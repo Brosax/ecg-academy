@@ -1,0 +1,750 @@
+{
+ "_note": "T7 golden hashes (seed 1). Regenerate with scripts/synth/golden.ts after a reviewed engine change.",
+ "seed": 1,
+ "cases": {
+  "normal": {
+   "signal": "ce7fc4a9",
+   "truth": "sinus-rhythm|axis-normal+normal-ecg+sinus-rhythm|71.9|160.0|92.1|381.8|38.6|51.0|43.9|12|12|12"
+  },
+  "sinus-bradycardia": {
+   "signal": "bb8a3466",
+   "truth": "sinus-bradycardia|axis-normal+sinus-bradycardia|49.8|160.0|92.1|431.3|38.5|51.0|43.9|9|8|8"
+  },
+  "sinus-tachycardia": {
+   "signal": "ca4b4143",
+   "truth": "sinus-tachycardia|axis-normal+sinus-tachycardia|118.1|146.2|92.1|323.6|38.5|51.0|43.9|19|20|20"
+  },
+  "sinus-arrhythmia": {
+   "signal": "6e66eee1",
+   "truth": "sinus-arrhythmia|axis-normal+sinus-arrhythmia|70.4|160.0|92.1|386.0|37.6|51.0|43.0|11|12|12"
+  },
+  "early-repolarization": {
+   "signal": "5084231d",
+   "truth": "sinus-rhythm|axis-normal+early-repolarization+sinus-rhythm|61.8|160.0|92.1|401.5|43.4|51.0|47.6|10|11|11"
+  },
+  "juvenile-t": {
+   "signal": "87ac2c16",
+   "truth": "sinus-rhythm|axis-normal+juvenile-t+sinus-rhythm|77.9|160.1|92.1|372.0|38.5|51.0|76.4|13|13|13"
+  },
+  "athlete": {
+   "signal": "03d83564",
+   "truth": "sinus-bradycardia|athlete-changes+axis-normal+early-repolarization+irbbb+sinus-bradycardia|47.8|160.0|116.1|464.3|12.8|51.0|35.2|8|8|8"
+  },
+  "athlete--first-degree": {
+   "signal": "acb88601",
+   "truth": "sinus-bradycardia|athlete-changes+av-block-1+axis-normal+early-repolarization+irbbb+sinus-bradycardia|47.8|220.0|116.1|464.3|12.8|51.0|35.2|8|8|8"
+  },
+  "irbbb": {
+   "signal": "09db6c6f",
+   "truth": "sinus-rhythm|axis-normal+irbbb+sinus-rhythm|68.0|160.0|116.1|412.3|41.0|51.0|39.0|11|11|11"
+  },
+  "sinus-pause": {
+   "signal": "bbc0bbae",
+   "truth": "sinus-rhythm|axis-normal+sinus-pause+sinus-rhythm|54.1|160.0|92.1|385.6|38.5|51.0|43.9|9|9|9"
+  },
+  "sinus-pause--escape": {
+   "signal": "9ecd0e39",
+   "truth": "sinus-rhythm|axis-normal+junctional-escape-rhythm+sinus-pause+sinus-rhythm|60.8|160.0|92.1|393.1|38.5|51.0|43.9|10|9|9"
+  },
+  "sa-exit-block": {
+   "signal": "47400d65",
+   "truth": "sinus-rhythm|axis-normal+sa-exit-block+sinus-rhythm|56.9|160.0|92.1|407.4|38.5|51.0|43.9|10|10|10"
+  },
+  "sa-exit-block--type-1": {
+   "signal": "7a787f1a",
+   "truth": "sinus-rhythm|axis-normal+sa-exit-block+sinus-rhythm|55.6|160.0|92.1|410.4|38.5|51.0|43.9|9|10|10"
+  },
+  "sinus-node-dysfunction": {
+   "signal": "eae5d269",
+   "truth": "sinus-node-dysfunction|axis-normal+sinus-node-dysfunction|74.0|-|92.1|326.9|38.2|-|43.9|12|13|13"
+  },
+  "ectopic-atrial-rhythm": {
+   "signal": "77749cda",
+   "truth": "ectopic-atrial-rhythm|axis-normal+ectopic-atrial-rhythm|65.7|139.3|92.1|392.7|38.6|-98.6|43.9|11|11|10"
+  },
+  "ectopic-atrial-rhythm--left-atrial": {
+   "signal": "6fbc08fc",
+   "truth": "ectopic-atrial-rhythm|axis-normal+ectopic-atrial-rhythm|69.8|155.4|92.1|385.2|38.6|-116.6|43.9|11|11|11"
+  },
+  "wandering-atrial-pacemaker": {
+   "signal": "49981707",
+   "truth": "wandering-atrial-pacemaker|axis-normal+wandering-atrial-pacemaker|68.2|-|92.1|388.1|38.5|-|43.9|11|11|11"
+  },
+  "pac": {
+   "signal": "367f78ca",
+   "truth": "sinus-rhythm|axis-normal+pac+sinus-rhythm|73.5|160.0|92.1|380.7|38.5|51.0|43.9|12|12|12"
+  },
+  "pac--frequent": {
+   "signal": "b21f12ee",
+   "truth": "sinus-rhythm|axis-normal+pac+sinus-rhythm|76.3|160.0|92.1|376.2|38.5|51.0|43.9|13|13|13"
+  },
+  "pac-blocked": {
+   "signal": "531c50c1",
+   "truth": "sinus-rhythm|axis-normal+pac-blocked+sinus-rhythm|68.2|160.2|92.1|382.3|38.5|51.0|43.9|11|12|12"
+  },
+  "pac-blocked--bigeminy": {
+   "signal": "41956d9f",
+   "truth": "sinus-rhythm|axis-normal+pac-blocked+sinus-rhythm|46.4|160.0|92.1|441.6|38.6|51.0|43.9|8|16|15"
+  },
+  "pac-aberrant": {
+   "signal": "e805d6b3",
+   "truth": "sinus-rhythm|aberrant-conduction+axis-normal+pac+sinus-rhythm|72.4|160.0|92.1|383.7|38.5|51.0|43.9|12|12|12"
+  },
+  "atrial-tachycardia": {
+   "signal": "64183f4c",
+   "truth": "atrial-tachycardia|atrial-tachycardia+axis-normal|107.9|169.2|92.1|320.6|38.6|103.4|43.9|18|18|18"
+  },
+  "atrial-tachycardia--block": {
+   "signal": "7a4e31af",
+   "truth": "atrial-tachycardia|atrial-tachycardia+axis-normal|90.4|185.3|92.1|340.6|38.5|103.4|43.9|15|30|30"
+  },
+  "mat": {
+   "signal": "5cdf93f9",
+   "truth": "mat|axis-normal+mat|116.8|-|92.1|323.2|38.5|-|43.9|20|20|20"
+  },
+  "pjc": {
+   "signal": "6bc33024",
+   "truth": "sinus-rhythm|axis-normal+pjc+sinus-rhythm|69.4|160.0|92.1|385.9|38.5|51.0|43.9|11|11|11"
+  },
+  "junctional-escape-rhythm": {
+   "signal": "2bf19cae",
+   "truth": "junctional-escape-rhythm|axis-normal+junctional-escape-rhythm|46.0|-|92.1|443.0|38.5|-|43.9|7|7|7"
+  },
+  "junctional-escape-rhythm--hidden": {
+   "signal": "c700ea61",
+   "truth": "junctional-escape-rhythm|axis-normal+junctional-escape-rhythm|46.0|-|92.1|443.0|26.2|-|43.9|7|7|0"
+  },
+  "junctional-escape-rhythm--after": {
+   "signal": "82759f7b",
+   "truth": "junctional-escape-rhythm|axis-normal+junctional-escape-rhythm|46.0|-|92.1|443.0|38.5|-|43.9|7|7|7"
+  },
+  "accelerated-junctional-rhythm": {
+   "signal": "e8d01d90",
+   "truth": "accelerated-junctional-rhythm|accelerated-junctional-rhythm+axis-normal|82.3|-|92.1|365.0|38.6|-|43.9|14|14|13"
+  },
+  "accelerated-junctional-rhythm--isorhythmic": {
+   "signal": "9aa29164",
+   "truth": "accelerated-junctional-rhythm|accelerated-junctional-rhythm+av-dissociation+axis-normal|79.1|-|92.1|367.3|38.5|-|43.9|13|12|5"
+  },
+  "af-regularised": {
+   "signal": "5e742035",
+   "truth": "atrial-fibrillation|atrial-fibrillation+av-block-3+axis-normal|44.0|-|92.1|449.3|38.6|-|43.9|7|259|0"
+  },
+  "atrial-fibrillation": {
+   "signal": "953fbecc",
+   "truth": "atrial-fibrillation|atrial-fibrillation+axis-normal|102.2|-|92.1|331.9|38.5|-|43.9|17|259|0"
+  },
+  "atrial-fibrillation--rapid": {
+   "signal": "f375b78c",
+   "truth": "atrial-fibrillation|atrial-fibrillation+axis-normal|138.1|-|92.1|305.6|38.5|-|43.9|23|259|0"
+  },
+  "atrial-fibrillation--slow": {
+   "signal": "c7a8a746",
+   "truth": "atrial-fibrillation|atrial-fibrillation+axis-normal|57.0|-|92.1|406.0|38.6|-|43.9|9|259|0"
+  },
+  "atrial-flutter": {
+   "signal": "fd330de8",
+   "truth": "atrial-flutter|atrial-flutter+axis-normal|75.0|-|92.1|376.2|38.7|-|43.9|13|50|36"
+  },
+  "atrial-flutter--clockwise": {
+   "signal": "461c203f",
+   "truth": "atrial-flutter|atrial-flutter+axis-normal|71.4|-|92.1|382.3|38.5|-|43.9|12|47|34"
+  },
+  "atrial-flutter--variable": {
+   "signal": "34c33793",
+   "truth": "atrial-flutter|atrial-flutter+axis-normal|76.8|-|92.1|377.1|38.5|-|43.9|12|50|37"
+  },
+  "wpw": {
+   "signal": "4aba4cbc",
+   "truth": "sinus-rhythm|axis-normal+short-pr+sinus-rhythm+wpw|71.9|116.0|122.1|410.0|89.3|51.0|-79.8|12|12|12"
+  },
+  "avnrt": {
+   "signal": "61cdd4c7",
+   "truth": "svt|avnrt+axis-normal+svt|176.1|-|92.1|283.0|36.7|-|43.9|29|30|0"
+  },
+  "avnrt--atypical": {
+   "signal": "2849613f",
+   "truth": "svt|avnrt+axis-normal+svt|150.0|-|92.1|298.5|38.6|-|43.9|25|25|25"
+  },
+  "avrt": {
+   "signal": "3199a335",
+   "truth": "svt|avrt+axis-normal+svt|190.1|-|92.1|275.9|38.2|-|43.9|31|32|0"
+  },
+  "avrt--antidromic": {
+   "signal": "2565cc7e",
+   "truth": "svt|avrt+rad+svt+wpw|185.0|-|155.0|299.3|96.8|-|-53.5|31|30|30"
+  },
+  "preexcited-af": {
+   "signal": "91c83fa5",
+   "truth": "atrial-fibrillation|atrial-fibrillation+wpw|187.8|-|155.0|248.2|96.8|-|-53.6|31|259|0"
+  },
+  "short-pr": {
+   "signal": "652bde21",
+   "truth": "sinus-rhythm|axis-normal+short-pr+sinus-rhythm|71.9|115.0|92.1|381.8|38.5|51.0|43.9|12|12|12"
+  },
+  "vt-monomorphic": {
+   "signal": "0cc46efc",
+   "truth": "vt-monomorphic|av-dissociation+extreme-axis+vt-monomorphic|150.0|-|162.2|324.2|-103.1|-|70.8|25|13|3"
+  },
+  "vt-monomorphic--teaching": {
+   "signal": "ffba34f6",
+   "truth": "vt-monomorphic|av-dissociation+extreme-axis+vt-monomorphic|125.1|-|162.2|344.5|-103.1|-|70.7|20|13|5"
+  },
+  "vt-monomorphic--captures": {
+   "signal": "ba39389d",
+   "truth": "vt-monomorphic|av-dissociation+extreme-axis+vt-monomorphic|146.0|-|162.2|327.4|-103.1|-|70.7|24|11|4"
+  },
+  "pvc": {
+   "signal": "4a64514a",
+   "truth": "sinus-rhythm|axis-normal+pvc+sinus-rhythm|73.9|160.0|92.1|379.0|38.5|51.0|43.9|12|12|11"
+  },
+  "pvc--lv-lateral": {
+   "signal": "9fb35fb9",
+   "truth": "sinus-rhythm|axis-normal+pvc+sinus-rhythm|73.9|160.0|92.1|379.0|38.5|51.0|43.9|12|12|12"
+  },
+  "pvc--fascicular": {
+   "signal": "ba122b0f",
+   "truth": "sinus-rhythm|axis-normal+pvc+sinus-rhythm|73.9|160.0|92.1|379.0|38.5|51.0|43.9|12|12|12"
+  },
+  "ventricular-bigeminy": {
+   "signal": "27033b20",
+   "truth": "sinus-rhythm|axis-normal+pvc+sinus-rhythm+ventricular-bigeminy|72.8|160.0|92.1|386.1|38.5|51.0|43.9|12|12|11"
+  },
+  "pvc-patterns": {
+   "signal": "061493fc",
+   "truth": "sinus-rhythm|axis-normal+pvc+sinus-rhythm+ventricular-couplet|85.0|160.0|92.1|373.5|38.5|51.0|43.9|14|12|12"
+  },
+  "pvc-patterns--trigeminy": {
+   "signal": "94b3cb50",
+   "truth": "sinus-rhythm|axis-normal+pvc+sinus-rhythm|74.9|160.0|92.1|385.4|38.5|51.0|43.9|12|12|12"
+  },
+  "pvc-patterns--multifocal": {
+   "signal": "871bd54a",
+   "truth": "sinus-rhythm|axis-normal+pvc+sinus-rhythm|74.9|160.0|92.1|385.4|38.5|51.0|43.9|12|12|12"
+  },
+  "aivr": {
+   "signal": "9cd94a99",
+   "truth": "aivr|aivr+av-dissociation|81.3|-|135.0|415.4|126.2|-|-34.9|14|12|7"
+  },
+  "ventricular-escape-rhythm": {
+   "signal": "f460b04a",
+   "truth": "ventricular-escape-rhythm|av-block-3+av-dissociation+extreme-axis+ventricular-escape-rhythm|31.9|-|149.0|573.9|-128.7|-|45.9|6|13|12"
+  },
+  "vt-polymorphic": {
+   "signal": "7da4ece0",
+   "truth": "vt-polymorphic|vt-polymorphic|156.1|-|149.0|311.1|-77.5|-|56.4|25|4|4"
+  },
+  "torsades": {
+   "signal": "1e825231",
+   "truth": "torsades|long-qt+torsades|158.4|-|152.7|232.2|-46.1|-|127.2|24|4|4"
+  },
+  "ventricular-flutter": {
+   "signal": "59baedf5",
+   "truth": "ventricular-flutter|ventricular-flutter|300.5|-|112.0|212.0|100.0|-|-80.1|50|0|0"
+  },
+  "ventricular-fibrillation": {
+   "signal": "f7e89fe2",
+   "truth": "ventricular-fibrillation|ventricular-fibrillation|0.0|-|0.0|0.0|0.0|-|0.0|0|0|0"
+  },
+  "ventricular-fibrillation--fine": {
+   "signal": "7156dc08",
+   "truth": "ventricular-fibrillation|ventricular-fibrillation|0.0|-|0.0|0.0|0.0|-|0.0|0|0|0"
+  },
+  "asystole": {
+   "signal": "2c87f42f",
+   "truth": "asystole|asystole|0.0|-|0.0|0.0|0.0|-|0.0|0|0|0"
+  },
+  "asystole--p-wave": {
+   "signal": "07b68fd8",
+   "truth": "asystole|asystole|0.0|-|0.0|0.0|0.0|-|0.0|0|8|8"
+  },
+  "av-block-1": {
+   "signal": "24a39313",
+   "truth": "sinus-rhythm|av-block-1+axis-normal+sinus-rhythm|67.9|280.1|92.1|389.1|38.6|51.0|43.9|12|11|11"
+  },
+  "av-block-2-mobitz1": {
+   "signal": "e6e89d65",
+   "truth": "sinus-rhythm|av-block-2-mobitz1+axis-normal+sinus-rhythm|54.7|-|92.1|411.4|38.5|-|43.9|9|13|13"
+  },
+  "av-block-2-mobitz1--3to2": {
+   "signal": "b21d9580",
+   "truth": "sinus-rhythm|av-block-2-mobitz1+axis-normal+sinus-rhythm|49.9|-|92.1|422.8|38.5|-|43.9|9|13|13"
+  },
+  "av-block-2-mobitz1--5to4": {
+   "signal": "473accb9",
+   "truth": "sinus-rhythm|av-block-2-mobitz1+axis-normal+sinus-rhythm|61.0|-|92.1|401.2|38.6|-|43.9|10|13|13"
+  },
+  "av-block-2-mobitz2": {
+   "signal": "707dc495",
+   "truth": "sinus-rhythm|av-block-2-mobitz2+axis-normal+rbbb+sinus-rhythm|54.5|160.0|142.1|459.7|49.5|51.0|37.2|10|13|13"
+  },
+  "av-block-2-mobitz2--lbbb": {
+   "signal": "28992771",
+   "truth": "sinus-rhythm|av-block-2-mobitz2+axis-normal+lbbb+sinus-rhythm|54.5|160.0|148.1|465.8|-9.4|51.0|117.4|10|13|13"
+  },
+  "av-block-2-2to1": {
+   "signal": "a431d53f",
+   "truth": "sinus-rhythm|av-block-2-2to1+axis-normal+sinus-rhythm|42.0|180.1|92.1|456.7|38.6|51.0|43.9|7|14|14"
+  },
+  "av-block-2-2to1--infra-his": {
+   "signal": "4af9ad47",
+   "truth": "sinus-rhythm|av-block-2-2to1+axis-normal+rbbb+sinus-rhythm|42.0|160.1|142.1|513.1|49.5|51.0|37.2|7|14|14"
+  },
+  "av-block-high-grade": {
+   "signal": "c831bf7f",
+   "truth": "sinus-rhythm|av-block-high-grade+axis-normal+sinus-rhythm|32.0|191.9|92.1|500.3|38.6|51.0|43.9|5|16|15"
+  },
+  "av-block-3": {
+   "signal": "d5dbc8d8",
+   "truth": "junctional-escape-rhythm|av-block-3+av-dissociation+axis-normal+junctional-escape-rhythm|45.0|-|92.1|445.9|38.6|-|43.9|8|13|11"
+  },
+  "av-block-3--infra-his": {
+   "signal": "a78a2fdd",
+   "truth": "ventricular-escape-rhythm|av-block-3+av-dissociation+extreme-axis+ventricular-escape-rhythm|33.9|-|149.0|562.3|-128.7|-|45.9|5|13|11"
+  },
+  "av-dissociation": {
+   "signal": "ccf7ea63",
+   "truth": "accelerated-junctional-rhythm|accelerated-junctional-rhythm+av-dissociation+axis-normal|73.8|-|92.1|379.7|38.5|-|43.9|12|10|2"
+  },
+  "rbbb": {
+   "signal": "3c1cdc4a",
+   "truth": "sinus-rhythm|axis-normal+rbbb+secondary-st-t+sinus-rhythm|69.9|160.0|142.1|432.9|49.5|51.0|36.6|11|12|11"
+  },
+  "lbbb": {
+   "signal": "50a2f12a",
+   "truth": "sinus-rhythm|axis-normal+lbbb+secondary-st-t+sinus-rhythm|67.9|160.0|148.1|442.9|-9.4|51.0|117.5|11|11|11"
+  },
+  "ilbbb": {
+   "signal": "c6e02a59",
+   "truth": "sinus-rhythm|axis-normal+ilbbb+poor-r-progression+sinus-rhythm|71.9|160.0|114.9|403.3|-5.1|51.0|84.5|12|12|12"
+  },
+  "lafb": {
+   "signal": "44d3306f",
+   "truth": "sinus-rhythm|lad+lafb+sinus-rhythm|69.9|160.0|106.1|398.7|-58.6|51.0|74.6|11|12|11"
+  },
+  "lpfb": {
+   "signal": "88994dc2",
+   "truth": "sinus-rhythm|lpfb+rad+sinus-rhythm|67.9|160.0|104.1|400.7|96.0|51.0|-12.2|11|11|11"
+  },
+  "bifascicular-block": {
+   "signal": "557a7a98",
+   "truth": "sinus-rhythm|bifascicular-block+lad+lafb+rbbb+secondary-st-t+sinus-rhythm|71.9|160.0|142.1|428.9|-72.3|51.0|70.2|12|12|12"
+  },
+  "bifascicular-block--lpfb": {
+   "signal": "02faa704",
+   "truth": "sinus-rhythm|bifascicular-block+lpfb+rad+rbbb+secondary-st-t+sinus-rhythm|71.9|160.0|142.1|428.9|95.4|51.0|-23.1|12|12|12"
+  },
+  "trifascicular-block": {
+   "signal": "b9b066b0",
+   "truth": "sinus-rhythm|av-block-1+bifascicular-block+lad+lafb+rbbb+secondary-st-t+sinus-rhythm|63.8|265.0|142.1|446.2|-72.3|51.0|70.2|11|11|11"
+  },
+  "trifascicular-block--mobitz2": {
+   "signal": "5a39d353",
+   "truth": "sinus-rhythm|av-block-1+av-block-2-mobitz2+bifascicular-block+lad+lafb+rbbb+secondary-st-t+sinus-rhythm+trifascicular-block|49.6|265.0|142.1|478.7|-72.3|51.0|70.2|8|11|11"
+  },
+  "rate-dependent-bbb": {
+   "signal": "4f5a7602",
+   "truth": "sinus-rhythm|aberrant-conduction+axis-normal+lbbb+sinus-rhythm|84.3|160.1|92.1|363.8|38.5|51.0|43.9|14|14|14"
+  },
+  "ivcd": {
+   "signal": "63f2807d",
+   "truth": "sinus-rhythm|axis-normal+ivcd+sinus-rhythm|73.9|160.0|119.8|405.9|33.3|51.0|45.8|12|12|12"
+  },
+  "stemi-anterior": {
+   "signal": "3566fb6e",
+   "truth": "sinus-rhythm|axis-normal+reciprocal-changes+sinus-rhythm+stemi-anterior|83.9|160.1|92.1|362.6|38.4|51.0|-18.5|14|14|14"
+  },
+  "stemi-anterior-subtle": {
+   "signal": "12f53993",
+   "truth": "sinus-rhythm|axis-normal+hyperacute-t+reciprocal-changes+sinus-rhythm+stemi-anterior|77.9|160.1|92.1|371.6|38.5|51.0|-20.3|13|13|13"
+  },
+  "stemi-anteroseptal": {
+   "signal": "6f2b220b",
+   "truth": "sinus-rhythm|axis-normal+sinus-rhythm+stemi-anteroseptal|79.9|160.1|92.1|368.5|38.5|51.0|20.8|14|13|13"
+  },
+  "stemi-anterolateral": {
+   "signal": "5dd76589",
+   "truth": "sinus-rhythm|axis-normal+reciprocal-changes+sinus-rhythm+stemi-anterolateral|87.8|160.2|92.1|357.1|38.4|51.0|-2.3|14|15|15"
+  },
+  "stemi-high-lateral": {
+   "signal": "1446d617",
+   "truth": "sinus-rhythm|axis-normal+reciprocal-changes+sinus-rhythm+stemi-high-lateral|76.0|160.0|92.1|374.9|29.2|51.0|-50.7|13|13|13"
+  },
+  "stemi-lateral": {
+   "signal": "8ef8d7cc",
+   "truth": "sinus-rhythm|axis-normal+reciprocal-changes+sinus-rhythm+stemi-lateral|81.9|160.1|92.1|365.5|38.4|51.0|-0.2|14|13|13"
+  },
+  "stemi-inferior": {
+   "signal": "82059373",
+   "truth": "sinus-rhythm|axis-normal+reciprocal-changes+sinus-rhythm+stemi-inferior|65.8|160.0|92.1|393.0|39.7|51.0|90.7|11|11|10"
+  },
+  "stemi-inferior--lcx": {
+   "signal": "c6767133",
+   "truth": "sinus-rhythm|axis-normal+sinus-rhythm+stemi-inferior+stemi-lateral|65.8|160.0|92.1|393.0|38.9|51.0|76.1|11|11|10"
+  },
+  "stemi-inferior--posterior": {
+   "signal": "85d63740",
+   "truth": "sinus-rhythm|axis-normal+reciprocal-changes+sinus-rhythm+stemi-inferior+stemi-posterior|65.8|160.0|92.1|393.0|39.4|51.0|89.7|11|11|10"
+  },
+  "rv-infarction": {
+   "signal": "c2a8b24f",
+   "truth": "sinus-bradycardia|axis-normal+reciprocal-changes+rv-infarction+sinus-bradycardia+stemi-inferior|57.9|160.0|92.1|410.6|41.3|51.0|96.0|10|10|10"
+  },
+  "stemi-posterior": {
+   "signal": "e847b7ca",
+   "truth": "sinus-rhythm|axis-normal+sinus-rhythm+stemi-lateral+stemi-posterior|73.9|160.0|92.1|378.2|38.5|51.0|8.0|12|12|12"
+  },
+  "stemi-posterior--isolated": {
+   "signal": "a08efdd0",
+   "truth": "sinus-rhythm|axis-normal+sinus-rhythm+stemi-posterior|73.9|160.0|92.1|378.2|38.5|51.0|37.3|12|12|12"
+  },
+  "stemi-posterior--evolved": {
+   "signal": "dda39f21",
+   "truth": "sinus-rhythm|axis-normal+pathological-q+sinus-rhythm+stemi-lateral+stemi-posterior|73.9|160.0|92.1|378.2|34.6|51.0|25.9|12|12|12"
+  },
+  "hyperacute-t": {
+   "signal": "08d862da",
+   "truth": "sinus-rhythm|axis-normal+hyperacute-t+sinus-rhythm|79.9|160.1|92.1|368.5|38.5|51.0|-24.8|14|13|13"
+  },
+  "de-winter": {
+   "signal": "4fa5de89",
+   "truth": "sinus-rhythm|axis-normal+de-winter+sinus-rhythm|81.9|160.1|92.1|365.5|39.0|51.0|-64.9|14|13|13"
+  },
+  "wellens": {
+   "signal": "527110c4",
+   "truth": "sinus-rhythm|axis-normal+sinus-rhythm+wellens|69.9|160.0|92.1|418.5|38.6|51.0|76.9|11|12|11"
+  },
+  "wellens--b": {
+   "signal": "68e8d6f5",
+   "truth": "sinus-rhythm|axis-normal+sinus-rhythm+wellens|69.9|160.0|92.1|432.8|38.6|51.0|87.3|11|12|11"
+  },
+  "avr-elevation-diffuse-std": {
+   "signal": "5a8eb557",
+   "truth": "sinus-rhythm|avr-elevation-diffuse-std+axis-normal+sinus-rhythm+st-depression-ischemic|85.9|160.1|92.1|359.7|37.8|51.0|-67.6|14|14|14"
+  },
+  "avr-elevation-diffuse-std--left-main": {
+   "signal": "a00e63b5",
+   "truth": "sinus-rhythm|avr-elevation-diffuse-std+axis-normal+sinus-rhythm+st-depression-ischemic|85.9|160.1|92.1|359.7|37.6|51.0|-84.7|14|14|14"
+  },
+  "st-depression-ischemic": {
+   "signal": "2587d467",
+   "truth": "sinus-rhythm|axis-normal+sinus-rhythm+st-depression-ischemic|87.8|160.2|92.1|357.1|39.8|51.0|87.7|14|15|15"
+  },
+  "t-inversion-ischemic": {
+   "signal": "fc76e147",
+   "truth": "sinus-rhythm|axis-normal+sinus-rhythm+t-inversion-ischemic|71.9|160.0|92.1|381.8|38.6|51.0|96.2|12|12|12"
+  },
+  "stemi-evolution": {
+   "signal": "b71239f0",
+   "truth": "sinus-rhythm|axis-normal+reciprocal-changes+sinus-rhythm+stemi-anterior|81.9|160.1|92.1|365.3|39.8|51.0|-27.5|14|13|13"
+  },
+  "stemi-evolution--hyperacute": {
+   "signal": "c177e2c1",
+   "truth": "sinus-rhythm|axis-normal+hyperacute-t+sinus-rhythm+stemi-anterior|81.9|160.1|92.1|365.3|38.5|51.0|-2.9|14|13|13"
+  },
+  "stemi-evolution--evolving": {
+   "signal": "481ed15d",
+   "truth": "sinus-rhythm|axis-normal+pathological-q+poor-r-progression+sinus-rhythm+stemi-anterior|81.9|160.1|92.1|401.4|45.5|51.0|44.7|14|13|13"
+  },
+  "stemi-evolution--old": {
+   "signal": "39de55f4",
+   "truth": "sinus-rhythm|axis-normal+old-mi-anterior+pathological-q+poor-r-progression+sinus-rhythm|81.9|160.1|92.1|369.9|47.4|51.0|51.0|14|13|13"
+  },
+  "old-mi": {
+   "signal": "24e4d86a",
+   "truth": "sinus-rhythm|axis-normal+old-mi-anterior+pathological-q+poor-r-progression+sinus-rhythm|69.9|160.0|92.1|385.4|48.7|51.0|44.3|11|12|11"
+  },
+  "old-mi--inferior": {
+   "signal": "87efd4ff",
+   "truth": "sinus-rhythm|lad+old-mi-inferior+pathological-q+sinus-rhythm|69.9|160.0|92.1|385.4|-45.5|51.0|39.9|11|12|11"
+  },
+  "old-mi--lateral": {
+   "signal": "a1e6ea1e",
+   "truth": "sinus-rhythm|old-mi-lateral+pathological-q+rad+sinus-rhythm|69.9|160.0|92.1|385.4|99.1|51.0|43.5|11|12|11"
+  },
+  "old-mi--fragmented": {
+   "signal": "486d0613",
+   "truth": "sinus-rhythm|axis-normal+old-mi-anterior+pathological-q+poor-r-progression+sinus-rhythm|69.9|160.0|92.1|385.4|48.1|51.0|44.3|11|12|11"
+  },
+  "lv-aneurysm": {
+   "signal": "bd8f3d8c",
+   "truth": "sinus-rhythm|axis-normal+lv-aneurysm+old-mi-anterior+pathological-q+poor-r-progression+sinus-rhythm|76.0|160.0|92.1|374.9|80.4|51.0|-95.8|13|13|13"
+  },
+  "sgarbossa": {
+   "signal": "068c6cf3",
+   "truth": "sinus-rhythm|axis-normal+lbbb+sgarbossa-positive+sinus-rhythm+stemi-lateral|79.9|160.1|148.1|419.4|-8.5|51.0|60.5|14|13|13"
+  },
+  "sgarbossa--concordant-depression": {
+   "signal": "6fc459d4",
+   "truth": "sinus-rhythm|axis-normal+lbbb+sgarbossa-positive+sinus-rhythm+stemi-posterior|79.9|160.1|148.1|419.4|-9.2|51.0|110.5|14|13|13"
+  },
+  "sgarbossa--smith": {
+   "signal": "1e0fa5ac",
+   "truth": "sinus-rhythm|axis-normal+lbbb+sgarbossa-positive+sinus-rhythm+stemi-anterior|79.9|160.1|148.1|419.4|-12.3|51.0|120.5|14|13|13"
+  },
+  "takotsubo": {
+   "signal": "39d8f57d",
+   "truth": "sinus-rhythm|axis-normal+sinus-rhythm+takotsubo|85.9|160.1|92.1|359.7|38.6|51.0|31.3|14|14|14"
+  },
+  "takotsubo--late": {
+   "signal": "aa25aba1",
+   "truth": "sinus-rhythm|axis-normal+long-qt+sinus-rhythm+takotsubo|69.9|160.0|92.1|480.3|38.6|51.0|-130.0|11|12|11"
+  },
+  "lae": {
+   "signal": "67b76860",
+   "truth": "sinus-rhythm|axis-normal+lae+sinus-rhythm|71.9|160.0|92.1|381.8|38.6|67.1|43.9|12|12|12"
+  },
+  "rae": {
+   "signal": "ca3f34cf",
+   "truth": "sinus-rhythm|axis-normal+rae+sinus-rhythm|83.9|160.1|92.1|362.6|38.5|86.2|43.9|14|14|14"
+  },
+  "biatrial-abnormality": {
+   "signal": "c9030f5e",
+   "truth": "sinus-rhythm|axis-normal+biatrial-abnormality+lae+rae+sinus-rhythm|79.9|160.1|92.1|368.5|38.6|79.7|43.9|14|13|13"
+  },
+  "interatrial-block": {
+   "signal": "f03135e9",
+   "truth": "sinus-rhythm|axis-normal+interatrial-block+sinus-rhythm|69.9|180.0|92.1|385.4|38.6|38.4|43.9|11|12|11"
+  },
+  "interatrial-block--advanced": {
+   "signal": "ed6174bf",
+   "truth": "sinus-rhythm|axis-normal+interatrial-block+sinus-rhythm|69.9|180.0|92.1|385.4|38.6|2.2|43.9|11|12|11"
+  },
+  "lvh": {
+   "signal": "4ab53d4e",
+   "truth": "sinus-rhythm|axis-normal+lvh+sinus-rhythm|67.9|160.0|99.9|396.9|-15.9|51.0|11.9|11|11|11"
+  },
+  "lvh-strain": {
+   "signal": "4cf7cf2c",
+   "truth": "sinus-rhythm|axis-normal+lvh-strain+secondary-st-t+sinus-rhythm|69.9|170.0|99.9|393.1|-15.9|47.6|146.7|11|12|11"
+  },
+  "rvh": {
+   "signal": "bab67e23",
+   "truth": "sinus-rhythm|rad+rvh+sinus-rhythm|81.9|160.1|95.6|368.9|121.7|69.1|67.0|14|13|13"
+  },
+  "rvh--strain": {
+   "signal": "02f367c1",
+   "truth": "sinus-rhythm|rad+rvh+secondary-st-t+sinus-rhythm|81.9|160.1|95.6|368.9|122.1|69.1|-14.3|14|13|13"
+  },
+  "biventricular-hypertrophy": {
+   "signal": "27e2251f",
+   "truth": "sinus-rhythm|biventricular-hypertrophy+rad+sinus-rhythm|77.9|160.1|101.8|381.4|96.4|46.3|45.8|13|13|13"
+  },
+  "low-voltage": {
+   "signal": "fa616635",
+   "truth": "sinus-rhythm|axis-normal+low-voltage+sinus-rhythm|79.9|160.1|92.1|368.5|38.6|51.0|43.9|14|13|13"
+  },
+  "low-voltage--obesity": {
+   "signal": "751375c1",
+   "truth": "sinus-rhythm|axis-normal+low-voltage+sinus-rhythm|79.9|160.1|92.1|368.5|-8.1|51.0|6.2|14|13|13"
+  },
+  "low-voltage--emphysema": {
+   "signal": "7bc5bf74",
+   "truth": "sinus-rhythm|axis-normal+low-voltage+sinus-rhythm|79.9|160.1|92.1|368.5|80.8|84.3|84.8|14|13|13"
+  },
+  "electrical-alternans": {
+   "signal": "03a38bc1",
+   "truth": "sinus-tachycardia|axis-normal+electrical-alternans+low-voltage+pericardial-effusion+sinus-tachycardia|112.0|151.6|92.1|329.3|38.4|51.0|44.0|19|18|18"
+  },
+  "poor-r-progression": {
+   "signal": "5d136573",
+   "truth": "sinus-rhythm|axis-normal+poor-r-progression+sinus-rhythm|73.9|160.0|92.1|378.2|55.1|51.0|29.9|12|12|12"
+  },
+  "dextrocardia": {
+   "signal": "8fefbdaa",
+   "truth": "sinus-rhythm|dextrocardia+rad+sinus-rhythm|71.9|160.0|92.1|381.8|140.0|132.5|137.2|12|12|12"
+  },
+  "copd-pattern": {
+   "signal": "01ab83da",
+   "truth": "sinus-rhythm|copd-pattern+low-voltage+poor-r-progression+rad+sinus-rhythm|83.9|160.1|92.1|362.5|95.9|89.8|83.6|14|14|14"
+  },
+  "hyperkalemia": {
+   "signal": "dba5ab2a",
+   "truth": "sinus-rhythm|av-block-1+axis-normal+hyperkalemia+peaked-t+sinus-rhythm|74.9|205.0|112.4|364.2|38.6|51.0|41.5|12|13|13"
+  },
+  "hyperkalemia-severe": {
+   "signal": "906b2144",
+   "truth": "sinus-rhythm|hyperkalemia+peaked-t|61.8|-|166.8|442.0|38.5|51.0|48.0|10|11|0"
+  },
+  "hypokalemia": {
+   "signal": "3db03a5c",
+   "truth": "sinus-rhythm|axis-normal+hypokalemia+sinus-rhythm+u-waves|59.9|160.0|92.1|405.8|38.6|51.0|50.3|10|10|10"
+  },
+  "hypercalcemia": {
+   "signal": "2f622f46",
+   "truth": "sinus-rhythm|axis-normal+hypercalcemia+short-qt+sinus-rhythm|73.9|160.0|92.1|312.8|38.5|51.0|43.9|12|12|12"
+  },
+  "hypocalcemia": {
+   "signal": "a17b90ea",
+   "truth": "sinus-rhythm|axis-normal+hypocalcemia+long-qt+sinus-rhythm|69.9|160.0|92.1|480.3|38.6|51.0|43.9|11|12|11"
+  },
+  "digoxin-effect": {
+   "signal": "e43da371",
+   "truth": "sinus-rhythm|axis-normal+digoxin-effect+short-qt+sinus-rhythm|67.9|190.0|92.1|353.5|38.5|51.0|63.9|11|11|11"
+  },
+  "long-qt": {
+   "signal": "54129754",
+   "truth": "sinus-rhythm|axis-normal+long-qt+sinus-rhythm|63.8|160.0|92.1|504.9|38.5|51.0|43.9|11|11|11"
+  },
+  "long-qt--lqt2": {
+   "signal": "32ec7641",
+   "truth": "sinus-rhythm|axis-normal+long-qt+sinus-rhythm|63.8|160.0|92.1|504.9|38.5|51.0|49.5|11|11|11"
+  },
+  "long-qt--lqt3": {
+   "signal": "8d071e05",
+   "truth": "sinus-rhythm|axis-normal+long-qt+sinus-rhythm|63.8|160.0|92.1|504.9|38.5|51.0|43.9|11|11|11"
+  },
+  "long-qt--drug": {
+   "signal": "75b33584",
+   "truth": "sinus-rhythm|axis-normal+long-qt+sinus-rhythm|63.8|160.0|92.1|504.9|38.5|51.0|51.7|11|11|11"
+  },
+  "short-qt": {
+   "signal": "15fe7aea",
+   "truth": "sinus-rhythm|axis-normal+short-qt+sinus-rhythm|65.8|160.0|92.1|308.5|38.6|51.0|42.2|11|11|10"
+  },
+  "na-channel-blockade": {
+   "signal": "35f64b95",
+   "truth": "sinus-tachycardia|axis-normal+na-channel-blockade+sinus-tachycardia|103.9|160.9|128.4|377.8|6.1|51.0|42.5|17|17|17"
+  },
+  "na-channel-blockade--brugada": {
+   "signal": "9ca87a3f",
+   "truth": "sinus-tachycardia|axis-normal+brugada-type1+na-channel-blockade+sinus-tachycardia|103.9|160.9|128.4|377.8|6.1|51.0|42.5|17|17|17"
+  },
+  "hypothermia": {
+   "signal": "adf7e900",
+   "truth": "sinus-bradycardia|av-block-1+axis-normal+hypothermia+long-qt+osborn-waves+sinus-bradycardia|45.9|230.0|139.5|538.8|40.5|51.0|44.4|8|8|8"
+  },
+  "cerebral-t": {
+   "signal": "60cd6bb7",
+   "truth": "sinus-rhythm|axis-normal+cerebral-t+long-qt+sinus-rhythm|67.9|160.0|92.1|537.9|38.6|51.0|-144.7|11|11|11"
+  },
+  "cardiac-memory": {
+   "signal": "9378a539",
+   "truth": "sinus-rhythm|axis-normal+nonspecific-st-t+sinus-rhythm|65.8|160.0|92.1|393.0|38.6|51.0|-41.9|11|11|10"
+  },
+  "nonspecific-st-t": {
+   "signal": "0ee105cf",
+   "truth": "sinus-rhythm|axis-normal+nonspecific-st-t+sinus-rhythm|71.9|160.0|92.1|381.8|38.6|51.0|94.3|12|12|12"
+  },
+  "brugada-type1": {
+   "signal": "637c3d47",
+   "truth": "sinus-rhythm|axis-normal+brugada-type1+sinus-rhythm|69.9|170.0|92.1|385.4|38.6|51.0|44.0|11|12|11"
+  },
+  "brugada-type2": {
+   "signal": "7b14b928",
+   "truth": "sinus-rhythm|axis-normal+brugada-type2+sinus-rhythm|67.9|170.0|92.1|389.1|38.6|51.0|45.1|11|11|11"
+  },
+  "hcm": {
+   "signal": "0a88a5e7",
+   "truth": "sinus-rhythm|axis-normal+hcm+lvh+sinus-rhythm|65.8|160.0|98.6|399.5|28.8|48.0|42.1|11|11|10"
+  },
+  "hcm--repolarization": {
+   "signal": "1d2001e2",
+   "truth": "sinus-rhythm|axis-normal+hcm+lvh+sinus-rhythm|65.8|160.0|98.6|399.5|28.8|48.0|-178.7|11|11|10"
+  },
+  "apical-hcm": {
+   "signal": "3154ed11",
+   "truth": "sinus-rhythm|apical-hcm+axis-normal+sinus-rhythm|63.8|160.0|98.6|437.8|22.6|51.0|178.6|11|11|11"
+  },
+  "arvc": {
+   "signal": "8ed6931a",
+   "truth": "sinus-rhythm|arvc+axis-normal+epsilon-wave+sinus-rhythm|67.9|160.0|114.7|411.7|32.4|51.0|-5.6|11|11|11"
+  },
+  "pericarditis": {
+   "signal": "c375fc6d",
+   "truth": "sinus-rhythm|axis-normal+pericarditis+sinus-rhythm|95.8|170.4|92.1|346.8|38.7|51.0|60.2|16|16|15"
+  },
+  "pericardial-effusion": {
+   "signal": "c367ec0b",
+   "truth": "sinus-tachycardia|axis-normal+low-voltage+pericardial-effusion+sinus-tachycardia|106.0|151.0|92.1|335.4|38.6|51.0|43.9|18|18|18"
+  },
+  "pulmonary-embolism": {
+   "signal": "9fc2acd0",
+   "truth": "sinus-tachycardia|axis-normal+pulmonary-embolism+sinus-tachycardia|102.0|150.7|92.1|335.5|87.5|51.0|15.0|17|17|17"
+  },
+  "paced-aai": {
+   "signal": "728e53fc",
+   "truth": "paced-rhythm|axis-normal+paced-rhythm|70.0|139.0|92.1|384.6|38.5|63.7|43.9|12|12|12"
+  },
+  "paced-vvi": {
+   "signal": "c5803046",
+   "truth": "paced-rhythm|atrial-fibrillation+paced-rhythm+secondary-st-t|60.0|-|156.0|477.0|-71.8|-|85.5|10|241|0"
+  },
+  "paced-vvi--bipolar": {
+   "signal": "39edfda1",
+   "truth": "paced-rhythm|atrial-fibrillation+paced-rhythm+secondary-st-t|60.0|-|156.0|477.0|-71.8|-|85.5|10|241|0"
+  },
+  "paced-ddd": {
+   "signal": "73859a4e",
+   "truth": "paced-rhythm|paced-rhythm+secondary-st-t|64.0|162.0|156.0|467.0|-71.8|63.7|85.5|10|10|10"
+  },
+  "paced-ddd--tracking": {
+   "signal": "e32fd84f",
+   "truth": "paced-rhythm|paced-rhythm+secondary-st-t|77.9|150.0|156.0|437.9|-71.8|51.0|85.5|13|13|13"
+  },
+  "paced-biv": {
+   "signal": "059dff7a",
+   "truth": "paced-rhythm|paced-rhythm+secondary-st-t|71.9|110.0|135.0|424.9|-118.6|51.0|53.8|12|12|12"
+  },
+  "pacing-failure-capture": {
+   "signal": "f3260125",
+   "truth": "paced-rhythm|paced-rhythm+pacing-failure-capture|50.4|-|156.0|493.3|-71.8|-|85.5|8|12|9"
+  },
+  "pacing-undersensing": {
+   "signal": "34bbc8bb",
+   "truth": "sinus-rhythm|axis-normal+pacing-undersensing+sinus-rhythm|86.6|160.1|92.1|364.7|38.5|51.0|43.9|14|13|10"
+  },
+  "pacing-oversensing": {
+   "signal": "a0348a5d",
+   "truth": "paced-rhythm|muscle-tremor+paced-rhythm+pacing-oversensing|52.7|-|156.0|492.5|-71.8|-|85.5|9|12|9"
+  },
+  "electrode-reversal-la-ra": {
+   "signal": "02a0c406",
+   "truth": "sinus-rhythm|electrode-reversal-la-ra+sinus-rhythm|71.9|160.0|92.1|381.8|141.4|120.7|136.1|12|12|12"
+  },
+  "electrode-reversal-la-ll": {
+   "signal": "e7ca7265",
+   "truth": "sinus-rhythm|electrode-reversal-la-ll+sinus-rhythm|71.9|160.0|92.1|381.8|28.5|0.7|16.1|12|12|12"
+  },
+  "electrode-reversal-ra-ll": {
+   "signal": "947161c9",
+   "truth": "sinus-rhythm|electrode-reversal-ra-ll+sinus-rhythm|71.9|160.0|92.1|381.8|-101.9|-119.3|-103.9|12|12|12"
+  },
+  "neutral-cable-reversal": {
+   "signal": "696a041f",
+   "truth": "sinus-rhythm|sinus-rhythm|71.9|160.0|92.1|381.8|30.0|30.0|30.0|12|12|12"
+  },
+  "precordial-misplacement": {
+   "signal": "e810c51d",
+   "truth": "sinus-rhythm|axis-normal+precordial-misplacement+sinus-rhythm|71.9|160.0|92.1|381.8|38.6|59.3|43.9|12|12|12"
+  },
+  "precordial-misplacement-high": {
+   "signal": "3a02711c",
+   "truth": "sinus-rhythm|axis-normal+precordial-misplacement+sinus-rhythm|71.9|160.0|92.1|381.8|38.6|59.3|43.9|12|12|12"
+  },
+  "limbs-on-torso": {
+   "signal": "f7a05f28",
+   "truth": "sinus-rhythm|sinus-rhythm|71.9|160.0|92.1|381.8|43.2|49.6|29.2|12|12|12"
+  },
+  "baseline-wander": {
+   "signal": "f4ba5339",
+   "truth": "sinus-rhythm|axis-normal+baseline-wander+sinus-rhythm|71.9|160.0|92.1|381.8|38.6|59.3|43.9|12|12|12"
+  },
+  "muscle-tremor": {
+   "signal": "9a6def2e",
+   "truth": "sinus-rhythm|axis-normal+muscle-tremor+sinus-rhythm|71.9|160.0|92.1|381.8|38.6|59.3|43.9|12|12|12"
+  },
+  "muscle-tremor-parkinsonian": {
+   "signal": "0b78e2e3",
+   "truth": "sinus-rhythm|axis-normal+muscle-tremor+sinus-rhythm|71.9|160.0|92.1|381.8|38.6|59.3|43.9|12|12|12"
+  },
+  "ac-interference": {
+   "signal": "355cb1ce",
+   "truth": "sinus-rhythm|ac-interference+axis-normal+sinus-rhythm|71.9|160.0|92.1|381.8|38.6|59.3|43.9|12|12|12"
+  },
+  "motion-artefact": {
+   "signal": "fd0bb7dd",
+   "truth": "sinus-rhythm|axis-normal+sinus-rhythm|71.9|160.0|92.1|381.8|38.6|59.3|43.9|12|12|12"
+  }
+ }
+}

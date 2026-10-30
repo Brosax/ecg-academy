@@ -1,0 +1,511 @@
+/*
+ * Application shell: header, navigation, phone menu, bottom tab bar, main container, footer.
+ * Theme tokens only (src/app/theme.css). Breakpoints:
+ *   > 1240 px  full header (brand + localized subtitle, six nav links, language segmented control)
+ *   ≤ 1240 px  subtitle hidden, language as a select
+ *   ≤ 1100 px  tighter nav links
+ *   ≤ 960 px   logo without the name, settings via the footer
+ *   ≤ 760 px   compact header (brand, progress, theme, menu) + bottom tab bar
+ */
+:root {
+  --app-max: 1440px;
+  --app-gutter: clamp(16px, 2.6vw, 32px);
+  --app-header-h: 60px;
+  --app-tabbar-h: 62px;
+}
+
+.app {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+/* visually hidden, still announced */
+.app-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── skip link ───────────────────────────────────────────────────────────────────────────────────────────────────── */
+.app-skip {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--fg);
+  color: var(--bg);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-160%);
+}
+.app-skip:focus,
+.app-skip:focus-visible {
+  transform: none;
+}
+
+/* ── header ──────────────────────────────────────────────────────────────────────────────────────────────────────── */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--border);
+}
+.app-header__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  height: var(--app-header-h);
+  max-width: var(--app-max);
+  margin: 0 auto;
+  padding: 0 var(--app-gutter);
+}
+
+.app-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+  min-width: 0;
+  color: var(--fg);
+  text-decoration: none;
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+}
+.app-brand__name {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.app-brand__sub {
+  font-size: var(--fs-sm);
+  color: var(--fg-muted);
+}
+.app-brand__sub::before {
+  content: '·';
+  margin-right: 8px;
+  color: var(--fg-faint);
+}
+
+.app-logo {
+  flex: none;
+  display: block;
+}
+.app-logo__tile {
+  fill: var(--ecg-paper);
+  stroke: var(--ecg-grid-major);
+  stroke-width: 1;
+}
+.app-logo__grid {
+  fill: none;
+  stroke: var(--ecg-grid-minor);
+  stroke-width: 1;
+}
+.app-logo__trace {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* main navigation */
+.app-nav {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+}
+.app-nav ul {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.app-nav ul::-webkit-scrollbar {
+  display: none;
+}
+.app-nav li {
+  display: flex;
+}
+.app-nav__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  color: var(--fg-muted);
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+}
+.app-nav__link::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: transparent;
+}
+.app-nav__link:hover {
+  color: var(--fg);
+}
+.app-nav__link:hover::after {
+  background: var(--border-strong);
+}
+.app-nav__link.is-on {
+  color: var(--fg);
+  font-weight: 650;
+}
+.app-nav__link.is-on::after {
+  background: var(--accent);
+}
+.app-nav__link:focus-visible {
+  outline-offset: -4px;
+}
+
+/* right-hand tools */
+.app-tools {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex: none;
+  margin-left: auto;
+}
+.app-iconbtn {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--fg-muted);
+  text-decoration: none;
+  cursor: pointer;
+}
+.app-iconbtn:hover {
+  background: var(--panel-2);
+  color: var(--fg);
+}
+.app-iconbtn.is-on {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.app-menubtn {
+  display: none;
+}
+.app-lang--narrow {
+  display: none;
+}
+.app-langselect {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+  color: var(--fg-muted);
+}
+.app-langselect select {
+  border: none;
+  background: transparent;
+  color: var(--fg);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+.app-langselect select:focus-visible {
+  outline: none;
+}
+.app-langselect:focus-within {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ── phone menu ──────────────────────────────────────────────────────────────────────────────────────────────────── */
+.app-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: calc(100dvh - var(--app-header-h) - var(--app-tabbar-h));
+  overflow-y: auto;
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  padding: var(--sp-3) var(--app-gutter) var(--sp-4);
+}
+.app-menu__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.app-menu__link {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: 44px;
+  padding: 0 var(--sp-3);
+  border-radius: var(--radius-sm);
+  color: var(--fg);
+  text-decoration: none;
+}
+.app-menu__link:hover {
+  background: var(--panel-2);
+}
+.app-menu__link .ui-icon {
+  color: var(--fg-muted);
+}
+.app-menu__link.is-on {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+.app-menu__link.is-on .ui-icon {
+  color: var(--accent);
+}
+.app-menu__prefs {
+  display: grid;
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--border);
+}
+.app-menu__pref {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+.app-menu__label {
+  color: var(--fg-muted);
+  font-size: var(--fs-sm);
+}
+
+/* ── main ────────────────────────────────────────────────────────────────────────────────────────────────────────── */
+.app-main {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: var(--app-max);
+  margin: 0 auto;
+  padding: var(--sp-6) var(--app-gutter) var(--sp-7);
+  min-width: 0;
+}
+.app-main:focus {
+  outline: none;
+}
+.app-view {
+  min-width: 0;
+}
+.app-view h1[tabindex='-1']:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Heart Lab (src/lab): full-bleed below the header, no footer (the lab sizes itself to the viewport) */
+.app--lab .app-main {
+  max-width: none;
+  padding: 0;
+}
+.app--lab .app-footer {
+  display: none;
+}
+
+/* ── footer ──────────────────────────────────────────────────────────────────────────────────────────────────────── */
+.app-footer {
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+.app-footer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  max-width: var(--app-max);
+  margin: 0 auto;
+  padding: var(--sp-4) var(--app-gutter);
+  color: var(--fg-muted);
+  font-size: var(--fs-sm);
+}
+.app-footer__text {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px var(--sp-4);
+  margin: 0;
+}
+.app-footer__links {
+  display: flex;
+  gap: var(--sp-4);
+  margin: 0;
+}
+.app-footer__links a {
+  color: var(--fg-muted);
+}
+.app-footer__links a:hover {
+  color: var(--fg);
+}
+
+/* ── bottom tab bar (phones) ─────────────────────────────────────────────────────────────────────────────────────── */
+.app-tabbar {
+  display: none;
+}
+
+/* ── responsive ──────────────────────────────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1240px) {
+  .app-brand__sub {
+    display: none;
+  }
+  .app-lang--wide {
+    display: none;
+  }
+  .app-lang--narrow {
+    display: block;
+  }
+}
+
+@media (max-width: 1100px) {
+  .app-header__inner {
+    gap: var(--sp-3);
+  }
+  .app-nav__link {
+    padding: 0 8px;
+    font-size: var(--fs-sm);
+  }
+  .app-nav__link::after {
+    left: 8px;
+    right: 8px;
+  }
+  .app-tools {
+    gap: 4px;
+  }
+}
+
+@media (max-width: 960px) {
+  .app-brand__name,
+  .app-only-wide {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  :root {
+    --app-header-h: 56px;
+  }
+  .app-nav,
+  .app-lang,
+  .app-only-wide {
+    display: none !important;
+  }
+  .app-menubtn {
+    display: inline-grid;
+  }
+  .app-brand__name {
+    display: inline;
+    font-size: 16px;
+  }
+  /* the footer (last in the flow) keeps the room for the fixed tab bar; main needs only its normal bottom space */
+  .app-main {
+    padding-top: var(--sp-5);
+    padding-bottom: var(--sp-6);
+  }
+  .app-footer {
+    padding-bottom: calc(var(--app-tabbar-h) + env(safe-area-inset-bottom, 0px));
+  }
+  .app-footer__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .app-tabbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    height: calc(var(--app-tabbar-h) + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: var(--bg-elev);
+    border-top: 1px solid var(--border);
+  }
+  .app-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    padding: 0 2px;
+    color: var(--fg-muted);
+    font-size: 11px;
+    line-height: 1.2;
+    text-decoration: none;
+  }
+  .app-tab span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .app-tab.is-on {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .app-tab:focus-visible {
+    outline-offset: -3px;
+  }
+}
+
+/* menu and tab bar exist only on phones */
+@media (min-width: 761px) {
+  .app-menu {
+    display: none;
+  }
+}
+
+/* ── reduce motion (setting; prefers-reduced-motion is handled in theme.css) ────────────────────────────────────── */
+:root[data-reduce-motion='true'] *,
+:root[data-reduce-motion='true'] *::before,
+:root[data-reduce-motion='true'] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+@media print {
+  .app-header,
+  .app-footer,
+  .app-tabbar,
+  .app-skip {
+    display: none !important;
+  }
+  .app-main {
+    max-width: none;
+    padding: 0;
+  }
+}

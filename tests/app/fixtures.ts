@@ -1,0 +1,30 @@
+import type { Route } from '../../src/app/router';
+
+/** At least one example of every route variant (optional params present and absent, awkward ids). */
+export const SAMPLE_ROUTES: readonly Route[] = [
+  { name: 'home' },
+  { name: 'learn' },
+  { name: 'lesson', id: 'f1' },
+  { name: 'lesson', id: 's4', step: 3 },
+  { name: 'lesson', id: 'r2', step: 0 },
+  { name: 'lesson', id: 'x 1/é' },
+  { name: 'practice' },
+  { name: 'lab' },
+  { name: 'lab', scenario: 'lbbb' },
+  { name: 'drill', id: 'rate' },
+  { name: 'drill', id: 'rate:12345' },
+  { name: 'cases' },
+  { name: 'case', id: 42 },
+  { name: 'case', id: 0 },
+  { name: 'atlas' },
+  { name: 'finding', id: 'lbbb' },
+  { name: 'finding', id: 'not-a-finding' },
+  { name: 'exam' },
+  { name: 'tools' },
+  { name: 'tools', tab: 'qtc' },
+  { name: 'progress' },
+  { name: 'settings' },
+  { name: 'about' },
+  { name: 'notfound', path: 'nope' },
+  { name: 'notfound', path: 'dev/viewer' },
+];

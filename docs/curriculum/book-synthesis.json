@@ -1,0 +1,2552 @@
+{
+ "chapter_map": [
+  {
+   "number": "1",
+   "title_es": "Conceptos generales de electrofisiología cardíaca",
+   "title_en": "General concepts of cardiac electrophysiology",
+   "pdf_pages": "8-15",
+   "printed_pages": "1-8",
+   "coverage": "complete",
+   "summary_en": "Describes the conduction system from sinus node to Purkinje network and the cell physiology underneath it: resting and action potentials and how each phase maps onto the QRS, ST and T, fast- versus slow-response cells, and refractory periods. Ends with dipole theory, which explains why an electrode records a positive, negative or equiphasic deflection."
+  },
+  {
+   "number": "2",
+   "title_es": "Conceptos generales de electrocardiografía",
+   "title_en": "General concepts of electrocardiography",
+   "pdf_pages": "16-25",
+   "printed_pages": "9-18",
+   "coverage": "complete",
+   "summary_en": "Covers the electrocardiograph, paper and calibration, the bipolar, augmented and chest lead systems (including right-sided, posterior and Medrano leads), recording technique and electrode colours. Defines wave names, intervals, QT correction and Bailey's reference systems, and gives norm tables by age and heart rate."
+  },
+  {
+   "number": "3",
+   "title_es": "Electrocardiograma normal",
+   "title_en": "The normal electrocardiogram",
+   "pdf_pages": "26-41",
+   "printed_pages": "19-34",
+   "coverage": "complete",
+   "summary_en": "Builds the normal tracing from atrial, AV-junctional and three-vector ventricular activation, then covers heart position and rotation, normal repolarization and its variants, and the paediatric ECG. Closes with the book's six-step reading method: rhythm, rate, PR, QT, axis and morphology."
+  },
+  {
+   "number": "4",
+   "title_es": "El electrocardiograma en los crecimientos atriales",
+   "title_en": "The ECG in atrial enlargement",
+   "pdf_pages": "42-53",
+   "printed_pages": "35-46",
+   "coverage": "complete",
+   "summary_en": "Derives right, left and biatrial enlargement from when each atrium is activated within the P wave. Gives criteria for axis, height, duration, V1 polarity and indirect QRS signs, and explains how coarse f waves in atrial fibrillation point to a large left atrium."
+  },
+  {
+   "number": "5",
+   "title_es": "El electrocardiograma en los crecimientos ventriculares",
+   "title_en": "The ECG in ventricular enlargement",
+   "pdf_pages": "54-68",
+   "printed_pages": "47-61",
+   "coverage": "complete",
+   "summary_en": "Explains LVH and RVH as enlarged activation vectors: axis shift, voltage indices, intrinsicoid deflection, transition shift and overload repolarization. Includes the Romhilt-Estes and Flowers-Horan scores, the conditions that mask hypertrophy, and the ECG in pulmonary embolism and cor pulmonale."
+  },
+  {
+   "number": "6",
+   "title_es": "El electrocardiograma en los bloqueos de rama y bloqueos fasciculares",
+   "title_en": "The ECG in bundle branch and fascicular blocks",
+   "pdf_pages": "69-88",
+   "printed_pages": "63-82",
+   "coverage": "complete",
+   "summary_en": "Uses the intraseptal barrier and a slow transseptal vector to derive complete and incomplete RBBB and LBBB, and reads fascicular blocks in the frontal plane. Also covers bi- and trifascicular, rate-dependent and masked block, Brugada syndrome and the prognosis of each block."
+  },
+  {
+   "number": "7",
+   "title_es": "Bloqueos atrioventriculares",
+   "title_en": "Atrioventricular blocks",
+   "pdf_pages": "89-101",
+   "printed_pages": "83-95",
+   "coverage": "complete",
+   "summary_en": "Classifies AV block by degree and by site (His-bundle intervals) and gives surface criteria for first-degree, Mobitz I and II, fixed, variable, advanced and complete block. Explains the arithmetic of Wenckebach cycles and how the escape QRS shows where the block sits."
+  },
+  {
+   "number": "8",
+   "title_es": "El electrocardiograma en los síndromes de preexcitación",
+   "title_en": "The ECG in pre-excitation syndromes",
+   "pdf_pages": "102-128",
+   "printed_pages": "97-123",
+   "coverage": "complete",
+   "summary_en": "Defines WPW, LGL, Mahaim and concealed pathways and explains how fusion sets the degree of pre-excitation. Covers pathway localization from delta polarity, the patterns WPW can mimic, orthodromic and antidromic reentry, pre-excited AF, risk markers and the ECG after ablation."
+  },
+  {
+   "number": "9",
+   "title_es": "El electrocardiograma en la cardiopatía isquémica",
+   "title_en": "The ECG in ischaemic heart disease",
+   "pdf_pages": "129-162",
+   "printed_pages": "125-158",
+   "coverage": "complete",
+   "summary_en": "Sorts coronary ECG changes into ischaemia (T), injury (ST) and necrosis (Q), each subendocardial or subepicardial, and follows their time course and lead territories. Covers non-Q, posterior and RV infarction, Prinzmetal angina, silent ischaemia, aneurysm, signs of reperfusion and how to identify the culprit artery."
+  },
+  {
+   "number": "10",
+   "title_es": "Prueba de esfuerzo y tests farmacológicos",
+   "title_en": "Exercise stress testing and pharmacological tests",
+   "pdf_pages": "163-192",
+   "printed_pages": "159-195",
+   "coverage": "partial: missing printed pp. 177-178, 187-188, 191, 193, 195-196",
+   "summary_en": "Covers exercise physiology, test protocols, target heart rate and lead systems, then ischaemic ST criteria, blood-pressure, arrhythmia and conduction responses, functional capacity and the Duke score. Also lists contraindications, stopping criteria, false results, Bayesian reasoning and radionuclide and drug stress tests."
+  },
+  {
+   "number": "11",
+   "title_es": "El electrocardiograma en las cardiopatías congénitas",
+   "title_en": "The ECG in congenital heart disease",
+   "pdf_pages": "193-224",
+   "printed_pages": "197-245",
+   "coverage": "partial: missing printed pp. 197, 199, 201, 203-205, 207, 212, 214, 218, 223-225, 227, 232, 235-236 (one shown as hidden PDF 216), 242",
+   "summary_en": "Sets paediatric norms and reads each lesion by the pressure or volume load it puts on each chamber. Covers cyanotic lesions (tricuspid atresia, pulmonary atresia, critical PS, Ebstein, TGA, TAPVC, truncus, DORV) and acyanotic ones (ASD, VSD, PDA, AVSD, AS, PS, coarctation, HCM)."
+  },
+  {
+   "number": "12",
+   "title_es": "Estimulación eléctrica por marcapasos",
+   "title_en": "Electrical stimulation by pacemakers",
+   "pdf_pages": "225-236",
+   "printed_pages": "247-265",
+   "coverage": "partial: missing printed pp. 249-250 (one shown as hidden PDF 227), 254, 258-259, 261, 263-265; PDF 236 blank",
+   "summary_en": "Introduces pacing electrophysiology (Ohm's law, energy, threshold, impedance, lead polarity) and the pacing modes with their timing cycles and special algorithms. Gives pacing indications for each conduction disorder and describes follow-up, including the expected paced QRS and the magnet response."
+  },
+  {
+   "number": "13",
+   "title_es": "Arritmias supraventriculares",
+   "title_en": "Supraventricular arrhythmias",
+   "pdf_pages": "237-260",
+   "printed_pages": "267-295",
+   "coverage": "partial: missing printed pp. 271-272, 276, 279, 284, 289, 295-296 (hidden PDF 259-260)",
+   "summary_en": "Classifies the arrhythmias and defines sinus rhythm, including P-axis variants. Then covers sinus arrhythmia, pauses, sick sinus syndrome, wandering pacemaker, atrial premature beats, paroxysmal, blocked and multifocal atrial tachycardia, flutter, fibrillation and atrial dissociation."
+  },
+  {
+   "number": "14",
+   "title_es": "Arritmias del tejido de la unión",
+   "title_en": "Arrhythmias of the junctional tissue",
+   "pdf_pages": "261-271",
+   "printed_pages": "297-309",
+   "coverage": "partial: missing printed pp. 300, 302",
+   "summary_en": "Separates passive junctional rhythms and escape beats from active junctional premature beats and tachycardia. Explains where the retrograde P falls, the dual-pathway AV nodal reentry with its pseudo-r' and pseudo-s, and complete, incomplete and isorhythmic AV dissociation."
+  },
+  {
+   "number": "15",
+   "title_es": "Arritmias ventriculares",
+   "title_en": "Ventricular arrhythmias",
+   "pdf_pages": "272-294",
+   "printed_pages": "311-342",
+   "coverage": "partial: missing printed pp. 311-312, 314, 329, 336-337, 340-342",
+   "summary_en": "Covers PVCs (coupling, pause, morphology, grouping, R-on-T, Lown grade) and how to tell them from aberrancy, plus escape and idioventricular rhythms. Then VT with dissociation, capture and fusion beats, the approach to wide-QRS tachycardia including the Brugada algorithm, accelerated idioventricular rhythm, torsades, and ventricular flutter and fibrillation."
+  },
+  {
+   "number": "Index",
+   "title_es": "Índice alfabético",
+   "title_en": "Alphabetical index",
+   "pdf_pages": "295-298",
+   "printed_pages": "343-346",
+   "coverage": "complete",
+   "summary_en": "An alphabetical topic-to-page index, used here to confirm where each chapter starts and ends. PDF 299 is the back cover."
+  }
+ ],
+ "missing_pages_summary": "Chapters 1-9 (PDF 8-162) have no missing pages. The printed page numbers that do not appear there (62, 96, 124) are blank versos; so are 246, 266 and 310 later in the book. Front matter (PDF 1-7) was not in any extraction window, so its content is unknown. From chapter 10 onward the scan is a preview with gaps. Placeholder PDF pages: PDF 216 (hidden; printed 235 or 236, rest of AV septal defect, ch.11), PDF 227 (hidden; printed 249 or 250, pacing codes, ch.12), PDF 236 (blank watermark page, ch.12), PDF 259-260 (hidden; probably printed 295-296, end of ch.13 references). Printed pages absent from the sequence, with what is lost: ch.10: 177-178 (end of the test report, start of indications), 187-188 (scintigraphic patterns), 191, 193, 195-196 (pharmacological test text, chapter end). ch.11: 197 (chapter opener), 199, 201 (paediatric QRS/hypertrophy basics, part of RVH-in-children criteria), 203-205 (tetralogy of Fallot ECG), 207, 212, 214, 218 (parts of tricuspid atresia, ASD, PDA, AS), 223-225 (DORV variants, single AV valve), 227, 232 (upper limit of the VSD axis), 235-236 (AVSD), 242 (end of congenital mitral disease). ch.12: 249-250 (mode code, VVI/AAI basics), 254, 258-259 (haemodynamics, start of indications for sinus node disease), 261 (end of bifascicular indications), 263-265 (battery depletion, pacemaker syndrome, endless-loop tachycardia). ch.13: 271-272 (sinus arrhythmia, sinus tachycardia and bradycardia text), 276 (opening of sick sinus syndrome), 279 (wandering pacemaker text, PAC criterion 1), 284 (atrial tachycardia with block and MAT criteria), 289 (flutter text including 1:1 conduction). ch.14: 300, 302 (dual-pathway and AVRT mechanism details). ch.15: 311-312 (chapter opening, PVC definition), 314 (bigeminy definition, end of frequency classes), 329 (remaining morphological criteria and the Brugada algorithm text; the algorithm figure survives on p.331), 336-337 (opening and rate definition of accelerated idioventricular rhythm), 340-342 (ventricular fibrillation text, chapter end). The index (PDF 295-298) and back cover (PDF 299) are present.",
+ "reading_method": [
+  "1. Context first: note the patient's age, sex, symptoms and drugs (digitalis, antiarrhythmics, beta-blockers), and find any previous ECG to compare. Always read all 12 leads together, never a single lead.",
+  "2. Technical check: the calibration pulse should be 10 mm per mV with square corners (rescale if the gain is half or double). Paper speed should be 25 mm/s (1 mm = 0.04 s). Check for a stable baseline, correct electrode colours and positions, and that II = I + III. P positive in aVR or negative in I suggests swapped arm cables.",
+  "3. Rhythm: is it sinus? Look for a normal P before every QRS (negative in aVR, positive in II, +/- in V1), a constant PR of at least 0.12 s, regular RR (spread ≤0.16 s) and a rate of 60-100 bpm. If not, find where the atrial activity starts.",
+  "4. Rate: for a regular rhythm, divide 300 by the number of large squares between R waves. For an irregular rhythm, count QRS complexes in 6 s and multiply by 10. Compare with the norms for age, and measure atrial and ventricular rates separately when they differ.",
+  "5. P wave in II and V1: normal is ≤0.10 s, ≤2.5 mm, axis about +54°. A tall peaked P with ++- in V1 suggests right atrial enlargement. A wide notched P with +-- in V1 suggests left atrial enlargement.",
+  "6. PR: measure from the start of P to the start of QRS and judge it against age and rate. A short PR calls for a search for a delta wave (WPW), LGL or a junctional or low atrial origin. A long PR means first-degree block. If P waves are dropped, march them out and classify the second- or third-degree block.",
+  "7. QRS: normal width is 0.06-0.10 s. At 0.12 s or more, consider bundle branch block (compare V1-V2 with V5-V6), pre-excitation or a ventricular origin. Name each complex (rS, qR, rsR', QS).",
+  "8. Frontal axis: use the hexaxial system, either with the net QRS of I and III or with the isodiphasic lead. Compare with the age range. Marked deviation suggests a fascicular block, hypertrophy or heart position. If every limb lead is isodiphasic, the axis is indeterminate.",
+  "9. Precordial progression: expect rS in V1-V2, transition at V3-V4 and qRs in V5-V6. A shifted transition points to rotation, hypertrophy or infarction.",
+  "10. Chambers: use age-adjusted voltages and indices (Sokolow, Lewis, Cabrera), the intrinsicoid deflection, the transition and overload repolarization, plus point scores and the clinical context.",
+  "11. Q waves: separate a small septal q from a pathological Q (more than 25% of R and/or at least 0.04 s, notched). Group the leads with Q waves to localise necrosis.",
+  "12. ST: measure at the J point against the PR baseline. Map elevation or depression to a coronary territory and look for reciprocal changes. In inferior MI, compare III with II, check I and aVL, and record V3R-V4R. In V1-V2, tall R with ST depression may be posterior MI.",
+  "13. T and U: T normally has the same polarity as the main QRS (negative in aVR). Symmetric pointed inversion suggests ischaemia; asymmetric inversion opposite to the QRS suggests overload or BBB. Tall peaked T is also abnormal. Apply the normal variants for age, sex and ethnicity, and look for a U wave.",
+  "14. QT: measure from QRS onset to the end of T and correct for rate (Bazett QTc ≤0.44 s, or predicted QT = 0.39 × √RR). Watch for T-U fusion.",
+  "15. Confounders: BBB, pre-excitation, LVH strain, digitalis and pacing all produce secondary ST-T changes, so do not use ischaemia criteria on them.",
+  "16. Arrhythmia subroutines. Pause: compare it with the PP cycle and search the preceding T for a blocked P'. Extra beat: decide early or late, look for a preceding P', and assess QRS width, coupling and the pause. Narrow tachycardia: locate the P relative to the QRS and look for F or f waves (a vagal manoeuvre helps). Wide tachycardia: apply the stepwise VT algorithm and look for dissociation, capture and fusion beats.",
+  "17. Paced ECG: identify the spikes, the paced chamber, capture and sensing, the timing intervals, and the expected LBBB-like paced QRS with a superior axis.",
+  "18. Synthesis: list the findings in order (rhythm, rate, conduction, axis, chambers, ischaemia), compare with the earlier tracing, and answer the clinical question."
+ ],
+ "criteria": [
+  {
+   "id": "calibration-standard",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "Calibration",
+   "parameter": "gain and pulse",
+   "value": "10 mm = 1 mV (1 mm = 0.1 mV); pulse is a 10 mm rectangle with square corners",
+   "context": "Rounded corners = miscalibration; half (5 mm/mV) or double (20 mm/mV) gain requires rescaling",
+   "pdf_pages": "16-17, 21"
+  },
+  {
+   "id": "paper-time-scale",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "Paper at 25 mm/s",
+   "parameter": "time per grid unit",
+   "value": "1 mm = 0.04 s; 5 mm = 0.20 s; 25 mm = 1 s; 300 large squares per minute",
+   "context": "50 mm/s for fine morphology, 12.5 mm/s for long strips; Holter often 12.5 mm/s at 5 mm/mV",
+   "pdf_pages": "17, 21, 36, 244"
+  },
+  {
+   "id": "bipolar-limb-leads",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "Bipolar limb leads",
+   "parameter": "polarity",
+   "value": "I: left arm + / right arm −; II: left leg + / right arm −; III: left leg + / left arm −; right leg = ground",
+   "leads": "I, II, III",
+   "pdf_pages": "17-18"
+  },
+  {
+   "id": "einthoven-law",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "Einthoven's law",
+   "parameter": "relation",
+   "value": "II = I + III at every instant",
+   "context": "Quality check for recording and labelling",
+   "pdf_pages": "18"
+  },
+  {
+   "id": "wilson-goldberger",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "Wilson terminal and augmented leads",
+   "parameter": "construction",
+   "value": "Limb electrodes joined through 5000-ohm resistors (potential about 0); aVR, aVL, aVF up to 50% larger than VR, VL, VF",
+   "pdf_pages": "18"
+  },
+  {
+   "id": "limb-electrode-colours",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "Limb electrodes",
+   "parameter": "colour code",
+   "value": "Red right arm, yellow left arm, green left leg, black right leg",
+   "pdf_pages": "20"
+  },
+  {
+   "id": "precordial-positions",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "V1-V6",
+   "parameter": "positions",
+   "value": "V1 4th right ICS at sternal edge; V2 4th left ICS at sternal edge; V3 midway; V4 5th ICS midclavicular; V5 anterior axillary; V6 mid-axillary (book: 5th ICS)",
+   "context": "Current practice puts V5-V6 at the level of V4",
+   "pdf_pages": "19"
+  },
+  {
+   "id": "extra-chest-leads",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "Posterior, right-sided and Medrano leads",
+   "parameter": "positions and use",
+   "value": "V7-V9 at 5th left ICS (posterior axillary, mid-scapular, paravertebral); V3R-V9R mirror the left side; MD last right rib at midclavicular line, ME xiphoid, MI last left rib at midclavicular line",
+   "context": "Posterior MI, dextrocardia, congenital disease, RV infarction",
+   "pdf_pages": "20, 146"
+  },
+  {
+   "id": "exercise-lead-system",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "Exercise ECG leads",
+   "parameter": "placement",
+   "value": "Limb electrodes on torso (infraclavicular, lower ribs); CM5 = + at V5, − on manubrium; 12 leads + CM5 best",
+   "context": "Frontal axis and limb voltages are not comparable with a resting ECG",
+   "pdf_pages": "168"
+  },
+  {
+   "id": "arm-cable-reversal",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "Arm cable reversal",
+   "parameter": "P polarity",
+   "value": "P positive in aVR, negative in aVL/I with a normal P vector",
+   "context": "Exclude before diagnosing situs inversus",
+   "leads": "I, aVR, aVL",
+   "pdf_pages": "239"
+  },
+  {
+   "id": "qrs-naming",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "QRS nomenclature",
+   "parameter": "rules",
+   "value": "R = first positive wave; Q before R, S after R; QS = all negative; primes for extra waves; lowercase <5 mm, uppercase >5 mm; 'm' = notched",
+   "pdf_pages": "21-22"
+  },
+  {
+   "id": "ap-ecg-map",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "Action potential vs ECG",
+   "parameter": "correspondence",
+   "value": "Phase 0 = QRS; start of phase 1 = J point; phase 2 = ST; phase 3 = T; phase 4 = diastole",
+   "pdf_pages": "10-11"
+  },
+  {
+   "id": "cell-response-types",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "Fast vs slow-response cells",
+   "parameter": "electrophysiology",
+   "value": "Fast (myocardium, Purkinje): rest −90 mV, overshoot +20 mV, 0.5-5 m/s. Slow (nodes): rest about −70 mV, threshold about −55 mV, 0.01-0.1 m/s, phase-4 automaticity",
+   "context": "Slow nodal conduction produces the PR delay",
+   "pdf_pages": "9-12"
+  },
+  {
+   "id": "refractory-periods",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "Refractory periods",
+   "parameter": "ECG landmarks",
+   "value": "Absolute: QRS onset to about end of ST; relative: about the T wave; supernormal: end of T",
+   "context": "Stimulus on the T downslope can trigger repetitive firing (R-on-T)",
+   "pdf_pages": "11-12, 276"
+  },
+  {
+   "id": "dipole-rule",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "Dipole theory",
+   "parameter": "polarity",
+   "value": "Front moving toward electrode = positive; away = negative; perpendicular = isodiphasic",
+   "pdf_pages": "13, 29"
+  },
+  {
+   "id": "activation-vectors",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "Ventricular depolarization",
+   "parameter": "three vectors",
+   "value": "1 septal (left to right, forward); 2 free walls (right to left, LV dominant); 3 basal (up, rightward, back)",
+   "context": "Explains rS V1-V2, RS V3-V4, qRs V5-V6",
+   "pdf_pages": "28-29, 54"
+  },
+  {
+   "id": "repolarization-direction",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "Normal repolarization",
+   "parameter": "direction",
+   "value": "Subendocardium repolarizes last, so T has the same polarity as the main QRS",
+   "pdf_pages": "34-35"
+  },
+  {
+   "id": "atrial-repol-hidden",
+   "cluster": "basics-technique-leads-paper",
+   "entity": "Atrial repolarization (Ta)",
+   "parameter": "visibility",
+   "value": "Hidden in the PR segment and QRS",
+   "pdf_pages": "21, 33"
+  },
+  {
+   "id": "sinus-p-polarity",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "Sinus rhythm",
+   "parameter": "P polarity",
+   "value": "Positive in I, II, III, aVL, aVF and V2-V6; negative in aVR; +/- in V1",
+   "pdf_pages": "36, 238"
+  },
+  {
+   "id": "sinus-pr-rate-rr",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "Sinus rhythm",
+   "parameter": "PR, rate, RR",
+   "value": "Every P conducted with constant PR 0.12-0.20 s; rate 60-100 bpm (<60 bradycardia, >100 tachycardia); RR spread ≤0.16 s",
+   "context": "Ch.13 gives PR 0.11-0.20 s; spread >0.16 s with cyclic change = sinus arrhythmia",
+   "pdf_pages": "36, 238-240"
+  },
+  {
+   "id": "p-wave-normal",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "P wave",
+   "parameter": "axis, duration, height",
+   "value": "Axis about +54° (+30° to +60°); duration 0.07-0.10 s; height ≤2.5 mm (0.25 mV); best lead II",
+   "pdf_pages": "21, 26-27, 42, 193"
+  },
+  {
+   "id": "pr-normal",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "PR interval",
+   "parameter": "adult range",
+   "value": "From P onset to Q or R onset: 0.12-0.20 s",
+   "context": "<0.12 s = accelerated conduction (WPW, LGL, junctional); >0.20 s = first-degree block",
+   "pdf_pages": "22, 37"
+  },
+  {
+   "id": "pr-limits-age-rate",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "PR upper limits (Tables 2.2/7.1)",
+   "parameter": "PR (s) at HR ≤70/71-90/91-110/111-130/>130",
+   "value": "0-1.5 y 0.16/0.15/0.16/0.14/0.13; 1.5-6 y 0.17/0.17/0.16/0.15/0.14; 7-13 y 0.18/0.17/0.16/0.15/0.14; 14-17 y 0.19/0.18/0.18/0.17/0.16; young adult 0.20/0.19/0.18/0.17/0.16; adult 0.21/0.20/0.19/0.18/0.17",
+   "context": "Column headers misprinted in the book",
+   "pdf_pages": "23, 91"
+  },
+  {
+   "id": "heart-rate-methods",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "Heart rate",
+   "parameter": "methods",
+   "value": "Regular: 300 ÷ large squares (each small square 0.2). Irregular: QRS in 6 s × 10 (or 10 s × 6). Ruler: 2 cycles at 25 mm/s, 1 at 50 mm/s. Interval (ms) = 60000 ÷ rate",
+   "pdf_pages": "36-37, 228"
+  },
+  {
+   "id": "intrinsic-rates",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "Pacemaker hierarchy",
+   "parameter": "intrinsic rate",
+   "value": "Sinus 60-100 bpm; AV junction 35-60; idioventricular 20-40",
+   "pdf_pages": "8, 261, 280"
+  },
+  {
+   "id": "qrs-duration-normal",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "QRS",
+   "parameter": "duration",
+   "value": "0.06-0.10 s in the widest lead",
+   "pdf_pages": "21"
+  },
+  {
+   "id": "qtc-bazett",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "QT interval",
+   "parameter": "correction",
+   "value": "QRS onset to T end; QTc = QT/√RR (s), normal ≤0.44 s; predicted QT = 0.39 × √RR, abnormal if exceeded by >0.04 s",
+   "pdf_pages": "23-24, 37-38"
+  },
+  {
+   "id": "qt-max-table",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "Maximum QT (Table 2.3)",
+   "parameter": "QT (s) men and children / women",
+   "value": "HR 40: 0.491/0.503; 60: 0.422/0.432; 80: 0.374/0.384; 100: 0.338/0.347; 120: 0.310/0.317; 150: 0.275/0.282",
+   "pdf_pages": "24"
+  },
+  {
+   "id": "st-t-u-normal",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "ST, T and U",
+   "parameter": "normal",
+   "value": "ST isoelectric from J point. T asymmetric, concordant with QRS, negative only in aVR (may be flat/negative in V1, negative in III). U small and positive in chest leads",
+   "pdf_pages": "22-23, 34"
+  },
+  {
+   "id": "t-juvenile-variant",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "Negative T V1-V4 (variant)",
+   "parameter": "groups",
+   "value": "Normal in children <6 y (sometimes up to 12 y), about 25% of women, Black individuals",
+   "pdf_pages": "22, 34"
+  },
+  {
+   "id": "hexaxial-system",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "Hexaxial system",
+   "parameter": "angles and pairs",
+   "value": "I 0°, aVL −30°, II +60°, aVF +90°, III +120°, aVR −150°; perpendicular pairs I/aVF, II/aVL, III/aVR",
+   "pdf_pages": "24-25, 39"
+  },
+  {
+   "id": "axis-methods",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "QRS axis",
+   "parameter": "methods",
+   "value": "Plot net QRS of I and III and intersect perpendiculars, or take the lead perpendicular to the isodiphasic lead and use its sign; all limb leads isodiphasic = indeterminate",
+   "pdf_pages": "38-40"
+  },
+  {
+   "id": "qrs-axis-adult",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "QRS axis (adult)",
+   "parameter": "normal",
+   "value": "Mean about +50°; −30° to +105° (ch.5: −30° to +110°); left deviation = more negative than −30°",
+   "pdf_pages": "25, 56"
+  },
+  {
+   "id": "heart-position",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "Heart position",
+   "parameter": "axis and limb QRS",
+   "value": "Horizontal about 0° (qR I/aVL, rS inferior); intermediate about +60° (largest QRS in II); vertical about +90° (qR inferior, rS/QS I/aVL)",
+   "pdf_pages": "29, 31, 55"
+  },
+  {
+   "id": "precordial-progression",
+   "cluster": "rate-rhythm-intervals-axis",
+   "entity": "Precordial QRS",
+   "parameter": "normal and rotation",
+   "value": "rS V1-V2, RS V3-V4, qRs V5-V6. Clockwise rotation: rS to V4-V5, transition V5-V6. Counterclockwise: qR from V2-V3, transition V1-V2",
+   "pdf_pages": "30, 32"
+  },
+  {
+   "id": "paed-rate-pr",
+   "cluster": "pediatric-congenital",
+   "entity": "Children",
+   "parameter": "rate and PR",
+   "value": "HR about 150 by 2 months, falling to about 85 by 12-15 y; PR mean 0.12 s (0.11-0.14)",
+   "pdf_pages": "193"
+  },
+  {
+   "id": "paed-axis",
+   "cluster": "pediatric-congenital",
+   "entity": "QRS axis by age",
+   "parameter": "mean (range)",
+   "value": "1 wk-1 mo +110° (+30/+180); 1-3 mo +70° (+10/+125); 3 mo-3 y +60° (+10/+110); >3 y +60° (+20/+120)",
+   "context": "LAD in a child (lower limit about 0° after 2 months) suggests AVSD or tricuspid atresia, not LVH",
+   "pdf_pages": "25, 194"
+  },
+  {
+   "id": "paed-t-and-dominance",
+   "cluster": "pediatric-congenital",
+   "entity": "Paediatric repolarization and RV dominance",
+   "parameter": "normal",
+   "value": "T positive in V1 in first week, then negative V1-V3/V4 until about 6-12 y; R > S in V1 and vertical axis normal in newborn",
+   "pdf_pages": "36, 193"
+  },
+  {
+   "id": "voltage-v1-v2",
+   "cluster": "pediatric-congenital",
+   "entity": "Voltage by age (Table 2.1)",
+   "parameter": "mean (upper) mm, 0-1 mo/1-6 mo/6-12 mo/1-3 y/3-8 y/8-12 y/12-16 y/adult",
+   "value": "R V1 15(25) 11(20) 10(20) 9(18) 7(18) 6(16) 5(16) 3(14); S V1 10(20) 7(18) 8(16) 13(27) 14(30) 16(26) 15(24) 10(23); R V2 21(30) 21(30) 19(28) 16(25) 13(28) 10(22) 9(19) 6(21); S V2 20(35) 16(30) 17(30) 21(34) 23(38) 23(38) 23(48) 14(36)",
+   "context": "Low-resolution scan; verify",
+   "pdf_pages": "23"
+  },
+  {
+   "id": "voltage-v5-v6",
+   "cluster": "pediatric-congenital",
+   "entity": "Voltage by age (Table 2.1)",
+   "parameter": "mean (upper) mm, same age bands",
+   "value": "R V5 12(30) 17(30) 18(30) 19(36) 21(36) 22(36) 18(33) 12(33); S V5 9(30) 9(26) 8(20) 6(16) 5(14) 5(17) 5(16) -; R V6 6(21) 10(20) 13(20) 13(24) 14(24) 14(24) 14(22) 10(21); S V6 4(12) 2(7) 2(6) 2(6) 1(5) 1(4) 1(5) 1(13)",
+   "pdf_pages": "23"
+  },
+  {
+   "id": "voltage-limb",
+   "cluster": "pediatric-congenital",
+   "entity": "Voltage by age (Table 2.1)",
+   "parameter": "limb R, mean (upper) mm",
+   "value": "I 4(8) 7(13) 8(16) 8(16) 7(15) 7(15) 6(13) 6(13); III 8(16) 9(20) 9(20) 9(20) 9(20) 9(24) 9(24) 6(22); aVF 7(14) 10(20) 10(16) 8(20) 10(19) 10(20) 11(21) 5(23); aVR 3(7) 3(6) 3(6) 2(6) 2(5) 2(4) 2(4) 1(4); S in I 5(10) to 1(6)",
+   "context": "Adult R in II printed 19(25); verify",
+   "pdf_pages": "23"
+  },
+  {
+   "id": "atrial-timing",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "Atrial activation",
+   "parameter": "timing",
+   "value": "RA about 0-0.06 s, LA about 0.03-0.10 s; first part of P = RA",
+   "pdf_pages": "26, 43"
+  },
+  {
+   "id": "rae-criteria",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "Right atrial enlargement",
+   "parameter": "P wave",
+   "value": "P >2.5 mm, peaked and symmetric, tallest in II/III/aVF; axis right of +54°; duration normal (≤0.11 s); V1 ++-",
+   "context": "In congenital right-heart obstruction the P axis may shift left",
+   "pdf_pages": "43-46, 194"
+  },
+  {
+   "id": "rae-indirect",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "Right atrial enlargement",
+   "parameter": "indirect QRS signs",
+   "value": "qR in V1 without infarction; QRS voltage V2/V1 ≥4, or >5 with V1 ≤4 mm",
+   "leads": "V1, V2",
+   "pdf_pages": "46"
+  },
+  {
+   "id": "lae-criteria",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "Left atrial enlargement",
+   "parameter": "P wave",
+   "value": "P >0.11 s, bimodal or notched (P mitrale); axis toward 0° (larger in I/aVL); V1 +-- with dominant terminal negativity; second hump >2.5 mm if LA hypertrophied",
+   "context": "Romhilt-Estes: terminal V1 negativity >0.04 s",
+   "pdf_pages": "47-48, 61"
+  },
+  {
+   "id": "lae-in-af",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "LA enlargement in AF",
+   "parameter": "f-wave size",
+   "value": "Coarse f >1 mm in V1 suggests a large LA (fine ≤1 mm)",
+   "pdf_pages": "48"
+  },
+  {
+   "id": "biatrial",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "Biatrial enlargement",
+   "parameter": "P wave",
+   "value": "P both long and tall (first hump); or bimodal limb-lead P with ++- V1, or peaked limb-lead P with +-- V1",
+   "context": "Book's duration cut-off >2.5 mm (0.10 s) is shorter than its LAE cut-off",
+   "pdf_pages": "52"
+  },
+  {
+   "id": "lvh-axis-voltage",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "LVH",
+   "parameter": "axis and Sokolow index",
+   "value": "Axis beyond −30°; S V1 + R V6 >35 mm",
+   "context": "Common Sokolow-Lyon uses the larger of RV5/RV6",
+   "pdf_pages": "56"
+  },
+  {
+   "id": "lewis-index",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "Lewis index",
+   "parameter": "(RI + SIII) − (RIII + SI)",
+   "value": "Normal −14 to +17 mm; >+17 = LVH; <−14 = RVH",
+   "pdf_pages": "56, 60"
+  },
+  {
+   "id": "intrinsicoid-deflection",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "Intrinsicoid deflection time",
+   "parameter": "QRS onset to R peak",
+   "value": "Normal ≤0.045 s in V5-V6 and <0.035 s in V1; longer in leads facing hypertrophied or late-activated wall",
+   "pdf_pages": "56, 60"
+  },
+  {
+   "id": "lvh-transition-q",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "LVH",
+   "parameter": "transition and septal q",
+   "value": "Transition shifted right (RS in V1-V2, qRs in V3-V4); deep q in V5-V6 if septum hypertrophied",
+   "pdf_pages": "56-57"
+  },
+  {
+   "id": "lv-systolic-overload",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "LV pressure overload (strain)",
+   "parameter": "ST-T",
+   "value": "ST depression and asymmetric inverted T (slow down, fast up, blunt nadir) opposite to tall R",
+   "leads": "V5-V6, I, aVL",
+   "pdf_pages": "57, 218"
+  },
+  {
+   "id": "lv-volume-overload",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "LV volume overload",
+   "parameter": "QRS-T",
+   "value": "Deep narrow q, tall R, tall peaked symmetric upright T; absent S in V5-V6 (only without BBB)",
+   "leads": "V5-V6, aVL, aVF",
+   "pdf_pages": "195, 214"
+  },
+  {
+   "id": "lvh-accuracy",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "ECG for LVH",
+   "parameter": "accuracy",
+   "value": "Sensitivity about 50%, specificity about 85%",
+   "context": "Pericardial effusion, emphysema and coexisting RVH lower the voltage",
+   "pdf_pages": "57"
+  },
+  {
+   "id": "romhilt-estes",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "Romhilt-Estes score",
+   "parameter": "items",
+   "value": "Voltage (limb R or S >20 mm, S V1/V2 >30, R V5/V6 >30) 3 pts; ST-T strain 3 pts (1 pt on digitalis); LA terminal V1 force 3 pts; intrinsicoid V5/V6 >0.05 s 1 pt; QRS >0.09 s; left axis (original 2 pts). Total ≥5 = LVH, 4 = probable",
+   "context": "Scanned table omits the axis item and scores QRS differently; voltage unreliable under 18 and over 60 years",
+   "pdf_pages": "57, 61"
+  },
+  {
+   "id": "rvh-criteria",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "RVH",
+   "parameter": "main criteria",
+   "value": "Axis >+110° (largest QRS III/aVF); tall R (Rs/qR) V1-V2 with deep S V5-V6; R/(R+S) V1 ≥0.5 (Cabrera); intrinsicoid V1 ≥0.035 s; transition shifted left; tall R aVR if outflow obstructed",
+   "pdf_pages": "59-60, 64"
+  },
+  {
+   "id": "rv-systolic-overload",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "RV pressure overload",
+   "parameter": "T wave",
+   "value": "Asymmetric blunt negative T in V1-V2 (to V4) with tall R",
+   "pdf_pages": "64"
+  },
+  {
+   "id": "flowers-horan",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "Flowers-Horan score",
+   "parameter": "main items and total",
+   "value": "5 pts: R/S V5 ÷ R/S V1 ≤0.4; qR V1. 4 pts: R/S V1 >1; S V1 <2 mm; RV1 + SV5/6 >10.5 mm; axis >+110°. Smaller items 1-3 pts. ≥10 = RV enlargement; 7-9 probable; 5-6 possible",
+   "context": "One 3-point item is illegible in the scan",
+   "pdf_pages": "64"
+  },
+  {
+   "id": "biventricular-hypertrophy",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "Biventricular hypertrophy",
+   "parameter": "pattern",
+   "value": "Tall R in both V1-V2 and V5-V6; large equiphasic RS V2-V4; deep q V5-V6",
+   "pdf_pages": "67, 215"
+  },
+  {
+   "id": "rv-volume-overload",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "entity": "RV volume overload",
+   "parameter": "V1",
+   "value": "rsR' (incomplete RBBB) with a rightward axis",
+   "pdf_pages": "209, 212"
+  },
+  {
+   "id": "bbb-qrs-cutoff",
+   "cluster": "bundle-branch-fascicular-blocks",
+   "entity": "Complete BBB",
+   "parameter": "QRS duration",
+   "value": "≥0.12 s (intro) / >0.12 s (Table 6.1); incomplete <0.12 s",
+   "pdf_pages": "69-70"
+  },
+  {
+   "id": "rbbb-complete",
+   "cluster": "bundle-branch-fascicular-blocks",
+   "entity": "Complete RBBB",
+   "parameter": "morphology",
+   "value": "rsR'/rSR'/M-shape with slurred R' in V1-V2; qRs with broad slurred s in V5-V6 and I; T negative and asymmetric in V1, positive in V6",
+   "context": "Book places the axis beyond +80°; modern texts usually normal",
+   "pdf_pages": "72"
+  },
+  {
+   "id": "rbbb-incomplete",
+   "cluster": "bundle-branch-fascicular-blocks",
+   "entity": "Incomplete RBBB",
+   "parameter": "morphology",
+   "value": "QRS <0.12 s; rSr' in V1; slurred terminal s in V6",
+   "pdf_pages": "76"
+  },
+  {
+   "id": "lbbb-complete",
+   "cluster": "bundle-branch-fascicular-blocks",
+   "entity": "Complete LBBB",
+   "parameter": "morphology",
+   "value": "QS or rS in V1-V2; broad notched R without q in V5-V6, I, aVL; axis −15° to −60° (or 0° to −60°); negative asymmetric T in V5-V6",
+   "pdf_pages": "77, 80"
+  },
+  {
+   "id": "lbbb-grades",
+   "cluster": "bundle-branch-fascicular-blocks",
+   "entity": "Incomplete LBBB (Sodi-Pallares)",
+   "parameter": "grades I-II",
+   "value": "Grade I: loss of q in V5-V6, smaller r in V1-V2. Grade II: QS V1-V2, pure slurred R in V5-V6; QRS <0.12 s",
+   "pdf_pages": "79-80"
+  },
+  {
+   "id": "lafb",
+   "cluster": "bundle-branch-fascicular-blocks",
+   "entity": "Left anterior fascicular block",
+   "parameter": "criteria",
+   "value": "QRS <0.12 s; axis −45° to −75° (text: beyond −30°); qR in I/aVL; rS in II, III, aVF; delayed intrinsicoid I/aVL",
+   "pdf_pages": "81-82"
+  },
+  {
+   "id": "lpfb",
+   "cluster": "bundle-branch-fascicular-blocks",
+   "entity": "Left posterior fascicular block",
+   "parameter": "criteria",
+   "value": "QRS <0.12 s; axis +90° to +120°; rS in I/aVL; qR in II, III, aVF; intrinsicoid >0.05 s inferiorly",
+   "pdf_pages": "82"
+  },
+  {
+   "id": "bifascicular",
+   "cluster": "bundle-branch-fascicular-blocks",
+   "entity": "Bifascicular block",
+   "parameter": "criteria",
+   "value": "RBBB + LAFB: axis about −60°, slurred S inferior, tall R aVR/aVL. RBBB + LPFB: right axis, tall slurred R inferior, intrinsicoid >0.05 s",
+   "pdf_pages": "83"
+  },
+  {
+   "id": "trifascicular",
+   "cluster": "bundle-branch-fascicular-blocks",
+   "entity": "Trifascicular block",
+   "parameter": "definition",
+   "value": "RBBB + both left fascicles, or any bifascicular block + PR >0.20 s",
+   "pdf_pages": "70, 83, 85"
+  },
+  {
+   "id": "masked-bbb",
+   "cluster": "bundle-branch-fascicular-blocks",
+   "entity": "Masked BBB",
+   "parameter": "pattern",
+   "value": "Dominant R in V1 (RBBB-like) but broad R without S in I/aVL, rS/QS inferiorly, marked left axis (LBBB-like)",
+   "pdf_pages": "85"
+  },
+  {
+   "id": "rate-dependent-bbb",
+   "cluster": "bundle-branch-fascicular-blocks",
+   "entity": "Intermittent BBB",
+   "parameter": "trigger",
+   "value": "Appears above a critical rate; may alternate beat to beat",
+   "pdf_pages": "85"
+  },
+  {
+   "id": "his-intervals",
+   "cluster": "av-blocks-sinus-node",
+   "entity": "His-bundle electrogram",
+   "parameter": "normal intervals",
+   "value": "PA 25-40 ms; AH 60-140 ms; His spike 15-20 ms; HV 35-55 ms",
+   "pdf_pages": "89-90"
+  },
+  {
+   "id": "first-degree-avb",
+   "cluster": "av-blocks-sinus-node",
+   "entity": "First-degree AV block",
+   "parameter": "PR",
+   "value": ">0.20 s in adults (>0.18 s in children or at HR >110); all P conducted",
+   "context": "PR can reach 0.60 s and hide P after T. Variable PR suggests vagal cause; fixed PR suggests structural cause",
+   "pdf_pages": "37, 90"
+  },
+  {
+   "id": "mobitz-i",
+   "cluster": "av-blocks-sinus-node",
+   "entity": "Mobitz I (Wenckebach)",
+   "parameter": "criteria",
+   "value": "PR lengthens until a P is blocked; RR shortens; pause <2 × PP; QRS usually narrow",
+   "context": "Nodal in 75%; atypical form lacks RR shortening",
+   "pdf_pages": "91-92"
+  },
+  {
+   "id": "wenckebach-arithmetic",
+   "cluster": "av-blocks-sinus-node",
+   "entity": "Typical Wenckebach",
+   "parameter": "arithmetic",
+   "value": "Largest increment on 2nd beat; pause = 2PP − total increment. Example PP 800, PR 120/280/400/480 gives RR 960/920/880 and pause 1240 ms",
+   "pdf_pages": "96"
+  },
+  {
+   "id": "mobitz-ii",
+   "cluster": "av-blocks-sinus-node",
+   "entity": "Mobitz II",
+   "parameter": "criteria",
+   "value": "Sudden blocked P with constant PR before and after",
+   "context": "Always structural; may progress suddenly to complete block",
+   "pdf_pages": "92"
+  },
+  {
+   "id": "fixed-variable-advanced-avb",
+   "cluster": "av-blocks-sinus-node",
+   "entity": "Second-degree variants",
+   "parameter": "ratio",
+   "value": "Fixed 2:1, 3:1, 4:1; variable ratio; advanced = ≥2 consecutive blocked P with constant PR in conducted beats",
+   "context": "In the book's notation, 3:1 means one P blocked in every 3. 2:1 cannot be typed from one strip",
+   "pdf_pages": "92-93"
+  },
+  {
+   "id": "complete-avb",
+   "cluster": "av-blocks-sinus-node",
+   "entity": "Complete AV block",
+   "parameter": "criteria",
+   "value": "P and QRS independent; P rate > QRS rate; PR random; P may hide in QRS or notch T",
+   "pdf_pages": "94"
+  },
+  {
+   "id": "escape-site",
+   "cluster": "av-blocks-sinus-node",
+   "entity": "Complete AV block escape",
+   "parameter": "QRS",
+   "value": "Proximal (30-40%): narrow. Distal (60-70%): wide, BBB-like (LV focus RBBB shape, RV focus LBBB shape)",
+   "pdf_pages": "94-95"
+  },
+  {
+   "id": "avb-in-mi",
+   "cluster": "av-blocks-sinus-node",
+   "entity": "AV block in MI",
+   "parameter": "type by site",
+   "value": "Inferior: Mobitz I, gradual complete block with nodal escape (mortality 20-25%). Anterior: Mobitz II, sudden block with idioventricular escape (70-80%)",
+   "pdf_pages": "159"
+  },
+  {
+   "id": "avb-exercise",
+   "cluster": "av-blocks-sinus-node",
+   "entity": "AV block during exercise",
+   "parameter": "response",
+   "value": "PR shortens normally; Mobitz I improves; Mobitz II worsens; complete block in recovery is serious",
+   "pdf_pages": "177-178"
+  },
+  {
+   "id": "sinus-pause-types",
+   "cluster": "av-blocks-sinus-node",
+   "entity": "Sinus pause",
+   "parameter": "pause vs PP",
+   "value": "Sinus arrest: not a multiple of PP. SA exit block: exact multiple of PP",
+   "context": "First look for a blocked premature P' notching the preceding T",
+   "pdf_pages": "242-243"
+  },
+  {
+   "id": "sick-sinus",
+   "cluster": "av-blocks-sinus-node",
+   "entity": "Sick sinus syndrome",
+   "parameter": "tests",
+   "value": "Pacing if symptomatic or pauses >3 s; atropine 1-2 mg abnormal if rate rises <25% or stays <90 bpm; 24-72 h Holter",
+   "pdf_pages": "244-245"
+  },
+  {
+   "id": "av-dissociation",
+   "cluster": "av-blocks-sinus-node",
+   "entity": "AV dissociation",
+   "parameter": "definition",
+   "value": "Independent atria and ventricles with ventricular rate > atrial rate; complete, with capture, or isorhythmic",
+   "context": "In complete AV block the atrial rate is faster",
+   "pdf_pages": "269-270"
+  },
+  {
+   "id": "lev-disease",
+   "cluster": "av-blocks-sinus-node",
+   "entity": "Lev disease",
+   "parameter": "mechanism",
+   "value": "Calcific aortic valve disease extends into the His bundle and causes complete AV block",
+   "pdf_pages": "9"
+  },
+  {
+   "id": "ischaemia-t",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Ischaemia",
+   "parameter": "T wave",
+   "value": "Subendocardial: tall, peaked, symmetric T. Subepicardial: negative, symmetric, pointed T",
+   "pdf_pages": "133"
+  },
+  {
+   "id": "injury-st",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Injury",
+   "parameter": "ST segment",
+   "value": "Subendocardial: ST depression. Subepicardial: ST elevation (acute MI in coronary context)",
+   "pdf_pages": "133"
+  },
+  {
+   "id": "pathological-q",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Pathological Q",
+   "parameter": "criteria",
+   "value": "Depth >25% of R and/or ≥0.04 s; notching supports. QS = transmural; Qr/QR = surviving tissue",
+   "context": "Small septal q in V5-V6 is normal",
+   "pdf_pages": "133-134"
+  },
+  {
+   "id": "mi-time-course",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Acute MI evolution",
+   "parameter": "timeline",
+   "value": "Minutes-hours: ST elevation; hours: R loss and Q; about 24 h: ST falls, T inverts; 1 week: Q + negative T; 1 month: T may normalize",
+   "pdf_pages": "132"
+  },
+  {
+   "id": "mi-territories",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Infarct localisation",
+   "parameter": "leads",
+   "value": "II, III, aVF inferior; V1-V2 septal; V1-V3 anteroseptal; V2 or V3 apical; V1-V4 anterior; V1-V6 extensive anterior; I, aVL, V5, V6 lateral (I/aVL high, V5-V6 low)",
+   "pdf_pages": "136, 139"
+  },
+  {
+   "id": "reciprocal-changes",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Reciprocal change",
+   "parameter": "mirror leads",
+   "value": "Inferior STEMI: ST down in I/aVL. Anterior STEMI: ST down in III/aVF. Inferoposterior: ST down in V1-V3",
+   "pdf_pages": "137, 146"
+  },
+  {
+   "id": "rca-vs-cx",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Inferior MI culprit",
+   "parameter": "ST pattern",
+   "value": "RCA: ST elevation III > II with ST depression in I. Circumflex: ST elevation greatest in II, lead I isoelectric",
+   "pdf_pages": "156"
+  },
+  {
+   "id": "rv-infarction",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "RV extension",
+   "parameter": "criteria",
+   "value": "Inferior STEMI + ST depression in I/aVL + ST elevation in V3R-V4R or MD",
+   "context": "Record right-sided leads in every inferior MI; RV is involved in 10-50%",
+   "pdf_pages": "144-147"
+  },
+  {
+   "id": "posterior-mi",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Posterior MI",
+   "parameter": "signs",
+   "value": "Mirror image in V1-V2: tall R and ST depression. Direct image in V8-V9: Q and ST elevation",
+   "pdf_pages": "148-150"
+  },
+  {
+   "id": "non-q-mi",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Non-Q MI",
+   "parameter": "criteria",
+   "value": "ST depression or deep negative T, enzyme rise, no Q, ECG normalizes",
+   "pdf_pages": "142-143"
+  },
+  {
+   "id": "diffuse-st-depression-avr",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Three-vessel pattern",
+   "parameter": "ST",
+   "value": "ST depression in >8 leads with ST elevation in aVR",
+   "pdf_pages": "143"
+  },
+  {
+   "id": "prinzmetal",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Prinzmetal angina",
+   "parameter": "ECG",
+   "value": "Transient ST elevation in one territory during rest pain; normal ECG and enzymes afterwards",
+   "pdf_pages": "143-144"
+  },
+  {
+   "id": "silent-ischaemia-holter",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Silent ischaemia on Holter",
+   "parameter": "episode",
+   "value": "ST depression >1 mm at J+80 ms lasting >1 min",
+   "pdf_pages": "148"
+  },
+  {
+   "id": "lv-aneurysm",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "LV aneurysm",
+   "parameter": "ST",
+   "value": "ST elevation persisting >4-6 weeks over Q waves; possible rsR' in V5-V6",
+   "pdf_pages": "148"
+  },
+  {
+   "id": "pvc-reveals-mi",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "PVC morphology",
+   "parameter": "Q wave",
+   "value": "QR/qR PVC with Q >0.04 s suggests infarction; a QS PVC is not diagnostic",
+   "pdf_pages": "149"
+  },
+  {
+   "id": "reperfusion-markers",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Reperfusion",
+   "parameter": "ST and T",
+   "value": "ST resolution >70% (about 50% suffices in anterior MI); <25% change at 1 h = no reperfusion; T inversion within 2 h of thrombolysis",
+   "context": "About 50% show a transient early ST rise; <30% resolution does not prove occlusion",
+   "pdf_pages": "149, 153-154"
+  },
+  {
+   "id": "engelen-patterns",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "LAD occlusion level (anterior MI)",
+   "parameter": "pattern",
+   "value": "Proximal to S1 and D1: ST up in aVR, aVL, V1 >2 mm, ST down inferiorly (III > II) and V5. Distal to both: Q V4-V6, no inferior depression. Between S1 and D1: ST up I/aVL, III depressed more than II. Proximal to S1 but distal to D1: ST up aVR/V1, ST down aVL/V5",
+   "context": "New RBBB and V1 >2.5 mm are 100% specific but only 12-14% sensitive",
+   "pdf_pages": "156-158"
+  },
+  {
+   "id": "coronary-supply",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Coronary supply",
+   "parameter": "dominance",
+   "value": "Sinus node artery from RCA 55%; PDA from RCA 90%; AV node artery from RCA; LAD wraps the apex in 70%",
+   "pdf_pages": "154-156"
+  },
+  {
+   "id": "exercise-positive-st",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Exercise test",
+   "parameter": "ECG positivity",
+   "value": "J depression ≥1 mm with horizontal or downsloping ST for >80 ms; or ST elevation ≥1 mm in leads without Q (suggests LM, 3-vessel or proximal LAD disease)",
+   "pdf_pages": "172-175"
+  },
+  {
+   "id": "exercise-target-hr",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Exercise test",
+   "parameter": "target HR",
+   "value": "220 − age (men), 210 − age (women); maximal >85%; <85% with no changes = inconclusive",
+   "pdf_pages": "168-169, 180"
+  },
+  {
+   "id": "exercise-severity",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Exercise test",
+   "parameter": "severity",
+   "value": "Mild: onset at Bruce stage III or later, ≤2 mm. Early positive: onset in stage I, >3 mm, or lasting >8 min into recovery",
+   "pdf_pages": "180"
+  },
+  {
+   "id": "duke-score",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Duke treadmill score",
+   "parameter": "formula",
+   "value": "Bruce minutes − 5 × max ST (mm) − 4 × angina index (0/1/2); ≤−11 high risk, ≥+5 low risk",
+   "pdf_pages": "180"
+  },
+  {
+   "id": "exercise-stop-ecg",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Exercise test",
+   "parameter": "ECG stopping criteria",
+   "value": "ST depression >4 mm; ST elevation >2 mm without prior MI; VT; increasing multifocal PVCs; fast SVT/AF; 2nd/3rd-degree AV block; new LBBB",
+   "pdf_pages": "185"
+  },
+  {
+   "id": "exercise-confounders",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Exercise test",
+   "parameter": "uninterpretable baselines",
+   "value": "LBBB, WPW, LVH strain, digitalis: use imaging. With RBBB, only V5-V6 depression counts",
+   "context": "Sensitivity about 40% for 1-vessel vs 90% for 3-vessel disease; specificity 85-90%",
+   "pdf_pages": "177, 185, 189-190"
+  },
+  {
+   "id": "exercise-other-responses",
+   "cluster": "ischemia-injury-infarction",
+   "entity": "Exercise test",
+   "parameter": "BP and R wave",
+   "value": "Hypertensive response: SBP rise >70 mmHg or DBP rise >15 mmHg; a falling BP suggests LV dysfunction. R normally falls in V5 (Brody); Ellestad R index >0 is abnormal",
+   "pdf_pages": "173-175"
+  },
+  {
+   "id": "wpw-criteria",
+   "cluster": "preexcitation-wpw",
+   "entity": "WPW",
+   "parameter": "criteria",
+   "value": "Normal P; PR <0.12 s; delta wave; wide QRS; T opposite to QRS; long QT",
+   "context": "About 12% have PR >0.12 s (Mahaim fibres)",
+   "pdf_pages": "103"
+  },
+  {
+   "id": "lgl",
+   "cluster": "preexcitation-wpw",
+   "entity": "LGL",
+   "parameter": "criteria",
+   "value": "PR <0.11 s, narrow QRS without delta, normal repolarization",
+   "pdf_pages": "106, 109"
+  },
+  {
+   "id": "post-svt-triage",
+   "cluster": "preexcitation-wpw",
+   "entity": "ECG after SVT ends",
+   "parameter": "substrate",
+   "value": "Short PR + delta = WPW; short PR only = LGL; normal ECG = concealed pathway",
+   "pdf_pages": "108"
+  },
+  {
+   "id": "mahaim-bardy",
+   "cluster": "preexcitation-wpw",
+   "entity": "Mahaim tachycardia",
+   "parameter": "Bardy criteria",
+   "value": "LBBB pattern, axis 0° to −75°, QRS ≤0.15 s, R in I, rS in V1, transition after V4",
+   "pdf_pages": "111"
+  },
+  {
+   "id": "arruda-algorithm",
+   "cluster": "preexcitation-wpw",
+   "entity": "Arruda algorithm (delta in first 20 ms)",
+   "parameter": "steps",
+   "value": "1) delta −/± in I or V1 R/S >1: left free wall. 2) delta − in II: subepicardial posteroseptal. 3) delta −/± in V1: septal (subdivided by aVF and lead III). 4) delta + in V1: right free wall (subdivided by aVF and II)",
+   "pdf_pages": "112-116"
+  },
+  {
+   "id": "rodriguez-rule",
+   "cluster": "preexcitation-wpw",
+   "entity": "Pathway location (quick rule)",
+   "parameter": "V1 and inferior delta",
+   "value": "Negative delta/QRS in V1 = right-sided, positive = left-sided; negative delta in II/III/aVF = posteroseptal; left lateral = −/iso delta in I, aVL, V5-V6",
+   "pdf_pages": "112, 116"
+  },
+  {
+   "id": "orthodromic-avrt",
+   "cluster": "preexcitation-wpw",
+   "entity": "Orthodromic AVRT",
+   "parameter": "criteria",
+   "value": "Regular narrow QRS at 180-250 bpm; retrograde P on ST/T, negative inferiorly; RP < PR",
+   "pdf_pages": "120"
+  },
+  {
+   "id": "antidromic-avrt",
+   "cluster": "preexcitation-wpw",
+   "entity": "Antidromic AVRT",
+   "parameter": "criteria",
+   "value": "Regular wide QRS with maximal pre-excitation",
+   "context": "Differential diagnosis: VT",
+   "pdf_pages": "120"
+  },
+  {
+   "id": "preexcited-af",
+   "cluster": "preexcitation-wpw",
+   "entity": "Pre-excited AF",
+   "parameter": "criteria and risk",
+   "value": "Irregular wide QRS of varying width at 200-350 bpm; shortest RR <220 ms = high risk",
+   "context": "Intermittent pre-excitation is a low-risk marker",
+   "pdf_pages": "122-126"
+  },
+  {
+   "id": "ablation-success",
+   "cluster": "preexcitation-wpw",
+   "entity": "Successful ablation",
+   "parameter": "ECG",
+   "value": "Abrupt loss of delta, PR normalizes, QRS narrows, axis shifts",
+   "pdf_pages": "126"
+  },
+  {
+   "id": "svt-definition",
+   "cluster": "supraventricular-arrhythmias",
+   "entity": "Supraventricular tachycardia",
+   "parameter": "definition",
+   "value": "≥3 fast impulses from above the His bifurcation (AF and flutter excluded)",
+   "pdf_pages": "237"
+  },
+  {
+   "id": "pac-criteria",
+   "cluster": "supraventricular-arrhythmias",
+   "entity": "Atrial premature beat",
+   "parameter": "criteria",
+   "value": "Early P' of different shape; P'R normal or long; QRS like sinus, or aberrant or blocked if very early; incomplete pause",
+   "pdf_pages": "246"
+  },
+  {
+   "id": "low-atrial-rhythm",
+   "cluster": "supraventricular-arrhythmias",
+   "entity": "Low atrial rhythm",
+   "parameter": "P polarity",
+   "value": "P negative in II, III, aVF and positive in aVR, aVL",
+   "pdf_pages": "239"
+  },
+  {
+   "id": "atrial-tachycardia",
+   "cluster": "supraventricular-arrhythmias",
+   "entity": "Atrial tachycardia",
+   "parameter": "criteria",
+   "value": "Abnormal P' before each QRS (P'R < RP'); 140-220 bpm (automatic 100-180); warm-up at onset; P'R lengthening to block suggests reentry",
+   "pdf_pages": "247-249"
+  },
+  {
+   "id": "blocked-at-mat",
+   "cluster": "supraventricular-arrhythmias",
+   "entity": "Blocked AT and MAT",
+   "parameter": "criteria",
+   "value": "Blocked AT: P' separated by isoelectric baseline, more P' than QRS. MAT: ≥3 P morphologies with variable PP/PR/RR",
+   "pdf_pages": "250-251"
+  },
+  {
+   "id": "flutter-criteria",
+   "cluster": "supraventricular-arrhythmias",
+   "entity": "Atrial flutter",
+   "parameter": "criteria",
+   "value": "Atrial rate 200-350 (about 300); sawtooth F waves without isoelectric line; typical flutter negative in II/III/aVF, atypical positive; untreated 2:1 (about 150 bpm); 1:1 is an emergency",
+   "pdf_pages": "251-254"
+  },
+  {
+   "id": "af-criteria",
+   "cluster": "supraventricular-arrhythmias",
+   "entity": "Atrial fibrillation",
+   "parameter": "criteria",
+   "value": "No P; f waves 350-600/min (V1-V2); irregular RR; untreated rate 100-180; >200 suggests a pathway; 40-60 without drugs suggests AV node disease",
+   "pdf_pages": "254-255"
+  },
+  {
+   "id": "aberrancy-vs-pvc",
+   "cluster": "supraventricular-arrhythmias",
+   "entity": "Aberrancy vs PVC",
+   "parameter": "discriminators",
+   "value": "Aberrancy: preceding P', rSR' in V1, incomplete pause, RP <0.11 s, Ashman long-short with variable coupling. PVC: no P, complete pause, fixed coupling, RP >0.20 s, concordance",
+   "pdf_pages": "255, 279-280"
+  },
+  {
+   "id": "junctional-rhythm",
+   "cluster": "supraventricular-arrhythmias",
+   "entity": "Junctional rhythm",
+   "parameter": "criteria",
+   "value": "35-60 bpm, narrow QRS; inverted P before QRS with PR <0.10 s, or hidden, or after QRS with RP ≤0.20 s",
+   "context": "An escape beat is late; a premature junctional beat is early",
+   "pdf_pages": "261-263"
+  },
+  {
+   "id": "avnrt",
+   "cluster": "supraventricular-arrhythmias",
+   "entity": "AVNRT",
+   "parameter": "criteria",
+   "value": "Sudden onset, regular 140-220 bpm, narrow QRS; retrograde P hidden or at the end of QRS: pseudo-r' V1, pseudo-s II/III/aVF; often ends with vagal manoeuvres",
+   "context": "P visible in about 50%",
+   "pdf_pages": "265, 268"
+  },
+  {
+   "id": "pvc-criteria",
+   "cluster": "ventricular-arrhythmias",
+   "entity": "PVC",
+   "parameter": "criteria",
+   "value": "Early wide BBB-like QRS (>0.12 s) without P; discordant ST-T; fixed coupling (±0.08 s); complete pause",
+   "context": "Variable coupling suggests parasystole; interpolated PVCs have no pause",
+   "pdf_pages": "272, 276"
+  },
+  {
+   "id": "pvc-origin",
+   "cluster": "ventricular-arrhythmias",
+   "entity": "PVC origin",
+   "parameter": "V1 shape",
+   "value": "RBBB-like = left ventricle; LBBB-like = right ventricle",
+   "pdf_pages": "273"
+  },
+  {
+   "id": "pvc-grouping-lown",
+   "cluster": "ventricular-arrhythmias",
+   "entity": "Ventricular ectopy grading",
+   "parameter": "grouping and Lown grade",
+   "value": "Bigeminy, trigeminy, couplet, triplet, >3 = VT run. Lown 0 none; 1 <30/h; 2 >30/h; 3 multifocal; 4A couplets; 4B salvos; 5 R-on-T",
+   "pdf_pages": "276, 278"
+  },
+  {
+   "id": "escape-idioventricular",
+   "cluster": "ventricular-arrhythmias",
+   "entity": "Ventricular escape",
+   "parameter": "criteria",
+   "value": "Late wide beat without P; idioventricular rhythm 20-40 bpm",
+   "pdf_pages": "279-280"
+  },
+  {
+   "id": "vt-criteria",
+   "cluster": "ventricular-arrhythmias",
+   "entity": "VT",
+   "parameter": "criteria",
+   "value": "≥3 ventricular beats; sustained >30 s; 140-200 bpm; wide QRS; regular RR (±0.03 s); onset often R-on-T",
+   "pdf_pages": "281"
+  },
+  {
+   "id": "vt-dissociation",
+   "cluster": "ventricular-arrhythmias",
+   "entity": "VT supporting signs",
+   "parameter": "dissociation",
+   "value": "Dissociated P in about 50%; capture beat = narrow; fusion beat = intermediate; retrograde P on ST",
+   "pdf_pages": "282-284"
+  },
+  {
+   "id": "wct-morphology",
+   "cluster": "ventricular-arrhythmias",
+   "entity": "Wide-QRS tachycardia",
+   "parameter": "VT favoured",
+   "value": "Structural heart disease; axis −90° to ±180°; QRS >0.14 s (RBBB) or >0.16 s (LBBB); concordance; resembles PVCs",
+   "pdf_pages": "284-285"
+  },
+  {
+   "id": "brugada-algorithm",
+   "cluster": "ventricular-arrhythmias",
+   "entity": "Brugada algorithm",
+   "parameter": "steps",
+   "value": "VT if no RS in V1-V6; RS >100 ms; AV dissociation; VT morphology in V1 and V6",
+   "context": "In LBBB-like VT, r to S nadir >60 ms",
+   "pdf_pages": "288-289"
+  },
+  {
+   "id": "aivr",
+   "cluster": "ventricular-arrhythmias",
+   "entity": "AIVR",
+   "parameter": "criteria",
+   "value": "≥3 ventricular beats at 60-120 bpm competing with sinus rhythm; marker of reperfusion",
+   "pdf_pages": "154, 293"
+  },
+  {
+   "id": "torsades",
+   "cluster": "ventricular-arrhythmias",
+   "entity": "Torsades de pointes",
+   "parameter": "criteria",
+   "value": "Cycles of 5-20 QRS twisting around the baseline at 200-250 bpm; QT >0.60 s; triggered by a PVC on the T wave",
+   "pdf_pages": "293"
+  },
+  {
+   "id": "vflutter-vf",
+   "cluster": "ventricular-arrhythmias",
+   "entity": "Ventricular flutter and VF",
+   "parameter": "morphology",
+   "value": "Flutter: regular sine wave at about 200/min. VF: chaotic, coarse or fine",
+   "pdf_pages": "294"
+  },
+  {
+   "id": "brugada-syndrome",
+   "cluster": "ventricular-arrhythmias",
+   "entity": "Brugada syndrome",
+   "parameter": "pattern",
+   "value": "RBBB-like V1-V2 with persistent ST elevation and sudden death",
+   "pdf_pages": "74-75"
+  },
+  {
+   "id": "qt-causes",
+   "cluster": "electrolytes-drugs-misc-conditions",
+   "entity": "QT duration",
+   "parameter": "causes",
+   "value": "Long QT: ischaemia, myocarditis, low Ca, quinidine, procainamide, amiodarone. Short QT: high Ca, high K, digitalis",
+   "pdf_pages": "38"
+  },
+  {
+   "id": "torsades-causes",
+   "cluster": "electrolytes-drugs-misc-conditions",
+   "entity": "Torsades",
+   "parameter": "causes",
+   "value": "Class Ia drugs, tricyclics, low K or Mg, ischaemia, long-QT syndromes, advanced AV block",
+   "pdf_pages": "294"
+  },
+  {
+   "id": "digitalis-effect",
+   "cluster": "electrolytes-drugs-misc-conditions",
+   "entity": "Digitalis",
+   "parameter": "ST-T",
+   "value": "ST-T changes mimicking strain or ischaemia; false positive exercise test",
+   "pdf_pages": "61, 167, 185"
+  },
+  {
+   "id": "pulmonary-embolism",
+   "cluster": "electrolytes-drugs-misc-conditions",
+   "entity": "Pulmonary embolism",
+   "parameter": "findings",
+   "value": "Normal in about 20%; right precordial T inversion up to 40%; S1Q3T3 up to 25%; new RBBB; right axis; often transient",
+   "pdf_pages": "65-66"
+  },
+  {
+   "id": "cor-pulmonale-chronic",
+   "cluster": "electrolytes-drugs-misc-conditions",
+   "entity": "Chronic cor pulmonale",
+   "parameter": "pattern",
+   "value": "P pulmonale + RBBB + low limb voltage",
+   "pdf_pages": "66"
+  },
+  {
+   "id": "hcm",
+   "cluster": "electrolytes-drugs-misc-conditions",
+   "entity": "HCM",
+   "parameter": "ECG",
+   "value": "Deep narrow Q in V5-V6, III, aVF; tall R with negative asymmetric T; fascicular block/LBBB",
+   "pdf_pages": "222"
+  },
+  {
+   "id": "early-repolarization",
+   "cluster": "electrolytes-drugs-misc-conditions",
+   "entity": "Early repolarization",
+   "parameter": "pattern",
+   "value": "Precordial ST elevation with tall asymmetric T in a healthy young person",
+   "pdf_pages": "34"
+  },
+  {
+   "id": "situs-p",
+   "cluster": "pediatric-congenital",
+   "entity": "Atrial situs",
+   "parameter": "P polarity",
+   "value": "Solitus: P up in I/aVF, down in aVR. Inversus: P + in aVR, − in aVL. Isomerism: P − in aVR and aVL",
+   "pdf_pages": "193, 239"
+  },
+  {
+   "id": "asd-secundum",
+   "cluster": "pediatric-congenital",
+   "entity": "Secundum ASD",
+   "parameter": "ECG",
+   "value": "Axis +90° to +170°; incomplete RBBB 80%; slightly long PR",
+   "context": "With pulmonary hypertension: peaked P, QR in V1, spreading T inversion",
+   "pdf_pages": "209-212"
+  },
+  {
+   "id": "avsd-triad",
+   "cluster": "pediatric-congenital",
+   "entity": "AVSD / primum ASD",
+   "parameter": "triad",
+   "value": "First-degree AV block (93% complete form) + LAD + RBBB",
+   "pdf_pages": "211, 215"
+  },
+  {
+   "id": "vsd-pda",
+   "cluster": "pediatric-congenital",
+   "entity": "VSD and PDA",
+   "parameter": "ECG",
+   "value": "Small defect: normal. Large: LA and LV volume overload. PDA axis +45° to +90°. Pulmonary hypertension: biventricular, then RV pattern",
+   "pdf_pages": "213-215"
+  },
+  {
+   "id": "ps-severity",
+   "cluster": "pediatric-congenital",
+   "entity": "Pulmonary stenosis",
+   "parameter": "gradient estimate",
+   "value": "Axis >+120° = ≥80 mmHg; R V1 >20 mm = >50; S I and V6 >10 mm = ≥80; R V1 >10 mm with inverted T = severe",
+   "pdf_pages": "219"
+  },
+  {
+   "id": "aortic-stenosis-ecg",
+   "cluster": "pediatric-congenital",
+   "entity": "Aortic stenosis",
+   "parameter": "ECG",
+   "value": "R rising V4 to V6; delayed intrinsicoid; strain if >80 mmHg; may be normal",
+   "pdf_pages": "217-218"
+  },
+  {
+   "id": "cyanotic-lesions",
+   "cluster": "pediatric-congenital",
+   "entity": "Cyanotic lesions",
+   "parameter": "clues",
+   "value": "Tricuspid atresia: LAD + LV dominance. TGA: upright T in V1 after week 1. Ebstein: giant P, RBBB, WPW. TAPVC: RAE, RVH, iRBBB",
+   "pdf_pages": "196-205"
+  },
+  {
+   "id": "coarctation",
+   "cluster": "pediatric-congenital",
+   "entity": "Coarctation",
+   "parameter": "ECG",
+   "value": "Axis about +70°; incomplete RBBB in one third; nonspecific",
+   "pdf_pages": "220"
+  },
+  {
+   "id": "paced-qrs",
+   "cluster": "pacemakers-devices",
+   "entity": "RV apical pacing",
+   "parameter": "QRS",
+   "value": "LBBB-like, superior axis, negative precordial QRS",
+   "pdf_pages": "235"
+  },
+  {
+   "id": "pacing-threshold-impedance",
+   "cluster": "pacemakers-devices",
+   "entity": "Pacing",
+   "parameter": "threshold and impedance",
+   "value": "Output 2-3× threshold; high impedance = lead fracture (loss of capture), low impedance = insulation break (battery drain)",
+   "pdf_pages": "226, 235"
+  },
+  {
+   "id": "magnet-response",
+   "cluster": "pacemakers-devices",
+   "entity": "Magnet",
+   "parameter": "response",
+   "value": "Asynchronous pacing; first 3 pulses at 100 bpm",
+   "pdf_pages": "235"
+  },
+  {
+   "id": "ddd-behaviour",
+   "cluster": "pacemakers-devices",
+   "entity": "DDD",
+   "parameter": "behaviour",
+   "value": "Four states (AV paced, A paced/V sensed, P sensed/V paced, inhibited); PVARP extension after PVC; mode switch in atrial tachyarrhythmia",
+   "pdf_pages": "230-233"
+  },
+  {
+   "id": "pacing-indications",
+   "cluster": "pacemakers-devices",
+   "entity": "Pacing indications",
+   "parameter": "AV block",
+   "value": "Class I: symptomatic block, asystole ≥3 s, escape <40 bpm. IIa: Mobitz II, asymptomatic complete block. III: first-degree block",
+   "pdf_pages": "234"
+  }
+ ],
+ "patterns": [
+  {
+   "id": "p-technical-artefacts",
+   "cluster": "basics-technique-leads-paper",
+   "name_es": "Artefactos técnicos",
+   "name_en": "Technical artefacts",
+   "hallmark_features": [
+    "Calibration pulse not 10 mm or with rounded corners",
+    "Wrong paper speed",
+    "Noisy baseline",
+    "II ≠ I + III"
+   ],
+   "differential": [
+    "True pathology"
+   ],
+   "pdf_pages": "20-21"
+  },
+  {
+   "id": "p-arm-reversal",
+   "cluster": "basics-technique-leads-paper",
+   "name_es": "Inversión de electrodos de brazos",
+   "name_en": "Arm electrode reversal",
+   "hallmark_features": [
+    "Lead I inverted",
+    "P + in aVR, − in aVL"
+   ],
+   "differential": [
+    "Situs inversus",
+    "Low atrial rhythm"
+   ],
+   "pdf_pages": "239"
+  },
+  {
+   "id": "p-normal-adult",
+   "cluster": "rate-rhythm-intervals-axis",
+   "name_es": "ECG normal del adulto",
+   "name_en": "Normal adult ECG",
+   "hallmark_features": [
+    "Sinus 60-100 bpm, PR 0.12-0.20 s, QRS ≤0.10 s",
+    "rS V1 to qRs V6",
+    "Concordant asymmetric T",
+    "QTc ≤0.44 s"
+   ],
+   "differential": [
+    "Positional variants",
+    "Early repolarization",
+    "Paediatric normal"
+   ],
+   "pdf_pages": "26-41"
+  },
+  {
+   "id": "p-sinus-arrhythmia",
+   "cluster": "rate-rhythm-intervals-axis",
+   "name_es": "Arritmia sinusal",
+   "name_en": "Sinus arrhythmia",
+   "hallmark_features": [
+    "Sinus P",
+    "Gradual cyclic RR change >0.16 s"
+   ],
+   "differential": [
+    "Sinus arrest",
+    "SA block",
+    "PACs"
+   ],
+   "pdf_pages": "240"
+  },
+  {
+   "id": "p-positional",
+   "cluster": "rate-rhythm-intervals-axis",
+   "name_es": "Variantes posicionales y rotaciones",
+   "name_en": "Positional variants and rotation",
+   "hallmark_features": [
+    "Vertical heart: qR inferior",
+    "Horizontal heart: qR I/aVL",
+    "Clockwise rotation: late transition",
+    "Counterclockwise rotation: early transition"
+   ],
+   "differential": [
+    "Hypertrophy",
+    "Fascicular block",
+    "Infarction"
+   ],
+   "pdf_pages": "29-32"
+  },
+  {
+   "id": "p-juvenile-t",
+   "cluster": "rate-rhythm-intervals-axis",
+   "name_es": "Ondas T negativas juveniles",
+   "name_en": "Juvenile T pattern",
+   "hallmark_features": [
+    "Negative T V1-V3/V4",
+    "Children, some women, Black individuals"
+   ],
+   "differential": [
+    "Anterior ischaemia",
+    "RV overload"
+   ],
+   "pdf_pages": "22, 34"
+  },
+  {
+   "id": "p-rae",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "name_es": "Crecimiento auricular derecho",
+   "name_en": "Right atrial enlargement",
+   "hallmark_features": [
+    "P >2.5 mm, peaked",
+    "Normal duration",
+    "V1 ++-"
+   ],
+   "differential": [
+    "LAE",
+    "Biatrial"
+   ],
+   "pdf_pages": "43-46"
+  },
+  {
+   "id": "p-lae",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "name_es": "Crecimiento auricular izquierdo",
+   "name_en": "Left atrial enlargement",
+   "hallmark_features": [
+    "P >0.11 s, notched",
+    "V1 +--",
+    "Coarse f in AF"
+   ],
+   "differential": [
+    "Interatrial conduction delay",
+    "RAE"
+   ],
+   "pdf_pages": "47-52"
+  },
+  {
+   "id": "p-lvh",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "name_es": "Hipertrofia ventricular izquierda",
+   "name_en": "LVH",
+   "hallmark_features": [
+    "Sokolow >35 mm",
+    "Delayed intrinsicoid",
+    "Strain ST-T",
+    "Romhilt-Estes ≥5"
+   ],
+   "differential": [
+    "Young high voltage",
+    "HCM",
+    "LBBB"
+   ],
+   "pdf_pages": "55-61"
+  },
+  {
+   "id": "p-rvh",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "name_es": "Hipertrofia ventricular derecha",
+   "name_en": "RVH",
+   "hallmark_features": [
+    "Right axis",
+    "Tall R V1",
+    "Deep S V6",
+    "RV strain"
+   ],
+   "differential": [
+    "RBBB",
+    "Posterior MI",
+    "Normal infant"
+   ],
+   "pdf_pages": "59-64"
+  },
+  {
+   "id": "p-biventricular",
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "name_es": "Hipertrofia biventricular",
+   "name_en": "Biventricular hypertrophy",
+   "hallmark_features": [
+    "Tall R in V1 and V6",
+    "Large equiphasic RS V2-V4"
+   ],
+   "differential": [
+    "Isolated LVH",
+    "Isolated RVH"
+   ],
+   "pdf_pages": "67, 215"
+  },
+  {
+   "id": "p-rbbb",
+   "cluster": "bundle-branch-fascicular-blocks",
+   "name_es": "Bloqueo de rama derecha",
+   "name_en": "RBBB",
+   "hallmark_features": [
+    "QRS ≥0.12 s",
+    "rsR' V1",
+    "Broad s V6",
+    "Negative T V1"
+   ],
+   "differential": [
+    "Incomplete RBBB",
+    "Brugada pattern",
+    "RVH"
+   ],
+   "pdf_pages": "72-76"
+  },
+  {
+   "id": "p-lbbb",
+   "cluster": "bundle-branch-fascicular-blocks",
+   "name_es": "Bloqueo de rama izquierda",
+   "name_en": "LBBB",
+   "hallmark_features": [
+    "QRS ≥0.12 s",
+    "QS/rS V1",
+    "Broad notched R V6 without q",
+    "Discordant T"
+   ],
+   "differential": [
+    "Incomplete LBBB",
+    "Maximal pre-excitation",
+    "Paced rhythm"
+   ],
+   "pdf_pages": "77-80"
+  },
+  {
+   "id": "p-lafb",
+   "cluster": "bundle-branch-fascicular-blocks",
+   "name_es": "Hemibloqueo anterior izquierdo",
+   "name_en": "LAFB",
+   "hallmark_features": [
+    "Axis −45° to −75°",
+    "qR I/aVL",
+    "rS inferior"
+   ],
+   "differential": [
+    "Inferior MI",
+    "LBBB"
+   ],
+   "pdf_pages": "81-82"
+  },
+  {
+   "id": "p-lpfb",
+   "cluster": "bundle-branch-fascicular-blocks",
+   "name_es": "Hemibloqueo posterior izquierdo",
+   "name_en": "LPFB",
+   "hallmark_features": [
+    "Axis +90° to +120°",
+    "rS I/aVL",
+    "qR inferior"
+   ],
+   "differential": [
+    "RVH",
+    "Vertical heart"
+   ],
+   "pdf_pages": "82"
+  },
+  {
+   "id": "p-bifascicular",
+   "cluster": "bundle-branch-fascicular-blocks",
+   "name_es": "Bloqueo bifascicular",
+   "name_en": "Bifascicular block",
+   "hallmark_features": [
+    "RBBB plus marked axis deviation"
+   ],
+   "differential": [
+    "Isolated RBBB",
+    "Masked BBB"
+   ],
+   "pdf_pages": "83-86"
+  },
+  {
+   "id": "p-first-degree-avb",
+   "cluster": "av-blocks-sinus-node",
+   "name_es": "Bloqueo AV de primer grado",
+   "name_en": "First-degree AV block",
+   "hallmark_features": [
+    "PR >0.20 s",
+    "All P conducted"
+   ],
+   "differential": [
+    "Slow-rate long PR",
+    "P hidden in T"
+   ],
+   "pdf_pages": "90"
+  },
+  {
+   "id": "p-mobitz-i",
+   "cluster": "av-blocks-sinus-node",
+   "name_es": "Bloqueo AV Mobitz I",
+   "name_en": "Mobitz I",
+   "hallmark_features": [
+    "Progressive PR",
+    "Grouped beating",
+    "Pause <2PP"
+   ],
+   "differential": [
+    "Mobitz II",
+    "Blocked PAC"
+   ],
+   "pdf_pages": "91-96"
+  },
+  {
+   "id": "p-mobitz-ii",
+   "cluster": "av-blocks-sinus-node",
+   "name_es": "Bloqueo AV Mobitz II",
+   "name_en": "Mobitz II",
+   "hallmark_features": [
+    "Constant PR",
+    "Sudden blocked P"
+   ],
+   "differential": [
+    "Mobitz I",
+    "Blocked PAC"
+   ],
+   "pdf_pages": "92-96"
+  },
+  {
+   "id": "p-complete-avb",
+   "cluster": "av-blocks-sinus-node",
+   "name_es": "Bloqueo AV completo",
+   "name_en": "Complete AV block",
+   "hallmark_features": [
+    "P rate > QRS rate",
+    "Variable PR",
+    "Escape QRS"
+   ],
+   "differential": [
+    "AV dissociation",
+    "Advanced block"
+   ],
+   "pdf_pages": "94-99"
+  },
+  {
+   "id": "p-sinus-pauses",
+   "cluster": "av-blocks-sinus-node",
+   "name_es": "Paro sinusal y bloqueo sinoauricular",
+   "name_en": "Sinus arrest and SA block",
+   "hallmark_features": [
+    "Pause without P",
+    "SA block pause = multiple of PP"
+   ],
+   "differential": [
+    "Blocked PAC",
+    "Sinus arrhythmia"
+   ],
+   "pdf_pages": "242-243"
+  },
+  {
+   "id": "p-sick-sinus",
+   "cluster": "av-blocks-sinus-node",
+   "name_es": "Enfermedad del nodo sinusal",
+   "name_en": "Sick sinus syndrome",
+   "hallmark_features": [
+    "Brady-tachy",
+    "Long pauses"
+   ],
+   "differential": [
+    "Drug effect"
+   ],
+   "pdf_pages": "244-245"
+  },
+  {
+   "id": "p-av-dissociation",
+   "cluster": "av-blocks-sinus-node",
+   "name_es": "Disociación auriculoventricular",
+   "name_en": "AV dissociation",
+   "hallmark_features": [
+    "Ventricular rate > atrial rate",
+    "Captures"
+   ],
+   "differential": [
+    "Complete AV block"
+   ],
+   "pdf_pages": "269-270"
+  },
+  {
+   "id": "p-stemi",
+   "cluster": "ischemia-injury-infarction",
+   "name_es": "Infarto con elevación del ST",
+   "name_en": "STEMI",
+   "hallmark_features": [
+    "Territorial ST elevation",
+    "Reciprocal depression",
+    "Evolving Q"
+   ],
+   "differential": [
+    "Prinzmetal",
+    "Early repolarization",
+    "Aneurysm"
+   ],
+   "pdf_pages": "132-141"
+  },
+  {
+   "id": "p-inferior-rv-mi",
+   "cluster": "ischemia-injury-infarction",
+   "name_es": "Infarto inferior con extensión a VD",
+   "name_en": "Inferior MI with RV extension",
+   "hallmark_features": [
+    "III > II elevation",
+    "I/aVL depression",
+    "V4R elevation"
+   ],
+   "differential": [
+    "Circumflex inferior MI"
+   ],
+   "pdf_pages": "144-147"
+  },
+  {
+   "id": "p-posterior-mi",
+   "cluster": "ischemia-injury-infarction",
+   "name_es": "Infarto posterior",
+   "name_en": "Posterior MI",
+   "hallmark_features": [
+    "Tall R V1-V2",
+    "ST depression V1-V2"
+   ],
+   "differential": [
+    "RVH",
+    "RBBB"
+   ],
+   "pdf_pages": "148-150"
+  },
+  {
+   "id": "p-non-q-mi",
+   "cluster": "ischemia-injury-infarction",
+   "name_es": "Infarto sin onda Q",
+   "name_en": "Non-Q MI",
+   "hallmark_features": [
+    "ST depression or deep T",
+    "Enzyme rise"
+   ],
+   "differential": [
+    "Unstable angina"
+   ],
+   "pdf_pages": "142-143"
+  },
+  {
+   "id": "p-prinzmetal",
+   "cluster": "ischemia-injury-infarction",
+   "name_es": "Angina de Prinzmetal",
+   "name_en": "Prinzmetal angina",
+   "hallmark_features": [
+    "Transient ST elevation at rest"
+   ],
+   "differential": [
+    "Acute MI"
+   ],
+   "pdf_pages": "143-144"
+  },
+  {
+   "id": "p-wpw",
+   "cluster": "preexcitation-wpw",
+   "name_es": "Síndrome de Wolff-Parkinson-White",
+   "name_en": "WPW",
+   "hallmark_features": [
+    "Short PR",
+    "Delta",
+    "Wide QRS"
+   ],
+   "differential": [
+    "BBB",
+    "Infarct",
+    "LVH"
+   ],
+   "pdf_pages": "103-118"
+  },
+  {
+   "id": "p-avrt",
+   "cluster": "preexcitation-wpw",
+   "name_es": "Taquicardia por reentrada AV",
+   "name_en": "AVRT",
+   "hallmark_features": [
+    "Narrow QRS at 180-250 bpm",
+    "Retrograde P on ST"
+   ],
+   "differential": [
+    "AVNRT",
+    "Atrial tachycardia"
+   ],
+   "pdf_pages": "117-121"
+  },
+  {
+   "id": "p-preexcited-af",
+   "cluster": "preexcitation-wpw",
+   "name_es": "Fibrilación auricular preexcitada",
+   "name_en": "Pre-excited AF",
+   "hallmark_features": [
+    "Irregular wide QRS of varying shape"
+   ],
+   "differential": [
+    "VT"
+   ],
+   "pdf_pages": "122-125"
+  },
+  {
+   "id": "p-flutter",
+   "cluster": "supraventricular-arrhythmias",
+   "name_es": "Flúter auricular",
+   "name_en": "Atrial flutter",
+   "hallmark_features": [
+    "Sawtooth F waves",
+    "2:1 conduction"
+   ],
+   "differential": [
+    "Atrial tachycardia"
+   ],
+   "pdf_pages": "251-254"
+  },
+  {
+   "id": "p-af",
+   "cluster": "supraventricular-arrhythmias",
+   "name_es": "Fibrilación auricular",
+   "name_en": "Atrial fibrillation",
+   "hallmark_features": [
+    "No P",
+    "Irregular RR"
+   ],
+   "differential": [
+    "MAT"
+   ],
+   "pdf_pages": "254-257"
+  },
+  {
+   "id": "p-avnrt",
+   "cluster": "supraventricular-arrhythmias",
+   "name_es": "Taquicardia intranodal",
+   "name_en": "AVNRT",
+   "hallmark_features": [
+    "Pseudo-r' V1"
+   ],
+   "differential": [
+    "AVRT"
+   ],
+   "pdf_pages": "265-268"
+  },
+  {
+   "id": "p-vt",
+   "cluster": "ventricular-arrhythmias",
+   "name_es": "Taquicardia ventricular",
+   "name_en": "VT",
+   "hallmark_features": [
+    "Wide regular",
+    "AV dissociation"
+   ],
+   "differential": [
+    "Aberrant SVT"
+   ],
+   "pdf_pages": "281-292"
+  },
+  {
+   "id": "p-torsades",
+   "cluster": "ventricular-arrhythmias",
+   "name_es": "Torsade de pointes",
+   "name_en": "Torsades",
+   "hallmark_features": [
+    "Twisting QRS",
+    "Long QT"
+   ],
+   "differential": [
+    "Polymorphic VT"
+   ],
+   "pdf_pages": "293-294"
+  },
+  {
+   "id": "p-pe",
+   "cluster": "electrolytes-drugs-misc-conditions",
+   "name_es": "Tromboembolismo pulmonar",
+   "name_en": "Pulmonary embolism",
+   "hallmark_features": [
+    "S1Q3T3",
+    "Right precordial T inversion"
+   ],
+   "differential": [
+    "RVH"
+   ],
+   "pdf_pages": "65-66"
+  },
+  {
+   "id": "p-asd",
+   "cluster": "pediatric-congenital",
+   "name_es": "Comunicación interauricular",
+   "name_en": "ASD",
+   "hallmark_features": [
+    "rsR' V1",
+    "Right axis"
+   ],
+   "differential": [
+    "AVSD"
+   ],
+   "pdf_pages": "209-212"
+  },
+  {
+   "id": "p-paced",
+   "cluster": "pacemakers-devices",
+   "name_es": "Ritmo de marcapasos",
+   "name_en": "Paced rhythm",
+   "hallmark_features": [
+    "Spike",
+    "LBBB-like QRS"
+   ],
+   "differential": [
+    "Native LBBB"
+   ],
+   "pdf_pages": "228-235"
+  }
+ ],
+ "glossary": [
+  {
+   "es": "derivación",
+   "en": "lead",
+   "zh": "导联"
+  },
+  {
+   "es": "terminal central de Wilson",
+   "en": "Wilson central terminal",
+   "zh": "Wilson中心电端"
+  },
+  {
+   "es": "sistema hexaxial",
+   "en": "hexaxial reference system",
+   "zh": "额面六轴系统"
+  },
+  {
+   "es": "eje eléctrico",
+   "en": "electrical axis",
+   "zh": "心电轴"
+  },
+  {
+   "es": "velocidad del papel",
+   "en": "paper speed",
+   "zh": "走纸速度"
+  },
+  {
+   "es": "calibración",
+   "en": "calibration",
+   "zh": "定标电压"
+  },
+  {
+   "es": "artefacto",
+   "en": "artefact",
+   "zh": "伪差"
+  },
+  {
+   "es": "nodo sinusal",
+   "en": "sinoatrial node",
+   "zh": "窦房结"
+  },
+  {
+   "es": "nodo auriculoventricular",
+   "en": "AV node",
+   "zh": "房室结"
+  },
+  {
+   "es": "haz de His",
+   "en": "bundle of His",
+   "zh": "希氏束"
+  },
+  {
+   "es": "onda P",
+   "en": "P wave",
+   "zh": "P波"
+  },
+  {
+   "es": "complejo QRS",
+   "en": "QRS complex",
+   "zh": "QRS波群"
+  },
+  {
+   "es": "punto J",
+   "en": "J point",
+   "zh": "J点"
+  },
+  {
+   "es": "segmento ST",
+   "en": "ST segment",
+   "zh": "ST段"
+  },
+  {
+   "es": "intervalo PR",
+   "en": "PR interval",
+   "zh": "PR间期"
+  },
+  {
+   "es": "intervalo QT corregido",
+   "en": "corrected QT",
+   "zh": "校正QT间期"
+  },
+  {
+   "es": "deflexión intrinsecoide",
+   "en": "intrinsicoid deflection",
+   "zh": "室壁激动时间"
+  },
+  {
+   "es": "zona de transición",
+   "en": "transition zone",
+   "zh": "移行区"
+  },
+  {
+   "es": "ritmo sinusal",
+   "en": "sinus rhythm",
+   "zh": "窦性心律"
+  },
+  {
+   "es": "arritmia sinusal",
+   "en": "sinus arrhythmia",
+   "zh": "窦性心律不齐"
+  },
+  {
+   "es": "crecimiento auricular izquierdo",
+   "en": "left atrial enlargement",
+   "zh": "左心房扩大"
+  },
+  {
+   "es": "crecimiento auricular derecho",
+   "en": "right atrial enlargement",
+   "zh": "右心房扩大"
+  },
+  {
+   "es": "hipertrofia ventricular izquierda",
+   "en": "left ventricular hypertrophy",
+   "zh": "左心室肥厚"
+  },
+  {
+   "es": "hipertrofia ventricular derecha",
+   "en": "right ventricular hypertrophy",
+   "zh": "右心室肥厚"
+  },
+  {
+   "es": "bloqueo de rama derecha",
+   "en": "right bundle branch block",
+   "zh": "右束支传导阻滞"
+  },
+  {
+   "es": "bloqueo de rama izquierda",
+   "en": "left bundle branch block",
+   "zh": "左束支传导阻滞"
+  },
+  {
+   "es": "hemibloqueo anterior izquierdo",
+   "en": "left anterior fascicular block",
+   "zh": "左前分支阻滞"
+  },
+  {
+   "es": "hemibloqueo posterior izquierdo",
+   "en": "left posterior fascicular block",
+   "zh": "左后分支阻滞"
+  },
+  {
+   "es": "bloqueo auriculoventricular",
+   "en": "AV block",
+   "zh": "房室传导阻滞"
+  },
+  {
+   "es": "fenómeno de Wenckebach",
+   "en": "Wenckebach phenomenon",
+   "zh": "文氏现象"
+  },
+  {
+   "es": "bloqueo AV completo",
+   "en": "complete AV block",
+   "zh": "三度房室传导阻滞"
+  },
+  {
+   "es": "paro sinusal",
+   "en": "sinus arrest",
+   "zh": "窦性停搏"
+  },
+  {
+   "es": "bloqueo sinoauricular",
+   "en": "sinoatrial block",
+   "zh": "窦房传导阻滞"
+  },
+  {
+   "es": "enfermedad del nodo sinusal",
+   "en": "sick sinus syndrome",
+   "zh": "病态窦房结综合征"
+  },
+  {
+   "es": "disociación auriculoventricular",
+   "en": "AV dissociation",
+   "zh": "房室分离"
+  },
+  {
+   "es": "onda Q patológica",
+   "en": "pathological Q wave",
+   "zh": "病理性Q波"
+  },
+  {
+   "es": "isquemia subendocárdica",
+   "en": "subendocardial ischaemia",
+   "zh": "心内膜下心肌缺血"
+  },
+  {
+   "es": "lesión subepicárdica",
+   "en": "subepicardial injury",
+   "zh": "心外膜下心肌损伤"
+  },
+  {
+   "es": "cambios recíprocos",
+   "en": "reciprocal changes",
+   "zh": "对应性改变"
+  },
+  {
+   "es": "angina de Prinzmetal",
+   "en": "variant angina",
+   "zh": "变异型心绞痛"
+  },
+  {
+   "es": "prueba de esfuerzo",
+   "en": "exercise stress test",
+   "zh": "运动负荷试验"
+  },
+  {
+   "es": "onda delta",
+   "en": "delta wave",
+   "zh": "δ波"
+  },
+  {
+   "es": "vía accesoria",
+   "en": "accessory pathway",
+   "zh": "房室旁路"
+  },
+  {
+   "es": "síndrome de Wolff-Parkinson-White",
+   "en": "WPW syndrome",
+   "zh": "预激综合征"
+  },
+  {
+   "es": "extrasístole auricular",
+   "en": "atrial premature beat",
+   "zh": "房性期前收缩"
+  },
+  {
+   "es": "flúter auricular",
+   "en": "atrial flutter",
+   "zh": "心房扑动"
+  },
+  {
+   "es": "fibrilación auricular",
+   "en": "atrial fibrillation",
+   "zh": "心房颤动"
+  },
+  {
+   "es": "taquicardia por reentrada intranodal",
+   "en": "AV nodal reentrant tachycardia",
+   "zh": "房室结折返性心动过速"
+  },
+  {
+   "es": "extrasístole ventricular",
+   "en": "ventricular premature beat",
+   "zh": "室性期前收缩"
+  },
+  {
+   "es": "taquicardia ventricular",
+   "en": "ventricular tachycardia",
+   "zh": "室性心动过速"
+  },
+  {
+   "es": "latido de fusión",
+   "en": "fusion beat",
+   "zh": "室性融合波"
+  },
+  {
+   "es": "latido de captura",
+   "en": "capture beat",
+   "zh": "心室夺获"
+  },
+  {
+   "es": "ritmo idioventricular acelerado",
+   "en": "accelerated idioventricular rhythm",
+   "zh": "加速性室性自主心律"
+  },
+  {
+   "es": "torsade de pointes",
+   "en": "torsades de pointes",
+   "zh": "尖端扭转型室性心动过速"
+  },
+  {
+   "es": "fibrilación ventricular",
+   "en": "ventricular fibrillation",
+   "zh": "心室颤动"
+  },
+  {
+   "es": "conducción aberrante",
+   "en": "aberrant conduction",
+   "zh": "室内差异性传导"
+  },
+  {
+   "es": "comunicación interauricular",
+   "en": "atrial septal defect",
+   "zh": "房间隔缺损"
+  },
+  {
+   "es": "tetralogía de Fallot",
+   "en": "tetralogy of Fallot",
+   "zh": "法洛四联症"
+  },
+  {
+   "es": "marcapasos",
+   "en": "pacemaker",
+   "zh": "起搏器"
+  }
+ ],
+ "exercise_ideas": [
+  {
+   "cluster": "basics-technique-leads-paper",
+   "idea": "Calibration and paper-speed trap: before measuring anything, the learner must work out the gain and speed from the calibration pulse and tick marks.",
+   "source_pdf_pages": "17, 244"
+  },
+  {
+   "cluster": "basics-technique-leads-paper",
+   "idea": "Electrode-placement torso drill covering standard, posterior, right-sided, Medrano and exercise positions, showing how misplacement changes the ECG.",
+   "source_pdf_pages": "19-20, 168"
+  },
+  {
+   "cluster": "basics-technique-leads-paper",
+   "idea": "Dipole sandbox: drag an electrode around a moving wavefront and watch the deflection change sign.",
+   "source_pdf_pages": "13-14"
+  },
+  {
+   "cluster": "rate-rhythm-intervals-axis",
+   "idea": "Hexaxial axis lab: rotate the QRS vector and watch all six limb leads update, then reverse the task and drag the vector to match six given leads.",
+   "source_pdf_pages": "24-25, 38-40"
+  },
+  {
+   "cluster": "rate-rhythm-intervals-axis",
+   "idea": "Caliper drill for PR, QRS, QT and QTc, including a case with T-U fusion.",
+   "source_pdf_pages": "21, 37"
+  },
+  {
+   "cluster": "rate-rhythm-intervals-axis",
+   "idea": "Heart-rate trainer comparing the 300 rule with a 6-second count on regular strips and on AF.",
+   "source_pdf_pages": "36-37"
+  },
+  {
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "idea": "Atrial-size sliders that redraw the P wave in lead II and V1 as each atrium grows.",
+   "source_pdf_pages": "43"
+  },
+  {
+   "cluster": "atrial-enlargement-ventricular-hypertrophy",
+   "idea": "Wall-thickness sliders with live voltage indices and score builders (Sokolow, Lewis, Cabrera, Romhilt-Estes).",
+   "source_pdf_pages": "55-64"
+  },
+  {
+   "cluster": "bundle-branch-fascicular-blocks",
+   "idea": "Block builder: cut a branch or fascicle and see the resulting 12-lead ECG.",
+   "source_pdf_pages": "70-82"
+  },
+  {
+   "cluster": "av-blocks-sinus-node",
+   "idea": "Wenckebach ladder-diagram simulator with an atypical-form toggle.",
+   "source_pdf_pages": "96"
+  },
+  {
+   "cluster": "av-blocks-sinus-node",
+   "idea": "March-out-the-P-waves tool for complete AV block and AV dissociation.",
+   "source_pdf_pages": "98, 269-270"
+  },
+  {
+   "cluster": "av-blocks-sinus-node",
+   "idea": "Pause analyser that sorts each pause into sinus arrest, SA block or blocked PAC.",
+   "source_pdf_pages": "242-243"
+  },
+  {
+   "cluster": "ischemia-injury-infarction",
+   "idea": "Infarct time slider showing how ST, Q and T evolve from minutes to a month.",
+   "source_pdf_pages": "132"
+  },
+  {
+   "cluster": "ischemia-injury-infarction",
+   "idea": "Two-way territory map: from leads to coronary territory and back, with reciprocal changes and RCA-versus-circumflex reasoning.",
+   "source_pdf_pages": "136-141, 156"
+  },
+  {
+   "cluster": "ischemia-injury-infarction",
+   "idea": "LAD occlusion-site simulator based on the Engelen patterns.",
+   "source_pdf_pages": "156-158"
+  },
+  {
+   "cluster": "ischemia-injury-infarction",
+   "idea": "Virtual stress lab: measure ST at J+80 ms, decide when to stop the test, and calculate the Duke score.",
+   "source_pdf_pages": "172-185"
+  },
+  {
+   "cluster": "preexcitation-wpw",
+   "idea": "Pre-excitation fusion slider plus pathway localisation using the Arruda algorithm.",
+   "source_pdf_pages": "103, 111-116"
+  },
+  {
+   "cluster": "supraventricular-arrhythmias",
+   "idea": "Vagal-manoeuvre button that unmasks flutter or AF waves or terminates AVNRT.",
+   "source_pdf_pages": "254, 269"
+  },
+  {
+   "cluster": "ventricular-arrhythmias",
+   "idea": "Step-by-step Brugada algorithm on wide-QRS tachycardias, with hunts for capture and fusion beats.",
+   "source_pdf_pages": "282-289"
+  },
+  {
+   "cluster": "pediatric-congenital",
+   "idea": "Age slider showing the normal ECG from newborn to adult.",
+   "source_pdf_pages": "23, 35, 193"
+  },
+  {
+   "cluster": "pacemakers-devices",
+   "idea": "Pacemaker timing sandbox to classify capture and sensing.",
+   "source_pdf_pages": "226-235"
+  }
+ ],
+ "pitfalls": [
+  "Check the calibration pulse and paper speed before taking any measurement.",
+  "Check that II = I + III. P positive in aVR suggests swapped arm cables.",
+  "Never read a single lead in isolation.",
+  "The normal PR range depends on heart rate and age.",
+  "QT must be corrected for heart rate, and T-U fusion makes the end of T hard to find.",
+  "Negative T waves in V1-V4 can be normal in children and some women.",
+  "Applying adult criteria to children leads to over-diagnosis.",
+  "Right atrial enlargement makes the P wave taller, not wider.",
+  "Sensitivity for LVH is only about 50%.",
+  "A tall R in V1 has a differential: RVH, RBBB, posterior MI, WPW.",
+  "The book gives both ≥0.12 s and >0.12 s as the BBB cut-off; fix one rule.",
+  "Fascicular blocks keep the QRS narrow.",
+  "An RBBB-like V1 with persistent ST elevation should raise suspicion of Brugada syndrome.",
+  "P waves hidden in T waves are easily missed.",
+  "A 2:1 block cannot be typed as Mobitz I or II from one strip.",
+  "A late wide beat after a pause is an escape beat, not a PVC.",
+  "AV dissociation is not the same as complete AV block.",
+  "A small septal q wave is not a pathological Q wave.",
+  "ST depression opposite a STEMI is reciprocal, not a second infarct.",
+  "Look for RV involvement in every inferior MI.",
+  "Posterior MI appears only as a mirror image in V1-V2.",
+  "ST changes are not interpretable with LBBB, WPW or digitalis.",
+  "A negative exercise test below the target heart rate is inconclusive, not normal.",
+  "A normal ECG does not exclude an accessory pathway.",
+  "WPW can mimic infarction, hypertrophy or BBB.",
+  "Flutter with 2:1 conduction at about 150 bpm is easily missed.",
+  "Fast AF can look regular.",
+  "Treat a wide-QRS tachycardia as VT until proven otherwise.",
+  "Measure the QT before calling a rhythm torsades.",
+  "Paced QRS complexes look like LBBB.",
+  "Source inconsistencies across chapters: Sokolow lead, LBBB axis range, LAFB axis range, the 'PR 24 ms' erratum."
+ ]
+}

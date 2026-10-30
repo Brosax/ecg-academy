@@ -1,0 +1,198 @@
+/* 3D view overlay. Colours only via theme tokens (src/app/theme.css). */
+.lab-root .hv-root {
+  position: relative;
+  min-height: 320px;
+  height: 100%;
+  overflow: hidden;
+  background: var(--scene-bg);
+  border-radius: var(--radius);
+  isolation: isolate;
+}
+.lab-root .hv-host {
+  position: absolute;
+  inset: 0;
+}
+.lab-root .hv-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: grab;
+}
+.lab-root .hv-canvas:active {
+  cursor: grabbing;
+}
+.lab-root .hv-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.lab-root .hv-label {
+  font: 500 11px/1.25 var(--font-sans);
+  color: var(--fg);
+  background: color-mix(in srgb, var(--panel) 86%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+.lab-root .hv-label.hv-struct {
+  border-color: var(--c-highlight);
+  font-weight: 600;
+}
+.lab-root .hv-label.hv-guide {
+  /* landmark lines on the skin: quiet, small, never competing with electrode labels */
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--fg-muted);
+  background: color-mix(in srgb, var(--panel) 70%, transparent);
+  border-color: transparent;
+  padding: 0 4px;
+}
+.lab-root .hv-label.hv-pos {
+  border-color: var(--c-highlight);
+  color: var(--c-highlight);
+  font-weight: 600;
+}
+.lab-root .hv-label.hv-neg {
+  border-color: var(--fg);
+}
+.lab-root .hv-axis-value {
+  color: var(--c-vector);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+.lab-root .hv-toolbar {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  left: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+  pointer-events: none;
+}
+.lab-root .hv-btn,
+.lab-root .hv-legend-toggle {
+  pointer-events: auto;
+  font: 500 12px/1.2 var(--font-sans);
+  padding: 5px 9px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--fg);
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+.lab-root .hv-btn:hover,
+.lab-root .hv-legend-toggle:hover {
+  border-color: var(--border-strong);
+}
+/* bottom-left stack: the "blood now" chip above the colour key; clear of the shell's tool rail (top right) */
+.lab-root .hv-foot {
+  position: absolute;
+  left: 8px;
+  right: calc(var(--rail-w, 0px) + 16px);
+  bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  pointer-events: none;
+}
+.lab-root .hv-legend {
+  max-width: 100%;
+  font: 400 11px/1.35 var(--font-sans);
+  color: var(--fg);
+  pointer-events: auto;
+}
+.lab-root .hv-legend-note {
+  color: var(--fg-muted);
+  font-size: 0.92em;
+}
+/* fixed size and one line whatever the caption says (no resize, no reflow); the full text is in the tooltip */
+.lab-root .hv-flow-chip {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  max-width: 440px;
+  height: 24px;
+  padding: 0 8px 0 4px;
+  overflow: hidden;
+  font: 500 12px/1 var(--font-sans);
+  color: var(--fg);
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  pointer-events: auto;
+  user-select: none;
+}
+.lab-root .hv-flow-tag {
+  flex: none;
+  padding: 2px 5px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--fg-muted);
+  border: 1px solid var(--border-strong);
+  border-radius: 3px;
+}
+.lab-root .hv-flow-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lab-root .hv-flow-chip[data-flow='noOutput'] .hv-flow-text {
+  color: var(--err);
+  font-weight: 600;
+}
+.lab-root .hv-legend ul {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 6px 8px;
+  display: grid;
+  gap: 2px;
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.lab-root .hv-sw {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 2px;
+  vertical-align: -1px;
+}
+.lab-root .hv-sw-ring {
+  outline: 1px solid var(--border-strong);
+}
+.lab-root .hv-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  text-align: center;
+  color: var(--fg-muted);
+}
+@container lab (max-width: 520px) {
+  .lab-root .hv-btn {
+    padding: 4px 7px;
+    font-size: 11px;
+  }
+  .lab-root .hv-label {
+    font-size: 10px;
+  }
+  .lab-root .hv-flow-chip {
+    height: 22px;
+    font-size: 11px;
+  }
+}

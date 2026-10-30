@@ -1,0 +1,6 @@
+{
+  "name": "ecg-academy-proto-vcg",
+  "private": true,
+  "type": "module",
+  "description": "Architecture B prototype: parametric VCG kernels + forward Dower lead system. Zero dependencies; run with `node gen.ts` (Node 24 type stripping)."
+}

@@ -1,0 +1,392 @@
+/*
+ * Reference tools (src/tools). Theme tokens only. The checklist prints on its own (print rules at the end use only
+ * this module's classes: everything else is hidden by visibility, the checklist is shown in black on white).
+ */
+
+.tl-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-width: 0;
+}
+.tl-head h1 {
+  margin: 0 0 6px;
+  font-size: var(--fs-2xl);
+  line-height: 1.25;
+}
+.tl-head p {
+  margin: 0;
+  max-width: 76ch;
+}
+.tl-muted {
+  color: var(--fg-muted);
+}
+.tl-panel {
+  min-width: 0;
+}
+/* the shared tab strip scrolls sideways on narrow screens; its active underline must not add a vertical scrollbar */
+.tl-page .ui-tabs {
+  overflow-y: hidden;
+}
+.tl-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+.tl-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+.tl-section h2 {
+  margin: 0;
+  font-size: var(--fs-lg);
+}
+.tl-section p {
+  margin: 0;
+}
+.tl-sectionhead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+.tl-sectionhead h2 {
+  margin: 0 0 4px;
+  font-size: var(--fs-lg);
+}
+.tl-sectionhead p {
+  margin: 0;
+  max-width: 70ch;
+}
+.tl-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.tl-progress {
+  display: inline-block;
+  min-width: 11ch;
+  font-size: var(--fs-sm);
+}
+.tl-printonly {
+  display: none;
+}
+
+/* ── checklist ───────────────────────────────────────────────────────────────────────────────────────────────────── */
+.tl-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.tl-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--sp-3);
+}
+.tl-step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--ecg-grid-major);
+  border-radius: var(--radius);
+  background: var(--panel);
+  break-inside: avoid;
+}
+.tl-step.is-done {
+  border-left-color: var(--ok);
+  background: var(--panel-2);
+}
+.tl-step__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  cursor: pointer;
+}
+.tl-step__head input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  flex: none;
+  align-self: center;
+  accent-color: var(--ok);
+}
+.tl-step__num {
+  flex: none;
+  color: var(--accent);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.tl-step__title {
+  font-weight: 700;
+}
+.tl-step__check {
+  margin: 0;
+  padding-left: 1.2em;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: var(--fs-sm);
+}
+.tl-step__facts {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--fs-sm);
+}
+.tl-step__normal {
+  margin: 0;
+  color: var(--ok);
+}
+.tl-step__normal strong {
+  color: var(--fg);
+}
+.tl-step__flags ul {
+  margin: 2px 0 0;
+  padding-left: 1.2em;
+  color: var(--err);
+}
+.tl-step__lessons {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font-size: var(--fs-xs);
+}
+.tl-step__lessons a {
+  font-weight: 700;
+  text-decoration: none;
+}
+.tl-step__lessons a:hover {
+  text-decoration: underline;
+}
+
+/* ── tables ──────────────────────────────────────────────────────────────────────────────────────────────────────── */
+.tl-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+.tl-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+.tl-table th,
+.tl-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+.tl-table tbody tr:last-child th,
+.tl-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.tl-table thead th {
+  background: var(--panel-2);
+  color: var(--fg-muted);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.tl-table tbody th {
+  font-weight: 600;
+  min-width: 9em;
+}
+.tl-table--compact th,
+.tl-table--compact td {
+  padding: 6px 10px;
+}
+.tl-src {
+  color: var(--fg-muted);
+  font-size: var(--fs-xs);
+}
+.tl-two {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--sp-5);
+  align-items: start;
+}
+.tl-notes {
+  margin: 0;
+  padding-left: 1.2em;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 90ch;
+}
+.tl-sources ol {
+  margin: 0;
+  padding-left: 1.4em;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--fs-sm);
+  color: var(--fg-muted);
+}
+
+/* ── calculators ─────────────────────────────────────────────────────────────────────────────────────────────────── */
+.tl-calc {
+  padding: var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+/* ── glossary ────────────────────────────────────────────────────────────────────────────────────────────────────── */
+.tl-glbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--sp-3);
+}
+.tl-search {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 260px;
+  max-width: 440px;
+}
+.tl-search__label {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--fg-muted);
+}
+.tl-search__box {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 0 var(--sp-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elev);
+  color: var(--fg-muted);
+}
+.tl-search__box:focus-within {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+.tl-search__box input {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  border: 0;
+  background: transparent;
+  color: var(--fg);
+}
+.tl-search__box input:focus {
+  outline: none;
+}
+.tl-count {
+  display: inline-block;
+  min-width: 9ch;
+  font-size: var(--fs-sm);
+  padding-bottom: 6px;
+}
+.tl-gltable th.is-current,
+.tl-gltable td.is-current {
+  background: var(--accent-soft);
+}
+.tl-term {
+  display: block;
+}
+.tl-term:lang(en)::first-letter,
+.tl-term:lang(es)::first-letter {
+  text-transform: uppercase;
+}
+.tl-term__extra {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
+  color: var(--fg-muted);
+  font-size: var(--fs-xs);
+}
+.tl-gltable__atlas {
+  width: 3.5em;
+  text-align: center !important;
+}
+.tl-gltable__atlas a {
+  display: inline-flex;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+}
+.tl-gltable__atlas a:hover {
+  background: var(--panel-2);
+}
+.tl-empty {
+  padding: var(--sp-5);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  color: var(--fg-muted);
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .tl-head h1 {
+    font-size: var(--fs-xl);
+  }
+  .tl-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ── print: the checklist alone ──────────────────────────────────────────────────────────────────────────────────── */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .tl-print,
+  .tl-print * {
+    visibility: visible;
+  }
+  .tl-print {
+    position: absolute;
+    inset: 0 0 auto 0;
+    padding: 0;
+    color: #000;
+    background: #fff;
+  }
+  .tl-noprint {
+    display: none !important;
+  }
+  .tl-printonly {
+    display: block;
+    color: #444;
+  }
+  .tl-steps {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .tl-step,
+  .tl-step.is-done {
+    border: 1px solid #999;
+    border-left: 3px solid #999;
+    background: #fff;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  .tl-step__check,
+  .tl-step__facts {
+    font-size: 10.5px;
+  }
+  .tl-step__normal,
+  .tl-step__flags ul,
+  .tl-step__num,
+  .tl-muted {
+    color: #000;
+  }
+}

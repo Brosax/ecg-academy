@@ -1,0 +1,236 @@
+/* ECG panels — theme tokens only (src/app/theme.css); light textbook paper by default, dark monitor via tokens. */
+.lab-root .ecg-panel {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.lab-root .ecg-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  font-size: 12px;
+}
+.lab-root .ecg-title {
+  font-weight: 600;
+  color: var(--fg);
+}
+.lab-root .ecg-scale {
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.lab-root .ecg-spacer {
+  flex: 1 1 auto;
+}
+.lab-root .ecg-btn,
+.lab-root .ecg-seg > button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 3px 9px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+  color: var(--fg);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.lab-root .ecg-btn:hover,
+.lab-root .ecg-seg > button:hover {
+  border-color: var(--fg-muted);
+}
+.lab-root .ecg-btn[aria-pressed='true'],
+.lab-root .ecg-seg > button[aria-pressed='true'] {
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
+}
+.lab-root .ecg-seg {
+  display: inline-flex;
+}
+.lab-root .ecg-seg > button {
+  border-radius: 0;
+  margin-left: -1px;
+}
+.lab-root .ecg-seg > button:first-child {
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  margin-left: 0;
+}
+.lab-root .ecg-seg > button:last-child {
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.lab-root .ecg-zoom > button,
+.lab-root .ecg-gain > button {
+  min-width: 30px;
+  justify-content: center;
+  font-variant-numeric: tabular-nums;
+}
+.lab-root .ecg-zoom > button {
+  white-space: nowrap;
+}
+.lab-root .ecg-seg > button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+.lab-root .ecg-scale-z {
+  min-width: 15ch;
+  cursor: help;
+}
+.lab-root .ecg-swatches {
+  display: inline-flex;
+  gap: 2px;
+}
+.lab-root .ecg-swatches > i {
+  display: block;
+  width: 6px;
+  height: 12px;
+  border-radius: 1px;
+}
+.lab-root .ecg-stage {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--ecg-paper);
+  touch-action: pan-y;
+  cursor: crosshair;
+}
+.lab-root .ecg-stage > canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.lab-root .ecg-stage-timeline {
+  height: 78px;
+  background: var(--panel);
+  cursor: pointer;
+  touch-action: none;
+}
+.lab-root .ecg-stage-wiggers {
+  aspect-ratio: 4 / 3;
+  background: var(--panel);
+  cursor: default;
+}
+.lab-root .ecg-stage-square {
+  aspect-ratio: 1 / 1;
+  max-width: 380px;
+  margin: 0 auto;
+  background: var(--panel);
+  cursor: pointer;
+}
+.lab-root .ecg-tip {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg-elev);
+  color: var(--fg);
+  box-shadow: var(--shadow);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.lab-root .ecg-hint,
+.lab-root .ecg-caption {
+  margin: 0;
+  color: var(--fg-muted);
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+.lab-root .ecg-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+}
+.lab-root .ecg-now {
+  color: var(--fg);
+  font-weight: 600;
+  /* updates ~10×/s: one line, fixed height, never reflows the timeline dock */
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  height: 1.45em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lab-root .ecg-muted {
+  color: var(--fg-muted);
+}
+.lab-root .ecg-readout {
+  margin: 0;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  display: block;
+  min-height: 2.9em;
+}
+.lab-root .ecg-cal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  font-size: 12px;
+}
+.lab-root .ecg-cal-out {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.lab-root .ecg-proj {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--panel-2);
+  font-size: 12.5px;
+}
+.lab-root .ecg-proj-formula {
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+.lab-root .ecg-proj ul {
+  margin: 4px 0;
+  padding-left: 18px;
+}
+.lab-root .ecg-leadpick {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+.lab-root .ecg-leadpick .ecg-btn {
+  min-width: 40px;
+  justify-content: center;
+}
+.lab-root .ecg-legend-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--fg-muted);
+  font-size: 11.5px;
+}
+.lab-root .ecg-legend-list li {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.lab-root .ecg-legend-list i {
+  display: block;
+  width: 12px;
+  height: 3px;
+  border-radius: 2px;
+}

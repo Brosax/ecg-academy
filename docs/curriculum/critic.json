@@ -1,0 +1,436 @@
+{
+ "missing_topics": [
+  {
+   "topic": "Occlusion MI (OMI) paradigm: recognising acute coronary occlusion that does not meet STEMI criteria (hyperacute T waves, ST elevation that is subtle but large relative to the QRS, terminal QRS distortion, isolated reciprocal ST depression, evolution on serial ECGs)",
+   "why_needed": "Roughly a quarter of NSTEMIs have a totally occluded culprit artery, and these patients do worse when reperfusion is delayed. Training in OMI findings detects many more occlusions than STEMI millimetre rules at similar specificity. The book's ischaemia/injury/necrosis frame does not teach this decision.",
+   "priority": "P0",
+   "source": "Khan AR et al., Eur Heart J 2017;38:3082 (meta-analysis, occluded culprit in NSTEMI); Meyers HP et al., Int J Cardiol Heart Vasc 2021 (OMI findings vs STEMI criteria); Aslanger EK et al., DIFOCCULT, Int J Cardiol Heart Vasc 2020; Kontos MC et al., 2022 ACC Expert Consensus Decision Pathway on chest pain, JACC 2022; 2023 ESC ACS guidelines (Byrne RA et al.)"
+  },
+  {
+   "topic": "Current STEMI and Q-wave criteria from the Fourth Universal Definition of MI: J-point thresholds by sex and age (V2-V3: >=2 mm men >=40 y, >=2.5 mm men <40 y, >=1.5 mm women; >=1 mm in other leads; two contiguous leads), right-sided leads (V3R/V4R >=0.5 mm, >=1 mm men <30 y), posterior leads (V7-V9 >=0.5 mm, >=1 mm men <40 y) and updated pathological Q criteria",
+   "why_needed": "These are the criteria that trigger reperfusion today. Learners must measure at the J point against a stable baseline. A 2004 text predates the sex- and age-specific thresholds.",
+   "priority": "P0",
+   "source": "Thygesen K et al., Fourth Universal Definition of Myocardial Infarction, Circulation/Eur Heart J 2018"
+  },
+  {
+   "topic": "Posterior and RV involvement as STEMI equivalents: maximal ST depression in V1-V4 with upright T waves meaning posterior occlusion, routine V7-V9 and V4R recording, and reading a tall R in V1-V2",
+   "why_needed": "Isolated posterior OMI is the classic STEMI-negative occlusion and is missed often. The book covers posterior and RV infarction mostly as Q-wave localisation, not as an acute reperfusion decision with lead-specific thresholds.",
+   "priority": "P0",
+   "source": "Fourth UDMI 2018; 2023 ESC ACS guidelines; Kontos MC et al., JACC 2022 (STEMI-equivalent list)"
+  },
+  {
+   "topic": "Wellens syndrome (pattern A biphasic, pattern B deep symmetric T inversion in V2-V3 in a pain-free patient), read as a reperfused critical LAD lesion",
+   "why_needed": "It is a high-stakes pre-infarction pattern that looks benign when the patient is pain-free. Learners must not send these patients to a stress test, and the book's 'subepicardial ischaemia' label hides what the pattern means.",
+   "priority": "P0",
+   "source": "de Zwaan C, Bar FW, Wellens HJJ, Am Heart J 1982;103:730; Rhinehardt J et al., Am J Emerg Med 2002"
+  },
+  {
+   "topic": "Hyperkalaemia: peaked narrow-based T waves, P flattening, PR and QRS widening, bradycardia and junctional rhythms, bundle-branch-like and Brugada-like patterns, sine wave; the progression is non-linear and the ECG is insensitive",
+   "why_needed": "It is a common, lethal and treatable emergency, it imitates STEMI, BBB and VT, and electrolytes are absent from the chapter map. Every curriculum's 'never miss' list includes it.",
+   "priority": "P0",
+   "source": "Littmann L, Gibbs MA, J Electrocardiol 2018 (severe hyperkalaemia); Durfey N et al., West J Emerg Med 2017; Antiperovitch P et al., J Hosp Med 2018;13:185 (class A competencies)"
+  },
+  {
+   "topic": "QT measurement and long-QT states: tangent method, choosing the lead, handling U waves, measuring in BBB and AF, Bazett vs Fridericia/Framingham, sex-specific limits, QTc >=500 ms or a rise >60 ms as torsades risk, drug-induced QT prolongation, congenital LQTS (T-wave morphology of LQT1-3, Schwartz score)",
+   "why_needed": "Drug-induced QT prolongation is one of the commonest preventable causes of in-hospital arrhythmic death. The book covers QT correction and torsades but not congenital LQTS, practical measurement or drug-risk management.",
+   "priority": "P0",
+   "source": "Rautaharju PM et al., AHA/ACCF/HRS 2009 Part IV (ST/T/U and QT); Drew BJ et al., AHA Scientific Statement on preventing torsade de pointes in hospital, Circulation 2010; Zeppenfeld K et al., 2022 ESC Ventricular Arrhythmias/SCD guidelines; Postema PG, Wilde AAM, Curr Cardiol Rev 2014"
+  },
+  {
+   "topic": "Acute pericarditis and myopericarditis versus STEMI and versus early repolarisation (diffuse concave ST elevation, PR depression, reciprocal change only in aVR/V1, Spodick sign, staged evolution), plus pericardial effusion and tamponade (low voltage, electrical alternans)",
+   "why_needed": "This is the most frequent STEMI mimic and a frequent cause of both missed and unnecessary cath-lab activations. It is absent from the chapter map.",
+   "priority": "P0",
+   "source": "2025 ESC Guidelines for the management of myocarditis and pericarditis, Eur Heart J 2025;46:3952 (doi 10.1093/eurheartj/ehaf192)"
+  },
+  {
+   "topic": "Peri-arrest rhythm recognition tied to current ALS algorithms: VF/pulseless VT, asystole and P-wave asystole, PEA, unstable bradycardia and tachycardia, post-ROSC 12-lead",
+   "why_needed": "The book describes VT and VF electrophysiologically but does not tie rhythm recognition to immediate action. Students are examined on, and will act on, these rhythms within seconds.",
+   "priority": "P0",
+   "source": "AHA 2025 Guidelines for CPR and ECC; ERC Guidelines 2025 (Resuscitation)"
+  },
+  {
+   "topic": "de Winter pattern (upsloping ST depression at the J point with tall symmetric T waves in V1-V6, often with ST elevation in aVR) as an LAD-occlusion equivalent",
+   "why_needed": "It is uncommon but represents an acute proximal LAD occlusion without ST elevation, and STEMI rules miss it.",
+   "priority": "P1",
+   "source": "de Winter RJ, Verouden NJW, Wellens HJJ, Wilde AAM, N Engl J Med 2008;359:2071; Kontos MC et al., JACC 2022"
+  },
+  {
+   "topic": "ST elevation in aVR (and/or V1) with widespread ST depression (>=1 mm in >=6 leads): diffuse subendocardial ischaemia from left-main or 3-vessel disease vs demand ischaemia, which is not itself an occlusion STEMI",
+   "why_needed": "Learners need to recognise it as high-risk and not mislabel it as a 'left main STEMI'. Current guidance frames it as multivessel or left-main ischaemia that calls for an urgent invasive strategy when the patient is unstable.",
+   "priority": "P1",
+   "source": "2023 ESC ACS guidelines; Harhash AA et al., Am J Med 2019 (aVR ST elevation and acute occlusion)"
+  },
+  {
+   "topic": "Infarction with confounding conduction: LBBB and ventricular pacing (Sgarbossa, Smith-modified Sgarbossa with ST/S ratio <=-0.25, Barcelona criteria), and RBBB with or without LAFB in acute LAD occlusion",
+   "why_needed": "New LBBB is no longer a STEMI equivalent on its own, so learners need a criterion-based method to detect occlusion under abnormal depolarisation. The book predates the modified criteria.",
+   "priority": "P1",
+   "source": "Sgarbossa EB et al., N Engl J Med 1996;334:481; Smith SW et al., Ann Emerg Med 2012;60:766; Meyers HP et al., Am Heart J 2015;170:1255; Di Marco A et al., J Am Heart Assoc 2020 (Barcelona); 2023 ESC ACS guidelines"
+  },
+  {
+   "topic": "Early repolarisation: benign pattern vs early-repolarisation syndrome (inferolateral J waves, horizontal ST), and normal-variant ST elevation vs subtle anterior OMI (4-variable formula)",
+   "why_needed": "It is the most common benign ST elevation in young people and the commonest reason subtle LAD occlusion gets dismissed. The book's 'normal repolarisation variants' predate the 2015 consensus definition.",
+   "priority": "P1",
+   "source": "Macfarlane PW et al., JACC 2015;66:470 (early repolarisation consensus); Antzelevitch C et al., J-wave syndromes expert consensus, Heart Rhythm/J Arrhythm 2016; Driver BE et al., J Electrocardiol 2017 (4-variable formula)"
+  },
+  {
+   "topic": "Brugada syndrome updated: type 1 (coved) as the only diagnostic pattern, type 2 (saddleback) as suggestive only, recording V1-V2 high in the 2nd-3rd intercostal spaces, unmasking by fever and drugs, Brugada phenocopies (hyperkalaemia, sodium-channel blockers, ischaemia), Shanghai score",
+   "why_needed": "The book covers Brugada in 2004 terms (three types). It is a sudden-death substrate in young adults, and modern criteria change who gets labelled.",
+   "priority": "P1",
+   "source": "Bayes de Luna A et al., J Electrocardiol 2012;45:433 (Brugada pattern consensus); Antzelevitch C et al., J-wave syndromes consensus 2016 (Shanghai score); 2022 ESC VA/SCD guidelines; Anselm DD, Baranchuk A, Brugada phenocopy literature"
+  },
+  {
+   "topic": "Hypertrophic cardiomyopathy in adults: LVH voltage with deep narrow inferolateral Q waves, pseudo-infarct patterns, giant negative T waves in apical HCM, abnormal ECG in a young person as a trigger for echo",
+   "why_needed": "HCM is a leading cause of sudden death in the young and the ECG is abnormal in most cases. The book discusses HCM only within congenital or paediatric disease.",
+   "priority": "P1",
+   "source": "Ommen SR et al., 2024 AHA/ACC multisociety HCM guideline, Circulation 2024; Arbelo E et al., 2023 ESC Cardiomyopathy guidelines"
+  },
+  {
+   "topic": "Athlete ECG: training-related findings (sinus bradycardia, 1st-degree AV block, Mobitz I, isolated QRS voltage for LVH, early repolarisation, Black-athlete repolarisation, juvenile T before 16 y) vs borderline vs abnormal findings that need work-up",
+   "why_needed": "Learners must avoid both false alarms and missed cardiomyopathy or channelopathy in young, fit patients. Standardised international criteria now exist.",
+   "priority": "P1",
+   "source": "Sharma S, Drezner JA et al., International recommendations for ECG interpretation in athletes, JACC 2017;69:1057 / Eur Heart J 2018;39:1466"
+  },
+  {
+   "topic": "Sodium-channel blocker toxicity (tricyclic antidepressants and others): sinus tachycardia, QRS >100 ms, terminal R in aVR >3 mm, R/S in aVR >0.7, Brugada-like pattern, wide-complex rhythms responsive to bicarbonate",
+   "why_needed": "Overdose is common and the ECG predicts seizures and arrhythmia and guides immediate treatment. It is absent from the book.",
+   "priority": "P1",
+   "source": "Boehnert MT, Lovejoy FH Jr, N Engl J Med 1985;313:474; Liebelt EL, Francis PD, Woolf AD, Ann Emerg Med 1995;26:195"
+  },
+  {
+   "topic": "Other electrolyte and drug effects: hypokalaemia (ST depression, U waves, apparent long QT), hypo- and hypercalcaemia (ST-segment length), hypomagnesaemia, digoxin effect vs toxicity (scooped ST; bidirectional VT, atrial tachycardia with block, regularised AF), beta-blocker/calcium-channel-blocker toxicity, class IC and III antiarrhythmics",
+   "why_needed": "Learners need a 'metabolic and drug' differential before attributing an abnormal ECG to structural heart disease, and the chapter map has no section on it.",
+   "priority": "P1",
+   "source": "Rautaharju PM et al., AHA/ACCF/HRS 2009 Part IV; Diercks DB et al., J Emerg Med 2004 (electrolyte ECG manifestations)"
+  },
+  {
+   "topic": "Lead reversal and misplacement beyond RA/LA: LA/LL, RA/LL, neutral-electrode swaps (a near-flat limb lead), precordial swaps, V1-V2 placed too high (pseudo-Brugada, pseudo-septal Q), and dextrocardia vs reversal",
+   "why_needed": "Misplacement is common in real practice and creates false infarcts, false axis shifts and false Brugada patterns. The book covers only arm reversal.",
+   "priority": "P1",
+   "source": "Batchvarov VN, Malik M, Camm AJ, Europace 2007;9:1081 (incorrect electrode cable connection); Kligfield P et al., AHA/ACCF/HRS 2007 Part I"
+  },
+  {
+   "topic": "Artefacts and the recording chain: tremor and movement artefact mimicking VT or AF, mains interference, and filter effects (0.5 Hz high-pass or monitor mode distorting the ST segment; 0.05-150 Hz diagnostic bandwidth)",
+   "why_needed": "Artefact read as VT has led to unnecessary procedures. Students must judge signal quality before interpreting.",
+   "priority": "P1",
+   "source": "Knight BP et al., N Engl J Med 1999;341:1270 (artefact mimicking VT); Kligfield P et al., AHA/ACCF/HRS 2007 Part I"
+  },
+  {
+   "topic": "Modern paced ECG: recognising AAI/VVI/DDD behaviour, failure to capture, failure to sense and oversensing, pacemaker-mediated tachycardia, CRT/biventricular morphology, conduction-system pacing (His bundle, LBBAP with pseudo-RBBB in V1), leadless devices",
+   "why_needed": "Paced ECGs are now common on wards, and conduction-system pacing changes what a 'normal' paced QRS looks like. The book chapter is device-physics heavy, has missing pages and predates CSP and CRT.",
+   "priority": "P1",
+   "source": "Glikson M et al., 2021 ESC Guidelines on cardiac pacing and CRT; Chung MK et al., 2023 HRS/APHRS/LAHRS physiologic pacing guideline, Heart Rhythm 2023; Burri H et al., EHRA conduction system pacing consensus, Europace 2023"
+  },
+  {
+   "topic": "Wide-complex tachycardia beyond the 1991 Brugada algorithm: Vereckei aVR algorithm, lead II R-wave peak time >=50 ms, VT score, and the safety rule that an unexplained wide-complex tachycardia is VT (especially with structural heart disease)",
+   "why_needed": "Learners need a fast, safe method under pressure and need to know that every algorithm has limited accuracy. The book stops at the Brugada algorithm.",
+   "priority": "P1",
+   "source": "Vereckei A et al., Heart Rhythm 2008;5:89; Pava LF et al., Heart Rhythm 2010;7:922; Jastrzebski M et al., Europace 2016;18:578; 2022 ESC VA/SCD guidelines"
+  },
+  {
+   "topic": "Critical use of computer interpretation and automation bias: read first, then compare with the machine statement; know typical algorithm failures (AF vs artefact, pacing, STEMI over- and under-calls)",
+   "why_needed": "Nearly every ECG now arrives with a machine read. Inaccurate computer statements measurably lead non-experts into the same errors.",
+   "priority": "P1",
+   "source": "Schlapfer J, Wellens HJ, JACC 2017;70:1183 (computer-interpreted ECGs); Tsai TL, Fridsma DB, Gatti G, JAMIA 2003;10:478; Mason JW et al., AHA/ACCF/HRS 2007 Part II"
+  },
+  {
+   "topic": "Arrhythmogenic (right ventricular) cardiomyopathy: T inversion in V1-V3 beyond adolescence without RBBB, epsilon waves, prolonged terminal activation duration, VT with LBBB morphology and superior axis",
+   "why_needed": "It is a sudden-death substrate in young people and athletes, and it is absent from the book.",
+   "priority": "P2",
+   "source": "Marcus FI et al., 2010 Task Force Criteria, Circulation/Eur Heart J 2010; Corrado D et al., European Task Force consensus criteria, Int J Cardiol 2024;395 (refining the 2020 Padua criteria)"
+  },
+  {
+   "topic": "Short QT syndrome (QTc <=320 ms, or 320-360 ms with supporting features; tall peaked T waves) and hypercalcaemia or digoxin as other causes of a short QT",
+   "why_needed": "It is a rare channelopathy, but completing the QT 'both ends' concept guards against reading only prolonged QT.",
+   "priority": "P2",
+   "source": "2022 ESC VA/SCD guidelines (Zeppenfeld K et al.)"
+  },
+  {
+   "topic": "Takotsubo syndrome ECG: anterior ST elevation that the ECG cannot reliably tell from anterior STEMI, later deep T inversion with QT prolongation",
+   "why_needed": "The teaching point is that the ECG cannot exclude occlusion, so learners must not withhold angiography. Takotsubo is absent from the book.",
+   "priority": "P2",
+   "source": "Ghadri JR et al., InterTAK International Expert Consensus, Eur Heart J 2018;39:2032"
+  },
+  {
+   "topic": "Hypothermia: Osborn (J) waves, bradycardia, prolonged intervals, shivering artefact, atrial fibrillation",
+   "why_needed": "It is a classic non-coronary J-wave pattern and part of the J-wave and ST-mimic differential.",
+   "priority": "P2",
+   "source": "Mattu A, Brady WJ, Perron AD, Am J Emerg Med 2002;20:314 (ECG manifestations of hypothermia)"
+  },
+  {
+   "topic": "Low QRS voltage and infiltrative disease: cardiac amyloidosis (low voltage despite a thick wall, pseudo-infarct Q waves, conduction disease)",
+   "why_needed": "Amyloid cardiomyopathy is increasingly diagnosed and treatable, and the mismatch between voltage and wall thickness is an ECG red flag.",
+   "priority": "P2",
+   "source": "Garcia-Pavia P et al., ESC position statement on cardiac amyloidosis, Eur Heart J 2021;42:1554"
+  },
+  {
+   "topic": "Interatrial block (partial and advanced; Bayes syndrome) as an entity separate from left atrial enlargement",
+   "why_needed": "Advanced interatrial block predicts atrial fibrillation and stroke. The book's left-atrial criteria mix conduction delay with chamber size.",
+   "priority": "P2",
+   "source": "Bayes de Luna A et al., Interatrial blocks consensus report, J Electrocardiol 2012;45:445"
+  },
+  {
+   "topic": "Subtle territory-specific occlusion patterns: high lateral OMI (ST elevation in I, aVL and V2 with ST depression in III, the 'South African flag' sign), the Aslanger pattern (inferior OMI with multivessel disease), reciprocal ST depression in aVL as an early sign of inferior OMI",
+   "why_needed": "These improve detection of STEMI-negative occlusion once the core OMI concepts are secure.",
+   "priority": "P2",
+   "source": "Littmann L, Am J Emerg Med 2016;34:107 (South African flag sign); Aslanger EK et al., J Electrocardiol 2020;61:41"
+  },
+  {
+   "topic": "LV aneurysm morphology vs acute anterior STEMI (T/QRS amplitude ratio rule)",
+   "why_needed": "Persistent ST elevation after a prior MI is a common false activation. The book describes aneurysm but gives no discriminating rule.",
+   "priority": "P2",
+   "source": "Klein LR, Shroff GR, Beeman W, Smith SW, Am J Emerg Med 2015;33:786"
+  },
+  {
+   "topic": "Non-coronary deep T-wave inversion: cerebral T waves (subarachnoid or intracerebral haemorrhage), post-tachycardia and post-pacing 'memory' T waves, apical HCM",
+   "why_needed": "Widening the differential for giant T inversion prevents anchoring on ischaemia.",
+   "priority": "P2"
+  },
+  {
+   "topic": "Idiopathic and catecholaminergic VT: RVOT VT (LBBB morphology, inferior axis), fascicular VT (RBBB with left axis, relatively narrow QRS), bidirectional VT (CPVT, digoxin)",
+   "why_needed": "These VTs are commonly misread as SVT with aberrancy, and they are not covered in the book.",
+   "priority": "P2",
+   "source": "2022 ESC VA/SCD guidelines"
+  },
+  {
+   "topic": "Strict LBBB criteria and nonspecific intraventricular conduction delay (relevant to CRT selection); updated LVH criteria (Cornell voltage and product, Peguero-Lo Presti) and the low sensitivity of voltage criteria",
+   "why_needed": "These refinements change how block and hypertrophy are labelled in modern reports.",
+   "priority": "P2",
+   "source": "Surawicz B et al., AHA/ACCF/HRS 2009 Part III; Strauss DG, Selvester RH, Wagner GS, Am J Cardiol 2011;107:927; Peguero JG et al., JACC 2017;69:1694; Hancock EW et al., AHA/ACCF/HRS 2009 Part V"
+  },
+  {
+   "topic": "Single-lead and wearable ECGs (smartwatch or handheld strips) for AF detection, and AI-ECG (for example, detecting low EF) as decision support, with their limitations",
+   "why_needed": "Patients in 2026 bring wearable strips, and guidelines accept a physician-reviewed single-lead tracing of at least 30 s for AF. AI-ECG output will appear alongside tracings.",
+   "priority": "P2",
+   "source": "Van Gelder IC et al., 2024 ESC AF guidelines; Siontis KC, Noseworthy PA, Attia ZI, Friedman PA, Nat Rev Cardiol 2021;18:465"
+  }
+ ],
+ "outdated_concepts": [
+  {
+   "concept": "The ischaemia-injury-necrosis triad (T wave = ischaemia, ST = injury, Q = necrosis) as the organising frame for the coronary ECG (book ch. 9)",
+   "replacement": "Use an occlusion-based frame: is there an acute coronary occlusion that needs emergent reperfusion (OMI vs non-OMI)? Read ST, T and QRS together, proportional to QRS amplitude, with reciprocity and serial evolution. Q waves track infarct size and do not prove irreversibility. Negative T waves are usually post-ischaemic or reperfusion signs, not ongoing ischaemia.",
+   "source": "Fourth UDMI (Thygesen 2018); Bayes de Luna A et al., Ann Noninvasive Electrocardiol 2014;19:426 (negative T wave consensus); Meyers HP et al. 2021; 2023 ESC ACS guidelines"
+  },
+  {
+   "concept": "Labels like 'isquemia subepicárdica' (subepicardial ischaemia) for negative T waves and 'isquemia subendocárdica' (subendocardial ischaemia) for tall T waves",
+   "replacement": "Describe the morphology and interpret it in context. Deep symmetric T inversion after resolved pain means reperfusion (for example, Wellens). Tall, broad, voluminous T waves early in chest pain are hyperacute T waves of OMI, distinct from the narrow peaked T of hyperkalaemia. Ongoing acute ischaemia does not produce isolated negative T waves.",
+   "source": "Bayes de Luna A et al., Negative T wave in ischemic heart disease: a consensus article, Ann Noninvasive Electrocardiol 2014;19:426"
+  },
+  {
+   "concept": "Q-wave vs non-Q-wave infarction as transmural vs non-transmural ('Non-Q MI' as a pattern category)",
+   "replacement": "STEMI/NSTEMI for management, refined by OMI/NOMI. CMR shows that Q waves reflect infarct size rather than transmurality. Use the UDMI Q-wave criteria for prior MI.",
+   "source": "Moon JC et al., JACC 2004;44:554 (CMR basis of Q vs non-Q MI); Fourth UDMI 2018"
+  },
+  {
+   "concept": "Single fixed millimetre thresholds for ST elevation (for example, 1 mm in limb leads, 2 mm in precordial leads) regardless of sex and age, with STEMI as the only trigger for reperfusion",
+   "replacement": "Use sex- and age-specific J-point thresholds, including posterior (V7-V9) and right-sided leads. Explicitly teach STEMI-negative OMI and STEMI equivalents (posterior, de Winter, hyperacute T, Sgarbossa-positive).",
+   "source": "Fourth UDMI 2018; Kontos MC et al., 2022 ACC chest-pain ECDP; 2023 ESC ACS guidelines"
+  },
+  {
+   "concept": "New (or presumed new) LBBB as an automatic STEMI equivalent",
+   "replacement": "LBBB alone does not indicate reperfusion. Apply Sgarbossa, Smith-modified Sgarbossa or the Barcelona criteria. In a patient with ongoing ischaemic symptoms, LBBB, RBBB or a paced rhythm leads to a primary-PCI strategy whether or not the block is new.",
+   "source": "O'Gara PT et al., 2013 ACCF/AHA STEMI guideline; 2023 ESC ACS guidelines; Smith SW et al., Ann Emerg Med 2012; Di Marco A et al., JAHA 2020"
+  },
+  {
+   "concept": "'Posterior (dorsal) infarction' as the name for chronic Q/R changes from the basal inferior wall; old wall nomenclature",
+   "replacement": "Use the AHA 17-segment model ('inferobasal' replaces 'posterior'). CMR correlation shows that a prominent R in V1-V2 mostly reflects lateral-wall infarction. In the acute setting, 'posterior OMI' is still used and is confirmed with V7-V9.",
+   "source": "Cerqueira MD et al., Circulation 2002;105:539; Bayes de Luna A et al., Circulation 2006;114:1755 (CMR-based terminology)"
+  },
+  {
+   "concept": "'Crecimiento auricular' (atrial enlargement) as the meaning of P-wave changes",
+   "replacement": "Say 'atrial abnormality': P changes reflect conduction delay and pressure as well as size. Teach interatrial block (partial or advanced) as a separate conduction diagnosis.",
+   "source": "Hancock EW et al., AHA/ACCF/HRS 2009 Part V; Bayes de Luna A et al., J Electrocardiol 2012;45:445"
+  },
+  {
+   "concept": "Cabrera's systolic vs diastolic overload ('sobrecarga sistólica/diastólica') and 'strain' for the ST-T of hypertrophy",
+   "replacement": "Say 'LVH (or RVH) with secondary ST-T abnormalities'. The ECG cannot reliably tell pressure load from volume load, and voltage criteria are insensitive. Echo or CMR defines mass and mechanism.",
+   "source": "Hancock EW et al., AHA/ACCF/HRS 2009 Part V (hypertrophy)"
+  },
+  {
+   "concept": "'Intrinsicoid deflection' (deflexión intrinsecoide)",
+   "replacement": "R-peak time, measured from QRS onset to the R peak.",
+   "source": "Surawicz B et al., AHA/ACCF/HRS 2009 Part III (intraventricular conduction)"
+  },
+  {
+   "concept": "'Hemibloqueo' (hemiblock), and 'trifascicular block' for bifascicular block plus a prolonged PR",
+   "replacement": "Say left anterior or left posterior fascicular block. Report the components ('bifascicular block with first-degree AV block'), because the PR delay may be in the AV node. Reserve trifascicular block for alternating BBB.",
+   "source": "Surawicz B et al., AHA/ACCF/HRS 2009 Part III; Kusumoto FM et al., 2018 ACC/AHA/HRS bradycardia and conduction delay guideline"
+  },
+  {
+   "concept": "Classifying 2:1 AV block as Mobitz I or II from the surface ECG, and inferring site from the pattern alone",
+   "replacement": "Treat 2:1 block as its own category that cannot be typed from one strip. Use QRS width, longer recordings and the response to vagal manoeuvres, atropine or exercise. Use 'high-grade/advanced AV block' for two or more consecutive non-conducted P waves.",
+   "source": "Barold SS, Hayes DL, Mayo Clin Proc 2001;76:44 (second-degree AV block reappraisal); Kusumoto FM et al., 2018 bradycardia guideline"
+  },
+  {
+   "concept": "Lown grading of PVCs and 'R-on-T' as the main markers of PVC danger",
+   "replacement": "Use PVC burden on ambulatory monitoring (roughly >10-20% raises the risk of PVC-induced cardiomyopathy), origin and morphology (outflow tract vs other), coupling interval, and above all the presence of structural heart disease.",
+   "source": "Zeppenfeld K et al., 2022 ESC Ventricular Arrhythmias/SCD guidelines"
+  },
+  {
+   "concept": "Three Brugada ECG types (2002 classification), with types 2 and 3 treated as diagnostic categories",
+   "replacement": "Only type 1 (coved, spontaneous or drug-induced) is diagnostic. Saddleback (the merged 'type 2') is only suggestive. Record high precordial leads, exclude phenocopies and use the Shanghai score.",
+   "source": "Bayes de Luna A et al., J Electrocardiol 2012;45:433; Antzelevitch C et al., J-wave syndromes consensus 2016; 2022 ESC VA/SCD guidelines"
+  },
+  {
+   "concept": "Lown-Ganong-Levine (LGL) syndrome as a distinct pre-excitation syndrome",
+   "replacement": "A short PR without a delta wave is a variant of enhanced AV-nodal conduction, not a recognised syndrome in current SVT classification. Drop it from the core curriculum and teach WPW pattern vs WPW syndrome instead.",
+   "source": "Brugada J et al., 2019 ESC SVT guidelines (Eur Heart J 2020), which do not include LGL in the current SVT classification"
+  },
+  {
+   "concept": "'Mahaim fibres' understood as nodoventricular or nodofascicular connections",
+   "replacement": "Most are atriofascicular (right-sided, decremental) accessory pathways producing antidromic tachycardia with LBBB morphology. Call them 'atypical/decremental accessory pathways'.",
+   "source": "Brugada J et al., 2019 ESC SVT guidelines"
+  },
+  {
+   "concept": "'Paroxysmal atrial tachycardia' or 'PSVT' as an umbrella term, and 'nodal' rhythm or tachycardia",
+   "replacement": "Use mechanism-based names: AVNRT (typical or atypical), AVRT (orthodromic or antidromic), focal or multifocal atrial tachycardia, junctional tachycardia. Say 'junctional', not 'nodal'.",
+   "source": "Brugada J et al., 2019 ESC SVT guidelines"
+  },
+  {
+   "concept": "Bazett as the default QT correction with a single upper limit",
+   "replacement": "Use Fridericia, Framingham or Hodges (or a regression method), especially outside 60-90 bpm. Apply sex-specific limits (about >=450 ms men, >=460 ms women). Treat QTc >=500 ms or a rise >60 ms as high risk, and use specific methods for BBB and AF.",
+   "source": "Rautaharju PM et al., AHA/ACCF/HRS 2009 Part IV; Vandenberk B et al., J Am Heart Assoc 2016;5:e003264; Drew BJ et al., Circulation 2010"
+  },
+  {
+   "concept": "S1Q3T3 (and the 'acute cor pulmonale' pattern) as the ECG hallmark of pulmonary embolism",
+   "replacement": "S1Q3T3 is insensitive and non-specific. Sinus tachycardia is the commonest finding. Signs of RV strain (T inversion in V1-V4 and III, new RBBB, right axis shift) carry prognostic value. The ECG neither rules PE in nor rules it out.",
+   "source": "Konstantinides SV et al., 2019 ESC acute PE guidelines"
+  },
+  {
+   "concept": "Exercise ECG as the first-line diagnostic test for suspected CAD, with Diamond-Forrester pre-test probability tables (book ch. 10)",
+   "replacement": "Use CCTA or functional imaging first-line and estimate clinical likelihood with updated, risk-factor-weighted models. Keep the exercise ECG for when imaging is unavailable, or for functional capacity and symptom correlation. An ECG-reading course needs only recognition of ischaemic exercise ST responses and exercise-induced arrhythmias.",
+   "source": "Knuuti J et al., 2019 ESC chronic coronary syndromes guidelines; Vrints C et al., 2024 ESC CCS guidelines; Gulati M et al., 2021 AHA/ACC chest pain guideline"
+  },
+  {
+   "concept": "Right-ventricular apical pacing as the standard paced morphology, a generic magnet response, and pacing taught mainly through device physics (Ohm's law, thresholds; book ch. 12)",
+   "replacement": "Teach recognition-oriented ECG content: paced morphologies including CRT and conduction-system pacing (His/LBBAP), leadless devices, malfunction patterns, and manufacturer-specific magnet behaviour. Device physics is optional depth.",
+   "source": "Glikson M et al., 2021 ESC pacing and CRT guidelines; Chung MK et al., 2023 HRS physiologic pacing guideline; Burri H et al., EHRA CSP consensus 2023"
+  },
+  {
+   "concept": "The surface ECG as a primary diagnostic tool for specific congenital lesions (book ch. 11)",
+   "replacement": "Echo and CMR make the diagnosis. Keep a few high-yield ECG clues (secundum ASD with rsR' and right axis; primum ASD/AVSD with left axis; Ebstein; congenitally corrected TGA) and adult congenital follow-up items such as QRS duration after tetralogy repair.",
+   "source": "Baumgartner H et al., 2020 ESC adult congenital heart disease guidelines (Eur Heart J 2021)"
+  },
+  {
+   "concept": "The 1991 Brugada algorithm as the definitive way to separate VT from SVT with aberrancy",
+   "replacement": "Several algorithms (Brugada, Vereckei aVR, lead II R-wave peak time, VT score) have similar, imperfect accuracy. Teach one fast algorithm plus the safety rule: an unexplained wide-complex tachycardia, especially with structural heart disease, is VT.",
+   "source": "Vereckei A et al., Heart Rhythm 2008; Pava LF et al., Heart Rhythm 2010; Jastrzebski M et al., Europace 2016; 2022 ESC VA/SCD guidelines"
+  },
+  {
+   "concept": "The six-step reading method (rhythm, rate, PR, QT, axis, morphology) as a complete routine",
+   "replacement": "Extend it to a structured read: technical quality, calibration and lead-placement check, then rate, rhythm, PR, QRS duration, QT/QTc, axis, and P/QRS/ST/T/U morphology. Then compare with the prior ECG, integrate the clinical context, run an explicit 'never-miss' screen (OMI and equivalents, hyperkalaemia, long QT, pre-excitation, Brugada type 1, high-grade block), and only then look at the computer statement.",
+   "source": "Kligfield P et al., AHA/ACCF/HRS 2007 Part I; Sibbald M et al., Med Educ 2013;47:301 and Adv Health Sci Educ 2019;24:427 (checklists in ECG interpretation); Antiperovitch P et al., J Hosp Med 2018"
+  },
+  {
+   "concept": "'Sick sinus syndrome' as the umbrella term",
+   "replacement": "'Sinus node dysfunction', including tachy-brady syndrome and chronotropic incompetence.",
+   "source": "Kusumoto FM et al., 2018 ACC/AHA/HRS bradycardia guideline"
+  }
+ ],
+ "learning_path": [
+  {
+   "stage": "Stage 1 - Foundations: from cardiac activation to the 12-lead tracing (book ch. 1-2, condensed)",
+   "goal": "Predict the polarity and size of a deflection in any lead from a stated activation vector, name every wave, interval and segment, and confirm calibration, paper speed, filter mode and electrode placement before reading. Keep this stage short: it exists to make later patterns understandable, not to teach electrophysiology for its own sake.",
+   "topics": [
+    "Conduction system and what each part contributes to the surface ECG (only the physiology that explains waves)",
+    "Dipole and vector concept; why an electrode sees positive, negative or equiphasic deflections",
+    "Einthoven triangle, Goldberger augmented leads, Wilson central terminal; hexaxial and horizontal reference frames",
+    "Paper, calibration (10 mm/mV, 25 mm/s), diagnostic vs monitor filter bandwidth",
+    "Electrode positions and colour codes (AHA vs IEC); right-sided and posterior leads",
+    "Signal-quality check as the first step of every read"
+   ],
+   "assessment": "Low-stakes retrieval quizzes and 'predict the lead' tasks (choose or draw the QRS in lead X for a given axis or activation sequence) with immediate feedback. Mastery is about 85% on two consecutive sets, after which the learner moves on. Evidence: causal basic-science explanations improve diagnostic accuracy and retention in novices (Woods NN, Brooks LR, Norman GR, Med Educ 2005;39:107), and worked examples before independent problems reduce cognitive load (cognitive load theory; van Gog and Sweller)."
+  },
+  {
+   "stage": "Stage 2 - The systematic read of the normal ECG and its measurements (book ch. 2-3)",
+   "goal": "Perform a fixed-order structured read of any 12-lead in about 3 minutes, measure accurately, and accept the full normal range, including normal variants, without over-calling.",
+   "topics": [
+    "Fixed reading order: quality/placement -> rate -> rhythm -> PR -> QRS duration -> QT/QTc -> axis -> P, QRS, ST, T, U morphology -> comparison with prior -> summary -> computer statement last",
+    "Rate methods (300/1500 rules, 10-s count x 6); sinus rhythm criteria; sinus arrhythmia",
+    "Interval measurement technique (earliest onset and latest offset across leads; QT tangent method; Fridericia/Framingham vs Bazett; sex- and age-specific limits)",
+    "Axis by the I/aVF/II method and the isoelectric lead; normal R-wave progression and transition",
+    "J point and ST deviation measured against the PR/TP baseline",
+    "Normal variants: early repolarisation pattern, persistent juvenile T, incomplete RBBB, positional changes, training-related changes; paediatric norms (brief)"
+   ],
+   "assessment": "Measurement drills against reference values with stated tolerances (HR +/-5 bpm, intervals +/-20 ms, axis +/-30 degrees), using real tracings (for example, PTB-XL with PTB-XL+ automated measurements as a starting reference). Normal-vs-abnormal discrimination is tested on sets where a large share are normal, so learners calibrate against over-calling. Evidence: checklist-guided systematic reading reduces omission errors (Sibbald M et al., Med Educ 2013;47:301; Adv Health Sci Educ 2019;24:427), and teaching combined analytic and pattern-recognition strategies beats either alone (Ark TK, Brooks LR, Eva KW, Acad Med 2006; Eva KW et al., Med Educ 2007;41:1152)."
+  },
+  {
+   "stage": "Stage 3 - Rhythm I: the P-QRS relationship, bradyarrhythmias, conduction blocks and premature beats (book ch. 6-7, 13-15 in part)",
+   "goal": "For any rhythm, find atrial activity, establish the P-QRS relationship (with a ladder diagram if needed), and name the rhythm, its site and its urgency. Classify AV block correctly, including 2:1 and high-grade block, and recognise bundle-branch and fascicular blocks.",
+   "topics": [
+    "Sinus bradycardia and tachycardia, pauses, sinus arrest, SA block, sinus node dysfunction",
+    "Escape beats and rhythms (junctional, ventricular); AV dissociation",
+    "First-degree AV block, Mobitz I, Mobitz II, 2:1 block, high-grade block, complete AV block",
+    "Premature atrial, junctional and ventricular beats; blocked PAC as the commonest cause of an unexpected pause; aberrancy",
+    "RBBB, LBBB (including strict criteria), LAFB, LPFB, bifascicular block, alternating BBB, nonspecific IVCD",
+    "Ladder diagrams"
+   ],
+   "assessment": "Interleaved (mixed-category) rhythm-strip and 12-lead sets with immediate corrective feedback after every item. Progress is tracked as an individual learning curve, and the stage is passed when rolling accuracy over the last 30 items reaches 80% or more and has plateaued. Missed items re-enter a spaced-review queue. Ladder-construction tasks check reasoning, not just labels. Evidence: mixed practice outperforms blocked practice for learning ECG categories (Hatala RM, Brooks LR, Norman GR, Adv Health Sci Educ 2003;8:17), and per-item feedback with learning curves quantifies each learner's progress (Hatala R et al., Adv Health Sci Educ 2019;24:45; Waechter J et al., GMS J Med Educ 2019)."
+  },
+  {
+   "stage": "Stage 4 - Rhythm II: tachyarrhythmias, pre-excitation and the unstable patient (book ch. 8, 13-15)",
+   "goal": "Classify any tachycardia by QRS width and regularity, name the mechanism, treat an unexplained wide-complex tachycardia as VT, and recognise peri-arrest rhythms within about 10 seconds, linked to the first ALS action.",
+   "topics": [
+    "Narrow regular: sinus tachycardia, AVNRT, orthodromic AVRT, focal AT, flutter with 2:1 conduction (hidden flutter waves)",
+    "Irregular: AF, flutter with variable block, multifocal AT, frequent ectopy",
+    "WPW pattern vs syndrome; pre-excited AF (irregular, wide, variable QRS) and why AV-nodal blockers are dangerous",
+    "Wide-complex tachycardia: AV dissociation, capture and fusion beats, concordance, one fast algorithm (Brugada, Vereckei aVR or lead II R-wave peak time), the 'treat as VT' rule; idiopathic VTs (brief)",
+    "Polymorphic VT vs torsades; VF; asystole and P-wave asystole; PEA; artefact mimicking VT",
+    "AHA/ERC 2025 bradycardia and tachycardia algorithms"
+   ],
+   "assessment": "Timed rapid-recognition sets on monitor strips and 12-leads, scored for both accuracy and time. Simulation or OSCE stations with a live monitor where the learner names the rhythm and the first action. The pass standard on emergency items is 100% recognition, following the 'class A must never be missed' principle (Antiperovitch P et al., J Hosp Med 2018). Evidence: deliberate practice with focused, immediate feedback is what drives expert performance (Ericsson KA, Acad Med 2004;79:S70)."
+  },
+  {
+   "stage": "Stage 5 - Ischaemia and infarction: the occlusion-MI decision (book ch. 9, modernised)",
+   "goal": "For every chest-pain ECG, commit to one of three calls: acute occlusion likely (emergent reperfusion); indeterminate (serial ECGs, posterior and right-sided leads, troponin, echo); or not OMI, naming the mimic. Then localise the territory and likely culprit.",
+   "topics": [
+    "UDMI J-point thresholds by sex and age; contiguous leads; reciprocal change; culprit-artery logic (LAD, RCA vs LCx)",
+    "Hyperacute T waves, ST elevation proportional to QRS, terminal QRS distortion; serial ECGs and comparison with prior",
+    "Posterior OMI (V1-V4 maximal ST depression, V7-V9) and RV infarction (V4R)",
+    "Wellens A/B, de Winter, high lateral OMI, aVR elevation with diffuse ST depression (subendocardial ischaemia pattern)",
+    "Evolution: Q waves, T inversion, reperfusion signs; UDMI Q-wave criteria for old MI",
+    "Confounders: LBBB and paced rhythm (Sgarbossa, Smith-modified Sgarbossa), RBBB, LVH",
+    "Mimics: pericarditis, early repolarisation (4-variable formula), LV aneurysm (T/QRS), Brugada, hyperkalaemia, takotsubo; a normal ECG does not exclude ACS"
+   ],
+   "assessment": "Case sets whose ground truth is outcome-based (angiographic occlusion or adjudicated final diagnosis) rather than expert opinion alone, including true mimics and 'repeat ECG' as a valid answer. Missed occlusions (false negatives) and false activations are scored and reported separately, and missed occlusions carry the higher penalty. Contrasting pairs (OMI vs its look-alike) are presented side by side. Evidence: STEMI rules miss a substantial share of occlusions, and OMI-based reading recovers many of them (Khan AR et al., Eur Heart J 2017; Meyers HP et al., 2021; Aslanger EK et al., 2020). Instruction that asks for flexible, multifaceted reasoning on confusable cases improves diagnostic accuracy on ECGs (Ark TK, Brooks LR, Eva KW, Med Educ 2007;41:281)."
+  },
+  {
+   "stage": "Stage 6 - Chambers, repolarisation and inherited sudden-death substrates (book ch. 4-6, 8, extended)",
+   "goal": "Recognise structural and channelopathy substrates of sudden death on a resting ECG, know which findings need referral, and apply the international athlete criteria to avoid both false alarms and misses.",
+   "topics": [
+    "Atrial abnormality and interatrial block; LVH (Sokolow-Lyon, Cornell, Peguero-Lo Presti; secondary ST-T) and RVH; low voltage and amyloid",
+    "HCM including the apical variant; ARVC (T inversion V1-V3, epsilon wave, terminal activation duration)",
+    "Congenital LQTS (LQT1-3 morphologies, Schwartz score), drug-induced long QT, short QT",
+    "Brugada type 1 (high leads, fever, drugs, phenocopies); early repolarisation pattern vs syndrome",
+    "WPW risk markers (intermittent pre-excitation, shortest pre-excited RR in AF)",
+    "Athlete ECG: normal, borderline and abnormal findings; Black-athlete repolarisation; juvenile T"
+   ],
+   "assessment": "Screening-style sets graded against the international athlete criteria: the learner labels each ECG normal, borderline or abnormal and names the next step. QTc measurement accuracy is tested on tracings with U waves, AF and BBB, and a must-refer item list is scored at 100%. Because these patterns are rare in everyday practice, they enter a spaced, interleaved review queue (expanding intervals, mixed with common ECGs) so they are not forgotten. Evidence: spaced retrieval produces durable retention (Cepeda NJ et al., Psychol Bull 2006;132:354), and ECG skills decay without assessment-driven retrieval (Raupach T et al., Med Educ 2010;44:731)."
+  },
+  {
+   "stage": "Stage 7 - Systemic, toxic, device and technical causes: mimics and traps",
+   "goal": "Explain an abnormal ECG by metabolism, drugs, temperature, devices or the recording itself before attributing it to heart disease, and catch lead reversal, artefact and computer-read errors.",
+   "topics": [
+    "Hyperkalaemia (non-linear progression, BBB- and Brugada-like patterns, sine wave), hypokalaemia and U waves, calcium and magnesium",
+    "Digoxin effect vs toxicity; sodium-channel blocker/TCA toxicity (QRS width, terminal R in aVR); QT-prolonging drugs; beta-blocker/calcium-channel-blocker toxicity",
+    "Hypothermia (Osborn waves); pulmonary embolism (sinus tachycardia, RV strain; S1Q3T3 is insensitive); pericardial effusion and tamponade; cerebral T waves",
+    "Lead reversals (RA/LA, LA/LL, RA/LL, neutral-lead swaps, precordial swaps), high V1-V2 placement, dextrocardia",
+    "Artefacts (tremor, movement, pseudo-VT) and filter effects on the ST segment",
+    "Paced ECGs: modes, failure to capture or sense, pacemaker-mediated tachycardia, CRT, conduction-system pacing",
+    "Computer interpretation: common failure modes and automation bias"
+   ],
+   "assessment": "'Trap' sets that mix mimics with true pathology. Each answer requires a one-line mechanism explanation, not just a label. Lead-reversal and artefact detection rates are tracked. Learners submit their own read before the machine statement is revealed, and the cost of agreeing with a wrong computer read is fed back explicitly. Evidence: inaccurate computer ECG statements mislead physicians (Tsai TL et al., JAMIA 2003;10:478), and checklist-prompted re-review improves ECG diagnostic accuracy (Sibbald M et al., Adv Health Sci Educ 2019;24:427)."
+  },
+  {
+   "stage": "Stage 8 - Integration, real-world reading and maintenance of competence",
+   "goal": "Read unselected real ECGs independently, accurately and under time pressure, produce a concise structured report with an urgency level and next action, and sustain that performance over months.",
+   "topics": [
+    "Unselected, prevalence-weighted ECG stream (many normals and minor findings, occasional emergencies)",
+    "Clinical vignette integration; comparison with prior ECG; deciding when to escalate",
+    "Structured report: findings -> interpretation -> urgency/action",
+    "Confidence calibration (stated confidence vs actual accuracy)",
+    "Personal error taxonomy feeding a spaced-review queue; expert over-read and discussion"
+   ],
+   "assessment": "A blueprinted summative exam mapped to the Antiperovitch competency classes: 100% on class A emergencies and at least 80% overall, with time limits. A delayed retention test at 3-6 months must stay above threshold, and the learner's curve must have plateaued. Workplace or OSCE ECG reads are judged for entrustment. Evidence: untrained ECG accuracy is low and rises with structured training (Cook DA, Oh SY, Pusic MV, JAMA Intern Med 2020;180:1461). Summative assessment drives ECG learning more than the teaching format does (Raupach T et al., Med Educ 2010; BMC Med 2013;11:61). Computer-assisted instruction is at least as effective as other formats (Viljoen CA et al., BMJ Open 2019;9:e028800), so practice volume, feedback and spacing matter more than the medium."
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.vitest/
+*.log
+tests/out/
+data-raw/
+assets-raw/
+_proto/**/out/
+deploy/
+_tmp_*
+nul
+.claude/settings.local.json
+*.pdf
+_proto/**/cache/

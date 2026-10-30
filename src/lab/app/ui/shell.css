@@ -1,0 +1,1152 @@
+/*
+ * Shell, modes, tour and quiz styles. Colours come only from the frozen tokens in src/app/theme.css, so the dark theme
+ * works by token switch. The colour-language tokens (--c-atrial, --c-qrs …) are used for swatches / borders only:
+ * as small text on the light background some of them fall under 4.5:1. Selected state = --c-vector fill with --bg text.
+ */
+
+.lab-root .lab-app {
+  min-height: 100cqh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: clip;
+}
+
+.lab-root .visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.lab-root .skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 100;
+  padding: 10px 14px;
+  background: var(--fg);
+  color: var(--bg);
+  border-radius: var(--radius-sm);
+}
+.lab-root .skip-link:focus {
+  top: 8px;
+}
+
+/* ------------------------------------------------------------------ buttons & controls */
+
+.lab-root .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  min-width: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elev);
+  color: var(--fg);
+  font: inherit;
+  line-height: 1.2;
+  cursor: pointer;
+  text-align: center;
+}
+.lab-root .btn:hover:not(:disabled) {
+  background: var(--panel-2);
+}
+.lab-root .btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.lab-root .btn-sm {
+  padding: 0 10px;
+  font-size: 13px;
+}
+.lab-root .btn[aria-pressed='true'],
+.lab-root .btn[aria-current='page'],
+.lab-root .btn-primary {
+  background: var(--c-vector);
+  border-color: var(--c-vector);
+  color: var(--bg);
+}
+.lab-root .btn[aria-pressed='true']:hover:not(:disabled),
+.lab-root .btn[aria-current='page']:hover,
+.lab-root .btn-primary:hover:not(:disabled) {
+  background: var(--c-vector);
+  filter: brightness(1.08);
+}
+.lab-root .icon-btn {
+  padding: 0;
+  width: 40px;
+}
+.lab-root .icon {
+  flex: none;
+}
+.lab-root .link-btn {
+  min-height: 40px;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--fg);
+  font: inherit;
+  text-align: left;
+  text-decoration: underline;
+  text-decoration-color: var(--border-strong);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.lab-root .link-btn:hover {
+  text-decoration-color: var(--fg);
+}
+
+.lab-root .seg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.lab-root kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 0 5px;
+  border: 1px solid var(--border-strong);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--bg-elev);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.lab-root input[type='range'] {
+  min-height: 40px;
+  width: 160px;
+  max-width: 100%;
+  accent-color: var(--c-vector);
+  cursor: pointer;
+}
+.lab-root select {
+  min-height: 40px;
+  padding: 0 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elev);
+  color: var(--fg);
+  font: inherit;
+}
+
+.lab-root .range {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 10px;
+}
+.lab-root .range input[type='range'] {
+  width: 100%;
+}
+.lab-root .range output {
+  min-width: 4.5em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.lab-root .toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  cursor: pointer;
+}
+.lab-root .toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.lab-root .toggle-track {
+  position: relative;
+  flex: none;
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--border-strong);
+  transition: background 0.15s;
+}
+.lab-root .toggle-track::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--bg-elev);
+  transition: transform 0.15s;
+}
+.lab-root .toggle input:checked + .toggle-track {
+  background: var(--c-vector);
+}
+.lab-root .toggle input:checked + .toggle-track::after {
+  transform: translateX(16px);
+}
+.lab-root .toggle input:focus-visible + .toggle-track {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.lab-root .lab-swatch {
+  display: inline-block;
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+}
+
+.lab-root .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 9px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel-2);
+  color: var(--fg);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+.lab-root .chip-strong {
+  border-color: var(--border-strong);
+  font-weight: 600;
+}
+.lab-root .chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lab-root .badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--panel-2);
+  color: var(--fg);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.lab-root .badge-ok {
+  border-color: var(--ok);
+  box-shadow: inset 3px 0 0 var(--ok);
+}
+.lab-root .badge-P1 {
+  box-shadow: inset 3px 0 0 var(--c-qrs);
+}
+.lab-root .badge-P2 {
+  box-shadow: inset 3px 0 0 var(--c-atrial);
+}
+.lab-root .badge-P3 {
+  box-shadow: inset 3px 0 0 var(--c-repol);
+}
+
+.lab-root .muted {
+  color: var(--fg-muted);
+}
+.lab-root .fine-print {
+  margin: 6px 0 0;
+  color: var(--fg-muted);
+  font-size: 12.5px;
+}
+.lab-root .tnum {
+  font-variant-numeric: tabular-nums;
+}
+.lab-root .error {
+  color: var(--err);
+}
+
+.lab-root .card {
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+.lab-root .card > h2,
+.lab-root .card h2 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+.lab-root .card h3 {
+  margin: 12px 0 6px;
+  font-size: 13.5px;
+}
+.lab-root .card p {
+  margin: 0 0 8px;
+}
+.lab-root .collapsible > summary {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.lab-root .collapsible-body {
+  padding-top: 8px;
+}
+.lab-root .sub-details {
+  margin-top: 8px;
+}
+.lab-root .sub-details > summary {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  cursor: pointer;
+}
+.lab-root .sub-details p {
+  margin: 6px 0;
+}
+
+/* ------------------------------------------------------------------ header */
+
+.lab-root .lab-app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+.lab-root .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.lab-root .brand h1 {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.25;
+}
+.lab-root .brand-sub {
+  margin: 0;
+  color: var(--fg-muted);
+  font-size: 12.5px;
+}
+.lab-root .brand-mark {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: conic-gradient(var(--c-atrial) 0 33%, var(--c-qrs) 0 66%, var(--c-repol) 0);
+}
+.lab-root .mode-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.lab-root .mode-btn kbd {
+  min-width: 1.4em;
+  font-size: 11px;
+}
+.lab-root .mode-btn[aria-current='page'] kbd {
+  border-color: currentColor;
+  background: transparent;
+  color: inherit;
+}
+.lab-root .header-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+/* ------------------------------------------------------------------ main layout */
+
+.lab-root .ecg-frame {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--ecg-paper);
+}
+.lab-root .ecg-frame > * {
+  max-width: 100%;
+}
+
+/* ------------------------------------------------------------------ transport */
+
+.lab-root .transport {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+}
+.lab-root .transport-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  min-width: 0;
+}
+.lab-root .transport label {
+  font-weight: 600;
+}
+.lab-root .readout,
+.lab-root .time-readout {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.lab-root .time-readout {
+  min-width: 7.5em;
+  color: var(--fg-muted);
+}
+.lab-root .shortcut-hint {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 0;
+  color: var(--fg-muted);
+  font-size: 12.5px;
+}
+@container lab (max-width: 767px) {
+  .lab-root .speed-group,
+  .lab-root .hr-group {
+    width: 100%;
+  }
+  .lab-root .speed-group input[type='range'],
+  .lab-root .hr-group input[type='range'] {
+    flex: 1 1 120px;
+  }
+}
+
+.lab-root .lab-app-footer {
+  padding: 8px 16px 16px;
+  color: var(--fg-muted);
+  font-size: 12.5px;
+}
+.lab-root .lab-app-footer p {
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------ overview */
+
+.lab-root .toggle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0 12px;
+  margin-bottom: 4px;
+}
+.lab-root .span-2 {
+  grid-column: 1 / -1;
+}
+.lab-root .seg-badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border-left: 4px solid var(--border-strong);
+  border-radius: 3px;
+  background: var(--panel-2);
+  font-weight: 600;
+}
+.lab-root .seg-P {
+  --seg-c: var(--c-atrial);
+  border-left-color: var(--c-atrial);
+}
+.lab-root .seg-PR {
+  --seg-c: var(--c-conduction);
+  border-left-color: var(--c-conduction);
+}
+.lab-root .seg-QRS {
+  --seg-c: var(--c-qrs);
+  border-left-color: var(--c-qrs);
+}
+.lab-root .seg-ST {
+  --seg-c: var(--c-qrs);
+  border-left-color: var(--c-qrs);
+}
+.lab-root .seg-T {
+  --seg-c: var(--c-repol);
+  border-left-color: var(--c-repol);
+}
+.lab-root .seg-TP {
+  border-left-color: var(--border-strong);
+}
+.lab-root .explain-steps {
+  margin: 8px 0 0;
+  padding-left: 1.3em;
+}
+.lab-root .explain-steps li {
+  margin: 0 0 5px;
+}
+.lab-root .explain-steps li::marker {
+  color: var(--fg-muted);
+}
+
+/* ------------------------------------------------------------------ leads */
+
+.lab-root .lead-group h3 {
+  margin: 10px 0 6px;
+}
+.lab-root .lead-btn {
+  min-width: 48px;
+  font-family: var(--font-mono);
+}
+.lab-root .formula code {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--panel-2);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.lab-root .poles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 12px;
+  margin: 10px 0;
+}
+.lab-root .poles dt {
+  color: var(--fg-muted);
+  font-size: 12.5px;
+}
+.lab-root .poles dd {
+  margin: 4px 0 0;
+}
+.lab-root .chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.lab-root .placement {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lab-root .placement li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 6px;
+}
+.lab-root .planes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+@container lab (min-width: 640px) {
+  .lab-root .planes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ------------------------------------------------------------------ section */
+
+.lab-root .preset-grid .btn {
+  flex: 1 1 auto;
+}
+
+/* ------------------------------------------------------------------ tour */
+
+.lab-root .tour-card:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.lab-root .tour-outline {
+  margin: 10px 0 0;
+  padding-left: 0;
+  list-style: none;
+}
+.lab-root .tour-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.lab-root .tour-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin: 6px 0;
+}
+.lab-root .tour-dot {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.lab-root .tour-dot::after {
+  content: '';
+  position: absolute;
+  inset: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--fg-muted);
+  background: transparent;
+}
+.lab-root .tour-dot[aria-current='step']::after {
+  inset: 12px;
+  border-color: var(--c-vector);
+  background: var(--c-vector);
+}
+.lab-root .tour-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.lab-root .tour-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* ------------------------------------------------------------------ disease */
+
+.lab-root .dz-head {
+  /* one row: a long condition name is ellipsised instead of pushing the badge onto a second line */
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+.lab-root .dz-head h2 {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.lab-root .dz-head > .badge {
+  flex-shrink: 0;
+}
+.lab-root .dz-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px 20px;
+}
+@container lab (min-width: 720px) {
+  .lab-root .dz-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.lab-root .dz-cat ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lab-root .dz-cat li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.lab-root .dz-current {
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ about dialog */
+
+.lab-root .about-dialog {
+  width: min(760px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--fg);
+  box-shadow: var(--shadow);
+}
+.lab-root .about-dialog::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+.lab-root .dialog-body {
+  padding: 4px 18px 18px;
+}
+.lab-root .dialog-head {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  background: var(--panel);
+}
+.lab-root .dialog-head h2 {
+  margin: 0;
+  font-size: 18px;
+}
+.lab-root .about-dialog h3 {
+  margin: 16px 0 6px;
+  font-size: 14px;
+}
+.lab-root .about-dialog p,
+.lab-root .about-dialog li {
+  margin: 0 0 6px;
+}
+.lab-root .legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lab-root .legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.lab-root .disclaimer {
+  margin-top: 12px;
+  padding: 4px 12px 8px;
+  border-left: 4px solid var(--warn);
+  background: var(--panel-2);
+  border-radius: var(--radius-sm);
+}
+.lab-root .refs {
+  padding-left: 1.4em;
+  font-size: 13px;
+}
+.lab-root .shortcut-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 14px;
+  margin: 0;
+}
+.lab-root .shortcut-list dd {
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------ quiz */
+
+.lab-root .quiz-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  width: min(460px, 100cqw);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 16px 16px;
+  border-left: 1px solid var(--border);
+  background: var(--panel);
+  box-shadow: -8px 0 24px rgb(0 0 0 / 0.12);
+}
+.lab-root .quiz-drawer[hidden] {
+  display: none;
+}
+.lab-root .drawer-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  background: var(--panel);
+}
+.lab-root .drawer-head h2 {
+  flex: 1;
+  margin: 0;
+  font-size: 17px;
+}
+.lab-root .drawer-intro {
+  margin-bottom: 10px;
+}
+.lab-root .quiz-restore {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 40;
+  max-width: calc(100cqw - 32px);
+  box-shadow: var(--shadow);
+}
+.lab-root .quiz-progress {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin: 0 0 6px;
+}
+.lab-root .quiz-question {
+  margin: 4px 0 10px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+/* headings / panels focused programmatically (tabindex=-1) to move the reading position: no ring needed */
+.lab-root [tabindex='-1']:focus-visible:not(.tour-card) {
+  outline: none;
+}
+.lab-root .quiz-body > .btn-primary {
+  margin-top: 10px;
+}
+.lab-root .quiz-strip {
+  margin: 0 0 6px;
+}
+.lab-root .strip-box {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.lab-root .strip-box.is-interactive {
+  cursor: crosshair;
+}
+.lab-root .strip-box svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.lab-root .strip-paper {
+  fill: var(--ecg-paper);
+}
+.lab-root .grid-minor {
+  stroke: var(--ecg-grid-minor);
+  stroke-width: 0.6;
+}
+.lab-root .grid-major {
+  stroke: var(--ecg-grid-major);
+  stroke-width: 1;
+}
+.lab-root .strip-trace {
+  stroke: var(--ecg-trace);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+.lab-root .strip-mark {
+  stroke: var(--ecg-cursor);
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+}
+.lab-root .strip-cursor {
+  stroke: var(--c-vector);
+  stroke-width: 2;
+}
+.lab-root .strip-probe {
+  stroke: var(--focus);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 3;
+}
+.lab-root .strip-answer {
+  fill: var(--ok);
+  fill-opacity: 0.18;
+}
+.lab-root .strip-mark-label {
+  position: absolute;
+  top: 2px;
+  transform: translateX(-50%);
+  padding: 0 4px;
+  border-radius: 3px;
+  background: var(--panel);
+  color: var(--fg);
+  font-size: 11.5px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.lab-root .strip-ticks {
+  position: relative;
+  height: 16px;
+  color: var(--fg-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.lab-root .strip-ticks span {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+}
+.lab-root .strip-ticks .strip-unit {
+  right: 0;
+  transform: none;
+}
+.lab-root .vplanes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 8px;
+}
+.lab-root .vplane {
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+.lab-root .vplane-ring {
+  fill: var(--panel-2);
+  stroke: var(--border-strong);
+}
+.lab-root .vplane-axis {
+  stroke: var(--border-strong);
+  stroke-dasharray: 2 3;
+}
+.lab-root .vplane-label {
+  fill: var(--fg-muted);
+  font-size: 10px;
+}
+.lab-root .vplane-arrow {
+  stroke: var(--c-vector);
+  stroke-width: 3;
+}
+.lab-root .vplane-head {
+  fill: var(--c-vector);
+}
+.lab-root .choices,
+.lab-root .lead-choice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0;
+}
+.lab-root .lead-choice {
+  flex-direction: column;
+}
+.lab-root .choice {
+  flex: 1 1 140px;
+}
+.lab-root .btn.is-answer {
+  box-shadow: 0 0 0 3px var(--ok);
+}
+.lab-root .quiz-feedback {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--err);
+  border-radius: var(--radius-sm);
+  background: var(--panel-2);
+  outline: none;
+}
+.lab-root .quiz-feedback.is-correct {
+  border-left-color: var(--ok);
+}
+.lab-root .verdict {
+  font-weight: 700;
+}
+.lab-root .quiz-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+}
+.lab-root .cal-reading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.lab-root .quiz-summary ul {
+  padding-left: 1.2em;
+}
+
+@container lab (max-width: 639px) {
+  .lab-root .mode-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+  .lab-root .mode-btn {
+    justify-content: flex-start;
+  }
+  .lab-root .header-tools {
+    margin-left: 0;
+  }
+  .lab-root .brand h1 {
+    font-size: 16px;
+  }
+  .lab-root .card {
+    padding: 10px 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-root .toggle-track,
+  .lab-root .toggle-track::after {
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------------ layout stability
+ * Text that changes quickly (≈10 Hz model state, tour steps) must never resize its container: the surrounding UI
+ * would jump. Fixed boxes scroll internally; one-line status texts truncate; digits use tabular figures.
+ */
+.lab-root .stable-stack {
+  display: grid;
+}
+.lab-root .stable-stack > * {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+.lab-root .stable-stack > .is-ghost {
+  visibility: hidden;
+  pointer-events: none;
+}
+.lab-root .tour-text h3 {
+  margin-top: 4px;
+}
+.lab-root .explain-steps {
+  height: 12.5em;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+.lab-root .fixed-box {
+  height: 9em;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+.lab-root .one-line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lab-root .tour-meta {
+  min-height: 3.6em;
+  align-content: flex-start;
+}
+.lab-root .tnum,
+.lab-root .transport {
+  font-variant-numeric: tabular-nums;
+}
+.lab-root .stable-stack.inline {
+  display: inline-grid;
+}
+.lab-root .time-readout {
+  display: inline-block;
+  min-width: 10ch;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------------------ disease mode (round 2) */
+.lab-root .dz-picker-list {
+  display: grid;
+  gap: 10px;
+  max-height: 46cqh;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+.lab-root .dz-picker .dz-cat h3 {
+  margin: 4px 0;
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+.lab-root .dz-picker ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.lab-root .dz-item {
+  width: 100%;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+  color: var(--fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.lab-root .dz-item:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+.lab-root .dz-item.is-active {
+  border-color: var(--c-vector);
+  box-shadow: inset 3px 0 0 var(--c-vector);
+}
+.lab-root .dz-item .dz-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lab-root .dz-info .dz-info-body {
+  /* fixed size: switching conditions must not move the ECG below */
+  height: 17em;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+.lab-root .dz-info .dz-info-body h3 {
+  margin: 8px 0 4px;
+  font-size: 13px;
+}
+.lab-root .dz-info .dz-info-body p {
+  margin: 0;
+}
+.lab-root .dz-criteria {
+  margin: 0;
+  padding-left: 1.2em;
+}
+.lab-root .dz-keyleads {
+  /* one fixed-height row (conditions list 2–7 key leads): never wraps, so switching conditions cannot move the ECG */
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+  margin-top: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+.lab-root .dz-keyleads > * {
+  flex-shrink: 0;
+}
+.lab-root .dz-keyleads > .btn {
+  margin-left: auto;
+}
+.lab-root .chip-btn {
+  cursor: pointer;
+  font-family: var(--font-mono);
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--fg);
+}
+.lab-root .chip-btn[aria-pressed='true'] {
+  background: var(--c-vector);
+  color: var(--bg);
+  border-color: var(--c-vector);
+}
+
+/* the heart-rate label names the pacemaker it drives (sinus, VT, junction, AF mean rate, atria): fixed width so the
+   transport row does not move when the scenario changes */
+.lab-root .hr-label {
+  display: inline-block;
+  /* fits the longest label in zh / en / es (≈ 140 px at 14 px) */
+  width: 10.5em;
+  text-align: right;
+}

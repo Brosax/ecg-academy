@@ -1,0 +1,197 @@
+/*
+ * Design tokens. Light "textbook" theme is the default; dark theme via <html data-theme="dark"> (tokens only — no
+ * component may hard-code colours).
+ * Colour language shared by ECG overlays, figures and the 3D heart:
+ *   atrial / P = amber · ventricular depolarization / QRS = magenta · repolarization / ST-T = teal ·
+ *   conduction system = gold · heart vector = blue · injury/ischaemia = red.
+ */
+:root {
+  color-scheme: light;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', 'Hiragino Sans GB',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace;
+
+  /* type scale */
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-md: 15px;
+  --fs-lg: 18px;
+  --fs-xl: 22px;
+  --fs-2xl: 28px;
+  --lh: 1.55;
+
+  /* spacing */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+
+  --bg: #f7f4ef;
+  --bg-elev: #ffffff;
+  --panel: #ffffff;
+  --panel-2: #f1ede6;
+  --panel-3: #e9e3d9;
+  --fg: #1f2328;
+  --fg-muted: #5c6370;
+  --fg-faint: #8a919c;
+  --border: #e2ddd4;
+  --border-strong: #c9c2b6;
+  --focus: #2563eb;
+  --accent: #b4233c;
+  --accent-fg: #ffffff;
+  --accent-soft: #fbe7ea;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 4px 16px rgb(0 0 0 / 0.06);
+  --shadow-lg: 0 2px 6px rgb(0 0 0 / 0.08), 0 12px 32px rgb(0 0 0 / 0.1);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --radius-lg: 16px;
+
+  /* colour language */
+  --c-atrial: #c26a00;
+  --c-qrs: #b0179e;
+  --c-repol: #0f8a80;
+  --c-conduction: #a87900;
+  --c-vector: #1d5fd6;
+  --c-injury: #d0312d;
+  --c-highlight: #ff7a00;
+  --c-highlight-soft: rgb(255 122 0 / 0.14);
+
+  /* ECG paper (pink textbook paper) */
+  --ecg-paper: #fff6f5;
+  --ecg-grid-minor: #f6cfcc;
+  --ecg-grid-major: #e59c97;
+  --ecg-trace: #16181d;
+  --ecg-trace-muted: #9aa1ab;
+  --ecg-cursor: #1d5fd6;
+  --ecg-label: #3b3f46;
+  --ecg-caliper: #1d5fd6;
+  --ecg-lead-highlight: rgb(29 95 214 / 0.08);
+
+  /* 3D heart */
+  --heart-rest: #c98f8a;
+  --heart-bg: #f3efe8;
+
+  /* feedback */
+  --ok: #1f8a4c;
+  --ok-soft: #e3f4ea;
+  --warn: #b7791f;
+  --warn-soft: #fbf0dc;
+  --err: #c0392b;
+  --err-soft: #fbe5e2;
+  --info: #1d5fd6;
+  --info-soft: #e5edfb;
+
+  /* severity */
+  --sev-critical: #c0392b;
+  --sev-major: #b7791f;
+  --sev-minor: #5c6370;
+  --sev-normal: #1f8a4c;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0e1116;
+  --bg-elev: #151a21;
+  --panel: #151a21;
+  --panel-2: #1b2129;
+  --panel-3: #232b35;
+  --fg: #e6e8eb;
+  --fg-muted: #a3aab4;
+  --fg-faint: #6f7783;
+  --border: #262d37;
+  --border-strong: #38414d;
+  --focus: #60a5fa;
+  --accent: #f0627a;
+  --accent-fg: #14080b;
+  --accent-soft: #3a1c23;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 16px rgb(0 0 0 / 0.35);
+  --shadow-lg: 0 2px 6px rgb(0 0 0 / 0.5), 0 12px 32px rgb(0 0 0 / 0.45);
+
+  --c-atrial: #f6b73c;
+  --c-qrs: #ef6fe0;
+  --c-repol: #34d3c2;
+  --c-conduction: #f5cf4a;
+  --c-vector: #6aa6ff;
+  --c-injury: #ff6b62;
+  --c-highlight: #ff9a3c;
+  --c-highlight-soft: rgb(255 154 60 / 0.16);
+
+  /* dark "monitor" paper */
+  --ecg-paper: #0b0f0d;
+  --ecg-grid-minor: #14251c;
+  --ecg-grid-major: #1f4a33;
+  --ecg-trace: #7dffb0;
+  --ecg-trace-muted: #4f7d63;
+  --ecg-cursor: #6aa6ff;
+  --ecg-label: #a3c9b2;
+  --ecg-caliper: #ffd166;
+  --ecg-lead-highlight: rgb(106 166 255 / 0.1);
+
+  --heart-rest: #a8615d;
+  --heart-bg: #12161c;
+
+  --ok: #4ade80;
+  --ok-soft: #12301f;
+  --warn: #f6b73c;
+  --warn-soft: #33270f;
+  --err: #ff6b62;
+  --err-soft: #3a1714;
+  --info: #6aa6ff;
+  --info-soft: #14233d;
+
+  --sev-critical: #ff6b62;
+  --sev-major: #f6b73c;
+  --sev-minor: #a3aab4;
+  --sev-normal: #4ade80;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  line-height: var(--lh);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--c-vector);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -1,0 +1,18 @@
+{
+ "_note": "T4 ratchet floors: fraction of oracle features inside the PTB-XL class 5–95 % envelope (seeds 1–5). Only raise them (scripts/synth/realism-report.ts --write). Target ≥ 0.90.",
+ "floors": {
+  "normal": 1,
+  "sinus-bradycardia": 1,
+  "sinus-tachycardia": 1,
+  "sinus-arrhythmia": 1,
+  "irbbb": 0.98,
+  "rbbb": 0.98,
+  "lbbb": 0.98,
+  "stemi-anterior": 0.77,
+  "stemi-inferior": 0.81,
+  "lvh-strain": 0.96,
+  "wpw": 0.81,
+  "atrial-flutter": 0.86,
+  "atrial-fibrillation": 0.98
+ }
+}

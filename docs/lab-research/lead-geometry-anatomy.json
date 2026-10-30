@@ -1,0 +1,194 @@
+{
+ "summary": "ELECTRODE AND LEAD GEOMETRY. The standard placement is documented in LITFL: V1 and V2 in the 4th intercostal space (ICS) at the right and left sternal margins, V3 midway between V2 and V4, V4 in the 5th ICS on the mid-clavicular line, and V5 and V6 at the same horizontal level as V4 on the anterior and mid-axillary lines. V7, V8 and V9 sit in the V6 horizontal plane (posterior axillary line, scapular tip, left paraspinal); V4R is in the 5th right ICS on the mid-clavicular line. In the Mason-Likar torso placement, the arm electrodes go in the infraclavicular fossae and LL goes on the left anterior axillary line midway between the costal margin and the iliac crest. This changes frontal-plane amplitudes and axis, so it is not interchangeable with the standard placement.\n- The ecgbook table gives the full set of limb-reversal effects. Example: swapping LA and RA inverts I, swaps II with III and aVR with aVL, and leaves aVF unchanged.\n- A high V1/V2 gives a negative P in V1, a negative or biphasic P in V2, an rSr' pattern, T-wave inversion, and about 0.1 mV less R per intercostal space.\n\nLEAD MATHEMATICS (primary source verified). The forward Dower matrix comes from Dower's own patent, US5711304A. It uses Frank's axes: X positive to the left, Y positive toward the feet (inferior), Z positive toward the back (posterior).\n- Two published matrices were cross-checked against two independent sources each: inverse Dower (Edenbrandt & Pahlm 1988) and Kors 1990.\n- Formulas: Einthoven's law I + III = II; Wilson central terminal WCT = (R+L+F)/3; Goldberger's augmented leads are 1.5 times the WCT-referenced unipolar leads; hexaxial angles are I 0°, II +60°, III +120°, aVR −150°, aVL −30°, aVF +90°.\n\nKEY MODELLING INSIGHT. The rows of the Dower matrix are lead vectors built from the image surface of Frank's torso. They already include the torso and proximity effects:\n- Precordial lead-vector lengths, computed from the matrix, are 1.06 to 1.56, with V3 the largest. Lead I is only 0.68.\n- In the frontal plane, the Dower vectors for I, II and III point at about −20°, +78° and +107°, not 0°, +60° and +120°. This agrees with the Burger triangle in bem.fi converted to Frank axes (−18°, +78°, +106°).\n- A pure dipole in an infinite homogeneous medium with realistic electrode positions over-weights the precordial leads compared with the limb leads, roughly 10:1 against about 2:1 in reality (computed estimate). It also loses the torso-boundary amplification.\n- Recommendation: compute each lead as L_lead · H(t), with L taken from the Dower rows. You can add a per-region near-field correction term if you want proximity effects. Use Kors or inverse Dower only for checking against real ECGs.\n\nHEART POSE. The apex is in the 5th ICS on the mid-clavicular line, about one third of the heart lies right of the midline, and the septum is at about 45° to the median plane.\n- CT (Norimatsu 2023): the valve-to-apex axis makes 53.3° ± 7.3°, 60.0° ± 7.1° and 52.3° ± 10.4° with the X, Y and Z axes. That gives a unit vector of about (0.60, 0.50, 0.61), meaning left, anterior and inferior. The paper does not explicitly say which of Y and Z is anterior-posterior and which is superior-inferior.\n\nDIMENSIONS (ASE/EACVI 2015).\n- LV internal diameter in diastole: 50.2 ± 4.1 mm in men, 45.0 ± 3.6 mm in women.\n- LV internal diameter in systole: 32.4 ± 3.7 mm in men, 28.2 ± 3.3 mm in women.\n- Septum and posterior wall: 6–10 mm in men, 6–9 mm in women.\n- Ejection fraction: 62 ± 5% in men, 64 ± 5% in women.\n- RV basal diameter 25–41 mm; RV wall above 5 mm counts as hypertrophy.\n- LA volume index at most 34 mL/m².\n- MAPSE on cardiac MRI is about 14.5 mm.\n- Pulmonary trunk about 26 mm and aorta about 30 mm (CT).\n\nCORONARY TERRITORIES (AHA 17-segment model). LAD supplies segments 1, 2, 7, 8, 13, 14 and 17; RCA supplies 3, 4, 9, 10 and 15; LCx supplies 5, 6, 11, 12 and 16. The matching lead groups: septal V1–V2, anterior V3–V4, lateral I, aVL, V5–V6, inferior II, III, aVF, posterior V7–V9 (seen as mirror-image changes in V1–V3), and right ventricle V4R. For inferior STEMI the culprit is the RCA in 80% and the LCx in 18%.\n\nCONDUCTION SYSTEM.\n- SA node: crescent-shaped, 13.5 ± 2.5 mm long, fully beneath the outer surface (subepicardial) in 72% of hearts, at the junction of the superior vena cava and right atrium along the terminal groove.\n- AV node: compact node at the apex of Koch's triangle, whose adult sides are about 26, 21 and 25 mm.\n- His bundle: passes through the central fibrous body below the membranous septum, which is 4.6 ± 1.5 mm long.\n- Left bundle trunk runs 10–15 mm toward the apex and splits into three fascicles. The right bundle runs 1–2 mm under the RV endocardium and reaches the anterior papillary muscle through the moderator band.\n\nGAPS. I found no public table of 10-electrode xyz coordinates relative to the heart centre. The coordinates I give are landmark-based estimates and are listed under \"unsourced\".",
+ "findings": [
+  {
+   "topic": "1. Standard precordial and extra electrode placement",
+   "detail": "Anatomical landmarks:\n- V1: 4th ICS, RIGHT sternal margin.\n- V2: 4th ICS, LEFT sternal margin.\n- V3: midway between V2 and V4.\n- V4: 5th ICS, mid-clavicular line.\n- V5: anterior axillary line, same horizontal level as V4.\n- V6: mid-axillary line, same horizontal level as V4.\n- Posterior leads, all in the same horizontal plane as V6: V7 on the left posterior axillary line, V8 at the tip of the left scapula, V9 in the left paraspinal region.\n- V4R: 5th right ICS, mid-clavicular line. ST elevation in V4R has 88% sensitivity and 78% specificity for RV infarction.\n- Limb electrodes RA, LA, RL and LL go on the limbs. RL is the ground / driven reference and is not used in any lead equation.\n- Placement accuracy (Wenger 1996, cited by Zappon 2024): precordial electrodes are on average about 2.9 cm from the standard sites; V1/V2 are more than 1.6 cm too high in 50% of placements.",
+   "citations": [
+    "https://litfl.com/ecg-lead-positioning/",
+    "https://arxiv.org/html/2407.17146 (Zappon et al. 2024, citing Wenger et al. 1996)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "topic": "1b. Mason-Likar torso placement of limb electrodes",
+   "detail": "- RA and LA: in the infraclavicular fossae, medial to the deltoid insertion (on the border of the deltoid).\n- LL: on the left anterior axillary line, midway between the costal margin and the iliac crest. Original Mason-Likar used the iliac crest; the modified version uses the lowest left rib.\n- Purpose: reduce motion artefact (exercise testing, monitoring).\n- Effects: changes R, S and T amplitudes in the limb leads and shifts the frontal-plane axis. It is not diagnostically interchangeable with standard limb placement. The AHA 2007 standard (Kligfield et al., Circulation 2007;115:1306-1324) covers this, but I could not access the full text (403), so its exact numbers are not quoted here.\n- A Mason-Likar-specific 12-lead→XYZ matrix is published (Vondrak & Penhaker 2022, Table 7). Rows X, Y, Z; columns I, II, V1–V6:\n  - X: 0.5169, −0.0722, −0.0753, 0.0162, 0.0384, 0.0545, 0.1384, 0.4606\n  - Y: −0.2406, 0.6344, 0.1707, −0.0833, 0.1182, 0.0237, −0.1649, 0.2100\n  - Z: −0.0715, −0.1962, −0.4987, −0.0319, −0.2362, −0.0507, −0.2007, 0.4122",
+   "citations": [
+    "https://www.cardiosecur.com/magazine/specialist-articles-on-the-heart/mason-likar",
+    "https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2022.856590/full",
+    "Kligfield P et al. Circulation 2007;115:1306-1324 doi:10.1161/CIRCULATIONAHA.106.180200"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "topic": "1c. Limb-electrode reversal effects (reproduce by swapping electrode positions in the model)",
+   "detail": "- LA/RA: I inverted; II↔III swapped; aVR↔aVL swapped; aVF unchanged. Mimics dextrocardia but without the precordial changes.\n- LA/LL: III inverted; I↔II swapped; aVL↔aVF swapped.\n- RA/LL: II inverted; I and III inverted and swapped; aVR↔aVF swapped.\n- RA/RL: lead II nearly flat (pseudo-asystole); aVR≈aVF; the WCT shifts, which distorts V1–V6.\n- LA/RL: lead III flat; aVL≈aVF; precordial leads distorted.\n- Both arm–leg pairs (RA/RL + LA/LL): lead I flat; II = III = aVF; aVR = aVL.\n- LL/RL: no change.\n- Detection rule: lead II flat or peak-to-peak below 185 µV suggests RA/RL interchange.\n- Prevalence: 0.4–4% of ECGs show signs of misplacement (search-summary figure).",
+   "citations": [
+    "https://ecgbook.com/ecg-lead-misplacement",
+    "https://www.mdpi.com/1424-8220/19/13/2920"
+   ],
+   "confidence": "high"
+  },
+  {
+   "topic": "1d. Precordial misplacement (high V1/V2)",
+   "detail": "- Moving V1/V2 up to the 2nd–3rd ICS lowers R amplitude by about 0.1 mV per interspace. This produces poor R-wave progression or a pseudo-septal infarct pattern (QS).\n- P wave: fully negative in V1, biphasic or negative in V2. This is the most reliable sign (Garcia-Niebla, 101 normal subjects).\n- QRS and T: rSr' (incomplete RBBB-like) pattern; with placement near the 2nd ICS, V1 looks like aVR (rSr' plus negative T); false T-wave inversion in V2; new Q waves; a pseudo-Brugada type 2 'saddle' ST segment.\n- More than 40% of V1/V2 placements are too high.\n- Simulation (Zappon 2024): moving the heart superior-inferior changed the V2 S-wave peak from −1.6 mV to −0.2 mV. V2–V6 were the leads most sensitive to geometry.",
+   "citations": [
+    "https://litfl.com/misplacement-of-v1-and-v2/",
+    "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8293594/",
+    "https://arxiv.org/html/2407.17146",
+    "Kligfield 2007 Circulation 115:1306 (0.1 mV/interspace, via search summary)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "topic": "2. Lead vectors / Burger triangle / image surface (3D torso data)",
+   "detail": "Lead-vector concept: Φ = c·p. This holds even for an inhomogeneous volume conductor (bem.fi ch. 11).\n\nBurger triangle (eq. 11.22, Malmivuo axes: x anterior+, y left+, z superior+):\n- cI = −17i + 65j + 21k\n- cII = 15i + 25j − 120k\n- cIII = 32i − 40j − 141k\n- Internal check: cI + cIII = cII.\n\nSame vectors converted to Frank axes (X = y, Y = −z, Z = −x):\n- cI = (65, −21, 17)\n- cII = (25, 120, −15)\n- cIII = (−40, 141, −32)\n- Frontal-plane angles: I ≈ −18°, II ≈ +78°, III ≈ +106°. |cIII|/|cI| ≈ 2.1.\n\nbem.fi also states that the shape of the Frank and Burger triangles 'varies strongly as a function of the location of the assumed heart dipole' (Tables 11.2A/B).\n\nFrank image surface (Frank E., Am Heart J 1954;47:757-768) is the source of measured lead vectors for V1–V6. The Nihon Kohden patent US6721591B2 uses it but does not tabulate the values.\n\nI found NO freely accessible published table of xyz coordinates for the 10 standard electrodes relative to the heart centre:\n- ECGSIM, the Dalhousie/EDGAR torsos, openCARP and torchcor all load electrodes from mesh files without listing them.\n- Sovilj 2013 (simplified 3D heart-torso model with SA node, atria, AV node, His, bundle branches, Purkinje and ventricles) places electrodes on a Visible-Human-derived torso without listing coordinates.",
+   "citations": [
+    "https://www.bem.fi/book/11/11.htm",
+    "https://patents.google.com/patent/US6721591B2/en",
+    "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC3654639/fullTextXML (Sovilj et al., Comput Math Methods Med 2013)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "topic": "3a. Forward Dower transform (Frank X,Y,Z → 8 independent leads), primary source",
+   "detail": "Frank axis convention: X positive LEFT, Y positive INFERIOR (toward the feet), Z positive POSTERIOR (Jaros 2019). Sanity checks: V1/V2 have large −Z (anterior electrodes); lead II is dominated by +Y.\n\nDower patent US5711304A, leads referenced to WCT ('W'), in the form lead = aX + bY + cZ:\n- I = 0.632X − 0.235Y + 0.059Z\n- II = 0.235X + 1.066Y − 0.132Z\n- V1 = −0.515X + 0.157Y − 0.917Z\n- V2 = 0.044X + 0.164Y − 1.387Z\n- V3 = 0.882X + 0.098Y − 1.277Z\n- V4 = 1.213X + 0.127Y − 0.601Z\n- V5 = 1.125X + 0.127Y − 0.086Z\n- V6 = 0.831X + 0.076Y + 0.230Z\n\nDerived limb leads (match the Frontiers Table 3):\n- III = (−0.397, 1.301, −0.191)\n- aVR = (−0.434, −0.415, 0.037)\n- aVL = (0.515, −0.768, 0.125)\n- aVF = (−0.081, 1.184, −0.162)\n\nThe Frontiers 2022 Table 3 has typos: V5 X = 2.125 (should be 1.125) and V4 Z = −0.604 (patent says −0.601). Use the patent values.\n\nRA-referenced versions in the patent: each V lead = W version + (0.289, 0.277, −0.024). For example V1R = −0.226X + 0.434Y − 0.941Z. The offset equals WCT measured from RA = (I + II)/3, which confirms the matrix is internally consistent.\n\nExtra leads in the same patent (W-referenced, from Frank's image surface):\n- V3R = −0.566X + 0.162Y − 0.493Z\n- V4R = −0.507X + 0.051Y − 0.257Z\n- V5R = −0.456X + 0.044Y − 0.132Z\n- V7 = 0.625X − 0.103Y + 0.338Z\n- V8 = 0.434X − 0.096Y + 0.419Z\n- V9 = 0.221X − 0.037Y + 0.471Z",
+   "citations": [
+    "https://patents.google.com/patent/US5711304A/en",
+    "https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2022.856590/full",
+    "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6678609/fullTextXML (Jaros, Martinek, Danys, Sensors 2019)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "topic": "3b. Inverse Dower (Edenbrandt & Pahlm 1988) and Kors (1990) 12-lead→XYZ matrices",
+   "detail": "Inverse Dower (Edenbrandt L, Pahlm O. J Electrocardiol 1988;21:361-367). Rows X, Y, Z; columns I, II, V1, V2, V3, V4, V5, V6:\n- X: 0.156, −0.010, −0.172, −0.074, 0.122, 0.231, 0.239, 0.194\n- Y: −0.227, 0.887, 0.057, −0.019, −0.106, −0.022, 0.041, 0.048\n- Z: 0.022, 0.102, −0.229, −0.310, −0.246, −0.063, 0.055, 0.108\n- Guillem 2006 prints the same matrix with last-digit rounding differences (e.g. −0.009, 0.886, 0.193, −0.228, 0.021).\n\nKors (Kors JA et al. Eur Heart J 1990;11:1083-1092; QRS regression on CSE data). Same layout:\n- X: 0.38, −0.07, −0.13, 0.05, −0.01, 0.14, 0.06, 0.54\n- Y: −0.07, 0.93, 0.06, −0.02, −0.05, 0.06, −0.17, 0.13\n- Z: 0.11, −0.23, −0.43, −0.06, −0.14, −0.20, −0.11, 0.31\n- Kors gives lower error than inverse Dower (lower MSE in all leads; higher correlation in X and Z; Vozda 2014, PTB database, 283 records).\n\nWave-specific inverse matrices (Guillem 2006; columns in the order V1–V6, I, II):\n- P-wave optimised (PLSV):\n  - X: −0.266, 0.027, 0.065, 0.131, 0.203, 0.220, 0.370, −0.154\n  - Y: 0.088, −0.088, 0.003, 0.042, 0.047, 0.067, −0.131, 0.717\n  - Z: −0.319, −0.198, −0.167, −0.099, −0.009, 0.060, 0.184, −0.114\n- QRS optimised (QLSV):\n  - X: −0.147, −0.058, 0.037, 0.139, 0.232, 0.226, 0.199, −0.018\n  - Y: 0.023, −0.085, −0.003, 0.033, 0.060, 0.104, −0.146, 0.503\n  - Z: −0.184, −0.163, −0.190, −0.119, −0.023, 0.043, 0.085, −0.130\n- Guillem notes the atrial dipole origin differs from the ventricular one, so Dower is less accurate for the P wave.\n\nThe Dower patent also gives an RA-referenced 'M^-1 A^T' inverse (X: 0.161, −0.126, −0.151 …). It uses different reference leads (LR, FR, CR1–CR6) and must NOT be mixed with the WCT-based inverse Dower.",
+   "citations": [
+    "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC9106114/fullTextXML (Vondrak & Penhaker, IEEE J Transl Eng Health Med 2022, Tables 1-2)",
+    "https://www.cinc.org/old/Proceedings/2006/pdf/0249.pdf (Guillem, Sahakian, Swiryn, Computers in Cardiology 2006;33:249-252)",
+    "https://www.measurement.sk/ICE2014/proceedings/061.pdf (Vozda, Peterek, Cerny 2014)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "topic": "3c. Einthoven, Wilson, Goldberger, hexaxial, Frank equations",
+   "detail": "Leads from electrode potentials:\n- I = ΦL − ΦR; II = ΦF − ΦR; III = ΦF − ΦL.\n- Einthoven's law: I + III = II (only 2 limb leads are independent).\n\nWilson central terminal:\n- Φ_WCT = (ΦR + ΦL + ΦF)/3, built with 5 kΩ resistors; it approximates the potential at infinity.\n- Vi = Φi − Φ_WCT.\n\nGoldberger augmented leads:\n- aVR = ΦR − (ΦL + ΦF)/2; aVL = ΦL − (ΦR + ΦF)/2; aVF = ΦF − (ΦR + ΦL)/2.\n- Each is 1.5× the WCT-referenced unipolar limb potential.\n- Equivalent forms: aVR = −(I + II)/2; aVL = (I − III)/2; aVF = (II + III)/2.\n\nHexaxial reference system (frontal plane, +90° = inferior):\n- I 0°, II +60°, III +120°, aVR −150°, aVL −30°, aVF +90°.\n- Normal QRS axis −30° to +90°; left axis deviation below −30°; right axis deviation above +90°; extreme axis −90° to 180°.\n\nFrank lead system:\n- Electrodes: E front midline, M back midline, I right mid-axillary, A left mid-axillary, C at 45° between E and A, F left leg, H back of neck. Chest electrodes at about the 4th–5th ICS level.\n- X = 0.610A + 0.171C − 0.781I\n- Y = 0.655F + 0.345M − 1.000H\n- Z = 0.133A + 0.736M − 0.264I − 0.374E − 0.231C",
+   "citations": [
+    "https://www.bem.fi/book/15/15.htm",
+    "https://www.bem.fi/book/16/16.htm",
+    "https://litfl.com/ecg-axis-interpretation/",
+    "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6678609/fullTextXML"
+   ],
+   "confidence": "high"
+  },
+  {
+   "topic": "4. Single-dipole / infinite-medium limitations and corrections",
+   "detail": "Dipole potential in an infinite homogeneous medium (bem.fi eq. 8.12):\n- Φ = −(p·∇)(1/(4πσr)), i.e. Φ(x) = p·(x − r0)/(4πσ|x − r0|³).\n- The lead vector of electrode e is therefore c_e = (x_e − r0)/(4πσ|x_e − r0|³).\n- A bipolar or WCT lead's vector is the difference of electrode lead vectors (bem.fi ch. 11). This is exact for an infinite medium or a centred dipole in a homogeneous sphere.\n\nLimits of the single-dipole model:\n- More than 90% of cardiac electrical activity is explained by a dipole, but the precordial leads also pick up non-dipolar components (bem.fi ch. 15).\n- Lead vectors depend strongly on where the dipole is placed (bem.fi Tables 11.2A/B).\n\nComputed from the Dower matrix:\n- Lead-vector lengths: V1 1.06, V2 1.40, V3 1.56, V4 1.36, V5 1.14, V6 0.87, versus I 0.68, II 1.10, III 1.37.\n- Horizontal-plane directions of V1→V6, measured from +X toward anterior: about 119°, 88°, 55°, 26°, 4°, −16°.\n- Frontal-plane angles: I −20°, II +78°, III +107°, aVF +94°, aVL −56°, aVR −136°. These agree with the Burger triangle, not with the idealised hexaxial angles.\n\nSo Dower rows are an empirical, torso-corrected lead field. They encode the proximity effect (precordial leads about 1.5–2.3× the limb leads) without needing electrode xyz.\n\nModel sensitivity (Zappon 2024):\n- Tested heart translations: ±3 cm right-left, ±3 cm superior-inferior, ±1 cm posterior-anterior; rotations ±10°; scaling ±10%.\n- Conductivities (S/m): blood 0.66, lungs 0.06, bone 0.006, liver 0.35, fat 0.037, skin 0.01, generic torso 0.25.",
+   "citations": [
+    "https://www.bem.fi/book/08/08.htm",
+    "https://www.bem.fi/book/11/11.htm",
+    "https://www.bem.fi/book/15/15.htm",
+    "https://patents.google.com/patent/US5711304A/en",
+    "https://arxiv.org/html/2407.17146"
+   ],
+   "confidence": "high"
+  },
+  {
+   "topic": "5. Heart position and orientation in the thorax",
+   "detail": "Textbook of Cardiology:\n- Apex in the 5th ICS on the mid-clavicular line.\n- About one third of the heart lies right of the sternal midline.\n- The long axis runs from the left hypochondrium toward the right shoulder.\n- The ventricular septum is at about 45° to the median plane, which puts the right-heart structures in front of the left-heart structures.\n- The LA is the most posterior chamber.\n- The lower border is nearly horizontal, from the left 6th rib to the right 6th costal cartilage; the right margin lies behind the right sternal border from the 3rd to 6th cartilages.\n\nCT, Norimatsu 2023 (Sci Rep; 'AV'-to-apex axis):\n- Supine 3D angles to the X, Y, Z axes: 53.3° ± 7.3°, 60.0° ± 7.1°, 52.3° ± 10.4°.\n- Projected angles: XY 39.9° ± 7.1°, XZ 45.1° ± 11.0°, YZ 49.9° ± 11.7°.\n- Upright: 51.8°, 62.4°, 51.5°. The heart moves dorsally and caudally when upright.\n- QRS axis 72.4° ± 14.4° supine, 77.6° ± 22.8° upright; correlates with the angle to Z (r = −0.54).\n- Direction cosines give a long-axis unit vector of about (0.60, 0.50, 0.61): left, anterior and inferior. The paper does not explicitly say which axis is which; the fetched text said 'AV' meant the aortic-valve centre.\n\nOther CT studies:\n- Mori 2017 (Anat Rec 300:1083-1092; n = 100; mitral orifice centre to LV apex): horizontal 48.7° ± 9.5°, frontal 52.3° ± 12.0°, sagittal 34.0° ± 11.2°. These numbers come from a search snippet; the angle definitions were not verified.\n- Sathananthan 2015 (n = 59; LV apex to mitral annulus): CT axis 38.1° ± 7.8° (range 20.9°–56.2°), ECG axis 51.8° ± 26.6°, no correlation (r = 0.12).\n\nSex differences (UK Biobank-type cohort): female hearts sit more posterior and superior; after MI hearts lie more horizontal.",
+   "citations": [
+    "https://www.textbookofcardiology.org/wiki/Anatomy_of_the_Heart",
+    "https://med.libretexts.org/Bookshelves/Medicine/Textbook_of_Cardiology/01:_Anatomy/1.02:_Position_of_the_Heart",
+    "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10598224/fullTextXML (Norimatsu et al., Sci Rep 2023)",
+    "https://anatomypubs.onlinelibrary.wiley.com/doi/10.1002/ar.23564 (Mori 2017; snippet only)",
+    "https://bjcardio.co.uk/2015/04/cardiac-orientation-is-there-a-correlation-between-the-anatomical-and-the-electrical-axis-of-the-heart/",
+    "https://arxiv.org/abs/2312.13976"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "topic": "6a. LV dimensions and function (ASE/EACVI 2015, Lang et al.)",
+   "detail": "Men:\n- LV internal diameter, diastole: 50.2 ± 4.1 mm (42.0–58.4).\n- LV internal diameter, systole: 32.4 ± 3.7 mm (25.0–39.8).\n- End-diastolic volume: 106 ± 22 mL (62–150). End-systolic volume: 41 ± 10 mL (21–61).\n- Ejection fraction: 62 ± 5% (52–72).\n\nWomen:\n- LV internal diameter, diastole: 45.0 ± 3.6 mm (37.8–52.2).\n- LV internal diameter, systole: 28.2 ± 3.3 mm (21.6–34.8).\n- End-diastolic volume: 76 ± 15 mL (46–106). End-systolic volume: 28 ± 7 mL (14–42).\n- Ejection fraction: 64 ± 5% (54–74).\n\nBoth sexes:\n- Global longitudinal strain about −20%.\n- Septal and posterior wall: 6–10 mm in men, 6–9 mm in women.\n- Relative wall thickness (2 × posterior wall / diastolic diameter) ≤ 0.42; above that is concentric geometry.\n- The LV apex thins to 1–2 mm (Textbook of Cardiology).\n- CMR end-diastolic wall about 8.6 ± 2.1 mm; fractional systolic thickening 0.56 ± 0.23 (search snippet, low confidence).",
+   "citations": [
+    "https://academic.oup.com/ehjcimaging/article/16/3/233/2400205",
+    "https://open-exam-prep.com/study-guides/rdcs-adult/quantification-doppler/chamber-quantification",
+    "https://www.textbookofcardiology.org/wiki/Anatomy_of_the_Heart"
+   ],
+   "confidence": "high"
+  },
+  {
+   "topic": "6b. RV, atria, AV-plane motion, twist",
+   "detail": "RV:\n- Basal diameter 25–41 mm (ASE 2015, secondary source).\n- Rudski 2010 ASE right-heart cut-offs: wall above 5 mm = hypertrophy; basal diameter above 42 mm = dilated; TAPSE below 16 mm = dysfunction (2015 uses below 17 mm).\n- Older ASE 2005 values (now superseded, as listed on Echopedia): basal 20–28 mm, mid 27–33 mm, base-to-apex 71–79 mm.\n\nAtria:\n- LA volume index upper limit 34 mL/m² (ASE 2015).\n- RA volume index 25 ± 7 mL/m² in men, 21 ± 6 mL/m² in women.\n- Older linear values: LA anteroposterior diameter 30–40 mm in men, 27–38 mm in women; RA minor axis 29–45 mm.\n\nAV-plane descent (MRI, Andre 2012, mean ± 2 SD):\n- MAPSE 14.4 ± 7.4 mm in men, 14.6 ± 7.2 mm in women.\n- TAPSE 20.7 ± 11.1 mm in men, 20.3 ± 8.6 mm in women.\n- Longitudinal shortening accounts for about 60% of stroke volume (Radiopaedia).\n\nTwist (search snippet, low confidence):\n- Children: peak twist 17.0° ± 6.5°; base −5.0° ± 2.6° (clockwise viewed from the apex), apex +13.9° ± 5.0°; torsion 2.9 ± 1.3°/cm.",
+   "citations": [
+    "https://open-exam-prep.com/study-guides/rdcs-adult/quantification-doppler/chamber-quantification",
+    "https://asecho.org/guideline/guidelines-for-the-echocardiographic-assessment-of-the-right-heart-in-adults",
+    "https://www.echopedia.org/index.php/Normal_Values",
+    "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC3305022/fullTextXML (Andre et al., JCMR 2012)",
+    "https://radiopaedia.org/articles/mitral-annular-plane-systolic-excursion"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "topic": "6c. Great vessels",
+   "detail": "CT, Lee 2015 (PLoS One; n = 813 healthy adults):\n- Main pulmonary artery: mean 25.9 mm (men 26.5, women 25.8); 90th percentile 31.3 mm in men, 29.6 mm in women.\n- Ascending aorta: mean 30.0 mm (men 31.6, women 29.6); 90th percentile 36.8 mm in men, 34.5 mm in women.\n- Pulmonary artery / aorta ratio 0.87.\n\nPulmonary-vein ostia (CT, search snippet): right superior 11.4–12.4 mm, left superior 9.6–10.5 mm, right inferior 12.3–13.1 mm, left inferior 9.0–9.9 mm.\n\nSVC cross-sectional area 1.08–4.42 cm² (snippet).\n\nThe fibrous skeleton insulates the atria from the ventricles: the His bundle is the only normal electrical connection between them.",
+   "citations": [
+    "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4425684/fullTextXML",
+    "https://www.ctisus.com/learning/journalclub/233230",
+    "https://radiopaedia.org/articles/bundle-of-his"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "topic": "7. Coronary territories, AHA 17-segment model, ECG lead mapping",
+   "detail": "AHA 17-segment model (Cerqueira, Circulation 2002;105:539-542):\n- Basal segments: 1 anterior, 2 anteroseptal, 3 inferoseptal, 4 inferior, 5 inferolateral, 6 anterolateral.\n- Mid segments 7–12 use the same order.\n- Apical segments: 13 anterior, 14 septal, 15 inferior, 16 lateral; 17 is the apex.\n- Basal and mid levels are split into six 60° sectors; the apical level into four 90° sectors.\n\nTerritories:\n- LAD: 1, 2, 7, 8, 13, 14, 17.\n- RCA: 3, 4, 9, 10, 15.\n- LCx: 5, 6, 11, 12, 16.\n- Anatomic variability is common.\n\nDominance:\n- Right dominant 80–85%; left dominant 7–13% ('a little under 10%' per Textbook of Cardiology); balanced 2–5%.\n- Ranges reported elsewhere: right 72–90%, left 8–33%.\n\nLead groups:\n- Septal V1–V2; anterior V3–V4; low lateral V5–V6; high lateral I and aVL; inferior II, III, aVF; posterior V7–V9; right ventricle V4R.\n\nAnterior MI patterns (LITFL):\n- Anteroseptal V1–4; anterior V2–5; anterolateral V3–6 + I + aVL; extensive anterior V1–6 + I + aVL.\n- Proximal LAD clues: ST elevation in aVR, ST elevation in V1 above 2.5 mm, RBBB, ST depression in V5.\n- Occlusion before the first diagonal: ST elevation / Q waves in I and aVL plus ST depression of 1 mm or more in II, III, aVF.\n\nInferior STEMI:\n- Culprit RCA 80%, LCx 18%.\n- RCA: ST elevation in III greater than II, plus mirror-image ST depression in I.\n- LCx: II ≈ III, no ST depression in I, with lateral ST elevation.\n- RV infarction in about 40% of inferior STEMIs (ST elevation in V1 and V4R); second- or third-degree AV block in up to 20%.\n\nPosterior MI:\n- V1–V3: horizontal ST depression, tall broad R (over 30 ms), R/S above 1 in V2, upright T.\n- ST elevation of 0.5 mm in V7–V9 is diagnostic.\n- Present in 15–20% of STEMIs; isolated in 5–10%.",
+   "citations": [
+    "https://radiopaedia.org/articles/cardiac-segmentation-model-1",
+    "https://www.imaios.cn/e-anatomy/anatomical-structures/standardized-myocardial-segmentation-aha-121131772",
+    "https://litfl.com/anterior-myocardial-infarction-ecg-library/",
+    "https://litfl.com/inferior-stemi-ecg-library/",
+    "https://litfl.com/posterior-myocardial-infarction-ecg-library/",
+    "https://www.textbookofcardiology.org/wiki/Anatomy_of_the_Heart",
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC4505791"
+   ],
+   "confidence": "high"
+  },
+  {
+   "topic": "8. Conduction-system positions and sizes",
+   "detail": "SA node:\n- Crescent-shaped, 13.5 ± 2.5 mm long, with no insulating fibrous sheath.\n- Entire body beneath the outer surface (subepicardial) in 72% of hearts; reaches the endocardial side in 28%.\n- Lies between the SVC and the terminal crest at the SVC–RA junction, with a tail running toward the IVC (Sánchez-Quintana 2005).\n- Textbook of Cardiology: about 3 mm wide, 15–20 mm long.\n\nKoch's triangle and AV node:\n- Koch's triangle is bounded by the tendon of Todaro, the septal-leaflet tricuspid annulus and the coronary-sinus orifice.\n- Adult sides 26.1 ± 3.1, 20.8 ± 3.6 and 24.5 ± 2.5 mm; area 256 ± 68 mm² (100 hearts).\n- The compact AV node is at the apex of the triangle, on the RA side of the central fibrous body, superior and anterior to the CS ostium. Size about 1 × 3 × 6 mm (encyclopaedic source, low confidence).\n\nHis bundle and bundle branches:\n- The His bundle penetrates the central fibrous body and emerges at the lower edge of the membranous septum (4.6 ± 1.5 mm, range 1–9 mm).\n- A non-branching segment runs 1–3 mm along the septal crest in 75–85% of hearts.\n- His bundle lies 0–15 mm below the distal tricuspid annulus.\n- Left bundle trunk: runs 10–15 mm toward the apex; width under 1 to 14 mm. Three fascicles: anterior, a wider posterior one, and a mid-septal one.\n- Right bundle: intramyocardial, 1–2 mm under the RV endocardium. It travels in the moderator band (septomarginal trabecula) from the septum to the base of the anterior papillary muscle; the band is supplied by septal perforators from the LAD.\n\nVentricular activation (Durrer 1970, 7 isolated human hearts):\n- Three LV endocardial areas activate 0–5 ms after LV onset.\n- They merge within 15–20 ms.\n- RV activation starts near the anterior papillary muscle 5–10 ms after LV onset.\n\nAn existing open-literature model with the same regions (SA node, atria, AV node, His, bundle branches, Purkinje, ventricles) generated a 12-lead ECG plus Frank leads (Sovilj 2013).",
+   "citations": [
+    "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=TITLE:%22sinus%20node%20revisited%22 (Sanchez-Quintana et al., Heart 2005;91:189, PMC1768731)",
+    "https://www.textbookofcardiology.org/wiki/Anatomy_of_the_Heart",
+    "https://repository.ukim.mk/handle/20.500.12188/26239",
+    "https://en.wikipedia.org/wiki/Koch%27s_triangle",
+    "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC8302008/fullTextXML (Cabrera et al., JACC Case Rep 2020)",
+    "https://radiopaedia.org/articles/moderator-band",
+    "Durrer D et al. Circulation 1970;41:899-912 doi:10.1161/01.cir.41.6.899",
+    "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC3654639/fullTextXML"
+   ],
+   "confidence": "medium"
+  }
+ ],
+ "recommendations": [
+  "Generation path: compute each lead as lead(t) = L_lead · H(t), with H in Frank coordinates (X left+, Y inferior+, Z posterior+). Take L for I, II and V1–V6 from the Dower patent rows. Derive III, aVR, aVL and aVF from I and II (III = II − I; aVR = −(I+II)/2; aVL = I − II/2; aVF = II − I/2) so Einthoven's law holds exactly. Get V3R–V5R and V7–V9 from the patent's W-referenced extra-lead equations. Every lead is then a projection of one H(t), and the torso and proximity effects are built in.",
+  "Optional proximity layer: keep per-region dipoles p_k(t) at region centroids r_k. Add a correction ΔΦ_e = Σ_k p_k·[(x_e − r_k)/|x_e − r_k|³ − (x_e − r_c)/|x_e − r_c|³]/(4πσ) for the precordial electrodes only, scaled by a blend factor of about 0.2–0.5. This lets anterior RV/septal events (e.g. a septal Q, a Brugada-like V1–V2 pattern, high-V1/V2 misplacement) show up more in V1–V3. Do not use the pure infinite-medium formula for every lead: with real distances it shrinks the limb leads about 10× compared with the precordial leads.",
+  "Store one coordinate convention and convert at the boundaries. Suggested Three.js world frame: +x = patient left, +y = superior, +z = anterior, origin at the ventricular centroid, units in cm. Then Frank X = x, Y = −y, Z = −z. The Burger data in bem.fi uses x anterior, y left, z superior and must be converted (Frank X = y, Y = −z, Z = −x).",
+  "Use the electrode xyz coordinates only for drawing the electrodes, and for the near-field term and misplacement demos. To simulate misplacement, swap or move electrode positions before computing the WCT and leads. For limb reversals, permute ΦR, ΦL, ΦF and ΦRL; for an RA/RL swap, the 'RA' input reads the right-leg potential, so lead II ≈ 0.",
+  "Compute the displayed QRS axis the clinical way (from net I and aVF on the hexaxial system) and also show the true frontal-plane angle of H(t). The Dower and Burger lead vectors sit at about −20°, +78° and +107°, not 0°, +60° and +120°, so the two angles can differ by about 10–20°. That difference is worth explaining to learners.",
+  "Validation path, not generation: run published real 12-lead ECGs (e.g. PTB/PhysioNet, which also records Frank XYZ) through the Kors matrix (preferred over inverse Dower for QRS; use Guillem's P-wave matrix for P) to get target H(t) loops. Then tune region activation times and dipole strengths until the synthetic VCG matches in magnitude and orientation.",
+  "Heart pose default: long-axis unit vector of about 0.60 left, 0.50–0.61 anterior and 0.50–0.61 inferior (from the CT direction cosines, Norimatsu 2023). Septum at about 45° to the median plane; apex under the V4 site (5th ICS, mid-clavicular line). Expose ±10° rotation and ±3 cm translation sliders, matching the variability ranges Zappon 2024 tested, to show how the anatomical axis moves the ECG.",
+  "Disease presets should tie lesions to AHA segments and leads:\n- LAD occlusion (segments 1, 2, 7, 8, 13, 14, 17): ST injury vector pointing anterior/septal → ST elevation V1–V4 (plus I and aVL if proximal), mirror-image ST depression in II, III, aVF.\n- RCA occlusion (3, 4, 9, 10, 15 + RV + AV node): ST elevation in III greater than II; ST depression in I and aVL; ST elevation in V4R; optional AV block.\n- LCx occlusion (5, 6, 11, 12, 16): ST elevation in I, aVL, V5–V6, or the posterior pattern (ST depression and tall R in V1–V3, ST elevation in V7–V9).\nImplement the ST shift as an additive 3D injury vector pointing from healthy toward injured myocardium during the ST segment, so all leads follow automatically.",
+  "Atrial dipole: Guillem 2006 shows the atrial source sits away from the ventricular one, which reduces Dower accuracy for the P wave. If you want correct P morphology (e.g. negative P in V1 with high placement), give the atrial dipole its own centroid (posterior-superior) in the near-field term."
+ ],
+ "unsourced": [
+  "Approximate electrode coordinates for visualisation, estimated from landmarks (NOT from a published dataset). Frame: cm, origin at ventricular centroid, +x patient-left, +y superior, +z anterior. Assumptions: adult male chest about 32 cm wide and 22 cm deep at the V4 level, heart centre about 2.5 cm left of midline and about 7 cm behind the anterior skin, intercostal spacing about 2–2.5 cm.\n- V1 (−4.5, +0.5, +7.0); V2 (−0.5, +0.5, +7.0); V3 (+3.0, −1.0, +6.5); V4 (+6.5, −2.5, +5.5); V5 (+10.5, −2.5, +2.5); V6 (+13.5, −2.5, −2.5).\n- V7 (+12, −2.5, −8.5); V8 (+7.5, −2.5, −12.5); V9 (+0.5, −2.5, −14.5); V3R (−8, −1, +6.5); V4R (−11.5, −2.5, +5.5).\n- Mason-Likar: RA (−15, +14, +4); LA (+10, +14, +4); LL (+9, −22, +3); RL (−14, −22, +3).",
+  "Standard limb electrodes: physically the limbs act like conducting wires, so the wrist/ankle potential is about the potential where the limb joins the trunk (right shoulder about (−17, +16, 0), left shoulder about (+12, +16, 0), left hip about (+6, −30, 0) in the frame above). This is general knowledge, not fetched.",
+  "For a dipole at the centre of a homogeneous insulated sphere, the surface potential is 3× the infinite-medium value (Φ = 3p·cosθ/(4πσR²)). This is general volume-conductor theory; bem.fi was checked and does not state the factor.",
+  "Typical adult spatial QRS vector magnitude about 1.5–2.0 mV and T vector about 0.4–0.6 mV in Frank-lead units. Use these to scale H(t) so the Dower-projected leads give realistic amplitudes (e.g. R in V4 about 1–2 mV). From general knowledge.",
+  "LV long-axis length (mitral annulus to apex) about 8–9 cm in diastole, shortening about 1.4 cm in systole (matches MAPSE). Mitral annulus about 3 cm across, tricuspid about 3.5 cm. The tricuspid septal leaflet inserts about 5–10 mm closer to the apex than the mitral (an exaggerated offset defines Ebstein's anomaly). The aortic valve sits centrally, anterior and to the right of the mitral, in fibrous continuity with it. IVC ≤ 21 mm (ASE right-atrial pressure estimate). SVC about 15–20 mm across. Heart mass about 250–350 g. General knowledge; not verified this session.",
+  "The anterior RV free wall lies about 1–3 cm behind the sternum and anterior chest wall; the heart is about 10–12 cm deep front to back. Not sourced.",
+  "Durrer 1970 later-activation details: first LV areas are the high anterior paraseptal region below the mitral attachment, the central left septum, and the posterior paraseptal region about one third of the way from apex to base. The posterobasal LV and the RV outflow (pulmonary conus) are activated last, at about 60–80 ms. Total ventricular activation about 80 ms. From memory of the paper; only the 0–5 ms, 15–20 ms and RV 5–10 ms figures were confirmed via a search summary.",
+  "Conduction velocities (from memory, lecture-level sources only): atrial muscle about 1 m/s; AV node about 0.02–0.05 m/s; His–Purkinje about 2–4 m/s; ventricular muscle about 0.3–1 m/s. These were not verified against a primary source.",
+  "Clinical mapping of the old 'posterior' wall to basal/mid inferolateral segments 5 and 11 (posterior MI → ST elevation in V7–V9, mirror-image changes in V1–V3) follows Bayés de Luna's CMR-based terminology. General knowledge; not fetched.",
+  "The anterolateral segments 6 and 12 are often supplied by LAD diagonal branches rather than the LCx in practice. Expect I/aVL ST elevation with diagonal occlusion. General knowledge, consistent with LITFL's 'LCx or diagonal' wording."
+ ]
+}

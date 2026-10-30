@@ -1,0 +1,29 @@
+{
+  "name": "ecg-academy",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "ECG Academy — learn to read the 12-lead ECG: lessons, unlimited drills, real cases (zh/en/es)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/inline-single-file.mjs",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:lab": "vitest run tests/lab",
+    "build:artifact": "vite build && node scripts/inline-single-file.mjs && node scripts/artifact-page.mjs"
+  },
+  "dependencies": {
+    "@preact/signals": "2.11.3",
+    "preact": "10.29.8",
+    "three": "0.186.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.1",
+    "@types/three": "0.186.0",
+    "typescript": "7.0.2",
+    "vite": "8.3.3",
+    "vitest": "5.0.3"
+  }
+}

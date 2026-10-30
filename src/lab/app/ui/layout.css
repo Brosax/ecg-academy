@@ -1,0 +1,1286 @@
+/*
+ * ECG-first layout. One screen at ≥ 1024 px, no CSS zoom:
+ *   header (transparent, over the cream scene)
+ *   [aside: disease picker] [hero: the ECG, glass] [side: the 3D heart + "now" strip + caption + mode content, glass]
+ *   dock: ⏮ ▶ ⏭ t · cycle timeline · speed · heart rate
+ *   footer
+ * The ECG is the protagonist: every mode puts its main ECG in the hero's primary box, which fills the height (the canvas
+ * views letterbox or widen their window into it); a fixed-height secondary row holds the mode's second ECG element.
+ * Below 1024 px everything stacks in reading order. Colours only from the frozen tokens (src/app/theme.css); the glass
+ * is a color-mix() of --panel, so the dark theme follows by token switch.
+ * Fixed-size rule: every box whose text changes at ~10 Hz ("now" strip, caption, chain texts) keeps its size.
+ */
+
+.lab-root .lab-app-e {
+  --glass: color-mix(in srgb, var(--panel) 78%, transparent);
+  --glass-strong: color-mix(in srgb, var(--panel) 93%, transparent);
+  --glass-border: color-mix(in srgb, var(--border-strong) 55%, transparent);
+  --gap: 10px;
+  --side-w: clamp(360px, 33cqw, 520px);
+  --aside-w: clamp(220px, 17cqw, 280px);
+  --rail-w: 48px;
+  --caption-h: 44px;
+  /* height of the hero's secondary row, per mode */
+  --sec-h: 180px;
+  background: var(--scene-bg);
+}
+.lab-root .lab-app-e.has-aside {
+  --side-w: clamp(340px, 30cqw, 480px);
+}
+.lab-root .lab-app-e.mode-leads {
+  --sec-h: clamp(200px, 30cqh, 280px);
+}
+.lab-root .lab-app-e.mode-section {
+  --sec-h: clamp(200px, 32cqh, 280px);
+}
+
+.lab-root .lab-app-e .glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 6px 24px rgb(0 0 0 / 0.06);
+}
+
+/* pressed / primary controls read as solid ink on the cream scene */
+.lab-root .lab-app-e .btn[aria-pressed='true'],
+.lab-root .lab-app-e .btn-primary {
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
+}
+.lab-root .lab-app-e .btn[aria-pressed='true']:hover:not(:disabled),
+.lab-root .lab-app-e .btn-primary:hover:not(:disabled) {
+  background: var(--fg);
+  filter: none;
+  opacity: 0.88;
+}
+.lab-root .lab-app-e .chip-btn[aria-pressed='true'] {
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
+}
+.lab-root .lab-app-e input[type='range'] {
+  accent-color: var(--fg);
+}
+/* buttons read as pills (the mode tabs and icon buttons keep their own shape) */
+.lab-root .lab-app-e .btn:not(.mode-btn):not(.icon-btn) {
+  border-radius: 999px;
+}
+.lab-root .lab-app-e .btn-ghost {
+  background: transparent;
+  border-color: transparent;
+}
+.lab-root .lab-app-e .stn {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid var(--fg);
+  border-radius: 50%;
+  background: var(--glass-strong);
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ------------------------------------------------------------------ header: transparent bar over the scene */
+
+.lab-root .lab-app-e .lab-app-header {
+  background: transparent;
+  border-bottom: 0;
+  padding: 4px 8px;
+}
+.lab-root .lab-app-e .brand h1 {
+  font-size: 16px;
+}
+.lab-root .lab-app-e .brand-sub {
+  font-size: 12px;
+}
+.lab-root .lab-app-e .mode-nav {
+  gap: 14px;
+}
+.lab-root .lab-app-e .mode-btn {
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: 0 4px;
+  color: var(--fg-muted);
+}
+.lab-root .lab-app-e .mode-btn:hover:not(:disabled) {
+  background: transparent;
+  color: var(--fg);
+}
+.lab-root .lab-app-e .mode-btn[aria-current='page'],
+.lab-root .lab-app-e .mode-btn[aria-current='page']:hover {
+  background: transparent;
+  border-color: transparent;
+  border-bottom-color: var(--fg);
+  color: var(--fg);
+  font-weight: 600;
+  filter: none;
+}
+.lab-root .lab-app-e .header-tools .btn:not([aria-pressed='true']) {
+  background: transparent;
+  border-color: transparent;
+}
+.lab-root .lab-app-e .header-tools .btn:not([aria-pressed='true']):hover {
+  background: var(--glass-strong);
+}
+
+/* ------------------------------------------------------------------ hero: the ECG */
+
+.lab-root .lab-app-e .hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 10px 10px;
+  outline: none;
+}
+.lab-root .hero-primary {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+.lab-root .hero-secondary {
+  display: flex;
+  flex: none;
+  gap: 10px;
+  height: var(--sec-h);
+  min-height: 0;
+  min-width: 0;
+}
+.lab-root .hero-secondary > * {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+/* flat frames inside the glass: no second border */
+.lab-root .lab-app-e .hero .ecg-frame {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.lab-root .lab-app-e .hero .ecg-panel {
+  height: 100%;
+  min-height: 0;
+  gap: 4px;
+}
+.lab-root .lab-app-e .hero .ecg-stage {
+  border-radius: 8px;
+}
+/* ECG toolbars in the hero: pill buttons; only the unpressed state is restyled, so pressed stays solid ink */
+.lab-root .lab-app-e .hero .ecg-btn,
+.lab-root .lab-app-e .hero .ecg-seg > button {
+  min-height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+}
+.lab-root .lab-app-e .hero .ecg-btn:not([aria-pressed='true']),
+.lab-root .lab-app-e .hero .ecg-seg > button:not([aria-pressed='true']) {
+  background: transparent;
+  border-color: var(--glass-border);
+}
+.lab-root .lab-app-e .hero .ecg-btn:not([aria-pressed='true']):hover:not(:disabled),
+.lab-root .lab-app-e .hero .ecg-seg > button:not([aria-pressed='true']):hover:not(:disabled) {
+  border-color: var(--fg-muted);
+}
+.lab-root .lab-app-e .hero .ecg-seg {
+  gap: 4px;
+}
+.lab-root .lab-app-e .hero .ecg-seg > button {
+  margin-left: 0;
+}
+.lab-root .lab-app-e .hero-primary .lead-detail > .ecg-cal {
+  gap: 4px 8px;
+}
+/* the plane and Wiggers diagrams draw on a transparent canvas: no box inside the glass box (the paper keeps its edge) */
+.lab-root .lab-app-e .hero .ecg-stage-square,
+.lab-root .lab-app-e .hero .ecg-stage-wiggers {
+  border: 0;
+  background: transparent;
+}
+/* hints: two fixed lines (click pauses and jumps; the opening square wave is the 1 mV calibration pulse) */
+.lab-root .lab-app-e .hero .ecg-hint {
+  display: -webkit-box;
+  height: calc(2 * 1.45em);
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+/* the projection read-out under the lead (leads mode): one compact row — the explanation lives in the side panel */
+.lab-root .lab-app-e .hero .ecg-proj {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 14px;
+  padding: 4px 10px;
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+}
+.lab-root .lab-app-e .hero .ecg-proj > ul,
+.lab-root .lab-app-e .hero .ecg-proj > .ecg-caption {
+  display: none;
+}
+.lab-root .lab-app-e .hero .ecg-proj > .ecg-readout {
+  min-height: 0;
+}
+/* the primary ECG keeps the caliper bar (rhythm strip / lead detail); the secondary strip hides it, and its colour-band
+   toggle (the 12-lead sheet above has the same, global, switch) so its toolbar stays one row */
+.lab-root .hero-secondary .lead-detail > .ecg-hint,
+.lab-root .hero-secondary .lead-detail > .ecg-cal,
+.lab-root .hero-secondary .lead-detail .ecg-toolbar > .ecg-btn,
+.lab-root .hero-secondary .wiggers > .ecg-toolbar,
+.lab-root .hero-secondary .plane-diagram > .ecg-caption:last-child {
+  display: none;
+}
+
+/* leads mode: the two plane diagrams side by side — square stage left, pickers / read-outs right */
+.lab-root .hero-secondary .plane-diagram {
+  --sq: calc(var(--sec-h) - 34px);
+  display: grid;
+  grid-template-columns: var(--sq) minmax(0, 1fr);
+  grid-auto-rows: min-content;
+  gap: 2px 10px;
+  overflow: hidden;
+}
+.lab-root .hero-secondary .plane-diagram > .ecg-toolbar {
+  grid-column: 1 / -1;
+}
+.lab-root .hero-secondary .plane-diagram > .ecg-stage-square {
+  grid-column: 1;
+  grid-row: 2 / span 8;
+  width: var(--sq);
+  height: var(--sq);
+  max-width: none;
+  margin: 0;
+}
+.lab-root .hero-secondary .plane-diagram > :not(.ecg-toolbar):not(.ecg-stage-square) {
+  grid-column: 2;
+  margin: 0;
+}
+.lab-root .hero-secondary .plane-diagram .ecg-leadpick {
+  justify-content: flex-start;
+  gap: 3px;
+}
+.lab-root .hero-secondary .plane-diagram .ecg-leadpick .ecg-btn {
+  min-width: 28px;
+  padding: 3px 5px;
+}
+/* frontal plane: the "why" and true-axis prose is in the side panel's formation card; the read-outs stay */
+.lab-root .hero-secondary .plane-diagram > p.ecg-readout ~ p.ecg-caption {
+  display: none;
+}
+/* section mode: the Wiggers diagram — 4:3 stage left, legend / read-out / caption right */
+.lab-root .hero-secondary .wiggers {
+  --wh: calc(var(--sec-h) - 4px);
+  display: grid;
+  grid-template-columns: calc(var(--wh) * 4 / 3) minmax(0, 1fr);
+  grid-auto-rows: min-content;
+  gap: 4px 12px;
+  overflow: hidden;
+}
+.lab-root .hero-secondary .wiggers > .ecg-stage-wiggers {
+  grid-column: 1;
+  grid-row: 1 / span 6;
+  width: calc(var(--wh) * 4 / 3);
+  height: var(--wh);
+  aspect-ratio: auto;
+}
+.lab-root .hero-secondary .wiggers > :not(.ecg-stage-wiggers) {
+  grid-column: 2;
+  margin: 0;
+}
+.lab-root .hero-secondary .wiggers > .ecg-legend-list {
+  display: grid;
+  gap: 2px;
+}
+
+/* ------------------------------------------------------------------ side: the heart */
+
+.lab-root .lab-app-e .side {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 10px;
+}
+
+/* "now" strip — fixed two rows */
+.lab-root .lab-app-e .side {
+  --now-h: 62px;
+}
+.lab-root .now-strip {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 2px;
+  height: var(--now-h);
+  padding: 0 2px;
+}
+.lab-root .now-row {
+  display: grid;
+  /* 112 px fits "t = 999,99 s" */
+  grid-template-columns: 112px 8.5em minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  min-height: 30px;
+}
+.lab-root .now-row-2 {
+  grid-template-columns: minmax(0, 1fr) fit-content(42%);
+}
+.lab-root .now-t {
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.lab-root .now-t small {
+  color: var(--fg-muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+.lab-root .now-row .seg-badge {
+  min-width: 0;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* the segment badge as a pill with a coloured dot (still a block, so the ellipsis works) */
+.lab-root .lab-app-e .now-row .seg-badge {
+  display: block;
+  position: relative;
+  height: 26px;
+  padding: 0 10px 0 22px;
+  border-left: 0;
+  border-radius: 999px;
+  line-height: 26px;
+}
+.lab-root .lab-app-e .now-row .seg-badge::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 9px;
+  width: 9px;
+  height: 9px;
+  margin-top: -4.5px;
+  border-radius: 50%;
+  background: var(--seg-c, var(--border-strong));
+}
+.lab-root .now-mech {
+  font-size: 13px;
+}
+.lab-root .now-why {
+  max-width: 100%;
+  min-width: 0;
+  min-height: 30px;
+  overflow: hidden;
+  justify-content: flex-start;
+  border-color: var(--border-strong);
+}
+.lab-root .now-why[aria-expanded='true'] {
+  border-color: var(--c-vector);
+}
+.lab-root .now-why > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lab-root .now-structs {
+  min-width: 0;
+  height: 1.5em;
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.lab-root .now-k {
+  color: var(--fg-muted);
+}
+
+/* the heart box: full-bleed scene, the tool rail on its right edge. Not clipped: the scene (.hv-root) clips itself, and
+   the rail popover may grow taller than the box (its max-height keeps it above the dock). */
+.lab-root .heart-box {
+  position: relative;
+  flex: 1 1 240px;
+  min-height: 200px;
+  overflow: visible;
+  border-radius: 10px;
+}
+.lab-root .heart-box .heart-view.hv-root {
+  height: 100%;
+  min-height: 0;
+  border-radius: 10px;
+  background: transparent;
+}
+/* camera presets and the colour key live in the tool rail */
+.lab-root .heart-box .hv-toolbar,
+.lab-root .heart-box .hv-legend {
+  display: none;
+}
+.lab-root .lab-app-e .rail {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: var(--rail-w);
+  padding: 4px;
+  border-radius: 12px;
+}
+.lab-root .rail-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+}
+.lab-root .rail-btn:hover {
+  background: var(--glass-strong);
+}
+.lab-root .rail-btn[aria-expanded='true'],
+.lab-root .rail-btn[aria-pressed='true'] {
+  background: var(--fg);
+  color: var(--bg);
+}
+.lab-root .rail-btn .icon {
+  width: 20px;
+  height: 20px;
+}
+.lab-root .lab-app-e .rail-panel {
+  position: absolute;
+  top: 8px;
+  right: calc(var(--rail-w) + 16px);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(300px, calc(100% - var(--rail-w) - 32px));
+  max-height: min(520px, calc(100cqh - 260px));
+  padding: 10px 12px 12px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--glass-strong);
+}
+.lab-root .lab-app-e .rail-panel-wiggers {
+  width: min(440px, calc(100% - var(--rail-w) - 32px));
+}
+.lab-root .rail-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.lab-root .rail-panel-head h2 {
+  margin: 0;
+  font-size: 15px;
+}
+.lab-root .view-presets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+.lab-root .rail-legend {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+}
+.lab-root .layer-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lab-root .layer-toggles .toggle-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* caption under the heart — fixed two lines */
+.lab-root .stage-caption {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  height: var(--caption-h);
+  margin: 0;
+  padding: 0 6px;
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.45;
+  text-align: center;
+}
+.lab-root .stage-caption span {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-wrap: balance;
+}
+
+/* the mode's own panels under the heart: flat inside the glass, scrolling on their own */
+.lab-root .side-content {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.lab-root .side-content:empty {
+  display: none;
+}
+.lab-root .side-content .card {
+  padding: 6px 2px;
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.lab-root .side-content .card > h2 {
+  font-size: 14px;
+}
+.lab-root .side-content .dz-info-body {
+  height: auto;
+  max-height: 15em;
+}
+
+/* the causal chain opens over the heart (below the "now" strip, which is step ①) */
+.lab-root .lab-app-e .explain-pop {
+  position: absolute;
+  top: calc(16px + var(--now-h));
+  right: 8px;
+  bottom: 8px;
+  left: 8px;
+  z-index: 22;
+  padding: 10px 12px 10px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--glass-strong);
+}
+.lab-root .explain-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 1;
+}
+.lab-root .explain-pop .chain-head {
+  padding-right: 40px;
+}
+.lab-root .explain-leads {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+}
+.lab-root .explain-leads .seg {
+  gap: 2px;
+}
+.lab-root .explain-leads .btn {
+  min-width: 30px;
+  min-height: 30px;
+  padding: 0 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+/* the rhythm strip / 12-lead sheet with calipers slides over the hero's lower half */
+.lab-root .lab-app-e .stage-sheet {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  left: 8px;
+  z-index: 25;
+  max-height: 62%;
+  padding: 8px 52px 10px 12px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--glass-strong);
+}
+.lab-root .sheet-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 1;
+}
+
+/* ------------------------------------------------------------------ causal chain (popup body) */
+
+.lab-root .chain-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lab-root .chain-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.lab-root .chain-head h2 {
+  margin: 0;
+  font-size: 15px;
+}
+.lab-root .chain {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lab-root .chain-stage {
+  display: flex;
+  gap: 10px;
+}
+.lab-root .stage-gut {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  width: 24px;
+}
+.lab-root .stage-spine {
+  position: relative;
+  flex: 1;
+  width: 2px;
+  min-height: 14px;
+  margin: 4px 0 6px;
+  border-radius: 1px;
+  background: var(--fg-muted);
+}
+.lab-root .stage-spine::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: -5px;
+  border: 6px solid transparent;
+  border-top: 7px solid var(--fg-muted);
+  border-bottom: 0;
+}
+.lab-root .stage-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  padding-bottom: 6px;
+}
+.lab-root .stage-body h3 {
+  margin: 2px 0 0;
+  font-size: 14px;
+  font-weight: 650;
+}
+.lab-root .stage-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px 12px;
+}
+.lab-root .stage-text {
+  flex: 1 1 180px;
+  min-width: 0;
+  margin: 0;
+  overflow-y: auto;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.lab-root .lines-2 {
+  height: calc(2 * 1.5em);
+}
+.lab-root .lines-3 {
+  height: calc(3 * 1.5em);
+}
+.lab-root .lines-5 {
+  height: calc(5 * 1.5em);
+}
+.lab-root .lines-6 {
+  height: calc(6 * 1.5em);
+}
+/* ④ the result sentence: two fixed lines (.lines-2), clamped */
+.lab-root .stage-result {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  font-size: 13.5px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+.lab-root .stage-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.lab-root .stage-value {
+  min-width: 8ch;
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+}
+.lab-root .stage-col {
+  display: flex;
+  flex: 1 1 180px;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.lab-root .stage-col .stage-text {
+  flex: none;
+}
+.lab-root .chain .vplanes {
+  flex: none;
+  gap: 4px;
+  margin: 0;
+}
+.lab-root .chain .vplane svg {
+  width: 92px;
+  height: 92px;
+}
+.lab-root .chain .stage-row > .proj-figure {
+  flex: 1 1 100%;
+}
+.lab-root .proj-figure {
+  display: flex;
+  flex: 0 1 220px;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  margin: 0;
+}
+.lab-root .proj-diagram {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+}
+.lab-root .pd-axis {
+  stroke: var(--fg);
+  stroke-width: 0.8;
+  stroke-dasharray: 3 2;
+}
+.lab-root .pd-axis-head,
+.lab-root .pd-origin {
+  fill: var(--fg);
+}
+.lab-root .pd-h {
+  stroke: var(--c-vector);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+.lab-root .pd-h-head,
+.lab-root .pd-h-label {
+  fill: var(--c-vector);
+}
+.lab-root .pd-h-label {
+  font-size: 7px;
+  font-weight: 700;
+}
+.lab-root .pd-arc {
+  fill: none;
+  stroke: var(--fg-muted);
+  stroke-width: 0.7;
+}
+.lab-root .pd-drop {
+  stroke: var(--fg-muted);
+  stroke-width: 0.7;
+  stroke-dasharray: 2 2;
+}
+.lab-root .pd-proj {
+  stroke: var(--c-highlight);
+  stroke-width: 4;
+}
+.lab-root .pd-label {
+  fill: var(--fg-muted);
+  font-size: 6px;
+}
+.lab-root .pd-value {
+  fill: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 6.5px;
+  font-weight: 700;
+}
+.lab-root .proj-formula {
+  max-width: 100%;
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+/* ④ keeps only the live trace: colour bands are on the sheet, the caliper read-out lives with the rhythm strip */
+.lab-root .chain-strip .ecg-stage {
+  aspect-ratio: auto !important;
+  height: 110px;
+}
+.lab-root .chain-strip .lead-detail > .ecg-hint,
+.lab-root .chain-strip .ecg-toolbar > .ecg-title,
+.lab-root .chain-strip .ecg-toolbar > .ecg-btn,
+.lab-root .chain-strip .ecg-cal {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ aside: disease picker */
+
+.lab-root .lab-app-e .mode-aside {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  padding: 6px;
+}
+.lab-root .lab-app-e .mode-aside .dz-picker {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.lab-root .lab-app-e .mode-aside .dz-picker-list {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+}
+/* one column that never scrolls sideways: names wrap to two lines, the "coming soon" badge keeps its size */
+.lab-root .lab-app-e .mode-aside .dz-picker-list,
+.lab-root .lab-app-e .mode-aside .dz-picker ul {
+  grid-template-columns: minmax(0, 1fr);
+}
+.lab-root .lab-app-e .mode-aside .dz-picker-list {
+  overflow-x: hidden;
+}
+.lab-root .lab-app-e .mode-aside .dz-cat,
+.lab-root .lab-app-e .mode-aside .dz-item {
+  min-width: 0;
+}
+.lab-root .lab-app-e .mode-aside .dz-item {
+  min-height: 40px;
+  border-color: transparent;
+  border-radius: 10px;
+  background: transparent;
+}
+.lab-root .lab-app-e .mode-aside .dz-item:hover:not(:disabled):not(.is-active) {
+  background: var(--glass-strong);
+}
+.lab-root .lab-app-e .mode-aside .dz-item.is-active {
+  border-color: var(--fg);
+  background: var(--fg);
+  box-shadow: none;
+  color: var(--bg);
+}
+.lab-root .lab-app-e .mode-aside .dz-item .dz-name {
+  display: -webkit-box;
+  flex: 1 1 auto;
+  overflow: hidden;
+  line-height: 1.25;
+  text-align: start;
+  white-space: normal;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.lab-root .lab-app-e .mode-aside .dz-item .badge {
+  flex: none;
+}
+
+/* ------------------------------------------------------------------ dock: transport + timeline */
+
+.lab-root .lab-app-e .dock {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 12px 6px;
+  border-radius: 12px;
+}
+.lab-root .lab-app-e .dock .transport {
+  display: grid;
+  grid-template-areas:
+    'tl tl tl'
+    'play speed hr';
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  justify-content: stretch;
+  gap: 2px 24px;
+}
+.lab-root .lab-app-e .dock .play-group {
+  grid-area: play;
+}
+.lab-root .lab-app-e .dock .timeline-wrap {
+  grid-area: tl;
+  min-width: 0;
+}
+.lab-root .lab-app-e .dock .speed-group {
+  grid-area: speed;
+}
+.lab-root .lab-app-e .dock .hr-group {
+  grid-area: hr;
+}
+.lab-root .lab-app-e .dock .shortcut-hint,
+.lab-root .lab-app-e .dock .speed-group > output,
+.lab-root .lab-app-e .dock .timeline .ecg-legend {
+  display: none;
+}
+.lab-root .lab-app-e .dock .timeline .ecg-stage-timeline {
+  background: transparent;
+  border: 0;
+}
+.lab-root .lab-app-e .dock .btn:not([aria-pressed='true']):not(.play-btn) {
+  background: transparent;
+  border-color: transparent;
+}
+.lab-root .lab-app-e .dock .btn:not([aria-pressed='true']):not(.play-btn):hover {
+  background: var(--glass-strong);
+}
+.lab-root .lab-app-e .dock .play-btn {
+  border-radius: 999px;
+  padding: 0 14px;
+}
+.lab-root .lab-app-e .dock .seg .btn {
+  min-width: 0;
+  padding: 0 7px;
+}
+.lab-root .lab-app-e .dock input[type='range'] {
+  width: 84px;
+}
+.lab-root .lab-app-e .dock .hr-group > output {
+  display: inline-block;
+  min-width: 19ch;
+  text-align: left;
+}
+.lab-root .lab-app-e .dock .time-readout {
+  display: inline-block;
+  min-width: 12ch;
+}
+/* two rows: the play and heart-rate groups hug the speed group, the timeline spans the whole dock */
+@container lab (min-width: 1024px) and (max-width: 1479.98px) {
+  .lab-root .lab-app-e .dock .play-group {
+    justify-self: end;
+  }
+  .lab-root .lab-app-e .dock .hr-group {
+    justify-self: start;
+  }
+}
+@container lab (min-width: 1480px) {
+  .lab-root .lab-app-e .dock .transport {
+    grid-template-areas: 'play tl speed hr';
+    grid-template-columns: auto minmax(360px, 1fr) auto auto;
+    justify-content: stretch;
+  }
+  /* one row: the speed presets stand in for the slider, so the timeline keeps its width */
+  .lab-root .lab-app-e .dock .speed-group > input[type='range'] {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------ footer */
+
+.lab-root .lab-app-e .lab-app-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 16px;
+  padding: 2px 10px 4px;
+  font-size: 11.5px;
+}
+.lab-root .lab-app-e .lab-app-footer p {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.lab-root .lab-app-e .lab-app-footer .shortcut-hint {
+  margin-left: auto;
+  font-size: 11.5px;
+}
+
+/* ------------------------------------------------------------------ ≥ 1024 px: one screen */
+
+@container lab (min-width: 1024px) {
+  .lab-root .lab-app-e {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--side-w);
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    column-gap: var(--gap);
+    height: 100cqh;
+    min-height: 600px;
+    padding: 0 12px;
+    overflow: hidden;
+  }
+  .lab-root .lab-app-e.has-aside {
+    grid-template-columns: var(--aside-w) minmax(0, 1fr) var(--side-w);
+  }
+  .lab-root .lab-app-e > .lab-app-header {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .lab-root .lab-app-e > .mode-aside {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .lab-root .lab-app-e > .hero {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .lab-root .lab-app-e.has-aside > .hero {
+    grid-column: 2;
+  }
+  .lab-root .lab-app-e > .side {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .lab-root .lab-app-e.has-aside > .side {
+    grid-column: 3;
+  }
+  .lab-root .lab-app-e > .dock {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    margin-top: var(--gap);
+  }
+  .lab-root .lab-app-e > .lab-app-footer {
+    grid-column: 1 / -1;
+    grid-row: 4;
+  }
+  /* the canvas views fill their box (letterbox / widened window) instead of dictating a height */
+  .lab-root .lab-app-e .hero .ecg-stage {
+    flex: 1 1 0;
+    min-height: 0;
+    aspect-ratio: auto !important;
+  }
+  .lab-root .lab-app-e .side-content {
+    max-height: 46%;
+  }
+  /* header: the brand counts as 14em for line breaking, so the row stays one line; the subtitle ellipsizes */
+  .lab-root .lab-app-e .brand {
+    flex: 1 1 0;
+    min-width: 14em;
+  }
+  .lab-root .lab-app-e .brand > div {
+    min-width: 0;
+  }
+  .lab-root .lab-app-e .brand h1,
+  .lab-root .lab-app-e .brand-sub {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /* the "now" strip already shows the time */
+  .lab-root .lab-app-e .dock .time-readout {
+    display: none;
+  }
+  /* the 12 lead buttons fit one row (the group has its aria-label) */
+  .lab-root .explain-pop .explain-leads > .muted {
+    display: none;
+  }
+  /* footer: the disclaimer is never cut, the legend before the shortcut hint */
+  .lab-root .lab-app-e .lab-app-footer p:first-child {
+    flex: 0 0 auto;
+  }
+  .lab-root .lab-app-e .lab-app-footer .footer-legend {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+  .lab-root .lab-app-e .lab-app-footer .shortcut-hint {
+    flex: 1 1 0;
+    flex-wrap: nowrap;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .lab-root .lab-app-e .lab-app-footer kbd {
+    padding: 0 4px;
+    font-size: 10.5px;
+    line-height: 1.3;
+  }
+}
+/* the "1–4 modes" item goes first when the footer is short of room (the About dialog lists it) */
+@container lab (min-width: 1024px) and (max-width: 1700px) {
+  .lab-root .lab-app-e .lab-app-footer .shortcut-hint > span:last-child {
+    display: none;
+  }
+}
+
+/* short desktop windows (up to 800 px high, so 1366 × 768 is included): tighter rows */
+@container lab (min-width: 1024px) and (max-height: 800px) {
+  .lab-root .lab-app-e {
+    --caption-h: 40px;
+    --rail-w: 42px;
+  }
+  .lab-root .lab-app-e.mode-disease {
+    --sec-h: 150px;
+  }
+  /* the lead strip stays taller than the plane / Wiggers row */
+  .lab-root .lab-app-e.mode-leads,
+  .lab-root .lab-app-e.mode-section {
+    --sec-h: 196px;
+  }
+  .lab-root .lab-app-e .stage-caption {
+    font-size: 13.5px;
+  }
+  .lab-root .lab-app-e .lab-app-header {
+    padding: 2px 8px;
+  }
+  /* a compact rail (2 + 6 + 6 × 31 + 5 = 199 px) fits the 200 px minimum heart box */
+  .lab-root .lab-app-e .rail {
+    top: 4px;
+    gap: 1px;
+    padding: 3px;
+  }
+  .lab-root .lab-app-e .rail-btn {
+    width: 34px;
+    height: 31px;
+  }
+  .lab-root .lab-app-e .rail-btn .icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* ------------------------------------------------------------------ < 1024 px: stacked */
+
+@container lab (max-width: 1023.98px) {
+  .lab-root .lab-app-e {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 12px 12px;
+  }
+  .lab-root .lab-app-e > .mode-aside {
+    max-height: 40cqh;
+  }
+  /* no fixed height to fill: the ECG keeps its paper aspect ratio (inline style) or an explicit strip height */
+  .lab-root .lab-app-e .hero-primary {
+    flex: none;
+  }
+  /* data-strip-fill sits on .hero-primary (leads, section) or .hero-secondary (disease) itself */
+  .lab-root .lab-app-e .hero [data-strip-fill] .ecg-stage {
+    height: 220px;
+  }
+  .lab-root .lab-app-e .hero-secondary {
+    flex-direction: column;
+    height: auto;
+  }
+  /* stacked: the secondary panels take their natural height (no basis-0 flex, no 100 % of an auto row) */
+  .lab-root .lab-app-e .hero-secondary > *,
+  .lab-root .lab-app-e .hero .hero-secondary .ecg-panel {
+    flex: none;
+    height: auto;
+  }
+  .lab-root .lab-app-e .hero-secondary .plane-diagram,
+  .lab-root .lab-app-e .hero-secondary .wiggers {
+    display: flex;
+    flex-direction: column;
+  }
+  .lab-root .lab-app-e .hero-secondary .plane-diagram > .ecg-stage-square {
+    width: min(100%, 300px);
+    height: auto;
+    aspect-ratio: 1 / 1;
+    margin: 0 auto;
+  }
+  .lab-root .lab-app-e .hero-secondary .wiggers > .ecg-stage-wiggers {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+  .lab-root .lab-app-e .hero-secondary .wiggers > .ecg-toolbar {
+    display: flex;
+  }
+  .lab-root .lab-app-e .heart-box {
+    flex: none;
+    height: min(70cqw, 420px);
+  }
+  .lab-root .lab-app-e .side-content {
+    max-height: none;
+    overflow: visible;
+  }
+  /* touch targets */
+  .lab-root .lab-app-e {
+    --rail-w: 50px;
+  }
+  .lab-root .lab-app-e .rail-btn {
+    width: 40px;
+    height: 40px;
+  }
+  .lab-root .lab-app-e .explain-leads .btn {
+    min-width: 40px;
+    min-height: 40px;
+  }
+  .lab-root .lab-app-e .explain-leads .seg {
+    gap: 4px;
+  }
+  .lab-root .lab-app-e .explain-pop {
+    position: fixed;
+    top: auto;
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+    z-index: 30;
+    max-height: 72cqh;
+  }
+  .lab-root .lab-app-e .stage-sheet {
+    position: fixed;
+    max-height: 70cqh;
+  }
+  .lab-root .lab-app-e .dock .transport {
+    grid-template-areas:
+      'tl'
+      'play'
+      'speed'
+      'hr';
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
+  .lab-root .lab-app-e .dock .speed-group,
+  .lab-root .lab-app-e .dock .hr-group {
+    width: auto;
+  }
+}
+
+/* ------------------------------------------------------------------ enlarged 3D view */
+
+/* the rail's last button (view3d/viewControls heartEnlarged → Shell's heart-large class): the side panel widens and
+   the heart box takes more of its height; the ECG hero keeps the rest and stays live. The scene re-fits itself. */
+@container lab (min-width: 1024px) {
+  .lab-root .lab-app-e.heart-large {
+    --side-w: clamp(520px, 56cqw, 1180px);
+  }
+  .lab-root .lab-app-e.heart-large.has-aside {
+    --side-w: clamp(480px, 50cqw, 1040px);
+  }
+  .lab-root .lab-app-e.heart-large .side-content {
+    max-height: 28%;
+  }
+}
+@container lab (max-width: 1023.98px) {
+  .lab-root .lab-app-e.heart-large .heart-box {
+    height: min(100cqw, 78cqh);
+  }
+}

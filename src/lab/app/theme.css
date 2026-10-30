@@ -1,0 +1,159 @@
+/*
+ * Heart Lab design tokens (the old app's frozen :root contract, now scoped to .lab-root so they never reach the host
+ * app). Light "textbook" theme is the default; dark "monitor" theme via the host's <html data-theme="dark"> (ECG Academy
+ * owns that attribute; the lab never writes it). Colour language (shared by 3D, slice, ECG labels):
+ *   atrial / P = amber, ventricular depolarization / QRS = magenta, repolarization / T = teal,
+ *   conduction system = gold, heart vector = blue.
+ */
+.lab-root {
+  color-scheme: light;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', 'Hiragino Sans GB',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace;
+
+  --bg: #f7f4ef;
+  --bg-elev: #ffffff;
+  --panel: #ffffff;
+  --panel-2: #f1ede6;
+  --fg: #1f2328;
+  --fg-muted: #5c6370;
+  --fg-faint: #8a919c;
+  --border: #e2ddd4;
+  --border-strong: #c9c2b6;
+  --focus: #2563eb;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 4px 16px rgb(0 0 0 / 0.06);
+  --radius: 10px;
+  --radius-sm: 6px;
+
+  /* colour language */
+  --c-atrial: #c26a00;
+  --c-qrs: #b0179e;
+  --c-repol: #0f8a80;
+  --c-conduction: #a87900;
+  --c-vector: #1d5fd6;
+  --c-myo-rest: #c98f8a;
+  --c-blood: #8f2f35;
+  --c-vessel: #b9606a;
+  --c-ring: #e9dcc3;
+  --c-highlight: #ff7a00;
+
+  /* ECG paper (pink textbook paper) */
+  --ecg-paper: #fff6f5;
+  --ecg-grid-minor: #f6cfcc;
+  --ecg-grid-major: #e59c97;
+  --ecg-trace: #16181d;
+  --ecg-trace-muted: #9aa1ab;
+  --ecg-cursor: #1d5fd6;
+  --ecg-label: #3b3f46;
+
+  /* 3D scene */
+  --scene-bg: #f3efe8;
+  --scene-ambient: #ffffff;
+  --torso: #d9cfc4;
+
+  --ok: #1f8a4c;
+  --warn: #b7791f;
+  --err: #c0392b;
+}
+
+:root[data-theme='dark'] .lab-root {
+  color-scheme: dark;
+  --bg: #0e1116;
+  --bg-elev: #151a21;
+  --panel: #151a21;
+  --panel-2: #1b2129;
+  --fg: #e6e8eb;
+  --fg-muted: #a3aab4;
+  --fg-faint: #6f7783;
+  --border: #262d37;
+  --border-strong: #38414d;
+  --focus: #60a5fa;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 16px rgb(0 0 0 / 0.35);
+
+  --c-atrial: #f6b73c;
+  --c-qrs: #ef6fe0;
+  --c-repol: #34d3c2;
+  --c-conduction: #f5cf4a;
+  --c-vector: #6aa6ff;
+  --c-myo-rest: #a8615d;
+  --c-blood: #5e1e24;
+  --c-vessel: #8d4650;
+  --c-ring: #6b6150;
+  --c-highlight: #ffa24d;
+
+  /* ECG monitor */
+  --ecg-paper: #071210;
+  --ecg-grid-minor: #0f2620;
+  --ecg-grid-major: #1b4a3c;
+  --ecg-trace: #5df29a;
+  --ecg-trace-muted: #3b6b55;
+  --ecg-cursor: #6aa6ff;
+  --ecg-label: #9fd8b8;
+
+  --scene-bg: #0b0e13;
+  --scene-ambient: #9fb3c8;
+  --torso: #3a4552;
+
+  --ok: #4ade80;
+  --warn: #fbbf24;
+  --err: #f87171;
+}
+
+.lab-root,
+.lab-root *,
+.lab-root *::before,
+.lab-root *::after {
+  box-sizing: border-box;
+}
+
+/*
+ * Heart Lab (ECG Academy): .lab-root is the box the old app treated as its viewport — everything below the host's
+ * header. It is a size container named `lab` (viewport units and width/height media queries of the lab CSS were turned
+ * into cqw/cqh and @container lab queries) and, through layout containment, the containing block of the lab's
+ * position: fixed elements (quiz drawer, phone sheets), so they stay inside the lab instead of covering the host's
+ * header. The old html/body base styles live here. .lab-viewport is the lab's own scroller (the old app scrolled the
+ * document).
+ */
+.lab-root {
+  /* what sits above the lab: the host header (--app-header-h) plus its 1 px bottom border; override if the host differs */
+  --lab-offset-top: calc(var(--app-header-h, 56px) + 1px);
+  position: relative;
+  display: block;
+  width: 100%;
+  height: calc(100vh - var(--lab-offset-top));
+  height: calc(100dvh - var(--lab-offset-top));
+  overflow: hidden;
+  container: lab / size;
+  /* layout containment: the containing block of position: fixed descendants (container-type alone does not do this) */
+  contain: layout;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+/* phones: the host's bottom tab bar (fixed, ≤ 760 px — ECG Academy src/app/shell.css) also takes viewport height */
+@media (max-width: 760px) {
+  .lab-root {
+    height: calc(100vh - var(--lab-offset-top) - var(--app-tabbar-h, 62px));
+    height: calc(100dvh - var(--lab-offset-top) - var(--app-tabbar-h, 62px) - env(safe-area-inset-bottom, 0px));
+  }
+}
+.lab-root > .lab-viewport {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.lab-root :focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-root * {
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,206 @@
+/* Small 3D heart — theme tokens only (src/app/theme.css). Fixed square; captions and overlays never resize it.
+   Two rows: the 3D stage, then a reserved caption strip (the caption never covers the heart). */
+.h3d {
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  background: var(--heart-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  contain: layout paint;
+  color: var(--fg);
+  font-size: var(--fs-xs);
+  line-height: 1.35;
+}
+
+.h3d__stage {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* touch-action pan-y (set again by view.ts over OrbitControls' inline 'none'): a vertical swipe scrolls the page,
+   a horizontal drag turns the heart */
+.h3d__canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: pan-y;
+  outline: none;
+}
+.h3d__canvas[hidden] {
+  display: none;
+}
+.h3d__canvas:active {
+  cursor: grabbing;
+}
+.h3d__canvas:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+  border-radius: var(--radius);
+}
+
+.h3d__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* hover label (positioned by view.ts with a transform from the top-left corner) */
+.h3d__tip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-width: calc(100% - 8px);
+  padding: 3px 7px;
+  background: var(--bg-elev);
+  color: var(--fg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.h3d__tip span {
+  color: var(--fg-muted);
+}
+.h3d__tip[hidden] {
+  display: none;
+}
+
+/* persistent labels of emphasized regions */
+.h3d__chip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--bg-elev);
+  border: 1px solid var(--c-highlight);
+  color: var(--fg);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: var(--shadow);
+}
+.h3d__chip.is-back {
+  opacity: 0.45;
+}
+
+.h3d__tools {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  gap: 4px;
+}
+.h3d__btn {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elev);
+  color: var(--fg-muted);
+  cursor: pointer;
+}
+.h3d__btn:hover,
+.h3d__btn.is-on {
+  color: var(--fg);
+  border-color: var(--border-strong);
+}
+
+/* phase caption: fixed two-line strip under the stage — its text changes with the cursor, its size never does */
+.h3d__phase {
+  box-sizing: content-box;
+  height: calc(2 * 1.35em);
+  padding: 2px 8px 6px;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  color: var(--fg-muted);
+  font-weight: 600;
+}
+.h3d__phase span {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.h3d__msg {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--sp-4);
+  text-align: center;
+  color: var(--fg-muted);
+  font-size: var(--fs-sm);
+}
+
+.h3d__info {
+  position: absolute;
+  top: 40px;
+  left: 6px;
+  right: 6px;
+  max-height: calc(100% - 46px);
+  overflow: auto;
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+}
+.h3d__legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 3px;
+}
+.h3d__legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.h3d__sw {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+.h3d__sw--line {
+  height: 4px;
+  border-radius: 2px;
+}
+.h3d__sw--ring {
+  background: transparent;
+  border: 2px solid;
+  border-radius: 50%;
+}
+.h3d__note,
+.h3d__credit {
+  margin: var(--sp-2) 0 0;
+  color: var(--fg-muted);
+}
+.h3d__close {
+  margin-top: var(--sp-2);
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--panel-2);
+  cursor: pointer;
+}
