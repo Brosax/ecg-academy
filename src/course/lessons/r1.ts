@@ -59,7 +59,7 @@ const lesson: Lesson = {
       ecg: synth('sinus-pause', 401),
       view: STRIP,
       question: l(
-        '节律条中部有一段长间歇。这里发生了什么？间歇里为什么连一个 P 波都没有？先写下你的判断。',
+        '节律条中部有一段长间歇。这里发生了什么？间歇里为什么连一个 P 波都没有？先想好你的判断。',
         'There is a long pause in the middle of this strip. What happened — and why is there not even a P wave in the gap? Commit to an answer.',
         'Hay una pausa larga en medio de esta tira. ¿Qué ha pasado y por qué no hay ni una onda P en el hueco? Decide una respuesta antes de continuar.',
       ),
@@ -237,9 +237,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [13591, 4408, 2594],
       caption: l(
-        '三份真实心电图：两份窦性心动过缓、一份窦性心动过速。先写下你的完整判读（心率、P 波、有没有其他发现），然后再揭晓。',
-        'Three real ECGs: two sinus bradycardias and one sinus tachycardia. Write down your full read (rate, P waves, anything else) before you reveal.',
-        'Tres ECG reales: dos bradicardias sinusales y una taquicardia sinusal. Escribe tu lectura completa (frecuencia, ondas P, cualquier otro hallazgo) antes de mirar la solución.',
+        '三份真实心电图：两份窦性心动过缓、一份窦性心动过速。先想好你的完整判读（心率、P 波、有没有其他发现），然后再揭晓。',
+        'Three real ECGs: two sinus bradycardias and one sinus tachycardia. Decide your full read (rate, P waves, anything else) before you reveal.',
+        'Tres ECG reales: dos bradicardias sinusales y una taquicardia sinusal. Decide tu lectura completa (frecuencia, ondas P, cualquier otro hallazgo) antes de mirar la solución.',
       ),
     },
     {

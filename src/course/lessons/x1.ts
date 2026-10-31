@@ -25,7 +25,7 @@ const GRID = { layout: '3x4+1' } as const;
 /** The worked tracing, shown again on both sides of the weak/strong contrast: the difference is the report, not the ECG. */
 const WORKED = synth('stemi-anterior', 1802);
 
-/** Write the full report of a real ECG (PTB-XL 4440) — graded field by field against the 12SL values and the labels. */
+/** The full report of a real ECG (PTB-XL 4440), each field picked from four values — graded field by field against the 12SL values and the labels. */
 const realReport: Item = {
   id: 'x1:report-4440',
   family: 'report-real',
@@ -34,9 +34,9 @@ const realReport: Item = {
   seed: 0,
   kind: 'report',
   prompt: l(
-    '真实病例（63 岁女性，申请单无临床信息）。按固定顺序写完整报告：心率、节律、PR、QRS、QTc、电轴，再列出所有发现。用分规自己量，别猜。',
-    'A real case (a 63-year-old woman; the request slip gives no clinical details). Write the full report in the fixed order: rate, rhythm, PR, QRS, QTc, axis, then every finding. Measure with the calipers — do not guess.',
-    'Un caso real (mujer de 63 años; la petición no aporta datos clínicos). Redacta el informe completo en el orden fijo: frecuencia, ritmo, PR, QRS, QTc, eje y después todos los hallazgos. Mide con el compás; no adivines.',
+    '真实病例（63 岁女性，申请单无临床信息）。按固定顺序完成整份报告：心率、节律、PR、QRS、QTc、电轴，再列出所有发现。用分规自己量，别猜。',
+    'A real case (a 63-year-old woman; the request slip gives no clinical details). Build the full report in the fixed order: rate, rhythm, PR, QRS, QTc, axis, then every finding. Measure with the calipers — do not guess.',
+    'Un caso real (mujer de 63 años; la petición no aporta datos clínicos). Completa el informe en el orden fijo: frecuencia, ritmo, PR, QRS, QTc, eje y después todos los hallazgos. Mide con el compás; no adivines.',
   ),
   ecg: real(4440),
   view: { layout: '3x4+1', calipers: true },
@@ -70,7 +70,7 @@ const lesson: Lesson = {
     'Un informe en el que otro lector pueda confiar: un orden fijo (registro → frecuencia → ritmo → intervalos → eje → morfología → ST → hallazgos por gravedad → comparación → urgencia y siguiente paso), la descripción antes del diagnóstico y cada frase localizable en el papel.',
   ),
   objectives: [
-    l('按固定顺序写一份完整的心电图报告，每一项都给出数字或明确的“正常”。', 'Write a complete ECG report in the fixed order, with a number or an explicit "normal" on every line.', 'Redactar un informe electrocardiográfico completo en el orden fijo, con una cifra o un «normal» explícito en cada línea.'),
+    l('按固定顺序给出一份完整的心电图报告，每一项都给出数字或明确的“正常”。', 'Give a complete ECG report in the fixed order, with a number or an explicit "normal" on every line.', 'Elaborar un informe electrocardiográfico completo en el orden fijo, con una cifra o un «normal» explícito en cada línea.'),
     l('区分“描述”与“诊断”层级的措辞，并说明把握程度。', 'Distinguish descriptive from diagnostic wording, and say how sure you are.', 'Distinguir el lenguaje descriptivo del diagnóstico y decir con qué seguridad se afirma.'),
     l('按严重程度排列发现，并以紧急程度与下一步收尾。', 'Order findings by severity and end with urgency and the next action.', 'Ordenar los hallazgos por gravedad y cerrar con la urgencia y el paso siguiente.'),
     l('对照机器判读与旧图，只签署你亲自核实过的内容。', 'Compare with the machine statement and old tracings, and sign only what you verified.', 'Comparar con la lectura automática y los ECG previos, y firmar solo lo verificado.'),
@@ -84,12 +84,12 @@ const lesson: Lesson = {
       ecg: synth('stemi-anterior', 1801),
       view: GRID,
       question: l(
-        '胸痛患者的十二导联。先别看任何提示：写出你完整的报告——从记录质量到“下一步做什么”。写完后数一数：你写了几行？每一行有数字吗？',
-        'A 12-lead of a patient with chest pain. Before any hints: write your complete report — from recording quality to "what happens next". Then count: how many lines did you write, and does each line carry a number?',
-        'Un ECG de 12 derivaciones de un paciente con dolor torácico. Sin pistas: redacta tu informe completo, desde la calidad del registro hasta «qué hacer a continuación». Después cuenta: ¿cuántas líneas has escrito y lleva cada una una cifra?',
+        '胸痛患者的十二导联。先别看任何提示：在心里过一遍你完整的报告——从记录质量到“下一步做什么”。然后数一数：你的报告有几行？每一行有数字吗？',
+        'A 12-lead of a patient with chest pain. Before any hints: build your complete report in your head — from recording quality to "what happens next". Then count: how many lines does it have, and does each line carry a number?',
+        'Un ECG de 12 derivaciones de un paciente con dolor torácico. Sin pistas: construye mentalmente tu informe completo, desde la calidad del registro hasta «qué hacer a continuación». Después cuenta: ¿cuántas líneas tiene y lleva cada una una cifra?',
       ),
       reveal: l(
-        '写完了吗？现在对照固定骨架检查你漏了哪一项：记录 → 心率（心室+心房）→ 节律（起源、P–QRS 关系、规则性）→ PR/QRS/QTc → 电轴 → P/QRS/T 形态 → ST 段 → 按严重程度列发现 → 对比旧图 → **紧急程度与下一步**。这份图：窦性约 84 次/分，间期与电轴正常，**V1–V4 ST 抬高（V3 最高约 4 mm），II、III、aVF 镜像压低**——急性前壁 STEMI，现在就要行动。多数初学者写对了“STEMI”，却漏了最后两行——而真正改变患者结局的恰恰是这两行。',
+        '想好了吗？现在对照固定骨架检查你漏了哪一项：记录 → 心率（心室+心房）→ 节律（起源、P–QRS 关系、规则性）→ PR/QRS/QTc → 电轴 → P/QRS/T 形态 → ST 段 → 按严重程度列发现 → 对比旧图 → **紧急程度与下一步**。这份图：窦性约 84 次/分，间期与电轴正常，**V1–V4 ST 抬高（V3 最高约 4 mm），II、III、aVF 镜像压低**——急性前壁 STEMI，现在就要行动。多数初学者答对了“STEMI”，却漏了最后两行——而真正改变患者结局的恰恰是这两行。',
         'Done? Now check what you missed against the fixed skeleton: recording → rate (ventricular + atrial) → rhythm (origin, P–QRS relationship, regularity) → PR/QRS/QTc → axis → P/QRS/T morphology → ST segments → findings by severity → comparison with old tracings → **urgency and next action**. This tracing: sinus at about 84/min, normal intervals and axis, **ST elevation in V1–V4 (highest, about 4 mm, in V3) with reciprocal depression in II, III and aVF** — an acute anterior STEMI that needs action now. Most beginners get "STEMI" right and miss the last two lines — and those two lines are the ones that change what happens to the patient.',
         '¿Terminaste? Comprueba qué te faltó con el esqueleto fijo: registro → frecuencia (ventricular y auricular) → ritmo (origen, relación P-QRS, regularidad) → PR/QRS/QTc → eje → morfología de P/QRS/T → segmento ST → hallazgos por gravedad → comparación con previos → **urgencia y siguiente paso**. Este ECG: sinusal a unas 84 lpm, intervalos y eje normales, **elevación del ST en V1-V4 (máxima, de unos 4 mm, en V3) con descenso recíproco en II, III y aVF**: un IAMCEST anterior agudo que exige actuar ya. La mayoría de los principiantes aciertan «IAMCEST» y olvidan las dos últimas líneas, que son precisamente las que cambian lo que le pasa al paciente.',
       ),

@@ -58,9 +58,9 @@ const lesson: Lesson = {
       ecg: synth('brugada-type1', 1341, { rate: 84 }),
       view: GRID,
       question: l(
-        '38 岁男性，发热性疾病期间晕厥一次。V1–V2 的 ST 段呈穹隆样抬高，随后落进一个倒置的 T 波。这个图形叫什么？拿到它你**必须**做什么？先写下答案再揭晓。',
+        '38 岁男性，发热性疾病期间晕厥一次。V1–V2 的 ST 段呈穹隆样抬高，随后落进一个倒置的 T 波。这个图形叫什么？拿到它你**必须**做什么？先想好答案再揭晓。',
         'A 38-year-old man fainted once during a febrile illness. In V1–V2 the ST segment rises in a coved shape and falls into a negative T wave. What is this pattern called, and what **must** you do with it? Commit before the reveal.',
-        'Un varón de 38 años sufrió un síncope durante un proceso febril. En V1-V2 el segmento ST se eleva con morfología en cúpula y cae a una onda T negativa. ¿Cómo se llama este patrón y qué **debes** hacer con él? Escribe tu respuesta antes de ver la solución.',
+        'Un varón de 38 años sufrió un síncope durante un proceso febril. En V1-V2 el segmento ST se eleva con morfología en cúpula y cae a una onda T negativa. ¿Cómo se llama este patrón y qué **debes** hacer con él? Decide tu respuesta antes de ver la solución.',
       ),
       reveal: l(
         '穹隆型（下斜型）ST 段抬高 ≥2 mm + T 波倒置，出现在 ≥1 个右胸导联——这是 **1 型 Brugada 图形**，唯一具有诊断意义的一型。自发的 1 型图形本身就足以诊断；发热诱发的还需要加上临床——这位患者有晕厥，两条路都通向 **Brugada 综合征**：这份 12 导联不是诊断的终点，而是起点——**转诊**（评估植入 ICD），积极退热，并从此让这位患者远离钠通道阻滞剂。',

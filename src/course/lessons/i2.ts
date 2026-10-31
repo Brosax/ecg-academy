@@ -47,7 +47,7 @@ const lesson: Lesson = {
     ),
     l('在下壁 STEMI 中用 ST 形态鉴别 RCA 与 LCx。', 'Use the ST pattern to tell RCA from LCx in an inferior STEMI.', 'Distinguir la CD de la Cx en un IAMCEST inferior mediante el patrón del ST.'),
     l('说出何时记录 V3R/V4R 与 V7–V9，并记住其诊断阈值。', 'Say when to record V3R/V4R and V7–V9, and quote their thresholds.', 'Indicar cuándo registrar V3R/V4R y V7-V9 y citar sus umbrales diagnósticos.'),
-    l('为一份 STEMI 写出“区域 + 罪犯血管”并决定下一步。', 'Write "territory + culprit artery" for a STEMI and decide the next step.', 'Escribir «territorio + arteria responsable» de un IAMCEST y decidir el paso siguiente.'),
+    l('为一份 STEMI 说出“区域 + 罪犯血管”并决定下一步。', 'Name "territory + culprit artery" for a STEMI and decide the next step.', 'Nombrar «territorio + arteria responsable» de un IAMCEST y decidir el paso siguiente.'),
   ],
   minutes: 14,
   competencies: ['C8'],
@@ -58,9 +58,9 @@ const lesson: Lesson = {
       ecg: synth('stemi-inferior', 821),
       view: STRIP,
       question: l(
-        '一颗心脏、三支冠状动脉树。先只看这一条 II 导联：正在受伤的是哪面心壁？罪犯血管最可能是哪一支？下一步必须加做哪些导联？先写下你的答案。',
-        'One heart, three coronary trees. From this single lead II: which wall is injuring? Which artery is the most likely culprit? And which leads must you record next? Commit in writing.',
-        'Un corazón, tres árboles coronarios. Con esta única derivación II: ¿qué pared está lesionándose? ¿Cuál es la arteria responsable más probable? ¿Y qué derivaciones hay que registrar a continuación? Anótalo antes de seguir.',
+        '一颗心脏、三支冠状动脉树。先只看这一条 II 导联：正在受伤的是哪面心壁？罪犯血管最可能是哪一支？下一步必须加做哪些导联？先想好你的答案。',
+        'One heart, three coronary trees. From this single lead II: which wall is injuring? Which artery is the most likely culprit? And which leads must you record next? Commit to an answer.',
+        'Un corazón, tres árboles coronarios. Con esta única derivación II: ¿qué pared está lesionándose? ¿Cuál es la arteria responsable más probable? ¿Y qué derivaciones hay que registrar a continuación? Decide tu respuesta antes de seguir.',
       ),
       reveal: l(
         'II 导联正对**下壁**：这里的 ST 抬高提示下壁损伤——单一导联不能诊断 STEMI，要在同组的 III、aVF 上确认（完整 12 导联上它们都抬高，I、aVL 呈镜像压低）。下壁几乎总由 **RCA** 供血（约 90% 的心脏由它发出后降支），**LCx** 是替代罪犯。而每个下壁 STEMI 都必须立即加做**右胸导联 V3R/V4R**——看完下一屏的地图你就知道为什么。',
@@ -303,9 +303,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [16704, 2627, 13868],
       caption: l(
-        '三份真实的陈旧或时期不明的梗死（PTB-XL 标注的是部位，不是急性）：81 岁女性（前壁）、45 岁男性（下壁）、66 岁男性（前侧壁）。这里没有可测量的急性 ST 抬高，所以用 Q 波和 T 波来定位——坏死心肌的 Q 波同样面向它的心壁。为每份写下“区域 + 最可能的血管”，再揭晓。注意：RCA/LCx 的 ST 规则只适用于急性抬高，陈旧下壁梗死只能说“RCA（多数）或 LCx”。',
-        'Three real infarcts, old or of unknown age (the PTB-XL label names the wall, not an acute event): a woman of 81 (anterior), a man of 45 (inferior) and a man of 66 (anterolateral). There is no acute ST elevation to measure, so localise them by Q waves and T waves — the Q waves of dead myocardium face their wall just as the injury current did. Write "territory + most likely artery" for each before revealing. Note: the RCA/LCx ST rules apply only to acute elevation; for an old inferior infarct you can only say "RCA (most) or LCx".',
-        'Tres infartos reales, antiguos o de antigüedad desconocida (la etiqueta de PTB-XL nombra la pared, no un evento agudo): una mujer de 81 años (anterior), un varón de 45 (inferior) y un varón de 66 (anterolateral). No hay elevación aguda del ST que medir, así que localízalos por las ondas Q y T: las Q del miocardio necrosado miran a su pared igual que lo hacía la corriente de lesión. Escribe «territorio + arteria más probable» en cada uno antes de mirar la solución. Ojo: las reglas CD/Cx del ST solo sirven para la elevación aguda; en un infarto inferior antiguo solo puedes decir «CD (la mayoría) o Cx».',
+        '三份真实的陈旧或时期不明的梗死（PTB-XL 标注的是部位，不是急性）：81 岁女性（前壁）、45 岁男性（下壁）、66 岁男性（前侧壁）。这里没有可测量的急性 ST 抬高，所以用 Q 波和 T 波来定位——坏死心肌的 Q 波同样面向它的心壁。为每份定下“区域 + 最可能的血管”，再揭晓。注意：RCA/LCx 的 ST 规则只适用于急性抬高，陈旧下壁梗死只能说“RCA（多数）或 LCx”。',
+        'Three real infarcts, old or of unknown age (the PTB-XL label names the wall, not an acute event): a woman of 81 (anterior), a man of 45 (inferior) and a man of 66 (anterolateral). There is no acute ST elevation to measure, so localise them by Q waves and T waves — the Q waves of dead myocardium face their wall just as the injury current did. Decide "territory + most likely artery" for each before revealing. Note: the RCA/LCx ST rules apply only to acute elevation; for an old inferior infarct you can only say "RCA (most) or LCx".',
+        'Tres infartos reales, antiguos o de antigüedad desconocida (la etiqueta de PTB-XL nombra la pared, no un evento agudo): una mujer de 81 años (anterior), un varón de 45 (inferior) y un varón de 66 (anterolateral). No hay elevación aguda del ST que medir, así que localízalos por las ondas Q y T: las Q del miocardio necrosado miran a su pared igual que lo hacía la corriente de lesión. Decide «territorio + arteria más probable» en cada uno antes de mirar la solución. Ojo: las reglas CD/Cx del ST solo sirven para la elevación aguda; en un infarto inferior antiguo solo puedes decir «CD (la mayoría) o Cx».',
       ),
     },
     {

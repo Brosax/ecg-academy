@@ -56,7 +56,7 @@ const lesson: Lesson = {
       ecg: synth('lae', 1201),
       view: { layout: '3x4+1', highlightLeads: ['II', 'V1'] },
       question: l(
-        '先别读 QRS。只看 II 和 V1 的 P 波：心房在对你说什么？写下你的判断再继续。',
+        '先别读 QRS。只看 II 和 V1 的 P 波：心房在对你说什么？先想好你的判断再继续。',
         'Do not read a single QRS yet. Look only at the P waves in II and V1: what are the atria telling you? Commit to an answer.',
         'No leas todavía ningún QRS. Mira solo las ondas P en II y V1: ¿qué te dicen las aurículas? Decide una respuesta antes de continuar.',
       ),
@@ -175,7 +175,7 @@ const lesson: Lesson = {
           view: { layout: 'single', lead: 'V1', calipers: true },
         },
         {
-          title: l('写下结论', 'Write the statement', 'Escribe la conclusión'),
+          title: l('下结论', 'State the conclusion', 'Formula la conclusión'),
           body: l(
             '时限约 150 ms + 双峰间距 ≥40 ms + V1 终末电势约 0.07 mm·s：**左心房异常**。QRS 完全正常——这个诊断只靠 P 波就成立；而且它还与房颤和卒中风险相关，值得在报告里单写一行。',
             'Duration about 150 ms + interpeak notch >=40 ms + V1 PTF about 0.07 mm·s: **left atrial abnormality**. The QRS is entirely normal — the diagnosis stands on the P alone; and because it also tracks with AF and stroke risk, it deserves its own line in the report.',
@@ -247,9 +247,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [6851, 12984, 15181],
       caption: l(
-        '三份真实心电图：前两份为左心房异常，第三份为右心房异常。先读 II（高度、时限），再读 V1（起始正向、终末负向），写下你的判读，然后再揭晓。',
-        'Three real ECGs: the first two show left atrial abnormality and the third right atrial abnormality. Read II first (height, duration), then V1 (initial positive, terminal negative), write your statements, and only then reveal.',
-        'Tres ECG reales: los dos primeros muestran una anomalía auricular izquierda y el tercero una anomalía auricular derecha. Lee primero II (altura, duración) y después V1 (positividad inicial, negatividad terminal), escribe tus conclusiones y solo entonces mira la solución.',
+        '三份真实心电图：前两份为左心房异常，第三份为右心房异常。先读 II（高度、时限），再读 V1（起始正向、终末负向），先想好你的判读，然后再揭晓。',
+        'Three real ECGs: the first two show left atrial abnormality and the third right atrial abnormality. Read II first (height, duration), then V1 (initial positive, terminal negative), decide your statements, and only then reveal.',
+        'Tres ECG reales: los dos primeros muestran una anomalía auricular izquierda y el tercero una anomalía auricular derecha. Lee primero II (altura, duración) y después V1 (positividad inicial, negatividad terminal), decide tus conclusiones y solo entonces mira la solución.',
       ),
     },
     {

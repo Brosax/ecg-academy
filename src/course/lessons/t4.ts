@@ -61,7 +61,7 @@ const lesson: Lesson = {
       ecg: synth('wpw', 661),
       view: { layout: '3x4+1' },
       question: l(
-        '21 岁竞技运动员，赛前筛查 12 导联心电图，报告写“PR 短、QRS 增宽、起始部顿挫”。这是什么？你又**不能**就此下哪些结论？先写下你的判读。',
+        '21 岁竞技运动员，赛前筛查 12 导联心电图，报告写“PR 短、QRS 增宽、起始部顿挫”。这是什么？你又**不能**就此下哪些结论？先想好你的判读。',
         'A 21-year-old competitive athlete, pre-participation screening 12-lead ECG, reported as "short PR, wide QRS with a slurred onset". What is it — and which conclusions must you **not** draw from it? Commit to your reading first.',
         'Deportista de competición de 21 años, ECG de 12 derivaciones del cribado previo, informado como «PR corto, QRS ancho con inicio empastado». ¿Qué es y qué conclusiones **no** debes sacar de él? Decide tu lectura antes de continuar.',
       ),
@@ -239,9 +239,9 @@ const lesson: Lesson = {
       ecg: synth('preexcited-af', 667),
       view: { layout: 'strip', lead: 'II', calipers: true },
       caption: l(
-        '现在**自己读**：节律规则吗？QRS 多宽？宽度逐搏变吗？用分规找出最短的 RR。写下你的判断，再看下一张卡。',
-        'Now **read it yourself**: is the rhythm regular? How wide is the QRS? Does the width change beat to beat? Use the calipers to find the shortest RR. Write your answer down, then move to the next card.',
-        'Ahora **léela tú**: ¿el ritmo es regular? ¿Cómo de ancho es el QRS? ¿Cambia la anchura de latido en latido? Usa el compás para buscar el RR más corto. Anota tu respuesta y pasa a la siguiente tarjeta.',
+        '现在**自己读**：节律规则吗？QRS 多宽？宽度逐搏变吗？用分规找出最短的 RR。想好你的判断，再看下一张卡。',
+        'Now **read it yourself**: is the rhythm regular? How wide is the QRS? Does the width change beat to beat? Use the calipers to find the shortest RR. Decide your answer, then move to the next card.',
+        'Ahora **léela tú**: ¿el ritmo es regular? ¿Cómo de ancho es el QRS? ¿Cambia la anchura de latido en latido? Usa el compás para buscar el RR más corto. Decide tu respuesta y pasa a la siguiente tarjeta.',
       ),
     },
     {
@@ -270,7 +270,7 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [11889, 2145, 12559],
       caption: l(
-        '三份真实的 WPW 图形（55–63 岁）。先测量 PR、在至少两个导联找 δ波、判断 QRS 宽度，写下你的报告，然后揭晓。注意：三份都是窦性心律，此刻并没有心律失常——所以它们是“图形”，不是“综合征”。预激程度各不相同：有一份的δ波很细微、PR 也不太短——不是每份图形都会量出 <120 ms，要逐导联仔细量。',
+        '三份真实的 WPW 图形（55–63 岁）。先测量 PR、在至少两个导联找 δ波、判断 QRS 宽度，想好你的报告，然后揭晓。注意：三份都是窦性心律，此刻并没有心律失常——所以它们是“图形”，不是“综合征”。预激程度各不相同：有一份的δ波很细微、PR 也不太短——不是每份图形都会量出 <120 ms，要逐导联仔细量。',
         'Three real WPW patterns (ages 55-63). Measure the PR, find the delta in at least two leads, judge the QRS width and commit to your report — then reveal. Note: all three are in sinus rhythm with no arrhythmia at this moment, so they are "patterns", not "syndromes". The degree of pre-excitation differs: in one the delta is subtle and the PR is not very short — not every pattern measures under 120 ms, so measure carefully, lead by lead.',
         'Tres patrones de WPW reales (55-63 años). Mide el PR, busca la delta en al menos dos derivaciones, valora la anchura del QRS y decide tu informe antes de mirar la solución. Fíjate: los tres están en ritmo sinusal y ahora mismo no hay arritmia, así que son «patrones», no «síndromes». El grado de preexcitación varía: en uno la delta es sutil y el PR no es muy corto; no todos los patrones miden menos de 120 ms, así que mide con cuidado, derivación por derivación.',
       ),

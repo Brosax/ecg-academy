@@ -59,7 +59,7 @@ const lesson: Lesson = {
       ecg: synth('sgarbossa', 981, undefined, 'smith'),
       view: { layout: '3x4+1', highlightLeads: ['V2', 'V3', 'V4'] },
       question: l(
-        '73 岁男性，胸痛持续 40 分钟，已知完全性左束支传导阻滞。这份心电图上还能诊断急性心肌梗死吗？先写下你的答案再往下读。',
+        '73 岁男性，胸痛持续 40 分钟，已知完全性左束支传导阻滞。这份心电图上还能诊断急性心肌梗死吗？先想好你的答案再往下读。',
         'A 73-year-old man with 40 minutes of chest pain and known complete LBBB. Can you diagnose an acute myocardial infarction on this ECG at all? Commit to an answer before reading on.',
         'Un varón de 73 años con 40 minutos de dolor torácico y un bloqueo completo de rama izquierda conocido. ¿Se puede diagnosticar un infarto agudo de miocardio en este ECG? Decide tu respuesta antes de continuar.',
       ),
@@ -311,7 +311,7 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [16100, 3990, 17856],
       caption: l(
-        '三份真实心电图：67 岁女性的完全性左束支传导阻滞、76 岁男性的起搏心律、73 岁男性的左心室肥厚。每份先写下判读——LBBB 与起搏图逐条过 Sgarbossa（改良）标准，LVH 图量 ST 对 S 的比例；全部写完再揭晓。',
+        '三份真实心电图：67 岁女性的完全性左束支传导阻滞、76 岁男性的起搏心律、73 岁男性的左心室肥厚。每份先想好判读——LBBB 与起搏图逐条过 Sgarbossa（改良）标准，LVH 图量 ST 对 S 的比例；全部想好再揭晓。',
         'Three real tracings: complete LBBB in a 67-year-old woman, a paced rhythm in a 76-year-old man, and LVH in a 73-year-old man. Commit on each before the reveal — run the (modified) Sgarbossa criteria line by line on the LBBB and paced tracings, and measure the ST-to-S proportion on the LVH one.',
         'Tres ECG reales: bloqueo completo de rama izquierda en una mujer de 67 años, ritmo de marcapasos en un varón de 76 e HVI en un varón de 73. Decide en cada uno antes de mirar la solución: pasa uno a uno los criterios de Sgarbossa (modificados) en el BRI y en el ritmo estimulado, y mide la proporción ST/S en la HVI.',
       ),

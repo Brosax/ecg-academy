@@ -57,9 +57,9 @@ const lesson: Lesson = {
       ecg: synth('arvc', 1301, { rate: 68 }),
       view: GRID,
       question: l(
-        '22 岁竞技运动员，运动时心悸来查：V1–V3 的T波倒置，QRS 不宽，没有胸痛。你的鉴别清单上有哪些？写下前三项，再揭晓。',
-        'A 22-year-old competitive athlete seen for palpitations on exertion: the T waves are inverted in V1–V3, the QRS is not wide, and there is no chest pain. What is on your list? Write your top three, then reveal.',
-        'Un deportista competitivo de 22 años consultado por palpitaciones al esfuerzo: las ondas T están invertidas en V1-V3, el QRS no es ancho y no hay dolor torácico. ¿Qué hay en tu lista? Escribe tus tres primeras opciones y luego mira la solución.',
+        '22 岁竞技运动员，运动时心悸来查：V1–V3 的T波倒置，QRS 不宽，没有胸痛。你的鉴别清单上有哪些？想好前三项，再揭晓。',
+        'A 22-year-old competitive athlete seen for palpitations on exertion: the T waves are inverted in V1–V3, the QRS is not wide, and there is no chest pain. What is on your list? Decide your top three, then reveal.',
+        'Un deportista competitivo de 22 años consultado por palpitaciones al esfuerzo: las ondas T están invertidas en V1-V3, el QRS no es ancho y no hay dolor torácico. ¿Qué hay en tu lista? Decide tus tres primeras opciones y luego mira la solución.',
       ),
       reveal: l(
         'QRS 不宽，所以这不是束支阻滞的**继发性**T波倒置；22 岁也早已过了"幼年型T波"的年龄（运动员只接受到 16 岁）。**致心律失常性右心室心肌病（ARVC）就在这份清单的最上面**：>14 岁、不伴完全性右束支阻滞的 V1–V3（或更广）T波倒置，是它的主要复极标准。再回头看 V1–V3 每个 QRS 的末端：紧贴 QRS 终点之后还有一个向上的小偏折——**ε波**，右心室最晚除极的那点心肌留下的签名。',

@@ -60,7 +60,7 @@ const lesson: Lesson = {
       ecg: synth('lafb', 521, { axis: -60 }),
       view: TWELVE,
       question: l(
-        'QRS 不宽，但 I 导联主波向上、aVF 主波深而向下——平均电轴约 −60°。窦性心律、QRS <120 ms，电轴怎么会被拉到这么左上？先定电轴，再看 aVL，写下你的解释。',
+        'QRS 不宽，但 I 导联主波向上、aVF 主波深而向下——平均电轴约 −60°。窦性心律、QRS <120 ms，电轴怎么会被拉到这么左上？先定电轴，再看 aVL，想好你的解释。',
         'The QRS is not wide, but lead I is dominantly positive and aVF deeply negative — a mean axis of about −60°. Sinus rhythm, QRS <120 ms: how does the axis get pulled that far up and left? Plot the axis, then look at aVL, and commit to an explanation.',
         'El QRS no es ancho, pero la derivación I es claramente positiva y aVF profundamente negativa: un eje medio de unos −60°. Ritmo sinusal, QRS <120 ms: ¿cómo llega el eje a desviarse tanto arriba y a la izquierda? Traza el eje, mira aVL y decide una explicación.',
       ),
@@ -118,7 +118,7 @@ const lesson: Lesson = {
           highlightLeads: ['aVL'],
         },
         {
-          title: l('哪些没变；写出结论', 'What stays intact; write the statement', 'Qué queda intacto; escribe la conclusión'),
+          title: l('哪些没变；下结论', 'What stays intact; state the conclusion', 'Qué queda intacto; formula la conclusión'),
           body: l(
             '初始间隔除极保留：V1 仍有小 r，V5–V6 的间隔 q 还在——这正是与 LBBB 的分界（r6）。胸前导联大致正常，继发性 T 改变轻微。结论：窦性心律，左前分支阻滞。附带一句：LAFB 本身抬高 aVL 的 R——别再拿 R aVL ≥11 mm 去判左室肥厚。',
             'Initial septal activation survives: V1 keeps its small r and V5–V6 keep the septal q — exactly the dividing line from LBBB (r6). The precordial leads are nearly normal and the secondary T changes are slight. Statement: sinus rhythm, left anterior fascicular block. One caveat: LAFB itself raises R in aVL — do not apply R aVL >=11 mm as an LVH criterion here.',
@@ -292,7 +292,7 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [18373, 9188, 3995],
       caption: l(
-        '三份真实心电图：两份左前分支阻滞、一份非特异性室内传导延迟。先量 QRS、用 I 与 aVF 定电轴度数、再看 aVL 与 V1/V6，写下每份的诊断，然后揭晓。',
+        '三份真实心电图：两份左前分支阻滞、一份非特异性室内传导延迟。先量 QRS、用 I 与 aVF 定电轴度数、再看 aVL 与 V1/V6，定下每份的诊断，然后揭晓。',
         'Three real ECGs: two left anterior fascicular blocks and one nonspecific IVCD. Measure the QRS, plot the axis in degrees from I and aVF, check aVL and V1/V6, commit to a diagnosis for each — then reveal.',
         'Tres ECG reales: dos bloqueos fasciculares anteriores izquierdos y un trastorno inespecífico de la conducción intraventricular. Mide el QRS, traza el eje en grados con I y aVF, revisa aVL y V1/V6, decide un diagnóstico para cada uno y después mira la solución.',
       ),

@@ -93,9 +93,9 @@ const lesson: Lesson = {
       kind: 'hook',
       ecg: synth('wpw', 127),
       question: l(
-        '给你一分钟：这份心电图正常吗？写下你的结论和理由。',
-        'You have one minute. Is this ECG normal? Write your verdict and the reason.',
-        'Tienes un minuto. ¿Es normal este ECG? Escribe tu conclusión y el motivo.',
+        '给你一分钟：这份心电图正常吗？想好你的结论和理由。',
+        'You have one minute. Is this ECG normal? Decide your verdict and the reason.',
+        'Tienes un minuto. ¿Es normal este ECG? Decide tu conclusión y el motivo.',
       ),
       reveal: l(
         '不正常。心率和节律没有问题，但 **PR 间期短（约 115 ms，< 120 ms）**，QRS 起始部顿挫（δ 波），QRS 增宽（约 125 ms），V1 的 R 波明显（R ≥ S），II、III、aVF 和 V3–V6 的 T 波倒置：心室预激，T 波倒置是它的继发性复极改变。每次都测 PR 的人在第 4 步就找到原因，用一个诊断解释了所有异常；直接“看形态”的人常把倒置的 T 波读成缺血，把 V1 明显的 R 波读成后壁梗死或右束支阻滞。这正是固定顺序的意义。',
@@ -262,9 +262,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [13683, 21589, 14918],
       caption: l(
-        '三份真实心电图。揭晓标注之前，每份按九步写下一行一句的读图结果，争取每份约三分钟。',
-        'Three real ECGs. Before you reveal the labels, write one line per step for each; aim for about three minutes per ECG.',
-        'Tres ECG reales. Antes de ver las etiquetas, escribe una línea por paso para cada uno; intenta tardar unos tres minutos por ECG.',
+        '三份真实心电图。揭晓标注之前，每份按九步在心里过一遍，每步一句结论，争取每份约三分钟。',
+        'Three real ECGs. Before you reveal the labels, say one line per step for each; aim for about three minutes per ECG.',
+        'Tres ECG reales. Antes de ver las etiquetas, formula una línea por paso para cada uno; intenta tardar unos tres minutos por ECG.',
       ),
     },
     {

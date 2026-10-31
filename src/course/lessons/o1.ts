@@ -248,9 +248,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [16101, 3456],
       caption: l(
-        '两份真实心电图（PTB-XL），标注都与电解质有关。先自己读：找帐篷样T、看P波是否低平、量QRS宽度，或者找ST–T–U的改变；写下你的判断，再揭晓标签。',
-        'Two real tracings (PTB-XL), both labelled as electrolyte-related. Read them yourself first: hunt the tented T, check whether the P is flattening, measure the QRS — or look for the ST–T–U pattern; commit in writing before the reveal.',
-        'Dos trazados reales (PTB-XL), ambos etiquetados como relacionados con electrolitos. Léelos tú primero: busca la T en tienda de campaña, comprueba si la P se aplana, mide el QRS o busca el patrón ST–T–U; comprométete por escrito antes de ver la etiqueta.',
+        '两份真实心电图（PTB-XL），标注都与电解质有关。先自己读：找帐篷样T、看P波是否低平、量QRS宽度，或者找ST–T–U的改变；先想好你的判断，再揭晓标签。',
+        'Two real tracings (PTB-XL), both labelled as electrolyte-related. Read them yourself first: hunt the tented T, check whether the P is flattening, measure the QRS — or look for the ST–T–U pattern; commit to an answer before the reveal.',
+        'Dos trazados reales (PTB-XL), ambos etiquetados como relacionados con electrolitos. Léelos tú primero: busca la T en tienda de campaña, comprueba si la P se aplana, mide el QRS o busca el patrón ST–T–U; decide tu respuesta antes de ver la etiqueta.',
       ),
     },
     {

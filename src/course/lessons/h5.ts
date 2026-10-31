@@ -56,7 +56,7 @@ const lesson: Lesson = {
       ecg: synth('hcm', 1281, { rate: 66 }),
       view: { layout: '3x4+1', highlightLeads: ['I', 'aVL', 'V5', 'V6'] },
       question: l(
-        '24 岁男性，晕厥一次。12 导联上左心室电压很高，而 I、aVL、V5–V6 的 QRS 都以一个醒目的窄 q 波开始（aVL 和 V6 约 3.5 mm 深）。这个 Q 波把鉴别诊断引向哪一边？先写下你的判断再继续。',
+        '24 岁男性，晕厥一次。12 导联上左心室电压很高，而 I、aVL、V5–V6 的 QRS 都以一个醒目的窄 q 波开始（aVL 和 V6 约 3.5 mm 深）。这个 Q 波把鉴别诊断引向哪一边？先想好你的判断再继续。',
         'A 24-year-old man, one syncope. On the 12-lead the LV voltage is high, and in I, aVL and V5–V6 the QRS opens with a conspicuous narrow q (about 3.5 mm deep in aVL and V6). Which way does that Q wave run the differential? Commit before you continue.',
         'Varón de 24 años, un síncope. En el ECG de 12 derivaciones el voltaje del VI es alto y en I, aVL y V5-V6 el QRS empieza con una q estrecha y llamativa (unos 3,5 mm de profundidad en aVL y V6). ¿Hacia qué lado dirige esa onda Q el diagnóstico diferencial? Decídete antes de continuar.',
       ),
@@ -169,7 +169,7 @@ const lesson: Lesson = {
           marks: [{ auto: 'r', lead: 'V6' }, { auto: 's', lead: 'V1' }, { auto: 'r', lead: 'V1' }],
         },
         {
-          title: l('结合背景再下笔', 'Put the context in before you write', 'Añade el contexto antes de escribir'),
+          title: l('结合背景再下结论', 'Put the context in before you conclude', 'Añade el contexto antes de concluir'),
           body: l(
             '24 岁、晕厥、没有梗死史；Q 波深而窄、侧壁分布而没有 ST–T 的演变故事：**间隔肥厚（HCM）**。方向判读：深 + 窄 + 年轻 + 高电压 ⇒ 肥厚；宽 + territory + 年长 + 缺血史 ⇒ 梗死。心电图给出方向，**超声、家系筛查与猝死风险评估**给出诊断和处理。',
             'Age 24, syncope, no infarct history; the Q is deep and narrow, lateral in distribution, with no evolving ST–T story: **septal hypertrophy (HCM)**. The direction rule: deep + narrow + young + voltage => hypertrophy; wide + a territory + older + ischaemic history => infarct. The ECG gives the direction; **echo, family screening and sudden-death risk assessment** give the diagnosis and the management.',
@@ -245,7 +245,7 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [5105, 2415],
       caption: l(
-        '两份真实的室间隔肥厚心电图：56 岁女性和 59 岁女性。先在侧壁和下壁导联找 Q 波，量深与宽，再看电压、P 波和 ST–T，写下"间隔肥厚还是梗死"的判断，然后揭晓。',
+        '两份真实的室间隔肥厚心电图：56 岁女性和 59 岁女性。先在侧壁和下壁导联找 Q 波，量深与宽，再看电压、P 波和 ST–T，定下"间隔肥厚还是梗死"的判断，然后揭晓。',
         'Two real septal-hypertrophy tracings: a 56-year-old and a 59-year-old woman. Hunt the Q waves in the lateral and inferior leads first, measure depth and width, then read the voltage, the P and the ST–T, and commit to "septal hypertrophy or infarct" before the reveal.',
         'Dos trazados reales de hipertrofia septal: una mujer de 56 años y otra de 59. Busca primero las ondas Q en las derivaciones laterales e inferiores, mide profundidad y anchura, lee después el voltaje, la P y el ST-T, y decide entre «hipertrofia septal o infarto» antes de la solución.',
       ),

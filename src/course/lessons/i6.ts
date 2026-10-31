@@ -69,9 +69,9 @@ const lesson: Lesson = {
       ecg: synth('stemi-posterior', 901),
       view: { layout: '3x4+1', highlightLeads: ['V1', 'V2', 'V3'] },
       question: l(
-        '胸痛 40 分钟。先只看 V1–V3：V1–V2 呈水平型 ST 压低（V2 的 T 波直立），向 V3 逐渐消失。这是“前壁心内膜下缺血”吗？写下你的判读和下一步，再看其余导联。',
+        '胸痛 40 分钟。先只看 V1–V3：V1–V2 呈水平型 ST 压低（V2 的 T 波直立），向 V3 逐渐消失。这是“前壁心内膜下缺血”吗？想好你的判读和下一步，再看其余导联。',
         '40 minutes of chest pain. Look at V1–V3 first: V1–V2 show horizontal ST depression (upright T in V2) that fades by V3. Is this "anterior subendocardial ischaemia"? Commit to a reading and a next step, then look at the other leads.',
-        '40 minutos de dolor torácico. Mira primero V1–V3: V1–V2 muestran descenso horizontal del ST (T positiva en V2) que se desvanece en V3. ¿Es «isquemia subendocárdica anterior»? Anota tu interpretación y el paso siguiente, y después mira el resto de derivaciones.',
+        '40 minutos de dolor torácico. Mira primero V1–V3: V1–V2 muestran descenso horizontal del ST (T positiva en V2) que se desvanece en V3. ¿Es «isquemia subendocárdica anterior»? Decide tu interpretación y el paso siguiente, y después mira el resto de derivaciones.',
       ),
       reveal: l(
         '不是。V1–V3 从**前方**看心脏；受伤的是**后壁**，V1–V3 记录到的正是它的**镜像**：水平型 ST 压低、直立的 T 波（以后还会出现增高的 R 波）。这份图上 I、aVL、V5–V6 也抬高——后侧壁 STEMI，罪犯血管多为 LCx。但用手遮住侧壁导联：剩下的 V1–V2 压低，就是孤立性后壁闭塞在 12 导联上**唯一**的样子——这是 STEMI 等危症：加做 V7–V9、按 STEMI 处理，而不是“缺血”。',
@@ -268,9 +268,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [15059, 17772],
       caption: l(
-        '两份真实心电图。81 岁男性：数据库标注为急性（分期 I）下后壁梗死，伴一度房室阻滞——找下壁导联的改变和胸前导联的 ST 压低，判断镜像在哪里、要不要加做 V7–V9。63 岁男性：时期不明的下壁 Q 波梗死，V2 的 R 波偏高——这是慢性的问题：它是否达到陈旧后壁梗死的 Q 波等价标准（R ≥40 ms、R/S ≥1、T 直立）？它不是 STEMI 等危症。先写下答案再揭晓。',
-        'Two real ECGs. A man of 81: labelled an acute (stage I) inferoposterior MI in the database, with first-degree AV block — find the inferior changes and the precordial ST depression, decide where the mirror is and whether V7–V9 are needed. A man of 63: an inferior Q-wave infarct of unknown age with a prominent R in V2 — the chronic question: does it meet the Q-wave equivalent of an old posterior MI (R ≥40 ms, R/S ≥1, upright T)? It is not a STEMI equivalent. Commit in writing, then reveal.',
-        'Dos ECG reales. Un varón de 81 años: etiquetado en la base de datos como infarto inferoposterior agudo (estadio I), con bloqueo AV de primer grado; busca los cambios inferiores y el descenso del ST precordial, decide dónde está la imagen especular y si hacen falta V7–V9. Un varón de 63: infarto inferior con onda Q de antigüedad desconocida y una R prominente en V2; la pregunta crónica: ¿cumple el equivalente de onda Q del infarto posterior antiguo (R ≥40 ms, R/S ≥1, T positiva)? No es un equivalente de IAMCEST. Anota tu respuesta y después mira la solución.',
+        '两份真实心电图。81 岁男性：数据库标注为急性（分期 I）下后壁梗死，伴一度房室阻滞——找下壁导联的改变和胸前导联的 ST 压低，判断镜像在哪里、要不要加做 V7–V9。63 岁男性：时期不明的下壁 Q 波梗死，V2 的 R 波偏高——这是慢性的问题：它是否达到陈旧后壁梗死的 Q 波等价标准（R ≥40 ms、R/S ≥1、T 直立）？它不是 STEMI 等危症。先想好答案再揭晓。',
+        'Two real ECGs. A man of 81: labelled an acute (stage I) inferoposterior MI in the database, with first-degree AV block — find the inferior changes and the precordial ST depression, decide where the mirror is and whether V7–V9 are needed. A man of 63: an inferior Q-wave infarct of unknown age with a prominent R in V2 — the chronic question: does it meet the Q-wave equivalent of an old posterior MI (R ≥40 ms, R/S ≥1, upright T)? It is not a STEMI equivalent. Commit to an answer, then reveal.',
+        'Dos ECG reales. Un varón de 81 años: etiquetado en la base de datos como infarto inferoposterior agudo (estadio I), con bloqueo AV de primer grado; busca los cambios inferiores y el descenso del ST precordial, decide dónde está la imagen especular y si hacen falta V7–V9. Un varón de 63: infarto inferior con onda Q de antigüedad desconocida y una R prominente en V2; la pregunta crónica: ¿cumple el equivalente de onda Q del infarto posterior antiguo (R ≥40 ms, R/S ≥1, T positiva)? No es un equivalente de IAMCEST. Decide tu respuesta y después mira la solución.',
       ),
     },
     {

@@ -67,9 +67,9 @@ const lesson: Lesson = {
       ecg: synth('sinus-arrhythmia', 301, { hrv: 0.15 }),
       view: STRIP,
       question: l(
-        '这条节律条的 RR 间期长短不一。这个节律异常吗？写下你会怎么报告。',
-        'The RR intervals on this strip vary. Is the rhythm abnormal? Write what you would report.',
-        'Los intervalos RR de esta tira varían. ¿Es anormal el ritmo? Escribe qué pondrías en el informe.',
+        '这条节律条的 RR 间期长短不一。这个节律异常吗？想好你会怎么报告。',
+        'The RR intervals on this strip vary. Is the rhythm abnormal? Decide what you would report.',
+        'Los intervalos RR de esta tira varían. ¿Es anormal el ritmo? Decide qué pondrías en el informe.',
       ),
       reveal: l(
         '每个 QRS 前都是**同样的直立 P 波、同样的 PR**。只有 PP 间期在平滑地变长、变短（这里约 730–990 ms）：**窦性心律不齐**，通常与呼吸有关——这是正常现象，年轻人尤其常见。',

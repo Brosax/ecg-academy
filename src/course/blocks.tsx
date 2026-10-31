@@ -169,21 +169,17 @@ export function BlockView(props: BlockViewProps) {
   }
 }
 
-// ── hook: commit a reading before the reveal ──────────────────────────────────────────────────────────────────────
+// ── hook: think first, then reveal (no typing) ─────────────────────────────────────────────────────────────────────
 
-/** Committed hook answers for this session ('' = "I don't know yet"). */
-const hookMemory = new Map<string, string>();
+/** Hooks already revealed in this session. */
+const hookMemory = new Set<string>();
 
 function HookBlock(props: { readonly block: BlockOf<'hook'>; readonly stateKey: string }) {
   const b = props.block;
-  const remembered = hookMemory.get(props.stateKey);
-  const [text, setText] = useState(remembered ?? '');
-  const [committed, setCommitted] = useState(remembered !== undefined);
-  const id = useId();
-  const commit = (answer: string) => {
-    hookMemory.set(props.stateKey, answer);
-    setText(answer);
-    setCommitted(true);
+  const [shown, setShown] = useState(hookMemory.has(props.stateKey));
+  const reveal = () => {
+    hookMemory.add(props.stateKey);
+    setShown(true);
   };
   return (
     <div class="crs-hook">
@@ -192,41 +188,15 @@ function HookBlock(props: { readonly block: BlockOf<'hook'>; readonly stateKey: 
       </div>
       <EcgPanel source={b.ecg} view={b.view} />
       <div class="crs-hook__panel">
-        {!committed ? (
-          <form
-            class="crs-hook__form"
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (text.trim()) commit(text.trim());
-            }}
-          >
-            <label class="crs-label" for={id}>
-              {tco('hookYourRead')}
-            </label>
-            <textarea
-              id={id}
-              class="crs-input"
-              rows={2}
-              maxLength={300}
-              placeholder={tco('hookPlaceholder')}
-              value={text}
-              onInput={(e) => setText(e.currentTarget.value)}
-            />
-            <div class="crs-row">
-              <Button tone="primary" type="submit" icon="check" disabled={text.trim() === ''}>
-                {tco('hookCommit')}
-              </Button>
-              <Button tone="ghost" onClick={() => commit('')}>
-                {tco('hookDontKnow')}
-              </Button>
-              <span class="crs-hint">{tco('hookCommitFirst')}</span>
-            </div>
-          </form>
+        {!shown ? (
+          <div class="crs-row">
+            <Button tone="primary" icon="check" onClick={reveal}>
+              {tco('hookCommit')}
+            </Button>
+            <span class="crs-hint">{tco('hookCommitFirst')}</span>
+          </div>
         ) : (
           <div class="crs-hook__reveal">
-            <p class="crs-hook__mine">
-              <strong>{tco('hookYouSaid')}</strong> {text || <span class="app-muted">{tco('hookNoAnswer')}</span>}
-            </p>
             <Feedback tone="info" title={tco('hookRevealTitle')}>
               <Markup text={lt(b.reveal)} />
             </Feedback>
@@ -669,7 +639,7 @@ function CheckBlock(props: { readonly block: BlockOf<'check'> }) {
   }, [ref]);
   if (!Player || state.status === 'error') return <Unavailable>{tco('checkUnavailable')}</Unavailable>;
   if (state.status === 'loading') return <EcgPlaceholder status="loading" />;
-  return <Player item={state.item} compact collectConfidence />;
+  return <Player item={state.item} compact />;
 }
 
 // ── drill: a mini-drill with a mastery bar ────────────────────────────────────────────────────────────────────────

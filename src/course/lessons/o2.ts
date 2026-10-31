@@ -200,7 +200,7 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [17648, 19926, 15985],
       caption: l(
-        '三份真实心电图：第一份来自一位电解质异常的患者，后两份是**洋地黄效应**——地高辛的勺状 ST 压低不要与钙的 ST 改变混淆。先读图并写下你的判断（QT 长还是短？ST 是等电位延长、缺失，还是下斜型压低？），再揭晓。',
+        '三份真实心电图：第一份来自一位电解质异常的患者，后两份是**洋地黄效应**——地高辛的勺状 ST 压低不要与钙的 ST 改变混淆。先读图并想好你的判断（QT 长还是短？ST 是等电位延长、缺失，还是下斜型压低？），再揭晓。',
         'Three real tracings: the first comes from a patient with an electrolyte disorder, the other two show **digitalis effect** — digoxin’s scooped ST must not be confused with calcium ST changes. Read and commit first (is the QT long or short? Is the ST a long flat line, absent, or downsloping and depressed?), then reveal.',
         'Tres trazados reales: el primero procede de un paciente con un trastorno electrolítico y los otros dos muestran **efecto digitálico**; el descenso del ST «en cuchara» de la digoxina no debe confundirse con los cambios del ST por calcio. Lee y comprométete primero (¿el QT es largo o corto? ¿El ST es una línea llana larga, ausente o descendente y deprimido?) y después mira la solución.',
       ),

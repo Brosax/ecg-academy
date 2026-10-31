@@ -108,9 +108,9 @@ const lesson: Lesson = {
       ecg: synth('digoxin-effect', 1441),
       view: { layout: '3x4+1', highlightLeads: ['V4', 'V5', 'V6'] },
       question: l(
-        '79 岁男性，服用地高辛控制心室率，今天来复诊，没有不适。V4–V6 的 ST 段轻度下垂、T 波低平。这位患者洋地黄中毒了吗？写下你的判断和理由。',
-        'A man of 79 taking digoxin for rate control, at a routine visit and feeling well. In V4–V6 the ST segment sags slightly and the T is low. Is this patient digoxin-toxic? Write your answer and your reason.',
-        'Varón de 79 años que toma digoxina para controlar la frecuencia, en una revisión y sin molestias. En V4–V6 el ST cae ligeramente en cuchara y la T es baja. ¿Está intoxicado? Escribe tu conclusión y tu razón.',
+        '79 岁男性，服用地高辛控制心室率，今天来复诊，没有不适。V4–V6 的 ST 段轻度下垂、T 波低平。这位患者洋地黄中毒了吗？想好你的判断和理由。',
+        'A man of 79 taking digoxin for rate control, at a routine visit and feeling well. In V4–V6 the ST segment sags slightly and the T is low. Is this patient digoxin-toxic? Decide your answer and your reason.',
+        'Varón de 79 años que toma digoxina para controlar la frecuencia, en una revisión y sin molestias. En V4–V6 el ST cae ligeramente en cuchara y la T es baja. ¿Está intoxicado? Decide tu conclusión y tu razón.',
       ),
       reveal: l(
         '不是。这是**洋地黄效应**：治疗浓度下的药物作用。ST 段呈下垂的“鱼钩样”压低，在 R 波高大的导联（这里是 V4–V6、I、II）最清楚，T 波低平，QT 偏短（这里 QTc 约 390 ms），PR 稍长（约 190 ms）。效应只说明“药在起作用”，与中毒无关；中毒要看**节律**，而这里是规整的窦性心律、没有异位搏动、没有阻滞。',
@@ -294,9 +294,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [15985, 7525, 19926],
       caption: l(
-        '三份真实的洋地黄效应心电图（两份为房颤、一份为窦性心动过速）。逐份读：ST 形态和分布、QT 方向、节律——房颤的 RR 是否仍不规则？有没有异位搏动或阻滞？写下“效应”还是“可能中毒”，再揭晓标注。',
-        'Three real tracings labelled digitalis effect (two in AF, one in sinus tachycardia). Read each: ST shape and distribution, QT direction, rhythm — is the RR in AF still irregular? Any ectopy or block? Write "effect" or "possible toxicity", then reveal the labels.',
-        'Tres ECG reales etiquetados como efecto digitálico (dos en FA y uno en taquicardia sinusal). Lee cada uno: forma y distribución del ST, dirección del QT y ritmo: ¿sigue siendo irregular el RR de la FA? ¿Hay extrasístoles o bloqueos? Escribe "efecto" o "posible intoxicación" y después mira las etiquetas.',
+        '三份真实的洋地黄效应心电图（两份为房颤、一份为窦性心动过速）。逐份读：ST 形态和分布、QT 方向、节律——房颤的 RR 是否仍不规则？有没有异位搏动或阻滞？先判定“效应”还是“可能中毒”，再揭晓标注。',
+        'Three real tracings labelled digitalis effect (two in AF, one in sinus tachycardia). Read each: ST shape and distribution, QT direction, rhythm — is the RR in AF still irregular? Any ectopy or block? Decide "effect" or "possible toxicity", then reveal the labels.',
+        'Tres ECG reales etiquetados como efecto digitálico (dos en FA y uno en taquicardia sinusal). Lee cada uno: forma y distribución del ST, dirección del QT y ritmo: ¿sigue siendo irregular el RR de la FA? ¿Hay extrasístoles o bloqueos? Decide "efecto" o "posible intoxicación" y después mira las etiquetas.',
       ),
     },
     {

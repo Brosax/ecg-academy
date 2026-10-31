@@ -774,7 +774,7 @@ export const FAMILY_SPECS: readonly FamilySpec[] = [
     competency: 'C11',
     kind: 'report',
     title: L('真实心电图：结构化报告', 'Real ECGs: structured report', 'ECG reales: informe estructurado'),
-    description: L('先写报告，再看标注。', 'Write the report, then see the labels.', 'Redacta el informe y después mira las etiquetas.'),
+    description: L('先完成报告选项，再看标注。', 'Fill in the report choices, then see the labels.', 'Completa las opciones del informe y después mira las etiquetas.'),
     difficulties: REAL_DIFFICULTIES,
     source: 'real',
     make: makeRealReport(),

@@ -59,9 +59,9 @@ const lesson: Lesson = {
       ecg: synth('pericarditis', 1001),
       view: { layout: '3x4+1', highlightLeads: ['II', 'aVR', 'V5'] },
       question: l(
-        '32 岁男性，尖锐胸痛 2 天，卧位与吸气时加重。多数导联 ST 抬高：是 STEMI 吗？写下决定答案的三个问题，再写下你的答案。',
-        'A 32-year-old man, two days of sharp chest pain, worse lying down and on inspiration. ST elevation in most leads: is this a STEMI? Write the three questions that decide it, then your answer.',
-        'Un varón de 32 años, dos días de dolor torácico punzante, peor en decúbito y con la inspiración. Elevación del ST en la mayoría de las derivaciones: ¿es un IAMCEST? Escribe las tres preguntas que lo deciden y después tu respuesta.',
+        '32 岁男性，尖锐胸痛 2 天，卧位与吸气时加重。多数导联 ST 抬高：是 STEMI 吗？先想好决定答案的三个问题，再定下你的答案。',
+        'A 32-year-old man, two days of sharp chest pain, worse lying down and on inspiration. ST elevation in most leads: is this a STEMI? Name the three questions that decide it, then give your answer.',
+        'Un varón de 32 años, dos días de dolor torácico punzante, peor en decúbito y con la inspiración. Elevación del ST en la mayoría de las derivaciones: ¿es un IAMCEST? Plantea las tres preguntas que lo deciden y después decide tu respuesta.',
       ),
       reveal: l(
         '三问：**分布**——抬高凹面向上，同时覆盖多个供血区（V2–V6 加肢体导联），不对应任何一支冠脉；**PR 段**——II、V4–V6 压低而 aVR 抬高（心房损伤电流的镜像）；**对应性压低**——除 aVR（常见于 V1）外没有。三条都指向**急性心包炎**，不是 STEMI。毫米数本身从来不能诊断 STEMI——先走这三问，这正是本课要练的反射。',
@@ -159,9 +159,9 @@ const lesson: Lesson = {
         {
           title: l('先描述，后诊断', 'Describe first, diagnose later', 'Describe primero, diagnostica después'),
           body: l(
-            '71 岁女性，严重情绪应激后 3 小时胸痛。V3–V6（面向心尖与中外侧壁的导联）ST 凹面向上抬高，I、aVL 和 II 也轻度抬高；V1 不抬高，aVR 压低；QRS 完好——R 波保留，无终末部变形。先把这些写下来，再去套标准。',
-            'A 71-year-old woman, chest pain 3 hours after severe emotional stress. Concave ST elevation in V3–V6 (the leads facing the apex and mid lateral wall), with I, aVL and II slightly up too; V1 is not elevated and aVR is depressed; the QRS is intact — R waves preserved, no terminal distortion. Write all that down before you reach for any criteria.',
-            'Una mujer de 71 años, dolor torácico 3 horas después de un estrés emocional intenso. Elevación cóncava del ST en V3–V6 (las derivaciones que miran el ápex y la pared lateral media), con I, aVL y II también algo elevadas; V1 no se eleva y aVR está descendida; el QRS está intacto: R conservadas, sin distorsión terminal. Anota todo esto antes de aplicar ningún criterio.',
+            '71 岁女性，严重情绪应激后 3 小时胸痛。V3–V6（面向心尖与中外侧壁的导联）ST 凹面向上抬高，I、aVL 和 II 也轻度抬高；V1 不抬高，aVR 压低；QRS 完好——R 波保留，无终末部变形。先把这些描述清楚，再去套标准。',
+            'A 71-year-old woman, chest pain 3 hours after severe emotional stress. Concave ST elevation in V3–V6 (the leads facing the apex and mid lateral wall), with I, aVL and II slightly up too; V1 is not elevated and aVR is depressed; the QRS is intact — R waves preserved, no terminal distortion. Describe all that first, before you reach for any criteria.',
+            'Una mujer de 71 años, dolor torácico 3 horas después de un estrés emocional intenso. Elevación cóncava del ST en V3–V6 (las derivaciones que miran el ápex y la pared lateral media), con I, aVL y II también algo elevadas; V1 no se eleva y aVR está descendida; el QRS está intacto: R conservadas, sin distorsión terminal. Describe todo esto antes de aplicar ningún criterio.',
           ),
           marks: [{ auto: 'st', lead: 'V4' }, { auto: 'st', lead: 'aVR' }],
           highlightLeads: ['V3', 'V4', 'V5', 'V6', 'V1', 'aVR'],
@@ -297,7 +297,7 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [8624, 16899, 5469],
       caption: l(
-        '三份真实心电图：62 岁女性（陈旧室壁瘤图形）、67 岁女性（侧壁 T 波浅倒或低平）、39 岁男性（轻微 ST 抬高）。每份先写下判读再揭晓——走三问（分布、PR 段、对应性），再量 T/QRS 比例、看 T 波的宽窄。',
+        '三份真实心电图：62 岁女性（陈旧室壁瘤图形）、67 岁女性（侧壁 T 波浅倒或低平）、39 岁男性（轻微 ST 抬高）。每份先想好判读再揭晓——走三问（分布、PR 段、对应性），再量 T/QRS 比例、看 T 波的宽窄。',
         'Three real tracings: a 62-year-old woman (an old aneurysm pattern), a 67-year-old woman (shallow lateral T inversion or flattening) and a 39-year-old man (subtle ST elevation). Commit on each before the reveal — run the three questions (distribution, PR segment, reciprocity), then the T/QRS proportion and the width of the T.',
         'Tres ECG reales: una mujer de 62 años (patrón de aneurisma antiguo), una mujer de 67 (T lateral poco negativa o aplanada) y un varón de 39 (elevación sutil del ST). Decide en cada uno antes de la solución: pasa las tres preguntas (distribución, segmento PR, reciprocidad), después el cociente T/QRS y la anchura de la T.',
       ),

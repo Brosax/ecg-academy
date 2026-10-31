@@ -199,9 +199,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [16899, 674, 4318],
       caption: l(
-        '三份真实的 T 波倒置或低平心电图。逐份走名单：QRS 正常吗（继发性 T）？QT 多长？倒置在哪些导联、多深、对称吗？像一支冠状动脉的地图吗？先写下“缺血可能 / 非缺血可能 / 需要更多信息”和理由，再对照标注。',
-        'Three real tracings with inverted or flattened T waves. Run the list on each: is the QRS normal (secondary T)? How long is the QT? Which leads are inverted, how deep, how symmetric? Does it look like the map of one coronary artery? Write "probably ischaemic / probably not / need more information" with your reason first, then compare with the labels.',
-        'Tres ECG reales con T negativas o planas. Recorre la lista en cada uno: ¿es normal el QRS (T secundaria)? ¿Cuánto mide el QT? ¿Qué derivaciones están invertidas, cuánto y con qué simetría? ¿Parece el mapa de una arteria coronaria? Escribe primero "probablemente isquémica / probablemente no / necesito más datos" con tu razón y después compara con las etiquetas.',
+        '三份真实的 T 波倒置或低平心电图。逐份走名单：QRS 正常吗（继发性 T）？QT 多长？倒置在哪些导联、多深、对称吗？像一支冠状动脉的地图吗？先判定“缺血可能 / 非缺血可能 / 需要更多信息”和理由，再对照标注。',
+        'Three real tracings with inverted or flattened T waves. Run the list on each: is the QRS normal (secondary T)? How long is the QT? Which leads are inverted, how deep, how symmetric? Does it look like the map of one coronary artery? Decide "probably ischaemic / probably not / need more information" with your reason first, then compare with the labels.',
+        'Tres ECG reales con T negativas o planas. Recorre la lista en cada uno: ¿es normal el QRS (T secundaria)? ¿Cuánto mide el QT? ¿Qué derivaciones están invertidas, cuánto y con qué simetría? ¿Parece el mapa de una arteria coronaria? Decide primero "probablemente isquémica / probablemente no / necesito más datos" con tu razón y después compara con las etiquetas.',
       ),
     },
     {

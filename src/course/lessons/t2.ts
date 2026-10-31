@@ -59,9 +59,9 @@ const lesson: Lesson = {
       ecg: synth('atrial-fibrillation', 621, { fCoarseness: 0.55, ventricularResponse: 120 }),
       view: STRIP,
       question: l(
-        '73岁男性，气促。没有P波，RR长短不一。你怎么证明这是心房颤动，而不是别的什么？先写下你的判断依据。',
+        '73岁男性，气促。没有P波，RR长短不一。你怎么证明这是心房颤动，而不是别的什么？先想好你的判断依据。',
         'A 73-year-old man, breathless. No P waves, and the RR intervals are all over the place. How do you prove this is atrial fibrillation and not something else? Commit to your evidence before the reveal.',
-        'Un varón de 73 años, disneico. Sin ondas P y con intervalos RR caóticos. ¿Cómo demuestras que es fibrilación auricular y no otra cosa? Anota tus pruebas antes de la solución.',
+        'Un varón de 73 años, disneico. Sin ondas P y con intervalos RR caóticos. ¿Cómo demuestras que es fibrilación auricular y no otra cosa? Ten claras tus pruebas antes de la solución.',
       ),
       reveal: l(
         '两个发现定义房颤：**绝对不齐的RR**（房室传导完好时）加**无可辨认的重复P波**——只有大小、形状、间距都不等的f波。但这只是入口：诊断的记录要求（12导联或≥30秒单导联）、心室率透露的信息，以及五个能装成“房颤”的不规则节律，才是本课要练的东西。',
@@ -169,9 +169,9 @@ const lesson: Lesson = {
         {
           title: l('第一步：量出每个RR', 'Step 1: measure every RR', 'Paso 1: mide cada RR'),
           body: l(
-            '乍一看这也像“绝对不齐”。把分规卡在最短的RR上，沿节律条逐搏记录每个RR。',
-            'At first glance this also passes for "irregularly irregular". Set your calipers to the shortest RR and walk down the strip, writing down every interval.',
-            'A primera vista también pasa por «irregularmente irregular». Ajusta el compás al RR más corto y recorre la tira anotando cada intervalo.',
+            '乍一看这也像“绝对不齐”。把分规卡在最短的RR上，沿节律条逐搏量出每个RR。',
+            'At first glance this also passes for "irregularly irregular". Set your calipers to the shortest RR and walk down the strip, measuring every interval.',
+            'A primera vista también pasa por «irregularmente irregular». Ajusta el compás al RR más corto y recorre la tira midiendo cada intervalo.',
           ),
           marks: [{ auto: 'rr' }],
           view: { layout: 'strip', lead: 'II', calipers: true },

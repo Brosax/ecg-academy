@@ -73,9 +73,9 @@ const lesson: Lesson = {
       ecg: real(19170),
       view: GRID,
       question: l(
-        '门诊流第 1 份：73 岁男性（申请单上没有临床信息）。先别往下翻：按 x1 的固定顺序写出你的完整报告，最后加一行紧急程度。',
-        'Tracing 1 of the clinic stream: a 73-year-old man (the request slip gives no clinical details). Before scrolling: write your complete report in the fixed order from x1, ending with one line of urgency.',
-        'ECG 1 de la serie de consulta: varón de 73 años (la petición no aporta datos clínicos). Antes de continuar: redacta tu informe completo en el orden fijo de x1 y cierra con una línea de urgencia.',
+        '门诊流第 1 份：73 岁男性（申请单上没有临床信息）。先别往下翻：按 x1 的固定顺序想好你的完整报告，最后加一行紧急程度。',
+        'Tracing 1 of the clinic stream: a 73-year-old man (the request slip gives no clinical details). Before scrolling: work out your complete report in the fixed order from x1, ending with one line of urgency.',
+        'ECG 1 de la serie de consulta: varón de 73 años (la petición no aporta datos clínicos). Antes de continuar: elabora mentalmente tu informe completo en el orden fijo de x1 y cierra con una línea de urgencia.',
       ),
       reveal: l(
         '节律：任何导联都找不到规则的 P 波，基线是不规则的心房活动（II 导联局部像扑动波），RR 毫无规律——**不规则的房性快速心律失常，心室率约 110 次/分（未控制）**。心脏科医师同时标了心房扑动与心房颤动：粗颤与不等比下传的房扑在单份图上本就难分，而处理是同一条路——控制心室率、找诱因、评估抗凝。报告不止这一行：QRS 约 116 ms（临界增宽）、电轴约 −14°，ST 段仍要逐组读一遍。紧急程度：**当天评估**（无不稳定表现时）。',
@@ -151,9 +151,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [6271, 2320, 11459],
       caption: l(
-        '门诊流第 3–5 份：60 岁女性、64 岁男性、18 岁女性。这才是门诊的常态。每一份也要写满十行——“大概正常”不是报告；写出数字之后，“正常心电图”才算结论。',
-        'Tracings 3–5: a 60-year-old woman, a 64-year-old man, an 18-year-old woman. This is what most of a clinic looks like. Each still gets all ten lines — "probably normal" is not a report; "normal ECG" becomes a conclusion only once the numbers are written.',
-        'ECG 3 a 5: mujer de 60 años, varón de 64 y mujer de 18. Así es la mayor parte de una consulta. Cada uno lleva igualmente sus diez líneas: «probablemente normal» no es un informe; «ECG normal» solo es una conclusión cuando las cifras están escritas.',
+        '门诊流第 3–5 份：60 岁女性、64 岁男性、18 岁女性。这才是门诊的常态。每一份也要走完十行——“大概正常”不是报告；给出数字之后，“正常心电图”才算结论。',
+        'Tracings 3–5: a 60-year-old woman, a 64-year-old man, an 18-year-old woman. This is what most of a clinic looks like. Each still gets all ten lines — "probably normal" is not a report; "normal ECG" becomes a conclusion only once the numbers are stated.',
+        'ECG 3 a 5: mujer de 60 años, varón de 64 y mujer de 18. Así es la mayor parte de una consulta. Cada uno lleva igualmente sus diez líneas: «probablemente normal» no es un informe; «ECG normal» solo es una conclusión cuando se han dado las cifras.',
       ),
     },
     {
@@ -161,9 +161,9 @@ const lesson: Lesson = {
       ecg: real(2627),
       view: GRID,
       caption: l(
-        '门诊流第 6 份：45 岁男性。节律看起来平淡无奇——**先写下完整报告再往下**：这份图里藏着一个节律步骤永远不会暴露的发现。',
-        'Tracing 6: a 45-year-old man. The rhythm looks unremarkable — **write the full report before scrolling**: this tracing hides a finding the rhythm step will never surface.',
-        'ECG 6: varón de 45 años. El ritmo parece anodino: **escribe el informe completo antes de continuar**; este ECG esconde un hallazgo que el paso del ritmo jamás revelará.',
+        '门诊流第 6 份：45 岁男性。节律看起来平淡无奇——**先想好完整报告再往下**：这份图里藏着一个节律步骤永远不会暴露的发现。',
+        'Tracing 6: a 45-year-old man. The rhythm looks unremarkable — **work out the full report before scrolling**: this tracing hides a finding the rhythm step will never surface.',
+        'ECG 6: varón de 45 años. El ritmo parece anodino: **elabora el informe completo antes de continuar**; este ECG esconde un hallazgo que el paso del ritmo jamás revelará.',
       ),
     },
     {
@@ -233,9 +233,9 @@ const lesson: Lesson = {
       ecg: real(18776),
       view: GRID,
       caption: l(
-        '门诊流第 8 份：35 岁男性。年轻人，胸前导联很高——正常还是疾病？**先写报告，再读下一段**。',
-        'Tracing 8: a 35-year-old man. A young man with very tall chest leads — normal or disease? **Write the report first, then read the next block**.',
-        'ECG 8: varón de 35 años. Un joven con precordiales muy altas: ¿normal o enfermedad? **Escribe primero el informe y luego lee el siguiente bloque**.',
+        '门诊流第 8 份：35 岁男性。年轻人，胸前导联很高——正常还是疾病？**先想好报告，再读下一段**。',
+        'Tracing 8: a 35-year-old man. A young man with very tall chest leads — normal or disease? **Work out the report first, then read the next block**.',
+        'ECG 8: varón de 35 años. Un joven con precordiales muy altas: ¿normal o enfermedad? **Elabora primero el informe y luego lee el siguiente bloque**.',
       ),
     },
     {
@@ -251,9 +251,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [2594, 14874, 6727],
       caption: l(
-        '门诊流第 9–11 份：58 岁女性、47 岁男性、28 岁女性。慢一点的、呼吸起伏的、PR 长一点的——都是“正常或次要”。每份写十行，并给出精确的措辞：心动过缓有几次？PR 超过 200 ms 吗？窦性心律不齐是正常现象，不是发现。',
-        'Tracings 9–11: a 58-year-old woman, a 47-year-old man, a 28-year-old woman. A slower one, one that breathes, one with a longer PR — all "normal or minor". Write ten lines each, with precise wording: how slow is the bradycardia? Is the PR over 200 ms? Sinus arrhythmia is normal, not a finding.',
-        'ECG 9 a 11: mujer de 58 años, varón de 47 y mujer de 28. Uno algo lento, otro que respira, otro con un PR algo largo: todos «normales o menores». Escribe diez líneas para cada uno con palabras precisas: ¿a cuánto va la bradicardia? ¿Supera el PR los 200 ms? La arritmia sinusal es normal, no un hallazgo.',
+        '门诊流第 9–11 份：58 岁女性、47 岁男性、28 岁女性。慢一点的、呼吸起伏的、PR 长一点的——都是“正常或次要”。每份走完十行，并给出精确的措辞：心动过缓有几次？PR 超过 200 ms 吗？窦性心律不齐是正常现象，不是发现。',
+        'Tracings 9–11: a 58-year-old woman, a 47-year-old man, a 28-year-old woman. A slower one, one that breathes, one with a longer PR — all "normal or minor". Work out ten lines each, with precise wording: how slow is the bradycardia? Is the PR over 200 ms? Sinus arrhythmia is normal, not a finding.',
+        'ECG 9 a 11: mujer de 58 años, varón de 47 y mujer de 28. Uno algo lento, otro que respira, otro con un PR algo largo: todos «normales o menores». Elabora diez líneas para cada uno con palabras precisas: ¿a cuánto va la bradicardia? ¿Supera el PR los 200 ms? La arritmia sinusal es normal, no un hallazgo.',
       ),
     },
     { kind: 'check', item: { family: 'spot-real', seed: 3 } },
@@ -264,9 +264,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [2739, 2466, 17835],
       caption: l(
-        '门诊堆里剩下的三份：89 岁男性、73 岁女性、76 岁男性。每份先按十步写完整报告——快而规则的那份，先在 II/III/aVF 找锯齿波并数出心房率；另外两份，找一找提前且形态不同的 P 波，并量一量 PR。写完再揭晓。',
-        'The last three in the clinic pile: an 89-year-old man, a 73-year-old woman, a 76-year-old man. Write the full ten-step report on each first — in the fast, regular one, hunt the sawtooth in II/III/aVF and count the atrial rate; in the other two, look for an early P wave of a different shape, and measure the PR. Reveal only after writing.',
-        'Los tres últimos de la pila de consulta: varón de 89 años, mujer de 73 y varón de 76. Escribe primero el informe completo de diez pasos de cada uno: en el rápido y regular, busca el diente de sierra en II/III/aVF y cuenta la frecuencia auricular; en los otros dos, busca una P precoz de morfología distinta y mide el PR. Mira la solución solo después de escribir.',
+        '门诊堆里剩下的三份：89 岁男性、73 岁女性、76 岁男性。每份先按十步想好完整报告——快而规则的那份，先在 II/III/aVF 找锯齿波并数出心房率；另外两份，找一找提前且形态不同的 P 波，并量一量 PR。想好再揭晓。',
+        'The last three in the clinic pile: an 89-year-old man, a 73-year-old woman, a 76-year-old man. Work out the full ten-step report on each first — in the fast, regular one, hunt the sawtooth in II/III/aVF and count the atrial rate; in the other two, look for an early P wave of a different shape, and measure the PR. Reveal only once you have committed.',
+        'Los tres últimos de la pila de consulta: varón de 89 años, mujer de 73 y varón de 76. Elabora primero el informe completo de diez pasos de cada uno: en el rápido y regular, busca el diente de sierra en II/III/aVF y cuenta la frecuencia auricular; en los otros dos, busca una P precoz de morfología distinta y mide el PR. Mira la solución solo cuando te hayas comprometido.',
       ),
     },
     {

@@ -60,7 +60,7 @@ const lesson: Lesson = {
       ecg: synth('asystole', 721),
       view: STRIP,
       question: l(
-        '心脏骤停。监护导联 II，你有 10 秒：这是什么节律？接下来做的第一件事是什么？写下你的判断再往下看。',
+        '心脏骤停。监护导联 II，你有 10 秒：这是什么节律？接下来做的第一件事是什么？先想好你的判断再往下看。',
         'Cardiac arrest. Monitor lead II, and you have 10 seconds: what is the rhythm, and what is the first thing you do? Commit to your answer before reading on.',
         'Parada cardiaca. Derivación II del monitor y tienes 10 segundos: ¿qué ritmo es y cuál es lo primero que harías? Decide tu respuesta antes de seguir.',
       ),

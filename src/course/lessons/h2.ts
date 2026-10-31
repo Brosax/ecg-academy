@@ -254,9 +254,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [17830, 18776, 14300],
       caption: l(
-        '三份真实的左心室肥厚心电图：76 岁女性、35 岁男性、73 岁女性。先确认定准电压，再逐份跑 Sokolow-Lyon、分性别的 Cornell 和 Peguero-Lo Presti，写下你的报告，然后揭晓。35 岁那位记得：年轻人电压本来就高。',
+        '三份真实的左心室肥厚心电图：76 岁女性、35 岁男性、73 岁女性。先确认定准电压，再逐份跑 Sokolow-Lyon、分性别的 Cornell 和 Peguero-Lo Presti，先想好你的报告，然后揭晓。35 岁那位记得：年轻人电压本来就高。',
         'Three real LVH tracings: a 76-year-old woman, a 35-year-old man and a 73-year-old woman. Check the calibration first, then run Sokolow-Lyon, sex-specific Cornell and Peguero-Lo Presti on each, commit to a report, then reveal. For the 35-year-old remember: voltage runs high in the young anyway.',
-        'Tres trazados reales de HVI: una mujer de 76 años, un varón de 35 y una mujer de 73. Comprueba primero la calibración y aplica después Sokolow-Lyon, Cornell según el sexo y Peguero-Lo Presti en cada uno; escribe tu informe y luego mira la solución. En el varón de 35 recuerda: en jóvenes el voltaje ya es alto de por sí.',
+        'Tres trazados reales de HVI: una mujer de 76 años, un varón de 35 y una mujer de 73. Comprueba primero la calibración y aplica después Sokolow-Lyon, Cornell según el sexo y Peguero-Lo Presti en cada uno; decide tu informe y luego mira la solución. En el varón de 35 recuerda: en jóvenes el voltaje ya es alto de por sí.',
       ),
     },
     {

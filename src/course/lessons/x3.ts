@@ -80,9 +80,9 @@ const lesson: Lesson = {
       ecg: synth('av-block-3', 1841, undefined, 'infra-his'),
       view: STRIP,
       question: l(
-        '复苏湾。监护仪上只有这条节律，你只有十秒——先行动，后读图。一位七十多岁男性，晕厥后送入，意识模糊，收缩压 78。写下你的第一个动作。',
-        'The resus bay. This strip is all you have on the monitor, and you have ten seconds — act now, read later. A man in his seventies, brought in after a syncope, drowsy, systolic pressure 78. Write down your FIRST action.',
-        'Sala de reanimación. Esta tira es todo lo que hay en el monitor y tienes diez segundos: actuar ya, leer después. Un varón de setenta y tantos años, trasladado tras un síncope, somnoliento, tensión sistólica 78. Escribe tu PRIMERA acción.',
+        '复苏湾。监护仪上只有这条节律，你只有十秒——先行动，后读图。一位七十多岁男性，晕厥后送入，意识模糊，收缩压 78。想好你的第一个动作。',
+        'The resus bay. This strip is all you have on the monitor, and you have ten seconds — act now, read later. A man in his seventies, brought in after a syncope, drowsy, systolic pressure 78. Decide your FIRST action.',
+        'Sala de reanimación. Esta tira es todo lo que hay en el monitor y tienes diez segundos: actuar ya, leer después. Un varón de setenta y tantos años, trasladado tras un síncope, somnoliento, tensión sistólica 78. Decide tu PRIMERA acción.',
       ),
       reveal: l(
         '约 34 次/分的**宽大室性逸搏**（QRS 约 150 ms），P 波约 78 次/分，与 QRS 各行其道——希氏束以下的**三度房室传导阻滞**，这个心室率撑不住灌注：不稳定心动过缓，**现在处理箱**。第一个动作不是把图读完，而是：贴上除颤/起搏电极片，启动**经皮起搏**（阿托品对希氏束以下的阻滞基本无效），同时找可逆原因。形态学细节等患者安全之后再读——那是 x1 的十步。',

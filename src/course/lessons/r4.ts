@@ -56,9 +56,9 @@ const lesson: Lesson = {
       ecg: synth('av-block-2-mobitz2', 461),
       view: STRIP,
       question: l(
-        '每个下传搏动的 PR 一模一样，然后一个 P 冷不防被拦下。这和文氏型有什么不同？先写下你的判断再往下看。',
+        '每个下传搏动的 PR 一模一样，然后一个 P 冷不防被拦下。这和文氏型有什么不同？先想好你的判断再往下看。',
         'Every conducted beat has exactly the same PR, then a P is dropped cold. How does this differ from Wenckebach? Commit to an answer before reading on.',
-        'Cada latido conducido tiene exactamente el mismo PR y, de pronto, una P se bloquea sin previo aviso. ¿En qué se diferencia del Wenckebach? Anota tu respuesta antes de continuar.',
+        'Cada latido conducido tiene exactamente el mismo PR y, de pronto, una P se bloquea sin previo aviso. ¿En qué se diferencia del Wenckebach? Decide tu respuesta antes de continuar.',
       ),
       reveal: l(
         '脱落**前后**的 PR 都恒定：没有渐进延长，间歇后第一个 PR 也不缩短——这是 **Mobitz II（二度Ⅱ型）**，4:3 传导。阻滞位于**希氏束以下**，所以 QRS 通常增宽（本例伴右束支阻滞）：患病的组织“全或无”地下传。排除可逆原因后，**无论有无症状，永久起搏都是 I 类指征**——这正是它与文氏型最大的临床差别。',
@@ -295,9 +295,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [19164, 4827, 16151],
       caption: l(
-        '一份二度（89 岁女性，搏动成组）、两份三度（PTB-XL 真实病例：一份窄 QRS 逸搏，一份宽 QRS 慢逸搏）。先判定传导比例与 PR 行为、量 QRS 宽度与逸搏频率、给阻滞定位，**写下结论再揭晓**。',
-        'One second-degree block (a woman of 89, grouped beating) and two complete blocks (real PTB-XL cases: one narrow escape, one slow wide escape). Decide the conduction ratio and PR behaviour, measure QRS width and escape rate, localise the block — **commit in writing before you reveal**.',
-        'Un bloqueo de segundo grado (mujer de 89 años, latidos agrupados) y dos completos (casos reales de PTB-XL: uno con escape estrecho y otro con escape ancho y lento). Decide el ratio de conducción y el comportamiento del PR, mide la anchura del QRS y la frecuencia del escape y localiza el bloqueo: **escribe tu conclusión antes de mirar la solución**.',
+        '一份二度（89 岁女性，搏动成组）、两份三度（PTB-XL 真实病例：一份窄 QRS 逸搏，一份宽 QRS 慢逸搏）。先判定传导比例与 PR 行为、量 QRS 宽度与逸搏频率、给阻滞定位，**先想好结论再揭晓**。',
+        'One second-degree block (a woman of 89, grouped beating) and two complete blocks (real PTB-XL cases: one narrow escape, one slow wide escape). Decide the conduction ratio and PR behaviour, measure QRS width and escape rate, localise the block — **commit to a conclusion before you reveal**.',
+        'Un bloqueo de segundo grado (mujer de 89 años, latidos agrupados) y dos completos (casos reales de PTB-XL: uno con escape estrecho y otro con escape ancho y lento). Decide el ratio de conducción y el comportamiento del PR, mide la anchura del QRS y la frecuencia del escape y localiza el bloqueo: **decide tu conclusión antes de mirar la solución**.',
       ),
     },
     {

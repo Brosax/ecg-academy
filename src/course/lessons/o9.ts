@@ -38,9 +38,9 @@ const lesson: Lesson = {
       ecg: synth('electrode-reversal-la-ra', 1561),
       view: { layout: '3x4+1', highlightLeads: ['I', 'aVR'] },
       question: l(
-        '这份心电图的 I 导联整个倒了过来，aVR 却直立。在写下任何“异常”之前，哪一个检查能解释全部表现？',
-        'Lead I on this ECG is entirely upside down, yet aVR is upright. Before you write down any "abnormality", which single check explains everything?',
-        'La derivación I de este ECG está completamente del revés y, sin embargo, la aVR es positiva. Antes de anotar cualquier «anomalía», ¿qué única comprobación lo explica todo?',
+        '这份心电图的 I 导联整个倒了过来，aVR 却直立。在认定任何“异常”之前，哪一个检查能解释全部表现？',
+        'Lead I on this ECG is entirely upside down, yet aVR is upright. Before you call any "abnormality", which single check explains everything?',
+        'La derivación I de este ECG está completamente del revés y, sin embargo, la aVR es positiva. Antes de dar por buena cualquier «anomalía», ¿qué única comprobación lo explica todo?',
       ),
       reveal: l(
         '**左右上肢电极接反（LA/RA）**。I 导联的 P、QRS、T 全部倒置；II 与 III 互换，aVR 与 aVL 互换；aVF 不变。那“一个检查”就是**看胸前导联**：V1–V6 完全正常、R 波递增如常——问题在记录，不在心脏（这也正是它与右位心的区别）。重新接好电极，再录一份。',
@@ -215,9 +215,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [17860],
       caption: l(
-        'PTB-XL 没有标注电极反接的记录，所以这里练的是反面：一份 I 导联 QRS 以负向为主的真实心电图。是电缆反接吗？查 P 波：上肢反接时 I 导联的 P、QRS、T **一起**倒置，aVR 的 P 变为直立；这里 II 导联 P 直立、aVR 的 P 倒置——电缆没接错，I 导联负向的 QRS 来自心脏本身的右偏电轴。先写下你的结论，再揭晓标签。',
-        'PTB-XL has no record labelled as an electrode reversal, so practise the opposite case: a real ECG whose QRS in lead I is mostly negative. Is it a cable reversal? Check the P wave: with the arm cables swapped, P, QRS and T in lead I invert **together** and the P in aVR turns upright; here the P is upright in II and inverted in aVR — the cables are right, and the negative QRS in lead I is the heart’s own rightward axis. Write your conclusion first, then reveal the label.',
-        'PTB-XL no contiene registros etiquetados como inversión de electrodos, así que practica el caso contrario: un ECG real con el QRS de la derivación I predominantemente negativo. ¿Es una inversión de cables? Mira la onda P: con los cables de los brazos invertidos, la P, el QRS y la T de I se invierten **juntos** y la P de aVR se vuelve positiva; aquí la P es positiva en II y negativa en aVR: los cables están bien y el QRS negativo en I es el eje derecho del propio corazón. Escribe tu conclusión y después mira la etiqueta.',
+        'PTB-XL 没有标注电极反接的记录，所以这里练的是反面：一份 I 导联 QRS 以负向为主的真实心电图。是电缆反接吗？查 P 波：上肢反接时 I 导联的 P、QRS、T **一起**倒置，aVR 的 P 变为直立；这里 II 导联 P 直立、aVR 的 P 倒置——电缆没接错，I 导联负向的 QRS 来自心脏本身的右偏电轴。先想好你的结论，再揭晓标签。',
+        'PTB-XL has no record labelled as an electrode reversal, so practise the opposite case: a real ECG whose QRS in lead I is mostly negative. Is it a cable reversal? Check the P wave: with the arm cables swapped, P, QRS and T in lead I invert **together** and the P in aVR turns upright; here the P is upright in II and inverted in aVR — the cables are right, and the negative QRS in lead I is the heart’s own rightward axis. Decide your conclusion first, then reveal the label.',
+        'PTB-XL no contiene registros etiquetados como inversión de electrodos, así que practica el caso contrario: un ECG real con el QRS de la derivación I predominantemente negativo. ¿Es una inversión de cables? Mira la onda P: con los cables de los brazos invertidos, la P, el QRS y la T de I se invierten **juntos** y la P de aVR se vuelve positiva; aquí la P es positiva en II y negativa en aVR: los cables están bien y el QRS negativo en I es el eje derecho del propio corazón. Decide tu conclusión y después mira la etiqueta.',
       ),
     },
     {

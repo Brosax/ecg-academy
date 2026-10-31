@@ -54,9 +54,9 @@ const lesson: Lesson = {
       ecg: synth('stemi-high-lateral', 881),
       view: { layout: '3x4+1' },
       question: l(
-        '胸痛 40 分钟。I 和 aVL 的 ST 抬高不过 1–2 mm，V1–V2 抬高约 1.5 mm（V3 约 1 mm，V4 不到 1 mm），V5–V6 平坦，III 压低约 3 mm：这是“小区域”，还是一次即将被漏掉的闭塞？写下你的判断和罪犯血管。',
+        '胸痛 40 分钟。I 和 aVL 的 ST 抬高不过 1–2 mm，V1–V2 抬高约 1.5 mm（V3 约 1 mm，V4 不到 1 mm），V5–V6 平坦，III 压低约 3 mm：这是“小区域”，还是一次即将被漏掉的闭塞？想好你的判断和罪犯血管。',
         'Chest pain for 40 minutes. The ST elevation in I and aVL is only 1–2 mm, V1–V2 rise by about 1.5 mm (V3 about 1 mm, V4 under 1 mm), V5–V6 are flat, and III is depressed by about 3 mm: a tiny territory, or an occlusion about to be missed? Commit to a reading and a culprit artery.',
-        'Dolor torácico de 40 minutos. La elevación del ST en I y aVL es de apenas 1-2 mm, V1-V2 suben unos 1,5 mm (V3 alrededor de 1 mm, V4 menos de 1 mm), V5-V6 están planas y III desciende unos 3 mm: ¿un territorio diminuto o una oclusión a punto de pasarse por alto? Anota tu lectura y la arteria responsable.',
+        'Dolor torácico de 40 minutos. La elevación del ST en I y aVL es de apenas 1-2 mm, V1-V2 suben unos 1,5 mm (V3 alrededor de 1 mm, V4 menos de 1 mm), V5-V6 están planas y III desciende unos 3 mm: ¿un territorio diminuto o una oclusión a punto de pasarse por alto? Decide tu lectura y la arteria responsable.',
       ),
       reveal: l(
         '这是**高侧壁 STEMI**：I、aVL 直接面向侧壁的上部。I、aVL 的阈值只有 **1 mm**（V2–V3 那套 2/2.5/1.5 mm 的性别年龄规则在这里不适用），所以振幅小绝不等于危险小。再看 III（± II、aVF）：那里约 3 mm 的 ST **压低**正是这股损伤电流的镜像——它支持闭塞，而不是另一个诊断。V2 也抬高（与 V1 相当），往 V3–V4 逐渐减小，V5–V6 平坦：罪犯血管是**第一对角支（D1，发自 LAD）**——这正是下文的“南非国旗”征；若 V2 不抬高，近段 LCx/钝缘支也有可能。',
@@ -242,9 +242,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [4712, 18198, 15755],
       caption: l(
-        '三份真实的侧壁梗死，都不是急性 STEMI：63 岁男性（侧壁，时期不明）、62 岁男性（前间壁 + 侧壁，数据库分期 II，演变中）、68 岁男性（下侧壁，时期不明）。没有急性 ST 抬高可供决策，就练习定位它们留下的痕迹：I、aVL、V5–V6 的 Q 波或 R 波变小（侧壁的 Q 波最难看出），第二份 V2–V4 的 QS 与深倒 T 波，第三份再加上下壁导联。为每份写下“区域 + 最可能的血管”，再揭晓。',
-        'Three real lateral infarcts, none of them an acute STEMI: a man of 63 (lateral, age unknown), a man of 62 (anteroseptal + lateral, database stage II, evolving) and a man of 68 (inferolateral, age unknown). With no acute ST elevation to act on, practise localising what they leave behind: Q waves or shrunken R waves in I, aVL and V5–V6 (lateral Q waves are the hardest to see), the QS waves and deep T inversion in V2–V4 of the second, and the inferior leads as well in the third. Write "territory + most likely artery" for each, then reveal.',
-        'Tres infartos laterales reales, ninguno un IAMCEST agudo: un varón de 63 años (lateral, antigüedad desconocida), uno de 62 (anteroseptal + lateral, estadio II de la base de datos, en evolución) y uno de 68 (inferolateral, antigüedad desconocida). Sin elevación aguda del ST sobre la que decidir, practica localizar la huella que dejan: ondas Q o R reducidas en I, aVL y V5-V6 (las Q laterales son las más difíciles de ver), las QS y la T negativa profunda en V2-V4 del segundo, y además las inferiores en el tercero. Escribe «territorio + arteria más probable» en cada uno y después mira la solución.',
+        '三份真实的侧壁梗死，都不是急性 STEMI：63 岁男性（侧壁，时期不明）、62 岁男性（前间壁 + 侧壁，数据库分期 II，演变中）、68 岁男性（下侧壁，时期不明）。没有急性 ST 抬高可供决策，就练习定位它们留下的痕迹：I、aVL、V5–V6 的 Q 波或 R 波变小（侧壁的 Q 波最难看出），第二份 V2–V4 的 QS 与深倒 T 波，第三份再加上下壁导联。为每份定下“区域 + 最可能的血管”，再揭晓。',
+        'Three real lateral infarcts, none of them an acute STEMI: a man of 63 (lateral, age unknown), a man of 62 (anteroseptal + lateral, database stage II, evolving) and a man of 68 (inferolateral, age unknown). With no acute ST elevation to act on, practise localising what they leave behind: Q waves or shrunken R waves in I, aVL and V5–V6 (lateral Q waves are the hardest to see), the QS waves and deep T inversion in V2–V4 of the second, and the inferior leads as well in the third. Decide "territory + most likely artery" for each, then reveal.',
+        'Tres infartos laterales reales, ninguno un IAMCEST agudo: un varón de 63 años (lateral, antigüedad desconocida), uno de 62 (anteroseptal + lateral, estadio II de la base de datos, en evolución) y uno de 68 (inferolateral, antigüedad desconocida). Sin elevación aguda del ST sobre la que decidir, practica localizar la huella que dejan: ondas Q o R reducidas en I, aVL y V5-V6 (las Q laterales son las más difíciles de ver), las QS y la T negativa profunda en V2-V4 del segundo, y además las inferiores en el tercero. Decide «territorio + arteria más probable» en cada uno y después mira la solución.',
       ),
     },
     {

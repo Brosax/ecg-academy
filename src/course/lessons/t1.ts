@@ -61,7 +61,7 @@ const lesson: Lesson = {
       ecg: synth('avnrt', 601),
       view: STRIP,
       question: l(
-        '34 岁女性，20 分钟前突发心悸，“像敲鼓一样”，无胸痛、无晕厥。这条 II 导联节律条：节律是什么？你第一步做什么？先写下你的判断。',
+        '34 岁女性，20 分钟前突发心悸，“像敲鼓一样”，无胸痛、无晕厥。这条 II 导联节律条：节律是什么？你第一步做什么？先想好你的判断。',
         'A 34-year-old woman: palpitations that started suddenly 20 minutes ago, "like a drum", no chest pain, no syncope. This lead II strip: what is the rhythm, and what is your first step? Commit to an answer.',
         'Mujer de 34 años: palpitaciones que empezaron de forma brusca hace 20 minutos, "como un tambor", sin dolor torácico ni síncope. En esta tira de derivación II: ¿qué ritmo es y cuál es tu primera actuación? Decide una respuesta antes de continuar.',
       ),

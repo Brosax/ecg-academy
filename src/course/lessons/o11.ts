@@ -246,9 +246,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [3990, 14963, 144],
       caption: l(
-        '三份真实起搏心电图。先对每一份跑一遍三项检查——夺获（钉后有无 P/QRS）、感知（有无碰撞、有无超过下限频率间期的长间歇）、频率（钉到钉等于多少）——写下结论，再揭晓。真实图上的钉样信号常常小得几乎看不见：认不出钉时，类 LBBB 的宽 QRS 加规整的 RR 本身就是起搏的证据。',
+        '三份真实起搏心电图。先对每一份跑一遍三项检查——夺获（钉后有无 P/QRS）、感知（有无碰撞、有无超过下限频率间期的长间歇）、频率（钉到钉等于多少）——先想好结论，再揭晓。真实图上的钉样信号常常小得几乎看不见：认不出钉时，类 LBBB 的宽 QRS 加规整的 RR 本身就是起搏的证据。',
         'Three real paced ECGs. Run the three-function check on each — capture (a P/QRS after every spike?), sensing (any collisions? any pause beyond the lower-rate interval?), rate (what is spike-to-spike?) — commit to your answers, then reveal. On real tracings the spike is often nearly invisible: when you cannot find one, an LBBB-like wide QRS with a regular RR is itself the evidence of pacing.',
-        'Tres ECG reales con marcapasos. Aplica a cada uno la comprobación de tres funciones —captura (¿P/QRS tras cada espícula?), detección (¿choques? ¿alguna pausa más allá del intervalo de la frecuencia límite inferior?) y frecuencia (¿cuánto hay de espícula a espícula?)—, anota tus conclusiones y después mira la solución. En los trazados reales la espícula suele ser casi invisible: cuando no la encuentres, un QRS ancho tipo BRI con RR regular es en sí la prueba de la estimulación.',
+        'Tres ECG reales con marcapasos. Aplica a cada uno la comprobación de tres funciones —captura (¿P/QRS tras cada espícula?), detección (¿choques? ¿alguna pausa más allá del intervalo de la frecuencia límite inferior?) y frecuencia (¿cuánto hay de espícula a espícula?)—, decide tus conclusiones y después mira la solución. En los trazados reales la espícula suele ser casi invisible: cuando no la encuentres, un QRS ancho tipo BRI con RR regular es en sí la prueba de la estimulación.',
       ),
     },
     {

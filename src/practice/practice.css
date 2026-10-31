@@ -449,6 +449,10 @@
   padding: 0;
   border: none;
 }
+/* four numeric values side by side (report fields) */
+.pr-opts--row {
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+}
 .pr-multi legend {
   margin-bottom: 6px;
   color: var(--fg-muted);

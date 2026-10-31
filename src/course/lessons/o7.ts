@@ -77,9 +77,9 @@ const lesson: Lesson = {
       ecg: synth('pericarditis', 1521),
       view: { layout: '3x4+1', highlightLeads: ['II', 'aVR'] },
       question: l(
-        '胸痛、广泛 ST 抬高：是 STEMI 还是心包炎？写下你将在两分钟内检查的特征。',
-        'Chest pain with widespread ST elevation: STEMI or pericarditis? Write down the features you will check in the next two minutes.',
-        'Dolor torácico con elevación difusa del ST: ¿IAMCEST o pericarditis? Escribe las características que comprobarás en los próximos dos minutos.',
+        '胸痛、广泛 ST 抬高：是 STEMI 还是心包炎？想好你将在两分钟内检查的特征。',
+        'Chest pain with widespread ST elevation: STEMI or pericarditis? List the features you will check in the next two minutes.',
+        'Dolor torácico con elevación difusa del ST: ¿IAMCEST o pericarditis? Enumera las características que comprobarás en los próximos dos minutos.',
       ),
       reveal: l(
         '**分布**、**PR 段**和**对应性**。这里 ST 凹面向上，在 I、II、aVF 和 V2–V6 广泛抬高（跨越血管分区），只有 aVR（和 V1）压低；PR 段在 II 和 V4–V6 压低、在 aVR 抬高——这是心包的弥漫性炎症，而不是某一支冠状动脉的地图。',

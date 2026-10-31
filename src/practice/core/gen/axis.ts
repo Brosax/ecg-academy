@@ -77,7 +77,7 @@ export function makeAxis(mode: 'quadrant' | 'degrees') {
       prompt:
         mode === 'quadrant'
           ? L('QRS电轴属于哪一类？', 'Which category is the QRS axis?', '¿En qué categoría está el eje del QRS?')
-          : L('估计额面QRS电轴（度），在轴盘上拖动或输入数值。', 'Estimate the frontal QRS axis in degrees — drag the vector on the dial or type it.', 'Estima el eje frontal del QRS en grados: arrastra el vector en el círculo o escríbelo.'),
+          : L('估计额面QRS电轴（度），选出最接近的数值。', 'Estimate the frontal QRS axis in degrees and pick the closest value.', 'Estima el eje frontal del QRS en grados y elige el valor más cercano.'),
       explanation: join(lines),
       ecg: d.source,
       findings,

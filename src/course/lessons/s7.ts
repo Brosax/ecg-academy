@@ -73,7 +73,7 @@ const lesson: Lesson = {
       kind: 'hook',
       ecg: synth('athlete', 702),
       question: l(
-        '22 岁足球运动员，无症状，参赛前筛查。写下你看到的表现，并说出哪些需要进一步检查。',
+        '22 岁足球运动员，无症状，参赛前筛查。列出你看到的表现，并说出哪些需要进一步检查。',
         'A 22-year-old footballer with no symptoms, pre-participation screening. List what you see and say which findings need further tests.',
         'Futbolista de 22 años, asintomático, en el reconocimiento previo a la competición. Enumera lo que ves y di qué hallazgos requieren más pruebas.',
       ),

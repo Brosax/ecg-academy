@@ -63,7 +63,7 @@ const lesson: Lesson = {
       ecg: synth('torsades', 701),
       view: STRIP_V3,
       question: l(
-        '监护导联 V3：QRS 绕着基线扭转，约 220 次/分。“扭转”本身就够下诊断吗？你要先检查什么？写下你的判读。',
+        '监护导联 V3：QRS 绕着基线扭转，约 220 次/分。“扭转”本身就够下诊断吗？你要先检查什么？想好你的判读。',
         'Monitor lead V3: the QRS complexes twist around the baseline at about 220/min. Is the twisting alone enough for the diagnosis — and what do you check first? Commit to your reading.',
         'Derivación V3 del monitor: los complejos QRS giran alrededor de la línea de base a unos 220 lpm. ¿Basta el giro para el diagnóstico? ¿Qué compruebas primero? Decide tu lectura.',
       ),

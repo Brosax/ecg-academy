@@ -15,14 +15,14 @@ import { lt } from '../../i18n/index';
 import { tp } from '../../i18n/practice';
 import { Badge, Button, Feedback, Icon, Segmented } from '../../ui/index';
 import type { Answer, Grade, Item, ItemPlayerProps } from '../api';
-import { viewOf } from '../core/extras';
+import { decoysOf, viewOf } from '../core/extras';
 import { getFamily } from '../core/families';
-import { callName, finalizeGrade, gradeItem, pickHits } from '../core/grade';
+import { callName, finalizeGrade, gradeItem, pickHits, rateTolerance } from '../core/grade';
+import { numericOptions } from '../core/numchoice';
 import { labLinkOf } from '../core/links';
 import { recordAttempt } from '../core/progress';
 import { fname } from '../core/text';
 import { AXIS_CATEGORIES, axisCategory } from '../core/truth';
-import { AxisDial } from './AxisDial';
 import { ItemEcg } from './ItemEcg';
 import { ReportForm } from './ReportForm';
 
@@ -160,6 +160,20 @@ export function ItemPlayerCore(props: ItemPlayerCoreProps) {
     commit(answer, gradeItem(item, answer));
   };
 
+  // one-pick items (single choice, left/right, axis quadrant) are graded the moment an option is chosen by pointer or
+  // digit key, outside the exam; arrow keys only move the selection (Enter checks), so browsing never commits
+  const instant = mode === 'practice' && !needConf;
+  const committed = useRef(false);
+  const pickNow = (id: string) => {
+    if (locked || committed.current) return;
+    const d = numericChoices(item).length ? { ...draft, text: id } : { ...draft, choice: id };
+    setDraft(d);
+    const a = instant ? toAnswer(item, d) : null;
+    if (!a) return;
+    committed.current = true;
+    commit(a, gradeItem(item, a));
+  };
+
   const set = (patch: Partial<Draft>) => !locked && setDraft((d) => ({ ...d, ...patch }));
 
   // digits 1–9 pick an option (choice, quadrant, compare); Enter checks / goes on
@@ -170,7 +184,7 @@ export function ItemPlayerCore(props: ItemPlayerCoreProps) {
       const opts = optionIds(item);
       const id = opts[Number(e.key) - 1];
       if (id) {
-        set({ choice: id });
+        pickNow(id);
         e.preventDefault();
       }
     }
@@ -247,7 +261,7 @@ export function ItemPlayerCore(props: ItemPlayerCoreProps) {
               check();
             }}
           >
-            <AnswerPanel item={item} draft={draft} set={set} locked={locked} uid={uid} caliper={cal} truthShown={locked && mode !== 'exam'} />
+            <AnswerPanel item={item} draft={draft} set={set} pick={pickNow} locked={locked} uid={uid} caliper={cal} truthShown={locked && mode !== 'exam'} />
             {needConf && !locked && (
               <div class="pr-conf">
                 <span id={`${uid}-conf`}>{tp('confidence')}</span>
@@ -264,7 +278,7 @@ export function ItemPlayerCore(props: ItemPlayerCoreProps) {
                 />
               </div>
             )}
-            {!locked && (
+            {!locked && !(instant && optionIds(item).length > 0 && !draft.choice && !draft.text) && (
               <div class="pr-actions">
                 <Button type="submit" tone="primary" icon="check" disabled={!ready}>
                   {mode === 'exam' ? tp('submitAnswer') : tc('check')}
@@ -329,7 +343,27 @@ function optionIds(item: Item): string[] {
   if (item.kind === 'choice') return item.key.options.map((o) => o.id);
   if (item.kind === 'compare') return ['left', 'right'];
   if (item.kind === 'axis' && item.key.mode === 'quadrant') return [...AXIS_CATEGORIES];
-  return [];
+  return numericChoices(item).map(String);
+}
+
+/** Lowest value worth offering as a distractor (shorter would be implausible on any tracing). */
+const MEASURE_MIN = { p: 40, pr: 80, qrs: 60, qt: 200, rr: 250, pp: 250 } as const;
+
+/** Numeric items are answered by picking one of four values (no typing); [] for other kinds. */
+function numericChoices(item: Item): number[] {
+  const seed = item.id;
+  switch (item.kind) {
+    case 'rate':
+      return numericOptions({ truth: item.key.truthBpm, tol: rateTolerance(item.key.truthBpm, item.key.tolerancePct, item.key.minTolBpm), unit: 1, min: 20, seed });
+    case 'measure':
+      return numericOptions({ truth: item.key.truthMs, tol: item.key.toleranceMs, unit: 10, min: MEASURE_MIN[item.key.what], decoys: decoysOf(item).map((d) => d.ms), seed });
+    case 'qtc':
+      return numericOptions({ truth: item.key.truthMs, tol: item.key.toleranceMs, unit: 10, min: 300, seed });
+    case 'axis':
+      return item.key.mode === 'degrees' ? numericOptions({ truth: item.key.truthDeg, tol: item.key.fullDeg, unit: 5, angle: true, seed }) : [];
+    default:
+      return [];
+  }
 }
 
 // ── answer panels ───────────────────────────────────────────────────────────────────────────────────────────────
@@ -337,20 +371,22 @@ interface PanelProps {
   readonly item: Item;
   readonly draft: Draft;
   readonly set: (p: Partial<Draft>) => void;
+  /** a one-pick answer chosen by pointer (may grade at once) */
+  readonly pick: (id: string) => void;
   readonly locked: boolean;
   readonly uid: string;
   readonly caliper: CaliperMeasure | null;
   readonly truthShown: boolean;
 }
 
-function Radio(props: { readonly name: string; readonly options: readonly { readonly id: string; readonly label: string }[]; readonly value: string | null; readonly onChange: (id: string) => void; readonly locked: boolean; readonly correct?: string | null; readonly label: string; readonly numbered?: boolean }) {
+function Radio(props: { readonly name: string; readonly options: readonly { readonly id: string; readonly label: string }[]; readonly value: string | null; readonly onChange: (id: string) => void; readonly locked: boolean; readonly correct?: string | null; readonly label: string; readonly numbered?: boolean; readonly onPick?: (id: string) => void }) {
   return (
     <div class="pr-opts" role="radiogroup" aria-label={props.label}>
       {props.options.map((o, i) => {
         const on = props.value === o.id;
         const state = props.correct == null ? '' : o.id === props.correct ? 'is-right' : on ? 'is-wrong' : '';
         return (
-          <label class={`pr-opt ${on ? 'is-on' : ''} ${state}`} key={o.id}>
+          <label class={`pr-opt ${on ? 'is-on' : ''} ${state}`} key={o.id} onPointerUp={props.onPick && !props.locked ? () => props.onPick?.(o.id) : undefined}>
             <input type="radio" name={props.name} value={o.id} checked={on} disabled={props.locked} onChange={() => props.onChange(o.id)} />
             {props.numbered !== false && <span class="pr-opt__n tabular" aria-hidden="true">{i + 1}</span>}
             <span class="pr-opt__label">{o.label}</span>
@@ -361,50 +397,49 @@ function Radio(props: { readonly name: string; readonly options: readonly { read
   );
 }
 
-function NumberAnswer(props: PanelProps & { readonly unit: string; readonly fromCaliper?: (m: CaliperMeasure) => number }) {
-  const cal = props.caliper;
-  const calVal = cal && props.fromCaliper ? props.fromCaliper(cal) : null;
+function NumberChoice(props: PanelProps & { readonly unit: string }) {
+  const values = numericChoices(props.item);
+  const sel = parseNum(props.draft.text);
+  // after grading, mark the option nearest the reference as the right one
+  const truth = props.truthShown ? values.reduce((b, v) => (Math.abs(v - truthOf(props.item)) < Math.abs(b - truthOf(props.item)) ? v : b), values[0]) : null;
+  const label = (v: number) => `${props.item.kind === 'axis' && v > 0 ? '+' : ''}${v}${props.item.kind === 'axis' ? '' : ' '}${props.unit}`;
   return (
-    <div class="pr-numans">
-      <label for={`${props.uid}-num`}>{tp('yourAnswer')}</label>
-      <span class="pr-num">
-        <input
-          id={`${props.uid}-num`}
-          class="pr-num__input pr-num__input--lg tabular"
-          type="text"
-          inputMode="decimal"
-          autoComplete="off"
-          value={props.draft.text}
-          disabled={props.locked}
-          onInput={(e) => props.set({ text: (e.currentTarget as HTMLInputElement).value })}
-        />
-        <span class="pr-num__unit">{props.unit}</span>
-      </span>
-      {props.fromCaliper && !props.locked && (
-        <p class="pr-numans__cal">
-          {calVal !== null && Number.isFinite(calVal) ? (
-            <button type="button" class="pr-linkbtn" onClick={() => props.set({ text: String(Math.round(calVal)) })}>
-              <Icon name="calipers" size={14} />
-              {tp('useCaliper', { v: Math.round(Math.abs(cal?.dtMs ?? 0)) })}
-            </button>
-          ) : (
-            <span class="app-muted">{tp('caliperHint')}</span>
-          )}
-        </p>
-      )}
-    </div>
+    <Radio
+      name={`${props.uid}-n`}
+      label={tp('yourAnswer')}
+      options={values.map((v) => ({ id: String(v), label: label(v) }))}
+      value={sel === null ? null : String(sel)}
+      onChange={(id) => props.set({ text: id })}
+      onPick={props.pick}
+      locked={props.locked}
+      correct={truth === null ? null : String(truth)}
+    />
   );
+}
+
+function truthOf(item: Item): number {
+  switch (item.kind) {
+    case 'rate':
+      return item.key.truthBpm;
+    case 'measure':
+    case 'qtc':
+      return item.key.truthMs;
+    case 'axis':
+      return item.key.truthDeg;
+    default:
+      return 0;
+  }
 }
 
 function AnswerPanel(props: PanelProps) {
   const { item, draft, set, locked } = props;
   switch (item.kind) {
     case 'rate':
-      return <NumberAnswer {...props} unit={UNIT.rate()} fromCaliper={(m) => 60000 / Math.max(1, Math.abs(m.dtMs))} />;
+      return <NumberChoice {...props} unit={UNIT.rate()} />;
     case 'measure':
-      return <NumberAnswer {...props} unit={UNIT.measure()} fromCaliper={(m) => Math.abs(m.dtMs)} />;
+      return <NumberChoice {...props} unit={UNIT.measure()} />;
     case 'qtc':
-      return <NumberAnswer {...props} unit={UNIT.qtc()} />;
+      return <NumberChoice {...props} unit={UNIT.qtc()} />;
     case 'axis': {
       if (item.key.mode === 'quadrant') {
         return (
@@ -414,18 +449,13 @@ function AnswerPanel(props: PanelProps) {
             options={AXIS_CATEGORIES.map((c) => ({ id: c, label: lt(FINDINGS[c].name) }))}
             value={draft.choice}
             onChange={(id) => set({ choice: id })}
+            onPick={props.pick}
             locked={locked}
             correct={props.truthShown ? axisCategory(item.key.truthDeg) : null}
           />
         );
       }
-      const v = parseNum(draft.text);
-      return (
-        <div class="pr-axisans">
-          <AxisDial value={v} onChange={(d) => set({ text: String(d) })} disabled={locked} truth={props.truthShown ? item.key.truthDeg : null} />
-          <NumberAnswer {...props} unit={UNIT.axis()} />
-        </div>
-      );
+      return <NumberChoice {...props} unit={UNIT.axis()} />;
     }
     case 'choice':
       return (
@@ -435,6 +465,7 @@ function AnswerPanel(props: PanelProps) {
           options={item.key.options.map((o) => ({ id: o.id, label: lt(o.label) }))}
           value={draft.choice}
           onChange={(id) => set({ choice: id })}
+            onPick={props.pick}
           locked={locked}
           correct={props.truthShown ? item.key.correct : null}
         />
@@ -450,6 +481,7 @@ function AnswerPanel(props: PanelProps) {
           ]}
           value={draft.choice}
           onChange={(id) => set({ choice: id })}
+            onPick={props.pick}
           locked={locked}
           correct={props.truthShown ? item.key.correct : null}
         />

@@ -68,9 +68,9 @@ const lesson: Lesson = {
       kind: 'hook',
       ecg: synth('stemi-inferior', 861),
       question: l(
-        'ST 抬高见于 II、III、aVF：先停一下——在你写下“下壁 STEMI”之前，罪犯血管最可能是哪一支？接下来必须加做哪些导联？写下你的答案。',
-        'ST elevation in II, III and aVF: stop — before you write "inferior STEMI", which artery is the most likely culprit, and which leads must you record next? Commit in writing.',
-        'Elevación del ST en II, III y aVF: para; antes de escribir «IAMCEST inferior», ¿cuál es la arteria responsable más probable y qué derivaciones hay que registrar a continuación? Anótalo.',
+        'ST 抬高见于 II、III、aVF：先停一下——在你认定“下壁 STEMI”之前，罪犯血管最可能是哪一支？接下来必须加做哪些导联？想好你的答案。',
+        'ST elevation in II, III and aVF: stop — before you call it "inferior STEMI", which artery is the most likely culprit, and which leads must you record next? Commit to an answer.',
+        'Elevación del ST en II, III y aVF: para; antes de etiquetarlo como «IAMCEST inferior», ¿cuál es la arteria responsable más probable y qué derivaciones hay que registrar a continuación? Decide tu respuesta.',
       ),
       reveal: l(
         '**ST↑ III > II，且 I、aVL 镜像性压低 ⇒ 最可能是 RCA**。但这个诊断只完成了一半：每个下壁 STEMI 都必须**立即记录右胸导联 V3R/V4R**（右心室受累会改变用药），并查看 V1–V3——压低伴直立 T 波提示后壁延伸，需要 V7–V9。本课把这三个问题练成下壁 STEMI 的固定流程。',
@@ -262,9 +262,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [6683, 15227, 17772],
       caption: l(
-        '三份真实的下壁梗死：69 岁和 52 岁女性（数据库分期 II–III，陈旧）、63 岁男性（时期不明）。它们是 Q 波梗死，不是急性 STEMI：RCA/LCx 的 ST 规则和 V4R 只用于急性抬高，对陈旧梗死没有意义。这里练的是慢性版本：在 II、III、aVF 找病理性 Q 波（≥ 30 ms、≥ 1 mm），并说出“RCA（多数）或 LCx”；第三份再看 V1–V2——R 波偏高、T 波直立，可能是陈旧后壁梗死的 Q 波等价物（第 i6 课）。先写下答案再揭晓。',
-        'Three real inferior infarcts: women of 69 and 52 (database stage II–III, old) and a man of 63 (age unknown). They are Q-wave infarcts, not acute STEMIs: the RCA/LCx ST rules and V4R belong to acute elevation and mean nothing in an old infarct. Practise the chronic version instead: find the pathological Q waves in II, III and aVF (≥ 30 ms and ≥ 1 mm) and name "RCA (most) or LCx"; in the third, look at V1–V2 as well — a prominent R with an upright T can be the Q-wave equivalent of an old posterior infarct (lesson i6). Commit in writing, then reveal.',
-        'Tres infartos inferiores reales: mujeres de 69 y 52 años (estadio II–III de la base de datos, antiguos) y un varón de 63 (antigüedad desconocida). Son infartos con onda Q, no IAMCEST agudos: las reglas CD/Cx del ST y la V4R pertenecen a la elevación aguda y no significan nada en un infarto antiguo. Practica la versión crónica: busca las ondas Q patológicas en II, III y aVF (≥ 30 ms y ≥ 1 mm) y di «CD (la mayoría) o Cx»; en el tercero mira además V1–V2: una R prominente con T positiva puede ser el equivalente de onda Q de un infarto posterior antiguo (lección i6). Anótalo y después mira la solución.',
+        '三份真实的下壁梗死：69 岁和 52 岁女性（数据库分期 II–III，陈旧）、63 岁男性（时期不明）。它们是 Q 波梗死，不是急性 STEMI：RCA/LCx 的 ST 规则和 V4R 只用于急性抬高，对陈旧梗死没有意义。这里练的是慢性版本：在 II、III、aVF 找病理性 Q 波（≥ 30 ms、≥ 1 mm），并说出“RCA（多数）或 LCx”；第三份再看 V1–V2——R 波偏高、T 波直立，可能是陈旧后壁梗死的 Q 波等价物（第 i6 课）。先想好答案再揭晓。',
+        'Three real inferior infarcts: women of 69 and 52 (database stage II–III, old) and a man of 63 (age unknown). They are Q-wave infarcts, not acute STEMIs: the RCA/LCx ST rules and V4R belong to acute elevation and mean nothing in an old infarct. Practise the chronic version instead: find the pathological Q waves in II, III and aVF (≥ 30 ms and ≥ 1 mm) and name "RCA (most) or LCx"; in the third, look at V1–V2 as well — a prominent R with an upright T can be the Q-wave equivalent of an old posterior infarct (lesson i6). Commit to an answer, then reveal.',
+        'Tres infartos inferiores reales: mujeres de 69 y 52 años (estadio II–III de la base de datos, antiguos) y un varón de 63 (antigüedad desconocida). Son infartos con onda Q, no IAMCEST agudos: las reglas CD/Cx del ST y la V4R pertenecen a la elevación aguda y no significan nada en un infarto antiguo. Practica la versión crónica: busca las ondas Q patológicas en II, III y aVF (≥ 30 ms y ≥ 1 mm) y di «CD (la mayoría) o Cx»; en el tercero mira además V1–V2: una R prominente con T positiva puede ser el equivalente de onda Q de un infarto posterior antiguo (lección i6). Decide tu respuesta y después mira la solución.',
       ),
     },
     {

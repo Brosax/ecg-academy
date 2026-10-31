@@ -259,9 +259,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [19164, 861, 959],
       caption: l(
-        '真实病例（PTB-XL）：一份二度房室传导阻滞、一份房性期前收缩、一份三度房室传导阻滞。**先在纸上为每份画出梯形图**——标 P、标 QRS、连线、读斜率——写下你的结论，然后揭晓核对。',
+        '真实病例（PTB-XL）：一份二度房室传导阻滞、一份房性期前收缩、一份三度房室传导阻滞。**先在纸上为每份画出梯形图**——标 P、标 QRS、连线、读斜率——想好你的结论，然后揭晓核对。',
         'Real PTB-XL cases: one second-degree AV block, one PACs, one complete AV block. **Draw the ladder for each on paper first** — mark the P waves, mark the QRS complexes, connect, read the slopes — commit to your reading, then reveal and check.',
-        'Casos reales de PTB-XL: un bloqueo AV de segundo grado, unas extrasístoles auriculares y un bloqueo AV completo. **Dibuja primero en papel el diagrama de cada uno** —marca las P, marca los QRS, conecta, lee las pendientes—, anota tu conclusión y compruébala después con la solución.',
+        'Casos reales de PTB-XL: un bloqueo AV de segundo grado, unas extrasístoles auriculares y un bloqueo AV completo. **Dibuja primero en papel el diagrama de cada uno** —marca las P, marca los QRS, conecta, lee las pendientes—, decide tu conclusión y compruébala después con la solución.',
       ),
     },
     {

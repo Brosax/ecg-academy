@@ -264,9 +264,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [1626, 14918],
       caption: l(
-        '两份真实 12 导联（PTB-XL），都来自 53 岁男性：一份高电压，一份窦性心动过缓（58 次/分）。先假设两位都是坚持训练的耐力运动者，用上面的三档卡逐项归档并**写下结论**，再揭晓。记住分档卡只对训练人群成立——揭晓会讨论：对训练者，孤立的高电压与 ≥30 次/分的心动过缓都落在训练相关档。',
-        'Two real 12-leads (PTB-XL), both from 53-year-old men: one high-voltage, one sinus bradycardia at 58/min. Suppose both are committed endurance athletes: sort every finding with the three-bin card above and **commit in writing**, then reveal. Remember the card applies to trained people — the reveal discusses how, for a trained patient, isolated high voltage and a rate above 30 both land in the training-related bin.',
-        'Dos ECG reales de 12 derivaciones (PTB-XL), ambos de varones de 53 años: uno con alto voltaje y otro con bradicardia sinusal a 58 lpm. Supón que ambos son deportistas de resistencia entrenados: clasifica cada hallazgo con la tarjeta de tres grupos y **escríbelo**, y después mira la solución. Recuerda que la tarjeta vale para personas entrenadas: la solución comenta cómo, en un paciente entrenado, el alto voltaje aislado y una frecuencia por encima de 30 caen en el grupo relacionado con el entrenamiento.',
+        '两份真实 12 导联（PTB-XL），都来自 53 岁男性：一份高电压，一份窦性心动过缓（58 次/分）。先假设两位都是坚持训练的耐力运动者，用上面的三档卡逐项归档并**定下结论**，再揭晓。记住分档卡只对训练人群成立——揭晓会讨论：对训练者，孤立的高电压与 ≥30 次/分的心动过缓都落在训练相关档。',
+        'Two real 12-leads (PTB-XL), both from 53-year-old men: one high-voltage, one sinus bradycardia at 58/min. Suppose both are committed endurance athletes: sort every finding with the three-bin card above and **commit to a verdict**, then reveal. Remember the card applies to trained people — the reveal discusses how, for a trained patient, isolated high voltage and a rate above 30 both land in the training-related bin.',
+        'Dos ECG reales de 12 derivaciones (PTB-XL), ambos de varones de 53 años: uno con alto voltaje y otro con bradicardia sinusal a 58 lpm. Supón que ambos son deportistas de resistencia entrenados: clasifica cada hallazgo con la tarjeta de tres grupos y **comprométete con una conclusión**, y después mira la solución. Recuerda que la tarjeta vale para personas entrenadas: la solución comenta cómo, en un paciente entrenado, el alto voltaje aislado y una frecuencia por encima de 30 caen en el grupo relacionado con el entrenamiento.',
       ),
     },
     {

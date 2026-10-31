@@ -56,9 +56,9 @@ const lesson: Lesson = {
       ecg: synth('ventricular-bigeminy', 481),
       view: STRIP,
       question: l(
-        '这条节律条上每隔一个搏动就有一个宽大、提前的 QRS。它们是什么，和窦性搏动是什么关系？先写下你的判断再往下看。',
+        '这条节律条上每隔一个搏动就有一个宽大、提前的 QRS。它们是什么，和窦性搏动是什么关系？先想好你的判断再往下看。',
         'Every other beat on this strip is wide and early. What are they, and how do they relate to the sinus beats? Commit to an answer before reading on.',
-        'En esta tira, un sí y un no, cada segundo latido es ancho y prematuro. ¿Qué son y cómo se relacionan con los latidos sinusales? Anota tu respuesta antes de continuar.',
+        'En esta tira, un sí y un no, cada segundo latido es ancho y prematuro. ¿Qué son y cómo se relacionan con los latidos sinusales? Decide tu respuesta antes de continuar.',
       ),
       reveal: l(
         '它们是**室性早搏（PVC），呈二联律**：每个窦性搏动后紧跟一个提前、宽大（≥120 ms）、束支阻滞形的 QRS，前面没有相关的 P 波，联律间期固定，随后是**完全性代偿间歇**——窦房结在室早下方照常放电，P 波埋在宽大的 QRS/T 里。宽大而提前的搏动先想室早，但本课要往下走三层：它的三个室上性“表亲”（房早、未下传房早、交界性早搏），以及最危险的替身——差异性传导。',
@@ -207,7 +207,7 @@ const lesson: Lesson = {
           marks: [{ auto: 'blocked-p' }],
         },
         {
-          title: l('写诊断，并和两个假象告别', 'Write the diagnosis, and rule out the two mimics', 'Escribe el diagnóstico y descarta los dos simulacros'),
+          title: l('下诊断，并和两个假象告别', 'Make the diagnosis, and rule out the two mimics', 'Haz el diagnóstico y descarta los dos simulacros'),
           body: l(
             '诊断：**未下传房早**。与二度房室传导阻滞的差别：那里的 P **按时**出现（PP 恒定），这里的关键 P′ 是**提前**的；与窦性停搏的差别：这里能找到那个 P′（它就藏在 T 上）。机制是心房“太早”，不是传导系统“太病”——治疗思路随之不同。',
             'Diagnosis: **blocked PAC**. Unlike second-degree AV block, where the P arrives **on time** (constant PP), the decisive P′ here is **early**; unlike sinus arrest, the P′ can be found — hidden on the T. The mechanism is an atrium firing too early, not a diseased conduction system, and management follows from that.',
@@ -277,9 +277,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [2466, 14276, 13033],
       caption: l(
-        '两份房性、一份室性期前收缩（PTB-XL 真实病例）。逐个分析提前的搏动：P′ 在哪里、QRS 多宽、联律固定吗、间歇是哪一种——**写下结论再揭晓**。',
-        'Two atrial and one ventricular premature beat (real PTB-XL cases). Analyse each early beat: where is the P′, how wide is the QRS, is the coupling fixed, and what kind of pause follows — **commit in writing before you reveal**.',
-        'Dos extrasístoles auriculares y una ventricular (casos reales de PTB-XL). Analiza cada latido precoz: dónde está la P′, qué anchura tiene el QRS, si el acoplamiento es fijo y qué tipo de pausa sigue: **escribe tu conclusión antes de mirar la solución**.',
+        '两份房性、一份室性期前收缩（PTB-XL 真实病例）。逐个分析提前的搏动：P′ 在哪里、QRS 多宽、联律固定吗、间歇是哪一种——**先想好结论再揭晓**。',
+        'Two atrial and one ventricular premature beat (real PTB-XL cases). Analyse each early beat: where is the P′, how wide is the QRS, is the coupling fixed, and what kind of pause follows — **commit to a conclusion before you reveal**.',
+        'Dos extrasístoles auriculares y una ventricular (casos reales de PTB-XL). Analiza cada latido precoz: dónde está la P′, qué anchura tiene el QRS, si el acoplamiento es fijo y qué tipo de pausa sigue: **decide tu conclusión antes de mirar la solución**.',
       ),
     },
     {

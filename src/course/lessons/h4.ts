@@ -55,9 +55,9 @@ const lesson: Lesson = {
       ecg: synth('low-voltage', 1261, { rate: 80 }),
       view: GRID,
       question: l(
-        '这份 12 导联心电图上，所有肢体导联的 QRS 都不足 5 mm，所有胸导联的 QRS 都不足 10 mm。信号去哪儿了？先写下你最先想到的三个病因，再揭晓。',
-        'On this 12-lead ECG every limb-lead QRS is under 5 mm and every precordial QRS is under 10 mm. Where has the signal gone? Write the three causes that come to mind first, then reveal.',
-        'En este ECG de 12 derivaciones, todo QRS de las derivaciones de extremidades mide menos de 5 mm y todo QRS precordial, menos de 10 mm. ¿Adónde se ha ido la señal? Escribe las tres causas que se te ocurran primero y luego mira la solución.',
+        '这份 12 导联心电图上，所有肢体导联的 QRS 都不足 5 mm，所有胸导联的 QRS 都不足 10 mm。信号去哪儿了？先想好你最先想到的三个病因，再揭晓。',
+        'On this 12-lead ECG every limb-lead QRS is under 5 mm and every precordial QRS is under 10 mm. Where has the signal gone? Name the three causes that come to mind first, then reveal.',
+        'En este ECG de 12 derivaciones, todo QRS de las derivaciones de extremidades mide menos de 5 mm y todo QRS precordial, menos de 10 mm. ¿Adónde se ha ido la señal? Nombra las tres causas que se te ocurran primero y luego mira la solución.',
       ),
       reveal: l(
         '两个方向：**能发电的心肌变少**，或者**心肌与电极之间的东西变多**。这就是 QRS 低电压——标准：全部肢体导联 QRS 振幅 <5 mm，和/或全部胸导联 <10 mm。本图本身说不出病因——心率 80 次/分、没有电交替、没有肺型 P 波，只剩“小”这一条线索；所以要背阶梯：心包积液、肥胖、肺气肿（COPD）、甲状腺功能减退、浸润性心肌病（淀粉样变）、严重心肌疾病。低电压从来不是最终诊断——它的价值在于逼你问"为什么"。',
@@ -253,7 +253,7 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [7796, 1599, 10303],
       caption: l(
-        '三份真实的低电压心电图：77 岁男性、62 岁女性、71 岁女性。先确认定准电压，再逐份写下"低电压 + 你最看好的两个病因"（别忘了节律：其中一份不是窦性），然后揭晓。真实病例没有合成图那样干净的答案——病因最终要靠临床与超声去定。',
+        '三份真实的低电压心电图：77 岁男性、62 岁女性、71 岁女性。先确认定准电压，再逐份定下"低电压 + 你最看好的两个病因"（别忘了节律：其中一份不是窦性），然后揭晓。真实病例没有合成图那样干净的答案——病因最终要靠临床与超声去定。',
         'Three real low-voltage tracings: a 77-year-old man, a 62-year-old woman and a 71-year-old woman. Check the calibration first, then commit on each to "low voltage + your top two causes" (and name the rhythm: one of them is not sinus) before the reveal. Real cases do not come with the clean answer of a synthetic strip — the cause is finally settled by the patient and the echo.',
         'Tres trazados reales de bajo voltaje: un varón de 77 años, una mujer de 62 y una de 71. Comprueba primero la calibración y comprométete en cada uno con «bajo voltaje + tus dos causas más probables» (y nombra el ritmo: uno de ellos no es sinusal) antes de la solución. Los casos reales no traen la respuesta limpia de una tira sintética: la causa la acaban decidiendo el paciente y el ecocardiograma.',
       ),

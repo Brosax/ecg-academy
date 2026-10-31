@@ -96,7 +96,7 @@ const lesson: Lesson = {
       kind: 'hook',
       ecg: INFERIOR,
       question: l(
-        'ST 段在哪些导联偏移、偏移多少？先写下导联名称再往下读。',
+        'ST 段在哪些导联偏移、偏移多少？先说出导联名称再往下读。',
         'Where is the ST segment shifted, and by how much? Name the leads before you read on.',
         '¿En qué derivaciones está desplazado el ST y cuánto? Nombra las derivaciones antes de seguir leyendo.',
       ),

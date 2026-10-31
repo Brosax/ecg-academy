@@ -56,7 +56,7 @@ const lesson: Lesson = {
       ecg: synth('atrial-flutter', 641, { conductionRatio: 2 }),
       view: STRIP,
       question: l(
-        '69 岁男性，心悸、活动后气短 3 天。这条 II 导联节律条：规则、约 150 次/分、QRS 窄。第二个心房波在哪里？先写下你的判断，再往下读。',
+        '69 岁男性，心悸、活动后气短 3 天。这条 II 导联节律条：规则、约 150 次/分、QRS 窄。第二个心房波在哪里？先想好你的判断，再往下读。',
         'A 69-year-old man, palpitations and exertional dyspnoea for 3 days. This lead II strip: regular, about 150/min, narrow QRS. Where is the second atrial wave? Commit to an answer before reading on.',
         'Varón de 69 años, palpitaciones y disnea de esfuerzo desde hace 3 días. Esta tira de derivación II: regular, unos 150 lpm, QRS estrecho. ¿Dónde está la segunda onda auricular? Decide una respuesta antes de seguir.',
       ),

@@ -55,7 +55,7 @@ const lesson: Lesson = {
       ecg: synth('av-block-2-mobitz1', 441),
       view: STRIP,
       question: l(
-        '这条节律条上的搏动“成组”出现，每组末尾有一段落空。逐搏测量 PR 与 RR，写下你认为的机制。',
+        '这条节律条上的搏动“成组”出现，每组末尾有一段落空。逐搏测量 PR 与 RR，想好你认为的机制。',
         'The beats on this strip come in groups, with a gap at the end of each group. Measure the PR and the RR beat by beat, then commit to the mechanism.',
         'Los latidos de esta tira aparecen «agrupados», con un vacío al final de cada grupo. Mide el PR y el RR latido a latido y decide cuál es el mecanismo.',
       ),
@@ -273,9 +273,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [20889, 9108, 19164],
       caption: l(
-        '三份真实心电图（PTB-XL）：前两份（75 岁、83 岁男性）为一度房室传导阻滞；第三份（89 岁女性）标注为二度房室传导阻滞，但未注明分型——搏动成组出现。先在 II 导联测 PR；第三份请逐搏追踪每个间歇前后的 PR，自己判断是 Mobitz I 还是 Mobitz II。**写下结论再揭晓**。',
-        'Three real ECGs (PTB-XL): the first two (men aged 75 and 83) are first-degree AV block; the third (a woman of 89) is labelled second-degree AV block without a type — the beats come in groups. Measure the PR in lead II first; on the third, follow the PR beat by beat around each pause and decide for yourself whether it is Mobitz I or Mobitz II. **Commit in writing before you reveal**.',
-        'Tres ECG reales (PTB-XL): los dos primeros (varones de 75 y 83 años) son un bloqueo AV de primer grado; el tercero (mujer de 89) está etiquetado como bloqueo AV de segundo grado sin especificar el tipo: los latidos aparecen agrupados. Mide primero el PR en la derivación II; en el tercero, sigue el PR latido a latido alrededor de cada pausa y decide tú si es un Mobitz I o un Mobitz II. **Escribe tu conclusión antes de mirar la solución**.',
+        '三份真实心电图（PTB-XL）：前两份（75 岁、83 岁男性）为一度房室传导阻滞；第三份（89 岁女性）标注为二度房室传导阻滞，但未注明分型——搏动成组出现。先在 II 导联测 PR；第三份请逐搏追踪每个间歇前后的 PR，自己判断是 Mobitz I 还是 Mobitz II。**先想好结论再揭晓**。',
+        'Three real ECGs (PTB-XL): the first two (men aged 75 and 83) are first-degree AV block; the third (a woman of 89) is labelled second-degree AV block without a type — the beats come in groups. Measure the PR in lead II first; on the third, follow the PR beat by beat around each pause and decide for yourself whether it is Mobitz I or Mobitz II. **Commit to a conclusion before you reveal**.',
+        'Tres ECG reales (PTB-XL): los dos primeros (varones de 75 y 83 años) son un bloqueo AV de primer grado; el tercero (mujer de 89) está etiquetado como bloqueo AV de segundo grado sin especificar el tipo: los latidos aparecen agrupados. Mide primero el PR en la derivación II; en el tercero, sigue el PR latido a latido alrededor de cada pausa y decide tú si es un Mobitz I o un Mobitz II. **Decide tu conclusión antes de mirar la solución**.',
       ),
     },
     {

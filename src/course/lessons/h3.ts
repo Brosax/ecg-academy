@@ -57,9 +57,9 @@ const lesson: Lesson = {
       ecg: synth('rvh', 1241, { rate: 78 }),
       view: { layout: '3x4+1', highlightLeads: ['V1'] },
       question: l(
-        'V1 的 R 波超过了它自己的 S 波。先别写诊断——把"V1 主导 R 波"的鉴别诊断整张清单列出来，然后说出你选哪一个、为什么。',
-        'The R wave in V1 outweighs its own S. Do not write a diagnosis yet — list the whole differential of a dominant R in V1, then say which one you pick and why.',
-        'La onda R en V1 supera a su propia S. No escribas todavía el diagnóstico: enumera todo el diagnóstico diferencial de la R dominante en V1 y di después cuál eliges y por qué.',
+        'V1 的 R 波超过了它自己的 S 波。先别急着下诊断——把"V1 主导 R 波"的鉴别诊断整张清单列出来，然后说出你选哪一个、为什么。',
+        'The R wave in V1 outweighs its own S. Do not commit to a diagnosis yet — list the whole differential of a dominant R in V1, then say which one you pick and why.',
+        'La onda R en V1 supera a su propia S. No te comprometas todavía con un diagnóstico: enumera todo el diagnóstico diferencial de la R dominante en V1 y di después cuál eliges y por qué.',
       ),
       reveal: l(
         '主导 R 波是一段阶梯：**右束支阻滞**（QRS ≥120 ms）、**后壁心肌梗死**（下壁 Q 波、V1 的 T 直立）、**WPW 预激**（δ 波、PR 短）、**肥厚型心肌病**、**右位心/电极错位**、**儿童与年轻人**的正常表现——最后才是右心室肥厚。本图 QRS 不宽、PR 正常、无 δ 波，电轴右偏（约 +120°），V1 呈高 R（约 18 mm，几乎没有 S），S 波一直延续到 V6：**右心室肥厚**。跳过阶梯直接写诊断，是这个图形最常见的错误。',
@@ -264,9 +264,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [2417, 2493, 10279],
       caption: l(
-        '三份标注为右心室肥厚的真实心电图：78 岁女性、57 岁男性、39 岁男性。每份都先走一遍 V1 主导 R 波的阶梯（宽度、PR 与 δ 波、下壁 Q 波、电轴），再量 V1 与 V5–V6 的数值，写下你的报告，然后揭晓。阶梯的第一级在这里真的会拦人：其中两份同时有右束支阻滞（一份完全性、一份不完全性），电压标准要打折扣。',
+        '三份标注为右心室肥厚的真实心电图：78 岁女性、57 岁男性、39 岁男性。每份都先走一遍 V1 主导 R 波的阶梯（宽度、PR 与 δ 波、下壁 Q 波、电轴），再量 V1 与 V5–V6 的数值，先想好你的报告，然后揭晓。阶梯的第一级在这里真的会拦人：其中两份同时有右束支阻滞（一份完全性、一份不完全性），电压标准要打折扣。',
         'Three real tracings labelled RVH: a 78-year-old woman, a 57-year-old man and a 39-year-old man. On each, walk the dominant-R-in-V1 ladder first (width, PR and delta, inferior Q waves, axis), then measure V1 and V5–V6, commit to a report, and only then reveal. The first rung really bites here: two of them also carry right bundle branch block (one complete, one incomplete), which discounts the voltage criteria.',
-        'Tres trazados reales etiquetados como HVD: una mujer de 78 años, un varón de 57 y un varón de 39. En cada uno, recorre primero la escalera de la R dominante en V1 (anchura, PR y delta, ondas Q inferiores, eje), mide después V1 y V5-V6, escribe tu informe y solo entonces mira la solución. El primer peldaño aquí sí frena: dos de ellos tienen además bloqueo de rama derecha (uno completo y otro incompleto), lo que resta valor a los criterios de voltaje.',
+        'Tres trazados reales etiquetados como HVD: una mujer de 78 años, un varón de 57 y un varón de 39. En cada uno, recorre primero la escalera de la R dominante en V1 (anchura, PR y delta, ondas Q inferiores, eje), mide después V1 y V5-V6, decide tu informe y solo entonces mira la solución. El primer peldaño aquí sí frena: dos de ellos tienen además bloqueo de rama derecha (uno completo y otro incompleto), lo que resta valor a los criterios de voltaje.',
       ),
     },
     {

@@ -38,9 +38,9 @@ const lesson: Lesson = {
       ecg: synth('sinus-bradycardia', 201, { rate: 50 }),
       view: STRIP,
       question: l(
-        '不用计算器，10 秒内估出这条 II 导联的心率。先写下你的数字。',
-        'Without a calculator, estimate the heart rate on this lead II strip in 10 seconds. Write your number first.',
-        'Sin calculadora, estima en 10 segundos la frecuencia de esta tira de la derivación II. Escribe primero tu número.',
+        '不用计算器，10 秒内估出这条 II 导联的心率。先想好你的数字。',
+        'Without a calculator, estimate the heart rate on this lead II strip in 10 seconds. Commit to your number first.',
+        'Sin calculadora, estima en 10 segundos la frecuencia de esta tira de la derivación II. Decide primero tu número.',
       ),
       reveal: l(
         '两个 R 波之间约 **6 个大格**：300 ÷ 6 = **50 次/分**。换成时间：RR ≈ 1.2 s = 1200 ms，60 000 ÷ 1200 = 50。每个 QRS 前都有窦性 P 波，心率 < 60 次/分：窦性心动过缓。',

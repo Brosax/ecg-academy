@@ -300,7 +300,7 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [492, 518, 8636],
       caption: l(
-        '三份真实心电图：79 岁女性与 76 岁男性（前间壁梗死：一份数据库分期为陈旧，一份时期不明）、75 岁女性（室壁瘤图形）。每份先写下判断：陈旧梗死、室壁瘤，还是急性事件？V1–V4 的 T/QRS 比值是多少？然后再揭晓。',
+        '三份真实心电图：79 岁女性与 76 岁男性（前间壁梗死：一份数据库分期为陈旧，一份时期不明）、75 岁女性（室壁瘤图形）。每份先定下判断：陈旧梗死、室壁瘤，还是急性事件？V1–V4 的 T/QRS 比值是多少？然后再揭晓。',
         'Three real tracings: a 79-year-old woman and a 76-year-old man (anteroseptal infarcts: one staged old in the database, one of unknown age) and a 75-year-old woman (an aneurysm pattern). For each, commit first: old infarct, aneurysm, or an acute event? What is the T/QRS ratio in V1-V4? Then reveal.',
         'Tres ECG reales: una mujer de 79 años y un varón de 76 (infartos anteroseptales: uno con estadio antiguo en la base de datos y otro de antigüedad desconocida) y una mujer de 75 (patrón de aneurisma). En cada uno, decide antes: ¿infarto antiguo, aneurisma o evento agudo? ¿Cuál es el cociente T/QRS en V1-V4? Después mira la solución.',
       ),

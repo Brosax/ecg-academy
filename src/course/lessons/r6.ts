@@ -57,7 +57,7 @@ const lesson: Lesson = {
       ecg: synth('rbbb', 501),
       view: { layout: '3x4+1' },
       question: l(
-        'QRS 增宽。除极的终末向量去了哪里——是哪条束支阻滞？先看 V1，再看 V6，写下你的判断。',
+        'QRS 增宽。除极的终末向量去了哪里——是哪条束支阻滞？先看 V1，再看 V6，想好你的判断。',
         'The QRS is wide. Where do the late depolarisation forces go — which branch is blocked? Look at V1 first, then V6, and commit to an answer.',
         'El QRS es ancho. ¿Hacia dónde van las fuerzas finales de despolarización y qué rama está bloqueada? Mira primero V1 y luego V6, y decide una respuesta.',
       ),
@@ -215,7 +215,7 @@ const lesson: Lesson = {
           highlightLeads: ['V1', 'V6'],
         },
         {
-          title: l('电轴不是判据；写出结论', 'The axis is not a criterion; write the statement', 'El eje no es criterio; escribe la conclusión'),
+          title: l('电轴不是判据；下结论', 'The axis is not a criterion; state the conclusion', 'El eje no es criterio; formula la conclusión'),
           body: l(
             'LBBB 可使电轴右偏、左偏或上偏，甚至随心率变化——所以电轴不属于 LBBB 的诊断标准，只照实描述。结论：窦性心律，完全性左束支传导阻滞，继发性 ST-T 改变。',
             'LBBB may shift the frontal axis rightward, leftward or superiorly, sometimes with rate — so the axis is not part of the LBBB criteria; report it descriptively. Statement: sinus rhythm, complete left bundle branch block, secondary ST-T changes.',
@@ -296,7 +296,7 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [6282, 11103, 16100],
       caption: l(
-        '三份真实心电图：两份 RBBB、一份 LBBB。先量 QRS（全局），看 V1 与 V6，写下“哪条束支、完全性还是不完全性”，然后揭晓。',
+        '三份真实心电图：两份 RBBB、一份 LBBB。先量 QRS（全局），看 V1 与 V6，定下“哪条束支、完全性还是不完全性”，然后揭晓。',
         'Three real ECGs: two RBBBs and one LBBB. Measure the QRS (globally), look at V1 and V6, commit to “which branch, complete or incomplete” — then reveal.',
         'Tres ECG reales: dos BRD y un BRI. Mide el QRS (de forma global), mira V1 y V6, decide “qué rama, completo o incompleto” y después mira la solución.',
       ),

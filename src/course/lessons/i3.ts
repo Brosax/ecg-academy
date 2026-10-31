@@ -53,9 +53,9 @@ const lesson: Lesson = {
       kind: 'hook',
       ecg: synth('stemi-anterolateral', 841),
       question: l(
-        '61岁男性，胸痛50分钟：V3–V6 与 I/aVL 的 ST 段一致抬高，III、aVF 压低。有多大范围的心肌处于危险之中？闭塞位于动脉的哪一段？先写下你的判断再继续。',
-        'Man, 61, chest pain for 50 minutes: ST elevation together across V3–V6 and I/aVL, with depression in III and aVF. How much myocardium is at risk, and where along the artery is the occlusion? Commit in writing before you continue.',
-        'Varón de 61 años, dolor torácico de 50 minutos: elevación del ST en V3–V6 e I/aVL a la vez, con descenso en III y aVF. ¿Cuánto miocardio está en riesgo y en qué punto de la arteria está la oclusión? Anótalo antes de continuar.',
+        '61岁男性，胸痛50分钟：V3–V6 与 I/aVL 的 ST 段一致抬高，III、aVF 压低。有多大范围的心肌处于危险之中？闭塞位于动脉的哪一段？先想好你的判断再继续。',
+        'Man, 61, chest pain for 50 minutes: ST elevation together across V3–V6 and I/aVL, with depression in III and aVF. How much myocardium is at risk, and where along the artery is the occlusion? Commit to an answer before you continue.',
+        'Varón de 61 años, dolor torácico de 50 minutos: elevación del ST en V3–V6 e I/aVL a la vez, con descenso en III y aVF. ¿Cuánto miocardio está en riesgo y en qué punto de la arteria está la oclusión? Decide tu respuesta antes de continuar.',
       ),
       reveal: l(
         'V3–V6 加 I、aVL——**前侧壁**：左心室前壁与侧壁一起受累，是 **LAD 加粗大对角支**的领地；I/aVL 抬高伴 III 压低（III > II）提示闭塞在第一对角支（D1）**之前**。危险心肌很大——只比 V1–V6 全部抬高的广泛前壁小一点。前壁闭塞不是一个诊断而是一族诊断：本课按导联范围给家族成员命名，用几个线索估计闭塞水平，并认识最早的信号——超急性期T波。',
@@ -255,9 +255,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [15319, 16195, 5862],
       caption: l(
-        '三份真实的前壁梗死（70、73、72 岁女性），数据库分期为 II–III 或 III：陈旧或演变中的梗死，不是急性 STEMI。没有可供决策的急性 ST 抬高，就用 Q 波（QS、R 波丢失）和 T 波定出范围：家族里的哪一员、哪支动脉？同一套导联组既能定位急性闭塞，也能定位它留下的瘢痕——但时期决定处理：陈旧梗死不是启动导管室的理由。先写下答案再揭晓。',
-        'Three real anterior infarcts (women of 70, 73 and 72) staged II–III or III in the database: old or evolving infarcts, not acute STEMIs. With no acute ST elevation to act on, map the extent from the Q waves (QS, lost R) and the T waves: which member of the family, which artery? The same lead groups that localise an acute occlusion localise the scar it leaves — but the stage decides management: an old infarct is not a cath-lab activation. Commit in writing, then reveal.',
-        'Tres infartos anteriores reales (mujeres de 70, 73 y 72 años) con estadio II–III o III en la base de datos: infartos antiguos o en evolución, no IAMCEST agudos. Sin elevación aguda del ST sobre la que decidir, delimita la extensión por las ondas Q (QS, pérdida de R) y las T: ¿qué miembro de la familia, qué arteria? Los mismos grupos de derivaciones que localizan una oclusión aguda localizan la cicatriz que deja, pero el estadio decide el manejo: un infarto antiguo no es una activación de hemodinámica. Anota tu respuesta y después mira la solución.',
+        '三份真实的前壁梗死（70、73、72 岁女性），数据库分期为 II–III 或 III：陈旧或演变中的梗死，不是急性 STEMI。没有可供决策的急性 ST 抬高，就用 Q 波（QS、R 波丢失）和 T 波定出范围：家族里的哪一员、哪支动脉？同一套导联组既能定位急性闭塞，也能定位它留下的瘢痕——但时期决定处理：陈旧梗死不是启动导管室的理由。先想好答案再揭晓。',
+        'Three real anterior infarcts (women of 70, 73 and 72) staged II–III or III in the database: old or evolving infarcts, not acute STEMIs. With no acute ST elevation to act on, map the extent from the Q waves (QS, lost R) and the T waves: which member of the family, which artery? The same lead groups that localise an acute occlusion localise the scar it leaves — but the stage decides management: an old infarct is not a cath-lab activation. Commit to an answer, then reveal.',
+        'Tres infartos anteriores reales (mujeres de 70, 73 y 72 años) con estadio II–III o III en la base de datos: infartos antiguos o en evolución, no IAMCEST agudos. Sin elevación aguda del ST sobre la que decidir, delimita la extensión por las ondas Q (QS, pérdida de R) y las T: ¿qué miembro de la familia, qué arteria? Los mismos grupos de derivaciones que localizan una oclusión aguda localizan la cicatriz que deja, pero el estadio decide el manejo: un infarto antiguo no es una activación de hemodinámica. Decide tu respuesta y después mira la solución.',
       ),
     },
     {

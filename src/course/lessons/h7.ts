@@ -58,9 +58,9 @@ const lesson: Lesson = {
       ecg: synth('long-qt', 1321, { rate: 60 }),
       view: STRIP,
       question: l(
-        '19 岁女性，在泳池里游第二个来回时晕厥，被救上岸。节律是窦性，心率约 60 次/分。先把 QT 测对——写下你的测量方法和数值，再决定这是不是"年轻人的血管迷走性晕厥"。',
-        'A 19-year-old woman fainted in the pool during her second length and was pulled out. The rhythm is sinus at about 60/min. Measure the QT properly first — write down how you measured and the number, and only then decide whether this is just "vasovagal syncope in a young woman".',
-        'Una mujer de 19 años sufrió un síncope mientras nadaba su segundo largo en la piscina y tuvieron que sacarla del agua. El ritmo es sinusal a unos 60 lpm. Mide primero bien el QT —anota cómo lo has medido y la cifra— y solo después decide si esto es un simple «síncope vasovagal de una joven».',
+        '19 岁女性，在泳池里游第二个来回时晕厥，被救上岸。节律是窦性，心率约 60 次/分。先把 QT 测对——想清楚你的测量方法和数值，再决定这是不是"年轻人的血管迷走性晕厥"。',
+        'A 19-year-old woman fainted in the pool during her second length and was pulled out. The rhythm is sinus at about 60/min. Measure the QT properly first — be clear how you measured it and what number you got, and only then decide whether this is just "vasovagal syncope in a young woman".',
+        'Una mujer de 19 años sufrió un síncope mientras nadaba su segundo largo en la piscina y tuvieron que sacarla del agua. El ritmo es sinusal a unos 60 lpm. Mide primero bien el QT —ten claro cómo lo has medido y la cifra— y solo después decide si esto es un simple «síncope vasovagal de una joven».',
       ),
       reveal: l(
         'QT 占了 RR 的一半以上——粗查已经报警；认真测量（最早 QRS 起点至 T 波终点，切线法，剔除 U 波）加心率校正后 QTc 约 **515 ms**——≥480 ms，重复心电图仍然如此 ⇒ **长QT综合征（LQTS）**，而且已过 500 ms 的高危线；游泳或运动中晕厥正是它的典型故事。T 波形态还能提示基因型：本图是基底很宽的 T，像 LQT1（游泳是 LQT1 的经典触发）；LQT1 宽大 T、LQT2 低平或有切迹的 T、LQT3 长 ST 段后的迟发尖 T——但形态只提示，诊断靠数值加临床（Schwartz 评分）。别把每一个年轻人的晕厥都归给迷走神经。',
@@ -312,7 +312,7 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [6479, 6515, 6310],
       caption: l(
-        '三份被 PTB-XL 判读医生标注为"长 QT"的真实心电图：79 岁女性、75 岁女性、54 岁男性。先在 QT 最长的导联用切线法定 T 终点、剔除 U 波，量 RR、算 QTc（心率快时别只信 Bazett），对照性别阈值写下"延长/不延长"与你的下一步（药单？电解质？家族史？），然后揭晓。提醒：不是每个标签都经得起你的分规。',
+        '三份被 PTB-XL 判读医生标注为"长 QT"的真实心电图：79 岁女性、75 岁女性、54 岁男性。先在 QT 最长的导联用切线法定 T 终点、剔除 U 波，量 RR、算 QTc（心率快时别只信 Bazett），对照性别阈值定下"延长/不延长"与你的下一步（药单？电解质？家族史？），然后揭晓。提醒：不是每个标签都经得起你的分规。',
         'Three real tracings that the PTB-XL reader labelled "long QT": a 79-year-old woman, a 75-year-old woman and a 54-year-old man. First set the T end by the tangent in the lead with the longest QT, leave the U out, measure the RR, compute the QTc (do not trust Bazett alone at a fast rate), and commit to "prolonged / not prolonged" against the sex-specific threshold, plus your next step (drug list? electrolytes? family history?), before the reveal. Fair warning: not every label survives your calipers.',
         'Tres trazados reales que el lector de PTB-XL etiquetó como «QT largo»: una mujer de 79 años, otra de 75 y un varón de 54. Fija primero el final de la T con la tangente en la derivación con el QT más largo, excluye la U, mide el RR, calcula el QTc (con frecuencia alta no te fíes solo de Bazett) y decide «prolongado / no prolongado» según el umbral de su sexo, junto con tu siguiente paso (¿lista de fármacos?, ¿electrolitos?, ¿historia familiar?), antes de la solución. Aviso: no todas las etiquetas sobreviven a tu compás.',
       ),

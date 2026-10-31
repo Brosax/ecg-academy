@@ -158,7 +158,7 @@ export function DrillRunner(props: DrillRunnerInternalProps) {
           key={`${round}:${i}:${item.id}`}
           item={item}
           compact={props.compact}
-          collectConfidence={props.collectConfidence ?? !props.compact}
+          collectConfidence={props.collectConfidence ?? false}
           counter={tp('itemOf', { i: i + 1, n: count })}
           onGraded={(g) => setResults((r) => [...r, { score: g.score, missedCritical: !!g.missedCritical }])}
           onNext={() => setI((x) => x + 1)}

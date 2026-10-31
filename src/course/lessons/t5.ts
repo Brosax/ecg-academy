@@ -61,7 +61,7 @@ const lesson: Lesson = {
       ecg: synth('vt-monomorphic', 681),
       view: { layout: '3x4+1' },
       question: l(
-        '66 岁男性，陈旧性下壁心梗，今晨突发心悸来诊：血压 105/70 mmHg、意识清楚、肺部干净。12 导联心电图：QRS 宽、节律规则、约 150 次/分。在证明不是之前，这是什么？写下你的判读和第一步处理。',
+        '66 岁男性，陈旧性下壁心梗，今晨突发心悸来诊：血压 105/70 mmHg、意识清楚、肺部干净。12 导联心电图：QRS 宽、节律规则、约 150 次/分。在证明不是之前，这是什么？想好你的判读和第一步处理。',
         'A 66-year-old man with an old inferior myocardial infarction, in this morning with sudden palpitations: blood pressure 105/70 mmHg, fully alert, chest clear. The 12-lead ECG shows a wide QRS, a regular rhythm at about 150/min. What is this until proven otherwise? Commit to your reading and your first step.',
         'Varón de 66 años con un infarto inferior antiguo, llegado hoy por palpitaciones súbitas: tensión 105/70 mmHg, consciente y orientado, tórax limpio. El ECG de 12 derivaciones muestra QRS ancho, ritmo regular a unos 150 lpm. ¿Qué es esto hasta que se demuestre lo contrario? Decide tu lectura y tu primera actuación.',
       ),
@@ -246,9 +246,9 @@ const lesson: Lesson = {
       ecg: synth('preexcited-af', 685),
       view: { layout: 'strip', lead: 'II', calipers: true },
       caption: l(
-        '现在**自己读**：节律规则吗？QRS 宽吗？宽度与形态逐搏变吗？用分规找出最短的 RR。写下判断再看对比卡——这是 t4 的老朋友**预激伴房颤**：快、宽、**不规则**、逐搏变化，最短 RR 可 < 250 ms；房室结阻滞剂禁用。不规则宽 QRS 心动过速走决策树的另一支。',
-        'Now **read it yourself**: is the rhythm regular? Is the QRS wide? Do width and shape change beat to beat? Use the calipers to find the shortest RR. Write your answer, then move on — this is the old friend from t4, **pre-excited AF**: fast, broad, **irregular**, changing beat to beat, shortest RR < 250 ms possible; AV-nodal blockers are contraindicated. An irregular wide-complex tachycardia takes the other branch of the tree.',
-        'Ahora **léela tú**: ¿el ritmo es regular? ¿El QRS es ancho? ¿Cambian anchura y morfología de latido en latido? Usa el compás para hallar el RR más corto. Anota tu respuesta y continúa: es la vieja conocida de t4, la **FA preexcitada**: rápida, ancha, **irregular**, cambiante de latido en latido, con RR más corto posible < 250 ms; los bloqueadores del nodo AV están contraindicados. La taquicardia de QRS ancho irregular va por la otra rama del árbol.',
+        '现在**自己读**：节律规则吗？QRS 宽吗？宽度与形态逐搏变吗？用分规找出最短的 RR。想好判断再看对比卡——这是 t4 的老朋友**预激伴房颤**：快、宽、**不规则**、逐搏变化，最短 RR 可 < 250 ms；房室结阻滞剂禁用。不规则宽 QRS 心动过速走决策树的另一支。',
+        'Now **read it yourself**: is the rhythm regular? Is the QRS wide? Do width and shape change beat to beat? Use the calipers to find the shortest RR. Decide your answer, then move on — this is the old friend from t4, **pre-excited AF**: fast, broad, **irregular**, changing beat to beat, shortest RR < 250 ms possible; AV-nodal blockers are contraindicated. An irregular wide-complex tachycardia takes the other branch of the tree.',
+        'Ahora **léela tú**: ¿el ritmo es regular? ¿El QRS es ancho? ¿Cambian anchura y morfología de latido en latido? Usa el compás para hallar el RR más corto. Decide tu respuesta y continúa: es la vieja conocida de t4, la **FA preexcitada**: rápida, ancha, **irregular**, cambiante de latido en latido, con RR más corto posible < 250 ms; los bloqueadores del nodo AV están contraindicados. La taquicardia de QRS ancho irregular va por la otra rama del árbol.',
       ),
     },
     {
@@ -289,7 +289,7 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [11889, 21804],
       caption: l(
-        '两份真实心电图，先写判读再揭晓。A：55 岁男性，窦性心律——短 PR、清楚的 δ波、QRS 很宽：这正是能造出逆向型 AVRT 和预激伴房颤（宽 QRS 心动过速的模仿者）的**底物**。B：87 岁女性，约 170 次/分、**不规则**的宽 QRS 心动过速：V1 呈 rsR′、I 与 V6 有宽 S 波——房颤伴右束支阻滞，即室上性心律伴束支阻滞这一模仿者；有旧图时，同样的束支阻滞形态会让你放心。PTB-XL 静息心电图库里没有室速——本课所有“室速长什么样”都来自合成模型；真实世界中，室速多见于有结构性心脏病的年长者。',
+        '两份真实心电图，先想好判读再揭晓。A：55 岁男性，窦性心律——短 PR、清楚的 δ波、QRS 很宽：这正是能造出逆向型 AVRT 和预激伴房颤（宽 QRS 心动过速的模仿者）的**底物**。B：87 岁女性，约 170 次/分、**不规则**的宽 QRS 心动过速：V1 呈 rsR′、I 与 V6 有宽 S 波——房颤伴右束支阻滞，即室上性心律伴束支阻滞这一模仿者；有旧图时，同样的束支阻滞形态会让你放心。PTB-XL 静息心电图库里没有室速——本课所有“室速长什么样”都来自合成模型；真实世界中，室速多见于有结构性心脏病的年长者。',
         'Two real tracings — commit to your reading before the reveal. A: a 55-year-old man in sinus rhythm — short PR, a clear delta wave and a very broad QRS: the exact **substrate** that can produce antidromic AVRT and pre-excited AF, two of the wide-complex mimics. B: an 87-year-old woman with an **irregular** wide-QRS tachycardia at about 170/min: rsR′ in V1 and a broad S in I and V6 — AF with right bundle branch block, the "SVT with bundle branch block" mimic; an old ECG with the same block would reassure you. The PTB-XL resting-ECG library holds no VT — every "what VT looks like" in this lesson comes from the synthetic model; in the real world VT usually belongs to older patients with structural heart disease.',
         'Dos ECG reales: decide tu lectura antes de mirar la solución. A: varón de 55 años en ritmo sinusal; PR corto, onda delta clara y QRS muy ancho: ese es justamente el **sustrato** capaz de producir una TRAV antidrómica y una FA preexcitada, dos de los imitadores de QRS ancho. B: mujer de 87 años con una taquicardia de QRS ancho **irregular** a unos 170 lpm: rsR′ en V1 y S ancha en I y V6, una FA con bloqueo de rama derecha, el imitador «TSV con bloqueo de rama»; un ECG antiguo con el mismo bloqueo te daría tranquilidad. La biblioteca de ECG de reposo de PTB-XL no contiene TV: todo el «cómo es una TV» de esta lección viene del modelo sintético; en el mundo real, la TV suele pertenecer a pacientes mayores con cardiopatía estructural.',
       ),

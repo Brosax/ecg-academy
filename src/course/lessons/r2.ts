@@ -55,9 +55,9 @@ const lesson: Lesson = {
       ecg: synth('junctional-escape-rhythm', 421),
       view: STRIP,
       question: l(
-        '这条节律条上找不到直立的 P 波，心率 46 次/分。这个节律危险吗？写下你的判断再往下看。',
+        '这条节律条上找不到直立的 P 波，心率 46 次/分。这个节律危险吗？先想好你的判断再往下看。',
         'No upright P wave anywhere on this strip, and the rate is 46/min. Is this rhythm dangerous? Commit to an answer before reading on.',
-        'No se ve ninguna onda P positiva en esta tira y la frecuencia es de 46 lpm. ¿Es peligroso este ritmo? Anota tu respuesta antes de continuar.',
+        'No se ve ninguna onda P positiva en esta tira y la frecuencia es de 46 lpm. ¿Es peligroso este ritmo? Decide tu respuesta antes de continuar.',
       ),
       reveal: l(
         '每个 QRS **之前**紧贴着一个**倒置的 P′**（II 导联，P′R 约 110 ms），心率 46 次/分、QRS 窄、RR 规则：**交界性逸搏心律**。它不是原发性心律失常，而是一支救援起搏点——上面（窦房结或传导）出了问题，房室交界区按自己的固有频率接管了心室。要问的不是“怎么压制它”，而是“上面为什么不来”。',
@@ -257,9 +257,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [4827, 16151, 959],
       caption: l(
-        '三份都是完全性房室传导阻滞的真实心电图（PTB-XL）。先自己找穿行的 P 波、量逸搏频率与 QRS 宽度、判断阻滞水平，**写下结论再揭晓**。',
-        'Three real ECGs (PTB-XL), all complete AV block. Find the marching P waves, measure the escape rate and QRS width, and judge the level of the block — **commit in writing before you reveal**.',
-        'Tres ECG reales (PTB-XL), los tres con bloqueo AV completo. Busca las ondas P que desfilan, mide la frecuencia y la anchura del QRS de escape y valora el nivel del bloqueo: **escribe tu conclusión antes de mirar la solución**.',
+        '三份都是完全性房室传导阻滞的真实心电图（PTB-XL）。先自己找穿行的 P 波、量逸搏频率与 QRS 宽度、判断阻滞水平，**先想好结论再揭晓**。',
+        'Three real ECGs (PTB-XL), all complete AV block. Find the marching P waves, measure the escape rate and QRS width, and judge the level of the block — **commit to a conclusion before you reveal**.',
+        'Tres ECG reales (PTB-XL), los tres con bloqueo AV completo. Busca las ondas P que desfilan, mide la frecuencia y la anchura del QRS de escape y valora el nivel del bloqueo: **decide tu conclusión antes de mirar la solución**.',
       ),
     },
     {

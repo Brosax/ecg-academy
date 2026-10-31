@@ -15,7 +15,8 @@ import type { CaliperMeasure } from '../../ecg/index';
 import type { CaseReadingSlotProps } from '../../real/index';
 import { Badge, Button, Feedback, Icon, Segmented } from '../../ui/index';
 import type { Grade, ReportAnswer, ReportFormProps, ReportKey } from '../api';
-import { gradeReport, reportFields, type ReportField } from '../core/grade';
+import { gradeReport, rateTolerance, reportFields, TOL, type ReportField } from '../core/grade';
+import { numericOptions } from '../core/numchoice';
 import { reportKeyFromCase } from '../core/gen/report';
 import { ports } from '../core/ports';
 import { recordAttempt } from '../core/progress';
@@ -26,13 +27,6 @@ export const EMPTY_REPORT: ReportAnswer = { rateBpm: null, rhythm: null, regular
 
 const RHYTHMS = FINDING_LIST.filter((f) => f.cat === 'rhythm');
 const PICKABLE = FINDING_LIST.filter((f) => f.cat !== 'rhythm');
-
-const toNum = (s: string): number | null => {
-  const t = s.replace(',', '.').replace('−', '-').trim();
-  if (t === '') return null;
-  const n = Number(t);
-  return Number.isFinite(n) ? n : null;
-};
 
 const FIELD_LABEL: Readonly<Record<ReportField, () => string>> = {
   rate: () => tp('fRate'),
@@ -45,41 +39,22 @@ const FIELD_LABEL: Readonly<Record<ReportField, () => string>> = {
   findings: () => tp('fFindings'),
 };
 
-function NumField(props: { readonly id: string; readonly label: string; readonly unit: string; readonly value: number | null; readonly onChange: (v: number | null) => void; readonly disabled?: boolean; readonly caliper?: number | null }) {
-  const [text, setText] = useState(props.value === null ? '' : String(props.value));
+/** A numeric report field answered by picking one of four values around the reference (no typing). */
+function NumPick(props: { readonly id: string; readonly label: string; readonly unit: string; readonly truth: number | null; readonly tol: number; readonly unit10?: number; readonly angle?: boolean; readonly min?: number; readonly value: number | null; readonly onChange: (v: number | null) => void; readonly disabled?: boolean }) {
+  if (props.truth === null) return null;
+  const values = numericOptions({ truth: props.truth, tol: props.tol, unit: props.unit10 ?? 1, angle: props.angle, min: props.angle ? undefined : props.min, seed: `${props.id}:${props.truth}` });
+  const label = (v: number) => (props.angle ? `${v > 0 ? '+' : ''}${v}°` : `${v} ${props.unit}`);
   return (
     <div class="pr-rf__num">
-      <label for={props.id}>{props.label}</label>
-      <span class="pr-num">
-        <input
-          id={props.id}
-          type="text"
-          inputMode="decimal"
-          class="pr-num__input tabular"
-          value={text}
-          disabled={props.disabled}
-          onInput={(e) => {
-            const s = (e.currentTarget as HTMLInputElement).value;
-            setText(s);
-            props.onChange(toNum(s));
-          }}
-        />
-        <span class="pr-num__unit">{props.unit}</span>
-      </span>
-      {props.caliper != null && !props.disabled && (
-        <button
-          type="button"
-          class="pr-linkbtn"
-          onClick={() => {
-            const v = Math.round(props.caliper as number);
-            setText(String(v));
-            props.onChange(v);
-          }}
-        >
-          <Icon name="calipers" size={14} />
-          {tp('useCaliper', { v: Math.round(props.caliper) })}
-        </button>
-      )}
+      <span id={props.id}>{props.label}</span>
+      <div class="pr-opts pr-opts--row" role="radiogroup" aria-labelledby={props.id}>
+        {values.map((v) => (
+          <label class={`pr-opt ${props.value === v ? 'is-on' : ''}`} key={v}>
+            <input type="radio" name={props.id} checked={props.value === v} disabled={props.disabled} onChange={() => props.onChange(v)} />
+            <span class="pr-opt__label tabular">{label(v)}</span>
+          </label>
+        ))}
+      </div>
     </div>
   );
 }
@@ -191,8 +166,7 @@ export function ReportForm(props: ReportFormInternalProps) {
   const [submitted, setSubmitted] = useState<{ grade: Grade; answer: ReportAnswer } | null>(null);
   const locked = !!submitted || !!props.revealed;
   const set = <K extends keyof ReportAnswer>(k: K, v: ReportAnswer[K]) => setA((x) => ({ ...x, [k]: v }));
-  const cal = props.caliper?.value ?? null;
-  const calMs = cal ? Math.abs(cal.dtMs) : null;
+  const ref = props.reference ?? null;
   const submit = () => {
     const grade: Grade = props.reference
       ? gradeReport(props.reference, a)
@@ -211,7 +185,7 @@ export function ReportForm(props: ReportFormInternalProps) {
       }}
     >
       <div class="pr-rf__grid">
-        <NumField id={`${prefix}-rate`} label={tp('fRate')} unit={tp('unitBpm')} value={a.rateBpm} onChange={(v) => set('rateBpm', v)} disabled={locked} caliper={calMs ? 60000 / calMs : null} />
+        <NumPick id={`${prefix}-rate`} min={20} label={tp('fRate')} unit={tp('unitBpm')} truth={ref?.rateBpm ?? null} tol={ref?.rateBpm ? rateTolerance(ref.rateBpm, TOL.hrPct, TOL.hrMinBpm) : 0} value={a.rateBpm} onChange={(v) => set('rateBpm', v)} disabled={locked} />
         <div class="pr-rf__num">
           <label for={`${prefix}-rhythm`}>{tp('fRhythm')}</label>
           <select id={`${prefix}-rhythm`} class="pr-select" disabled={locked} value={a.rhythm ?? ''} onChange={(e) => set('rhythm', ((e.currentTarget as HTMLSelectElement).value || null) as FindingId | null)}>
@@ -237,19 +211,15 @@ export function ReportForm(props: ReportFormInternalProps) {
             onChange={(v) => !locked && set('regular', v === 'unsure' ? null : v === 'yes')}
           />
         </div>
-        <NumField id={`${prefix}-pr`} label={tp('fPr')} unit="ms" value={a.prMs} onChange={(v) => set('prMs', v)} disabled={locked} caliper={calMs} />
-        <NumField id={`${prefix}-qrs`} label={tp('fQrs')} unit="ms" value={a.qrsMs} onChange={(v) => set('qrsMs', v)} disabled={locked} caliper={calMs} />
-        <NumField id={`${prefix}-qtc`} label={tp('fQtc')} unit="ms" value={a.qtcMs} onChange={(v) => set('qtcMs', v)} disabled={locked} />
-        <NumField id={`${prefix}-axis`} label={tp('fAxis')} unit="°" value={a.axisDeg} onChange={(v) => set('axisDeg', v)} disabled={locked} />
+        <NumPick id={`${prefix}-pr`} min={80} label={tp('fPr')} unit="ms" truth={ref?.prMs ?? null} tol={TOL.intervalMs} unit10={10} value={a.prMs} onChange={(v) => set('prMs', v)} disabled={locked} />
+        <NumPick id={`${prefix}-qrs`} min={60} label={tp('fQrs')} unit="ms" truth={ref?.qrsMs ?? null} tol={TOL.intervalMs} unit10={10} value={a.qrsMs} onChange={(v) => set('qrsMs', v)} disabled={locked} />
+        <NumPick id={`${prefix}-qtc`} min={300} label={tp('fQtc')} unit="ms" truth={ref?.qtcMs ?? null} tol={TOL.qtcMs} unit10={10} value={a.qtcMs} onChange={(v) => set('qtcMs', v)} disabled={locked} />
+        <NumPick id={`${prefix}-axis`} label={tp('fAxis')} unit="°" truth={ref?.axisDeg ?? null} tol={TOL.axisFullDeg} unit10={5} angle value={a.axisDeg} onChange={(v) => set('axisDeg', v)} disabled={locked} />
       </div>
       <fieldset class="pr-rf__findings">
         <legend>{tp('fFindings')}</legend>
         <FindingPicker idPrefix={prefix} value={a.findings} onChange={(v) => set('findings', v)} disabled={locked} />
       </fieldset>
-      <div class="pr-rf__notes">
-        <label for={`${prefix}-notes`}>{tp('fNotes')}</label>
-        <textarea id={`${prefix}-notes`} rows={2} disabled={locked} value={a.notes ?? ''} onInput={(e) => set('notes', (e.currentTarget as HTMLTextAreaElement).value)} />
-      </div>
       {!locked && (
         <div class="pr-actions">
           <Button type="submit" tone="primary" icon="check">
