@@ -6,6 +6,7 @@
  */
 import { signal } from '@preact/signals';
 import type { View3dKey } from '../i18n/view3d/zh';
+import type { ValveId } from '../sim/types';
 import type { FlowCaptionId } from './core/flowTypes';
 
 /** Layer switch (the "血流（示意）" toggle in the layers popover). */
@@ -13,10 +14,65 @@ export const bloodFlow = signal(false);
 /** What the blood is doing now; HeartScene publishes it (≤ 10 Hz, only on change) for the fixed-size caption chip. */
 export const flowNow = signal<FlowCaptionId>('idle');
 
-/** Look of the streams: comet dashes along tubes, or instanced "blood cells" (flowParticles.ts). The jets show in both. */
-export type FlowStyle = 'comets' | 'cells';
+/**
+ * Look of the streams: bold chevron arrows over a faint route track (flowChevrons.ts, the default: direction readable
+ * in a still frame), comet dashes along tubes, or instanced "blood cells" (flowParticles.ts). The jets show in all.
+ */
+export type FlowStyle = 'arrows' | 'comets' | 'cells';
+export const FLOW_STYLES: readonly FlowStyle[] = ['arrows', 'comets', 'cells'];
 /** Stream look switch (a sub-option of the layer, shown while it is on). */
-export const flowStyle = signal<FlowStyle>('comets');
+export const flowStyle = signal<FlowStyle>('arrows');
+/** X-ray heart while the layer is on: a see-through wall (outline kept) so the cavity flow is not hidden. */
+export const flowXray = signal(true);
+
+/**
+ * Stream groups, as named by the walkthrough: `heart:<valve>` = the chamber stream through that valve,
+ * `out:<valve>` = its great-artery continuation, `ven:L|R` = the pulmonary veins / venae cavae.
+ */
+export type FlowStreamKey = `heart:${ValveId}` | `out:${ValveId}` | 'ven:L' | 'ven:R';
+/** 3D name tags shown with the layer (chambers and the vessels the streams follow); i18n view3d `flow.label.<id>`. */
+export const FLOW_LABEL_IDS = ['RA', 'RV', 'LA', 'LV', 'SVC', 'IVC', 'PA', 'PV', 'AO'] as const;
+export type FlowLabelId = (typeof FLOW_LABEL_IDS)[number];
+export const FLOW_LABEL_KEYS = {
+  RA: 'flow.label.RA',
+  RV: 'flow.label.RV',
+  LA: 'flow.label.LA',
+  LV: 'flow.label.LV',
+  SVC: 'flow.label.SVC',
+  IVC: 'flow.label.IVC',
+  PA: 'flow.label.PA',
+  PV: 'flow.label.PV',
+  AO: 'flow.label.AO',
+} as const satisfies Record<FlowLabelId, View3dKey>;
+
+export interface FlowTourStep {
+  /** Explanation shown in the walkthrough card. */
+  readonly key: View3dKey;
+  /** Streams kept bright; every other stream is dimmed. Empty = all dim (the lungs are not modelled). */
+  readonly focus: readonly FlowStreamKey[];
+  /** Name tags emphasised in this step. */
+  readonly labels: readonly FlowLabelId[];
+  /** Which moment of the beat to play once: ventricular ejection, early filling, or nothing (stay paused). */
+  readonly at: 'ejection' | 'filling' | 'none';
+  /** Valve whose window times that moment (venous S wave: the ejection on that side). */
+  readonly valve: ValveId;
+}
+
+/**
+ * "Follow the blood once round": venae cavae → RA → RV → pulmonary artery → lungs → pulmonary veins → LA → LV →
+ * aorta. Each step plays its moment of the beat once and stops (no looping); text in view3d `flow.tour.<n>`.
+ */
+export const FLOW_TOUR: readonly FlowTourStep[] = [
+  { key: 'flow.tour.1', focus: ['ven:R'], labels: ['SVC', 'IVC', 'RA'], at: 'ejection', valve: 'PULMONARY' },
+  { key: 'flow.tour.2', focus: ['heart:TRICUSPID'], labels: ['RA', 'RV'], at: 'filling', valve: 'TRICUSPID' },
+  { key: 'flow.tour.3', focus: ['heart:PULMONARY', 'out:PULMONARY'], labels: ['RV', 'PA'], at: 'ejection', valve: 'PULMONARY' },
+  { key: 'flow.tour.4', focus: ['out:PULMONARY', 'ven:L'], labels: ['PA', 'PV'], at: 'none', valve: 'PULMONARY' },
+  { key: 'flow.tour.5', focus: ['ven:L'], labels: ['PV', 'LA'], at: 'ejection', valve: 'AORTIC' },
+  { key: 'flow.tour.6', focus: ['heart:MITRAL'], labels: ['LA', 'LV'], at: 'filling', valve: 'MITRAL' },
+  { key: 'flow.tour.7', focus: ['heart:AORTIC', 'out:AORTIC'], labels: ['LV', 'AO'], at: 'ejection', valve: 'AORTIC' },
+];
+/** Current walkthrough step (index into FLOW_TOUR), or null when the walkthrough is closed. */
+export const flowTourStep = signal<number | null>(null);
 
 export type FlowTone = 'rich' | 'poor';
 export type FlowPalette = Readonly<Record<FlowTone, string>>;
@@ -58,6 +114,7 @@ export const FLOW_LEGEND: readonly {
 }[] = [
   { key: 'legend.flowRich', tone: 'rich' },
   { key: 'legend.flowPoor', tone: 'poor' },
+  { key: 'legend.flowArrows', tone: null, style: 'arrows' },
   { key: 'legend.flowNote', tone: null, style: 'comets' },
   { key: 'legend.flowCells', tone: null, style: 'cells' },
   { key: 'legend.flowVeins', tone: null },

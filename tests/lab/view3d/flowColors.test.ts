@@ -99,11 +99,12 @@ describe('blood-flow legend and caption keys', () => {
   });
 
   it('legend: one O2-rich row, one O2-poor row, swatch-less notes (one per stream look), venous waves, a cut-only note', () => {
-    expect(FLOW_LEGEND.map((r) => r.tone)).toEqual(['rich', 'poor', null, null, null, null]);
+    expect(FLOW_LEGEND.map((r) => r.tone)).toEqual(['rich', 'poor', null, null, null, null, null]);
     // the section note shows only while the cut is on; the colour rows, the look's note and the venous note always
-    expect(FLOW_LEGEND.map((r) => r.cut === true)).toEqual([false, false, false, false, false, true]);
+    expect(FLOW_LEGEND.map((r) => r.cut === true)).toEqual([false, false, false, false, false, false, true]);
     for (const r of FLOW_LEGEND) for (const d of Object.values(dicts)) expect(d[r.key]?.trim()).toBeTruthy();
-    const keys = (cut: boolean, style: 'comets' | 'cells') => flowLegendRows(cut, style).map((r) => r.key);
+    const keys = (cut: boolean, style: 'arrows' | 'comets' | 'cells') => flowLegendRows(cut, style).map((r) => r.key);
+    expect(keys(false, 'arrows')).toEqual(['legend.flowRich', 'legend.flowPoor', 'legend.flowArrows', 'legend.flowVeins']);
     expect(keys(false, 'comets')).toEqual(['legend.flowRich', 'legend.flowPoor', 'legend.flowNote', 'legend.flowVeins']);
     expect(keys(false, 'cells')).toEqual(['legend.flowRich', 'legend.flowPoor', 'legend.flowCells', 'legend.flowVeins']);
     expect(keys(true, 'comets')).toContain('legend.flowCut');

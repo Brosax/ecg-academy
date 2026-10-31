@@ -62,6 +62,7 @@ varying float vWall;
 varying vec2 vCompW;
 varying vec3 vStatic;
 varying float vHl;
+uniform float uXray;
 ${GLSL_BEATS}
 ${GLSL_ELECTRICAL}
 ${GLSL_CLIP}
@@ -79,6 +80,19 @@ diffuseColor.rgb = hvState.rgb * mix(0.86, 1.0, clamp(vWall, 0.0, 1.0));
 float hvHl = clamp(vHl, 0.0, 1.0) * uHighlightMix;
 diffuseColor.rgb = mix(diffuseColor.rgb, uColHighlight, hvHl * 0.45);
 vec3 hvEmissive = uColFront * (hvState.a * 0.5) + uColHighlight * (hvHl * 0.3);
+// X-ray view (blood-flow layer): the electrical colours step back toward a light grey so the blood colours lead
+float hvLum = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));
+diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.25 + 0.6 * hvLum), 0.55 * uXray);
+hvEmissive *= 1.0 - 0.6 * uXray;
+`;
+
+/**
+ * X-ray alpha: nearly clear where the wall faces the viewer, more opaque toward the silhouette (Fresnel-like), so the
+ * heart reads as an outline with the cavity flow visible inside. uXray = 0 leaves the opaque material unchanged.
+ */
+const FRAG_XRAY = /* glsl */ `
+float hvRim = 1.0 - abs(dot(normalize(normal), normalize(vViewPosition)));
+gl_FragColor.a *= mix(1.0, 0.08 + 0.62 * hvRim * hvRim, uXray);
 `;
 
 /** Pure string patch (unit-tested): injects attributes, varyings, shared chunks, displacement, clip and colour. */
@@ -89,16 +103,35 @@ export function patchHeartShader(shader: ShaderLike, uniforms: Record<string, IU
   fs = replaceOnce(fs, '#include <clipping_planes_fragment>', 'HV_CLIP_DISCARD(vRestPos)\n#include <clipping_planes_fragment>');
   fs = insertAfter(fs, '#include <color_fragment>', FRAG_COLOR);
   fs = insertAfter(fs, '#include <emissivemap_fragment>', 'totalEmissiveRadiance += hvEmissive;');
+  fs = insertAfter(fs, '#include <opaque_fragment>', FRAG_XRAY);
   shader.vertexShader = vs;
   shader.fragmentShader = fs;
   Object.assign(shader.uniforms, uniforms);
 }
 
-export function createHeartMaterial(uniforms: SharedUniforms): MeshStandardMaterial {
-  const m = new MeshStandardMaterial({ color: 0xffffff, roughness: 0.58, metalness: 0, side: FrontSide });
-  m.onBeforeCompile = (shader) => patchHeartShader(shader, uniforms);
+export interface HeartMaterial extends MeshStandardMaterial {
+  /** 0 = opaque myocardium, 1 = X-ray (see-through wall, outline kept); set with setHeartXray. */
+  readonly xray: IUniform<number>;
+}
+
+export function createHeartMaterial(uniforms: SharedUniforms): HeartMaterial {
+  const xray: IUniform<number> = { value: 0 };
+  const m = Object.assign(new MeshStandardMaterial({ color: 0xffffff, roughness: 0.58, metalness: 0, side: FrontSide }), { xray });
+  m.onBeforeCompile = (shader) => patchHeartShader(shader, { ...uniforms, uXray: xray });
   m.customProgramCacheKey = () => HEART_PROGRAM_KEY;
   return m;
+}
+
+/**
+ * X-ray on/off. Transparent without depth writes, so everything inside (blood flow, valves, conduction system) draws
+ * in full over it; the transparent switch recompiles once per state (three's OPAQUE define), then both stay cached.
+ */
+export function setHeartXray(m: HeartMaterial, on: boolean): void {
+  m.xray.value = on ? 1 : 0;
+  if (m.transparent === on) return;
+  m.transparent = on;
+  m.depthWrite = !on;
+  m.needsUpdate = true;
 }
 
 /** Static geometry: render mesh + contract attributes (uploaded once; rebuilt only on engine.onChange). */

@@ -42,6 +42,18 @@
   border-color: var(--c-highlight);
   font-weight: 600;
 }
+.lab-root .hv-label.hv-flow-label {
+  /* blood-flow name tags (chambers, vessels): quiet until a walkthrough step names them */
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+.lab-root .hv-label.hv-flow-label.is-focus {
+  border-color: var(--c-highlight);
+  color: var(--c-highlight);
+}
+.lab-root .hv-label.hv-flow-label.is-dim {
+  opacity: 0.35;
+}
 .lab-root .hv-label.hv-guide {
   /* landmark lines on the skin: quiet, small, never competing with electrode labels */
   font-size: 10px;
@@ -148,6 +160,67 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.lab-root .hv-flow-tour-open {
+  pointer-events: auto;
+  padding: 3px 10px;
+  font: 600 12px/1.3 var(--font-sans);
+  color: var(--fg);
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+  border: 1px solid var(--c-highlight);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+.lab-root .hv-flow-tour-open:hover {
+  background: var(--panel);
+}
+/* walkthrough card: fixed size, so stepping never moves the chip, the legend or the heart */
+.lab-root .hv-flow-tour {
+  box-sizing: border-box;
+  pointer-events: auto;
+  width: 100%;
+  max-width: 440px;
+  height: 128px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 8px;
+  font: 400 12px/1.4 var(--font-sans);
+  color: var(--fg);
+  background: color-mix(in srgb, var(--panel) 94%, transparent);
+  border: 1px solid var(--c-highlight);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+}
+.lab-root .hv-flow-tour header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.lab-root .hv-flow-tour-n {
+  color: var(--fg-muted);
+  font-size: 11px;
+}
+.lab-root .hv-flow-tour-x {
+  margin-left: auto;
+  border: 0;
+  background: none;
+  color: var(--fg-muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+.lab-root .hv-flow-tour p {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  overflow-y: auto;
+}
+.lab-root .hv-flow-tour-nav {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
 }
 .lab-root .hv-flow-chip[data-flow='noOutput'] .hv-flow-text {
   color: var(--err);

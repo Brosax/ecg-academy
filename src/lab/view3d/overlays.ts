@@ -48,13 +48,18 @@ export interface Overlays {
   setClip(on: boolean): void;
   /** Glow the given overlays (e.g. the culprit coronary artery of an infarction scenario). */
   setHighlight(ids: ReadonlySet<string>, css: string): void;
+  /**
+   * X-ray (blood-flow layer): great vessels turn see-through so the inflow / outflow streams inside them show, and
+   * the coronary arteries and cardiac veins fade further so they do not compete with the blood colours.
+   */
+  setXray(on: boolean): void;
   dispose(): void;
 }
 
 export function createOverlays(geo: GeometryBundle, shared: SharedUniforms): Overlays {
   const group = new Group();
   group.name = 'overlays';
-  const items: { id: string; geom: BufferGeometry; mat: MeshStandardMaterial }[] = [];
+  const items: { id: string; geom: BufferGeometry; mat: MeshStandardMaterial; vessel: boolean }[] = [];
   for (const o of geo.overlays ?? []) {
     const geom = new BufferGeometry();
     geom.setAttribute('position', new BufferAttribute(o.position, 3));
@@ -69,7 +74,7 @@ export function createOverlays(geo: GeometryBundle, shared: SharedUniforms): Ove
     mesh.frustumCulled = false; // displaced on the GPU
     mesh.renderOrder = 2;
     group.add(mesh);
-    items.push({ id: o.id, geom, mat });
+    items.push({ id: o.id, geom, mat, vessel });
   }
   return {
     group,
@@ -88,6 +93,15 @@ export function createOverlays(geo: GeometryBundle, shared: SharedUniforms): Ove
           it.mat.emissive.setRGB(0, 0, 0);
           it.mat.emissiveIntensity = 0;
         }
+      }
+    },
+    setXray(on) {
+      for (const it of items) {
+        if (it.mat.transparent === on) continue;
+        it.mat.transparent = on;
+        it.mat.depthWrite = !on;
+        it.mat.opacity = on ? (it.vessel ? 0.28 : 0.15) : 1;
+        it.mat.needsUpdate = true;
       }
     },
     dispose() {

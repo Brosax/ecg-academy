@@ -6,10 +6,10 @@
  */
 import { Ecg12 } from '../../ecg';
 import { tm } from '../../i18n/modes';
-import { bloodFlow, FLOW_COLORS, flowStyle, flowSwatch } from '../../view3d/flowControls';
+import { bloodFlow, FLOW_COLORS, FLOW_STYLES, flowStyle, flowSwatch, flowXray } from '../../view3d/flowControls';
 import { store } from '../store';
 import type { Layers } from '../store';
-import { Range, Toggle } from '../ui/controls';
+import { Range, Segmented, Toggle } from '../ui/controls';
 import type { ModeProps, ModeView } from './types';
 
 function setLayer<K extends keyof Layers>(k: K, v: Layers[K]) {
@@ -23,6 +23,8 @@ const LAYER_TOGGLES = [
   ['valves', 'ov.layer.valves', undefined],
   ['labels', 'ov.layer.labels', undefined],
 ] as const;
+
+const FLOW_STYLE_KEYS = { arrows: 'ov.flowStyle.arrows', comets: 'ov.flowStyle.comets', cells: 'ov.flowStyle.cells' } as const;
 
 /** 3D layer switches + contraction amplitude; `bare` drops the card and its title (the rail popover has its own). */
 export function LayerToggles({ bare = false }: { readonly bare?: boolean }) {
@@ -46,13 +48,18 @@ export function LayerToggles({ bare = false }: { readonly bare?: boolean }) {
           onChange={(v) => (bloodFlow.value = v)}
         />
         {bloodFlow.value && (
-          <Toggle
-            label={tm('ov.layer.bloodCells')}
-            checked={flowStyle.value === 'cells'}
-            onChange={(v) => (flowStyle.value = v ? 'cells' : 'comets')}
-          />
+          <Toggle label={tm('ov.layer.flowXray')} checked={flowXray.value} onChange={(v) => (flowXray.value = v)} />
         )}
       </div>
+      {bloodFlow.value && (
+        <Segmented
+          class="flow-style"
+          label={tm('ov.layer.flowStyle')}
+          options={FLOW_STYLES.map((v) => ({ value: v, label: tm(FLOW_STYLE_KEYS[v]) }))}
+          value={flowStyle.value}
+          onChange={(v) => (flowStyle.value = v)}
+        />
+      )}
       <Range
         id="contraction-range"
         label={tm('ov.layer.contraction')}

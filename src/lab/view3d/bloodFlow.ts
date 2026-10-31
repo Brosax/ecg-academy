@@ -22,7 +22,9 @@ import type { GeometryBundle, ValveId } from '../sim/types';
 import { FLOW_A, FLOW_Q, isVesselPath } from './core/flowTypes';
 import type { FlowPath } from './core/flowTypes';
 import { VEN_A, VEN_Q } from './core/venousTiming';
-import type { FlowStyle } from './flowControls';
+import { createFlowChevrons } from './flowChevrons';
+import type { FlowChevrons } from './flowChevrons';
+import type { FlowStreamKey, FlowStyle } from './flowControls';
 import { createFlowCells } from './flowParticles';
 import type { FlowCells } from './flowParticles';
 import { GLSL_BEATS, GLSL_CLIP, GLSL_DISPLACEMENT, GLSL_GRID, setClipDefine } from './shaders/chunks';
@@ -38,6 +40,8 @@ export const JET_SLIDE_MM = 15;
 const TUBULAR_SEGMENTS = 96;
 const RADIAL_SEGMENTS = 8;
 const GHOST_OPACITY = 0.8;
+/** Alpha factor of the streams left out of the walkthrough's current step. */
+export const FLOW_DIM = 0.12;
 /** Fallback colours (light theme) until setColors is called: O2-rich red, O2-poor violet-blue. */
 const DEFAULT_RICH = '#d23a2f';
 const DEFAULT_POOR = '#5960b0';
@@ -85,8 +89,10 @@ uniform float uFlow[${MAX_FLOW_PATHS}];
 uniform float uDash[${MAX_FLOW_PATHS}];
 uniform float uBlur[${MAX_FLOW_PATHS}];
 uniform vec3 uColor[${MAX_FLOW_PATHS}];
+uniform float uFocus[${MAX_FLOW_PATHS}];
 varying vec4 vComet;
 varying vec3 vColor;
+varying float vFocus;
 varying vec3 vNormalV;
 varying vec3 vRestPos;
 ${GLSL_BEATS}
@@ -98,6 +104,7 @@ void main() {
   // (dash coordinate - phase, intensity q, arc-length position along the path, motion-blur width in dashes)
   vComet = vec4(uv.x * uDash[i] - uPhase[i], uFlow[i], uv.x, uBlur[i]);
   vColor = uColor[i];
+  vFocus = uFocus[i];
   vRestPos = position;
   vec3 p = position + heartDisplacementAt(position);
   vNormalV = normalize(normalMatrix * normal);
@@ -107,8 +114,10 @@ void main() {
 
 export const FLOW_FRAGMENT = /* glsl */ `
 uniform float uOpacity;
+uniform float uTrack;
 varying vec4 vComet;
 varying vec3 vColor;
+varying float vFocus;
 varying vec3 vNormalV;
 varying vec3 vRestPos;
 ${GLSL_CLIP}
@@ -140,8 +149,13 @@ void main() {
   // head: most opaque and slightly brighter (scaled, not mixed toward white, so it stays saturated on the light theme)
   vec3 col = vColor * (0.55 + 0.45 * facing) * (0.8 + 0.2 * q) * (1.0 + 0.35 * q * c4);
   float ends = smoothstep(0.0, 0.03, vComet.z) * (1.0 - smoothstep(0.97, 1.0, vComet.z));
-  float a = clamp(0.4 + c * (0.25 + 0.6 * q), 0.0, 1.0) * ends * uOpacity;
-  gl_FragColor = vec4(col, a);
+  float a = clamp(0.4 + c * (0.25 + 0.6 * q), 0.0, 1.0);
+  // arrows look: the tube is only a faint, steady route track under the chevrons (flowChevrons.ts)
+  if (uTrack > 0.5) {
+    col = vColor * (0.55 + 0.45 * facing);
+    a = 0.3;
+  }
+  gl_FragColor = vec4(col, a * ends * vFocus * uOpacity);
   #include <tonemapping_fragment>
   #include <colorspace_fragment>
 }
@@ -272,6 +286,8 @@ export interface BloodFlow {
    */
   update(state: ArrayLike<number>, open: ArrayLike<number>, venous?: ArrayLike<number>): void;
   setStyle(style: FlowStyle): void;
+  /** Walkthrough emphasis: only these streams (and their jets) stay bright; null = all. */
+  setFocus(keys: ReadonlySet<FlowStreamKey> | null): void;
   /** Stream slots in use and cell instances built so far (diagnostics, tests). */
   readonly slots: number;
   readonly cells: number;
@@ -298,12 +314,17 @@ export function createBloodFlow(geo: GeometryBundle, paths: readonly FlowPath[],
     if (path.leg === 'out') valveOf[slot] = VALVES.indexOf(path.valve);
     else venOf[slot] = path.side === 'L' ? 0 : 1;
   }
+  // walkthrough key of every slot (heart stream, its arterial continuation, or a venous side)
+  const keyOf: (FlowStreamKey | null)[] = Array.from({ length: P }, (_, i) => (i < VALVES.length ? (`heart:${VALVES[i]}` as const) : null));
+  for (const { slot, path } of slots) if (slot >= VALVES.length) keyOf[slot] = path.leg === 'out' ? `out:${path.valve}` : path.side === 'L' ? 'ven:L' : 'ven:R';
   const local = {
     uPhase: { value: new Float32Array(P) },
     uFlow: { value: new Float32Array(P) },
     uDash: { value: new Float32Array(P).fill(1) },
     uBlur: { value: new Float32Array(P) },
     uColor: { value: sideOf.map((s) => new Color(s === 'L' ? DEFAULT_RICH : DEFAULT_POOR)) },
+    uFocus: { value: new Float32Array(P).fill(1) },
+    uTrack: { value: 1 },
     uJetAmp: { value: new Float32Array(4) },
     uJetSlide: { value: new Float32Array(4) },
   } satisfies Record<string, IUniform>;
@@ -357,6 +378,19 @@ export function createBloodFlow(geo: GeometryBundle, paths: readonly FlowPath[],
       group.add(...cells.meshes);
     }
     return cells;
+  };
+  // chevron arrows: the same per-slot uniforms; built on the first setStyle('arrows')
+  let chevrons: FlowChevrons | null = null;
+  const chevronsOf = (): FlowChevrons => {
+    if (!chevrons) {
+      chevrons = createFlowChevrons(slots.map((s) => ({ ...s, n: dashCount[s.slot] })), P, U, local, GHOST_OPACITY);
+      for (const m of chevrons.materials) {
+        setClipDefine(m, clipOn);
+        materials.push(m);
+      }
+      group.add(...chevrons.meshes);
+    }
+    return chevrons;
   };
 
   // jets: instance i = VALVES[i] (gl_InstanceID indexes the uniforms); a missing valve keeps a zero matrix
@@ -413,15 +447,21 @@ export function createBloodFlow(geo: GeometryBundle, paths: readonly FlowPath[],
       }
       for (let i = 0; i < 4; i++) {
         const a = clamp01(state[FLOW_A + i]), q = clamp01(state[FLOW_Q + i]);
-        local.uJetAmp.value[i] = clamp01(open[i]) * q;
+        local.uJetAmp.value[i] = clamp01(open[i]) * q * local.uFocus.value[i];
         // A held at a window end while q = 0 hides the arrow, so the reset to the plane at the next window is unseen
         local.uJetSlide.value[i] = a * JET_SLIDE_MM;
       }
     },
     setStyle(style) {
-      for (const m of streamMeshes) m.visible = style === 'comets';
+      for (const m of streamMeshes) m.visible = style !== 'cells';
+      local.uTrack.value = style === 'arrows' ? 1 : 0;
+      if (style === 'arrows') chevronsOf().setVisible(true);
+      else chevrons?.setVisible(false);
       if (style === 'cells') cellsOf().setVisible(true);
       else cells?.setVisible(false);
+    },
+    setFocus(keys) {
+      for (let i = 0; i < P; i++) local.uFocus.value[i] = !keys || (keyOf[i] !== null && keys.has(keyOf[i] as FlowStreamKey)) ? 1 : FLOW_DIM;
     },
     setClip(on) {
       clipOn = on;
@@ -436,6 +476,7 @@ export function createBloodFlow(geo: GeometryBundle, paths: readonly FlowPath[],
       materials.forEach((m) => m.dispose());
       jets.forEach((j) => j.dispose());
       (cells as FlowCells | null)?.dispose();
+      (chevrons as FlowChevrons | null)?.dispose();
     },
   };
 }

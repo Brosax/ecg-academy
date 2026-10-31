@@ -14,6 +14,12 @@ Copied byte-for-byte on 2026-10-17 from `C:\Users\A511741\Desktop\Workspace\Dyna
 `sim/measure/mechanics.ts`, `view3d/core/{lvotSlice,venousTiming,vesselPaths}.ts`, `view3d/flowParticles.ts` and the
 modified flow, Wiggers, engine, truth and i18n files). The old project is read-only reference; it was not modified.
 
+**Synced 2026-10-31** with the old project's blood-flow clarity round (old commits `5c27415` and `2adccec`):
+X-ray heart and see-through vessels while the flow layer is on, chevron arrows as the default look, chamber/vessel name
+tags, slow motion and enlarged heart on enable, and the seven-step "follow the blood" walkthrough
+(`view3d/flowChevrons.ts`, `view3d/core/flowLabels.ts`, `view3d/core/flowTour.ts`; tests in
+`tests/lab/view3d/flowClarity.test.ts`). The port edits listed below were kept; the new CSS is scoped under `.lab-root`.
+
 | old | new |
 |---|---|
 | `src/**` | `src/lab/**` (same relative layout, so relative imports are unchanged; `main.tsx` deleted) |

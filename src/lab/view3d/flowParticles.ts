@@ -152,9 +152,11 @@ uniform float uPhase[${slots}];
 uniform float uDash[${slots}];
 uniform float uBlur[${slots}];
 uniform vec3 uColor[${slots}];
+uniform float uFocus[${slots}];
 uniform float uCellMm;
 varying vec3 vRestPos;
 varying vec3 vColor;
+varying float vFocus;
 varying vec2 vCap;
 varying float vLen;
 varying float vEnds;
@@ -205,6 +207,7 @@ void main() {
   vLen = len / rad;
   vRestPos = mix(tailRest, headRest, position.y);
   vColor = uColor[slot];
+  vFocus = uFocus[slot];
   vEnds = smoothstep(0.0, 0.03, uh) * (1.0 - smoothstep(0.97, 1.0, uh));
   gl_Position = projectionMatrix * vec4(p, 1.0);
 }
@@ -214,6 +217,7 @@ export const CELL_FRAGMENT = /* glsl */ `
 uniform float uOpacity;
 varying vec3 vRestPos;
 varying vec3 vColor;
+varying float vFocus;
 varying vec2 vCap;
 varying float vLen;
 varying float vEnds;
@@ -227,7 +231,7 @@ void main() {
   // biconcave look: a paler centre and a slightly darker rim
   float pallor = 1.0 - smoothstep(0.0, 0.55, d);
   vec3 col = vColor * (0.82 + 0.3 * pallor) * (1.0 - 0.18 * smoothstep(0.75, 1.0, d));
-  float a = (1.0 - smoothstep(0.85, 1.0, d)) * vEnds * uOpacity / (1.0 + 0.25 * vLen);
+  float a = (1.0 - smoothstep(0.85, 1.0, d)) * vEnds * vFocus * uOpacity / (1.0 + 0.25 * vLen);
   gl_FragColor = vec4(col, a);
   #include <tonemapping_fragment>
   #include <colorspace_fragment>

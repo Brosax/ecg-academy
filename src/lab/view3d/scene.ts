@@ -56,9 +56,12 @@ import type { Box3 } from './core/slice';
 import { CM_PER_MV, frankToAppInto, leadAxisSpec, leadValue } from './core/vectors';
 import type { LeadAxisSpec } from './core/vectors';
 // leaf module (never ./viewControls, which imports this file at module scope)
-import { bloodFlow, flowNow, flowPaletteForBg, flowStyle } from './flowControls';
+import { bloodFlow, FLOW_LABEL_KEYS, FLOW_TOUR, flowNow, flowPaletteForBg, flowStyle, flowTourStep, flowXray } from './flowControls';
+import type { FlowLabelId } from './flowControls';
+import { flowLabelAnchors } from './core/flowLabels';
 import { MAX_HIGHLIGHT } from './gpuContract';
-import { createHeartGeometry, createHeartMaterial } from './heartMaterial';
+import { createHeartGeometry, createHeartMaterial, setHeartXray } from './heartMaterial';
+import type { HeartMaterial } from './heartMaterial';
 import { createLeadAxis } from './leadAxis';
 import { createOverlays } from './overlays';
 import type { Overlays } from './overlays';
@@ -86,7 +89,7 @@ export const FRONT_CSS = '#fff8e1';
 interface Content {
   readonly poseGroup: Group;
   readonly heart: Mesh;
-  readonly heartMat: MeshStandardMaterial;
+  readonly heartMat: HeartMaterial;
   readonly attr: HeartAttributes;
   readonly textures: Data3DTexture[];
   readonly slice: SlicePlane;
@@ -95,6 +98,8 @@ interface Content {
   readonly valves: Valves;
   /** Built on first show (syncFlow); null while the layer has never been on for this content. */
   flow: BloodFlow | null;
+  /** Name tags of the flow layer (chambers, vessels), built with it; shown while it is. */
+  flowLabels: Map<FlowLabelId, { obj: CSS2DObject; el: HTMLDivElement; p: Vec3 }> | null;
   readonly overlays: Overlays;
   readonly labelGroup: Group;
   readonly labels: Map<StructureId, { obj: CSS2DObject; el: HTMLDivElement }>;
@@ -106,12 +111,6 @@ interface Content {
   readonly box: Box3;
   readonly vScale: number;
   readonly pose: Pose;
-}
-
-/** A cycle's events for one valve (allocation-free). */
-function valveEventsOf(c: CycleTruth | null, id: ValveId): ValveEvents | undefined {
-  if (c) for (let j = 0; j < c.valves.length; j++) if (c.valves[j].id === id) return c.valves[j];
-  return undefined;
 }
 
 /**
@@ -126,6 +125,12 @@ function fieldVolumeOf(grid: VoxelGrid, fields: EngineFields): FieldVolume {
   const vol = packFieldVolume(grid, fields);
   fieldVolumes.set(fields, { grid, vol });
   return vol;
+}
+
+/** A cycle's events for one valve (allocation-free). */
+function valveEventsOf(c: CycleTruth | null, id: ValveId): ValveEvents | undefined {
+  if (c) for (let j = 0; j < c.valves.length; j++) if (c.valves[j].id === id) return c.valves[j];
+  return undefined;
 }
 
 function setPoseMatrix(m: Matrix4, pose: Pose): void {
@@ -276,7 +281,14 @@ export class HeartScene {
     this.disposers.push(
       effect(() => {
         void bloodFlow.value;
+        void flowXray.value;
         this.syncFlow();
+      }),
+    );
+    this.disposers.push(
+      effect(() => {
+        void flowTourStep.value;
+        this.applyFlowTour();
       }),
     );
     this.disposers.push(
@@ -394,7 +406,7 @@ export class HeartScene {
     const fitRadius = Math.max(heartSphere.radius * 0.95, allSphere.radius * 0.7);
 
     this.content = {
-      poseGroup, heart, heartMat, attr, textures, slice, arrows, tubes, valves, flow: null, overlays, labelGroup,
+      poseGroup, heart, heartMat, attr, textures, slice, arrows, tubes, valves, flow: null, flowLabels: null, overlays, labelGroup,
       labels: new Map(),
       anchors: structureAnchors(geo),
       centre,
@@ -418,6 +430,7 @@ export class HeartScene {
     c.tubes.dispose();
     c.valves.dispose();
     c.flow?.dispose();
+    if (c.flowLabels) for (const l of c.flowLabels.values()) l.el.remove();
     c.overlays.dispose();
     for (const l of c.labels.values()) l.el.remove();
     this.content = null;
@@ -510,8 +523,38 @@ export class HeartScene {
       if (show && !flow.group.visible) this.lastFlowMs = 0; // caption at the next frame
       flow.group.visible = show;
     }
-    c.slice.setFlowOpen(show && !!flow && store.slice.peek().enabled);
+    const sl = store.slice.peek();
+    c.slice.setFlowOpen(show && !!flow && sl.enabled);
+    // X-ray wall while the flow is drawn, so the cavity streams are not hidden behind the myocardium
+    const xray = show && !!flow && flowXray.peek();
+    setHeartXray(c.heartMat, xray);
+    c.overlays.setXray(xray);
+    if (c.flowLabels) {
+      // tags in the half removed by the cross-section are hidden (as for the structure labels)
+      const nl = Math.hypot(sl.normal[0], sl.normal[1], sl.normal[2]) || 1;
+      for (const l of c.flowLabels.values()) {
+        const cut = sl.enabled && (l.p[0] * sl.normal[0] + l.p[1] * sl.normal[1] + l.p[2] * sl.normal[2]) / nl > sl.offsetMm / nl;
+        l.obj.visible = show && !cut;
+      }
+      this.labelsDirty = true;
+    }
     if ((!show || !flow) && flowNow.peek() !== 'idle') flowNow.value = 'idle';
+  }
+
+  /** Walkthrough step → stream emphasis and tag emphasis (flowControls.FLOW_TOUR). */
+  private applyFlowTour(): void {
+    const c = this.content;
+    if (!c) return;
+    const i = flowTourStep.peek();
+    const st = i === null ? null : FLOW_TOUR[i] ?? null;
+    c.flow?.setFocus(st ? new Set(st.focus) : null);
+    if (c.flowLabels)
+      for (const [id, l] of c.flowLabels) {
+        const on = !!st && st.labels.includes(id);
+        l.el.classList.toggle('is-focus', on);
+        l.el.classList.toggle('is-dim', !!st && !on);
+      }
+    this.labelsDirty = true;
   }
 
   /**
@@ -522,9 +565,11 @@ export class HeartScene {
     if (c.flow) return c.flow;
     const geo = this.engine.geometry;
     let flow: BloodFlow;
+    let anchors: ReturnType<typeof flowLabelAnchors>;
     try {
       const net = buildFlowNetwork(geo);
       flow = createBloodFlow(geo, [...net.heart, ...net.vessels], this.U);
+      anchors = flowLabelAnchors(geo, net.vessels);
     } catch (err) {
       console.error('[view3d] blood-flow paths could not be built', err);
       return null;
@@ -536,6 +581,21 @@ export class HeartScene {
     flow.group.visible = false;
     c.poseGroup.add(flow.group);
     c.flow = flow;
+    const lang = store.lang.peek();
+    const tags = new Map<FlowLabelId, { obj: CSS2DObject; el: HTMLDivElement; p: Vec3 }>();
+    for (const [id, p] of Object.entries(anchors) as [FlowLabelId, Vec3][]) {
+      const el = document.createElement('div');
+      el.className = 'hv-label hv-flow-label';
+      el.dataset.flow = id;
+      el.textContent = tv.in(lang, FLOW_LABEL_KEYS[id]);
+      const obj = new CSS2DObject(el);
+      obj.position.set(p[0], p[1], p[2]);
+      obj.visible = false;
+      c.poseGroup.add(obj);
+      tags.set(id, { obj, el, p });
+    }
+    c.flowLabels = tags;
+    this.applyFlowTour();
     return flow;
   }
 
@@ -652,6 +712,7 @@ export class HeartScene {
     this.lastValueMs = 0;
     const c = this.content;
     if (c) for (const [id, l] of c.labels) l.el.textContent = tc.in(lang, `struct.${id}`);
+    if (c?.flowLabels) for (const [id, l] of c.flowLabels) l.el.textContent = tv.in(lang, FLOW_LABEL_KEYS[id]);
   }
 
   // ---------------------------------------------------------------- camera
@@ -726,15 +787,42 @@ export class HeartScene {
     this.tween.start(this.camera, this.controls.target, pos, target, performance.now());
   }
 
+  /** Pixels at the bottom of the view covered by an overlay (the flow walkthrough card); see setViewInset. */
+  private insetBottom = 0;
+  private viewW = 0;
+  private viewH = 0;
+
+  /**
+   * Keep the heart clear of an overlay covering the bottom `px` of the view: the camera renders the lower part of a
+   * frame taller by `px`, so the framing centre moves to the middle of the free area above it (and the heart shrinks a
+   * little). Labels and picking follow, since both use the camera's projection. 0 restores the normal view.
+   */
+  setViewInset(px: number): void {
+    this.insetBottom = Math.max(0, Math.round(px));
+    this.applyViewOffset();
+  }
+
+  private applyViewOffset(): void {
+    const w = this.viewW, h = this.viewH, b = this.insetBottom;
+    if (w < 2 || h < 2) return;
+    if (b > 0 && b < 0.7 * h) this.camera.setViewOffset(w, h + b, 0, b, w, h);
+    else this.camera.clearViewOffset();
+    this.camera.updateProjectionMatrix();
+    this.labelsDirty = true;
+  }
+
   private resize(w: number, h: number): void {
     if (w < 2 || h < 2) return;
     const oldAspect = this.camera.aspect;
     this.hostWidth = w;
+    this.viewW = w;
+    this.viewH = h;
     this.renderer.setSize(w, h, false);
     this.labelRenderer.setSize(w, h);
     this.labelsDirty = true;
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
+    if (this.insetBottom > 0) this.applyViewOffset();
     // When the pane changes shape later (window resize, layout switch), keep the framing: scale the viewing distance by
     // the ratio of the fit distances, which also preserves the student's own zoom. The first resize precedes placeCamera.
     if (this.sized && Math.abs(oldAspect - this.camera.aspect) > 1e-3 && !this.tween.active) {
