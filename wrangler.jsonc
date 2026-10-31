@@ -1,0 +1,29 @@
+// Cloudflare deployment: one Worker serves dist/index.html (static assets) and /api/assistant (server/worker.ts).
+// Deploy: `npm run deploy` (builds first). The key is a secret, never in this file:
+//   npx wrangler secret put ANTHROPIC_API_KEY
+// Custom domain: add it under the Worker's Settings → Domains & Routes in the Cloudflare dashboard (docs/deploy.md).
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "ecg-academy",
+  "main": "./server/worker.ts",
+  "compatibility_date": "2026-10-19",
+  "compatibility_flags": ["nodejs_compat"],
+  // the site's home (xiangminf.com itself is the owner's portfolio; the old Vercel URL redirects here)
+  "routes": [{ "pattern": "ecgacademy.xiangminf.com", "custom_domain": true }],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+  // Run the Worker next to a US cloud region, so calls to the Claude API always leave from a supported region,
+  // whatever data centre the visitor reaches.
+  "placement": {
+    "region": "aws:us-east-1"
+  },
+  "vars": {
+    "ASSISTANT_MODEL": "claude-opus-5-5"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

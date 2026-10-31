@@ -11,7 +11,14 @@ import { AssistantError, type AssistantErrorCode, type AssistantSettings, type C
 import { pageContext } from './context';
 import { streamChat } from './llm';
 import { systemPrompt } from './prompt';
+import { probeServer } from './providers/server';
 import { effectiveModel, isConfigured, loadSettings, saveSettings } from './settings';
+
+/** Whether this site has its own assistant endpoint (probed once, see checkServer). */
+export interface ServerState {
+  readonly status: 'unknown' | 'checking' | 'ready' | 'off';
+  readonly model: string;
+}
 
 export type AssistantKey = Parameters<typeof tai>[0];
 
@@ -37,9 +44,24 @@ export const assistant = {
   busy: signal(false),
   /** a short note above the composer (a dictionary key), e.g. "configure the API first" */
   notice: signal<AssistantKey | null>(null),
+  server: signal<ServerState>({ status: 'unknown', model: '' }),
 };
 
-export const configured = computed(() => isConfigured(assistant.settings.value));
+export const configured = computed(() => isConfigured(assistant.settings.value, assistant.server.value.status === 'ready'));
+
+let probing: Promise<void> | null = null;
+
+/** Ask the site whether it has an assistant endpoint (once; `force` asks again). */
+export function checkServer(force = false): Promise<void> {
+  if (probing && !force) return probing;
+  if (!force && (assistant.server.value.status === 'ready' || assistant.server.value.status === 'off')) return Promise.resolve();
+  assistant.server.value = { ...assistant.server.value, status: 'checking' };
+  probing = probeServer().then((info) => {
+    assistant.server.value = info.enabled ? { status: 'ready', model: info.model } : { status: 'off', model: '' };
+    if (configured.value && assistant.notice.value === 'notConfigured') assistant.notice.value = null;
+  });
+  return probing;
+}
 
 /** Turns sent with a request: the last MAX_TURNS completed turns, starting with the learner, same-role turns merged. */
 export const MAX_TURNS = 12;
@@ -114,7 +136,9 @@ export async function sendMessage(text: string): Promise<void> {
   const q = text.trim();
   if (q === '' || assistant.busy.value) return;
   const settings = assistant.settings.value;
-  if (!isConfigured(settings)) {
+  if (settings.provider === 'server' && assistant.server.value.status !== 'ready' && assistant.server.value.status !== 'off') await checkServer();
+  if (assistant.busy.value) return;
+  if (!isConfigured(settings, assistant.server.value.status === 'ready')) {
     assistant.draft.value = q;
     assistant.notice.value = 'notConfigured';
     assistant.view.value = 'settings';
@@ -171,12 +195,16 @@ export type ConnectionTest = { readonly ok: true; readonly model: string } | { r
 /** One tiny request with the given (possibly unsaved) settings. */
 export async function testConnection(s: AssistantSettings): Promise<ConnectionTest> {
   try {
+    if (s.provider === 'server') {
+      await checkServer(true);
+      if (assistant.server.value.status !== 'ready') throw new AssistantError('server', 'no server');
+    }
     await streamChat(s, {
       system: 'This is a connection test. Reply with the single word OK.',
       messages: [{ role: 'user', content: 'Reply with OK.' }],
       maxTokens: 64,
     });
-    return { ok: true, model: effectiveModel(s) };
+    return { ok: true, model: s.provider === 'server' ? assistant.server.value.model : effectiveModel(s) };
   } catch (e) {
     return { ok: false, error: e instanceof AssistantError ? e : new AssistantError('unknown', e instanceof Error ? e.message : String(e)) };
   }

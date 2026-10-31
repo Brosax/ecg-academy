@@ -19,6 +19,7 @@ import { Markdown } from './MarkdownView';
 import { cleanKey, DEFAULT_BASE_URL, DEFAULT_MODEL, isConfigured, isValidBaseUrl, isValidKey } from './settings';
 import {
   assistant,
+  checkServer,
   clearConversation,
   closeAssistant,
   configured,
@@ -183,10 +184,14 @@ function Chat() {
 
 function Empty(props: { readonly kind: ContextKind }) {
   const ok = configured.value;
+  const viaServer = assistant.settings.value.provider === 'server';
+  const srv = assistant.server.value.status;
+  const checking = viaServer && (srv === 'unknown' || srv === 'checking');
+  const text = ok ? tai('intro') : checking ? tai('serverChecking') : viaServer ? tai('serverOff') : tai('introUnconfigured');
   return (
     <div class="ai-empty">
-      <p class="ai-empty__text">{ok ? tai('intro') : tai('introUnconfigured')}</p>
-      {ok ? (
+      <p class="ai-empty__text">{text}</p>
+      {checking && !ok ? null : ok ? (
         <div class="ai-chips">
           {CHIPS[props.kind].map((k) => (
             <button key={k} type="button" class="ai-chip" onClick={() => void sendMessage(tai(k))}>
@@ -393,6 +398,7 @@ export function AssistantSettingsForm(props: { readonly onSaved?: () => void }) 
           value={p}
           ariaLabel={tai('setProvider')}
           options={[
+            { value: 'server', label: tai('provServer') },
             { value: 'anthropic', label: 'Anthropic · Claude' },
             { value: 'openai', label: tai('provOpenai') },
           ]}
@@ -400,6 +406,10 @@ export function AssistantSettingsForm(props: { readonly onSaved?: () => void }) 
         />
       </div>
 
+      {p === 'server' ? (
+        <ServerStatus />
+      ) : (
+      <>
       <div class="ai-field">
         <label class="ai-field__label" for={`${idp}-key`}>
           {tai('setKey')}
@@ -469,19 +479,37 @@ export function AssistantSettingsForm(props: { readonly onSaved?: () => void }) 
         </div>
         <input id={`${idp}-remember`} type="checkbox" role="switch" class="ai-switch" checked={draft.remember} onChange={(e) => set({ remember: e.currentTarget.checked })} />
       </div>
+      </>
+      )}
 
       <div class="ai-settings__actions">
         <button type="button" class="ui-btn ui-btn--primary ui-btn--sm" disabled={!dirty || !urlOk || !keyOk} onClick={save}>
           <Icon name="check" />
           <span>{tai('save')}</span>
         </button>
-        <button type="button" class="ui-btn ui-btn--default ui-btn--sm" disabled={test === 'testing' || !isConfigured(draft)} onClick={() => void runTest()}>
+        <button type="button" class="ui-btn ui-btn--default ui-btn--sm" disabled={test === 'testing' || (p !== 'server' && !isConfigured(draft))} onClick={() => void runTest()}>
           <Icon name="bolt" />
           <span>{tai('test')}</span>
         </button>
       </div>
       <p class={`ai-settings__status${tone ? ` ai-settings__status--${tone}` : ''}`} role="status">
         {status}
+      </p>
+    </div>
+  );
+}
+
+/** The site's own endpoint: whether it is there, and which model it uses. */
+function ServerStatus() {
+  const s = assistant.server.value;
+  useEffect(() => {
+    void checkServer();
+  }, []);
+  const text = s.status === 'ready' ? tai('serverReady', { model: s.model || '—' }) : s.status === 'off' ? tai('serverOff') : tai('serverChecking');
+  return (
+    <div class="ai-field">
+      <p class={`ai-server ai-server--${s.status}`} role="status">
+        {text}
       </p>
     </div>
   );
