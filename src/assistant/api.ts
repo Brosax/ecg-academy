@@ -5,8 +5,12 @@
  * key; only the question, the conversation and a short description of the current page travel — never ECG signal
  * data, never the hidden answer of a case or an exercise — and no page, grade or truth depends on it.
  */
-export const PROVIDERS = ['anthropic', 'openai'] as const;
-/** 'anthropic' = the Claude Messages API through @anthropic-ai/sdk; 'openai' = any OpenAI-compatible chat endpoint. */
+export const PROVIDERS = ['server', 'anthropic', 'openai'] as const;
+/**
+ * 'server' = the site's own endpoint (/api/assistant, server/assistant.ts) holding the site's key — the default, no key
+ * needed; 'anthropic' = the Claude Messages API with the learner's key through @anthropic-ai/sdk; 'openai' = any
+ * OpenAI-compatible chat endpoint with the learner's key.
+ */
 export type ProviderId = (typeof PROVIDERS)[number];
 
 export interface AssistantSettings {

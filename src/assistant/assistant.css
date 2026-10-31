@@ -376,6 +376,23 @@
 .ai-switch:checked::before {
   transform: translateX(18px);
 }
+.ai-server {
+  min-height: 40px;
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--panel-2);
+  color: var(--fg-muted);
+  font-size: var(--fs-sm);
+}
+.ai-server--ready {
+  background: var(--ok-soft);
+  color: var(--ok);
+}
+.ai-server--off {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
 .ai-settings__actions {
   display: flex;
   flex-wrap: wrap;

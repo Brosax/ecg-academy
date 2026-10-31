@@ -12,3 +12,7 @@ nul
 .claude/settings.local.json
 *.pdf
 _proto/**/cache/
+.env.local
+.env*.local
+.dev.vars
+.wrangler/

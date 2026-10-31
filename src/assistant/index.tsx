@@ -10,6 +10,7 @@
  */
 import { assistantSettingsSlot, assistantSlot } from '../app/slots';
 import { AssistantDock, AssistantSettingsForm } from './Assistant';
+import { checkServer } from './store';
 
 export { AssistantDock, AssistantSettingsForm } from './Assistant';
 export { openAssistant, sendMessage } from './store';
@@ -26,4 +27,6 @@ export function AssistantSettingsSection() {
 export function wireAssistant(): void {
   assistantSlot.value = AssistantDock;
   assistantSettingsSlot.value = AssistantSettingsSection;
+  // only where the page comes from a server (a single-file copy opened from disk has no endpoint to ask)
+  if (/^https?:$/.test(globalThis.location?.protocol ?? '')) void checkServer();
 }

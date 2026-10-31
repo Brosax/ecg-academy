@@ -74,17 +74,28 @@ describe('key cleaning', () => {
 });
 
 describe('effective values and configured', () => {
+  it('defaults to the site server, which needs no key and is ready only when the server said so', () => {
+    expect(DEFAULT_SETTINGS.provider).toBe('server');
+    expect(isConfigured(DEFAULT_SETTINGS)).toBe(false);
+    expect(isConfigured(DEFAULT_SETTINGS, true)).toBe(true);
+    expect(sanitizeSettings({}).provider).toBe('server');
+    // a learner who chose their own key keeps that choice
+    expect(sanitizeSettings({ provider: 'anthropic', apiKey: 'k' }).provider).toBe('anthropic');
+  });
+
   it('falls back to the provider defaults', () => {
-    expect(effectiveBaseUrl(DEFAULT_SETTINGS)).toBe(DEFAULT_BASE_URL.anthropic);
-    expect(effectiveModel(DEFAULT_SETTINGS)).toBe(DEFAULT_MODEL.anthropic);
+    const an = { ...DEFAULT_SETTINGS, provider: 'anthropic' as const };
+    expect(effectiveBaseUrl(an)).toBe(DEFAULT_BASE_URL.anthropic);
+    expect(effectiveModel(an)).toBe(DEFAULT_MODEL.anthropic);
     expect(DEFAULT_MODEL.anthropic).toBe('claude-opus-5-5');
     const oa = { ...DEFAULT_SETTINGS, provider: 'openai' as const };
     expect(effectiveBaseUrl(oa)).toBe('https://api.openai.com/v1');
     expect(effectiveModel(oa)).toBe('');
   });
   it('anthropic needs a key; an OpenAI-compatible endpoint needs a model (a key is optional for local servers)', () => {
-    expect(isConfigured(DEFAULT_SETTINGS)).toBe(false);
-    expect(isConfigured({ ...DEFAULT_SETTINGS, apiKey: 'sk-x' })).toBe(true);
+    const an = { ...DEFAULT_SETTINGS, provider: 'anthropic' as const };
+    expect(isConfigured(an, true)).toBe(false);
+    expect(isConfigured({ ...an, apiKey: 'sk-x' })).toBe(true);
     expect(isConfigured({ ...DEFAULT_SETTINGS, provider: 'openai', apiKey: 'k' })).toBe(false);
     expect(isConfigured({ ...DEFAULT_SETTINGS, provider: 'openai', model: 'llama3', baseUrl: 'http://localhost:11434/v1' })).toBe(true);
     expect(isConfigured({ ...DEFAULT_SETTINGS, apiKey: 'k', baseUrl: 'not a url' })).toBe(false);

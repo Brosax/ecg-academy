@@ -30,15 +30,20 @@ Audience: medical students (and nurses/residents). UI in zh / en / es.
 - All lab CSS is scoped under `.lab-root`; the lab follows the main app's language and theme (bridged in `src/lab/index.tsx`).
 
 ## AI study assistant (`src/assistant/`) — added 2026-10-31
-- An opt-in chat panel (floating button, non-modal) that explains terms, criteria and mechanisms through the LLM API the
-  learner configures themself (settings panel / settings page: provider, key, base URL, model). Nothing is sent until a
-  key is saved; the key lives only in this browser (`ecg-academy:assistant:v1`, sessionStorage when "remember" is off)
-  and never inside the app's preferences. This is the **one runtime network exception** to the "no external network
-  resources" convention below: the app works fully without it, and no page, grade or truth ever depends on an answer.
-- Two providers: Claude through the official `@anthropic-ai/sdk` (`client.beta.messages.stream`, browser mode, model
-  gated parameters: `effort: low`, server-side refusal `fallbacks` on the models that support them), and any
-  OpenAI-compatible `chat/completions` endpoint over fetch (DeepSeek, Qwen, Moonshot, Ollama…). Never call Claude through
-  the OpenAI-compatible path.
+- A chat panel (floating button, non-modal) that explains terms, criteria and mechanisms. This is the **one runtime
+  network exception** to the "no external network resources" convention below: the app works fully without it, and no
+  page, grade or truth ever depends on an answer.
+- Default provider (2026-10-31, user decision): **the site's own endpoint** `/api/assistant` (`server/assistant.ts`,
+  web-standard Request/Response) holding the site's Claude key, so learners never enter a key. Deployed as a Cloudflare
+  Worker with the static app (`server/worker.ts`, `wrangler.jsonc`, `docs/deploy.md`; key = Worker secret
+  `ANTHROPIC_API_KEY`, never in the repo); `npm run dev` serves it too (key from `.env.local`). The endpoint fixes the
+  model, caps sizes and `max_tokens`, accepts only same-site origins and rate-limits per IP. The panel probes it once;
+  a copy opened from disk has none and offers the learner's own key instead.
+- Learner's own key (optional): Claude through the official `@anthropic-ai/sdk` (`client.beta.messages.stream`, browser
+  mode), or any OpenAI-compatible `chat/completions` endpoint over fetch (DeepSeek, Qwen, Moonshot, Ollama…). That key
+  lives only in this browser (`ecg-academy:assistant:v1`, sessionStorage when "remember" is off), never in the app's
+  preferences. Claude calls (server or browser) use the same model-gated parameters (`effort: low`, refusal `fallbacks`
+  where supported); never call Claude through the OpenAI-compatible path.
 - What travels: the system prompt (`prompt.ts`), the conversation, and a short description of the current page
   (`context.ts`: lesson title + current step, atlas definition + criteria, drill family title). **Never** ECG signal data,
   a real case's labels or measurements, a drill item, seed or topic, or a lesson hook's reveal — the model is told it

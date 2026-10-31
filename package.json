@@ -12,7 +12,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:lab": "vitest run tests/lab",
-    "build:artifact": "vite build && node scripts/inline-single-file.mjs && node scripts/artifact-page.mjs"
+    "build:artifact": "vite build && node scripts/inline-single-file.mjs && node scripts/artifact-page.mjs",
+    "cf:dev": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "1.3.0",
@@ -25,6 +27,7 @@
     "@types/three": "0.186.0",
     "typescript": "7.0.2",
     "vite": "8.3.3",
-    "vitest": "5.0.3"
+    "vitest": "5.0.3",
+    "wrangler": "4.151.1"
   }
 }

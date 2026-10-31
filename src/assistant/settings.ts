@@ -5,17 +5,21 @@
  */
 import { PROVIDERS, type AssistantSettings, type ProviderId } from './api';
 
+/** The server provider's model is chosen by the server ('' here). */
 export const DEFAULT_MODEL: Readonly<Record<ProviderId, string>> = {
+  server: '',
   anthropic: 'claude-opus-5-5',
   openai: '',
 };
 
+/** The server provider always calls this site's /api/assistant ('' here). */
 export const DEFAULT_BASE_URL: Readonly<Record<ProviderId, string>> = {
+  server: '',
   anthropic: 'https://api.anthropic.com',
   openai: 'https://api.openai.com/v1',
 };
 
-export const DEFAULT_SETTINGS: AssistantSettings = { provider: 'anthropic', apiKey: '', baseUrl: '', model: '', remember: true };
+export const DEFAULT_SETTINGS: AssistantSettings = { provider: 'server', apiKey: '', baseUrl: '', model: '', remember: true };
 
 export const STORAGE_KEY = 'ecg-academy:assistant:v1';
 /** the key while "remember" is off: sessionStorage, this tab only */
@@ -63,8 +67,12 @@ export function effectiveModel(s: AssistantSettings): string {
   return s.model.trim() || DEFAULT_MODEL[s.provider];
 }
 
-/** Ready to send: a valid base URL, a model, and a key for Anthropic (a local OpenAI-compatible server may need none). */
-export function isConfigured(s: AssistantSettings): boolean {
+/**
+ * Ready to send. The site's server: when it answered that it is enabled (`serverReady`). Own key: a valid base URL, a
+ * model, and a key for Anthropic (a local OpenAI-compatible server may need none).
+ */
+export function isConfigured(s: AssistantSettings, serverReady = false): boolean {
+  if (s.provider === 'server') return serverReady;
   if (!isValidBaseUrl(s.baseUrl)) return false;
   if (effectiveModel(s) === '') return false;
   const key = cleanKey(s.apiKey);
