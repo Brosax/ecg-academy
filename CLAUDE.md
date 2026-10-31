@@ -29,9 +29,27 @@ Audience: medical students (and nurses/residents). UI in zh / en / es.
   `labHref(findingId)` (`src/lab/links.ts`) when the lab has that condition.
 - All lab CSS is scoped under `.lab-root`; the lab follows the main app's language and theme (bridged in `src/lab/index.tsx`).
 
+## AI study assistant (`src/assistant/`) — added 2026-10-31
+- An opt-in chat panel (floating button, non-modal) that explains terms, criteria and mechanisms through the LLM API the
+  learner configures themself (settings panel / settings page: provider, key, base URL, model). Nothing is sent until a
+  key is saved; the key lives only in this browser (`ecg-academy:assistant:v1`, sessionStorage when "remember" is off)
+  and never inside the app's preferences. This is the **one runtime network exception** to the "no external network
+  resources" convention below: the app works fully without it, and no page, grade or truth ever depends on an answer.
+- Two providers: Claude through the official `@anthropic-ai/sdk` (`client.beta.messages.stream`, browser mode, model
+  gated parameters: `effort: low`, server-side refusal `fallbacks` on the models that support them), and any
+  OpenAI-compatible `chat/completions` endpoint over fetch (DeepSeek, Qwen, Moonshot, Ollama…). Never call Claude through
+  the OpenAI-compatible path.
+- What travels: the system prompt (`prompt.ts`), the conversation, and a short description of the current page
+  (`context.ts`: lesson title + current step, atlas definition + criteria, drill family title). **Never** ECG signal data,
+  a real case's labels or measurements, a drill item, seed or topic, or a lesson hook's reveal — the model is told it
+  cannot see the tracing and must not guess an answer. Replies are Markdown rendered to VNodes (`markdown.ts`), never
+  innerHTML. The shell gets the dock and the settings section through slots (`assistantSlot`, `assistantSettingsSlot`);
+  `src/app` never imports `src/assistant`.
+
 ## Conventions
 - TypeScript strict, ESM, Preact + @preact/signals, three r186 (the small 3D heart and the Heart Lab). No enums (`as const` objects).
-- No external network resources at runtime (no CDN, no web fonts). Build → one self-contained `dist/index.html`.
+- No external network resources at runtime (no CDN, no web fonts; the only exception is the opt-in AI assistant calling
+  the endpoint the learner configured). Build → one self-contained `dist/index.html`.
 - i18n: zh / en / es for every user-visible string; medical terms must be correct in all three (Spanish: Spain usage —
   "derivación", "aurícula", "onda", "segmento", "bloqueo de rama").
 - Light "textbook" theme (pink ECG paper) is the default; dark theme via CSS tokens only.

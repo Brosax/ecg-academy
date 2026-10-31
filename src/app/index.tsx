@@ -9,4 +9,4 @@ export { AboutPage } from './AboutPage';
 export { NotFoundPage } from './NotFoundPage';
 
 /** Places in the shell that feature modules fill (wired in src/main.tsx). */
-export { homeSlots, overallProgress, progressDataSlot } from './slots';
+export { assistantSettingsSlot, assistantSlot, homeSlots, overallProgress, progressDataSlot } from './slots';

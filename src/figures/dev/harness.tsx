@@ -38,6 +38,16 @@ function App() {
     { id: 'decision-tree', params: { tree: 'wide-tachy' } },
     { id: 'decision-tree', params: { tree: 'brady-av-block' } },
     { id: 'vector-loop', ecg, cursor },
+    // animated scenes (docs/design/f-explainers.md §4)
+    { id: 'conduction-journey', ecg, cursor },
+    { id: 'vector-pen' },
+    { id: 'three-vectors' },
+    { id: 'triangle-to-wheel', ecg, cursor },
+    { id: 'chest-ring' },
+    { id: 'moving-paper', ecg, cursor },
+    { id: 'electrode-walk', ecg, cursor },
+    { id: 'cable-swap', ecg, cursor },
+    { id: 'noisy-electrode', ecg, cursor },
   ];
   const shown = which === 'all' ? items : items.filter((f) => f.id === which);
   return (

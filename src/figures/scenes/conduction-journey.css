@@ -1,0 +1,23 @@
+/* conduction-journey scene (lesson f1). Tokens only; imported by ConductionJourneyScene.tsx. */
+.cj-k-atrial { color: var(--c-atrial); }
+.cj-k-cond { color: var(--c-conduction); }
+.cj-k-qrs { color: var(--c-qrs); }
+.cj-k-st { color: var(--fg-muted); }
+.cj-k-repol { color: var(--c-repol); }
+.cj-lbl { fill: currentColor; font-family: var(--font-sans); font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; paint-order: stroke; stroke: var(--ecg-paper); stroke-width: 3px; stroke-linejoin: round; }
+.cj-lbl--out { stroke: var(--bg-elev); }
+.cj-br { stroke: currentColor; stroke-width: 1.6; fill: none; stroke-linecap: round; }
+.cj-lead { stroke: currentColor; stroke-width: 1.1; stroke-dasharray: 3 3; fill: none; }
+.cj-chip rect { fill: var(--panel); stroke: var(--border-strong); stroke-width: 1; }
+.cj-chip text { fill: var(--fg); font-family: var(--font-sans); font-size: 11px; font-variant-numeric: tabular-nums; }
+.cj-chip.cj-k-cond rect { stroke: var(--c-conduction); }
+.cj-repol { fill: var(--c-repol); stroke: none; pointer-events: none; }
+.cj-arc { fill: none; stroke: var(--c-conduction); stroke-width: 3; stroke-linecap: round; }
+.cj-arc--track { stroke: var(--border-strong); stroke-width: 1.5; }
+.cj-ring { fill: none; stroke: var(--c-conduction); stroke-width: 2; }
+.cj-glow { fill: var(--c-highlight); }
+.cj-ap-box { fill: var(--panel-2); stroke: var(--border); stroke-width: 1; }
+.cj-ap { stroke: var(--c-vector); stroke-width: 1.8; fill: none; stroke-linejoin: round; }
+.cj-dot { fill: var(--c-vector); }
+.cj-moral { fill: var(--fg); font-family: var(--font-sans); font-size: 13px; font-weight: 700; }
+.cj-hit { fill: transparent; cursor: ew-resize; }

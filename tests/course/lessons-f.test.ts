@@ -7,7 +7,13 @@
  *  - check families are available today and generate; inline answer keys grade as correct;
  *  - every drill has at least one available family; real cases are clean normal ECGs;
  *  - the text is complete in zh / en / es, uses current terminology and Spain Spanish number style;
- *  - what the text says is on a tracing is measurably there (rate, PR, QRS, flat leads, inverted leads, R progression…).
+ *  - what the text says is on a tracing is measurably there (rate, PR, QRS, flat leads, inverted leads, R progression…);
+ *  - the lessons are scene-led (docs/design/f-explainers.md §4–§5): each embeds its planned animated scenes before its
+ *    first check, every scene block has a zh / en / es caption (and the scene's own dictionary a title and caption),
+ *    the text-policy limits hold (no standalone text block, four reference cards, ≤ 3 pitfalls, short captions), and
+ *    each lesson's text volume stays under a per-language ceiling that is below the pre-scene level.
+ * The 2026-10-31 rewrite kept every block the tests below pin by kind index (hook, live[0], contrast[0]/[1], worked[0],
+ * ecg[0], the inline items by seed) with the same ECG sources, so those assertions are unchanged.
  */
 import { describe, expect, it } from 'vitest';
 import type { Block, Lesson, LessonMark } from '../../src/course/api';
@@ -30,6 +36,15 @@ import { familyAvailable, generateItem, gradeItem } from '../../src/practice';
 import type { EcgSource, Item, ItemView } from '../../src/practice/api';
 import { getCase } from '../../src/real';
 import { generate, scenarios, type SynthRequest } from '../../src/synth';
+import * as cableSwapI18n from '../../src/figures/scenes/cable-swap.i18n';
+import * as chestRingI18n from '../../src/figures/scenes/chest-ring.i18n';
+import * as conductionJourneyI18n from '../../src/figures/scenes/conduction-journey.i18n';
+import * as electrodeWalkI18n from '../../src/figures/scenes/electrode-walk.i18n';
+import * as movingPaperI18n from '../../src/figures/scenes/moving-paper.i18n';
+import * as noisyElectrodeI18n from '../../src/figures/scenes/noisy-electrode.i18n';
+import * as threeVectorsI18n from '../../src/figures/scenes/three-vectors.i18n';
+import * as triangleToWheelI18n from '../../src/figures/scenes/triangle-to-wheel.i18n';
+import * as vectorPenI18n from '../../src/figures/scenes/vector-pen.i18n';
 
 const F: readonly Lesson[] = [f1, f2, f3, f4, f5, f6];
 
@@ -592,5 +607,138 @@ describe('f6: artefacts on one electrode', () => {
     const ii = roughness(e, 'II');
     for (const l of ['I', 'III', 'aVL'] as const) expect(roughness(e, l), l).toBeGreaterThan(5 * ii);
     for (const l of ['aVR', 'aVF'] as const) expect(roughness(e, l), l).toBeGreaterThan(2 * ii);
+  });
+});
+
+// ── scene-led lessons (docs/design/f-explainers.md §4 scenes, §5 text policy) ───────────────────────────────────────
+
+/** The animated scenes each lesson embeds (spec §4: nine scenes, every lesson at least one). */
+const SCENES = [
+  ['f1', 'conduction-journey'],
+  ['f2', 'vector-pen'],
+  ['f2', 'three-vectors'],
+  ['f3', 'triangle-to-wheel'],
+  ['f3', 'chest-ring'],
+  ['f4', 'moving-paper'],
+  ['f5', 'electrode-walk'],
+  ['f6', 'cable-swap'],
+  ['f6', 'noisy-electrode'],
+] as const;
+type SceneId = (typeof SCENES)[number][1];
+
+/** Each scene's own string tables (title / aria / caption / beats …), read raw. */
+type Table = Readonly<Record<string, string>>;
+const SCENE_DICTS: Readonly<Record<SceneId, { readonly zh: Table; readonly en: Table; readonly es: Table }>> = {
+  'conduction-journey': conductionJourneyI18n,
+  'vector-pen': vectorPenI18n,
+  'three-vectors': threeVectorsI18n,
+  'triangle-to-wheel': triangleToWheelI18n,
+  'chest-ring': chestRingI18n,
+  'moving-paper': movingPaperI18n,
+  'electrode-walk': electrodeWalkI18n,
+  'cable-swap': cableSwapI18n,
+  'noisy-electrode': noisyElectrodeI18n,
+};
+
+const lessonById = (id: string): Lesson => {
+  const x = F.find((y) => y.id === id);
+  if (!x) throw new Error(`no lesson ${id}`);
+  return x;
+};
+const sceneBlock = (lesson: Lesson, id: SceneId): BlockOf<'figure'> | undefined => blocks(lesson, 'figure').find((b) => b.figure.id === id);
+/** Sentences in an English text (a terminal . ! or ? followed by a space or the end). */
+const sentences = (en: string): number => (en.match(/[.!?](\s|$)/g) ?? []).length;
+
+type Volume = Readonly<Record<'zh' | 'en' | 'es', number>>;
+const HAN = /[㐀-鿿]/g;
+const wordCount = (s: string): number => s.split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
+/**
+ * Text volume of a whole lesson (every L10n in it: title, summary, objectives and all blocks): Han characters in zh,
+ * words (whitespace-separated tokens holding a letter or a digit) in en and es.
+ */
+function volume(lesson: Lesson): Volume {
+  const ts = texts(lesson).map((x) => x.t);
+  return {
+    zh: ts.reduce((a, t) => a + (t.zh.match(HAN) ?? []).length, 0),
+    en: ts.reduce((a, t) => a + wordCount(t.en), 0),
+    es: ts.reduce((a, t) => a + wordCount(t.es), 0),
+  };
+}
+/**
+ * `old`: the same measure on the pre-scene lessons (commit 5f9532c). `max`: the ceiling the scene-led lessons must stay
+ * under (about 10–15 % above their size on 2026-10-31); every ceiling is itself below the old level.
+ */
+const VOLUME: Readonly<Record<string, { readonly old: Volume; readonly max: Volume }>> = {
+  f1: { old: { zh: 1465, en: 1101, es: 1214 }, max: { zh: 900, en: 700, es: 750 } },
+  f2: { old: { zh: 1370, en: 1028, es: 1125 }, max: { zh: 850, en: 700, es: 750 } },
+  f3: { old: { zh: 1275, en: 1146, es: 1235 }, max: { zh: 750, en: 650, es: 700 } },
+  f4: { old: { zh: 1126, en: 930, es: 1035 }, max: { zh: 700, en: 600, es: 650 } },
+  f5: { old: { zh: 1324, en: 1061, es: 1169 }, max: { zh: 1000, en: 800, es: 900 } },
+  f6: { old: { zh: 1931, en: 1407, es: 1601 }, max: { zh: 1200, en: 900, es: 1050 } },
+};
+
+describe('stage F: scene-led lessons', () => {
+  it.each(SCENES)('%s embeds the %s scene before its first check, with a zh / en / es caption', (lessonId, sceneId) => {
+    const lesson = lessonById(lessonId);
+    const b = sceneBlock(lesson, sceneId);
+    expect(b, `${lessonId} has no figure block for ${sceneId}`).toBeDefined();
+    if (!b) return;
+    const firstCheck = lesson.blocks.findIndex((x) => x.kind === 'check');
+    expect(firstCheck).toBeGreaterThan(0);
+    expect(lesson.blocks.indexOf(b), `${sceneId} comes after the first check`).toBeLessThan(firstCheck);
+    expect(b.caption, `${sceneId}: the lesson block has no caption`).toBeDefined();
+    if (!b.caption) return;
+    for (const k of ['zh', 'en', 'es'] as const) expect(b.caption[k].trim(), `${sceneId} caption.${k}`).not.toBe('');
+    expect(/[㐀-鿿]/.test(b.caption.zh), `${sceneId} caption.zh is not Chinese`).toBe(true);
+    expect(b.caption.es, `${sceneId} caption.es is not translated`).not.toBe(b.caption.en);
+  });
+
+  it.each(SCENES)('%s: the %s scene has its own title and caption in zh / en / es', (_lessonId, sceneId) => {
+    const d = SCENE_DICTS[sceneId];
+    for (const k of ['zh', 'en', 'es'] as const)
+      for (const key of ['title', 'caption'] as const) expect(d[k][key]?.trim(), `${sceneId} ${k}.${key}`).toBeTruthy();
+    expect(/[㐀-鿿]/.test(d.zh.caption), `${sceneId} zh.caption is not Chinese`).toBe(true);
+    expect(d.es.caption, `${sceneId} es.caption is not translated`).not.toBe(d.en.caption);
+  });
+
+  it('every planned scene is embedded in exactly one stage-F lesson, the planned one', () => {
+    for (const [lessonId, sceneId] of SCENES) expect(F.filter((x) => sceneBlock(x, sceneId)).map((x) => x.id), sceneId).toEqual([lessonId]);
+  });
+});
+
+describe.each(F.map((x) => [x.id, x] as const))('%s: text policy', (id, lesson) => {
+  it('no standalone text block; pitfalls ≤ 3; summary ≤ 5 points', () => {
+    expect(blocks(lesson, 'text').length).toBe(0);
+    for (const b of blocks(lesson, 'pitfalls')) expect(b.items.length).toBeLessThanOrEqual(3);
+    for (const b of blocks(lesson, 'summary')) expect(b.points.length).toBeLessThanOrEqual(5);
+  });
+
+  it('figure, heart and live captions ≤ 2 sentences; contrast points ≤ 3 sentences (en)', () => {
+    for (const b of lesson.blocks) {
+      if ((b.kind === 'figure' || b.kind === 'heart' || b.kind === 'live') && b.caption)
+        expect(sentences(b.caption.en), `${b.kind} caption: "${b.caption.en}"`).toBeLessThanOrEqual(2);
+      if (b.kind === 'contrast') expect(sentences(b.point.en), `contrast point: "${b.point.en}"`).toBeLessThanOrEqual(3);
+    }
+  });
+
+  it('text volume per language stays under its ceiling, and the ceiling is below the pre-scene level', () => {
+    const v = volume(lesson);
+    const lim = VOLUME[id];
+    expect(lim, id).toBeDefined();
+    for (const k of ['zh', 'en', 'es'] as const) {
+      expect(lim.max[k], `${id} ${k}: ceiling not below the old level`).toBeLessThan(lim.old[k]);
+      expect(v[k], `${id} ${k}: ${v[k]} over the ceiling ${lim.max[k]}`).toBeLessThanOrEqual(lim.max[k]);
+    }
+  });
+});
+
+describe('stage F: reference cards', () => {
+  it('four criteria cards remain (f4 recording standards, f5 colour codes and extra leads, f6 artefacts), ≤ 4 rows, each with a source', () => {
+    expect(F.map((x) => blocks(x, 'criteria').length)).toEqual([0, 0, 0, 1, 2, 1]);
+    for (const x of F)
+      for (const b of blocks(x, 'criteria')) {
+        expect(b.items.length, `${x.id} ${b.title.en}`).toBeLessThanOrEqual(4);
+        expect(b.source?.trim(), `${x.id} ${b.title.en}: source`).toBeTruthy();
+      }
   });
 });

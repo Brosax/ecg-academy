@@ -99,6 +99,7 @@ export const courseZh = {
   dialSite: '部位',
   dialNoise: '噪声',
   playBeat: '慢放一个心动周期',
+  heartLabBeat: '在心脏实验室中查看这个心动周期',
   // criteria
   criteriaSource: '来源：{source}',
   // worked
@@ -239,6 +240,7 @@ export const courseEn: { readonly [K in CourseKey]: string } = {
   dialSite: 'Site',
   dialNoise: 'Noise',
   playBeat: 'Play one beat in slow motion',
+  heartLabBeat: 'See this beat in the Heart Lab',
   criteriaSource: 'Source: {source}',
   workedStepsAria: 'Steps of the worked example',
   workedPrev: 'Previous',
@@ -370,6 +372,7 @@ export const courseEs: { readonly [K in CourseKey]: string } = {
   dialSite: 'Localización',
   dialNoise: 'Ruido',
   playBeat: 'Reproducir un latido a cámara lenta',
+  heartLabBeat: 'Ver este latido en el Laboratorio cardiaco',
   criteriaSource: 'Fuente: {source}',
   workedStepsAria: 'Pasos del ejemplo resuelto',
   workedPrev: 'Anterior',

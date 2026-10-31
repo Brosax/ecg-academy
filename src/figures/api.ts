@@ -36,6 +36,27 @@ export interface FigureParams {
   readonly 'decision-tree': { readonly tree: 'narrow-tachy' | 'wide-tachy' | 'brady-av-block' | 'st-elevation' | 'bundle-branch' };
   /** frontal & horizontal VCG loops of the ECG's QRS/T with the instantaneous vector at the cursor */
   readonly 'vector-loop': { readonly plane?: 'frontal' | 'horizontal' | 'both' };
+
+  // ── animated scenes (src/figures/scenes, runtime src/figures/scene; docs/design/f-explainers.md §4). Params are
+  //    start values only: all interaction is internal state (Figure remounts on any params change). ──
+  /** f1 — one beat along the conduction system: what each structure draws on lead II (block ECG + cursor) */
+  readonly 'conduction-journey': Record<string, never>;
+  /** f2 — the heart vector as the pen: one schematic loop projected on a highlighted limb-lead axis */
+  readonly 'vector-pen': { readonly axisDeg?: number; readonly lead?: 'I' | 'II' | 'III' | 'aVR' | 'aVL' | 'aVF' };
+  /** f2 — septal, free-wall and basal vectors seen from V1 and V6 (rS / qR); optional late right vector */
+  readonly 'three-vectors': { readonly mainDeg?: number; readonly lateVector?: boolean };
+  /** f3 — Einthoven's triangle sliding into the hexaxial wheel, leads re-assembled from the block ECG's potentials */
+  readonly 'triangle-to-wheel': { readonly cabrera?: boolean };
+  /** f3 — Wilson's central terminal and an electrode walking V1 → V6 around the chest section */
+  readonly 'chest-ring': { readonly mainDeg?: number };
+  /** f4 — paper speed and gain as a drawing scale under a fixed pen (block ECG, lead II) */
+  readonly 'moving-paper': { readonly speed?: 25 | 50; readonly gain?: 5 | 10 | 20 };
+  /** f5 — placing V1–V6 on the torso; a cable swap permutes the block ECG's chest traces */
+  readonly 'electrode-walk': { readonly swap?: 'none' | 'v2v3' | 'v1v3' };
+  /** f6 — limb-cable reversals re-assembled exactly from the block ECG's electrode potentials */
+  readonly 'cable-swap': { readonly start?: 'correct' | 'laRa' | 'laLl' | 'raLl' | 'raRl' | 'laRl' };
+  /** f6 — noise on one limb electrode and where it shows up (block ECG, clean recording) */
+  readonly 'noisy-electrode': { readonly electrode?: 'RA' | 'LA' | 'LL'; readonly noise?: 'tremor' | 'mains' | 'wander' | 'emg' };
 }
 
 export type FigureId = keyof FigureParams;
@@ -55,7 +76,31 @@ export const FIGURE_IDS = [
   'territories',
   'decision-tree',
   'vector-loop',
+  // animated scenes
+  'conduction-journey',
+  'vector-pen',
+  'three-vectors',
+  'triangle-to-wheel',
+  'chest-ring',
+  'moving-paper',
+  'electrode-walk',
+  'cable-swap',
+  'noisy-electrode',
 ] as const satisfies readonly FigureId[];
+
+/** The animated scenes among the figure ids (docs/design/f-explainers.md §4), in lesson order. */
+export const SCENE_IDS = [
+  'conduction-journey',
+  'vector-pen',
+  'three-vectors',
+  'triangle-to-wheel',
+  'chest-ring',
+  'moving-paper',
+  'electrode-walk',
+  'cable-swap',
+  'noisy-electrode',
+] as const satisfies readonly FigureId[];
+export type SceneId = (typeof SCENE_IDS)[number];
 
 export type FigureProps = {
   [K in FigureId]: {

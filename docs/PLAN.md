@@ -35,6 +35,10 @@ at 1366×768 and 390 px wide, with no console errors (headless Edge check of the
   of the taxonomy. **Tools** (`src/tools`): checklist, normal values, calculators, glossary.
 - **Heart Lab** (`src/lab`, `#/lab`): 40 lab scenarios reachable from 56 findings; "see it in the Heart Lab" links on
   atlas pages, lessons and drills wherever the lab has the condition.
+- **AI study assistant** (`src/assistant`, 2026-10-31): an opt-in floating chat panel that explains terms, criteria and
+  mechanisms through the learner's own LLM API (Claude via the official SDK, or any OpenAI-compatible endpoint); knows
+  which lesson step, atlas entry or drill is on screen, never the hidden answer of a case or item; "ask AI" bubble on
+  selected text; settings in the panel and on the settings page; the key stays in the browser (CLAUDE.md).
 
 Planned, not built yet:
 

@@ -708,6 +708,10 @@ a.crs-lcard:hover {
   gap: var(--sp-2);
   text-align: center;
 }
+.crs-heart__transport {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
 
 /* criteria */
 .crs-criteria {

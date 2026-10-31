@@ -11,10 +11,11 @@ import type { ComponentChildren } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
 import { href } from '../app/router';
 import { store, type LayoutId } from '../app/store';
+import type { EcgTruth } from '../core/ecg';
 import { FINDINGS } from '../core/findings';
 import type { L10n } from '../core/l10n';
 import { hashString } from '../core/rng';
-import { Figure, type FigureProps } from '../figures';
+import { Figure, HEART_PHASES, PHASE_LABEL_KEY, phaseBeats, SceneTransport, tsn, useScene, type Beat, type FigureProps, type SceneState } from '../figures';
 import { Heart3D } from '../heart3d';
 import { lt } from '../i18n';
 import { tc } from '../i18n/common';
@@ -22,7 +23,7 @@ import { tco } from '../i18n/course';
 import type { DrillRunnerProps, Item } from '../practice/api';
 import type { DialId, DialRange, SynthResult } from '../synth';
 import { Badge, Button, Feedback, Icon, LinkButton } from '../ui';
-import type { Block, Lesson } from './api';
+import type { AutoMark, Block, Lesson, LessonMark } from './api';
 import {
   drillMastery,
   drillRunner,
@@ -37,6 +38,7 @@ import {
 import { EcgDisplay, EcgPanel, EcgPlaceholder, useEcg } from './EcgFrame';
 import { DIAL_META, dialStep, pickDials, realisedDials, startDials } from './live';
 import { defaultBeat } from './marks';
+import { labLinks } from './lab';
 import { Markup } from './LessonText';
 import { reviewKeys } from './stages';
 
@@ -408,65 +410,121 @@ function FigureBlock(props: { readonly block: BlockOf<'figure'> }) {
 }
 
 // ── 3D heart following the ECG cursor ─────────────────────────────────────────────────────────────────────────────
-
-function reducedMotion(): boolean {
-  if (store.settings.value.reduceMotion) return true;
-  try {
-    return globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-  } catch {
-    return false;
-  }
-}
+//
+// Spec docs/design/f-explainers.md §3: the shared cursor is the one clock (the heart reads it, the strip draws it);
+// useScene owns play-once / scrub / prev-next over one beat in slow motion, landing on phase middles (a phase end is
+// ambiguous in 3D). The phase sentence is Heart3D's own fixed .h3d__phase box (no second narration box); per-phase
+// emphasis goes on the ECG as one AutoMark, never on the heart (view.ts turns the camera on emphasis changes).
 
 /** Slow-motion factor of "play one beat" (one beat of ≈ 0.6 s takes ≈ 3 s). */
 const SLOW_MOTION = 5;
 
+type HeartPhaseId = (typeof HEART_PHASES)[number]['id'];
+
+/** The ECG region each heart phase draws (the sinus node draws nothing). */
+export const HEART_PHASE_AUTO: Readonly<Record<HeartPhaseId, AutoMark['auto'] | null>> = {
+  sa: null,
+  p: 'p',
+  pr: 'pr-segment',
+  qrs: 'qrs',
+  st: 'st',
+  t: 't',
+};
+
+/** The one mark of a phase on lead II of beat k (undefined for the sinus node or no phase). Pure. */
+export function heartPhaseMarks(id: HeartPhaseId | '', beat: number): readonly LessonMark[] | undefined {
+  const auto = id === '' ? null : HEART_PHASE_AUTO[id];
+  return auto ? [{ auto, lead: 'II', beat, color: 'highlight' }] : undefined;
+}
+
+/**
+ * Where prev / next / the phase bar land (p): the middle of phase i, except that the T phase is measured to the end of
+ * the T wave (tOff), not to the window end (tOff + 60) — past tOff the heart has recovered and would say "at rest"
+ * while the bar says "T wave". Pure.
+ */
+export function heartPhaseTarget(beats: readonly Beat[], window: readonly [number, number] | null, i: number, tOffMs: number): number {
+  if (beats.length === 0) return 0;
+  const b = beats[Math.min(beats.length - 1, Math.max(0, Math.round(i)))];
+  const span = window ? window[1] - window[0] : 0;
+  const pOff = window && span > 0 ? (tOffMs - window[0]) / span : 1;
+  const to = Math.max(b.from, Math.min(b.to, pOff));
+  return (b.from + to) / 2;
+}
+
+/** The phase whose wave the pen is drawing at ECG time tMs: none for the sinus node and none after the T wave. Pure. */
+export function heartMarkPhase(id: HeartPhaseId | '', tMs: number | null, tOffMs: number): HeartPhaseId | '' {
+  if (id === 'sa' || (id === 't' && tMs !== null && tMs > tOffMs)) return '';
+  return id;
+}
+
+/** The Heart Lab link of an ECG: its first finding the lab can show, preferring one that is not just the rhythm. Pure. */
+export function heartLabHref(truth: Pick<EcgTruth, 'rhythm' | 'findings'> | null | undefined, links: typeof labLinks = labLinks): string | null {
+  if (!truth) return null;
+  const all = links(truth.findings);
+  return (all.find((x) => x.finding !== truth.rhythm) ?? all[0])?.href ?? null;
+}
+
 function HeartBlock(props: { readonly block: BlockOf<'heart'> }) {
   const b = props.block;
   const cursor = useSignal<number | null>(null);
+  const side = useRef<HTMLDivElement>(null);
   const { state, retry } = useEcg(b.ecg);
   const ecg = state.status === 'ready' ? state.ecg : null;
-  const raf = useRef(0);
-  useEffect(() => () => cancelAnimationFrame(raf.current), []);
-
-  const play = () => {
-    const truth = ecg?.truth;
-    if (!ecg || !truth) return;
-    const k = defaultBeat(truth, ecg.signal.durationMs);
-    if (k === null) return;
-    const beat = truth.beats[k];
-    const t0 = (beat.pOn ?? beat.qrsOn - 120) - 40;
-    const t1 = beat.tOff + 60;
-    cancelAnimationFrame(raf.current);
-    if (reducedMotion()) {
-      cursor.value = (beat.qrsOn + beat.qrsOff) / 2;
-      return;
+  const truth = ecg?.truth;
+  const k = ecg && truth ? defaultBeat(truth, ecg.signal.durationMs) : null;
+  // window = [pOn − 40, tOff + 60], ×5, clamped to 1.5–6 s (anchorBeats); one identity per ECG
+  const timeline = useMemo(() => {
+    if (!truth || k === null) return null;
+    try {
+      return phaseBeats(HEART_PHASES, truth.beats[k], SLOW_MOTION);
+    } catch {
+      return null; // fiducials out of order (anchorBeats throws): the heart still follows clicks on the ECG
     }
-    const dur = Math.max(1500, Math.min(6000, (t1 - t0) * SLOW_MOTION));
-    const start = performance.now();
-    const tick = (now: number) => {
-      const f = Math.min(1, (now - start) / dur);
-      cursor.value = t0 + f * (t1 - t0);
-      if (f < 1) raf.current = requestAnimationFrame(tick);
-    };
-    raf.current = requestAnimationFrame(tick);
+  }, [truth, k]);
+  const scene = useScene<HeartPhaseId>({ timeline, autoplay: false, seekTo: 'middle', cursor, target: side });
+  const tOff = truth && k !== null ? truth.beats[k].tOff : 0;
+  const seekPhase = (i: number) => scene.seek(heartPhaseTarget(scene.beats, scene.window, i, tOff));
+  const qrs = scene.beats.findIndex((x) => x.id === 'qrs');
+  // reduced motion: the cursor goes straight to the middle of the QRS; otherwise the beat plays once and holds
+  const playOne = () => (scene.reduced ? seekPhase(qrs) : scene.replay());
+  const transport: SceneState<HeartPhaseId> = {
+    ...scene,
+    replay: playOne,
+    seekBeat: seekPhase,
+    prev: () => seekPhase(scene.i - 1),
+    next: () => seekPhase(scene.i + 1),
+    prevBeat: () => seekPhase(scene.i - 1),
+    nextBeat: () => seekPhase(scene.i + 1),
   };
+  // one mark, whose identity changes only at phase boundaries → EcgDisplay re-resolves ≈ 6 times per play, never per frame
+  const tNow = scene.window ? scene.window[0] + (scene.window[1] - scene.window[0]) * scene.p : null;
+  const markId = heartMarkPhase(scene.id, tNow, tOff);
+  const marks = useMemo(() => (k === null ? undefined : heartPhaseMarks(markId, k)), [markId, k]);
+  const lab = useMemo(() => heartLabHref(truth), [truth]);
 
   return (
     <figure class="crs-fig">
       <div class="crs-heart">
         <div class="crs-heart__ecg">
           {ecg ? (
-            <EcgDisplay ecg={ecg} cursor={cursor} />
+            <EcgDisplay ecg={ecg} cursor={cursor} marks={marks} />
           ) : (
             <EcgPlaceholder status={state.status === 'error' ? 'error' : 'loading'} real={b.ecg.kind === 'real'} onRetry={retry} />
           )}
         </div>
-        <div class="crs-heart__side">
+        <div class="crs-heart__side" ref={side}>
           <Heart3D regions={ecg?.regions ?? null} cursor={cursor} emphasize={b.emphasize} showConduction={b.showConduction} labels size={260} />
-          <Button size="sm" icon="play" onClick={play} disabled={!ecg?.truth}>
+          <Button size="sm" icon="play" onClick={playOne} disabled={!scene.ready || scene.playing}>
             {tco('playBeat')}
           </Button>
+          {lab && (
+            <LinkButton size="sm" tone="ghost" icon="heart" href={lab}>
+              {tco('heartLabBeat')}
+            </LinkButton>
+          )}
+        </div>
+        <div class="crs-heart__transport">
+          <SceneTransport scene={transport} beatLabel={(id) => tsn(PHASE_LABEL_KEY[id])} slow={SLOW_MOTION} playBeat={false} />
         </div>
       </div>
       <Caption text={b.caption} />

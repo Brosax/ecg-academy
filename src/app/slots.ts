@@ -27,3 +27,9 @@ export const overallProgress = signal<number | null>(null);
 
 /** Progress data controls on the settings page (src/practice: export / import / reset). */
 export const progressDataSlot = signal<ComponentType | null>(null);
+
+/** The AI study assistant's floating dock (src/assistant), rendered by the shell after the tab bar; null = none. */
+export const assistantSlot = signal<ComponentType | null>(null);
+
+/** The AI assistant's settings section on the settings page (src/assistant: provider, key, model); null = hidden. */
+export const assistantSettingsSlot = signal<ComponentType | null>(null);

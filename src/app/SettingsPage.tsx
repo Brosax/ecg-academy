@@ -27,7 +27,7 @@ import {
   widthForPxPerMm,
   type CardEdge,
 } from './calibration';
-import { progressDataSlot } from './slots';
+import { assistantSettingsSlot, progressDataSlot } from './slots';
 import { LAYOUTS, store, updateSettings, updateViewer, type LayoutId } from './store';
 import './pages.css';
 
@@ -48,6 +48,7 @@ export function SettingsPage() {
   const s = store.settings.value;
   const v = s.viewer;
   const ProgressData = progressDataSlot.value;
+  const AssistantSettings = assistantSettingsSlot.value;
   return (
     <div class="app-page set-page">
       <header class="app-pagehead">
@@ -162,6 +163,13 @@ export function SettingsPage() {
           </div>
         )}
       </Section>
+
+      {/* SLOT assistantSettingsSlot: src/assistant plugs in the provider / key / model form of the AI study assistant */}
+      {AssistantSettings && (
+        <Section id="set-assistant" title={tsh('setAssistant')} hint={tsh('setAssistantHint')}>
+          <AssistantSettings />
+        </Section>
+      )}
 
       <Section id="set-calibration" title={tsh('calTitle')} hint={tsh('calLead')}>
         <Calibration />

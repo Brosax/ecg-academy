@@ -12,6 +12,8 @@
  *   progressDataSlot           src/practice ProgressDataControls (wirePractice)
  *   real case reading slot     src/practice CaseReportPanel — structured report graded against the case's 12SL
  *                              reference measurements and its labels mapped to findings (wirePractice)
+ *   assistantSlot              src/assistant AssistantDock — the opt-in AI study assistant (wireAssistant)
+ *   assistantSettingsSlot      src/assistant AssistantSettingsSection — its provider / key / model form (wireAssistant)
  */
 // must stay the first import: repairs an undecodable hash before the router module reads it (see hashGuard.ts)
 import './app/hashGuard';
@@ -24,6 +26,7 @@ import { startRouter } from './app/router';
 import { startShellEffects } from './app/shellEffects';
 import { homeSlots, overallProgress } from './app/slots';
 import { startPersistence } from './app/store';
+import { wireAssistant } from './assistant';
 import { wireCourse } from './course';
 import { overallMastery, progressVersion, wirePractice } from './practice';
 import { CaseOfDayCard } from './real';
@@ -35,6 +38,7 @@ startShellEffects();
 // ── slots ──
 wireCourse();
 wirePractice();
+wireAssistant();
 homeSlots.caseOfDay.value = CaseOfDayCard;
 homeSlots.heroEcg.value = HeroEcg;
 // the header ring follows every progress write (record, import, reset, another tab's reload)

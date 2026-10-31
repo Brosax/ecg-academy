@@ -1,0 +1,86 @@
+/*
+ * Scene runtime styles (src/figures/scene). Imported once from SceneFrame.tsx. Tokens only (src/app/theme.css); the
+ * dark theme inherits through the tokens. Fixed heights wherever text changes during playback (layout stability).
+ */
+
+.sc-stage { position: relative; }
+
+/* ── footer: transport + narration ───────────────────────────────────────────────────────────────────────── */
+.sc-foot { display: flex; flex-direction: column; gap: var(--sp-2); margin-top: var(--sp-2); }
+
+.sc-transport { min-height: 36px; }
+.sc-transport__row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-3); min-height: 34px; }
+.sc-btn { padding-inline: 7px; min-width: 32px; justify-content: center; }
+
+.sc-counter { display: inline-block; min-width: 5ch; text-align: center; font-size: var(--fs-sm); color: var(--fg-muted); font-variant-numeric: tabular-nums; }
+
+/* beat dots: one segment per beat, filled up to p */
+.sc-bar { display: inline-flex; align-items: center; gap: 3px; flex: 1 1 120px; min-width: 120px; max-width: 320px; height: 24px; }
+.sc-bar__seg {
+  position: relative;
+  flex: 1 1 0;
+  height: 10px;
+  min-width: 14px;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--panel-2);
+  overflow: hidden;
+  cursor: pointer;
+}
+.sc-bar__seg:disabled { opacity: 0.45; cursor: not-allowed; }
+.sc-bar__fill { position: absolute; inset: 0 auto 0 0; background: var(--accent); opacity: 0.55; }
+.sc-bar__seg.is-done .sc-bar__fill { opacity: 0.55; }
+.sc-bar__seg.is-on { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.sc-bar__seg.is-on .sc-bar__fill { opacity: 1; }
+.sc-bar__seg:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* narration: a block Reserve; its height comes from the ghosts (the longest caption of the language) */
+.sc-narr {
+  padding: var(--sp-2) var(--sp-3);
+  border-left: 3px solid var(--accent);
+  background: var(--panel-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-md);
+  line-height: var(--lh);
+  color: var(--fg);
+}
+
+.sc-note { font-size: var(--fs-xs); color: var(--fg-muted); margin-top: 4px; }
+
+/* ── chips & Predict ─────────────────────────────────────────────────────────────────────────────────────── */
+.sc-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  min-height: 24px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--fg);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+}
+.sc-chip--muted { color: var(--fg-muted); }
+.sc-chip--opt { cursor: pointer; border-color: var(--border-strong); min-height: 30px; padding-inline: 12px; }
+.sc-chip--opt:hover:not(:disabled) { background: var(--panel-2); }
+.sc-chip--opt:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.sc-chip--opt.is-picked { border-color: var(--accent); background: var(--accent-soft); }
+.sc-chip--opt.is-ok { border-color: var(--ok); background: var(--ok-soft); color: var(--fg); }
+.sc-chip--opt.is-err { border-color: var(--err); background: var(--err-soft); color: var(--fg); }
+.sc-chip--opt:disabled { cursor: default; }
+
+.sc-predict { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-3); min-height: 36px; }
+.sc-predict__q { font-size: var(--fs-sm); font-weight: 700; color: var(--fg); }
+.sc-predict__opts { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+
+/* ── emphasis by dimming, the pen ────────────────────────────────────────────────────────────────────────── */
+.sc-dim { opacity: 0.35; }
+.sc-on { opacity: 1; }
+.sc-pen { fill: var(--c-highlight); }
+.sc-pen--glow { filter: drop-shadow(0 0 3px var(--c-highlight-soft)); }
+
+/* ── stub ────────────────────────────────────────────────────────────────────────────────────────────────── */
+.sc-stub__box { fill: var(--panel-2); stroke: var(--border-strong); stroke-width: 1.5; stroke-dasharray: 8 6; }
+.sc-stub__text { font-size: 18px; }

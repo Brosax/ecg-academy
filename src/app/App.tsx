@@ -12,7 +12,7 @@ import type { Lang } from '../core/l10n';
 import { focusPageHeading, Outlet } from './Outlet';
 import { href, route } from './router';
 import { BRAND, brandSubtitle, HEADER_NAV, MENU_NAV, pageKey, SECTIONS, sectionOf, TAB_NAV, type SectionId } from './routes';
-import { overallProgress } from './slots';
+import { assistantSlot, overallProgress } from './slots';
 import { store } from './store';
 import './shell.css';
 
@@ -30,8 +30,15 @@ export function App() {
       </main>
       <Footer />
       <TabBar />
+      <AssistantSlot />
     </div>
   );
+}
+
+/** SLOT assistantSlot: the AI study assistant's floating dock (src/assistant); nothing until a module plugs it in. */
+function AssistantSlot() {
+  const Dock = assistantSlot.value;
+  return Dock ? <Dock /> : null;
 }
 
 /** A hash link would be read by the router as a route, so the skip link moves focus itself. */
