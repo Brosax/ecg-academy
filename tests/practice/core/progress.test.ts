@@ -1,9 +1,12 @@
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 import { overallProgress } from '../../../src/app/slots';
+import { scheduleReview as queueLessonReview } from '../../../src/course/deps';
+import { reviewKeys } from '../../../src/course/stages';
 import type { Attempt } from '../../../src/practice/api';
-import { DAY_MS } from '../../../src/practice/core/mastery';
+import { DAY_MS, LEITNER_DAYS } from '../../../src/practice/core/mastery';
 import {
   allAttempts,
+  allCards,
   dueReviews,
   exportProgress,
   getLessonProgress,
@@ -17,8 +20,10 @@ import {
   recordAttempt,
   reloadProgress,
   resetProgress,
+  scheduleReview,
   setLessonProgress,
 } from '../../../src/practice/core/progress';
+import exampleLesson from '../../course/fixtures/example-lesson';
 
 class MemoryStorage {
   readonly m = new Map<string, string>();
@@ -136,6 +141,54 @@ describe('progress store', () => {
     expect(dueReviews(T0).map((c) => c.box)).toEqual([2]);
     expect(getLessonProgress('a')).not.toBeNull();
     expect(getLessonProgress('b')).toBeNull();
+  });
+
+  it('a finished lesson’s key points enter the review queue and stay there', () => {
+    const keys = reviewKeys(exampleLesson);
+    expect(keys.length).toBeGreaterThan(0);
+    expect(queueLessonReview(keys, T0)).toBe(true);
+    // just learned: box 1, due after the same one-day interval as a first miss — not due immediately
+    expect(dueReviews(T0)).toEqual([]);
+    const dueAt = T0 + LEITNER_DAYS[0] * DAY_MS;
+    const queued = dueReviews(dueAt);
+    expect(queued.map((c) => c.key)).toEqual([...keys].sort((a, b) => a.localeCompare(b)));
+    expect(queued.every((c) => c.box === 1 && c.due === dueAt)).toBe(true);
+
+    const json = exportProgress();
+    resetProgress();
+    expect(dueReviews(dueAt)).toEqual([]);
+    expect(importProgress(json)).toBe(true);
+    reloadProgress();
+    expect(dueReviews(dueAt).map((c) => c.key)).toEqual(queued.map((c) => c.key));
+  });
+
+  it('does not move a card that is already queued, and a later pass promotes it', () => {
+    recordAttempt(att({ family: 'av-block', competency: 'C6', findings: ['lbbb'], score: 0, at: T0 }));
+    const missed = allCards().find((c) => c.key === 'finding:lbbb');
+    expect(missed).toEqual({ key: 'finding:lbbb', box: 1, due: T0 + DAY_MS });
+    const v = progressVersion.value;
+    scheduleReview(['finding:lbbb', 'finding:lbbb', 'rate'], T0);
+    expect(progressVersion.value).toBe(v + 1);
+    expect(allCards().find((c) => c.key === 'finding:lbbb')).toEqual(missed);
+    expect(allCards().find((c) => c.key === 'rate')).toEqual({ key: 'rate', box: 1, due: T0 + DAY_MS });
+
+    const v2 = progressVersion.value;
+    scheduleReview(['finding:lbbb', 'rate'], T0 + 5 * DAY_MS);
+    expect(progressVersion.value).toBe(v2);
+    expect(allCards().find((c) => c.key === 'rate')?.due).toBe(T0 + DAY_MS);
+
+    recordAttempt(att({ score: 1, at: T0 + DAY_MS }));
+    expect(allCards().find((c) => c.key === 'rate')).toEqual({ key: 'rate', box: 2, due: T0 + DAY_MS + LEITNER_DAYS[1] * DAY_MS });
+  });
+
+  it('ignores blank keys and finding ids that are not in the taxonomy', () => {
+    const v = progressVersion.value;
+    scheduleReview(['', 'finding:not-a-finding', 'finding:'], T0);
+    expect(allCards()).toEqual([]);
+    expect(progressVersion.value).toBe(v);
+    expect(queueLessonReview([], T0)).toBe(false);
+    scheduleReview(['finding:lbbb'], Number.NaN);
+    expect(allCards()).toEqual([]);
   });
 
   it('recovers from corrupt stored data (kept aside) and from blocked storage', () => {

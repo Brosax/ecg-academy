@@ -30,7 +30,8 @@ at 1366×768 and 390 px wide, with no console errors (headless Edge check of the
   catalogues (F1–F6, S1–S7, R1–R8, T1–T7, I1–I11, H1–H9, O1–O12, X1–X4; criteria from docs/curriculum/criteria.md
   current values, citations per lesson).
 - **Practice** (`src/practice`): 52 drill families on the real engines (synthetic and PTB-XL), exam, mastery + Leitner
-  review; every real case page carries the structured report, graded against the 12SL measurements and the mapped labels.
+  review; a finished lesson's summary enqueues its finding and family keys (`scheduleReview`); every real case page
+  carries the structured report, graded against the 12SL measurements and the mapped labels.
 - **Real library** (`src/real`): 300 PTB-XL cases, case of the day. **Atlas** (`src/atlas`): 129 entries — every finding
   of the taxonomy. **Tools** (`src/tools`): checklist, normal values, calculators, glossary.
 - **Heart Lab** (`src/lab`, `#/lab`): 40 lab scenarios reachable from 56 findings; "see it in the Heart Lab" links on
@@ -42,8 +43,6 @@ at 1366×768 and 390 px wide, with no console errors (headless Edge check of the
 
 Planned, not built yet:
 
-- Lesson take-aways → spaced-review queue (§4 `summary`): the course calls practice `scheduleReview(keys, now)`, which
-  the practice module does not export yet, so take-aways are not queued.
 - Lazy loading / code splitting of the large assets (the single file is 10.4 MB, see §11).
 
 ## 1. Learning outcomes (competencies)

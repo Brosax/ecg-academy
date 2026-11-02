@@ -40,6 +40,7 @@ export {
   masteryOfFamily,
   overallMastery,
   dueReviews,
+  scheduleReview,
   getLessonProgress,
   setLessonProgress,
   exportProgress,

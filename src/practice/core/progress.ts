@@ -11,7 +11,7 @@ import { signal, type ReadonlySignal } from '@preact/signals';
 import { overallProgress } from '../../app/slots';
 import { isFindingId, type FindingId } from '../../core/findings';
 import { COMPETENCIES, type Attempt, type CompetencyId, type LessonProgress, type Mastery, type ReviewCard } from '../api';
-import { cardKeys, masteryFrom, nextCard, overallFrom } from './mastery';
+import { cardKeys, DAY_MS, LEITNER_DAYS, masteryFrom, nextCard, overallFrom } from './mastery';
 
 export const PROGRESS_KEY = 'ecg-academy:progress:v1';
 export const PROGRESS_SCHEMA = 1;
@@ -190,6 +190,33 @@ export function reloadProgress(): void {
 }
 
 // ── writes ───────────────────────────────────────────────────────────────────────────────────────────────────────
+function reviewKeyOk(key: string): boolean {
+  if (key.length === 0) return false;
+  // finding cards use the same `finding:<id>` key as a missed item; anything else is a drill-family key
+  if (key.startsWith('finding:')) return isFindingId(key.slice(8));
+  return true;
+}
+
+/**
+ * Enqueue lesson take-aways (PLAN §4 summary). Each new `finding:<id>` or family key becomes a Leitner box-1 card,
+ * due after the same one-day interval as a first miss. A key that already has a card is left alone, so opening the
+ * summary again does not demote or postpone a review the learner is already working through.
+ */
+export function scheduleReview(keys: readonly string[], nowMs: number): void {
+  if (!isNum(nowMs)) return;
+  const s = st();
+  const seen = new Set<string>();
+  let added = false;
+  for (const key of keys) {
+    if (typeof key !== 'string' || !reviewKeyOk(key) || seen.has(key)) continue;
+    seen.add(key);
+    if (s.cards.has(key)) continue;
+    s.cards.set(key, { key, box: 1, due: nowMs + LEITNER_DAYS[0] * DAY_MS });
+    added = true;
+  }
+  if (added) commit();
+}
+
 export function recordAttempt(a: Attempt): void {
   const clean = cleanAttempt(a);
   if (!clean) return;
