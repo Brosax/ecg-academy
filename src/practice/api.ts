@@ -199,6 +199,9 @@ export interface ReviewCard {
 //   ecgOf(source: EcgSource): Promise<Ecg>          resolves synthetic (src/synth generate) and real (src/real) ECGs; cached
 //   recordAttempt(a: Attempt): void;  masteryOf(c: CompetencyId): Mastery;  masteryOfFinding(id: FindingId): Mastery
 //   overallMastery(): number | null;  dueReviews(nowMs: number): readonly ReviewCard[]
+//   scheduleReview(keys: readonly string[], nowMs: number): void
+//                                                   lesson take-aways: enqueue `finding:<id>` and family keys (box 1,
+//                                                   due in 1 day). A key that already has a card is left unchanged.
 //   getLessonProgress(id: string): LessonProgress | null;  setLessonProgress(id: string, p: LessonProgress): void
 //   exportProgress(): string;  importProgress(json: string): boolean;  resetProgress(): void
 //   progressVersion: ReadonlySignal<number>        bumps on every write (components re-render)

@@ -9,8 +9,8 @@
  *      ecgOf            → synth generate() / real loadRealEcg() directly (same result, no shared cache)
  *      lesson progress  → kept in memory for this session
  *      items, drills    → the block says "not available yet"
- *  - review cards: the contract has no way to enqueue a card; `scheduleReview` is the function the course asks the
- *    practice module for (contract request). It is called only when it exists.
+ *  - review cards: `scheduleReview` puts a lesson's take-away keys into the Leitner queue. It is called only when
+ *    the practice module exports it.
  */
 import { signal, type ReadonlySignal } from '@preact/signals';
 import type { ComponentType } from 'preact';
@@ -46,7 +46,7 @@ export interface PracticeApi {
   getLessonProgress(id: string): LessonProgress | null;
   setLessonProgress(id: string, p: LessonProgress): void;
   readonly progressVersion: ReadonlySignal<number>;
-  /** PROPOSED (contract request): put review cards (`family` or `finding:<id>` keys) into the spaced-review queue. */
+  /** Put review cards (`family` or `finding:<id>` keys) into the spaced-review queue. */
   scheduleReview?(keys: readonly string[], nowMs: number): void;
 }
 
