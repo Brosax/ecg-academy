@@ -99,6 +99,31 @@ describe('validateLesson', () => {
     expect(errors(live)[0]).toMatchObject({ path: 'blocks[3].dials[0].id' });
   });
 
+  it('play sweeps one of the block\'s dials inside its range; a prediction needs play and a valid answer', () => {
+    const x = lesson();
+    const live = blocks(x)[3];
+    live.play = { dial: 'axis', to: 300, notes: [{ min: 90, max: 80, text: l('a', 'a', 'a') }] };
+    expect(errors(x).map((i) => i.path)).toEqual(['blocks[3].play.dial']);
+    live.play = { dial: 'rate', from: 20, to: 300, notes: [{ min: 90, max: 80, text: l('a', 'a', 'a') }] };
+    expect(errors(x).map((i) => i.path).sort()).toEqual(['blocks[3].play.from', 'blocks[3].play.notes[0]', 'blocks[3].play.to']);
+    live.play = undefined;
+    expect(errors(x).map((i) => i.path)).toEqual(['blocks[3].predict']);
+    live.play = { dial: 'rate', to: 90 };
+    live.predict = { question: l('q', 'q', 'q'), options: [l('a', 'a', 'a'), l('b', 'b', 'b')], answer: 2 };
+    expect(errors(x).map((i) => i.path)).toEqual(['blocks[3].predict.answer']);
+  });
+
+  it('a film has 2–6 frames, each an ECG with a label and a note', () => {
+    const x = lesson();
+    const film = blocks(x).find((b) => b.kind === 'film')!;
+    const at = blocks(x).indexOf(film);
+    const frames = film.frames as Mutable[];
+    film.frames = [frames[0]];
+    expect(errors(x).map((i) => i.path)).toEqual([`blocks[${at}].frames`]);
+    film.frames = [frames[0], { label: l('b', 'b', 'b'), ecg: { kind: 'synth', req: { scenario: 'nope', seed: 1 } } }];
+    expect(errors(x).map((i) => i.path).sort()).toEqual([`blocks[${at}].frames[1].ecg.req.scenario`, `blocks[${at}].frames[1].note`]);
+  });
+
   it('variants must exist in the scenario', () => {
     const x = lesson();
     ((blocks(x)[2].ecg as Mutable).req as Mutable).variant = 'horizontal';
@@ -196,7 +221,7 @@ describe('validateLesson', () => {
   it('a lesson typed as Lesson keeps type-checking (fixture shape)', () => {
     const typed: Lesson = example;
     expect(typed.blocks.map((b) => b.kind)).toEqual([
-      'hook', 'text', 'ecg', 'live', 'figure', 'heart', 'criteria', 'worked', 'contrast', 'check', 'drill', 'real', 'pitfalls', 'summary',
+      'hook', 'text', 'ecg', 'live', 'figure', 'heart', 'criteria', 'worked', 'contrast', 'check', 'drill', 'real', 'film', 'pitfalls', 'summary',
     ]);
   });
 });

@@ -50,7 +50,7 @@ const has = <T extends string>(list: readonly T[], v: unknown): v is T => typeof
 
 const LEADS: readonly string[] = [...STD_LEADS, ...EXTRA_LEADS];
 const LANG_KEYS = ['zh', 'en', 'es'] as const;
-const BLOCK_KINDS = ['hook', 'text', 'ecg', 'live', 'figure', 'heart', 'criteria', 'worked', 'contrast', 'check', 'drill', 'real', 'pitfalls', 'summary'] as const;
+const BLOCK_KINDS = ['hook', 'text', 'ecg', 'live', 'film', 'figure', 'heart', 'criteria', 'worked', 'contrast', 'check', 'drill', 'real', 'pitfalls', 'summary'] as const;
 const ECG_MARK_KINDS = ['bracket', 'wave', 'region', 'hline', 'arrow', 'lead'] as const;
 const CJK = /[㐀-鿿]/;
 
@@ -120,6 +120,15 @@ export function validateLesson(lesson: unknown, deps: ValidateDeps): LessonIssue
     if (v.length < min) err(path, `needs at least ${min} item(s)`);
     v.forEach((x, i) => l10n(x, `${path}[${i}]`));
     return v;
+  };
+  const prediction = (v: unknown, path: string) => {
+    if (!isObj(v)) {
+      err(path, 'a prediction is { question, options, answer }');
+      return;
+    }
+    l10n(v.question, `${path}.question`);
+    const opts = l10nList(v.options, `${path}.options`, 2);
+    if (!isInt(v.answer) || v.answer < 0 || v.answer >= opts.length) err(`${path}.answer`, 'answer must index one of the options');
   };
   const finding = (v: unknown, path: string) => {
     if (!isStr(v) || !(v in FINDINGS)) err(path, `unknown finding id ${JSON.stringify(v)} (src/core/findings.ts)`);
@@ -431,6 +440,52 @@ export function validateLesson(lesson: unknown, deps: ValidateDeps): LessonIssue
         view(b.view, `${p}.view`, ctx);
         marks(b.marks, `${p}.marks`, ctx);
         l10n(b.caption, `${p}.caption`);
+        if (b.play !== undefined) {
+          const pl = b.play;
+          const dialIds = Array.isArray(b.dials) ? b.dials.map((d) => (isObj(d) ? d.id : undefined)) : [];
+          if (!isObj(pl) || !dialIds.includes(pl.dial)) err(`${p}.play.dial`, 'play.dial must be one of the block\'s dials');
+          else {
+            const r = sc && has(DIAL_IDS, pl.dial) ? sc.dials[pl.dial] : undefined;
+            const inRange = (v: unknown) => isNum(v) && (!r || (v >= r.min && v <= r.max));
+            if (!inRange(pl.to)) err(`${p}.play.to`, `play.to must be a number inside the dial's range${r ? ` (${r.min}–${r.max})` : ''}`);
+            if (pl.from !== undefined && !inRange(pl.from)) err(`${p}.play.from`, `play.from must be a number inside the dial's range${r ? ` (${r.min}–${r.max})` : ''}`);
+            if (pl.notes !== undefined) {
+              if (!Array.isArray(pl.notes) || pl.notes.length === 0) err(`${p}.play.notes`, 'notes must be a non-empty list of { min, max, text }');
+              else
+                pl.notes.forEach((n, k) => {
+                  const np = `${p}.play.notes[${k}]`;
+                  if (!isObj(n) || !inRange(n.min) || !inRange(n.max) || (n.min as number) > (n.max as number)) err(np, 'a note needs min ≤ max inside the dial range');
+                  if (isObj(n)) l10n(n.text, `${np}.text`);
+                });
+            }
+          }
+        }
+        if (b.predict !== undefined) {
+          if (b.play === undefined) err(`${p}.predict`, 'a prediction needs play: the experiment is the reveal');
+          prediction(b.predict, `${p}.predict`);
+        }
+        break;
+      }
+      case 'film': {
+        l10n(b.title, `${p}.title`);
+        l10n(b.caption, `${p}.caption`);
+        let ctx0: EcgCtx | null = null;
+        if (!Array.isArray(b.frames) || b.frames.length < 2 || b.frames.length > 6) err(`${p}.frames`, 'a film needs 2–6 frames');
+        else
+          b.frames.forEach((f, k) => {
+            const fp = `${p}.frames[${k}]`;
+            if (!isObj(f)) {
+              err(fp, 'a frame must be { label, ecg, note }');
+              return;
+            }
+            l10n(f.label, `${fp}.label`);
+            l10n(f.note, `${fp}.note`);
+            const ctx = source(f.ecg, `${fp}.ecg`);
+            if (k === 0) ctx0 = ctx;
+            marks(f.marks, `${fp}.marks`, ctx);
+          });
+        view(b.view, `${p}.view`, ctx0);
+        if (b.predict !== undefined) prediction(b.predict, `${p}.predict`);
         break;
       }
       case 'figure': {

@@ -49,6 +49,40 @@ export type ItemRef =
   | { readonly family: string; readonly seed: number; readonly difficulty?: Difficulty }
   | { readonly inline: import('../practice/api').Item };
 
+/** One question the learner answers before an experiment plays; the reveal is the experiment itself. Never sent to the assistant. */
+export interface Prediction {
+  readonly question: L10n;
+  readonly options: readonly L10n[];
+  /** index into options */
+  readonly answer: number;
+}
+
+/** What the tracing shows while the played dial is inside [min, max]. */
+export interface DialNote {
+  readonly min: number;
+  readonly max: number;
+  readonly text: L10n;
+}
+
+/**
+ * A live block's experiment: `dial` starts at `from` (default: its start value), sweeps once to `to` and holds;
+ * `notes` follow its value.
+ */
+export interface LivePlay {
+  readonly dial: DialId;
+  readonly from?: number;
+  readonly to: number;
+  readonly notes?: readonly DialNote[];
+}
+
+/** One state of a film: an ECG from the engine, a short chip label and what to look at. */
+export interface FilmFrame {
+  readonly label: L10n;
+  readonly ecg: EcgSource;
+  readonly note: L10n;
+  readonly marks?: readonly LessonMark[];
+}
+
 export interface WorkedStep {
   readonly title: L10n;
   readonly body: L10n;
@@ -64,7 +98,9 @@ export type Block =
   | { readonly kind: 'text'; readonly title?: L10n; readonly body: L10n }
   | { readonly kind: 'ecg'; readonly ecg: EcgSource; readonly view?: ItemView; readonly marks?: readonly LessonMark[]; readonly caption: L10n }
   /** live synthetic ECG with dials the learner moves (truth stays exact) */
-  | { readonly kind: 'live'; readonly scenario: string; readonly variant?: string; readonly seed: number; readonly dials: readonly { readonly id: DialId; readonly label?: L10n }[]; readonly view?: ItemView; readonly marks?: readonly LessonMark[]; readonly caption: L10n }
+  | { readonly kind: 'live'; readonly scenario: string; readonly variant?: string; readonly seed: number; readonly dials: readonly { readonly id: DialId; readonly label?: L10n }[]; readonly view?: ItemView; readonly marks?: readonly LessonMark[]; readonly caption: L10n; readonly play?: LivePlay; readonly predict?: Prediction }
+  /** engine states shown in turn in one place (plays once and holds, then the learner steps), each with what to notice */
+  | { readonly kind: 'film'; readonly title: L10n; readonly frames: readonly FilmFrame[]; readonly view?: ItemView; readonly predict?: Prediction; readonly caption: L10n }
   | { readonly kind: 'figure'; readonly figure: FigureProps; readonly ecg?: EcgSource; readonly caption?: L10n }
   /** ECG + small 3D heart following the shared cursor */
   | { readonly kind: 'heart'; readonly ecg: EcgSource; readonly emphasize?: readonly RegionId[]; readonly showConduction?: boolean; readonly caption: L10n }

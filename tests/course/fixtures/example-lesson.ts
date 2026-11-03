@@ -60,6 +60,20 @@ const lesson: Lesson = {
       seed: 13,
       dials: [{ id: 'rate' }],
       caption: l('移动滑块，观察 RR 间期如何变化。', 'Move the slider and watch the RR interval change.', 'Mueve el control y observa cómo cambia el intervalo RR.'),
+      play: {
+        dial: 'rate',
+        from: 60,
+        to: 100,
+        notes: [
+          { min: 60, max: 62, text: l('5 个大格：60 次/分。', '5 large squares: 60/min.', '5 cuadros grandes: 60 lpm.') },
+          { min: 98, max: 100, text: l('3 个大格：100 次/分。', '3 large squares: 100/min.', '3 cuadros grandes: 100 lpm.') },
+        ],
+      },
+      predict: {
+        question: l('心率升到 100 次/分时 RR 剩几个大格？', 'At 100/min, how many large squares per RR?', '¿A 100 lpm, cuántos cuadros grandes ocupa un RR?'),
+        options: [l('3', '3', '3'), l('4', '4', '4')],
+        answer: 0,
+      },
     },
     { kind: 'figure', figure: { id: 'rate-ruler', params: { method: '300' } }, ecg: normal(14) },
     {
@@ -108,6 +122,20 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [1101],
       caption: l('在真实病例上用同样的方法。', 'Use the same method on a real patient.', 'Usa el mismo método en un paciente real.'),
+    },
+    {
+      kind: 'film',
+      title: l('从慢到快', 'Slow to fast', 'De lenta a rápida'),
+      frames: [
+        { label: l('慢', 'Slow', 'Lenta'), ecg: synth('sinus-bradycardia', 19, 50), note: l('RR 6 个大格。', 'RR of 6 large squares.', 'RR de 6 cuadros grandes.'), marks: [{ auto: 'rr' }] },
+        { label: l('快', 'Fast', 'Rápida'), ecg: synth('sinus-tachycardia', 20, 110), note: l('RR 不到 3 个大格。', 'RR under 3 large squares.', 'RR de menos de 3 cuadros grandes.') },
+      ],
+      predict: {
+        question: l('哪一条 RR 更短？', 'Which strip has the shorter RR?', '¿Qué tira tiene el RR más corto?'),
+        options: [l('慢', 'Slow', 'Lenta'), l('快', 'Fast', 'Rápida')],
+        answer: 1,
+      },
+      caption: l('同一位置依次看两条节律条。', 'Two strips in turn, in one place.', 'Dos tiras sucesivas en el mismo sitio.'),
     },
     {
       kind: 'pitfalls',
