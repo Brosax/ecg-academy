@@ -43,6 +43,9 @@ function sourcesOf(lesson: Lesson): { readonly path: string; readonly src: EcgSo
       case 'contrast':
         out.push({ path: `${p}.left`, src: b.left.ecg }, { path: `${p}.right`, src: b.right.ecg });
         break;
+      case 'film':
+        b.frames.forEach((f, k) => out.push({ path: `${p}.frames[${k}]`, src: f.ecg }));
+        break;
       case 'check':
         if ('inline' in b.item) {
           out.push({ path: `${p}.item`, src: b.item.inline.ecg });
@@ -272,6 +275,46 @@ describe('s1: the reading order on the tracings', () => {
     expect(t.qrsMs).toBeLessThan(120);
     for (const l of ['V3', 'V4'] as const) expect(tw(e, l).max, l).toBeGreaterThan(qrs(e, l).max);
     expect(tw(e, 'V5').max).toBeGreaterThan(0.85 * qrs(e, 'V5').max);
+  });
+  it('walk-through film: every frame is the hook tracing, about 72/min in sinus rhythm (PR, QRS and T are asserted on the hook)', () => {
+    const hook = blocksOf('s1', 'hook')[0].ecg;
+    for (const f of blocksOf('s1', 'film')[0].frames) expect(f.ecg).toEqual(hook);
+    const t = ecgOf(hook).truth!;
+    expect(Math.abs(t.hrBpm - 72)).toBeLessThan(3);
+    expect(t.rhythm).toBe('sinus-rhythm');
+  });
+  it('recording film: correct cables (I upright, aVR negative); arm cables swapped (I all negative, aVR QRS and T upright); left-arm noise in I, III and aVL with II untouched', () => {
+    const [ok, swapped, noisy] = blocksOf('s1', 'film')[1].frames.map((f) => ecgOf(f.ecg));
+    for (const part of [pw, qrs, tw]) {
+      expect(part(ok, 'I').net).toBeGreaterThan(0.03);
+      expect(part(ok, 'aVR').net).toBeLessThan(-0.03);
+      expect(part(swapped, 'I').net).toBeLessThan(-0.03);
+    }
+    expect(qrs(swapped, 'aVR').net).toBeGreaterThan(0.1);
+    expect(tw(swapped, 'aVR').net).toBeGreaterThan(0.05);
+    const diff = (l: StdLead) => Math.max(...noisy.signal.leads[l].map((x, i) => Math.abs(x - ok.signal.leads[l][i])));
+    expect(diff('II')).toBeLessThan(1e-6);
+    for (const l of ['I', 'III', 'aVL'] as const) expect(diff(l), l).toBeGreaterThan(0.03);
+  });
+  it('never-miss film: ST up in V1–V4 with III and aVF down; T taller than R in V3–V4, PR > 200, QRS > 110; QTc about 520; PR < 120 with pre-excitation; coved ST ≥ 2 mm into a negative T in V1–V2; P about 96/min with one in three conducted at about 32/min', () => {
+    const [occlusion, potassium, longQt, preExcited, brugada, avBlock] = blocksOf('s1', 'film')[2].frames.map((f) => ecgOf(f.ecg));
+    for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(stAt(occlusion, l), l).toBeGreaterThanOrEqual(0.1);
+    for (const l of ['III', 'aVF'] as const) expect(stAt(occlusion, l), l).toBeLessThan(-0.05);
+    for (const l of ['V3', 'V4'] as const) expect(tw(potassium, l).max, l).toBeGreaterThan(qrs(potassium, l).max);
+    expect(potassium.truth!.prMs!).toBeGreaterThan(200);
+    expect(potassium.truth!.qrsMs).toBeGreaterThan(110);
+    for (const q of [longQt.truth!.qtcBazettMs, longQt.truth!.qtcFridericiaMs]) expect(Math.abs(q - 520)).toBeLessThan(10);
+    expect(preExcited.truth!.prMs!).toBeLessThan(120);
+    expect(preExcited.truth!.findings).toContain('wpw');
+    for (const l of ['V1', 'V2'] as const) {
+      expect(stAt(brugada, l), l).toBeGreaterThanOrEqual(0.2);
+      expect(stAt(brugada, l, 60), l).toBeLessThan(stAt(brugada, l));
+      expect(tw(brugada, l).min, l).toBeLessThan(-0.1);
+    }
+    const t = avBlock.truth!;
+    expect(Math.abs(t.atrialRateBpm! - 96)).toBeLessThan(3);
+    expect(Math.abs(t.hrBpm - 32)).toBeLessThan(2);
+    expect(Math.abs(t.atrial.length / t.atrial.filter((a) => a.conductedTo !== null).length - 3)).toBeLessThan(0.4);
   });
 });
 
