@@ -296,6 +296,31 @@ describe('s2: rate on the tracings', () => {
     expect(b.truth!.rhythm).toBe('atrial-fibrillation');
     expect(Math.max(...rrs(b)) - Math.min(...rrs(b))).toBeGreaterThan(300);
   });
+  const swept = (i: number, rate: number) => {
+    const b = blocksOf('s2', 'live')[i];
+    return ecgOf({ scenario: b.scenario, seed: b.seed, dials: { rate } });
+  };
+  const meanRr = (e: Ecg) => rrs(e).reduce((s, x) => s + x, 0) / rrs(e).length;
+  it('clock sweep notes: 5 large squares at 60–62, 4 at 73–77, 3 at 98–100 (one large square = 200 ms)', () => {
+    for (const [rate, squares] of [[60, 5], [62, 5], [73, 4], [77, 4], [98, 3], [100, 3]] as const) {
+      expect(Math.abs(meanRr(swept(0, rate)) / 200 - squares), `${rate}/min`).toBeLessThan(0.2);
+    }
+  });
+  it('fast sweep notes: 14–15 small squares at 102–106, about 10 at 145–150 (one small square = 40 ms)', () => {
+    for (const rate of [102, 106]) {
+      const n = meanRr(swept(1, rate)) / 40;
+      expect(n, `${rate}/min`).toBeGreaterThan(13.8);
+      expect(n, `${rate}/min`).toBeLessThan(15.2);
+    }
+    for (const rate of [145, 150]) expect(Math.abs(meanRr(swept(1, rate)) / 40 - 10), `${rate}/min`).toBeLessThan(0.6);
+  });
+  it('film: regular at 115/min; sinus arrhythmia varies with breathing; AF irregularly irregular', () => {
+    const [reg, sa, af] = blocksOf('s2', 'film')[0].frames.map((f) => ecgOf(f.ecg));
+    expect(Math.abs(reg.truth!.hrBpm - 115)).toBeLessThan(3);
+    expect(Math.max(...rrs(reg)) - Math.min(...rrs(reg))).toBeLessThan(40);
+    expect(Math.max(...rrs(sa)) - Math.min(...rrs(sa))).toBeGreaterThan(120);
+    expect(af.truth!.rhythm).toBe('atrial-fibrillation');
+  });
 });
 
 describe('s3: sinus rhythm on the tracings', () => {

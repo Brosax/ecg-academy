@@ -63,7 +63,10 @@ mechanism: where the impulse is slow, which wall is injured, where a pathway sit
 4. A point that no picture shows: if `criteria`, `pitfalls` or `summary` already holds it, drop it. Otherwise add it
    as a pitfall or a new criteria item, or keep it in one short `text` block (all text blocks together ≤ 200 zh).
 5. Shorten every long caption. Move numbers into notes.
-6. Run the checks below. Then open the lesson in the browser if you can.
+6. Prove every number you wrote in a note or frame note: add an assertion to the stage test that generates the same
+   request and checks `ecg.truth` (`hrBpm`, `prMs`, `qrsMs`, `qtcBazettMs`, `axisDeg.qrs`, `stMv`, the RR of `beats`).
+   A sweep note covers a range; assert both ends.
+7. Run the checks below. Do not open a browser; the coordinator walks every stage after the merge.
 
 Merge blocks rather than add them: a lesson that had a `text` block and a static `ecg` block about the same point
 usually becomes one `film`.
@@ -78,12 +81,15 @@ usually becomes one `film`.
   "bloqueo de rama"). Medical terms correct in all three.
 - Original wording. The Castellano et al. 2004 book is for structure and criteria only; never copy its prose.
 - Keep the ids, seeds and order of existing `check`, `drill` and `real` blocks.
+- Stage tests find some blocks by position. When a test breaks because a block moved, fix the index, never the
+  assertion. When an assertion checks a block you deleted, move it to the block that now carries that ECG, or report
+  it; never delete a medical assertion.
 - Captions and notes are plain: short sentences, `**bold**` for the one thing to look at, no lecture.
 
 ## Check your work
 
 ```bash
-npx vitest run tests/course/learn-by-doing.test.ts tests/course/lessons-s.test.ts
+npx vitest run --maxWorkers=2 tests/course/learn-by-doing.test.ts tests/course/lessons-s.test.ts
 ```
 
 ```bash
