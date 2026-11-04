@@ -987,6 +987,9 @@ describe('o8: deep T inversion on the tracings', () => {
     for (const l of ['III', 'aVF', 'V1'] as const) expect(qrs(paced, l).max, l).toBeLessThan(0.05);
     expect(qrs(paced, 'V2').net).toBeLessThan(0);
     expect(film.predict!.options[film.predict!.answer].en).toBe('III, aVF and V1–V2');
+    const heart = blocksOf('o8', 'heart')[0];
+    expect(byId('o8').blocks.indexOf(heart)).toBeLessThan(byId('o8').blocks.indexOf(film));
+    expect(heart.caption.en, 'the heart caption above the prediction does not say where the T goes').not.toMatch(/\bT\b/);
     for (const l of ['III', 'aVF', 'V1', 'V2'] as const) expect(tInverted(own, l), l).toBe(true);
     expect(Math.abs(own.truth!.qrsMs - 95)).toBeLessThan(5);
     expect(film.frames[2].ecg).toEqual(film.frames[1].ecg);
