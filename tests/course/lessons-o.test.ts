@@ -976,7 +976,8 @@ describe('o8: deep T inversion on the tracings', () => {
     }
     expect(Math.min(tw(e, 'V4').min, tw(e, 'V5').min)).toBeLessThan(Math.min(tw(e, 'V2').min, tw(e, 'V3').min));
     for (const l of ['V1', 'V2', 'V3'] as const) expect(qrs(e, l).min, l).toBeLessThan(-1.5);
-    for (const l of ['V5', 'V6'] as const) expect(qrs(e, l).max, l).toBeGreaterThan(1.5);
+    expect(qrs(e, 'V5').max).toBeGreaterThan(1.5);
+    expect(qrs(e, 'V6').max).toBeGreaterThan(1.8);
   });
 });
 
