@@ -19,11 +19,11 @@ const lesson: Lesson = {
   id: 'o6',
   stage: 'O',
   order: 6,
-  title: l('肺栓塞', 'Pulmonary embolism', 'Tromboembolismo pulmonar'),
+  title: l('肺栓塞', 'Pulmonary embolism', 'Tromboembolia pulmonar'),
   summary: l(
     '肺栓塞的心电图既不能确诊也不能排除：窦性心动过速最常见，右心室负荷征象（V1–V4 T 波倒置、S1Q3T3、新发右束支传导阻滞、V1 呈 QR 型、电轴右偏、aVR/V1 ST 段抬高）提示病情更重；确诊靠临床评分、D-二聚体与 CT 肺动脉造影。',
     'The ECG neither rules pulmonary embolism in nor out: sinus tachycardia is the commonest finding, and RV-strain signs (T inversion in V1–V4, S1Q3T3, a new RBBB, QR in V1, right axis, ST elevation in aVR/V1) mark a more severe patient; confirmation comes from a clinical score, D-dimer and CT pulmonary angiography.',
-    'El ECG ni confirma ni excluye el tromboembolismo pulmonar: la taquicardia sinusal es el hallazgo más frecuente y los signos de sobrecarga del VD (T invertida en V1–V4, S1Q3T3, BRD de novo, QR en V1, eje derecho y elevación del ST en aVR/V1) marcan un paciente más grave; la confirmación llega con la puntuación clínica, el dímero D y la angio-TC pulmonar.',
+    'El ECG ni confirma ni excluye la tromboembolia pulmonar: la taquicardia sinusal es el hallazgo más frecuente y los signos de sobrecarga del VD (T invertida en V1–V4, S1Q3T3, BRD de novo, QR en V1, eje derecho y elevación del ST en aVR/V1) marcan un paciente más grave; la confirmación llega con la puntuación clínica, el dímero D y la angio-TC pulmonar.',
   ),
   objectives: [
     l(
@@ -107,7 +107,7 @@ const lesson: Lesson = {
     },
     {
       kind: 'criteria',
-      title: l('肺栓塞：右心室负荷清单', 'Pulmonary embolism: the RV-strain list', 'Tromboembolismo pulmonar: la lista de sobrecarga del VD'),
+      title: l('肺栓塞：右心室负荷清单', 'Pulmonary embolism: the RV-strain list', 'Tromboembolia pulmonar: la lista de sobrecarga del VD'),
       items: [
         {
           label: l('最常见的异常', 'Commonest abnormality', 'Alteración más frecuente'),
@@ -218,8 +218,9 @@ const lesson: Lesson = {
       },
       predict: {
         question: l('把心率从100调到115次/分，S1Q3T3会怎样？', 'Raise the rate from 100 to 115/min. What happens to the S1Q3T3?', 'Sube la frecuencia de 100 a 115 lpm. ¿Qué le pasa al S1Q3T3?'),
-        options: [l('不变', 'It stays the same', 'No cambia'), l('消失', 'It disappears', 'Desaparece'), l('变得更明显', 'It gets bigger', 'Se hace mayor')],
-        answer: 0,
+        options: [l('消失', 'It disappears', 'Desaparece'), l('不变', 'It stays the same', 'No cambia'), l('变得更明显', 'It gets bigger', 'Se hace mayor')],
+        answer: 1,
+        ordered: true,
       },
       caption: l(
         '心动过速随疼痛、发热、脓毒症来去；S1Q3T3和右胸T波倒置来自右心室负荷。',
@@ -242,16 +243,16 @@ const lesson: Lesson = {
       right: {
         ecg: synth('rvh', 1507, { rate: 82 }),
         caption: l(
-          '慢性右心室肥厚（肺动脉高压）：V1 高 R 波、V5–V6 深 S 波、电轴右偏、P 波高尖',
-          'Chronic RVH (pulmonary hypertension): tall R in V1, deep S in V5–V6, right axis, peaked P waves',
-          'HVD crónica (hipertensión pulmonar): R alta en V1, S profunda en V5–V6, eje derecho y P apuntada',
+          '慢性右心室肥厚（肺动脉高压）：V1 高 R 波、V5–V6 深 S 波、电轴右偏',
+          'Chronic RVH (pulmonary hypertension): tall R in V1, deep S in V5–V6, right axis',
+          'HVD crónica (hipertensión pulmonar): R alta en V1, S profunda en V5–V6 y eje derecho',
         ),
         marks: [{ auto: 'r', lead: 'V1' }],
       },
       point: l(
-        '急性与慢性的分界：**急性负荷**几乎没有电压——右心室还来不及肥厚——只有 S1Q3T3、T 波倒置与新发的传导改变，并随血流动力学好转而消退。**慢性 RVH** 给出电压（V1 高 R 波、V5–V6 深 S 波），加上右心房异常（P 波高尖）与继发性 ST–T 改变。QR 型 V1 两侧都可能出现：在慢性侧，它是右心室肥厚最特异的标准。',
-        'The line between acute and chronic: **acute strain** comes with almost no voltage — the RV has had no time to hypertrophy — only S1Q3T3, T inversion and new conduction changes, and it fades as the haemodynamics improve. **Chronic RVH** delivers voltage (a tall R in V1, a deep S in V5–V6) plus a right atrial abnormality (peaked P waves) and secondary ST–T changes. A QR in V1 can appear on both sides; on the chronic side it is the most specific RVH criterion.',
-        'La frontera entre lo agudo y lo crónico: la **sobrecarga aguda** llega casi sin voltaje —el VD no ha tenido tiempo de hipertrofiarse—, solo S1Q3T3, T invertida y cambios de conducción de novo, y se borra al mejorar la hemodinámica. La **HVD crónica** aporta voltaje (R alta en V1, S profunda en V5–V6) además de anomalía auricular derecha (P apuntada) y alteraciones secundarias del ST-T. Un QR en V1 puede aparecer en ambos lados; en el lado crónico es el criterio más específico de HVD.',
+        '急性与慢性的分界：**急性负荷**不增加 QRS 电压——右心室还来不及肥厚——只有 S1Q3T3、T 波倒置与新发的传导改变，并随血流动力学好转而消退。**慢性 RVH** 带来电压（这里是 V1 高 R 波、V5–V6 深 S 波和电轴右偏），常伴右心房异常（P 波高尖）与继发性 ST–T 改变。QR 型 V1 两侧都可能出现：在慢性侧，它是右心室肥厚最特异的标准。',
+        'The line between acute and chronic: **acute strain** adds no QRS voltage — the RV has had no time to hypertrophy — only S1Q3T3, T inversion and new conduction changes, and it fades as the haemodynamics improve. **Chronic RVH** delivers voltage (here a tall R in V1, a deep S in V5–V6 and a right axis), often with a right atrial abnormality (peaked P waves) and secondary ST–T changes. A QR in V1 can appear on both sides; on the chronic side it is the most specific RVH criterion.',
+        'La frontera entre lo agudo y lo crónico: la **sobrecarga aguda** no añade voltaje al QRS —el VD no ha tenido tiempo de hipertrofiarse—, solo S1Q3T3, T invertida y cambios de conducción de novo, y se borra al mejorar la hemodinámica. La **HVD crónica** aporta voltaje (aquí R alta en V1, S profunda en V5–V6 y eje derecho), a menudo con anomalía auricular derecha (P apuntada) y alteraciones secundarias del ST-T. Un QR en V1 puede aparecer en ambos lados; en el lado crónico es el criterio más específico de HVD.',
       ),
     },
     { kind: 'check', item: { family: 'systemic', seed: 3 } },
@@ -263,7 +264,7 @@ const lesson: Lesson = {
       caption: l(
         'PTB-XL 没有肺栓塞标签，所以这里放的是这一课的两块“拼图”。第一份：窦性心动过速约 130 次/分——肺栓塞最常见的心电图异常，但单独出现时什么也证明不了。第二份标注为右心室肥厚：V1 高 R、V1–V4 T 波倒置——慢性右心压力负荷带来的是电压。先自己读：哪一份有右室“电压”，哪一份只有心率？再揭晓标签。',
         'PTB-XL carries no pulmonary-embolism label, so here are the two halves of this lesson’s puzzle. The first: sinus tachycardia at about 130/min — the commonest ECG abnormality in PE, and on its own proof of nothing. The second is labelled right ventricular hypertrophy: a tall R in V1 with T inversion in V1–V4 — a chronic RV pressure load brings voltage. Read them yourself first: which one has RV voltage, which one only has a rate? Then reveal the labels.',
-        'PTB-XL no tiene etiquetas de tromboembolismo pulmonar, así que aquí van las dos piezas del rompecabezas de esta lección. La primera: taquicardia sinusal a unos 130 lpm, la alteración electrocardiográfica más frecuente del TEP y, por sí sola, prueba de nada. La segunda está etiquetada como hipertrofia ventricular derecha: R alta en V1 con T negativas en V1–V4; la sobrecarga crónica de presión del VD aporta voltaje. Léelas tú primero: ¿cuál tiene voltaje del VD y cuál solo frecuencia? Después mira las etiquetas.',
+        'PTB-XL no tiene etiquetas de tromboembolia pulmonar, así que aquí van las dos piezas del rompecabezas de esta lección. La primera: taquicardia sinusal a unos 130 lpm, la alteración electrocardiográfica más frecuente del TEP y, por sí sola, prueba de nada. La segunda está etiquetada como hipertrofia ventricular derecha: R alta en V1 con T negativas en V1–V4; la sobrecarga crónica de presión del VD aporta voltaje. Léelas tú primero: ¿cuál tiene voltaje del VD y cuál solo frecuencia? Después mira las etiquetas.',
       ),
     },
     {
@@ -315,9 +316,9 @@ const lesson: Lesson = {
           'La lista de sobrecarga del VD: la T invertida en V1–V4 (± inferior) es el hallazgo más frecuente en el TEP grave; también S1Q3T3, BRD de novo, QR en V1, eje derecho y elevación del ST en aVR/V1.',
         ),
         l(
-          '急性负荷与慢性 RVH 的分界：急性几乎没有电压且一过性；慢性给出电压、右心房异常与继发性 ST–T 改变。',
-          'Acute strain vs chronic RVH: the acute picture has almost no voltage and is transient; the chronic one delivers voltage, right atrial abnormality and secondary ST–T changes.',
-          'Sobrecarga aguda frente a HVD crónica: el cuadro agudo casi no tiene voltaje y es transitorio; el crónico aporta voltaje, anomalía auricular derecha y alteraciones secundarias del ST-T.',
+          '急性负荷与慢性 RVH 的分界：急性不增加 QRS 电压且一过性；慢性带来电压，常伴右心房异常与继发性 ST–T 改变。',
+          'Acute strain vs chronic RVH: the acute picture adds no QRS voltage and is transient; the chronic one delivers voltage, often with a right atrial abnormality and secondary ST–T changes.',
+          'Sobrecarga aguda frente a HVD crónica: el cuadro agudo no añade voltaje al QRS y es transitorio; el crónico aporta voltaje, a menudo con anomalía auricular derecha y alteraciones secundarias del ST-T.',
         ),
         l(
           '确诊靠 Wells/Geneva 评分、D-二聚体与 CTPA——绝不为心电图而推迟影像学。',

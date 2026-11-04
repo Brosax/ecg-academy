@@ -733,8 +733,26 @@ describe('o6: pulmonary embolism on the tracings', () => {
     expect(roles(e, 'III').startsWith('q'), `${at}: Q in III`).toBe(true);
     for (const l of ['III', 'V1', 'V2'] as const) expect(tInverted(e, l), `${at}: T in ${l}`).toBe(true);
   };
-  it('every PE tracing (hook, heart, film, worked, contrast): S in I, Q and inverted T in III, T inverted in V1–V2', () => {
-    for (const { path, src } of sourcesOf(byId('o6'))) if (src.kind === 'synth' && src.req.scenario === 'pulmonary-embolism') strain(ecgOf(src), path);
+  it('every PE tracing (hook, heart, film, worked, contrast): S in I, Q and inverted T in III, T inverted in V1–V2, at its requested rate (about 106/min in the hook, 102/min in the worked example)', () => {
+    for (const { path, src } of sourcesOf(byId('o6'))) {
+      if (src.kind !== 'synth' || src.req.scenario !== 'pulmonary-embolism') continue;
+      strain(ecgOf(src), path);
+      expect(Math.abs(ecgOf(src).truth!.hrBpm - src.req.dials!.rate!), path).toBeLessThan(1);
+    }
+  });
+  it('contrast: acute PE has no RV voltage (R in V1 and S in V5–V6 under 7 mm); chronic RVH has a pure tall R in V1, an S deeper than the R in V5–V6 (≥ 7 mm) and a right axis', () => {
+    const c = contrastTitled('o6', 'Acute strain or chronic hypertrophy?');
+    const pe = ecgOf(c.left.ecg);
+    const rvh = ecgOf(c.right.ecg);
+    expect(qrs(pe, 'V1').max).toBeLessThan(0.7);
+    expect(roles(rvh, 'V1')).toBe('r');
+    expect(qrs(rvh, 'V1').max).toBeGreaterThan(0.7);
+    for (const l of ['V5', 'V6'] as const) {
+      expect(qrs(pe, l).min, l).toBeGreaterThan(-0.7);
+      expect(qrs(rvh, l).min, l).toBeLessThan(-0.7);
+      expect(-qrs(rvh, l).min, l).toBeGreaterThan(qrs(rvh, l).max);
+    }
+    expect(rvh.truth!.axisDeg.qrs).toBeGreaterThan(90);
   });
   it('rate sweep: the strain signs at both ends, 100 and 115/min', () => {
     for (const v of [100, 115]) {
