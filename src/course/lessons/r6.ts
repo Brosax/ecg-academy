@@ -73,9 +73,9 @@ const lesson: Lesson = {
       showConduction: true,
       emphasize: ['rbb'],
       caption: l(
-        '右束支是通向右心室的细长高速路。阻滞它：室间隔仍从左向右除极、左心室仍正常除极——**初始向量不变**；右心室最后才靠激动从左心室穿过心肌缓慢扩布除极，产生一个指向右前方的晚期向量。朝向右心室的 V1 记录到晚期的 R′，朝向左心室的 V6 记录到晚期的宽 S。',
-        'The right bundle branch is the slim fast road to the right ventricle. Block it: the septum still depolarises left to right and the left ventricle activates normally — **the initial vectors are unchanged**; the right ventricle is depolarised last, slowly, by the impulse spreading through muscle from the left, giving a late force that points rightward and anterior. V1, facing the right ventricle, records the late R′; V6, facing the left ventricle, the late broad S.',
-        'La rama derecha es la vía rápida y fina hacia el ventrículo derecho. Si se bloquea: el tabique se despolariza de izquierda a derecha y el ventrículo izquierdo se activa con normalidad — **los vectores iniciales no cambian** —; el ventrículo derecho se despolariza al final, despacio, por el impulso que se propaga desde el izquierdo a través del miocardio, y genera una fuerza tardía dirigida a la derecha y adelante. V1, mirando al ventrículo derecho, registra la R′ tardía; V6, mirando al izquierdo, la S ancha tardía.',
+        '右束支阻滞：室间隔和左室照常先除极（起始向量不变），右室最后靠心肌慢慢扩布。V1 看到晚到的 R′，V6 看到晚到的宽 S。',
+        'RBBB: the septum and the left ventricle still fire first (the initial vectors are unchanged); the right ventricle is reached last, slowly, through muscle. V1 sees a late R′, V6 a late broad S.',
+        'BRD: el tabique y el ventrículo izquierdo se activan primero como siempre (los vectores iniciales no cambian); el derecho se alcanza al final, despacio, a través del músculo. V1 ve una R′ tardía y V6 una S ancha tardía.',
       ),
     },
     {
@@ -84,9 +84,9 @@ const lesson: Lesson = {
       showConduction: true,
       emphasize: ['lbb'],
       caption: l(
-        '左束支阻滞则从第一毫秒起就改变一切：室间隔改为从右向左除极——V5–V6、I 里正常的间隔 q 波**消失**；左心室最后靠激动从右心室扩布过来除极，终末向量指向左后。V1–V2 呈 QS 或 rS，I、aVL、V5–V6 呈宽大、有切迹或粗钝的 R。晚期力量属于左心室，所以 V6 只有 R、没有 S。',
-        'Blocking the left bundle changes everything from the first millisecond: the septum depolarises right to left instead — the normal septal q in V5–V6 and I **disappears**; the left ventricle is activated last by spread from the right ventricle, so the terminal forces point leftward and posterior. V1–V2 show QS or rS; I, aVL and V5–V6 show a broad, notched or slurred R. The late forces belong to the left ventricle, so V6 has an R and no S.',
-        'Bloquear la rama izquierda lo cambia todo desde el primer milisegundo: el tabique se despolariza de derecha a izquierda — la q septal normal de V5–V6 e I **desaparece** —; el ventrículo izquierdo se activa al final por propagación desde el derecho, de modo que las fuerzas terminales apuntan a la izquierda y atrás. V1–V2 muestran QS o rS; I, aVL y V5–V6 una R ancha, con muescas o empastada. Las fuerzas tardías pertenecen al ventrículo izquierdo, así que en V6 hay R y no hay S.',
+        '左束支阻滞从第一毫秒就不同：室间隔改为从右向左除极，I、V5–V6 的 q 消失；左室最后除极。V1–V2 以深 S 为主，I、V5–V6 主波是宽大的 R。',
+        'LBBB differs from the first millisecond: the septum fires right to left, so the q in I and V5–V6 disappears, and the left ventricle fires last. V1–V2 are dominated by a deep S; I and V5–V6 by a broad R.',
+        'El BRI cambia desde el primer milisegundo: el tabique se activa de derecha a izquierda, así que desaparece la q de I y V5–V6, y el ventrículo izquierdo se activa al final. En V1–V2 domina una S profunda; en I y V5–V6, una R ancha.',
       ),
     },
     {
@@ -165,6 +165,14 @@ const lesson: Lesson = {
             'QRS >=140 ms en varones, >=130 ms en mujeres; QS o rS en V1 y V2; muesca o empastamiento a mitad del QRS en >=2 de V1, V2, V5, V6, I, aVL. La TRC es indicación de clase I con BRI, QRS >=150 ms y FEVI <=35% en insuficiencia cardíaca sintomática pese al tratamiento médico óptimo',
           ),
         },
+        {
+          label: l('束支阻滞遇上胸痛', 'Bundle branch block with chest pain', 'Bloqueo de rama con dolor torácico'),
+          value: l(
+            '持续的拟诊缺血症状 + LBBB 或 RBBB（新发或已知）→ 按 STEMI 等同处理，启动直接 PCI（2023 ESC）；LBBB 掩盖 Q 波、破坏电压标准，ST 判读用 Sgarbossa 标准（i10）；RBBB 不掩盖病理性 Q 波，急性心梗中新发 RBBB 提示大面积受累（常为前降支近段）',
+            'Ongoing symptoms suggesting ischaemia + LBBB or RBBB (new or known) → manage as a STEMI equivalent and activate primary PCI (2023 ESC); LBBB hides Q waves and defeats voltage criteria, so read its ST with the Sgarbossa criteria (i10); RBBB does not hide pathological Q waves, and a new RBBB in acute MI signals extensive involvement (often the proximal LAD)',
+            'Síntomas persistentes sugestivos de isquemia + BRI o BRD (nuevo o conocido) → tratar como equivalente a STEMI y activar la ICP primaria (ESC 2023); el BRI oculta las ondas Q e invalida los criterios de voltaje, así que su ST se lee con los criterios de Sgarbossa (i10); el BRD no oculta las ondas Q patológicas, y un BRD nuevo en el infarto agudo indica afectación extensa (a menudo de la DA proximal)',
+          ),
+        },
       ],
       source: 'Surawicz B et al. AHA/ACCF/HRS Part III: Intraventricular conduction disturbances. Circulation 2009;119:e235-e240; Strauss DG, Selvester RH, Wagner GS. Am J Cardiol 2011;107:927-934',
     },
@@ -231,10 +239,32 @@ const lesson: Lesson = {
       dials: [{ id: 'qrs' }],
       view: V1_STRIP,
       marks: [{ auto: 'qrs' }],
+      play: {
+        dial: 'qrs',
+        from: 125,
+        to: 160,
+        notes: [
+          {
+            min: 125,
+            max: 139,
+            text: l('QRS ≥120 ms，V1 呈 rsR′：s 降到基线以下，R′ 比 r 高得多。完全性右束支阻滞。', 'QRS ≥120 ms and an rsR′ in V1: the s dips below the baseline and the R′ towers over the r. Complete RBBB.', 'QRS ≥120 ms y rsR′ en V1: la s baja de la línea de base y la R′ es mucho más alta que la r. BRD completo.'),
+          },
+          {
+            min: 140,
+            max: 160,
+            text: l('整个 QRS 更宽，V1 仍是 rsR′（M 形）：还是同一条束支，右室只是等得更久。', 'The whole QRS is wider, yet V1 is still an rsR′ “M”: the same branch is blocked; the right ventricle just waits longer.', 'Todo el QRS es más ancho, pero V1 sigue siendo una rsR′ en «M»: la misma rama bloqueada; el ventrículo derecho solo espera más.'),
+          },
+        ],
+      },
+      predict: {
+        question: l('把 QRS 从 125 拉到 160 ms，V1 会怎样？', 'Stretch the QRS from 125 to 160 ms. What happens in V1?', 'Alarga el QRS de 125 a 160 ms. ¿Qué pasa en V1?'),
+        options: [l('更宽，但仍是 rsR′', 'Wider, but still an rsR′', 'Más ancho, pero sigue siendo rsR′'), l('变成 QS', 'It turns into a QS', 'Se convierte en QS'), l('R′ 消失，只剩 rS', 'The R′ vanishes, leaving an rS', 'Desaparece la R′ y queda una rS')],
+        answer: 0,
+      },
       caption: l(
-        '把 QRS 从 125 ms 拉到 160 ms：R′ 越来越宽，形态始终是 rsR′（M 形）——阻滞的都是同一条束支，只是右心室等得更久。注意这个旋钮最低只到 125 ms：同样形态而 QRS <120 ms 就叫不完全性，rSr′ 而 QRS <110 ms 则只是正常变异。',
-        'Slide the QRS from 125 to 160 ms: the R′ grows wider and wider, but the shape stays an rsR′ “M” — the same branch is blocked; the right ventricle simply waits longer. Note that the dial bottoms out at 125 ms: the same shape with QRS <120 ms would be called incomplete, and an rSr′ under 110 ms only a normal variant.',
-        'Mueve el QRS de 125 a 160 ms: la R′ se ensancha cada vez más, pero la morfología sigue siendo una rsR′ en “M”; está bloqueada la misma rama y el ventrículo derecho solo espera más. Fíjate en que el control no baja de 125 ms: la misma morfología con QRS <120 ms se llamaría incompleta, y una rSr′ por debajo de 110 ms solo una variante normal.',
+        '宽度只说明右室等了多久；形态说明是哪条束支。旋钮最低 125 ms：同样形态而 QRS 110–119 ms 叫不完全性。',
+        'Width tells you how long the right ventricle waited; shape tells you which branch. The dial stops at 125 ms: the same shape at 110–119 ms is called incomplete.',
+        'La anchura dice cuánto esperó el ventrículo derecho; la morfología, qué rama. El control no baja de 125 ms: la misma morfología con 110–119 ms se llama incompleta.',
       ),
     },
     {
@@ -258,34 +288,38 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('rate-dependent-bbb', 509),
-      view: STRIP,
-      marks: [{ auto: 'p' }, { auto: 'qrs' }],
+      kind: 'film',
+      title: l('完全、不完全，还是时有时无', 'Complete, incomplete, or now and then', 'Completo, incompleto o a ratos'),
+      view: { layout: '3x4+1' },
+      frames: [
+        {
+          label: l('完全性 RBBB', 'Complete RBBB', 'BRD completo'),
+          ecg: synth('rbbb', 506, { qrs: 125 }),
+          note: l('V1 rsR′，I 和 V6 有宽 S，全局 QRS 约 125 ms（≥120）：完全性右束支阻滞。', 'An rsR′ in V1, a broad S in I and V6, and a global QRS of about 125 ms (≥120): complete RBBB.', 'rsR′ en V1, S ancha en I y V6 y un QRS global de unos 125 ms (≥120): BRD completo.'),
+          marks: [{ auto: 'qrs', lead: 'V1' }],
+        },
+        {
+          label: l('不完全性 RBBB', 'Incomplete RBBB', 'BRD incompleto'),
+          ecg: synth('irbbb', 510),
+          note: l('同样的 rsR′，但全局 QRS 只有约 114 ms（110–119）：不完全性。rSr′ 而 QRS <110 ms 只是正常变异。', 'The same rsR′, but the global QRS is only about 114 ms (110–119): incomplete. An rSr′ with QRS <110 ms is just a normal variant.', 'La misma rsR′, pero el QRS global mide solo unos 114 ms (110–119): incompleto. Una rSr′ con QRS <110 ms es solo una variante normal.'),
+          marks: [{ auto: 'qrs', lead: 'V1' }],
+        },
+        {
+          label: l('频率依赖性 LBBB', 'Rate-dependent LBBB', 'BRI dependiente de la frecuencia'),
+          ecg: synth('rate-dependent-bbb', 509),
+          note: l('周期一缩短，随后的搏动就呈左束支阻滞形；周期变长又变窄。宽搏动前仍是窦性 P，PR 不变：差异性传导。', 'When the cycle shortens, the beats that follow take an LBBB shape; longer cycles conduct narrow again. A sinus P with the same PR precedes every wide beat: aberrancy.', 'Cuando el ciclo se acorta, los latidos siguientes toman forma de BRI; con ciclos largos vuelven a ser estrechos. Antes de cada latido ancho hay una P sinusal con el mismo PR: aberrancia.'),
+          marks: [{ auto: 'p' }, { auto: 'qrs' }],
+        },
+      ],
+      predict: {
+        question: l('V1 同样是 rsR′，但全局 QRS 约 114 ms。该叫什么？', 'V1 shows the same rsR′, but the global QRS is about 114 ms. What do you call it?', 'V1 muestra la misma rsR′, pero el QRS global mide unos 114 ms. ¿Cómo lo llamas?'),
+        options: [l('完全性右束支阻滞', 'Complete RBBB', 'BRD completo'), l('不完全性右束支阻滞', 'Incomplete RBBB', 'BRD incompleto'), l('正常变异', 'A normal variant', 'Una variante normal')],
+        answer: 1,
+      },
       caption: l(
-        '频率依赖性（加速依赖性）LBBB：呼吸性窦性心律不齐里，当周期缩短到左束支不应期以下（吸气加快时），紧随其后的搏动就以 LBBB 形态下传；周期变长时又恢复正常。关键鉴别点：**宽的搏动前仍有窦性 P、PR 不变**——这是差异性传导，不是室性早搏（对照 r5 的“提前”逻辑）。',
-        'Rate-dependent (acceleration-dependent) LBBB: within respiratory sinus arrhythmia, whenever the cycle shortens below the left bundle’s refractory period (the inspiratory acceleration), the beats that follow conduct with an LBBB pattern; longer cycles conduct normally. The key point: **the wide beats still follow a sinus P at an unchanged PR** — this is aberrancy, not PVCs (contrast the “premature” logic of r5).',
-        'BRI dependiente de la frecuencia (dependiente de la aceleración): dentro de una arritmia sinusal respiratoria, cada vez que el ciclo se acorta por debajo del periodo refractario de la rama izquierda (con la aceleración inspiratoria), los latidos siguientes conducen con patrón de BRI; los ciclos largos conducen con normalidad. La clave: **los latidos anchos van precedidos de una P sinusal con el mismo PR**; es aberrancia, no extrasístoles ventriculares (contrasta con la lógica “prematura” de r5).',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('irbbb', 510),
-      view: V1_STRIP,
-      marks: [{ auto: 'qrs' }],
-      caption: l(
-        '不完全性右束支传导阻滞：与完全性完全相同的 rsR′ 形态，量一量——QRS 落在 110–119 ms 带（全局测量）。同样的 rSr′ 而 QRS <110 ms 只是常见的正常变异，不要写成 iRBBB。不完全性 LBBB 同理需要 110–119 ms，加上 LVH 图形、V4–V6 R 波峰 >60 ms 和 I/V5/V6 无 q。',
-        'Incomplete right bundle branch block: exactly the same rsR′ shape as the complete block — measure it, and the QRS falls in the 110–119 ms band (globally). The same rSr′ with QRS <110 ms is only a common normal variant; do not report it as iRBBB. Incomplete LBBB likewise needs 110–119 ms, plus an LVH pattern, R-peak time >60 ms in V4–V6 and no q in I, V5, V6.',
-        'Bloqueo incompleto de rama derecha: exactamente la misma morfología rsR′ que el bloqueo completo; mídelo y verás que el QRS cae en la franja de 110–119 ms (medición global). La misma rSr′ con QRS <110 ms es solo una variante normal frecuente; no la informes como BRD incompleto. El BRI incompleto exige igualmente 110–119 ms, más patrón de HVI, tiempo hasta la cima de la R >60 ms en V4–V6 y sin q en I, V5, V6.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('束支传导阻滞遇上胸痛：走哪条路径', 'Bundle branch block meets chest pain: which pathway', 'El bloqueo de rama se encuentra con el dolor torácico: qué vía elegir'),
-      body: l(
-        '束支传导阻滞本身不诊断心肌梗死，但伴胸痛时不许忽视：\n- 进行中、拟诊心肌缺血的症状 + 束支传导阻滞（LBBB 或 RBBB，新发或已知）→ 按 **STEMI 等同**处理，启动直接 PCI 路径（2023 ESC ACS）。\n- LBBB 会**掩盖 Q 波**、破坏电压标准，ST 段判读要靠 Sgarbossa 标准（在 i10 专门讲）。\n- RBBB 不掩盖病理性 Q 波——初始除极未受影响；急性心肌梗死中新发 RBBB 提示大面积（常为左前降支近段）受累。',
-        'Bundle branch block alone does not diagnose myocardial infarction, but with chest pain it must not be ignored:\n- Ongoing symptoms suggestive of myocardial ischaemia + bundle branch block (LBBB or RBBB, new or previously known) → manage as a **STEMI equivalent** and activate the primary-PCI pathway (2023 ESC ACS).\n- LBBB **hides Q waves** and defeats voltage criteria; ST-segment reading needs the Sgarbossa criteria (taught in i10).\n- RBBB does not hide pathological Q waves — initial activation is untouched; new RBBB in acute MI signals extensive (often proximal LAD) involvement.',
-        'El bloqueo de rama por sí solo no diagnostica infarto de miocardio, pero con dolor torácico no se puede ignorar:\n- Síntomas en curso sugestivos de isquemia miocárdica + bloqueo de rama (BRI o BRD, nuevo o conocido) → tratarlo como **equivalente a STEMI** y activar la vía de ICP primaria (ESC ACS 2023).\n- El BRI **oculta las ondas Q** e invalida los criterios de voltaje; la lectura del segmento ST exige los criterios de Sgarbossa (se tratan en i10).\n- El BRD no oculta las ondas Q patológicas: la activación inicial queda intacta; un BRD nuevo en el infarto agudo señala afectación extensa (a menudo de la DA proximal).',
+        '先全局量 QRS 再命名：≥120 ms 完全性，110–119 ms 不完全性。宽窄随周期变化 = 频率依赖性。',
+        'Measure the QRS globally before naming it: ≥120 ms complete, 110–119 ms incomplete. Width that follows the cycle length = rate-dependent.',
+        'Mide el QRS de forma global antes de nombrarlo: ≥120 ms completo, 110–119 ms incompleto. Una anchura que sigue al ciclo = dependiente de la frecuencia.',
       ),
     },
     { kind: 'check', item: { family: 'bundle-branch', seed: 15 } },

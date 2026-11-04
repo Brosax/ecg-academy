@@ -682,16 +682,58 @@ describe('r6: bundle branch block on the tracings', () => {
     expect(-v1.min).toBeGreaterThan(3 * Math.max(0, v1.max));
     for (const l of ['I', 'V6'] as const) expect(shape(e, l, b).startsWith('q'), l).toBe(false);
   });
-  it('rate-dependent LBBB: wide beats end shorter cycles than narrow ones; same PR', () => {
-    const e = ecgOf(blocksOf('r6', 'ecg')[0].ecg);
+  const v1Waves = (e: Ecg) => {
+    const b = mid(e);
+    return qrsWaves(e.signal.leads.V1, e.signal.fs, b.qrsOn, b.qrsOff);
+  };
+  it('QRS sweep notes: the read-out is ≥120 ms from 125 to 160 and grows; V1 stays r s R′ with the s below the baseline and the R′ far taller than the r', () => {
+    let last = 0;
+    for (const v of [125, 139, 140, 160]) {
+      const e = played('r6', 0, v);
+      expect(e.truth!.qrsMs, `${v} ms`).toBeGreaterThanOrEqual(120);
+      expect(Math.abs(e.truth!.qrsMs - v), `${v} ms`).toBeLessThan(3);
+      expect(e.truth!.qrsMs, `${v} ms`).toBeGreaterThan(last);
+      last = e.truth!.qrsMs;
+      const w = v1Waves(e);
+      expect(w.map((x) => x.label.toLowerCase().replace(/′/g, "'")).join(' '), `${v} ms`).toMatch(/^r s r'$/);
+      expect(w[1].mv, `${v} ms`).toBeLessThan(-0.15);
+      expect(w[2].mv, `${v} ms`).toBeGreaterThan(4 * w[0].mv);
+      expect(e.truth!.findings).toContain('rbbb');
+    }
+  });
+  it('width film: complete RBBB is the sweep start, global QRS about 125 ms with a broad S in I and V6; incomplete RBBB rsR′ at about 114 ms', () => {
+    const [full, inc] = frames('r6', 0);
+    expect(full).toBe(played('r6', 0, 125));
+    expect(Math.abs(full.truth!.qrsMs - 125)).toBeLessThan(5);
+    for (const l of ['I', 'V6'] as const) expect(qrsSpan(full, l, mid(full)).min, l).toBeLessThan(-0.1);
+    expect(Math.abs(inc.truth!.qrsMs - 114)).toBeLessThan(5);
+    expect(v1Waves(inc).map((x) => x.label.toLowerCase().replace(/′/g, "'")).join(' ')).toMatch(/^r s r'$/);
+  });
+  it('LBBB heart: QRS ≥120, V1 and V2 dominated by a deep S, no q and a dominant R in I, V5 and V6', () => {
+    const e = ecgOf(blocksOf('r6', 'heart')[1].ecg);
+    const b = mid(e);
+    expect(e.truth!.qrsMs).toBeGreaterThanOrEqual(120);
+    for (const l of ['V1', 'V2'] as const) expect(-qrsSpan(e, l, b).min, l).toBeGreaterThan(3 * qrsSpan(e, l, b).max);
+    for (const l of ['I', 'V5', 'V6'] as const) {
+      expect(shape(e, l, b).startsWith('q'), l).toBe(false);
+      expect(qrsSpan(e, l, b).max, l).toBeGreaterThan(3 * -qrsSpan(e, l, b).min);
+    }
+  });
+  it('RBBB heart: late R′ in V1, broad S in V6', () => {
+    const e = ecgOf(blocksOf('r6', 'heart')[0].ecg);
+    expect(v1Waves(e).map((x) => x.label.toLowerCase().replace(/′/g, "'")).join(' ')).toMatch(/^r s r'$/);
+    expect(qrsSpan(e, 'V6', mid(e)).min).toBeLessThan(-0.1);
+  });
+  it('rate-dependent LBBB (width film frame 3): wide beats end shorter cycles than narrow ones; same PR', () => {
+    const e = frames('r6', 0)[2];
     const beats = e.truth!.beats;
     const cyc = beats.slice(1).map((b, i) => ({ rr: b.qrsOn - beats[i].qrsOn, wide: b.aberrant }));
     expect(Math.max(...cyc.filter((c) => c.wide).map((c) => c.rr))).toBeLessThan(Math.min(...cyc.filter((c) => !c.wide).map((c) => c.rr)));
     const p = prs(e);
     expect(Math.max(...p) - Math.min(...p)).toBeLessThan(5);
   });
-  it('incomplete RBBB: QRS 110–119 ms', () => {
-    const t = ecgOf(blocksOf('r6', 'ecg')[1].ecg).truth!;
+  it('incomplete RBBB (width film frame 2): QRS 110–119 ms', () => {
+    const t = frames('r6', 0)[1].truth!;
     expect(t.qrsMs).toBeGreaterThanOrEqual(110);
     expect(t.qrsMs).toBeLessThan(120);
   });
