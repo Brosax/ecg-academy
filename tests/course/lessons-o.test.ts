@@ -976,6 +976,64 @@ describe('o9: placement errors on the tracings', () => {
 });
 const CHEST4: readonly StdLead[] = ['V1', 'V2', 'V3', 'V4'];
 
+describe('o11: pacing on the tracings', () => {
+  /** the spike: the largest excursion in the few ms around a paced QRS onset */
+  const spike = (e: Ecg, l: StdLead, b = midBeat(e)) => {
+    const s = span(e, l, b.qrsOn - 3, b.qrsOn + 4, b);
+    return Math.max(s.max, -s.min);
+  };
+  /** the paced QRS without its spike */
+  const body = (e: Ecg, l: StdLead, b = midBeat(e)) => span(e, l, b.qrsOn + 10, b.qrsOff, b);
+  const paced = (e: Ecg) => e.truth!.beats.filter((b) => b.kind === 'paced-ventricular');
+  it('mode film: AAI 70/min with a P after each atrial stimulus and a narrow own QRS; VVI 60/min, QRS ≈ 160 ms negative in II, III, aVF and QS in V1 over AF; bipolar spike about a fifth; DDD AP–VP 64/min with both stimuli; AS–VP tracks sinus P waves with ventricular spikes only; CRT QRS ≈ 135 ms with lead I negative', () => {
+    const [aai, vvi, bipolar, apvp, asvp, crt] = frames('o11', 0);
+    expect(Math.abs(aai.truth!.hrBpm - 70)).toBeLessThan(1);
+    expect(Math.abs(aai.truth!.qrsMs - 95)).toBeLessThan(5);
+    expect(aai.truth!.atrial.every((a) => a.kind === 'paced' && a.conductedTo !== null)).toBe(true);
+    expect(aai.truth!.beats.every((b) => b.kind === 'paced-atrial' || b.kind === 'sinus')).toBe(true);
+    expect(Math.abs(vvi.truth!.hrBpm - 60)).toBeLessThan(1);
+    expect(Math.abs(vvi.truth!.qrsMs - 160)).toBeLessThan(5);
+    expect(vvi.truth!.findings).toContain('atrial-fibrillation');
+    for (const l of ['II', 'III', 'aVF'] as const) expect(body(vvi, l).max, l).toBeLessThan(0.05);
+    expect(body(vvi, 'V1').max).toBeLessThan(0.05);
+    expect(paced(vvi).length).toBe(vvi.truth!.beats.length);
+    expect(bipolar.truth!.beats).toEqual(vvi.truth!.beats);
+    for (const l of ['II', 'V6'] as const) {
+      expect(spike(bipolar, l) / spike(vvi, l), l).toBeGreaterThan(0.15);
+      expect(spike(bipolar, l) / spike(vvi, l), l).toBeLessThan(0.25);
+    }
+    expect(Math.abs(apvp.truth!.hrBpm - 64)).toBeLessThan(1);
+    expect(apvp.truth!.atrial.every((a) => a.kind === 'paced')).toBe(true);
+    expect(paced(apvp).length).toBe(apvp.truth!.beats.length);
+    expect(asvp.truth!.atrial.every((a) => a.kind === 'sinus')).toBe(true);
+    expect(paced(asvp).length).toBe(asvp.truth!.beats.length);
+    const delays = asvp.truth!.beats.map((b) => b.qrsOn - b.pOn!);
+    expect(Math.max(...delays) - Math.min(...delays)).toBeLessThan(5);
+    expect(Math.abs(crt.truth!.qrsMs - 135)).toBeLessThan(5);
+    expect(crt.truth!.qrsMs).toBeLessThan(vvi.truth!.qrsMs - 15);
+    expect(body(crt, 'I').max).toBeLessThan(0.05);
+    expect(body(crt, 'I').min).toBeLessThan(-0.3);
+    expect(body(vvi, 'I').max).toBeGreaterThan(0.3);
+  });
+  it('function film: working VVI 1000 ms spike to spike; every third stimulus uncaptured with a ≈ 36/min junctional escape; undersensing spikes after own QRS; an oversensing pause ≈ 2.6 s without spike or QRS', () => {
+    const [ok, noCapture, under, over] = frames('o11', 1);
+    for (const r of rrs(ok)) expect(Math.abs(r - 1000)).toBeLessThan(5);
+    expect(paced(ok).length).toBe(ok.truth!.beats.length);
+    expect(noCapture.truth!.findings).toContain('pacing-failure-capture');
+    const long = rrs(noCapture).filter((r) => r > 1200);
+    expect(long.length).toBeGreaterThanOrEqual(2);
+    for (const r of long) expect(Math.abs(60000 / r - 36)).toBeLessThan(2);
+    expect(noCapture.truth!.beats.some((b) => b.kind === 'escape-junctional')).toBe(true);
+    expect(under.truth!.findings).toContain('pacing-undersensing');
+    expect(under.truth!.beats.some((b) => b.kind === 'sinus')).toBe(true);
+    expect(under.truth!.beats.some((b) => b.kind === 'paced-ventricular')).toBe(true);
+    expect(over.truth!.findings).toContain('pacing-oversensing');
+    const pause = Math.max(...rrs(over));
+    expect(Math.abs(pause - 2600)).toBeLessThan(100);
+    expect(rrs(over).filter((r) => r < 1100).every((r) => Math.abs(r - 1000) < 5)).toBe(true);
+  });
+});
+
 describe('o10: artefacts and filters on the tracings', () => {
   it('Parkinsonian tremor (LL): II, III, aVF noisy, I clean', () => {
     for (const src of sourcesWith('o10', 'muscle-tremor-parkinsonian')) {
