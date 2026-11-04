@@ -402,14 +402,17 @@ describe('i2: territories on the tracings', () => {
     for (const l of ['V5', 'V6'] as const) expect(stAt(b, l), l).toBeGreaterThan(0.05);
     expect(stAt(b, 'aVL')).toBeLessThan(0);
   });
-  it('RV infarction: V4R ≥ 0.5 mm and V1 ≥ 1 mm with inferior elevation', () => {
-    const e = ecgOf(blocksOf('i2', 'ecg')[0].ecg);
-    expect(stAt(e, 'V4R')).toBeGreaterThanOrEqual(0.05);
+  it('V4R film: flat V4R in the inferior STEMI; V4R > 1 mm and V1 about 1 mm with inferior elevation in the RV infarction', () => {
+    expect(Math.abs(stAt(frame('i2', 1, 0), 'V4R'))).toBeLessThan(0.04);
+    for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(frame('i2', 1, 0), l), l).toBeGreaterThanOrEqual(0.1);
+    const e = frame('i2', 1, 1);
+    expect(stAt(e, 'V4R')).toBeGreaterThan(0.1);
     expect(stAt(e, 'V1')).toBeGreaterThanOrEqual(0.1);
+    expect(stAt(e, 'V1')).toBeLessThan(0.14);
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
   });
-  it('posterolateral: V1–V2 depressed ≥ 0.5 mm ending in upright T waves (V1–V3), V5/V6 elevated ≥ 1 mm, I/aVL slightly up (< 1 mm); V8 ≥ 0.5 mm', () => {
-    const e = ecgOf(blocksOf('i2', 'ecg')[1].ecg);
+  it('posterolateral frame: V1–V2 depressed ≥ 0.5 mm ending in upright T waves (V1–V3), V5/V6 elevated ≥ 1 mm, I/aVL slightly up (< 1 mm); V8 ≥ 0.5 mm', () => {
+    const e = frame('i2', 0, 3);
     for (const l of ['V1', 'V2'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
     for (const l of ['V1', 'V2', 'V3'] as const) expect(tw(e, l).max, `upright T ${l}`).toBeGreaterThan(0.1);
     for (const l of ['V5', 'V6'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
@@ -417,7 +420,27 @@ describe('i2: territories on the tracings', () => {
       expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.05);
       expect(stAt(e, l), l).toBeLessThan(0.1);
     }
-    expect(stAt(ecgOf(blocksOf('i2', 'ecg')[2].ecg), 'V8')).toBeGreaterThanOrEqual(0.05);
+    const v8 = blocksOf('i2', 'ecg')[0].ecg;
+    expect(v8.kind === 'synth' && v8.req.seed).toBe(827);
+    expect(stAt(ecgOf(v8), 'V8')).toBeGreaterThanOrEqual(0.05);
+  });
+  it('territory film: anterior V1–V4 up with V3 highest and II/III/aVF down; inferior III > II with I/aVL down; lateral I/aVL/V5–V6 up with III down; RV frame V1 about 1 mm over an inferior STEMI', () => {
+    const ant = frame('i2', 0, 0);
+    for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(stAt(ant, l), l).toBeGreaterThanOrEqual(0.1);
+    expect(CHEST.reduce((m, l) => (stAt(ant, l) > stAt(ant, m) ? l : m))).toBe('V3');
+    for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(ant, l), l).toBeLessThan(-0.05);
+    const inf = frame('i2', 0, 1);
+    for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(inf, l), l).toBeGreaterThanOrEqual(0.1);
+    expect(stAt(inf, 'III')).toBeGreaterThan(stAt(inf, 'II'));
+    for (const l of ['I', 'aVL'] as const) expect(stAt(inf, l), l).toBeLessThan(-0.03);
+    const lat = frame('i2', 0, 2);
+    for (const l of ['I', 'aVL', 'V5', 'V6'] as const) expect(stAt(lat, l), l).toBeGreaterThanOrEqual(0.1);
+    expect(stAt(lat, 'III')).toBeLessThan(-0.05);
+    const rv = frame('i2', 0, 4);
+    expect(rv.truth!.findings).toContain('rv-infarction');
+    expect(stAt(rv, 'V1')).toBeGreaterThanOrEqual(0.08);
+    expect(stAt(rv, 'V1')).toBeLessThan(0.14);
+    for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(rv, l), l).toBeGreaterThanOrEqual(0.1);
   });
 });
 
