@@ -140,9 +140,9 @@ const lesson: Lesson = {
         {
           title: l('分组相邻导联', 'Group the contiguous leads', 'Agrupa las derivaciones contiguas'),
           body: l(
-            'V1–V3 抬高（V4 仅约 0.5 mm）：前间壁组。患者为 64 岁女性，V2–V3 界值 1.5 mm：V2 约 2.5 mm、V3 约 2 mm，均超过。V5–V6 与 I/aVL 不在其中——不是广泛前壁。',
-            'V1–V3 are elevated (V4 only about 0.5 mm): the anteroseptal group. The patient is a woman of 64, so the V2–V3 limit is 1.5 mm: V2 at about 2.5 mm and V3 at about 2 mm both exceed it. V5–V6 and I/aVL are spared — not an extensive anterior MI.',
-            'V1-V3 están elevadas (V4 apenas 0,5 mm): el grupo anteroseptal. La paciente es una mujer de 64 años, así que el límite en V2-V3 es 1,5 mm: V2, con unos 2,5 mm, y V3, con unos 2 mm, lo superan. V5-V6 e I/aVL se libran: no es un anterior extenso.',
+            'V1–V3 抬高（V4 不到 1 mm）：前间壁组。患者为 64 岁女性，V2–V3 界值 1.5 mm：V2 约 2.5 mm、V3 约 2 mm，均超过。V5–V6 与 I/aVL 不在其中——不是广泛前壁。',
+            'V1–V3 are elevated (V4 under 1 mm): the anteroseptal group. The patient is a woman of 64, so the V2–V3 limit is 1.5 mm: V2 at about 2.5 mm and V3 at about 2 mm both exceed it. V5–V6 and I/aVL are spared — not an extensive anterior MI.',
+            'V1-V3 están elevadas (V4 por debajo de 1 mm): el grupo anteroseptal. La paciente es una mujer de 64 años, así que el límite en V2-V3 es 1,5 mm: V2, con unos 2,5 mm, y V3, con unos 2 mm, lo superan. V5-V6 e I/aVL se libran: no es un anterior extenso.',
           ),
           highlightLeads: ['V1', 'V2', 'V3', 'V5', 'V6', 'I', 'aVL'],
         },

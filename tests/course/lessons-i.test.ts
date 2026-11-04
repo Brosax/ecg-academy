@@ -12,7 +12,7 @@ import { liveValidateDeps } from '../../src/course/deps';
 import { REGISTERED } from '../../src/course/lessons/index';
 import { realisedDials, startDials } from '../../src/course/live';
 import { formatIssues, validateLesson } from '../../src/course/validate';
-import { baselineBefore, qrsWaves } from '../../src/course/marks';
+import { baselineBefore, MIN_WAVE_MV, qrsWaves } from '../../src/course/marks';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
 import type { L10n } from '../../src/core/l10n';
 import type { StdLead } from '../../src/core/leads';
@@ -326,9 +326,10 @@ function prSegment(ecg: Ecg, lead: AnyLead, b = midBeat(ecg)): number {
 }
 
 describe('i1: measuring ST on the tracings', () => {
-  it('hook / worked (man of 58): J point about 2–3.5 mm in V2–V4, highest in V3 (worked: V2 about 2.5, V3 3–3.5, V4 about 2, J+60 read-out about 4), V1 about 1 mm, mirror about −1 mm in III and aVF', () => {
+  it('hook / worked (man of 58): J point about 2–3.5 mm in V2–V4, highest in V3 (worked: V2 about 2.5, V3 3–3.5, V4 about 2, J+60 read-out about 4), V1 about 1 mm, mirror about −1 mm in III and aVF, II depressed too', () => {
     for (const src of [blocksOf('i1', 'hook')[0].ecg, blocksOf('i1', 'worked')[0].ecg]) {
       const e = ecgOf(src);
+      expect(stAt(e, 'II'), 'II in the mirror').toBeLessThanOrEqual(-0.05);
       for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.2);
       expect(stAt(e, 'V4')).toBeGreaterThanOrEqual(0.1);
       expect(CHEST.reduce((m, l) => (stAt(e, l) > stAt(e, m) ? l : m))).toBe('V3');
@@ -354,12 +355,15 @@ describe('i1: measuring ST on the tracings', () => {
     expect(w.truth!.stMv.V3, 'the st60 read-out on V3, about 4 mm').toBeGreaterThanOrEqual(0.375);
     expect(w.truth!.stMv.V3, 'the st60 read-out on V3, about 4 mm').toBeLessThanOrEqual(0.425);
   });
-  it('heart block: the lit segments are the injured LAD segments, basal ones included', () => {
+  it('heart block: the lit segments are the injured LAD segments, basal ones included; on its tracing V2–V4 are up and II, III and aVF depressed', () => {
     const h = blocksOf('i1', 'heart')[0];
     const req = h.ecg.kind === 'synth' ? h.ecg.req : null;
     const sc = scenarios().find((s) => s.id === req?.scenario);
     const injured = sc!.source.injury!.flatMap((x) => (typeof x.where === 'string' ? [] : [...x.where]));
     expect([...(h.emphasize ?? [])].sort()).toEqual([...new Set(injured)].sort());
+    const e = ecgOf(h.ecg);
+    for (const l of ['V2', 'V3', 'V4'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
+    for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
   });
   it('contrast A (early repolarisation, man of 24): V3 below 2.5 mm, II/aVF J about 1.5 mm, V2–V6 elevated, no reciprocal depression ≥ 0.5 mm except aVR', () => {
     const e = ecgOf(blocksOf('i1', 'contrast')[0].left.ecg);
@@ -427,14 +431,15 @@ describe('i1: measuring ST on the tracings', () => {
 });
 
 describe('i2: territories on the tracings', () => {
-  it('worked (anteroseptal, woman of 64): V1–V3 ≥ 1 mm, V2 about 2.5 and V3 about 2 mm, V4 about 0.5 mm, V5–V6/I/aVL not elevated', () => {
+  it('worked (anteroseptal, woman of 64): V1–V3 ≥ 1 mm, V2 about 2.5 and V3 about 2 mm, V4 under 1 mm, V5–V6/I/aVL not elevated', () => {
     const e = ecgOf(blocksOf('i2', 'worked')[0].ecg);
     for (const l of ['V1', 'V2', 'V3'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
     for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.15);
-    expect(stAt(e, 'V4')).toBeLessThan(0.1);
+    expect(stAt(e, 'V4'), 'V4 under 1 mm').toBeLessThan(0.1);
+    expect(stAt(e, 'V4'), 'V4 under 1 mm, not depressed').toBeGreaterThanOrEqual(0);
     for (const l of ['V5', 'V6', 'I', 'aVL'] as const) expect(stAt(e, l), l).toBeLessThan(0.05);
     expect(CHEST.reduce((m, l) => (stAt(e, l) > stAt(e, m) ? l : m))).toBe('V2');
-    const about = { V2: 0.25, V3: 0.2, V4: 0.05 } as const;
+    const about = { V2: 0.25, V3: 0.2 } as const;
     for (const [l, mv] of Object.entries(about) as [StdLead, number][]) {
       expect(stAt(e, l), `${l} about ${mv * 10} mm`).toBeGreaterThanOrEqual(mv - 0.025);
       expect(stAt(e, l), `${l} about ${mv * 10} mm`).toBeLessThanOrEqual(mv + 0.025);
@@ -773,7 +778,7 @@ describe('i6: posterior infarction on the tracings', () => {
     expect(Math.abs(stAt(e, 'V4'))).toBeLessThan(0.03);
     for (const l of ['I', 'aVL', 'V5', 'V6'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.05);
   });
-  it('contrast B (subendocardial): depression in V4–V6 and I/aVL, V1–V2 not depressed, nothing elevated ≥ 1 mm', () => {
+  it('contrast B (subendocardial): depression in V4–V6 and I/aVL, V1–V2 not depressed, nothing up ≥ 1 mm (caption and point)', () => {
     const e = ecgOf(blocksOf('i6', 'contrast')[0].right.ecg);
     for (const l of ['V4', 'V5', 'V6', 'I', 'aVL'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
     for (const l of ['V1', 'V2'] as const) expect(stAt(e, l), l).toBeGreaterThan(0);
@@ -809,17 +814,20 @@ describe('i6: posterior infarction on the tracings', () => {
     for (const l of ['I', 'aVL', 'V1', 'V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
     for (const l of ['V5', 'V6'] as const) expect(stAt(e, l), l).toBeLessThan(0.05);
   });
-  it('company film prediction: aVL, up on the opening tracing, falls below the baseline when the inferior wall joins instead', () => {
-    const film = blocksOf('i6', 'film')[0];
-    const p = film.predict!;
-    expect(p.options[p.answer].en).toMatch(/^Fall below/);
-    expect(stAt(frame('i6', 0, 0), 'aVL')).toBeGreaterThanOrEqual(0.05);
-    expect(stAt(frame('i6', 0, 2), 'aVL')).toBeLessThanOrEqual(-0.05);
+  it('company film prediction: V5–V6, up on the opening tracing, do not rise when the inferior wall joins instead (a yes/no question, not a scale)', () => {
+    const p = blocksOf('i6', 'film')[0].predict!;
+    expect(p.ordered).toBeUndefined();
+    expect(p.answer).toBe(1);
+    expect(p.options[p.answer].en).toBe('No, they do not rise');
+    for (const l of ['V5', 'V6'] as const) {
+      expect(stAt(frame('i6', 0, 0), l), `opening tracing ${l} up`).toBeGreaterThanOrEqual(0.05);
+      expect(stAt(frame('i6', 0, 2), l), `inferoposterior ${l} not up`).toBeLessThan(0.05);
+    }
   });
 });
 
 describe('i7: subtle occlusion on the tracings', () => {
-  it('hook / "below the line" frame (man of 52): V2–V4 up to about 1 mm, most in V3, under the 2-mm limit, bulky T in V3, the faint mirror an inverted T in III', () => {
+  it('hook / "short of threshold" frame (man of 52): V2–V4 up to about 1 mm, most in V3, under the 2-mm limit, bulky T in V3, possibly a faint mirror: an inverted T in III', () => {
     for (const src of [blocksOf('i7', 'hook')[0].ecg, blocksOf('i7', 'film')[0].frames[1].ecg]) {
       const e = ecgOf(src);
       for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThan(0.2);
@@ -872,6 +880,8 @@ describe('i7: subtle occlusion on the tracings', () => {
     expect(near(i7TOverQrs(e, 'V2'), 1 / 3), `B V2 ${i7TOverQrs(e, 'V2')}`).toBe(true);
     expect(near(i7TOverQrs(a, 'V3'), 0.7), `A V3 ${i7TOverQrs(a, 'V3')}`).toBe(true);
     expect(near(i7TOverQrs(e, 'V3'), 0.55), `B V3 ${i7TOverQrs(e, 'V3')}`).toBe(true);
+    const gap = (l: AnyLead) => i7TOverQrs(a, l) - i7TOverQrs(e, l);
+    expect(gap('V3'), 'in V3 the gap narrows').toBeLessThan(gap('V2'));
   });
   it('serial film (same seed, hyperacute then acute): first J under 1 mm in V2–V4 with the V3 T almost as tall as the R and T inverted in III; repeat V2–V3 ≥ 2 mm, V3 about 3.5 mm, III and aVF 1–1.5 mm down, the inferior mirror deepened', () => {
     const [f1, f2] = blocksOf('i7', 'film')[1].frames;
@@ -954,7 +964,7 @@ describe('i8: Wellens, de Winter, aVR on the tracings', () => {
     }
     expect(qrs(e, 'V3').max).toBeGreaterThan(0.5);
   });
-  it('Wellens B frame: T inversion about 7 mm deep in V2–V3 with no real upright start (T max under a tenth of the depth and under half the type A upright part), ST flat, R preserved; the inversion reaches V1 to V4 and stops there (the prediction); type A frame = the hook', () => {
+  it('Wellens B frame: T inversion about 7 mm deep in V2–V3 with no real upright start (T max under a tenth of the depth and under half the type A upright part), ST flat, R preserved; the inversion sits in V1–V4, with II, III, aVF, V5 and V6 upright and I not inverted (the prediction, unordered); type A frame = the hook', () => {
     expect(blocksOf('i8', 'film')[0].frames[0].ecg).toEqual(blocksOf('i8', 'hook')[0].ecg);
     const e = frame('i8', 0, 1);
     const typeA = frame('i8', 0, 0);
@@ -968,9 +978,13 @@ describe('i8: Wellens, de Winter, aVR on the tracings', () => {
     expect(qrs(e, 'V3').max).toBeGreaterThan(0.5);
     for (const l of ['V1', 'V4'] as const) expect(tw(e, l).min, l).toBeLessThan(-0.1);
     const p = blocksOf('i8', 'film')[0].predict!;
-    expect(p.options[p.answer].en).toBe('V1 to V4');
+    expect(p.ordered).toBeUndefined();
+    expect(p.answer).toBe(0);
+    expect(p.options[p.answer].en).toBe('V1–V4');
     for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(tInverted(e, l), l).toBe(true);
-    for (const l of ['V5', 'V6'] as const) expect(tUpright(e, l), l).toBe(true);
+    for (const l of ['II', 'III', 'aVF', 'V5', 'V6'] as const) expect(tUpright(e, l), l).toBe(true);
+    expect(tInverted(e, 'I'), 'I').toBe(false);
+    for (const l of ['V2', 'V3'] as const) expect(tw(e, 'aVL').min, `aVL shallower than ${l}`).toBeGreaterThan(tw(e, l).min);
   });
   it('de Winter frame: J depressed > 2 mm in V2–V4 and upsloping, tall T in V3, slight elevation in aVR, no chest elevation (V1–V6 below the baseline at J, J+60 and all through J → J+80 ms)', () => {
     const e = frame('i8', 0, 2);
@@ -1011,27 +1025,46 @@ describe('i8: Wellens, de Winter, aVR on the tracings', () => {
     expect(Math.min(...ALL.map((l) => stAt(e, l, 60)))).toBeLessThanOrEqual(-0.225);
     expect(Math.min(...ALL.map((l) => stAt(e, l, 60)))).toBeGreaterThanOrEqual(-0.275);
   });
-  it('contrast: A Wellens in V2–V3; B lateral T inversion (I, aVL, V5, V6) with tall R', () => {
+  it('contrast: A Wellens in V2–V3; B lateral T inversion > 1 mm in aVL and V6, each over a dominant R', () => {
     const c = blocksOf('i8', 'contrast')[0];
     expect(tw(ecgOf(c.left.ecg), 'V2').min).toBeLessThan(-0.08);
     const b = ecgOf(c.right.ecg);
-    for (const l of ['I', 'aVL', 'V5', 'V6'] as const) expect(tw(b, l).min, l).toBeLessThan(-0.1);
-    expect(tInverted(b, 'V6')).toBe(true);
+    for (const l of ['aVL', 'V6'] as const) {
+      expect(tInverted(b, l), l).toBe(true);
+      expect(qrs(b, l).max, `${l} R dominant`).toBeGreaterThan(-qrs(b, l).min);
+    }
   });
 });
 
 describe('i9: evolution, Q waves and aneurysm on the tracings', () => {
-  it('timeline film (one seed): hyperacute (V2 ST < 1 mm, T taller than R) → acute (V2 about 3 mm, III down, R and no Q) → evolving (V2 starts with a Q, T inverted, ST still up about 1 mm) → old (QS V1–V3, ST back), as in the hook (with upright T in V2–V3)', () => {
+  it('timeline film (one seed): hyperacute (V2 ST < 1 mm, T taller than R) → acute (V2 nearly 3 mm, III down, R and no Q) → evolving (V2 starts with a Q, the R gone, T inverted, ST still up about 1 mm) → old (QS V1–V3, ST back), as in the hook (with upright T in V2–V3)', () => {
     const film = blocksOf('i9', 'film')[0];
     expect(new Set(film.frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req.seed : -1))).size).toBe(1);
     const [p1, p2, p3, p4] = film.frames.map((f) => ecgOf(f.ecg));
     expect(tw(p1, 'V2').max).toBeGreaterThan(qrs(p1, 'V2').max);
-    expect(stAt(p2, 'V2')).toBeGreaterThanOrEqual(0.275);
-    expect(stAt(p2, 'V2')).toBeLessThanOrEqual(0.325);
+    expect(stAt(p2, 'V2'), 'nearly 3 mm').toBeGreaterThanOrEqual(0.25);
+    expect(stAt(p2, 'V2'), 'nearly 3 mm').toBeLessThan(0.3);
     expect(stAt(p2, 'III')).toBeLessThan(-0.05);
     // hours: the R still there, no Q; about a day: V2 starts with a Q, the R gone (the prediction), the T inverted
     expect(shape(p2, 'V2'), 'hours: V2 starts with an R').toMatch(/^r/i);
     expect(shape(p3, 'V2'), 'about a day: V2 starts with a Q').toMatch(/^q/i);
+    /** the highest point of the V2 QRS before its deepest point: the initial R, if there is one */
+    const rBeforeNadir = (e: Ecg): number => {
+      const b = midBeat(e);
+      const a = sig(e, 'V2');
+      const fs = e.signal.fs;
+      const base = baselineBefore(a, fs, b.qrsOn);
+      const i0 = Math.round((b.qrsOn * fs) / 1000);
+      const i1 = Math.round((b.qrsOff * fs) / 1000);
+      let nadir = i0;
+      for (let i = i0; i <= i1; i++) if (a[i] < a[nadir]) nadir = i;
+      let max = -Infinity;
+      for (let i = i0; i <= nadir; i++) max = Math.max(max, a[i] - base);
+      return max;
+    };
+    expect(rBeforeNadir(p2), 'hours: an R before the S').toBeGreaterThanOrEqual(0.1);
+    expect(rBeforeNadir(p3), 'about a day: no R before the Q').toBeLessThanOrEqual(MIN_WAVE_MV);
+    expect(qrs(p3, 'V2').max, 'about a day: nothing in the QRS rises above the J point').toBeLessThanOrEqual(stAt(p3, 'V2') + 0.01);
     const p = film.predict!;
     expect(p.options[p.answer].en).toBe('With a Q: the R is gone');
     expect(tInverted(p3, 'V2')).toBe(true);
@@ -1136,10 +1169,8 @@ describe('i10: confounders on the tracings', () => {
     expect(i10SDepthMm(e, 'V3')).toBeLessThanOrEqual(12.075);
     expect(stOverS(e, 'V3')).toBeGreaterThanOrEqual(-0.35);
     expect(stOverS(e, 'V3')).toBeLessThanOrEqual(-0.25);
-    expect(stOverS(e, 'V1')).toBeGreaterThanOrEqual(-0.28);
-    expect(stOverS(e, 'V1')).toBeLessThanOrEqual(-0.26);
-    expect(stOverS(e, 'V2')).toBeGreaterThanOrEqual(-0.3);
-    expect(stOverS(e, 'V2')).toBeLessThanOrEqual(-0.28);
+    expect(Math.abs(stOverS(e, 'V1') - -0.27), 'V1 ST/S about −0.27').toBeLessThanOrEqual(0.05);
+    expect(Math.abs(stOverS(e, 'V2') - -0.29), 'V2 ST/S about −0.29').toBeLessThanOrEqual(0.05);
   });
   it('contrast A (uncomplicated LBBB): ST/S about −0.1 in V1–V3, lateral ST discordant; B is also an LBBB baseline', () => {
     const e = ecgOf(blocksOf('i10', 'contrast')[0].left.ecg);

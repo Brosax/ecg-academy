@@ -87,9 +87,9 @@ const lesson: Lesson = {
           label: l('数小时', 'Hours', 'Horas'),
           ecg: synth('stemi-evolution', 964),
           note: l(
-            '数小时：V2 的 ST 从 J 点抬高约 3 mm，T 波“站”在上面；III 压低是镜像。R 波还在，还没有 Q 波。',
-            'Hours: in V2 the ST rises about 3 mm from the J point with the T standing on it; III is down, the mirror. The R is still there, no Q yet.',
-            'Horas: en V2 el ST sube unos 3 mm desde el punto J con la T encima; III desciende, el espejo. La R sigue ahí, aún sin Q.',
+            '数小时：V2 的 ST 从 J 点抬高近 3 mm，T 波“站”在上面；III 压低是镜像。R 波还在，还没有 Q 波。',
+            'Hours: in V2 the ST rises nearly 3 mm from the J point with the T standing on it; III is down, the mirror. The R is still there, no Q yet.',
+            'Horas: en V2 el ST sube casi 3 mm desde el punto J con la T encima; III desciende, el espejo. La R sigue ahí, aún sin Q.',
           ),
           marks: [{ auto: 'j', lead: 'V2' }, { auto: 'j', lead: 'III' }],
         },
@@ -116,9 +116,9 @@ const lesson: Lesson = {
       ],
       predict: {
         question: l(
-          '数小时时，V2 仍以 R 波开始。大约一天后，V2 会以什么开始？',
-          'Hours in, V2 still starts with an R. About a day later, how will V2 start?',
-          'A las pocas horas, V2 aún empieza con una R. Alrededor de un día después, ¿cómo empezará V2?',
+          '数小时时，V2 以 R 波开始。大约一天后，V2 会以什么开始？',
+          'Hours in, V2 starts with an R. About a day later, how will V2 start?',
+          'A las pocas horas, V2 empieza con una R. Alrededor de un día después, ¿cómo empezará V2?',
         ),
         options: [
           l('以 Q 波开始：R 波没了', 'With a Q: the R is gone', 'Con una Q: la R ha desaparecido'),
