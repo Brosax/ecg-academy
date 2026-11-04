@@ -76,3 +76,26 @@ The engine exposes few dials per scenario: of 130 scenarios, 71 offer only `rate
 - S residual fixes merged (0866aa9 … 5ff2eb2 → 48bb6cb): s7's test now proves a separate hump (II dip +0.003 mV then a 0.33 mV peak; the same check rejects the athlete and a normal tracing); the caption names the higher-risk features (notch > 2 mm, inferior, horizontal ST) as relevant only with symptoms or family history; s6 now says "ST at the J point". Deviation accepted: the athlete hook's hump follows an S wave (an RSr′, not a notch), so it is described as 1–1.5 mm J-point elevation per the 2017 athlete criteria. Engine note for later: the athlete scenario draws an unnamed 2.5–3.8 mm terminal r′ in II, aVF, V5 and V6. S tests 286 passed. S: VERIFIED against its reviews.
 - O review fixes merged (40f5e60 … 4b9d239 → 6677a50): every list item done; o7 went further and removed a V1 claim the tracing contradicts (V1 measures about +1 mm, not flat); o8's second scenario is now labelled "Another patient, pacing stopped" (one-scenario rebuild impossible without engine changes); o11 gains the CRT pitfall (a negative V1 alone does not prove LV capture loss) and the lost RV-capture-loss criteria item, and the one-in-three capture failure is asserted from the drawn signal. O tests 332 passed. O: VERIFIED against its review.
 - T review fixes merged (64caef8 … 45688c5 → 3829404): every list item done. The fixer rejected one coordinator premise with evidence: marks.ts capitalises a wave at ≥ 0.5 mV or ≥ half the largest wave, not at S ≥ R; V6 measures R/S 2.0, so the note now says "small q, tall R, smaller S (R/S > 1)" and asserts the ratio. t7 restores ESC 2022 first-line cardioversion for stable VT. The coordinator corrected the t6 hook to the measured QT 565 ms / QTc about 570 (was 580 / 570–590). T tests 302 passed. T: VERIFIED against its review.
+- I review fixes merged (1a84aed … 73a505c → 344641e): every list item done; i11's hyperkalaemia frame is asserted to have J < 0.05 mV in every lead and the film is now "six tracings that can pass for an occlusion"; i3 uses the criteria's "Anteroseptal"; every "about 1 mm" is asserted to 0.075–0.125 mV. I tests 338 passed. I: VERIFIED against its review.
+
+## Final verification (8c40ef7)
+
+Predicate from Phase A, checked on the real product:
+
+| Predicate | Result | Evidence |
+|---|---|---|
+| Text blocks ≤ 200 zh per S–X lesson | Met. S, R, I, H, O: 0 zh per lesson (was 357–735). T: 12 (one drill instruction an older test needs). X: 46 (one 184-char overview in x2). | `lesson-audit.test.ts` → `audit-after.json` |
+| Captions ≤ 120 zh, notes ≤ 80 zh, ≥ 3 media, ≥ 1 that plays | Met for all 58 S–X lessons. | `learn-by-doing.test.ts`, strict, no PENDING |
+| Criteria survive word for word | Met: all 408 baseline items; new items only appended. | `learn-by-doing.test.ts` |
+| Every note number proven by truth | Met where the reviews checked; each stage was reviewed and its findings fixed. | stage tests |
+| Tests and typecheck | Full suite 4895 passed, 9 skipped, 0 failed; typecheck clean. | `npx vitest run`, `tsc --noEmit` |
+| Build | Single-file `dist/index.html`, 12320 KB. | `npm run build` |
+| Browser walk per stage | s2, r4, t5, i9, h3, o1, x3: chips, notes and caption hidden before the reveal, shown after, no placeholder, no console error. | dev server, 2026-11-04 |
+
+Blocks in S–X after the run: 94 films, 28 live (30 incl. F), 41 heart, 18 figures (28 incl. F).
+
+Open, not done in this run:
+
+- The engine draws an unnamed 2.5–3.8 mm terminal r′ in the athlete scenario (II, aVF, V5, V6); the CRT scenario draws no dominant R in V1; the AVRT heart lights the right atrium first for a left pathway. Lessons now say only what is drawn; the engine is unchanged.
+- No second review pass after the fix rounds; each fix agent reported item by item and the stage tests pass, but no independent reader re-read the fixed text.
+- Not tested on a physical touch screen.
