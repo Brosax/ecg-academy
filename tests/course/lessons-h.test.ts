@@ -1082,6 +1082,13 @@ describe('h9: the athlete ECG on the tracings', () => {
     expect(Math.abs(first.truth!.hrBpm - t.hrBpm), 'the rate stays').toBeLessThan(0.5);
     for (const bt of first.truth!.beats) expect(bt.pOn, 'a P before every QRS').not.toBeNull();
   });
+  it('rate sweep prediction: as the sinus rate falls from 58 to 40/min the PR stays the same', () => {
+    const [hi, lo] = [played('h9', 0, 58), played('h9', 0, 40)];
+    expect(hi.truth!.hrBpm - lo.truth!.hrBpm).toBeGreaterThan(15);
+    expect(Math.abs(hi.truth!.prMs! - lo.truth!.prMs!)).toBeLessThan(2);
+    const p = blocksOf('h9', 'live')[0].predict!;
+    expect(p.options[p.answer].en).toBe('It stays the same');
+  });
   it('rate sweep notes: sinus with a P before every QRS and the PR fixed at 160 ms at 40–58/min, always above 30/min', () => {
     for (const v of [40, 49, 50, 58]) {
       const e = played('h9', 0, v);
@@ -1095,12 +1102,14 @@ describe('h9: the athlete ECG on the tracings', () => {
       }
     }
   });
-  it('contrast: A has upright lateral T; B (HCM) lateral T inversion >= 1 mm with ST depression >= 0.5 mm', () => {
+  it('contrast: Sokolow-Lyon met on both sides; A has upright lateral T with the ST above the baseline; B (HCM) lateral T inversion >= 1 mm with ST depression >= 0.5 mm', () => {
     const c = blocksOf('h9', 'contrast')[0];
     const a = ecgOf(c.left.ecg);
     const b = ecgOf(c.right.ecg);
+    for (const e of [a, b]) expect(sokolow(e)).toBeGreaterThanOrEqual(3.5);
     for (const l of ['V5', 'V6'] as const) {
       expect(tUpright(a, l), l).toBe(true);
+      for (const ms of [0, 60]) expect(stAt(a, l, ms), `${l} J+${ms}: elevated, never depressed`).toBeGreaterThan(0.05);
       expect(tInverted(b, l), l).toBe(true);
       expect(stAt(b, l, 60), l).toBeLessThanOrEqual(-0.05);
     }

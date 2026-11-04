@@ -193,7 +193,7 @@ const lesson: Lesson = {
       seed: 1365,
       dials: [{ id: 'rate', label: l('心率', 'Heart rate', 'Frecuencia cardíaca') }],
       view: STRIP_II,
-      marks: [{ auto: 'p' }, { auto: 'rr' }],
+      marks: [{ auto: 'pr' }, { auto: 'rr' }],
       play: {
         dial: 'rate',
         from: 58,
@@ -220,9 +220,14 @@ const lesson: Lesson = {
         ],
       },
       predict: {
-        question: l('心率从 58 降到 40 次/分。40 次/分落在哪一档？', 'The rate falls from 58 to 40/min. Which bin does 40/min fall in?', 'La frecuencia baja de 58 a 40 lpm. ¿En qué grupo cae 40 lpm?'),
-        options: [l('训练相关', 'Training-related', 'Relacionado con el entrenamiento'), l('边界', 'Borderline', 'Límite'), l('异常', 'Abnormal', 'Anormal')],
-        answer: 0,
+        question: l(
+          '只有窦房结变慢：心率从 58 降到 40 次/分。PR 间期会怎样？',
+          'Only the sinus node slows: the rate falls from 58 to 40/min. What does the PR interval do?',
+          'Solo se frena el nodo sinusal: la frecuencia baja de 58 a 40 lpm. ¿Qué hace el intervalo PR?',
+        ),
+        options: [l('变短', 'It shortens', 'Se acorta'), l('不变', 'It stays the same', 'No cambia'), l('变长', 'It lengthens', 'Se alarga')],
+        answer: 1,
+        ordered: true,
       },
       caption: l(
         '训练性心动过缓本身不产生症状；有症状才需要评估，起搏决定从不由数字单独作出。',
@@ -232,7 +237,7 @@ const lesson: Lesson = {
     },
     {
       kind: 'contrast',
-      title: l('同一电压，两种 T 波', 'Same voltage, two different T waves', 'Mismo voltaje, dos ondas T distintas'),
+      title: l('两侧都达电压标准，T 波却不同', 'Voltage criteria on both sides, two different T waves', 'Criterios de voltaje en ambos lados, dos ondas T distintas'),
       view: GRID,
       left: {
         ecg: synth('athlete', 1366, { rate: 48 }),
@@ -253,9 +258,9 @@ const lesson: Lesson = {
         marks: [{ auto: 'st', lead: 'V5' }, { auto: 't', lead: 'V5' }],
       },
       point: l(
-        '两侧的电压可以一模一样——电压本身从不决定档位，决定档位的是 **T 波和 ST**：A 的 QRS 末端带 J 波切迹，ST 轻度抬高而不压低，以直立的 T 收尾；B 的侧壁 T 波倒置 ≥1 mm、ST 压低 ≥0.5 mm——在运动员身上，这就是需要心脏科的那条线，首先想肥厚型心肌病（其后是 ARVC、扩张型心肌病、心肌炎）。',
-        'The voltage on the two sides can be identical — voltage alone never decides the bin; the **T wave and ST** do. Side A ends its QRS with a J-wave notch, keeps the ST slightly elevated (never depressed) and finishes with an upright T; side B shows lateral T inversion >=1 mm and ST depression >=0.5 mm — in an athlete that is the line that needs cardiology, with hypertrophic cardiomyopathy first (then ARVC, dilated cardiomyopathy, myocarditis).',
-        'El voltaje de ambos lados puede ser idéntico: el voltaje por sí solo nunca decide el grupo; lo deciden **la onda T y el ST**. El lado A termina el QRS con una muesca de onda J, mantiene el ST algo elevado (nunca descendido) y acaba en una T positiva; el lado B muestra inversión de T lateral >=1 mm y descenso del ST >=0,5 mm — en un deportista esa es la línea que exige cardiología, con la miocardiopatía hipertrófica en primer lugar (después MAVD, miocardiopatía dilatada, miocarditis).',
+        '两侧都满足 Sokolow-Lyon——电压本身从不决定档位，决定档位的是 **T 波和 ST**：A 的 QRS 末端带 J 波切迹，ST 轻度抬高而不压低，以直立的 T 收尾；B 的侧壁 T 波倒置 ≥1 mm、ST 压低 ≥0.5 mm——在运动员身上，这就是需要心脏科的那条线，首先想肥厚型心肌病（其后是 ARVC、扩张型心肌病、心肌炎）。',
+        'Both sides meet Sokolow-Lyon — voltage alone never decides the bin; the **T wave and ST** do. Side A ends its QRS with a J-wave notch, keeps the ST slightly elevated (never depressed) and finishes with an upright T; side B shows lateral T inversion >=1 mm and ST depression >=0.5 mm — in an athlete that is the line that needs cardiology, with hypertrophic cardiomyopathy first (then ARVC, dilated cardiomyopathy, myocarditis).',
+        'Los dos lados cumplen Sokolow-Lyon: el voltaje por sí solo nunca decide el grupo; lo deciden **la onda T y el ST**. El lado A termina el QRS con una muesca de onda J, mantiene el ST algo elevado (nunca descendido) y acaba en una T positiva; el lado B muestra inversión de T lateral >=1 mm y descenso del ST >=0,5 mm — en un deportista esa es la línea que exige cardiología, con la miocardiopatía hipertrófica en primer lugar (después MAVD, miocardiopatía dilatada, miocarditis).',
       ),
     },
     {
@@ -339,9 +344,9 @@ const lesson: Lesson = {
           'Llamar isquemia a la variante V1-V4 del deportista de raza negra: la elevación del punto J + ST convexo + inversión de T es una variante normal aceptada en esta población; se detiene en V4, sin descenso recíproco, y no debe enviar a nadie a una coronariografía.',
         ),
         l(
-          '把运动员的 Mobitz I 送去起搏：运动后消失的文氏阻滞是训练相关发现；起搏的领地从 Mobitz II、三度房室传导阻滞和 PR ≥400 ms 才开始。',
-          'Sending athlete Mobitz I for pacing: Wenckebach that vanishes with exercise is a training-related finding; pacing territory starts at Mobitz II, third-degree block and PR >=400 ms.',
-          'Enviar a un Mobitz I de deportista para marcapasos: el Wenckebach que desaparece con el ejercicio es un hallazgo relacionado con el entrenamiento; el territorio del marcapasos empieza en el Mobitz II, el bloqueo de tercer grado y el PR >=400 ms.',
+          '把运动员的 Mobitz I 送去起搏：运动后消失的文氏阻滞是训练相关发现；起搏的领地从 Mobitz II 和三度房室传导阻滞才开始；PR ≥400 ms 意味着要评估，而不是装起搏器。',
+          'Sending athlete Mobitz I for pacing: Wenckebach that vanishes with exercise is a training-related finding; pacing territory starts at Mobitz II and third-degree block; PR >=400 ms means evaluation, not a pacemaker.',
+          'Enviar a un Mobitz I de deportista para marcapasos: el Wenckebach que desaparece con el ejercicio es un hallazgo relacionado con el entrenamiento; el territorio del marcapasos empieza en el Mobitz II y el bloqueo de tercer grado; un PR >=400 ms exige evaluación, no un marcapasos.',
         ),
         l(
           '把运动员分档卡套在久坐患者身上：这套放宽的界值只对训练人群成立；同样的电压或心动过缓出现在普通人身上，要按常规标准读。',
