@@ -396,16 +396,12 @@ const lesson: Lesson = {
       ],
       predict: {
         question: l(
-          '一份心电图的部分导联显示宽 QRS 心动过速，但有一个导联完全干净，其中的 QRS 按原来的 RR 继续出现，患者在和你说话。你先做什么？',
-          'A tracing shows a wide-QRS tachycardia in some leads, but one lead is perfectly clean, its QRS complexes carry on at the same RR, and the patient is talking to you. What do you do first?',
-          'Un trazado muestra una taquicardia de QRS ancho en algunas derivaciones, pero una derivación está totalmente limpia, sus QRS siguen con el mismo RR y el paciente te habla. ¿Qué haces primero?',
+          '第 4 帧里右臂电极在晃动。哪个肢体导联保持干净？',
+          'In frame 4 the right-arm electrode moves. Which limb lead stays clean?',
+          'En el fotograma 4 se mueve el electrodo del brazo derecho. ¿Qué derivación de miembros queda limpia?',
         ),
-        options: [
-          l('同步电复律', 'Synchronised cardioversion', 'Cardioversión sincronizada'),
-          l('先看患者，再查各导联', 'Check the patient, then the other leads', 'Mirar al paciente y después las demás derivaciones'),
-          l('静脉胺碘酮', 'IV amiodarone', 'Amiodarona intravenosa'),
-        ],
-        answer: 1,
+        options: [l('I', 'I', 'I'), l('II', 'II', 'II'), l('III', 'III', 'III'), l('aVF', 'aVF', 'aVF')],
+        answer: 2,
       },
       caption: l(
         '宽 QRS 心动过速的四个模仿者。拿不准时一律按室速处理；诊断未明时禁用维拉帕米。',
@@ -452,8 +448,8 @@ const lesson: Lesson = {
       ids: [11889, 21804],
       caption: l(
         '两份真实心电图，先想好判读再揭晓。A：55 岁男性，标注为窦性心律伴 WPW；机器测量（12SL）PR 100 ms、QRS 184 ms：这正是能造出逆向型 AVRT 和预激伴房颤（宽 QRS 心动过速的模仿者）的**底物**。B：87 岁女性，约 170 次/分，标注为房颤伴完全性右束支阻滞，即室上性心律伴束支阻滞这一模仿者；机器测得 QRS 116 ms，刚好在 120 ms 线以下，要自己量；有旧图时，同样的束支阻滞形态会让你放心。PTB-XL 静息心电图库里没有室速——本课所有“室速长什么样”都来自合成模型；真实世界中，室速多见于有结构性心脏病的年长者。',
-        'Two real tracings — commit to your reading before the reveal. A: a 55-year-old man labelled sinus rhythm with WPW; the machine reading (12SL) gives a PR of 100 ms and a QRS of 184 ms: the exact **substrate** that can produce antidromic AVRT and pre-excited AF, two of the wide-complex mimics. B: an 87-year-old woman at about 170/min, labelled AF with complete right bundle branch block, the "SVT with bundle branch block" mimic; the machine puts her QRS at 116 ms, just under the 120 ms line, so measure it yourself; an old ECG with the same block would reassure you. The PTB-XL resting-ECG library holds no VT — every "what VT looks like" in this lesson comes from the synthetic model; in the real world VT usually belongs to older patients with structural heart disease.',
-        'Dos ECG reales: decide tu lectura antes de mirar la solución. A: varón de 55 años etiquetado como ritmo sinusal con WPW; la medición automática (12SL) da un PR de 100 ms y un QRS de 184 ms: ese es justamente el **sustrato** capaz de producir una TRAV antidrómica y una FA preexcitada, dos de los imitadores de QRS ancho. B: mujer de 87 años a unos 170 lpm, etiquetada como FA con bloqueo completo de rama derecha, el imitador «TSV con bloqueo de rama»; la máquina le mide un QRS de 116 ms, justo por debajo de la línea de 120 ms, así que mídelo tú; un ECG antiguo con el mismo bloqueo te daría tranquilidad. La biblioteca de ECG de reposo de PTB-XL no contiene TV: todo el «cómo es una TV» de esta lección viene del modelo sintético; en el mundo real, la TV suele pertenecer a pacientes mayores con cardiopatía estructural.',
+        'Two real tracings — commit to your reading before the reveal. A: a 55-year-old man labelled sinus rhythm with WPW; the machine reading (12SL) gives a PR of 100 ms and a QRS of 184 ms: the exact **substrate** that can produce antidromic AVRT and pre-excited AF, two of the wide-complex mimics. B: an 87-year-old woman at about 170/min, labelled AF with complete right bundle branch block, the "supraventricular rhythm with bundle branch block" mimic; the machine puts her QRS at 116 ms, just under the 120 ms line, so measure it yourself; an old ECG with the same block would reassure you. The PTB-XL resting-ECG library holds no VT — every "what VT looks like" in this lesson comes from the synthetic model; in the real world VT usually belongs to older patients with structural heart disease.',
+        'Dos ECG reales: decide tu lectura antes de mirar la solución. A: varón de 55 años etiquetado como ritmo sinusal con WPW; la medición automática (12SL) da un PR de 100 ms y un QRS de 184 ms: ese es justamente el **sustrato** capaz de producir una TRAV antidrómica y una FA preexcitada, dos de los imitadores de QRS ancho. B: mujer de 87 años a unos 170 lpm, etiquetada como FA con bloqueo completo de rama derecha, el imitador «ritmo supraventricular con bloqueo de rama»; la máquina le mide un QRS de 116 ms, justo por debajo de la línea de 120 ms, así que mídelo tú; un ECG antiguo con el mismo bloqueo te daría tranquilidad. La biblioteca de ECG de reposo de PTB-XL no contiene TV: todo el «cómo es una TV» de esta lección viene del modelo sintético; en el mundo real, la TV suele pertenecer a pacientes mayores con cardiopatía estructural.',
       ),
     },
     {

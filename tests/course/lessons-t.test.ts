@@ -1103,7 +1103,7 @@ describe('t5 on the tracings', () => {
       expect(t.rhythm).toBe('vt-monomorphic');
     }
   });
-  it('mimics film: an early aberrant PAC with rsR′ in V1 and in V6 a q, a tall R and a smaller S (R/S > 1); pre-excited AF irregular with the QRS width changing beat to beat and shortest RR about 235 ms; every QRS paced and wide; right-arm artefact in I, II and aVR with III untouched and a steady RR', () => {
+  it('mimics film: an early aberrant PAC with rsR′ in V1 and in V6 a q, a tall R and a smaller S (R/S > 1); pre-excited AF irregular with the QRS width changing beat to beat and shortest RR about 235 ms; every QRS paced and wide; right-arm artefact in I, II and aVR with III untouched (the prediction: III is the one clean option) and a steady RR', () => {
     const mimics = blocksOf('t5', 'film')[1];
     for (const s of [mimics.title.en, mimics.predict!.question.en]) expect(s, 'the title and question do not name the answer').not.toMatch(/mimic|artefact|artifact|"/i);
     const [ab, pre, paced, art] = frames('t5', 1);
@@ -1132,6 +1132,12 @@ describe('t5 on the tracings', () => {
     const diff = (l: StdLead) => Math.max(...art.signal.leads[l].map((x, i) => Math.abs(x - clean.signal.leads[l][i])));
     expect(diff('III')).toBeLessThan(1e-6);
     for (const l of ['I', 'II', 'aVR'] as const) expect(diff(l), l).toBeGreaterThan(0.2);
+    const pr = mimics.predict!;
+    expect(pr.options[pr.answer].en, 'the prediction: the limb lead that stays clean').toBe('III');
+    for (const [k, o] of pr.options.entries()) {
+      if (k === pr.answer) expect(diff(o.en as StdLead), o.en).toBeLessThan(1e-6);
+      else expect(diff(o.en as StdLead), `${o.en} is not clean`).toBeGreaterThan(0.2);
+    }
     expect(Math.max(...rrs(art)) - Math.min(...rrs(art))).toBeLessThan(60);
   });
   it('VT vs antidromic AVRT contrast: V4–V6 mainly negative in the VT and positive in the AVRT; ventricular flutter about 300/min with a cycle of about 200 ms', () => {
