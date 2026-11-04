@@ -711,7 +711,7 @@ describe('o5: hypothermia on the tracings', () => {
     }
     expect(stAt(stemi, 'aVL', 60)).toBeLessThan(-0.1);
   });
-  it('shivering film: the same cold heart with EMG on LA has I, III and aVL noisy and II clean; slow AF ≈ 55/min and irregular, the RR mark on its longest interval', () => {
+  it('shivering film: the same cold heart with EMG on LA has I, III and aVL noisy and II clean; slow AF ≈ 55/min and irregular, the RR marks on its shortest and longest intervals', () => {
     const [still, shiver, af] = frames('o5', 2);
     expect(shiver.truth!.beats).toEqual(still.truth!.beats);
     for (const l of ['I', 'III', 'aVL'] as const) {
@@ -721,9 +721,9 @@ describe('o5: hypothermia on the tracings', () => {
     expect(af.truth!.rhythm).toBe('atrial-fibrillation');
     expect(Math.abs(af.truth!.hrBpm - 55)).toBeLessThan(5);
     expect(Math.max(...rrs(af)) - Math.min(...rrs(af))).toBeGreaterThan(150);
-    const [k] = markBeats(blocksOf('o5', 'film')[2].frames[2].marks, 'rr');
-    expect(af.truth!.beats[k].kind).toBe('atrial');
-    expect(rrs(af)[k]).toBe(Math.max(...rrs(af)));
+    const marked = markBeats(blocksOf('o5', 'film')[2].frames[2].marks, 'rr');
+    for (const k of marked) expect(af.truth!.beats[k].kind).toBe('atrial');
+    expect(marked.map((k) => rrs(af)[k])).toEqual([Math.min(...rrs(af)), Math.max(...rrs(af))]);
   });
 });
 
