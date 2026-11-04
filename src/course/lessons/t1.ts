@@ -74,7 +74,7 @@ const lesson: Lesson = {
     {
       kind: 'film',
       title: l('P′ 在哪里？', 'Where is the P′?', '¿Dónde está la P′?'),
-      view: STRIP,
+      view: { layout: '3x4+1' },
       frames: [
         {
           label: l('窦速', 'Sinus', 'Sinusal'),
@@ -100,11 +100,11 @@ const lesson: Lesson = {
           label: l('房室折返', 'AVRT', 'TRAV'),
           ecg: synth('avrt', 604),
           note: l(
-            'P′ 与 QRS 分开，骑在 **ST 段**上：RP 约 115 ms，比 P′R 短 ⇒ 顺向型 AVRT。',
-            'The P′ is separate from the QRS, riding on the **ST segment**: RP about 115 ms, shorter than the P′R → orthodromic AVRT.',
-            'La P′ está separada del QRS, sobre el **segmento ST**: RP de unos 115 ms, más corto que el P′R → TRAV ortodrómica.',
+            'P′ 与 QRS 分开，在 **ST 段**上：I、aVL 里清楚下凹，II 里藏在 T 升支上。RP 约 115 ms，短于 P′R ⇒ 顺向型 AVRT。',
+            'The P′ sits apart from the QRS, on the **ST segment**: a crisp dip in I and aVL, while in II it hides on the T upstroke. RP about 115 ms, shorter than the P′R → orthodromic AVRT.',
+            'La P′ está separada del QRS, sobre el **segmento ST**: una muesca negativa nítida en I y aVL, mientras que en II se esconde en la rama ascendente de la T. RP de unos 115 ms, más corto que el P′R → TRAV ortodrómica.',
           ),
-          marks: [{ auto: 'p', label: l('P′', 'P′', 'P′') }],
+          marks: [{ auto: 'p', lead: 'I', label: l('P′', 'P′', 'P′') }, { auto: 'p', lead: 'aVL', label: l('P′', 'P′', 'P′') }],
         },
         {
           label: l('房速 2:1', 'AT 2:1', 'TA 2:1'),
@@ -131,9 +131,9 @@ const lesson: Lesson = {
         answer: 1,
       },
       caption: l(
-        '规则的窄 QRS 心动过速：在 II、III、aVF、V1 找 P′，再看它在 QRS 之前、之中、之后，还是比 QRS 多。',
-        'Regular narrow-QRS tachycardia: hunt the P′ in II, III, aVF and V1, then ask whether it sits before, inside or after the QRS, or outnumbers it.',
-        'Taquicardia regular de QRS estrecho: busca la P′ en II, III, aVF y V1 y mira si está antes, dentro o después del QRS, o si hay más P′ que QRS.',
+        '规则的窄 QRS 心动过速：先在 II、III、aVF、V1 找 P′，再看其余导联；然后问它在 QRS 之前、之中、之后，还是比 QRS 多。',
+        'Regular narrow-QRS tachycardia: hunt the P′ in II, III, aVF and V1 first, then in the other leads; then ask whether it sits before, inside or after the QRS, or outnumbers it.',
+        'Taquicardia regular de QRS estrecho: busca la P′ primero en II, III, aVF y V1 y después en las demás derivaciones; luego mira si está antes, dentro o después del QRS, o si hay más P′ que QRS.',
       ),
     },
     {
@@ -288,12 +288,12 @@ const lesson: Lesson = {
         {
           title: l('在 II、III、aVF 和 V1 里找 P′', 'Hunt the P′ in II, III, aVF and V1', 'Caza la P′ en II, III, aVF y V1'),
           body: l(
-            '逐个导联看 QRS 之后的 ST 段：I 和 aVL 里有一个小而清晰的**负向**波，III、aVF 里同一时刻是一个小的**正向**驼峰；II 导联里它骑在 T 波升支上，很容易漏看。它每搏位置相同：**逆行 P′**。',
-            'Look at the ST segment after each QRS, lead by lead: in I and aVL there is a small, crisp **negative** deflection, and at the same instant a small **positive** hump in III and aVF; in II it rides on the T upstroke and is easy to miss. It sits identically every beat: a **retrograde P′**.',
-            'Mira el segmento ST tras cada QRS, derivación por derivación: en I y aVL hay una pequeña deflexión **negativa** nítida y, en el mismo instante, una pequeña joroba **positiva** en III y aVF; en II cabalga sobre la rama ascendente de la T y es fácil que se te escape. Ocupa el mismo lugar en cada latido: una **P′ retrógrada**.',
+            '逐个导联看 QRS 之后的 ST 段：I 和 aVL 里有一个小而清晰的**负向**波，III 里同一时刻是一个小的**正向**驼峰；II 和 aVF 里它骑在 T 波升支上，很容易漏看。它每搏位置相同：**逆行 P′**。',
+            'Look at the ST segment after each QRS, lead by lead: in I and aVL there is a small, crisp **negative** deflection, and at the same instant a small **positive** hump in III; in II and aVF it rides on the T upstroke and is easy to miss. It sits identically every beat: a **retrograde P′**.',
+            'Mira el segmento ST tras cada QRS, derivación por derivación: en I y aVL hay una pequeña deflexión **negativa** nítida y, en el mismo instante, una pequeña joroba **positiva** en III; en II y aVF cabalga sobre la rama ascendente de la T y es fácil que se te escape. Ocupa el mismo lugar en cada latido: una **P′ retrógrada**.',
           ),
           marks: [{ auto: 'p', lead: 'I', label: l('P′', 'P′', 'P′') }, { auto: 'p', lead: 'aVL', label: l('P′', 'P′', 'P′') }],
-          highlightLeads: ['I', 'aVL', 'III', 'aVF'],
+          highlightLeads: ['I', 'aVL', 'III'],
         },
         {
           title: l('P′ 相对 QRS 在哪里？', 'Where is the P′ relative to the QRS?', '¿Dónde está la P′ respecto al QRS?'),
@@ -308,9 +308,9 @@ const lesson: Lesson = {
         {
           title: l('量 RP′ 与 P′R', 'Measure RP′ against P′R', 'Mide el RP′ frente al P′R'),
           body: l(
-            'RP′（QRS 起点至 P′ 起点）≈ 115 ms，P′R（P′ 至下一个 QRS）≈ 200 ms：**RP < PR，且 RP > 90 ms** ⇒ **顺向型 AVRT**（若 P′ 可见而 RP < 90 ms，则更支持 AVNRT）。旁路在左侧游离壁，所以逆行 P′ 在 I、aVL 倒置、下壁直立（P′ 极向随旁路位置而变）。支持征象：ST 段压低、QRS 电交替在 AVRT 中常见。终止后必看基础窦性 ECG：显性旁路见 δ 波，隐性旁路则完全正常。',
-            'The RP′ (QRS onset to P′ onset) is about 115 ms and the P′R (P′ to the next QRS) about 200 ms: **RP < PR, and RP > 90 ms** -> **orthodromic AVRT** (a visible P′ with RP < 90 ms would favour AVNRT). The pathway is left free-wall, so the retrograde P′ is negative in I and aVL and upright inferiorly (polarity follows the pathway site). Supporting signs: ST depression and QRS alternans are common in AVRT. After termination, always look at the baseline sinus ECG: a manifest pathway shows a delta wave; a concealed one looks completely normal.',
-            'El RP′ (inicio del QRS al inicio de la P′) ronda 115 ms y el P′R (P′ al siguiente QRS) unos 200 ms: **RP < PR y RP > 90 ms** -> **TRAV ortodrómica** (una P′ visible con RP < 90 ms favorecería la TRIN). La vía es de pared libre izquierda, de modo que la P′ retrógrada es negativa en I y aVL y positiva en las inferiores (la polaridad sigue la localización de la vía). Signos de apoyo: la depresión del ST y la alternancia del QRS son frecuentes en la TRAV. Tras la terminación, mira siempre el ECG sinusal basal: una vía manifiesta muestra onda delta; una oculta parece completamente normal.',
+            'RP′（QRS 起点至 P′ 起点）≈ 115 ms，P′R（P′ 至下一个 QRS）≈ 200 ms：**RP < PR，且 RP > 90 ms** ⇒ **顺向型 AVRT**（若 P′ 可见而 RP < 90 ms，则更支持 AVNRT）。旁路在左侧游离壁，所以逆行 P′ 在 I、aVL 倒置、III 直立（P′ 极向随旁路位置而变）。支持征象：ST 段压低、QRS 电交替在 AVRT 中常见。终止后必看基础窦性 ECG：显性旁路见 δ 波，隐性旁路则完全正常。',
+            'The RP′ (QRS onset to P′ onset) is about 115 ms and the P′R (P′ to the next QRS) about 200 ms: **RP < PR, and RP > 90 ms** -> **orthodromic AVRT** (a visible P′ with RP < 90 ms would favour AVNRT). The pathway is left free-wall, so the retrograde P′ is negative in I and aVL and upright in III (polarity follows the pathway site). Supporting signs: ST depression and QRS alternans are common in AVRT. After termination, always look at the baseline sinus ECG: a manifest pathway shows a delta wave; a concealed one looks completely normal.',
+            'El RP′ (inicio del QRS al inicio de la P′) ronda 115 ms y el P′R (P′ al siguiente QRS) unos 200 ms: **RP < PR y RP > 90 ms** -> **TRAV ortodrómica** (una P′ visible con RP < 90 ms favorecería la TRIN). La vía es de pared libre izquierda, de modo que la P′ retrógrada es negativa en I y aVL y positiva en III (la polaridad sigue la localización de la vía). Signos de apoyo: la depresión del ST y la alternancia del QRS son frecuentes en la TRAV. Tras la terminación, mira siempre el ECG sinusal basal: una vía manifiesta muestra onda delta; una oculta parece completamente normal.',
           ),
           marks: [{ auto: 'qrs', lead: 'I' }, { auto: 'p', lead: 'I', label: l('P′', 'P′', 'P′') }, { auto: 'rr' }],
           view: { layout: 'strip', lead: 'I', calipers: true },

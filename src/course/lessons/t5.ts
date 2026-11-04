@@ -68,7 +68,7 @@ const lesson: Lesson = {
       reveal: l(
         '**室性心动过速（VT）**——默认规则：原因不明的宽 QRS 心动过速，在证明不是之前**按室速处理**。约 80% 的宽 QRS 心动过速是室速，陈旧性心梗后比例更高，而**既往心梗或结构性心脏病是最强的临床预测因子**。他没有倒下，不代表这不是室速——室速常常血流动力学稳定；稳定性只决定在哪里、怎么治疗，不决定诊断。本课教你在体表心电图上找到证据：房室分离、夺获与融合波、同向性、四步流程。',
         '**Ventricular tachycardia** — the default rule: an unexplained wide-QRS tachycardia is **treated as VT until proven otherwise**. About 80% of wide-complex tachycardias are VT, more still after an old myocardial infarction, and **previous MI or structural heart disease is the strongest clinical predictor**. That he is not collapsed does not mean this is not VT — VT is often haemodynamically stable; stability decides where and how to treat, never what the rhythm is. This lesson teaches you to find the evidence on the surface ECG: AV dissociation, capture and fusion beats, concordance, and one fast algorithm.',
-        '**Taquicardia ventricular**: la regla por defecto; una taquicardia de QRS ancho sin explicación **se trata como TV hasta que se demuestre lo contrario**. Alrededor del 80 % de las taquicardias de QRS ancho son TV, aún más tras un infarto antiguo, y **el infarto previo o la cardiopatía estructural son el predictor clínico más potente**. Que no esté mareado no significa que no sea TV: la TV suele ser hemodinámicamente estable; la estabilidad decide dónde y cómo tratar, nunca qué ritmo es. Esta lección te enseña a encontrar la evidencia en el ECG de superficie: disociación AV, latidos de captura y de fusión, concordancia y un algoritmo rápido.',
+        '**Taquicardia ventricular**: la regla por defecto; una taquicardia de QRS ancho sin explicación **se trata como TV hasta que se demuestre lo contrario**. Alrededor del 80 % de las taquicardias de QRS ancho son TV, aún más tras un infarto antiguo, y **el infarto previo o la cardiopatía estructural son el predictor clínico más potente**. Que no se haya desplomado no significa que no sea TV: la TV suele ser hemodinámicamente estable; la estabilidad decide dónde y cómo tratar, nunca qué ritmo es. Esta lección te enseña a encontrar la evidencia en el ECG de superficie: disociación AV, latidos de captura y de fusión, concordancia y un algoritmo rápido.',
       ),
     },
     {
@@ -204,9 +204,9 @@ const lesson: Lesson = {
         {
           title: l('胸导联走 Brugada 前两步', 'Brugada steps 1-2 in the chest leads', 'Brugada, pasos 1-2 en las precordiales'),
           body: l(
-            '第 1 步：逐个看 V1–V6，找 RS 波形（R 后接 S）。全部六个导联都没有 RS（同向性是其极端）⇒ 室速。本图 V1–V4 都有 RS（V1–V3 宽大 R 波后接 S，V5–V6 为 QS），没有同向性——第 1 步阴性，继续。第 2 步：在 RS 最长的导联上量 R 起点到 S 波最低点：V1–V3 约 130 ms，> 100 ms ⇒ **室速**。室速经心肌间缓慢传导，宽而顿挫的 QRS 常让第 2 步直接阳性。',
-            'Step 1: go lead by lead through V1-V6 looking for an RS complex (an R followed by an S). No RS in any of the six (concordance is the extreme case) -> VT. Here V1-V4 all have an RS (a broad R then an S in V1-V3; QS in V5-V6), so there is no concordance — step 1 is negative, go on. Step 2: in the lead with the longest RS, measure from R onset to the S nadir: about 130 ms in V1-V3, > 100 ms -> **VT**. VT spreads muscle to muscle, slowly, so a broad, slurred QRS often turns step 2 positive on its own.',
-            'Paso 1: recorre V1-V6 derivación por derivación buscando un complejo RS (una R seguida de S). Sin RS en las seis (la concordancia es el caso extremo) -> TV. Aquí V1-V4 tienen RS (una R ancha seguida de S en V1-V3; QS en V5-V6), así que no hay concordancia: el paso 1 es negativo, sigue. Paso 2: en la derivación con el RS más largo, mide del inicio de la R al nadir de la S: unos 130 ms en V1-V3, > 100 ms -> **TV**. La TV se propaga de músculo a músculo, despacio, así que un QRS ancho y empastado suele hacer positivo el paso 2 por sí solo.',
+            '第 1 步：逐个看 V1–V6，找 RS 波形（R 后接 S）。全部六个导联都没有 RS（同向性是其极端）⇒ 室速。本图 V1–V4 都有 RS（V1–V3 宽大 R 波后接 S，V5–V6 为 QS），没有同向性——第 1 步阴性，继续。第 2 步：在 RS 最长的导联上量 R 起点到 S 波最低点：V1–V3 约 135 ms，> 100 ms ⇒ **室速**。室速经心肌间缓慢传导，宽而顿挫的 QRS 常让第 2 步直接阳性。',
+            'Step 1: go lead by lead through V1-V6 looking for an RS complex (an R followed by an S). No RS in any of the six (concordance is the extreme case) -> VT. Here V1-V4 all have an RS (a broad R then an S in V1-V3; QS in V5-V6), so there is no concordance — step 1 is negative, go on. Step 2: in the lead with the longest RS, measure from R onset to the S nadir: about 135 ms in V1-V3, > 100 ms -> **VT**. VT spreads muscle to muscle, slowly, so a broad, slurred QRS often turns step 2 positive on its own.',
+            'Paso 1: recorre V1-V6 derivación por derivación buscando un complejo RS (una R seguida de S). Sin RS en las seis (la concordancia es el caso extremo) -> TV. Aquí V1-V4 tienen RS (una R ancha seguida de S en V1-V3; QS en V5-V6), así que no hay concordancia: el paso 1 es negativo, sigue. Paso 2: en la derivación con el RS más largo, mide del inicio de la R al nadir de la S: unos 135 ms en V1-V3, > 100 ms -> **TV**. La TV se propaga de músculo a músculo, despacio, así que un QRS ancho y empastado suele hacer positivo el paso 2 por sí solo.',
           ),
           marks: [{ auto: 'qrs', lead: 'V2' }],
           highlightLeads: ['V1', 'V2', 'V3', 'V4', 'V5', 'V6'],
@@ -350,7 +350,7 @@ const lesson: Lesson = {
     },
     {
       kind: 'film',
-      title: l('四个模仿者', 'Four mimics', 'Cuatro imitadores'),
+      title: l('四条宽 QRS 心电图', 'Four wide-QRS tracings', 'Cuatro trazados de QRS ancho'),
       view: { layout: '12x1' },
       frames: [
         {
@@ -371,7 +371,7 @@ const lesson: Lesson = {
             'Fast, broad, **irregular**, the QRS changing beat to beat, shortest RR about 235 ms → pre-excited AF (t4), the irregular branch of the tree.',
             'Rápida, ancha, **irregular**, con el QRS cambiando de latido en latido y RR más corto de unos 235 ms → FA preexcitada (t4), la rama irregular del árbol.',
           ),
-          marks: [{ auto: 'rr' }],
+          marks: [{ auto: 'rr', beat: 25 }],
         },
         {
           label: l('起搏', 'Paced', 'Marcapasos'),
@@ -396,9 +396,9 @@ const lesson: Lesson = {
       ],
       predict: {
         question: l(
-          '一条“宽 QRS 心动过速”里，有一个导联完全干净，真 QRS 按原来的 RR 继续出现，患者在和你说话。你先做什么？',
-          'In a "wide-QRS tachycardia" one lead is perfectly clean, the true QRS complexes carry on at the same RR, and the patient is talking to you. What do you do first?',
-          'En una «taquicardia de QRS ancho» una derivación está totalmente limpia, los QRS verdaderos siguen con el mismo RR y el paciente te habla. ¿Qué haces primero?',
+          '一份心电图的部分导联显示宽 QRS 心动过速，但有一个导联完全干净，其中的 QRS 按原来的 RR 继续出现，患者在和你说话。你先做什么？',
+          'A tracing shows a wide-QRS tachycardia in some leads, but one lead is perfectly clean, its QRS complexes carry on at the same RR, and the patient is talking to you. What do you do first?',
+          'Un trazado muestra una taquicardia de QRS ancho en algunas derivaciones, pero una derivación está totalmente limpia, sus QRS siguen con el mismo RR y el paciente te habla. ¿Qué haces primero?',
         ),
         options: [
           l('同步电复律', 'Synchronised cardioversion', 'Cardioversión sincronizada'),
@@ -451,9 +451,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [11889, 21804],
       caption: l(
-        '两份真实心电图，先想好判读再揭晓。A：55 岁男性，窦性心律——短 PR、清楚的 δ波、QRS 很宽：这正是能造出逆向型 AVRT 和预激伴房颤（宽 QRS 心动过速的模仿者）的**底物**。B：87 岁女性，约 170 次/分、**不规则**的宽 QRS 心动过速：V1 呈 rsR′、I 与 V6 有宽 S 波——房颤伴右束支阻滞，即室上性心律伴束支阻滞这一模仿者；有旧图时，同样的束支阻滞形态会让你放心。PTB-XL 静息心电图库里没有室速——本课所有“室速长什么样”都来自合成模型；真实世界中，室速多见于有结构性心脏病的年长者。',
-        'Two real tracings — commit to your reading before the reveal. A: a 55-year-old man in sinus rhythm — short PR, a clear delta wave and a very broad QRS: the exact **substrate** that can produce antidromic AVRT and pre-excited AF, two of the wide-complex mimics. B: an 87-year-old woman with an **irregular** wide-QRS tachycardia at about 170/min: rsR′ in V1 and a broad S in I and V6 — AF with right bundle branch block, the "SVT with bundle branch block" mimic; an old ECG with the same block would reassure you. The PTB-XL resting-ECG library holds no VT — every "what VT looks like" in this lesson comes from the synthetic model; in the real world VT usually belongs to older patients with structural heart disease.',
-        'Dos ECG reales: decide tu lectura antes de mirar la solución. A: varón de 55 años en ritmo sinusal; PR corto, onda delta clara y QRS muy ancho: ese es justamente el **sustrato** capaz de producir una TRAV antidrómica y una FA preexcitada, dos de los imitadores de QRS ancho. B: mujer de 87 años con una taquicardia de QRS ancho **irregular** a unos 170 lpm: rsR′ en V1 y S ancha en I y V6, una FA con bloqueo de rama derecha, el imitador «TSV con bloqueo de rama»; un ECG antiguo con el mismo bloqueo te daría tranquilidad. La biblioteca de ECG de reposo de PTB-XL no contiene TV: todo el «cómo es una TV» de esta lección viene del modelo sintético; en el mundo real, la TV suele pertenecer a pacientes mayores con cardiopatía estructural.',
+        '两份真实心电图，先想好判读再揭晓。A：55 岁男性，标注为窦性心律伴 WPW；机器测量（12SL）PR 100 ms、QRS 184 ms：这正是能造出逆向型 AVRT 和预激伴房颤（宽 QRS 心动过速的模仿者）的**底物**。B：87 岁女性，约 170 次/分，标注为房颤伴完全性右束支阻滞，即室上性心律伴束支阻滞这一模仿者；机器测得 QRS 116 ms，刚好在 120 ms 线以下，要自己量；有旧图时，同样的束支阻滞形态会让你放心。PTB-XL 静息心电图库里没有室速——本课所有“室速长什么样”都来自合成模型；真实世界中，室速多见于有结构性心脏病的年长者。',
+        'Two real tracings — commit to your reading before the reveal. A: a 55-year-old man labelled sinus rhythm with WPW; the machine reading (12SL) gives a PR of 100 ms and a QRS of 184 ms: the exact **substrate** that can produce antidromic AVRT and pre-excited AF, two of the wide-complex mimics. B: an 87-year-old woman at about 170/min, labelled AF with complete right bundle branch block, the "SVT with bundle branch block" mimic; the machine puts her QRS at 116 ms, just under the 120 ms line, so measure it yourself; an old ECG with the same block would reassure you. The PTB-XL resting-ECG library holds no VT — every "what VT looks like" in this lesson comes from the synthetic model; in the real world VT usually belongs to older patients with structural heart disease.',
+        'Dos ECG reales: decide tu lectura antes de mirar la solución. A: varón de 55 años etiquetado como ritmo sinusal con WPW; la medición automática (12SL) da un PR de 100 ms y un QRS de 184 ms: ese es justamente el **sustrato** capaz de producir una TRAV antidrómica y una FA preexcitada, dos de los imitadores de QRS ancho. B: mujer de 87 años a unos 170 lpm, etiquetada como FA con bloqueo completo de rama derecha, el imitador «TSV con bloqueo de rama»; la máquina le mide un QRS de 116 ms, justo por debajo de la línea de 120 ms, así que mídelo tú; un ECG antiguo con el mismo bloqueo te daría tranquilidad. La biblioteca de ECG de reposo de PTB-XL no contiene TV: todo el «cómo es una TV» de esta lección viene del modelo sintético; en el mundo real, la TV suele pertenecer a pacientes mayores con cardiopatía estructural.',
       ),
     },
     {

@@ -146,7 +146,7 @@ const lesson: Lesson = {
     {
       kind: 'film',
       title: l('旁路在四种心律里', 'The pathway in four rhythms', 'La vía en cuatro ritmos'),
-      view: STRIP,
+      view: { layout: '3x4+1' },
       frames: [
         {
           label: l('窦性：图形', 'Sinus: pattern', 'Sinusal: patrón'),
@@ -162,11 +162,11 @@ const lesson: Lesson = {
           label: l('顺向型 AVRT', 'Orthodromic AVRT', 'TRAV ortodrómica'),
           ecg: synth('avrt', 668),
           note: l(
-            '经房室结下传、经旁路逆传 ⇒ QRS 窄而规则，约 190 次/分，P′ 落在 ST 段。',
-            'Down the AV node, back up the pathway → a narrow, regular QRS at about 190/min, with the P′ on the ST segment.',
-            'Baja por el nodo AV y vuelve por la vía → QRS estrecho y regular a unos 190 lpm, con la P′ sobre el segmento ST.',
+            '经房室结下传、经旁路逆传 ⇒ QRS 窄而规则，约 190 次/分；P′ 落在 ST 段上，I、aVL 里清楚下凹。',
+            'Down the AV node, back up the pathway → a narrow, regular QRS at about 190/min; the P′ sits on the ST segment, a crisp dip in I and aVL.',
+            'Baja por el nodo AV y vuelve por la vía → QRS estrecho y regular a unos 190 lpm; la P′ cae sobre el segmento ST, con una muesca negativa nítida en I y aVL.',
           ),
-          marks: [{ auto: 'p', label: l('P′', 'P′', 'P′') }],
+          marks: [{ auto: 'p', lead: 'I', label: l('P′', 'P′', 'P′') }, { auto: 'p', lead: 'aVL', label: l('P′', 'P′', 'P′') }],
         },
         {
           label: l('逆向型 AVRT', 'Antidromic AVRT', 'TRAV antidrómica'),
@@ -186,7 +186,7 @@ const lesson: Lesson = {
             'Fast (about 200/min), broad and irregular, with the QRS width changing beat to beat and a few narrower beats mixed in; shortest RR about 210 ms → high risk.',
             'Rápida (unos 200 lpm), ancha e irregular, con la anchura del QRS cambiando de latido en latido y algunos latidos más estrechos; RR más corto de unos 210 ms → alto riesgo.',
           ),
-          marks: [{ auto: 'qrs' }],
+          marks: [{ auto: 'qrs', beat: 29 }, { auto: 'rr', beat: 28 }],
         },
       ],
       predict: {
@@ -203,9 +203,9 @@ const lesson: Lesson = {
         answer: 1,
       },
       caption: l(
-        '四个不同的患者，旁路都在左侧游离壁。能前传的旁路在窦性心律时画出图形（顺向型那位的旁路是隐匿的，没有图形）；心动过速时旁路充当环路。图形 + 心动过速 = WPW 综合征。',
-        'Four different patients, each with a left free-wall pathway. A pathway that conducts forward draws the pattern in sinus rhythm (the orthodromic patient’s is concealed: no pattern); in tachycardia the pathway forms the circuit. Pattern + tachycardia = WPW syndrome.',
-        'Cuatro pacientes distintos, todos con una vía de pared libre izquierda. Una vía que conduce hacia delante dibuja el patrón en ritmo sinusal (la del paciente ortodrómico está oculta: no hay patrón); en taquicardia la vía forma el circuito. Patrón + taquicardia = síndrome de WPW.',
+        '四个不同的患者，旁路都在左侧游离壁。能前传的旁路在窦性心律时画出图形（顺向型那位的旁路是隐匿的，没有图形）；AVRT 时旁路构成环路，房颤时它放快速的心房冲动通过。图形 + 心动过速 = WPW 综合征。',
+        'Four different patients, each with a left free-wall pathway. A pathway that conducts forward draws the pattern in sinus rhythm (the orthodromic patient’s is concealed: no pattern); in AVRT the pathway forms the circuit; in AF it lets the fast atrial impulses through. Pattern + tachycardia = WPW syndrome.',
+        'Cuatro pacientes distintos, todos con una vía de pared libre izquierda. Una vía que conduce hacia delante dibuja el patrón en ritmo sinusal (la del paciente ortodrómico está oculta: no hay patrón); en la TRAV la vía forma el circuito; en la FA deja pasar los impulsos auriculares rápidos. Patrón + taquicardia = síndrome de WPW.',
       ),
     },
     {
@@ -391,9 +391,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [11889, 2145, 12559],
       caption: l(
-        '三份真实的 WPW 图形（55–63 岁）。先测量 PR、在至少两个导联找 δ波、判断 QRS 宽度，想好你的报告，然后揭晓。注意：三份都是窦性心律，此刻并没有心律失常——所以它们是“图形”，不是“综合征”。预激程度各不相同：有一份的δ波很细微、PR 也不太短——不是每份图形都会量出 <120 ms，要逐导联仔细量。',
-        'Three real WPW patterns (ages 55-63). Measure the PR, find the delta in at least two leads, judge the QRS width and commit to your report — then reveal. Note: all three are in sinus rhythm with no arrhythmia at this moment, so they are "patterns", not "syndromes". The degree of pre-excitation differs: in one the delta is subtle and the PR is not very short — not every pattern measures under 120 ms, so measure carefully, lead by lead.',
-        'Tres patrones de WPW reales (55-63 años). Mide el PR, busca la delta en al menos dos derivaciones, valora la anchura del QRS y decide tu informe antes de mirar la solución. Fíjate: los tres están en ritmo sinusal y ahora mismo no hay arritmia, así que son «patrones», no «síndromes». El grado de preexcitación varía: en uno la delta es sutil y el PR no es muy corto; no todos los patrones miden menos de 120 ms, así que mide con cuidado, derivación por derivación.',
+        '三份真实的 WPW 图形（55–63 岁）。先测量 PR、在至少两个导联找 δ波、判断 QRS 宽度，想好你的报告，然后揭晓。注意：三份都没有心律失常标签，机器测量（12SL）也是每个 QRS 一个 P——此刻没有心动过速，所以它们是“图形”，不是“综合征”。预激程度各不相同：有一份机器测得 PR 140 ms——不是每份图形都会量出 <120 ms，要逐导联仔细量。',
+        'Three real WPW patterns (ages 55-63). Measure the PR, find the delta in at least two leads, judge the QRS width and commit to your report — then reveal. Note: none of the three carries an arrhythmia label and the machine reading (12SL) counts one P per QRS: no tachyarrhythmia at this moment, so they are "patterns", not "syndromes". The degree of pre-excitation differs: in one the machine PR is 140 ms — not every pattern measures under 120 ms, so measure carefully, lead by lead.',
+        'Tres patrones de WPW reales (55-63 años). Mide el PR, busca la delta en al menos dos derivaciones, valora la anchura del QRS y decide tu informe antes de mirar la solución. Fíjate: ninguno lleva una etiqueta de arritmia y la medición automática (12SL) cuenta una P por QRS; ahora mismo no hay taquicardia, así que son «patrones», no «síndromes». El grado de preexcitación varía: en uno la máquina mide un PR de 140 ms; no todos los patrones miden menos de 120 ms, así que mide con cuidado, derivación por derivación.',
       ),
     },
     {

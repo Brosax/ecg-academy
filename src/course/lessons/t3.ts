@@ -61,9 +61,9 @@ const lesson: Lesson = {
         'Varón de 69 años, palpitaciones y disnea de esfuerzo desde hace 3 días. Esta tira de derivación II: regular, unos 150 lpm, QRS estrecho. ¿Dónde está la segunda onda auricular? Decide una respuesta antes de seguir.',
       ),
       reveal: l(
-        '**锯齿来了。** II 导联的基线不是平的：一串负向锯齿状 **F 波**，F–F ≈ 200 ms ⇒ **心房率约 300 次/分**。房室结每两个 F 只下传一个：**典型心房扑动，2:1 下传**。你看不见第二个 F，因为它恰好藏在 QRS–T 里。任何约 150 次/分的规则窄 QRS 心动过速，第一件事都是搜第二个 F。',
-        '**There is the sawtooth.** The baseline in II is not flat: a train of negative sawtooth **F waves** with F–F about 200 ms, so an **atrial rate of about 300/min**. The AV node conducts only every second F: **typical atrial flutter with 2:1 conduction**. You cannot see the second F because it sits exactly inside the QRS–T. With any regular narrow-QRS tachycardia at about 150/min, the first job is to hunt the second F.',
-        '**Ahí está el diente de sierra.** La línea de base en II no es plana: un tren de **ondas F** negativas en diente de sierra con un F–F de unos 200 ms, es decir, una **frecuencia auricular de unos 300 lpm**. El nodo AV conduce solo una de cada dos F: **flutter auricular típico con conducción 2:1**. La segunda F no se ve porque cae justo dentro del QRS–T. Ante cualquier taquicardia regular de QRS estrecho a unos 150 lpm, la primera tarea es buscar la segunda F.',
+        '**锯齿来了。** II 导联的基线不是平的：一串负向锯齿状 **F 波**，F–F ≈ 200 ms ⇒ **心房率约 300 次/分**。房室结每两个 F 只下传一个：**典型心房扑动，2:1 下传**。你看不见第二个 F，因为它从 T 波结束处一直延伸进下一个 QRS。任何约 150 次/分的规则窄 QRS 心动过速，第一件事都是搜第二个 F。',
+        '**There is the sawtooth.** The baseline in II is not flat: a train of negative sawtooth **F waves** with F–F about 200 ms, so an **atrial rate of about 300/min**. The AV node conducts only every second F: **typical atrial flutter with 2:1 conduction**. You cannot see the second F because it runs from the end of the T straight into the next QRS. With any regular narrow-QRS tachycardia at about 150/min, the first job is to hunt the second F.',
+        '**Ahí está el diente de sierra.** La línea de base en II no es plana: un tren de **ondas F** negativas en diente de sierra con un F–F de unos 200 ms, es decir, una **frecuencia auricular de unos 300 lpm**. El nodo AV conduce solo una de cada dos F: **flutter auricular típico con conducción 2:1**. La segunda F no se ve porque va desde el final de la T hasta dentro del QRS siguiente. Ante cualquier taquicardia regular de QRS estrecho a unos 150 lpm, la primera tarea es buscar la segunda F.',
       ),
     },
     {
@@ -82,9 +82,9 @@ const lesson: Lesson = {
       emphasize: ['ra', 'av-node'],
       showConduction: true,
       caption: l(
-        '环路在右心房（高亮）：激动绕三尖瓣环转，每圈都穿过**下腔静脉-三尖瓣峡部**。每圈约 200 ms ⇒ 心房约 300 次/分；房室结只放过每两个 F 中的一个 ⇒ 2:1。',
-        'The loop lives in the right atrium (highlighted): the wavefront circles the tricuspid annulus and crosses the **cavotricuspid isthmus** on every lap. About 200 ms per lap → atria at about 300/min; the AV node lets only one F in two through → 2:1.',
-        'El circuito está en la aurícula derecha (resaltada): el frente rodea el anillo tricuspídeo y cruza el **istmo cavotricuspídeo** en cada vuelta. Unos 200 ms por vuelta → aurículas a unas 300 lpm; el nodo AV deja pasar solo una F de cada dos → 2:1.',
+        '房扑的环路在右心房（高亮），但这里不画环路本身：只显示心房**每 200 ms 激动一次** ⇒ 约 300 次/分；房室结只放过每两个 F 中的一个 ⇒ 2:1。',
+        'The flutter loop lives in the right atrium (highlighted), but the loop itself is not drawn: you see the atria **fire every 200 ms** → about 300/min; the AV node lets only one F in two through → 2:1.',
+        'El circuito del flutter está en la aurícula derecha (resaltada), pero el circuito en sí no se dibuja: ves las aurículas **activarse cada 200 ms** → unas 300 lpm; el nodo AV deja pasar solo una F de cada dos → 2:1.',
       ),
     },
     {
@@ -210,9 +210,9 @@ const lesson: Lesson = {
         {
           title: l('第二个 F 在哪里？', 'Where is the second F?', '¿Dónde está la segunda F?'),
           body: l(
-            '两个下传的 F 之间还有一个 F：它藏在 **QRS–T 里**——你能看见的那个 F 搭在 T 波的降支上。每两个 F 一个 QRS：**2:1 下传**。所以"看不见"不等于"不存在"。',
-            'Between two conducted F waves there is one more F: it hides **inside the QRS–T** — the one you can see rides on the descending limb of the T wave. One QRS per two F waves: **2:1 conduction**. "Not visible" does not mean "not there".',
-            'Entre dos F conducidas hay una F más: se esconde **dentro del QRS–T**; la que sí ves cabalga sobre la rama descendente de la onda T. Un QRS por cada dos F: **conducción 2:1**. "No visible" no significa "inexistente".',
+            '两个下传的 F 之间还有一个 F：它从 T 波结束处开始，一直**延伸进下一个 QRS**，所以看不见——你能看见的那个 F 紧跟在 QRS 之后，落在 ST 段上。每两个 F 一个 QRS：**2:1 下传**。所以"看不见"不等于"不存在"。',
+            'Between two conducted F waves there is one more F: it starts as the T ends and **runs into the next QRS**, so you cannot see it — the one you can see sits on the ST segment, right after the QRS. One QRS per two F waves: **2:1 conduction**. "Not visible" does not mean "not there".',
+            'Entre dos F conducidas hay una F más: empieza cuando acaba la T y **se mete en el QRS siguiente**, así que no se ve; la que sí ves está justo después del QRS, sobre el segmento ST. Un QRS por cada dos F: **conducción 2:1**. "No visible" no significa "inexistente".',
           ),
           marks: [{ auto: 'f-waves', label: l('F 波', 'F waves', 'ondas F') }, { auto: 'qrs' }, { auto: 't' }],
         },
@@ -262,6 +262,7 @@ const lesson: Lesson = {
         question: l('把 2:1 调到 4:1，心房率会怎样？', 'Going from 2:1 to 4:1, what happens to the atrial rate?', 'Al pasar de 2:1 a 4:1, ¿qué le ocurre a la frecuencia auricular?'),
         options: [l('减半', 'It halves', 'Se reduce a la mitad'), l('仍约 300 次/分', 'It stays at about 300/min', 'Sigue en unas 300 lpm'), l('加倍', 'It doubles', 'Se duplica')],
         answer: 1,
+        ordered: true,
       },
       caption: l(
         '迷走手法或腺苷就是这样提高比例：暴露 F 波，却几乎从不终止房扑。给药时全程记录 12 导联；报告要写比例。',
@@ -284,7 +285,7 @@ const lesson: Lesson = {
         marks: [{ auto: 'p' }],
       },
       point: l(
-        '心室率相同，心房真相完全不同：**左**每个 RR 有四个 F 波（一个与 QRS 重叠）、锯齿相连、没有等电位线——房扑 4:1；**右**每个 QRS 前只有一个 P 波，P 前后有平坦的等电位线、PR 恒定。慢而不至于快的心动过速也可能是房扑：数心房波，别只数 QRS。',
+        '心室率相同，心房真相完全不同：**左**每个 RR 有四个 F 波（一个与 QRS 重叠）、锯齿相连、没有等电位线——房扑 4:1；**右**每个 QRS 前只有一个 P 波，P 前后有平坦的等电位线、PR 恒定。看似无害的心率下也可能藏着房扑：数心房波，别只数 QRS。',
         'Identical ventricular rate, completely different atrial truth: on the **left** four F waves per RR (one runs into the QRS), linked in a sawtooth with no isoelectric line — 4:1 flutter; on the **right** one P wave before every QRS, with a flat baseline around it and a constant PR. A flutter can hide at a harmless-looking rate: count the atrial waves, not just the QRS complexes.',
         'La misma frecuencia ventricular, una verdad auricular totalmente distinta: a la **izquierda** cuatro ondas F por RR (una se solapa con el QRS), encadenadas en diente de sierra sin línea isoeléctrica (flutter 4:1); a la **derecha** una sola P antes de cada QRS, con línea de base plana a su alrededor y PR constante. Un flutter puede esconderse tras una frecuencia inofensiva: cuenta las ondas auriculares, no solo los QRS.',
       ),
@@ -293,7 +294,7 @@ const lesson: Lesson = {
       kind: 'ecg',
       ecg: synth('atrial-flutter', 647, undefined, 'variable'),
       view: STRIP,
-      marks: [{ auto: 'f-waves' }, { auto: 'rr' }],
+      marks: [{ auto: 'f-waves' }, { auto: 'rr', beat: 5 }],
       caption: l(
         '比例不等的房扑：RR 看似杂乱，但**每个 RR 都接近 F–F（200 ms）的整数倍**（本条 3 到 5 倍）。心房的“钟”从未变过；房颤没有这口钟（t2）。',
         'Flutter with variable block: the RR looks chaotic, but **every RR sits close to a whole multiple of the F–F (200 ms)**, three to five times on this strip. The atrial clock never changes; AF has no such clock (t2).',

@@ -209,10 +209,10 @@ const lesson: Lesson = {
       view: STRIP,
       play: {
         dial: 'fCoarseness',
-        from: 1,
+        from: 0.98,
         to: 0.5,
         notes: [
-          { min: 0.9, max: 1, text: l('粗颤：II 导联波幅约 2 mV（20 mm），形态、大小、间距都在变。', 'Coarse VF: waves of about 2 mV (20 mm) in II, changing in shape, size and spacing.', 'FV gruesa: ondas de unos 2 mV (20 mm) en II, que cambian de forma, tamaño y separación.') },
+          { min: 0.91, max: 0.98, text: l('粗颤：II 导联波幅约 2 mV（20 mm），形态、大小、间距都在变。', 'Coarse VF: waves of about 2 mV (20 mm) in II, changing in shape, size and spacing.', 'FV gruesa: ondas de unos 2 mV (20 mm) en II, que cambian de forma, tamaño y separación.') },
           {
             min: 0.5,
             max: 0.6,
@@ -258,7 +258,7 @@ const lesson: Lesson = {
         },
         {
           label: l('心室扑动', 'Ventricular flutter', 'Flutter ventricular'),
-          ecg: synth('ventricular-flutter', 706),
+          ecg: synth('ventricular-flutter', 710),
           note: l(
             '规则的正弦波，约 300 次/分（周期约 200 ms），没有平线，QRS 与 T 分不开 ⇒ 心室扑动：可电击，按室颤处理。',
             'A regular sine wave at about 300/min (cycle about 200 ms), no flat line, QRS and T inseparable → ventricular flutter: shockable, treat as VF.',
@@ -267,7 +267,7 @@ const lesson: Lesson = {
         },
         {
           label: l('细颤', 'Fine VF', 'FV fina'),
-          ecg: synth('ventricular-fibrillation', 708, undefined, 'fine'),
+          ecg: synth('ventricular-fibrillation', 719, undefined, 'fine'),
           note: l(
             '波幅只有约 2 mm，在一个导联上可以冒充直线。换一个导联、查增益；真分不清时按停搏处理，继续按压。',
             'Waves of only about 2 mm that can pass for a flat line in one lead. Check a second lead and the gain; if you truly cannot tell, treat as asystole and keep compressing.',
@@ -286,9 +286,17 @@ const lesson: Lesson = {
         },
       ],
       predict: {
-        question: l('心室扑动规则而有组织。它可以电击吗？', 'Ventricular flutter is regular and organised. Is it shockable?', 'El flutter ventricular es regular y organizado. ¿Es desfibrilable?'),
-        options: [l('可以，按室颤处理', 'Yes, treat it as VF', 'Sí, trátalo como FV'), l('不可以，它有组织', 'No, it is organised', 'No, está organizado'), l('只能同步电复律', 'Only with a synchronised shock', 'Solo con descarga sincronizada')],
-        answer: 0,
+        question: l(
+          '细颤可以冒充停搏。第 3 帧是细颤：II 导联上会是什么样？',
+          'Fine VF can pass for asystole. Frame 3 is fine VF: what will lead II show?',
+          'La FV fina puede pasar por asistolia. El fotograma 3 es FV fina: ¿qué mostrará la derivación II?',
+        ),
+        options: [
+          l('一条完全平直的线', 'A perfectly flat line', 'Una línea totalmente plana'),
+          l('细小而杂乱的波', 'Small, chaotic waves', 'Ondas pequeñas y caóticas'),
+          l('细小而规则的波群', 'Small, regular complexes', 'Complejos pequeños y regulares'),
+        ],
+        answer: 1,
       },
       caption: l(
         '10 秒内叫出骤停节律：室颤与心室扑动可电击，停搏与无脉性电活动不可电击。本课节律条均为合成：PTB-XL 里没有骤停心律。',
@@ -298,7 +306,7 @@ const lesson: Lesson = {
     },
     {
       kind: 'film',
-      title: l('伪差扮演室速', 'Artefact playing VT', 'El artefacto haciendo de TV'),
+      title: l('II 导联里的一阵', 'A burst in lead II', 'Una ráfaga en II'),
       view: { layout: 'strip', lead: 'II', calipers: true },
       frames: [
         {
@@ -328,9 +336,9 @@ const lesson: Lesson = {
       ],
       predict: {
         question: l(
-          '这阵“室速”出现时，患者正在和你说话。你先做什么？',
-          'During this "VT" the patient is talking to you. What do you do first?',
-          'Durante esta «TV» el paciente está hablando contigo. ¿Qué haces primero?',
+          '这一阵出现时，患者正在和你说话。你先做什么？',
+          'During this burst the patient is talking to you. What do you do first?',
+          'Durante esta ráfaga el paciente está hablando contigo. ¿Qué haces primero?',
         ),
         options: [l('立即电击', 'Shock at once', 'Descarga inmediata'), l('用分规在伪差里找真 QRS', 'Look for the true QRS inside the noise with calipers', 'Buscar con el compás los QRS verdaderos dentro del ruido'), l('给胺碘酮', 'Give amiodarone', 'Dar amiodarona')],
         answer: 1,
