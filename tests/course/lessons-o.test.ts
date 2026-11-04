@@ -754,12 +754,21 @@ describe('o6: pulmonary embolism on the tracings', () => {
     }
     expect(rvh.truth!.axisDeg.qrs).toBeGreaterThan(90);
   });
-  it('rate sweep: the strain signs at both ends, 100 and 115/min', () => {
+  it('rate sweep: the strain signs at both ends, 100 and 115/min, the same size at both (the predicted "it stays the same")', () => {
+    const live = blocksOf('o6', 'live')[0];
+    expect(live.predict!.options[live.predict!.answer].en).toBe('It stays the same');
+    const wave = (e: Ecg, l: StdLead, role: 'q' | 's') => {
+      const b = midBeat(e);
+      return qrsWaves(e.signal.leads[l], e.signal.fs, b.qrsOn, b.qrsOff).find((w) => w.role === role)!.mv;
+    };
+    const sizes = (e: Ecg) => [wave(e, 'I', 's'), wave(e, 'III', 'q'), tw(e, 'III').min, tw(e, 'V1').min, tw(e, 'V2').min];
     for (const v of [100, 115]) {
       const e = played('o6', 0, v);
       expect(Math.abs(e.truth!.hrBpm - v), `${v}`).toBeLessThan(1.5);
       strain(e, `${v}/min`);
     }
+    const [slow, fast] = [sizes(played('o6', 0, 100)), sizes(played('o6', 0, 115))];
+    slow.forEach((mv, k) => expect(Math.abs(fast[k] - mv), ['S in I', 'Q in III', 'T in III', 'T in V1', 'T in V2'][k]).toBeLessThanOrEqual(0.05));
   });
   it('film: at ≈ 108/min tachycardia alone has I all R, no Q in III and an upright T in V2; the strained heart adds S1Q3T3, T inversion in V1–V2 and a qR in V1', () => {
     const [tachy, pe] = frames('o6', 0);
