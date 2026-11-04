@@ -178,9 +178,9 @@ const lesson: Lesson = {
         {
           title: l('裁决者：V1–V6', 'The decider: V1–V6', 'La decisiva: V1-V6'),
           body: l(
-            '从 V1 走到 V6：R 波**越来越小**——递增不良，到 V6 几乎全负。肢体接反不会碰胸前导联，所以这不是电缆的问题：**右位心**。若 R 波平滑递增，答案就是接反——回到上一份图。',
-            'Walk V1 to V6: the R wave gets **smaller and smaller** — poor progression, almost fully negative by V6. Limb reversals never touch the chest leads, so this is not a cable problem: **dextrocardia**. Had the R progressed smoothly, the answer would be the cable reversal of the previous tracing.',
-            'Recorre de V1 a V6: la onda R se hace **cada vez más pequeña**: mala progresión, casi negativa del todo en V6. Las inversiones de miembros nunca tocan las precordiales, así que esto no es un problema de cables: **dextrocardia**. Si la R hubiera progresado con suavidad, la respuesta sería la inversión de cables del trazado anterior.',
+            '从 V1 走到 V6：R 波**从 V1 到 V4 越来越小**，到 V5–V6 几乎消失，这两个导联几乎全负——R 波递减，与正常相反。肢体接反不会碰胸前导联，所以这不是电缆的问题：**右位心**。若 R 波平滑递增，答案就是接反——回到上一份图。',
+            'Walk V1 to V6: the R wave gets **smaller from V1 to V4** and is all but gone in V5–V6, which are almost fully negative — the reverse of normal progression. Limb reversals never touch the chest leads, so this is not a cable problem: **dextrocardia**. Had the R progressed smoothly, the answer would be the cable reversal of the previous tracing.',
+            'Recorre de V1 a V6: la onda R se hace **más pequeña de V1 a V4** y casi desaparece en V5-V6, que son casi negativas del todo: lo contrario de la progresión normal. Las inversiones de miembros nunca tocan las precordiales, así que esto no es un problema de cables: **dextrocardia**. Si la R hubiera progresado con suavidad, la respuesta sería la inversión de cables del trazado anterior.',
           ),
           marks: [{ auto: 'r', lead: 'V1' }, { auto: 'r', lead: 'V6' }],
           highlightLeads: ['V1', 'V3', 'V6'],
