@@ -52,6 +52,9 @@ function sourcesOf(lesson: Lesson): { readonly path: string; readonly src: EcgSo
       case 'contrast':
         out.push({ path: `${p}.left`, src: b.left.ecg }, { path: `${p}.right`, src: b.right.ecg });
         break;
+      case 'film':
+        b.frames.forEach((f, k) => out.push({ path: `${p}.frames[${k}]`, src: f.ecg }));
+        break;
       case 'check':
         if ('inline' in b.item) {
           out.push({ path: `${p}.item`, src: b.item.inline.ecg });
@@ -223,6 +226,16 @@ function ecgOf(src: EcgSource | SynthRequest): Ecg {
   }
   return e;
 }
+/** what a playing live block shows with its played dial at `v` (its other dials at their start values) */
+function played(id: string, i: number, v: number): Ecg {
+  const b = blocksOf(id, 'live')[i];
+  if (!b.play) throw new Error(`${id}: live block ${i} does not play`);
+  const sc = scenarios().find((s) => s.id === b.scenario);
+  if (!sc) throw new Error(`unknown scenario ${b.scenario}`);
+  const dials = { ...startDials(sc, b.variant, b.dials.map((d) => d.id), b.play), [b.play.dial]: v };
+  return ecgOf({ scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed, dials });
+}
+const frames = (id: string, film: number): Ecg[] => blocksOf(id, 'film')[film].frames.map((f) => ecgOf(f.ecg));
 
 const LIMB: readonly StdLead[] = ['I', 'II', 'III', 'aVR', 'aVL', 'aVF'];
 const CHEST: readonly StdLead[] = ['V1', 'V2', 'V3', 'V4', 'V5', 'V6'];
@@ -302,8 +315,8 @@ describe('h1: the P wave on the tracings', () => {
     expect(depth * 10 * (neg / 1000)).toBeGreaterThan(0.06);
     expect(depth * 10 * (neg / 1000)).toBeLessThan(0.08);
   });
-  it('RAE (ecg, contrast A): P >= 2.5 mm in II, duration < 120 ms, initial V1 positivity > 1.5 mm', () => {
-    for (const src of [blocksOf('h1', 'ecg')[0].ecg, blocksOf('h1', 'contrast')[0].left.ecg]) {
+  it('RAE (P film frame 2, contrast A): P >= 2.5 mm in II, duration < 120 ms, initial V1 positivity > 1.5 mm', () => {
+    for (const src of [blocksOf('h1', 'film')[0].frames[1].ecg, blocksOf('h1', 'contrast')[0].left.ecg]) {
       const e = ecgOf(src);
       const b = midBeat(e);
       expect(pw(e, 'II').max).toBeGreaterThanOrEqual(0.25);
@@ -311,10 +324,67 @@ describe('h1: the P wave on the tracings', () => {
       expect(pw(e, 'V1').max).toBeGreaterThan(0.15);
     }
   });
-  it('advanced interatrial block: P >= 120 ms, biphasic +/− in II, III and aVF', () => {
-    const e = ecgOf(blocksOf('h1', 'ecg')[1].ecg);
+  it('heart: the normal P runs along lead II (+60° ± 10°)', () => {
+    expect(Math.abs(ecgOf(blocksOf('h1', 'heart')[0].ecg).truth!.axisDeg.p! - 60)).toBeLessThan(10);
+  });
+  it('P film notes: normal P about 100 ms and < 1 mm in II with a tiny up-then-down V1; RAE about 3 mm, about 100 ms, V1 initial about 1.6 mm; LAE (the worked tracing) about 150 ms and about 1.6 mm tall', () => {
+    const film = blocksOf('h1', 'film')[0];
+    expect(film.frames[0].ecg).toEqual(blocksOf('h1', 'heart')[0].ecg);
+    expect(film.frames[2].ecg).toEqual(blocksOf('h1', 'worked')[0].ecg);
+    const [normal, rae, lae] = frames('h1', 0);
+    const dur = (e: Ecg) => midBeat(e).pOff! - midBeat(e).pOn!;
+    for (const e of [normal, rae]) {
+      expect(dur(e)).toBeGreaterThan(95);
+      expect(dur(e)).toBeLessThan(105);
+    }
+    expect(Math.abs(dur(lae) - 150)).toBeLessThan(5);
+    expect(pw(normal, 'II').max).toBeLessThan(0.1);
+    const v1 = pSamples(normal, 'V1');
+    expect(Math.max(...v1)).toBeGreaterThan(0.005);
+    expect(Math.min(...v1)).toBeLessThan(-0.01);
+    expect(v1.indexOf(Math.max(...v1)), 'V1 up first').toBeLessThan(v1.indexOf(Math.min(...v1)));
+    for (const x of [Math.max(...v1), -Math.min(...v1)]) expect(x).toBeLessThan(0.05);
+    expect(pw(rae, 'II').max).toBeGreaterThan(0.27);
+    expect(pw(rae, 'II').max).toBeLessThan(0.33);
+    expect(pw(rae, 'V1').max).toBeGreaterThan(0.155);
+    expect(pw(rae, 'V1').max).toBeLessThan(0.17);
+    expect(pw(lae, 'II').max).toBeGreaterThan(0.15);
+    expect(pw(lae, 'II').max).toBeLessThan(0.17);
+  });
+  it('P film, biatrial: II tall and broad (about 3 mm, about 140 ms); V1 right on the cut-offs: initial about 1.5 mm, terminal about 1 mm', () => {
+    const e = frames('h1', 0)[3];
     const b = midBeat(e);
-    expect(b.pOff! - b.pOn!).toBeGreaterThanOrEqual(120);
+    expect(pw(e, 'II').max).toBeGreaterThan(0.27);
+    expect(pw(e, 'II').max).toBeLessThan(0.33);
+    expect(b.pOff! - b.pOn!).toBeGreaterThanOrEqual(135);
+    expect(b.pOff! - b.pOn!).toBeLessThan(145);
+    expect(pw(e, 'V1').max).toBeGreaterThan(0.14);
+    expect(pw(e, 'V1').max).toBeLessThan(0.16);
+    expect(pw(e, 'V1').min).toBeLessThan(-0.09);
+    expect(pw(e, 'V1').min).toBeGreaterThan(-0.105);
+  });
+  it('P film, V1 high on the same heart: the whole V1 P is negative (about 0.3 mm) and every other lead but V2 is unchanged', () => {
+    const [normal, , , , high] = frames('h1', 0);
+    const p = pSamples(high, 'V1');
+    expect(Math.max(...p)).toBeLessThan(0);
+    expect(-Math.min(...p)).toBeGreaterThan(0.025);
+    expect(-Math.min(...p)).toBeLessThan(0.035);
+    for (const l of [...LIMB, 'V3', 'V4', 'V5', 'V6'] as const) expect(high.signal.leads[l], l).toEqual(normal.signal.leads[l]);
+  });
+  it('interatrial-block film: partial P about 145 ms, upright in II and aVF; advanced is the same heart with P >= 120 ms, biphasic +/− in II, III and aVF', () => {
+    const film = blocksOf('h1', 'film')[1];
+    const [a, b] = film.frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req : null));
+    expect({ ...a, variant: 'advanced' }).toEqual(b);
+    const [partial, e] = frames('h1', 1);
+    const pb = midBeat(partial);
+    expect(pb.pOff! - pb.pOn!).toBeGreaterThan(140);
+    expect(pb.pOff! - pb.pOn!).toBeLessThan(150);
+    for (const l of ['II', 'aVF'] as const) {
+      expect(pw(partial, l).max, l).toBeGreaterThan(0.05);
+      expect(pw(partial, l).min, l).toBeGreaterThan(-0.01);
+    }
+    const bt = midBeat(e);
+    expect(bt.pOff! - bt.pOn!).toBeGreaterThanOrEqual(120);
     for (const l of ['II', 'III', 'aVF'] as const) {
       const p = pSamples(e, l);
       const iMax = p.indexOf(Math.max(...p));
@@ -323,16 +393,6 @@ describe('h1: the P wave on the tracings', () => {
       expect(p[iMin], l).toBeLessThan(-0.02);
       expect(iMin, `${l}: positive first, negative last`).toBeGreaterThan(iMax);
     }
-  });
-  it('biatrial: II tall and broad (> 2.5 mm, >= 120 ms); V1 borderline: initial about 1.5 mm, terminal about 0.9 mm', () => {
-    const e = ecgOf(blocksOf('h1', 'ecg')[2].ecg);
-    const b = midBeat(e);
-    expect(pw(e, 'II').max).toBeGreaterThan(0.25);
-    expect(b.pOff! - b.pOn!).toBeGreaterThanOrEqual(120);
-    expect(pw(e, 'V1').max).toBeGreaterThan(0.13);
-    expect(pw(e, 'V1').max).toBeLessThan(0.17);
-    expect(pw(e, 'V1').min).toBeLessThan(-0.07);
-    expect(pw(e, 'V1').min).toBeGreaterThan(-0.1);
   });
 });
 
