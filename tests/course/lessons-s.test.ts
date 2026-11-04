@@ -435,7 +435,7 @@ describe('s3: sinus rhythm on the tracings', () => {
     });
     expect(Math.abs(pw(frames[0], 'II').max - pw(frames[1], 'II').max)).toBeLessThan(0.01);
   });
-  it('P-axis sweep notes: III flat or slightly negative at 20–30 with a small upright aVF; III and aVL small at 35–55; aVL flat or slightly negative with III upright at 60–70; I, II, aVF upright and aVR negative at every step (no opposite wave of 0.5 mm), changing only in size', () => {
+  it('P-axis sweep notes and caption: III flat or slightly negative with aVL upright at 20–30 and a small upright aVF; III and aVL small at 35–55; aVL flat or slightly negative with III upright at 60–70; I, II, aVF upright and aVR negative at every step (no opposite wave of 0.5 mm), changing only in size', () => {
     const sc = scenarios().find((s) => s.id === 'normal')!;
     for (const v of sweepValues('pAxis', sc.dials.pAxis!, 20, 70)) {
       const e = played('s3', 0, v);
@@ -461,6 +461,8 @@ describe('s3: sinus rhythm on the tracings', () => {
       if (v <= 30) {
         expect(iii, `${v}° III`).toBeLessThan(0.005);
         expect(iii, `${v}° III`).toBeGreaterThan(-0.04);
+        expect(avl, `${v}° aVL`).toBeGreaterThan(0.03);
+        expect(pw(e, 'aVL').min, `${v}° aVL`).toBeGreaterThan(-MIN_WAVE_MV);
       } else if (v <= 55) {
         for (const x of [iii, avl]) expect(Math.abs(x), `${v}° III/aVL`).toBeLessThan(0.6 * ii);
       } else {
