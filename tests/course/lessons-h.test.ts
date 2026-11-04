@@ -481,11 +481,11 @@ describe('h3: RVH and right-heart load on the tracings', () => {
       for (const l of ['V5', 'V6'] as const) expect(qrs(e, l).max / -qrs(e, l).min, l).toBeLessThan(1);
     }
   });
-  it('worked: T shallowly inverted in V1 only, upright from V2', () => {
+  it('worked: T shallowly inverted in V1 only, upright from V2 (V2–V6)', () => {
     const e = ecgOf(blocksOf('h3', 'worked')[0].ecg);
     expect(tInverted(e, 'V1')).toBe(true);
     expect(tw(e, 'V1').min).toBeGreaterThan(-0.2);
-    for (const l of ['V2', 'V3'] as const) expect(tUpright(e, l), l).toBe(true);
+    for (const l of ['V2', 'V3', 'V4', 'V5', 'V6'] as const) expect(tUpright(e, l), l).toBe(true);
   });
   it('strain variant (load film frame 2): deep T inversion in V1–V2, only a trace in V3, inverted in III and shallow in aVF', () => {
     const e = frames('h3', 1)[1];
@@ -536,7 +536,7 @@ describe('h3: RVH and right-heart load on the tracings', () => {
     near(qrs(rvh, 'V1').max, 18);
     expect(rvh.truth!.findings).not.toContain('wpw');
   });
-  it('load film notes: RVH R V1 about 17 mm with almost no S, S V5 about 10 mm, T V1 about −1.5 mm and upright from V2; the strain frame is the same heart with V1–V2 T about −7 to −9 mm (asymmetric: slow descent), V3 about −1 mm', () => {
+  it('load film notes: RVH R V1 about 17 mm with almost no S, S V5 about 10 mm, T V1 about −1.5 mm and upright from V2 (V2–V6); the strain frame is the same heart with V1–V2 T about −7 to −9 mm (asymmetric: slow descent), V3 about −1 mm', () => {
     const [a, b] = blocksOf('h3', 'film')[1].frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req : null));
     expect({ ...a, variant: 'strain' }).toEqual(b);
     const [rvh, strain] = frames('h3', 1);
@@ -544,7 +544,7 @@ describe('h3: RVH and right-heart load on the tracings', () => {
     expect(qrs(rvh, 'V1').min).toBeGreaterThan(-0.05);
     near(-qrs(rvh, 'V5').min, 10);
     near(tw(rvh, 'V1').min, -1.5);
-    expect(tUpright(rvh, 'V2')).toBe(true);
+    for (const l of ['V2', 'V3', 'V4', 'V5', 'V6'] as const) expect(tUpright(rvh, l), l).toBe(true);
     for (const l of ['V1', 'V2'] as const) {
       expect(tw(strain, l).min, l).toBeGreaterThanOrEqual(-0.9);
       expect(tw(strain, l).min, l).toBeLessThanOrEqual(-0.7);
@@ -558,13 +558,18 @@ describe('h3: RVH and right-heart load on the tracings', () => {
     }
     near(tw(strain, 'V3').min, -1);
   });
-  it('biventricular: axis > +90°, R V1 about 11 mm, S V3 about 25 mm (Peguero about 40 mm) while Sokolow-Lyon stays about 11 mm', () => {
+  it('biventricular (contrast B caption and point): axis about +96° (> +90°), R V1 about 10 mm, S V3 about 33 mm (the deepest S) with an RS about 43 mm, Peguero about 52 mm (≥ 28) while Sokolow-Lyon is about 14 mm (< 35)', () => {
     const e = ecgOf(blocksOf('h3', 'contrast')[0].right.ecg);
     expect(e.truth!.axisDeg.qrs).toBeGreaterThan(90);
-    expect(qrs(e, 'V1').max).toBeGreaterThan(0.9);
-    expect(-qrs(e, 'V3').min).toBeGreaterThan(2.2);
-    expect(peguero(e)).toBeGreaterThan(2.8);
-    expect(sokolow(e)).toBeLessThan(1.5);
+    expect(Math.abs(e.truth!.axisDeg.qrs - 96)).toBeLessThanOrEqual(5);
+    near(qrs(e, 'V1').max, 10);
+    near(-qrs(e, 'V3').min, 33);
+    expect(deepestS(e)).toBe('V3');
+    near(qrs(e, 'V3').p2p, 43);
+    near(peguero(e), 52);
+    expect(peguero(e)).toBeGreaterThanOrEqual(2.8);
+    near(sokolow(e), 14);
+    expect(sokolow(e)).toBeLessThan(3.5);
   });
 });
 
