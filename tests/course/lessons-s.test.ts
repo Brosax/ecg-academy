@@ -728,14 +728,16 @@ describe('s5: axis on the tracings', () => {
 });
 
 describe('s6: ST measurement on the tracings', () => {
-  it('hook (inferior): about 2 mm ST elevation in II, III, aVF (largest in III, each ≥ 1 mm at J); depression in aVL and I', () => {
+  it('hook (inferior): ST elevation at J of about 1.5–2 mm in II, III, aVF (largest in III, each ≥ 1 mm); depression in aVL and I', () => {
     const e = ecgOf(blocksOf('s6', 'hook')[0].ecg);
     for (const l of ['II', 'III', 'aVF'] as const) {
-      expect(stAt(e, l), `${l} at J`).toBeGreaterThanOrEqual(0.1);
+      expect(stAt(e, l), `${l} at J`).toBeGreaterThanOrEqual(0.125);
+      expect(stAt(e, l), `${l} at J`).toBeLessThanOrEqual(0.225);
       expect(stAt(e, l, 60), `${l} at J+60`).toBeGreaterThan(0.15);
       expect(stAt(e, l, 60), `${l} at J+60`).toBeLessThan(0.3);
     }
-    expect(stAt(e, 'III', 60)).toBeGreaterThan(Math.max(stAt(e, 'II', 60), stAt(e, 'aVF', 60)));
+    for (const d of [0, 60]) expect(stAt(e, 'III', d), `J+${d}`).toBeGreaterThan(Math.max(stAt(e, 'II', d), stAt(e, 'aVF', d)));
+    for (const l of ['aVL', 'I'] as const) expect(stAt(e, l), `${l} at J`).toBeLessThan(-MIN_WAVE_MV);
     expect(stAt(e, 'aVL', 60)).toBeLessThan(-0.1);
     expect(stAt(e, 'I', 60)).toBeLessThan(0);
   });
@@ -745,7 +747,7 @@ describe('s6: ST measurement on the tracings', () => {
     const label = m && 'label' in m && m.label ? (typeof m.label === 'string' ? m.label : m.label.en) : '';
     return /ST ([+−±]\d+\.\d) mm/.exec(label)?.[1] ?? label;
   };
-  it('worked (anterior): V2 about 2.6 mm at J with a read-out of +3.0, V3 about 3.3 mm at J with +3.8, read-outs V4 +2.2 and V1 +1.3; I and aVL < 1 mm; read-outs III −1.3 and aVF −1.0', () => {
+  it('worked (anterior): V2 about 2.6 mm at J with a read-out of +3.0, V3 about 3.3 mm at J with +3.8, read-outs V4 +2.2 and V1 +1.3; at J aVL up by less than 1 mm and I almost flat but on the same side; read-outs III −1.3 and aVF −1.0', () => {
     const e = ecgOf(blocksOf('s6', 'worked')[0].ecg);
     expect(Math.abs(stAt(e, 'V2') - 0.26)).toBeLessThanOrEqual(0.015);
     expect(Math.abs(stAt(e, 'V3') - 0.33)).toBeLessThanOrEqual(0.015);
@@ -754,6 +756,9 @@ describe('s6: ST measurement on the tracings', () => {
       expect(stAt(e, l), l).toBeLessThan(0.1);
       expect(stAt(e, l, 60), l).toBeLessThan(0.1);
     }
+    expect(stAt(e, 'aVL')).toBeGreaterThan(MIN_WAVE_MV);
+    expect(stAt(e, 'I')).toBeGreaterThan(0);
+    expect(stAt(e, 'I')).toBeLessThanOrEqual(MIN_WAVE_MV);
   });
   it('live: more injury current raises V3 and lowers III (reciprocity)', () => {
     const b = blocksOf('s6', 'live')[0];
@@ -779,7 +784,7 @@ describe('s6: ST measurement on the tracings', () => {
       expect(Math.abs(stAt(e, 'III', 60) + 0.2), `${v}`).toBeLessThanOrEqual(0.015);
     }
   });
-  it('thresholds film: injury 1.9–3.3 mm in V2–V4 at J with III and aVF 1–1.2 mm down; the monitor filter drops V4 from about 1.9 to 0.6 mm and V3 from about 3.3 to 2.1 mm; LBBB 2–2.5 mm in V1–V2, under a quarter of the S before it, QRS about 150 ms; hyperacute T with V2–V3 0.9–1.2 mm and the T in V3 as tall as the R', () => {
+  it('thresholds film: injury about 1.9–3.3 mm in V2–V4 at J with III and aVF about 1–1.2 mm down; the monitor filter drops V4 from about 1.9 to 0.6 mm and V3 from about 3.3 to 2.1 mm; LBBB 2–2.5 mm in V1–V2, under a quarter of the S before it (Smith’s ratio), QRS about 150 ms; hyperacute T with V2–V3 0.9–1.2 mm and the T in V3 as tall as the R', () => {
     const film = blocksOf('s6', 'film')[0];
     expect(film.frames[0].ecg).toEqual(blocksOf('s6', 'worked')[0].ecg);
     const [injury, monitor, lbbb, hyper] = film.frames.map((f) => ecgOf(f.ecg));
@@ -802,8 +807,8 @@ describe('s6: ST measurement on the tracings', () => {
       expect(stAt(lbbb, l) / -qrs(lbbb, l).min, `${l} ST/S`).toBeLessThan(0.25);
     }
     for (const l of ['V2', 'V3'] as const) {
-      expect(stAt(hyper, l), l).toBeGreaterThanOrEqual(0.085);
-      expect(stAt(hyper, l), l).toBeLessThan(0.125);
+      expect(stAt(hyper, l), l).toBeGreaterThanOrEqual(0.09);
+      expect(stAt(hyper, l), l).toBeLessThanOrEqual(0.12);
     }
     expect(tw(hyper, 'V3').max).toBeGreaterThanOrEqual(0.95 * qrs(hyper, 'V3').max);
   });
@@ -811,8 +816,8 @@ describe('s6: ST measurement on the tracings', () => {
     const e = ecgOf(blocksOf('s6', 'contrast')[0].left.ecg);
     for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThan(0.25);
     for (const l of ['II', 'III', 'aVF', 'V4', 'V5', 'V6'] as const) {
-      expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.095);
-      expect(stAt(e, l), l).toBeLessThan(0.175);
+      expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
+      expect(stAt(e, l), l).toBeLessThanOrEqual(0.17);
     }
     expect(stAt(e, 'aVR')).toBeLessThan(-0.03);
     for (const l of ['I', 'II', 'III', 'aVL', 'aVF', ...CHEST] as const) expect(stAt(e, l), l).toBeGreaterThan(-0.05);
@@ -977,6 +982,11 @@ const REAL_CLAIMS: Readonly<Partial<Record<(typeof IDS)[number], readonly RealCl
     { id: 13683 },
     { id: 7419, sex: 'F', age: 18, has: ['lpfb'], axis: [95, 105] },
     { id: 9188 },
+  ],
+  // "both were read as normal by cardiologists (men aged 19 and 39)"
+  s6: [
+    { id: 13683, sex: 'M', age: 19, has: ['normal-ecg'] },
+    { id: 5469, sex: 'M', age: 39, has: ['normal-ecg'] },
   ],
 };
 
