@@ -1006,7 +1006,10 @@ describe('h8: Brugada and early repolarisation on the tracings', () => {
       expect(stAt(high, l), l).toBeGreaterThanOrEqual(0.5);
       expect(stAt(high, l), l).toBeLessThanOrEqual(0.7);
       expect(tw(high, l).min, l).toBeLessThan(tw(std, l).min);
+      expect(stAt(high, l), `${l}: prediction, the coved ST grows one space up`).toBeGreaterThan(stAt(std, l));
     }
+    const p = blocksOf('h8', 'film')[0].predict!;
+    expect(p.options[p.answer].en).toBe('It grows');
     for (const l of [...LIMB, 'V3', 'V4', 'V5', 'V6'] as const) {
       expect(low.signal.leads[l], l).toEqual(std.signal.leads[l]);
       expect(high.signal.leads[l], l).toEqual(std.signal.leads[l]);
