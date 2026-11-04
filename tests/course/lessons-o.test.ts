@@ -1098,6 +1098,10 @@ describe('o11: pacing on the tracings', () => {
     expect(body(vvi, 'V1').max).toBeLessThan(0.05);
     expect(paced(vvi).length).toBe(vvi.truth!.beats.length);
     expect(bipolar.truth!.beats).toEqual(vvi.truth!.beats);
+    // the bipolar note's clues: a superior axis, exactly the lower rate (above), AF underneath
+    expect(bipolar.truth!.axisDeg.qrs).toBeGreaterThan(-90);
+    expect(bipolar.truth!.axisDeg.qrs).toBeLessThan(-30);
+    expect(bipolar.truth!.findings).toContain('atrial-fibrillation');
     for (const l of ['II', 'V6'] as const) {
       expect(spike(bipolar, l) / spike(vvi, l), l).toBeGreaterThan(0.15);
       expect(spike(bipolar, l) / spike(vvi, l), l).toBeLessThan(0.25);
@@ -1118,7 +1122,9 @@ describe('o11: pacing on the tracings', () => {
     expect(body(crt, 'V1').max).toBeLessThan(0.05);
     expect(body(crt, 'V1').min).toBeLessThan(-0.5);
   });
-  it('function film: working VVI 1000 ms spike to spike; every third spike in the strip has no QRS after it, with a ≈ 36/min junctional escape; undersensing spikes after own QRS; an oversensing pause ≈ 2.6 s without spike or QRS', () => {
+  it('function film: working VVI 1000 ms spike to spike (the predicted answer); every third spike in the strip has no QRS after it, with a ≈ 36/min junctional escape under the RR mark; undersensing spikes after own QRS; an oversensing pause ≈ 2.6 s without spike or QRS under the RR mark', () => {
+    const film = blocksOf('o11', 'film')[1];
+    expect(film.predict!.options[film.predict!.answer].en).toBe('1000 ms');
     const [ok, noCapture, under, over] = frames('o11', 1);
     for (const r of rrs(ok)) expect(Math.abs(r - 1000)).toBeLessThan(5);
     expect(paced(ok).length).toBe(ok.truth!.beats.length);
@@ -1128,15 +1134,71 @@ describe('o11: pacing on the tracings', () => {
     expect(followed).toEqual(followed.map((_, i) => i % 3 !== 2));
     const long = rrs(noCapture).filter((r) => r > 1200);
     expect(long.length).toBeGreaterThanOrEqual(2);
-    for (const r of long) expect(Math.abs(60000 / r - 36)).toBeLessThan(2);
-    expect(noCapture.truth!.beats.some((b) => b.kind === 'escape-junctional')).toBe(true);
+    for (const r of long) expect(Math.abs(60000 / r - 36)).toBeLessThan(1);
+    const [esc] = markBeats(film.frames[1].marks, 'rr');
+    expect(noCapture.truth!.beats[esc + 1].kind).toBe('escape-junctional');
+    expect(Math.abs(60000 / rrs(noCapture)[esc] - 36)).toBeLessThan(1);
+    expect(noCapture.truth!.beats[markBeats(film.frames[1].marks, 'pacing-spike')[0]].kind).toBe('paced-ventricular');
     expect(under.truth!.findings).toContain('pacing-undersensing');
-    expect(under.truth!.beats.some((b) => b.kind === 'sinus')).toBe(true);
-    expect(under.truth!.beats.some((b) => b.kind === 'paced-ventricular')).toBe(true);
+    const [u] = markBeats(film.frames[2].marks, 'pacing-spike');
+    expect(under.truth!.beats[u].kind).toBe('paced-ventricular');
+    expect(under.truth!.beats[u - 1].kind).toBe('sinus');
+    expect(under.truth!.beats[u].qrsOn - under.truth!.beats[u - 1].qrsOn).toBeLessThan(1000);
     expect(over.truth!.findings).toContain('pacing-oversensing');
     const pause = Math.max(...rrs(over));
-    expect(Math.abs(pause - 2600)).toBeLessThan(100);
+    expect(Math.abs(pause - 2600)).toBeLessThan(50);
     expect(rrs(over).filter((r) => r < 1100).every((r) => Math.abs(r - 1000) < 5)).toBe(true);
+    const [o] = markBeats(film.frames[3].marks, 'rr');
+    expect(rrs(over)[o]).toBe(pause);
+    const [b0, b1] = [over.truth!.beats[o], over.truth!.beats[o + 1]];
+    expect(stimuli(over).filter((t) => t > b0.qrsOn + 50 && t < b1.qrsOn - 50)).toEqual([]);
+  });
+  it('hook (seed 1601, twelve leads): a wide QRS, QS in II, III, aVF and V1, upright I and V6 (LBBB-like) and a superior axis', () => {
+    const e = ecgOf(blocksOf('o11', 'hook')[0].ecg);
+    expect(e.truth!.qrsMs).toBeGreaterThanOrEqual(140);
+    expect(e.truth!.axisDeg.qrs).toBeGreaterThan(-90);
+    expect(e.truth!.axisDeg.qrs).toBeLessThan(-30);
+    for (const l of ['II', 'III', 'aVF', 'V1'] as const) expect(body(e, l).max, l).toBeLessThan(0.05);
+    for (const l of ['I', 'V6'] as const) {
+      expect(body(e, l).max, l).toBeGreaterThan(0.3);
+      expect(body(e, l).min, l).toBeGreaterThan(-0.05);
+    }
+  });
+  it('worked DDD (seed 1603): the second spike about 170 ms after the first; spike to spike about 940 ms = 64/min', () => {
+    const e = ecgOf(blocksOf('o11', 'worked')[0].ecg);
+    const st = stimuli(e);
+    const av = paced(e)
+      .slice(1)
+      .map((b) => {
+        const v = st.find((t) => Math.abs(t - b.qrsOn) < 10)!;
+        return v - st.filter((t) => t < v - 50).pop()!;
+      });
+    expect(av.length).toBeGreaterThanOrEqual(8);
+    for (const x of av) expect(Math.abs(x - 170)).toBeLessThanOrEqual(5);
+    for (const r of rrs(e)) expect(Math.abs(r - 940)).toBeLessThanOrEqual(5);
+    expect(Math.abs(e.truth!.hrBpm - 64)).toBeLessThan(1);
+  });
+  it('capture-or-sensing contrast: failure to capture with a junctional escape near 36/min; undersensing with a spike right after the marked intrinsic QRS, spikes that keep their 1000-ms beat, and a captured spike less than 1000 ms after an intrinsic QRS', () => {
+    const c = contrastTitled('o11', 'What happens after the spike?');
+    const fail = ecgOf(c.left.ecg);
+    const r = rrs(fail);
+    const long = r.map((x, i) => [x, i] as const).filter(([x]) => x > 1200);
+    expect(long.length).toBeGreaterThanOrEqual(2);
+    for (const [x, i] of long) {
+      expect(Math.abs(60000 / x - 36)).toBeLessThan(1);
+      expect(fail.truth!.beats[i + 1].kind).toBe('escape-junctional');
+    }
+    expect(fail.truth!.beats[markBeats(c.left.marks, 'pacing-spike')[0]].kind).toBe('paced-ventricular');
+    const under = ecgOf(c.right.ecg);
+    const st = stimuli(under);
+    st.slice(1).forEach((t, i) => expect(Math.abs(t - st[i] - 1000)).toBeLessThanOrEqual(5));
+    const own = under.truth!.beats[markBeats(c.right.marks, 'qrs')[0]];
+    expect(own.kind).toBe('sinus');
+    expect(st.some((t) => t > own.qrsOff && t < own.qrsOn + 300)).toBe(true);
+    const [p] = markBeats(c.right.marks, 'pacing-spike');
+    expect(under.truth!.beats[p].kind).toBe('paced-ventricular');
+    expect(under.truth!.beats[p - 1].kind).toBe('sinus');
+    expect(under.truth!.beats[p].qrsOn - under.truth!.beats[p - 1].qrsOn).toBeLessThan(1000);
   });
 });
 
