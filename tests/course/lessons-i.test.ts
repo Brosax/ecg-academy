@@ -581,11 +581,16 @@ describe('i4: inferior and RV infarction on the tracings', () => {
       for (const l of ['I', 'aVL'] as const) expect(stAt(e, l), l).toBeLessThan(-0.03);
     }
   });
-  it('worked (RV): V1 ≥ 1 mm, V4R ≥ 0.5 mm, III the tallest inferior lead', () => {
+  it('worked (RV): II, III, aVF elevated with III the tallest, I and aVL depressed (also on the J+60 read-outs), V1 ≥ 1 mm, V4R ≥ 0.5 mm', () => {
     const e = ecgOf(blocksOf('i4', 'worked')[0].ecg);
     expect(stAt(e, 'V1')).toBeGreaterThanOrEqual(0.1);
     expect(stAt(e, 'V4R')).toBeGreaterThanOrEqual(0.05);
     expect(stAt(e, 'III')).toBeGreaterThan(Math.max(stAt(e, 'II'), stAt(e, 'aVF')));
+    for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
+    for (const l of ['I', 'aVL'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
+    const ro = e.truth!.stMv;
+    expect(ro.III!, 'st60 read-outs: III > II').toBeGreaterThan(ro.II!);
+    expect(ro.I!, 'st60 read-out: I depressed').toBeLessThanOrEqual(-0.05);
   });
   it('film: RCA frame = the hook with V1 flat; LCx II ≥ III with I flat, V5–V6 rising and aVL down; RV frame V1 about 1 mm over an inferior STEMI', () => {
     expect(blocksOf('i4', 'film')[0].frames[0].ecg).toEqual(blocksOf('i4', 'hook')[0].ecg);

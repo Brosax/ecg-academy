@@ -215,9 +215,9 @@ const lesson: Lesson = {
         {
           title: l('加做 V4R', 'Add V4R', 'Añade V4R'),
           body: l(
-            'RCA 已定位，还要问闭塞在右心室支之前还是之后。V1 本身已抬高（正常 V1 的 ST 轻微压低或等电位）——这是右心室游离壁损伤的第一个线索。切到 V4R：**ST 抬高 ≥ 0.5 mm（< 30 岁男性 ≥ 1 mm）= 右心室受累**。',
-            'The RCA is named; now ask whether the occlusion sits before or after its RV branches. V1 itself is elevated (normally the ST in V1 is slightly depressed or isoelectric) — the first clue of RV free-wall injury. Switch to V4R: **ST elevation ≥ 0.5 mm (≥ 1 mm in men < 30 y) = right ventricular involvement**.',
-            'La CD está identificada; ahora pregunta si la oclusión está antes o después de sus ramas para el VD. La propia V1 está elevada (normalmente el ST en V1 está ligeramente descendido o isoeléctrico): la primera pista de lesión de la pared libre del VD. Cambia a V4R: **elevación del ST ≥ 0,5 mm (≥ 1 mm en varones < 30 años) = afectación del ventrículo derecho**.',
+            'RCA 已定位，还要问闭塞在右心室支之前还是之后。V1 本身已抬高（正常 V1 的 ST 接近基线）——这是右心室游离壁损伤的第一个线索。切到 V4R：**ST 抬高 ≥ 0.5 mm（< 30 岁男性 ≥ 1 mm）= 右心室受累**。',
+            'The RCA is named; now ask whether the occlusion sits before or after its RV branches. V1 itself is elevated (normally the ST in V1 is near the baseline) — the first clue of RV free-wall injury. Switch to V4R: **ST elevation ≥ 0.5 mm (≥ 1 mm in men < 30 y) = right ventricular involvement**.',
+            'La CD está identificada; ahora pregunta si la oclusión está antes o después de sus ramas para el VD. La propia V1 está elevada (normalmente el ST en V1 está cerca de la línea de base): la primera pista de lesión de la pared libre del VD. Cambia a V4R: **elevación del ST ≥ 0,5 mm (≥ 1 mm en varones < 30 años) = afectación del ventrículo derecho**.',
           ),
           view: { layout: 'single', lead: 'V4R' },
           marks: [{ auto: 'st', lead: 'V4R' }],
@@ -257,9 +257,9 @@ const lesson: Lesson = {
         ],
       },
       point: l(
-        '两张都是下壁 STEMI，下一步却不同。A（RCA）：**现在就记录 V3R/V4R**——右心室受累意味着近段闭塞，硝酸酯类要谨慎，还要警惕缓慢性心律与房室传导阻滞（房室结动脉通常来自 RCA）。B（LCx）：右心室不受累（右心室支来自 RCA），但要细读 I/aVL、V5–V6，并想到后壁——LCx 的梗死向侧壁和背侧延伸。',
-        'Both are inferior STEMIs, but the next step differs. A (RCA): **record V3R/V4R now** — RV involvement means a proximal occlusion, nitrates need caution, and bradyarrhythmias and AV block are on the watch list (the AV node artery usually comes from the RCA). B (LCx): the right ventricle is spared (the RV branches come from the RCA), but read I/aVL and V5–V6 carefully and think of the back — an LCx infarct extends lateral and posterior.',
-        'Ambos son IAMCEST inferiores, pero el paso siguiente es distinto. A (CD): **registra V3R/V4R ahora**: la afectación del VD indica oclusión proximal, los nitratos exigen cautela y hay que vigilar bradiarritmias y bloqueo AV (la arteria del nodo AV suele nacer de la CD). B (Cx): el VD se libra (las ramas del VD nacen de la CD), pero lee con calma I/aVL y V5–V6 y piensa en la cara posterior: el infarto por Cx se extiende hacia el lateral y hacia atrás.',
+        '两张都是下壁 STEMI，下一步却不同。A（RCA）：**现在就记录 V3R/V4R**——右心室受累意味着近段闭塞，硝酸酯类要谨慎，还要警惕缓慢性心律与房室传导阻滞（房室结动脉通常来自 RCA）。B（LCx）：右心室通常不受累（右心室支来自 RCA），但要细读 I/aVL、V5–V6，并想到后壁——LCx 的梗死向侧壁和背侧延伸。',
+        'Both are inferior STEMIs, but the next step differs. A (RCA): **record V3R/V4R now** — RV involvement means a proximal occlusion, nitrates need caution, and bradyarrhythmias and AV block are on the watch list (the AV node artery usually comes from the RCA). B (LCx): the right ventricle is usually spared (the RV branches come from the RCA), but read I/aVL and V5–V6 carefully and think of the back — an LCx infarct extends lateral and posterior.',
+        'Ambos son IAMCEST inferiores, pero el paso siguiente es distinto. A (CD): **registra V3R/V4R ahora**: la afectación del VD indica oclusión proximal, los nitratos exigen cautela y hay que vigilar bradiarritmias y bloqueo AV (la arteria del nodo AV suele nacer de la CD). B (Cx): el VD suele librarse (las ramas del VD nacen de la CD), pero lee con calma I/aVL y V5–V6 y piensa en la cara posterior: el infarto por Cx se extiende hacia el lateral y hacia atrás.',
       ),
     },
     {
@@ -323,7 +323,7 @@ const lesson: Lesson = {
       ids: [6683, 15227, 17772],
       caption: l(
         '三份真实的下壁梗死：69 岁和 52 岁女性（数据库分期 II–III，陈旧）、63 岁男性（时期不明）。它们是 Q 波梗死，不是急性 STEMI：RCA/LCx 的 ST 规则和 V4R 只用于急性抬高，对陈旧梗死没有意义。这里练的是慢性版本：在 II、III、aVF 找病理性 Q 波（≥ 30 ms、≥ 1 mm），并说出“RCA（多数）或 LCx”；第三份再看 V1–V2——R 波偏高、T 波直立，可能是陈旧后壁梗死的 Q 波等价物（第 i6 课）。先想好答案再揭晓。',
-        'Three real inferior infarcts: women of 69 and 52 (database stage II–III, old) and a man of 63 (age unknown). They are Q-wave infarcts, not acute STEMIs: the RCA/LCx ST rules and V4R belong to acute elevation and mean nothing in an old infarct. Practise the chronic version instead: find the pathological Q waves in II, III and aVF (≥ 30 ms and ≥ 1 mm) and name "RCA (most) or LCx"; in the third, look at V1–V2 as well — a prominent R with an upright T can be the Q-wave equivalent of an old posterior infarct (lesson i6). Commit to an answer, then reveal.',
+        'Three real inferior infarcts: women of 69 and 52 (database stage II–III, old) and a man of 63 (infarct of unknown age). They are Q-wave infarcts, not acute STEMIs: the RCA/LCx ST rules and V4R belong to acute elevation and mean nothing in an old infarct. Practise the chronic version instead: find the pathological Q waves in II, III and aVF (≥ 30 ms and ≥ 1 mm) and name "RCA (most) or LCx"; in the third, look at V1–V2 as well — a prominent R with an upright T can be the Q-wave equivalent of an old posterior infarct (lesson i6). Commit to an answer, then reveal.',
         'Tres infartos inferiores reales: mujeres de 69 y 52 años (estadio II–III de la base de datos, antiguos) y un varón de 63 (antigüedad desconocida). Son infartos con onda Q, no IAMCEST agudos: las reglas CD/Cx del ST y la V4R pertenecen a la elevación aguda y no significan nada en un infarto antiguo. Practica la versión crónica: busca las ondas Q patológicas en II, III y aVF (≥ 30 ms y ≥ 1 mm) y di «CD (la mayoría) o Cx»; en el tercero mira además V1–V2: una R prominente con T positiva puede ser el equivalente de onda Q de un infarto posterior antiguo (lección i6). Decide tu respuesta y después mira la solución.',
       ),
     },
