@@ -500,14 +500,43 @@ describe('r4: Mobitz II to complete block on the tracings', () => {
     expect(b.prMs!).toBeLessThanOrEqual(200);
     for (const t of [a, b]) expect(Math.abs((t.atrialRateBpm ?? 0) / t.hrBpm - 2)).toBeLessThan(0.1);
   });
-  it('high-grade: 3:1 — runs of two blocked P waves', () => {
+  it('high-grade (ladder film frame 4): 3:1 — runs of two blocked P waves, atria about 96/min, ventricles about 32/min', () => {
+    const t = frames('r4', 0)[3].truth!;
     let run = 0;
     let maxRun = 0;
-    for (const a of ecgOf(blocksOf('r4', 'ecg')[0].ecg).truth!.atrial) {
+    for (const a of t.atrial) {
       run = a.conductedTo === null ? run + 1 : 0;
       maxRun = Math.max(maxRun, run);
     }
     expect(maxRun).toBe(2);
+    expect(Math.abs(t.atrialRateBpm! - 96)).toBeLessThan(2);
+    expect(Math.abs(t.hrBpm - 32)).toBeLessThan(1);
+  });
+  it('heart: P at 75/min, PR 160 ms on every conducted beat, every fourth P blocked, RBBB', () => {
+    const e = ecgOf(blocksOf('r4', 'heart')[0].ecg);
+    const t = e.truth!;
+    expect(Math.abs(t.atrialRateBpm! - 75)).toBeLessThan(1);
+    for (const p of prs(e)) expect(Math.abs(p - 160)).toBeLessThan(3);
+    t.atrial.filter((a) => a.t < t.beats[t.beats.length - 1].qrsOn).forEach((a, i) => expect(a.conductedTo === null, `P ${i}`).toBe((i - 1) % 4 === 0));
+    expect(t.qrsMs).toBeGreaterThanOrEqual(120);
+    expect(t.findings).toContain('rbbb');
+  });
+  it('ladder film: first degree PR about 280 ms 1:1; Mobitz I PR about 150 → 235 → 280 then a drop, narrow; Mobitz II is the hook with a constant PR of about 160 ms and every fourth P dropped; third degree is the worked tracing', () => {
+    const [first, m1, m2] = frames('r4', 0);
+    expect(Math.abs(first.truth!.prMs! - 280)).toBeLessThan(5);
+    for (const p of prs(first)) expect(Math.abs(p - 280)).toBeLessThan(3);
+    expect(blocked(first).filter((a) => a.t < first.truth!.beats[first.truth!.beats.length - 1].qrsOn).length).toBe(0);
+    const p1 = prs(m1);
+    const resets = p1.flatMap((p, i) => (i > 0 && p < p1[i - 1] - 100 ? [i] : []));
+    expect(resets.length).toBeGreaterThanOrEqual(2);
+    for (const s of resets.filter((i) => i + 2 < p1.length)) [150, 235, 280].forEach((v, k) => expect(Math.abs(p1[s + k] - v), `beat ${s + k}`).toBeLessThan(5));
+    expect(m1.truth!.qrsMs).toBeLessThan(110);
+    const f = blocksOf('r4', 'film')[0].frames;
+    expect(f[2].ecg).toEqual(blocksOf('r4', 'hook')[0].ecg);
+    expect(f[4].ecg).toEqual(blocksOf('r4', 'worked')[0].ecg);
+    for (const p of prs(m2)) expect(Math.abs(p - 160)).toBeLessThan(3);
+    const t2 = m2.truth!;
+    t2.atrial.filter((a) => a.t < t2.beats[t2.beats.length - 1].qrsOn).forEach((a, i) => expect(a.conductedTo === null, `P ${i}`).toBe((i - 1) % 4 === 0));
   });
   it('worked: complete block, narrow escape about 45/min, sinus about 78/min, no P conducts', () => {
     const t = ecgOf(blocksOf('r4', 'worked')[0].ecg).truth!;
@@ -515,10 +544,31 @@ describe('r4: Mobitz II to complete block on the tracings', () => {
     expect(Math.abs((t.atrialRateBpm ?? 0) - 78)).toBeLessThan(3);
     expect(t.atrial.every((a) => a.conductedTo === null)).toBe(true);
   });
-  it('infra-His complete block: wide ventricular escape about 34/min', () => {
-    const t = ecgOf(blocksOf('r4', 'ecg')[1].ecg).truth!;
-    expect(Math.abs(t.hrBpm - 34)).toBeLessThan(2);
+  it('infra-His complete block (complete-or-not film frame 1): P at about 78/min in every part of the cycle, none conducted; wide escape about 34/min', () => {
+    const e = frames('r4', 1)[0];
+    const t = e.truth!;
+    expect(Math.abs(t.hrBpm - 34)).toBeLessThan(1);
+    expect(Math.abs(t.atrialRateBpm! - 78)).toBeLessThan(1);
     expect(t.qrsMs).toBeGreaterThanOrEqual(120);
+    expect(t.atrial.every((a) => a.conductedTo === null)).toBe(true);
+    const on = onsets(e);
+    const rr = rrs(e)[0];
+    const phase = t.atrial.filter((a) => a.t > on[0] && a.t < on[on.length - 1]).map((a) => (a.t - Math.max(...on.filter((q) => q <= a.t))) / rr);
+    expect(Math.max(...phase) - Math.min(...phase)).toBeGreaterThan(0.7);
+  });
+  it('complete-or-not film: AF with a regular escape at about 44/min; dissociation with sinus about 60, junction about 66 and early captures', () => {
+    const [, af, diss] = frames('r4', 1);
+    expect(af.truth!.rhythm).toBe('atrial-fibrillation');
+    expect(af.truth!.findings).toContain('av-block-3');
+    expect(Math.max(...rrs(af)) - Math.min(...rrs(af))).toBeLessThan(5);
+    expect(Math.abs(af.truth!.hrBpm - 44)).toBeLessThan(1);
+    const t = diss.truth!;
+    expect(Math.abs(t.atrialRateBpm! - 60)).toBeLessThan(1);
+    const junc = t.beats.flatMap((b, i) => (i > 0 && b.kind === 'escape-junctional' && t.beats[i - 1].kind === 'escape-junctional' ? [b.qrsOn - t.beats[i - 1].qrsOn] : []));
+    for (const rr of junc) expect(Math.abs(60000 / rr - 66)).toBeLessThan(1);
+    const caps = t.beats.flatMap((b, i) => (b.kind === 'sinus' && i > 0 ? [b.qrsOn - t.beats[i - 1].qrsOn] : []));
+    expect(caps.length).toBeGreaterThanOrEqual(1);
+    for (const c of caps) expect(c).toBeLessThan(Math.min(...junc) - 300);
   });
 });
 
