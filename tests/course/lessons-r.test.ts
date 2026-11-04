@@ -876,26 +876,32 @@ describe('r7: fascicular blocks on the tracings', () => {
       s = sII;
     }
   });
-  it('IVCD sweep notes: the read-out is over 110 ms from 112 to 135; V1 has no R′, I and V6 no broad S, V6 keeps a small q; never RBBB or LBBB', () => {
+  it('IVCD sweep notes: the read-out is over 110 ms from 112 to 135; V1 has no R′, I and V6 no broad S (< 40 ms), V6 keeps a small q; never RBBB or LBBB', () => {
     for (const v of [112, 123, 124, 135]) {
       const e = played('r7', 1, v);
       const b = mid(e);
       expect(e.truth!.qrsMs, `${v} ms`).toBeGreaterThan(110);
       expect(Math.abs(e.truth!.qrsMs - v), `${v} ms`).toBeLessThan(2);
       expect(hasRPrime(e, 'V1', b), `${v} ms`).toBe(false);
-      for (const l of ['I', 'V6'] as const) expect(qrsSpan(e, l, b).min, `${v} ms ${l}`).toBeGreaterThan(-0.1);
+      for (const l of ['I', 'V6'] as const) {
+        expect(qrsSpan(e, l, b).min, `${v} ms ${l}`).toBeGreaterThan(-0.1);
+        expect(sMs(e, l, b), `${v} ms ${l} S duration`).toBeLessThan(40);
+      }
       expect(shape(e, 'V6', b).startsWith('q'), `${v} ms`).toBe(true);
       expect(e.truth!.findings, `${v} ms`).toContain('ivcd');
       expect(e.truth!.findings, `${v} ms`).not.toContain('rbbb');
       expect(e.truth!.findings, `${v} ms`).not.toContain('lbbb');
     }
   });
-  it('bifascicular film: RBBB + LAFB with rsR′ in V1, broad S in I and V6, axis about −70°; RBBB + LPFB with a broad R in V1 (R peak > 50 ms), rS in I and aVL, qR in III, axis about +95°', () => {
+  it('bifascicular film: RBBB + LAFB with rsR′ in V1, broad S (> 40 ms) in I and V6, axis about −70°; RBBB + LPFB with a broad R in V1 (R peak > 50 ms), rS in I and aVL, qR in III, axis about +95°', () => {
     const [laf, lpf] = frames('r7', 0);
     expect(blocksOf('r7', 'film')[0].frames[0].ecg).toEqual(blocksOf('r7', 'heart')[1].ecg);
     const b1 = mid(laf);
     expect(hasRPrime(laf, 'V1', b1)).toBe(true);
-    for (const l of ['I', 'V6'] as const) expect(qrsSpan(laf, l, b1).min, l).toBeLessThan(-0.2);
+    for (const l of ['I', 'V6'] as const) {
+      expect(qrsSpan(laf, l, b1).min, l).toBeLessThan(-0.2);
+      expect(sMs(laf, l, b1), `${l} S duration`).toBeGreaterThan(40);
+    }
     expect(Math.abs(laf.truth!.axisDeg.qrs + 70)).toBeLessThan(5);
     expect(laf.truth!.findings).toEqual(expect.arrayContaining(['rbbb', 'lafb']));
     const b2 = mid(lpf);
