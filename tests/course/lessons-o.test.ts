@@ -74,6 +74,9 @@ function sourcesOf(lesson: Lesson): { readonly path: string; readonly src: EcgSo
       case 'contrast':
         out.push({ path: `${p}.left`, src: b.left.ecg }, { path: `${p}.right`, src: b.right.ecg });
         break;
+      case 'film':
+        b.frames.forEach((f, k) => out.push({ path: `${p}.frames[${k}]`, src: f.ecg }));
+        break;
       case 'check':
         if ('inline' in b.item) {
           out.push({ path: `${p}.item`, src: b.item.inline.ecg });
@@ -199,6 +202,7 @@ function markedSources(lesson: Lesson): { readonly path: string; readonly src: E
       if (b.right.marks) out.push({ path: `${p}.right`, src: b.right.ecg, view: b.view, marks: b.right.marks });
     }
     if (b.kind === 'worked') b.steps.forEach((st, k) => st.marks && out.push({ path: `${p}.steps[${k}]`, src: b.ecg, view: st.view ?? b.view, marks: st.marks }));
+    if (b.kind === 'film') b.frames.forEach((f, k) => f.marks && out.push({ path: `${p}.frames[${k}]`, src: f.ecg, view: b.view, marks: f.marks }));
   });
   return out;
 }
@@ -326,6 +330,16 @@ function ecgOf(src: EcgSource | SynthRequest): Ecg {
   }
   return e;
 }
+/** what a playing live block shows with its played dial at `v` (its other dials at their start values) */
+function played(id: string, i: number, v: number): Ecg {
+  const b = blocksOf(id, 'live')[i];
+  if (!b.play) throw new Error(`${id}: live block ${i} does not play`);
+  const sc = scenarios().find((s) => s.id === b.scenario);
+  if (!sc) throw new Error(`unknown scenario ${b.scenario}`);
+  const dials = { ...startDials(sc, b.variant, b.dials.map((d) => d.id), b.play), [b.play.dial]: v };
+  return ecgOf({ scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed, dials });
+}
+const frames = (id: string, i: number): Ecg[] => blocksOf(id, 'film')[i].frames.map((f) => ecgOf(f.ecg));
 
 const LIMB: readonly StdLead[] = ['I', 'II', 'III', 'aVR', 'aVL', 'aVF'];
 const midBeat = (ecg: Ecg): BeatMarks => ecg.truth!.beats[Math.floor(ecg.truth!.beats.length / 2)];
@@ -390,19 +404,66 @@ function excursion(ecg: Ecg, lead: StdLead, t0: number, t1: number): number {
   return Math.max(...vals.map((v) => Math.abs(v - med)));
 }
 
+/** the U wave in a lead: its peak above the baseline between T end and U end */
+const uw = (ecg: Ecg, lead: StdLead, b = midBeat(ecg)) => span(ecg, lead, b.tOff, b.uOff!, b);
+/** from the end of the U to the next P (ms) */
+const uToNextP = (ecg: Ecg, b = midBeat(ecg)) => ecg.truth!.atrial.find((a) => a.t > b.qrsOn + 50)!.t - b.uOff!;
+
 describe('o1: potassium on the tracings', () => {
-  it('stage 1–2 hyperkalaemia (hook, ecg, contrast): PR already ≈ 205 ms, QRS 105–120 ms, T in V3 taller than its R', () => {
+  it('stage 1–2 hyperkalaemia (hook, ladder film, contrast): PR already ≈ 205 ms, QRS 105–120 ms, T in V3 taller than its R', () => {
     for (const src of sourcesWith('o1', 'hyperkalemia')) {
       const e = ecgOf(src);
       expect(Math.abs(e.truth!.prMs! - 205)).toBeLessThan(12);
       expect(e.truth!.qrsMs).toBeGreaterThanOrEqual(105);
       expect(e.truth!.qrsMs).toBeLessThan(120);
+      expect(tw(e, 'V3').max).toBeGreaterThan(qrs(e, 'V3').max);
     }
   });
   it('severe hyperkalaemia (worked): no measurable PR, QRS > 150 ms', () => {
     const e = ecgOf(blocksOf('o1', 'worked')[0].ecg);
     expect(e.truth!.prMs).toBeNull();
     expect(e.truth!.qrsMs).toBeGreaterThan(150);
+  });
+  it('ladder film: normal PR 160 and QRS ≈ 95 with the V3 T below its R; then PR ≈ 205, QRS ≈ 115; severe has the P in II almost gone, no PR, QRS ≈ 170', () => {
+    const [normal, tented, severe] = frames('o1', 0);
+    expect(Math.abs(normal.truth!.prMs! - 160)).toBeLessThan(3);
+    expect(Math.abs(normal.truth!.qrsMs - 95)).toBeLessThan(4);
+    expect(tw(normal, 'V3').max).toBeLessThan(0.6 * qrs(normal, 'V3').max);
+    expect(Math.abs(tented.truth!.prMs! - 205)).toBeLessThan(5);
+    expect(Math.abs(tented.truth!.qrsMs - 115)).toBeLessThan(4);
+    expect(severe.truth!.prMs).toBeNull();
+    expect(Math.abs(severe.truth!.qrsMs - 170)).toBeLessThan(5);
+    const pII = (e: Ecg) => span(e, 'II', midBeat(e).pOn!, midBeat(e).pOff!, midBeat(e)).max;
+    expect(pII(severe)).toBeLessThan(0.3 * pII(normal));
+    expect(severe.truth!.beats.length).toBeGreaterThan(5);
+  });
+  it('hypokalaemia film (V2): the normal T stands alone; low K halves the T, the U overtakes it, and the QT to the end of the T stays ≈ 410 ms', () => {
+    const [normal, low] = frames('o1', 1);
+    expect(uw(normal, 'V2').max).toBeLessThan(0.2 * tw(normal, 'V2').max);
+    const ratio = tw(low, 'V2').max / tw(normal, 'V2').max;
+    expect(ratio).toBeGreaterThan(0.4);
+    expect(ratio).toBeLessThan(0.6);
+    expect(uw(low, 'V2').max).toBeGreaterThan(tw(low, 'V2').max);
+    for (const e of [normal, low]) expect(Math.abs(e.truth!.qtMs - 410)).toBeLessThan(5);
+  });
+  it('hypokalaemia sweep (V2): 52–58/min U above T, QT 410–430 vs QU 570–600 ms; 59–68/min the U, still above the T, closes on the next P', () => {
+    for (const v of [52, 58]) {
+      const e = played('o1', 0, v);
+      const b = midBeat(e);
+      expect(uw(e, 'V2').max, `${v}`).toBeGreaterThan(tw(e, 'V2').max);
+      expect(e.truth!.qtMs, `${v}`).toBeGreaterThanOrEqual(410);
+      expect(e.truth!.qtMs, `${v}`).toBeLessThanOrEqual(430);
+      expect(b.uOff! - b.qrsOn, `${v}`).toBeGreaterThanOrEqual(570);
+      expect(b.uOff! - b.qrsOn, `${v}`).toBeLessThanOrEqual(600);
+    }
+    for (const v of [59, 68]) {
+      const e = played('o1', 0, v);
+      expect(uw(e, 'V2').max, `${v}`).toBeGreaterThan(tw(e, 'V2').max);
+    }
+    const gaps = [52, 59, 68].map((v) => uToNextP(played('o1', 0, v)));
+    expect(gaps[1]).toBeLessThan(gaps[0]);
+    expect(gaps[2]).toBeLessThan(gaps[1]);
+    expect(gaps[2]).toBeLessThan(0.5 * gaps[0]);
   });
 });
 

@@ -66,26 +66,41 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
+      kind: 'film',
       title: l('高钾阶梯', 'The hyperkalaemia ladder', 'La escalera de la hiperpotasemia'),
-      body: l(
-        '血钾升高时，心电图大致按固定顺序变化——**高钾阶梯**：\n- **T波高尖**：窄底、对称，呈“帐篷样”，V2–V4最清楚（II、III亦可见）；\n- **PR间期延长、P波低平直至消失**：心房除极被逐渐压制；\n- **QRS增宽**：形态怪异，可伪装成STEMI或Brugada样图形；\n- **正弦波**：QRS与T融合成一条连续起伏的曲线，随后可发展为心动过缓、高度房室传导阻滞、心室颤动或停搏。\n两条规则：血钾浓度与心电图形**相关性差**——血钾很高时图形可以接近正常，数值不高时也可以出现明显改变；因此**任何**提示高钾的心电图改变都是急症：静脉钙剂稳定心肌 → 胰岛素+葡萄糖把钾移入细胞 → 透析、利尿剂或钾结合剂排钾。',
-        'As potassium climbs, the ECG changes in a rough, fixed order — the **hyperkalaemia ladder**:\n- **tented T waves**: narrow-based, symmetric "tents", clearest in V2–V4 (also II and III);\n- **PR prolongation, P flattening, then P loss**: atrial activation is progressively suppressed;\n- **QRS widening**: bizarre morphology, can masquerade as STEMI or a Brugada-like pattern;\n- **sine wave**: QRS and T merge into one undulating curve — then bradycardia, high-grade AV block, VF or asystole.\nTwo rules: serum K correlates **poorly** with the tracing — the ECG can look nearly normal at a dangerous level, and striking changes can appear at a modest one; and **any** ECG change of hyperkalaemia is an emergency: IV calcium to stabilise the myocardium → insulin with glucose to shift K into cells → dialysis, diuretics or potassium binders to remove it.',
-        'A medida que el potasio sube, el ECG cambia en un orden aproximado y fijo — la **escalera de la hiperpotasemia**:\n- **ondas T picudas**: en "tienda de campaña", de base estrecha y simétricas, más claras en V2–V4 (también en II y III);\n- **PR prolongado, aplanamiento de la P y luego desaparición**: la activación auricular se amortigua progresivamente;\n- **ensanchamiento del QRS**: morfología bizarra, puede enmascararse como IAMCEST o patrón tipo Brugada;\n- **onda sinusoidal**: el QRS y la T se funden en una curva ondulante única — después bradicardia, bloqueo AV avanzado, fibrilación ventricular o asistolia.\nDos reglas: la potasemia se correlaciona **mal** con el trazado — el ECG puede ser casi normal con cifras peligrosas, y cambios llamativos pueden aparecer con valores discretos; y **cualquier** cambio electrocardiográfico de la hiperpotasemia es una urgencia: calcio intravenoso para estabilizar el miocardio → insulina con glucosa para trasladar el K al interior celular → diálisis, diuréticos o quelantes del potasio para eliminarlo.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('hyperkalemia', 1402, { rate: 82 }),
-      marks: [
-        { auto: 't', lead: 'V2' },
-        { auto: 't', lead: 'V3' },
-        { auto: 'qrs', lead: 'V2' },
+      frames: [
+        {
+          label: l('正常', 'Normal', 'Normal'),
+          ecg: synth('normal', 1402, { rate: 82 }),
+          note: l('起点：V3的T波圆钝，比R波矮。PR 160 ms，QRS约95 ms。', 'Starting point: in V3 the T is rounded and shorter than the R. PR 160 ms, QRS about 95 ms.', 'Punto de partida: en V3 la T es redondeada y más baja que la R. PR de 160 ms, QRS de unos 95 ms.'),
+          marks: [{ auto: 't', lead: 'V3' }, { auto: 'pr', lead: 'II' }],
+        },
+        {
+          label: l('T波高尖', 'Tented T', 'T picuda'),
+          ecg: synth('hyperkalemia', 1402, { rate: 82 }),
+          note: l('V3的T波成了窄底帐篷，比R波还高。PR约205 ms、QRS约115 ms，已开始拉长：越过了第一级。', 'In V3 the T is a narrow tent, taller than the R. The PR (about 205 ms) and QRS (about 115 ms) are already stretching: past the first rung.', 'En V3 la T es una tienda estrecha, más alta que la R. El PR (unos 205 ms) y el QRS (unos 115 ms) ya se alargan: pasado el primer peldaño.'),
+          marks: [{ auto: 't', lead: 'V3' }, { auto: 'pr', lead: 'II' }, { auto: 'qrs', lead: 'V3' }],
+        },
+        {
+          label: l('重度', 'Severe', 'Grave'),
+          ecg: synth('hyperkalemia-severe', 1402, { rate: 62 }),
+          note: l('重度：II导联的P波几乎消失，QRS约170 ms，T波直接从QRS里升起。再往上是正弦波，然后室颤或停搏。', 'Severe: the P in II has almost gone, the QRS is about 170 ms and the T rises straight out of it. Next comes the sine wave, then VF or asystole.', 'Grave: la P de II casi ha desaparecido, el QRS ronda los 170 ms y la T sale directamente de él. Después viene la onda sinusoidal y luego FV o asistolia.'),
+          marks: [{ auto: 'p', lead: 'II' }, { auto: 'qrs', lead: 'V3' }],
+        },
       ],
+      predict: {
+        question: l('T波高尖之后，血钾继续升高，接下来先变的是什么？', 'After the tented T, potassium keeps rising. What changes next?', 'Tras la T picuda, el potasio sigue subiendo. ¿Qué cambia después?'),
+        options: [
+          l('P波变平、PR延长、QRS增宽', 'The P flattens, the PR lengthens, the QRS widens', 'La P se aplana, el PR se alarga y el QRS se ensancha'),
+          l('ST抬高并出现Q波', 'The ST rises and Q waves appear', 'El ST sube y aparecen ondas Q'),
+          l('T波后出现高大的U波', 'A tall U wave appears after the T', 'Aparece una onda U alta tras la T'),
+        ],
+        answer: 0,
+      },
       caption: l(
-        'V2–V3的T波**高尖、对称、窄底**，像帐篷一样立在QRS之后。再量一下间期：PR约205 ms（已轻度延长），QRS约115 ms（接近120 ms上限）——阶梯已经越过第一级，P波与传导开始受累，这就是急症。窄的底部是与超急性期T波的关键区别（后者宽底、粗大，见下面对比）。',
-        'In V2–V3 the T waves are **tall, symmetric and narrow-based**, a tent standing right after the QRS. Now measure: the PR is about 205 ms (already mildly long) and the QRS about 115 ms (close to the 120-ms limit) — the ladder is past its first rung, the P and conduction are starting to suffer, and that is an emergency. The narrow base is the key difference from a hyperacute T (broad-based and bulky — see the contrast below).',
-        'En V2–V3 las ondas T son **picudas, simétricas y de base estrecha**, una tienda de campaña justo detrás del QRS. Ahora mide: el PR ronda los 205 ms (ya algo largo) y el QRS unos 115 ms (cerca del límite de 120 ms): la escalera ha pasado el primer peldaño, la P y la conducción empiezan a sufrir, y eso es una urgencia. La base estrecha es la diferencia clave frente a una T hiperaguda (ancha de base y voluminosa: mira el contraste más abajo).',
+        '血钾一级级升高：先变T波，再变P波和PR，最后是QRS。每一级都是急症。',
+        'Potassium rising, one rung at a time: the T first, then the P and PR, then the QRS. Every rung is an emergency.',
+        'El potasio sube peldaño a peldaño: primero la T, luego la P y el PR, después el QRS. Cada peldaño es una urgencia.',
       ),
     },
     {
@@ -176,26 +191,27 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'text',
+      kind: 'film',
       title: l('低钾：另一条路', 'Hypokalaemia: the other road', 'Hipopotasemia: el otro camino'),
-      body: l(
-        '低钾血症的复极**变慢**而不是变快：\n- ST段轻度压低；\n- T波低平，甚至倒置；\n- **U波显著**，V2–V3最清楚，常常**比T波还高**；\n- T波与U波融合，QT看似延长——那其实是**QU间期**：测QT止于T波终点，把U波排除在外。\n低钾增加**尖端扭转型室速**和**洋地黄中毒**（o3）的风险，而且几乎总与**低镁血症**同行：补钾的同时查镁、补镁，两个离子都纠正才能压住TdP。',
-        'In hypokalaemia repolarisation **slows** instead of speeding up:\n- slight ST depression;\n- a flat T, even inverted;\n- a **prominent U wave**, clearest in V2–V3, often **taller than the T**;\n- T and U fuse and the QT looks long — but that is a **QU interval**: measure the QT to the end of the T and leave the U out.\nLow potassium raises the risk of **torsades de pointes** and of **digoxin toxicity** (o3), and almost always travels with **hypomagnesaemia**: when you replace potassium, check and replace magnesium too — both ions must be corrected to hold TdP down.',
-        'En la hipopotasemia la repolarización se **enlentece** en lugar de acelerarse:\n- descenso ligero del ST;\n- una T plana, incluso invertida;\n- una **onda U prominente**, más clara en V2–V3, a menudo **más alta que la T**;\n- la T y la U se funden y el QT parece largo — pero eso es un **intervalo QU**: mide el QT hasta el final de la T y deja fuera la U.\nEl potasio bajo aumenta el riesgo de **torsades de pointes** y de **intoxicación digitálica** (o3), y casi siempre va acompañado de **hipomagnesemia**: al reponer potasio, comprueba y repone también el magnesio; hay que corregir ambos iones para controlar la TdP.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('hypokalemia', 1404, { rate: 60 }),
-      marks: [
-        { auto: 'st', lead: 'V2' },
-        { auto: 't', lead: 'V2' },
-        { auto: 'u', lead: 'V2' },
+      view: { layout: 'strip', lead: 'V2' },
+      frames: [
+        {
+          label: l('正常', 'Normal', 'Normal'),
+          ecg: synth('normal', 1404, { rate: 60 }),
+          note: l('正常的V2：T波直立，几乎看不到U波。QT约410 ms。', 'Normal V2: an upright T and hardly any U. QT about 410 ms.', 'V2 normal: T positiva y casi sin U. QT de unos 410 ms.'),
+          marks: [{ auto: 't', lead: 'V2' }, { auto: 'qt', lead: 'V2' }],
+        },
+        {
+          label: l('低钾', 'Low potassium', 'Potasio bajo'),
+          ecg: synth('hypokalemia', 1404, { rate: 60 }),
+          note: l('低钾：T波只剩一半高，**U波**反而比T波高。量到T波终点，QT仍约410 ms：变长的是QU。', 'Low K: the T is half as tall and the **U** now stands above it. To the end of the T the QT is still about 410 ms: what grew is the QU.', 'K bajo: la T mide la mitad y la **U** ya la supera. Hasta el final de la T, el QT sigue en unos 410 ms: lo que crece es el QU.'),
+          marks: [{ auto: 't', lead: 'V2' }, { auto: 'u', lead: 'V2' }, { auto: 'qt', lead: 'V2' }],
+        },
       ],
       caption: l(
-        'V2：ST轻度压低，T低平，U波比T波还高。QT测量用切线法止于**T波终点**——一直量到U波终点就成了“假性长QT”。同时查血镁；正在用洋地黄的病人，这幅图是中毒的预警（o3）。',
-        'V2: slight ST depression, a flat T, and a U wave taller than the T. Measure the QT with the tangent method to the **end of the T** — run it to the end of the U and you have manufactured a "long QT". Check magnesium at the same time; in a patient on digoxin this tracing is a toxicity warning (o3).',
-        'V2: descenso ligero del ST, T plana y una onda U más alta que la T. Mide el QT con el método de la tangente hasta el **final de la T**; si lo llevas hasta el final de la U habrás fabricado un "QT largo". Comprueba el magnesio a la vez; en un paciente con digital, este trazado es un aviso de intoxicación (o3).',
+        '低钾使复极变慢：T波低平、U波高大，V2–V3最清楚。同时查血镁。',
+        'Low potassium slows repolarisation: a flat T and a big U, clearest in V2–V3. Check magnesium as well.',
+        'El potasio bajo enlentece la repolarización: T plana y U grande, más claras en V2–V3. Comprueba también el magnesio.',
       ),
     },
     {
@@ -208,10 +224,28 @@ const lesson: Lesson = {
         { auto: 't', lead: 'V2' },
         { auto: 'u', lead: 'V2' },
       ],
+      play: {
+        dial: 'rate',
+        from: 52,
+        to: 68,
+        notes: [
+          { min: 52, max: 58, text: l('心率慢：V2的**U波**比T波高。QT量到T波终点是410–430 ms；量到U波终点会得到570–600 ms。', 'Slow: in V2 the **U** is taller than the T. To the end of the T the QT is 410–430 ms; to the end of the U you get 570–600 ms.', 'Lenta: en V2 la **U** es más alta que la T. Hasta el final de la T el QT mide 410–430 ms; hasta el final de la U salen 570–600 ms.') },
+          { min: 59, max: 68, text: l('心率加快：舒张期缩短，U波逼近下一个P波。QT仍然量到T波终点：T加U是QU，不是长QT。', 'Faster: diastole shortens and the U closes in on the next P. Still stop the QT at the end of the T: T plus U is a QU, not a long QT.', 'Más rápida: la diástole se acorta y la U se acerca a la siguiente P. Sigue cerrando el QT al final de la T: T más U es un QU, no un QT largo.') },
+        ],
+      },
+      predict: {
+        question: l('心率从52加快到68次/分，U波会怎样？', 'Speed the rate from 52 to 68/min. Where does the U wave go?', 'Sube la frecuencia de 52 a 68 lpm. ¿Qué hace la onda U?'),
+        options: [
+          l('逼近下一个P波', 'It closes in on the next P', 'Se acerca a la siguiente P'),
+          l('融进QRS里', 'It merges into the QRS', 'Se funde con el QRS'),
+          l('完全消失', 'It disappears', 'Desaparece'),
+        ],
+        answer: 0,
+      },
       caption: l(
-        '拖动心率（52–68次/分）：舒张期缩短，U波向下一个P波靠近。心率再快时T、U、P会融合成一段看似延长的复极——那时别把QU读成QT。',
-        'Drag the rate (52–68/min): diastole shortens and the U wave closes in on the next P. At faster rates T, U and P fuse into what looks like one long repolarisation — do not read that QU as a QT.',
-        'Mueve la frecuencia (52–68 lpm): la diástole se acorta y la U se acerca a la siguiente P. Con frecuencias mayores, T, U y P se funden en lo que parece una repolarización única y larga: no leas ese QU como un QT.',
+        '在V2上加快心率，看U波逼近下一个P波。QT用切线法量到T波终点，不要量到U波。',
+        'Speed up the rate in V2 and watch the U close in on the next P. Measure the QT to the end of the T (tangent method), never to the U.',
+        'Acelera la frecuencia en V2 y mira cómo la U se acerca a la siguiente P. Mide el QT hasta el final de la T (método de la tangente), nunca hasta la U.',
       ),
     },
     {
