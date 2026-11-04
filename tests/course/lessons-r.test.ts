@@ -5,7 +5,7 @@
  * show can be generated.
  */
 import { describe, expect, it } from 'vitest';
-import type { AutoMark, Block, Lesson } from '../../src/course/api';
+import type { AutoMark, Block, Lesson, LessonMark } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
 import { REGISTERED } from '../../src/course/lessons/index';
 import { realisedDials, startDials } from '../../src/course/live';
@@ -211,9 +211,14 @@ function played(id: string, i: number, v: number): Ecg {
   return ecgOf({ scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed, dials });
 }
 const frames = (id: string, i: number): Ecg[] => blocksOf(id, 'film')[i].frames.map((f) => ecgOf(f.ecg));
-/** the beat indices of a film frame's `kind` marks, as the lesson places them */
-const markBeats = (id: string, film: number, frame: number, kind: AutoMark['auto']): number[] =>
-  (blocksOf(id, 'film')[film].frames[frame].marks ?? []).flatMap((m) => (isAutoMark(m) && m.auto === kind && m.beat !== undefined ? [m.beat] : []));
+/** the beat indices of the `kind` marks in a mark list, as the lesson places them */
+const beatsOf = (marks: readonly LessonMark[] | undefined, kind: AutoMark['auto']): number[] =>
+  (marks ?? []).flatMap((m) => (isAutoMark(m) && m.auto === kind && m.beat !== undefined ? [m.beat] : []));
+const markBeats = (id: string, film: number, frame: number, kind: AutoMark['auto']): number[] => beatsOf(blocksOf(id, 'film')[film].frames[frame].marks, kind);
+const stepBeats = (id: string, step: number, kind: AutoMark['auto']): number[] => beatsOf(blocksOf(id, 'worked')[0].steps[step].marks, kind);
+const sideBeats = (id: string, contrast: number, side: 'left' | 'right', kind: AutoMark['auto']): number[] =>
+  beatsOf(blocksOf(id, 'contrast')[contrast][side].marks, kind);
+const mean = (xs: readonly number[]): number => xs.reduce((s, x) => s + x, 0) / xs.length;
 /** the P wave of a beat (default the middle one) in a lead: its largest excursion above (sign 1) or below (sign −1, returned positive) the PR baseline (mV) */
 function pAmp(e: Ecg, lead: StdLead, b = mid(e), sign: 1 | -1 = 1): number {
   const a = e.signal.leads[lead];
@@ -288,17 +293,43 @@ describe('r1: the sinus node on the tracings', () => {
     expect(pause / Math.min(...r)).toBeGreaterThan(3.1);
     expect(pause / Math.min(...r)).toBeLessThan(3.5);
   });
-  it('worked: SA exit block — every pause is 2 x the basic PP (about 1580 ms)', () => {
-    const r = rrs(ecgOf(blocksOf('r1', 'worked')[0].ecg));
-    const pp = Math.min(...r);
-    for (const x of r.filter((y) => y > 1.5 * pp)) expect(Math.abs(x / pp - 2)).toBeLessThan(0.06);
-    expect(Math.abs(Math.max(...r) - 1580)).toBeLessThan(40);
+  it('worked: SA exit block 4:3 — basic PP about 790 ms (76/min); the calipers walk P, P, P into the pause; the bracketed pause is about 1580 ms = 2 PP; the P after it returns on time', () => {
+    const e = ecgOf(blocksOf('r1', 'worked')[0].ecg);
+    const b = e.truth!.beats;
+    const r = rrs(e);
+    const pp = mean(r.filter((x) => x < 1000));
+    expect(Math.abs(pp - 790)).toBeLessThanOrEqual(5);
+    expect(Math.abs(60000 / pp - 76)).toBeLessThanOrEqual(1);
+    const pauses = r.flatMap((x, i) => (x > 1.5 * pp ? [i] : []));
+    expect(pauses.length).toBeGreaterThanOrEqual(2);
+    for (const k of pauses) expect(Math.abs(r[k] / pp - 2), `pause after beat ${k}`).toBeLessThanOrEqual(0.05);
+    for (let i = 1; i < pauses.length; i++) expect(pauses[i] - pauses[i - 1], '4:3: three conducted P waves between pauses').toBe(3);
+    const [p0] = stepBeats('r1', 0, 'p');
+    expect(b[p0].pOn, 'step 1 marks a P').not.toBeNull();
+    const [walk] = stepBeats('r1', 1, 'rr');
+    expect([r[walk] < 1.5 * pp, r[walk + 1] < 1.5 * pp, r[walk + 2] > 1.5 * pp], 'P, P, P, then the 4th position is empty').toEqual([true, true, true]);
+    const [pause] = stepBeats('r1', 2, 'rr');
+    expect(pauses).toContain(pause);
+    expect(Math.abs(r[pause] - 1580)).toBeLessThanOrEqual(5);
+    const [after] = stepBeats('r1', 3, 'p');
+    expect(after, 'step 4 marks the first P after the bracketed pause').toBe(pause + 1);
+    expect(Math.abs(((b[after].pOn ?? 0) - (b[pause].pOn ?? 0)) / pp - 2), 'that P comes exactly 2 PP after the last one').toBeLessThanOrEqual(0.05);
+  });
+  it('contrast: A (arrest) pauses about 3.3 PP, B (type II SA block) exactly 2 PP; each bracket sits on its pause', () => {
+    const c = blocksOf('r1', 'contrast')[0];
+    const a = rrs(ecgOf(c.left.ecg));
+    const b = rrs(ecgOf(c.right.ecg));
+    const [ka] = sideBeats('r1', 0, 'left', 'rr');
+    const [kb] = sideBeats('r1', 0, 'right', 'rr');
+    expect(a[ka]).toBe(Math.max(...a));
+    expect(Math.abs(a[ka] / mean(a.filter((x) => x < 1000)) - 3.3)).toBeLessThanOrEqual(0.05);
+    expect(b[kb]).toBeGreaterThan(1.5 * Math.min(...b));
+    expect(Math.abs(b[kb] / mean(b.filter((x) => x < 1000)) - 2)).toBeLessThanOrEqual(0.05);
   });
   it('pause film: arrest (the hook tracing) pauses about 2.85 s = about 3.3 PP; type II (the worked tracing) pauses about 1580 ms = 2 PP', () => {
     const f = blocksOf('r1', 'film')[0].frames;
     expect(f[0].ecg).toEqual(blocksOf('r1', 'hook')[0].ecg);
     expect(f[1].ecg).toEqual(blocksOf('r1', 'worked')[0].ecg);
-    const mean = (xs: number[]) => xs.reduce((s, x) => s + x, 0) / xs.length;
     const [arrest, exit] = frames('r1', 0).map(rrs);
     const a = Math.max(...arrest);
     expect(Math.abs(a - 2850)).toBeLessThan(10);

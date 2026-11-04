@@ -100,7 +100,7 @@ const lesson: Lesson = {
           {
             min: 40,
             max: 49,
-            text: l('低于 50：指南认为有临床意义；但静息、睡眠时 40–50 常是生理性的。P 和 PR 仍不变：看症状。', 'Below 50: clinically significant by the guideline, yet 40–50 at rest or asleep is often physiologic. P and PR unchanged: ask about symptoms.', 'Por debajo de 50: clínicamente significativa según la guía, pero 40–50 en reposo o dormido suele ser fisiológica. P y PR iguales: pregunta por síntomas.'),
+            text: l('低于 50：按 2018 指南的定义属于心动过缓；但静息、睡眠时 40–50 常是生理性的。P 和 PR 仍不变：看症状。', 'Below 50: bradycardia by the 2018 guideline’s definition, yet 40–50 at rest or asleep is often physiologic. P and PR unchanged: ask about symptoms.', 'Por debajo de 50: bradicardia según la definición de la guía de 2018, pero 40–50 en reposo o dormido suele ser fisiológica. P y PR iguales: pregunta por síntomas.'),
           },
           {
             min: 38,
@@ -166,13 +166,13 @@ const lesson: Lesson = {
         {
           title: l('找出所有 P 波', 'Find every P wave', 'Busca todas las ondas P'),
           body: l('每个 P 后都跟着 QRS，PR 恒定。基础 PP ≈ 790 ms（76 次/分）。', 'Every P is followed by a QRS, with a constant PR. The basic PP is about 790 ms (76/min).', 'Cada P va seguida de QRS, con PR constante. El PP basal mide unos 790 ms (76 lpm).'),
-          marks: [{ auto: 'p' }],
+          marks: [{ auto: 'p', beat: 1 }],
           highlightLeads: ['II'],
         },
         {
           title: l('把分规卡在一个 PP 上，向前跨', 'Set the calipers to one PP and walk forward', 'Ajusta el compás a un PP y avanza'),
           body: l('一分规一格：P、P、P——第 4 个位置上本该出现的 P 不见了，只剩一段空白。', 'Step the calipers along the paper: P, P, P — at the 4th position the expected P is missing, leaving a blank.', 'Avanza el compás por el papel: P, P, P… en la 4.ª posición falta la P esperada y queda un hueco.'),
-          marks: [{ auto: 'rr' }],
+          marks: [{ auto: 'rr', beat: 1 }],
           view: { layout: 'strip', lead: 'II', calipers: true },
         },
         {
@@ -182,7 +182,7 @@ const lesson: Lesson = {
             'The pause is about 1580 ms — exactly two PP: **second-degree type II SA exit block, 4:3**. The sinus node discharged on time; that one impulse simply failed to exit the sinoatrial junction — which is why no P appears on the paper.',
             'La pausa dura unos 1580 ms, exactamente dos PP: **bloqueo sinoauricular de segundo grado tipo II, 4:3**. El nodo sinusal disparó a tiempo; ese impulso simplemente no logró salir de la unión sinoauricular, y por eso no se ve P en el papel.',
           ),
-          marks: [{ auto: 'rr' }],
+          marks: [{ auto: 'rr', beat: 3 }],
         },
         {
           title: l('间歇后的 P 准时回归', 'The first P after the pause returns on time', 'La primera P tras la pausa vuelve a tiempo'),
@@ -191,7 +191,7 @@ const lesson: Lesson = {
             'It has the same shape as the earlier P waves and arrives on schedule; the PP sequence was not “reset”. That is the difference from sinus arrest: after an arrest, the timing of the next P is anybody’s guess.',
             'Tiene la misma morfología que las P previas y llega a tiempo; la secuencia de PP no se “reinició”. Esa es la diferencia con el paro sinusal: tras un paro, cuándo vendrá la siguiente P es impredecible.',
           ),
-          marks: [{ auto: 'p' }],
+          marks: [{ auto: 'p', beat: 4 }],
         },
       ],
     },
@@ -202,12 +202,12 @@ const lesson: Lesson = {
       left: {
         ecg: synth('sinus-pause', 405),
         caption: l('A：窦性停搏', 'A: sinus arrest', 'A: paro sinusal'),
-        marks: [{ auto: 'rr' }],
+        marks: [{ auto: 'rr', beat: 4 }],
       },
       right: {
         ecg: synth('sa-exit-block', 406),
         caption: l('B：二度Ⅱ型窦房传导阻滞', 'B: second-degree type II SA exit block', 'B: bloqueo sinoauricular de segundo grado tipo II'),
-        marks: [{ auto: 'rr' }],
+        marks: [{ auto: 'rr', beat: 3 }],
       },
       point: l(
         'A 的间歇 ≈ 3.3 × PP，与 PP 没有整数倍关系——窦房结停止了放电（停搏）。B 的间歇恰好 = 2 × PP——窦房结放了电，冲动没能传出（传出阻滞）。只看间歇的长短分不出来：必须用分规去量 PP 的倍数关系。',
@@ -319,9 +319,9 @@ const lesson: Lesson = {
       kind: 'summary',
       points: [
         l(
-          '有临床意义的窦性心动过缓是 <50 次/分（指南），报告惯例 <60；40–50 常为生理性，运动员 ≥30 正常。',
-          'Clinically significant sinus bradycardia is <50/min (guideline); reports conventionally flag <60. Rates of 40–50 are often physiologic, and >=30 is normal in athletes.',
-          'La bradicardia sinusal clínicamente significativa es <50 lpm (guía); los informes marcan por convención <60. Frecuencias de 40–50 suelen ser fisiológicas y >=30 es normal en deportistas.',
+          '按 2018 指南的定义，窦性心动过缓是 <50 次/分，报告惯例 <60；40–50 常为生理性，运动员 ≥30 正常。',
+          'By the 2018 guideline’s definition, sinus bradycardia is <50/min; reports conventionally flag <60. Rates of 40–50 are often physiologic, and >=30 is normal in athletes.',
+          'Según la definición de la guía de 2018, la bradicardia sinusal es <50 lpm; los informes marcan por convención <60. Frecuencias de 40–50 suelen ser fisiológicas y >=30 es normal en deportistas.',
         ),
         l(
           '窦性心动过速 >100 次/分是描述，不是诊断：写完就去问“为什么”。',
