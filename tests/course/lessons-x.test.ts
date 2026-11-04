@@ -329,7 +329,7 @@ describe('x1: the structured report on the tracings', () => {
     expectX1Stemi(ecgOf(blocksOf('x1', 'hook')[0].ecg));
     expectX1Stemi(ecgOf(blocksOf('x1', 'worked')[0].ecg));
   });
-  it('ten-line film: every frame is the normal tracing of the contrast; I upright and aVR negative; RR just over 4 large squares at about 72/min with an upright P in II; PR 160, QRS about 95, QT about 385; I, II, aVF positive; transition at V3; ST on the baseline everywhere', () => {
+  it('ten-line film: every frame is the normal tracing of the contrast; I upright and aVR negative; RR just over 4 large squares at about 72/min with an upright P in II before every QRS; PR 160, QRS about 95, QT about 385; I, II, aVF positive; transition at V3; ST on the baseline everywhere', () => {
     const film = blocksOf('x1', 'film')[0];
     for (const f of film.frames) expect(f.ecg).toEqual(blocksOf('x1', 'contrast')[1].left.ecg);
     const e = ecgOf(film.frames[0].ecg);
@@ -342,7 +342,10 @@ describe('x1: the structured report on the tracings', () => {
     expect(meanRr(e) / 200).toBeLessThan(4.4);
     expect(Math.abs(t.hrBpm - 72)).toBeLessThan(2);
     expect(t.rhythm).toBe('sinus-rhythm');
-    expect(pw(e, 'II').max).toBeGreaterThan(0.05);
+    for (const b of t.beats) {
+      expect(b.pOn, `P before the QRS at ${b.qrsOn}`).not.toBeNull();
+      expect(pw(e, 'II', b).max, `P upright in II at ${b.qrsOn}`).toBeGreaterThan(Math.max(0.05, -pw(e, 'II', b).min));
+    }
     expect(Math.abs(t.prMs! - 160)).toBeLessThan(5);
     expect(Math.abs(t.qrsMs - 95)).toBeLessThan(5);
     expect(Math.abs(t.qtMs - 385)).toBeLessThan(5);
@@ -353,9 +356,10 @@ describe('x1: the structured report on the tracings', () => {
     for (const l of ['I', 'II', 'V3', 'V4', 'V5', 'V6'] as const) expect(tUpright(e, l), l).toBe(true);
     expect(t.findings).toContain('normal-ecg');
   });
-  it('ST sweep notes: the worked heart; V3 about +3 mm and III about −1 mm at 0.22–0.25; V2–V4 rise as II, III and aVF fall across 0.26–0.39; V3 about +5–6 mm and III about −2 mm at 0.40–0.45; acute anterior STEMI throughout', () => {
+  it('ST sweep notes: the worked heart; the slider reads the ST in V2; V3 about +3 mm and III about −1 mm at 0.22–0.25; V2–V4 rise as II, III and aVF fall across 0.26–0.39; V3 about +5–6 mm and III about −2 mm at 0.40–0.45; acute anterior STEMI throughout', () => {
     const b = blocksOf('x1', 'live')[0];
     expect({ kind: 'synth', req: { scenario: b.scenario, seed: b.seed } }).toEqual(blocksOf('x1', 'worked')[0].ecg);
+    for (const v of [0.22, 0.45]) expect(Math.abs(stAt(played('x1', 0, v), 'V2', 60) - v), `V2 at ${v}`).toBeLessThan(0.01);
     for (const v of [0.22, 0.25]) {
       const e = played('x1', 0, v);
       expect(stAt(e, 'V3', 60), `${v}`).toBeGreaterThan(0.25);
