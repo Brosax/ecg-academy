@@ -4,7 +4,7 @@
  * is drawn.
  */
 import { describe, expect, it } from 'vitest';
-import { authoredDialValue, dialStep, noteAt, pickDials, realisedDials, snapDial, startDials, sweepValues } from '../../src/course/live';
+import { authoredDialValue, dialStep, liveNote, noteAt, pickDials, realisedDials, snapDial, startDials, sweepValues } from '../../src/course/live';
 import { l } from '../../src/core/l10n';
 import { generate, scenarios, type ScenarioDef } from '../../src/synth';
 
@@ -85,6 +85,15 @@ describe('played experiments', () => {
     expect(noteAt(notes, 77)?.text.en).toBe('b');
     expect(noteAt(notes, 70)).toBeUndefined();
     expect(noteAt(undefined, 70)).toBeUndefined();
+  });
+
+  it('no note once the learner moves a dial the notes were not written for', () => {
+    const play = { dial: 'rate' as const, notes: [{ min: 60, max: 62, text: l('a', 'a', 'a') }] };
+    const start = { rate: 60, qtc: 405 };
+    expect(liveNote(play, { rate: 61, qtc: 405 }, start)?.text.en).toBe('a');
+    expect(liveNote(play, { rate: 61, qtc: 450 }, start)).toBeUndefined();
+    expect(liveNote(undefined, { rate: 61 }, start)).toBeUndefined();
+    expect(liveNote(play, null, start)).toBeUndefined();
   });
 });
 

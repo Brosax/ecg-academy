@@ -37,7 +37,7 @@ import {
   synthesize,
 } from './deps';
 import { EcgDisplay, EcgPanel, EcgPlaceholder, useEcg } from './EcgFrame';
-import { DIAL_META, dialStep, noteAt, pickDials, realisedDials, startDials, sweepValues } from './live';
+import { DIAL_META, dialStep, liveNote, pickDials, realisedDials, startDials, sweepValues } from './live';
 import { defaultBeat } from './marks';
 import { labLinks } from './lab';
 import { Markup } from './LessonText';
@@ -399,8 +399,7 @@ function LiveBlock(props: { readonly block: BlockOf<'live'> }) {
     }, 80);
   };
 
-  const noteValue = play && values ? values[play.dial] : undefined;
-  const note = noteValue !== undefined ? noteAt(play?.notes, noteValue) : undefined;
+  const note = liveNote(play, values, initial.current);
 
   return (
     <figure class="crs-fig crs-live">

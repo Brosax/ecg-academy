@@ -80,6 +80,17 @@ usually becomes one `film`.
 - zh, en and es for every string. Spanish as used in Spain ("derivación", "aurícula", "onda", "segmento",
   "bloqueo de rama"). Medical terms correct in all three.
 - Original wording. The Castellano et al. 2004 book is for structure and criteria only; never copy its prose.
+- A note states only what the learner can see or measure on screen: the tracing, its marks, the dial read-outs.
+  Never quote a value the screen does not show, such as a formula's result.
+- Notes are written for the block's other dials at their start values; the player hides the note as soon as the
+  learner moves another dial.
+- A prediction must be answerable from what the lesson has already shown. If it needs something taught later, it is
+  a quiz: move the block or change the question.
+- An assertion's tolerance matches the note's precision: "about 115 ms" needs ±5 ms; "2–3.5 mm" needs the value
+  inside 2–3.5. Where a note range marks the threshold of a finding, assert both sides of the boundary in every lead
+  the definition uses.
+- Do not reuse a category name that criteria already define (for example "Borderline" in the athlete criteria) for
+  something else.
 - Keep the ids, seeds and order of existing `check`, `drill` and `real` blocks.
 - Stage tests find some blocks by position. When a test breaks because a block moved, fix the index, never the
   assertion. When an assertion checks a block you deleted, move it to the block that now carries that ECG, or report

@@ -138,6 +138,21 @@ export function noteAt<N extends { readonly min: number; readonly max: number }>
   return notes?.find((n) => v >= n.min - 1e-9 && v <= n.max + 1e-9);
 }
 
+/**
+ * The note for what is on screen. Notes are written for the other dials at their start values, so once the learner
+ * moves another dial no note shows rather than a stale one.
+ */
+export function liveNote<N extends { readonly min: number; readonly max: number }>(
+  play: { readonly dial: DialId; readonly notes?: readonly N[] } | undefined,
+  values: Readonly<Partial<Record<DialId, number>>> | null,
+  start: Readonly<Partial<Record<DialId, number>>>,
+): N | undefined {
+  if (!play || !values) return undefined;
+  const v = values[play.dial];
+  const othersAtStart = (Object.keys(start) as DialId[]).every((id) => id === play.dial || values[id] === start[id]);
+  return v !== undefined && othersAtStart ? noteAt(play.notes, v) : undefined;
+}
+
 /** The dials the engine realised (present in `applied`), in the block's order. */
 export function realisedDials(ids: readonly DialId[], applied: Readonly<Partial<Record<DialId, number>>>): DialId[] {
   return ids.filter((id) => typeof applied[id] === 'number');
