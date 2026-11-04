@@ -53,15 +53,6 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('间期从哪里量到哪里', 'Where intervals start and end', 'Dónde empiezan y terminan los intervalos'),
-      body: l(
-        '- **PR 间期**：P 波起点 → QRS 起点（q 或 R 波）。\n- **QRS 时限**：QRS 起点 → J 点（QRS 结束、ST 段开始处）。\n- **QT 间期**：QRS 起点 → T 波终点。\n在间期最长的导联上测量；更好的做法是从所有同步导联中最早的起点量到最晚的终点。心电图机就是这样“整体测量”的，所以机器值常比单导联手工测量略长。',
-        '- **PR interval**: start of the P wave → start of the QRS (q or R).\n- **QRS duration**: start of the QRS → J point, where the QRS ends and the ST begins.\n- **QT interval**: start of the QRS → end of the T wave.\nMeasure in the lead where the interval is longest; better still, from the earliest onset in any lead to the latest offset in any lead. Machines measure globally across simultaneous leads, so their values are often a little longer than a single-lead hand measurement.',
-        '- **Intervalo PR**: inicio de la onda P → inicio del QRS (q o R).\n- **Duración del QRS**: inicio del QRS → punto J, donde termina el QRS y empieza el ST.\n- **Intervalo QT**: inicio del QRS → final de la onda T.\nMide en la derivación donde el intervalo es más largo; mejor aún, desde el inicio más precoz en cualquier derivación hasta el final más tardío. Los equipos miden de forma global en derivaciones simultáneas, por eso sus valores suelen ser algo más largos que una medición manual en una sola derivación.',
-      ),
-    },
-    {
       kind: 'worked',
       title: l('PR 与 QRS，一步步测量', 'PR and QRS, step by step', 'PR y QRS, paso a paso'),
       ecg: synth('normal', 402, { rate: 70, pr: 180, qrs: 95 }),
@@ -108,10 +99,25 @@ const lesson: Lesson = {
       dials: [{ id: 'pr' }, { id: 'qrs' }],
       view: { layout: 'strip', lead: 'II', calipers: true },
       marks: [{ auto: 'pr' }, { auto: 'qrs' }],
+      play: {
+        dial: 'pr',
+        from: 120,
+        to: 200,
+        notes: [
+          { min: 120, max: 125, text: l('PR 约 **3 个小格**（120 ms）：下限。再短就找 δ 波。', 'PR about **3 small squares** (120 ms): the lower limit. Shorter? Look for a delta wave.', 'PR de unos **3 cuadros pequeños** (120 ms): el límite inferior. ¿Más corto? Busca una onda delta.') },
+          { min: 130, max: 190, text: l('从 P 波起点数到 QRS 起点，每个小格 40 ms。', 'Count small squares from P onset to QRS onset: 40 ms each.', 'Cuenta cuadros pequeños desde el inicio de la P hasta el inicio del QRS: 40 ms cada uno.') },
+          { min: 195, max: 200, text: l('PR 约 **5 个小格**（200 ms）：上限。再长就是一度房室传导阻滞。', 'PR about **5 small squares** (200 ms): the upper limit. Longer is first-degree AV block.', 'PR de unos **5 cuadros pequeños** (200 ms): el límite superior. Más largo es un bloqueo AV de primer grado.') },
+        ],
+      },
+      predict: {
+        question: l('PR 从 120 ms 延长到 200 ms。最后它占几个小格？', 'The PR grows from 120 to 200 ms. How many small squares will it span at the end?', 'El PR pasa de 120 a 200 ms. ¿Cuántos cuadros pequeños ocupará al final?'),
+        options: [l('5 个', '5', '5'), l('4 个', '4', '4'), l('8 个', '8', '8')],
+        answer: 0,
+      },
       caption: l(
-        '随意设置 PR 和 QRS，用分规测量，再和读数比较。反复练习，直到误差在 20 ms（半个小格）以内。',
-        'Set any PR and QRS, measure them with the calipers, then compare with the read-out. Practise until you are within 20 ms (half a small square).',
-        'Elige un PR y un QRS cualesquiera, mídelos con el compás y compáralos con la lectura. Practica hasta que el error sea < 20 ms (medio cuadro pequeño).',
+        '先看 PR 从下限走到上限。然后随意设置 PR 和 QRS，用分规测量，和读数比较，直到误差在 20 ms（半个小格）以内。',
+        'Watch the PR walk from the lower to the upper limit. Then set any PR and QRS, measure with the calipers and compare with the read-out until you are within 20 ms (half a small square).',
+        'Mira cómo el PR va del límite inferior al superior. Después elige cualquier PR y QRS, mídelos con el compás y compáralos con la lectura hasta que el error sea < 20 ms (medio cuadro pequeño).',
       ),
     },
     {
@@ -152,15 +158,6 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'text',
-      title: l('按心率校正 QT', 'Correcting the QT for rate', 'Corregir el QT por la frecuencia'),
-      body: l(
-        '心率越快 QT 越短，所以要把 QT 校正到 60 次/分（RR = 1 s）：\n- **Bazett 公式**：QTc = QT ÷ √RR——心率快时过度校正，心率慢时校正不足\n- **Fridericia 公式**：QTc = QT ÷ ∛RR——在各种心率下都更稳定\n- **Framingham 公式**：QTc = QT + 154 × (1 − RR)\n- **Hodges 公式**：QTc = QT + 1.75 × (心率 − 60)\nQT 用 ms，RR 用秒。尤其在 60–90 次/分以外，优先用 Fridericia 或线性公式。QRS ≥ 120 ms 时改用 JT 间期或经 QRS 校正的 QT。',
-        'The QT shortens as the rate rises, so it is corrected to a rate of 60/min (RR = 1 s):\n- **Bazett**: QTc = QT ÷ √RR. It over-corrects at fast rates and under-corrects at slow ones.\n- **Fridericia**: QTc = QT ÷ ∛RR. Steadier across rates.\n- **Framingham**: QTc = QT + 154 × (1 − RR)\n- **Hodges**: QTc = QT + 1.75 × (rate − 60)\nQT in ms, RR in seconds. Prefer Fridericia or a linear formula, especially outside 60–90/min. With a QRS ≥ 120 ms, use the JT interval or a QRS-adjusted QT.',
-        'El QT se acorta al subir la frecuencia, por eso se corrige a 60 lpm (RR = 1 s):\n- **Bazett**: QTc = QT ÷ √RR. Sobrecorrige con frecuencias rápidas e infracorrige con las lentas.\n- **Fridericia**: QTc = QT ÷ ∛RR. Más estable en todo el rango.\n- **Framingham**: QTc = QT + 154 × (1 − RR)\n- **Hodges**: QTc = QT + 1,75 × (frecuencia − 60)\nQT en ms y RR en segundos. Prefiere Fridericia o una fórmula lineal, sobre todo fuera de 60–90 lpm. Con un QRS ≥ 120 ms, usa el intervalo JT o un QT ajustado por el QRS.',
-      ),
-    },
-    {
       kind: 'figure',
       figure: { id: 'qtc-calculator', params: {} },
       caption: l(
@@ -176,16 +173,47 @@ const lesson: Lesson = {
       dials: [{ id: 'rate' }, { id: 'qtc' }],
       view: STRIP,
       marks: [{ auto: 'qt' }, { auto: 'rr' }],
+      play: {
+        dial: 'rate',
+        from: 60,
+        to: 100,
+        notes: [
+          { min: 60, max: 62, text: l('RR ≈ 1 s：QT ≈ QTc ≈ 405 ms，所有公式都一样。', 'RR ≈ 1 s: QT ≈ QTc ≈ 405 ms by every formula.', 'RR ≈ 1 s: QT ≈ QTc ≈ 405 ms con cualquier fórmula.') },
+          { min: 63, max: 89, text: l('心率加快：纸上的 QT 变短，而 QTc 读数停在你设定的值。', 'Faster: the QT on the paper shortens while the QTc read-out stays where you set it.', 'Más rápido: el QT del papel se acorta mientras la lectura del QTc se queda donde la pusiste.') },
+          { min: 90, max: 100, text: l('QT 约 340–355 ms。Fridericia 仍约 405 ms，Bazett 升到约 430–440 ms：心率快时 Bazett 过度校正。', 'QT about 340–355 ms. Fridericia still gives about 405 ms, Bazett climbs to about 430–440 ms: at fast rates Bazett over-corrects.', 'QT de unos 340–355 ms. Fridericia sigue en unos 405 ms y Bazett sube a unos 430–440 ms: con frecuencias rápidas Bazett sobrecorrige.') },
+        ],
+      },
+      predict: {
+        question: l('真实 QTc 固定，把心率从 60 提到 100 次/分。Bazett 公式算出的 QTc 会怎样？', 'The true QTc is fixed. Raise the rate from 60 to 100/min: what does Bazett’s QTc do?', 'El QTc real está fijo. Sube la frecuencia de 60 a 100 lpm: ¿qué hace el QTc de Bazett?'),
+        options: [l('高于真实值', 'Climbs above the true value', 'Sube por encima del valor real'), l('保持不变', 'Stays the same', 'No cambia'), l('低于真实值', 'Falls below it', 'Baja por debajo')],
+        answer: 0,
+      },
       caption: l(
-        '提高心率：纸上的 QT 变短，而 QTc 读数停留在你设定的值——这正是校正要还原的东西。',
-        'Raise the rate: the QT on the paper shortens while the QTc read-out stays where you set it. That is exactly what the correction undoes.',
-        'Sube la frecuencia: el QT en el papel se acorta mientras la lectura del QTc se queda donde la pusiste. Eso es justo lo que deshace la corrección.',
+        '提高心率：纸上的 QT 变短，好的校正值应保持不变。看哪个公式做到了。',
+        'Raise the rate: the QT on the paper shortens and a good correction stays put. Watch which formula does.',
+        'Sube la frecuencia: el QT del papel se acorta y una buena corrección no se mueve. Mira qué fórmula lo consigue.',
       ),
     },
     {
       kind: 'criteria',
       title: l('成人间期界值', 'Adult interval limits', 'Límites de los intervalos en el adulto'),
       items: [
+        {
+          label: l('在哪里测', 'Where to measure', 'Dónde medir'),
+          value: l(
+            'PR：P 波起点 → QRS 起点；QRS：起点 → J 点；QT：QRS 起点 → T 波终点。取间期最长的导联，或从所有同步导联中最早的起点量到最晚的终点（机器这样整体测量，所以读数常略长）',
+            'PR: P onset → QRS onset; QRS: onset → J point; QT: QRS onset → end of T. Use the lead where the interval is longest, or the earliest onset to the latest offset across simultaneous leads (machines measure this way, so their values run a little longer)',
+            'PR: inicio de la P → inicio del QRS; QRS: inicio → punto J; QT: inicio del QRS → final de la T. Usa la derivación donde el intervalo es más largo, o del inicio más precoz al final más tardío en derivaciones simultáneas (los equipos miden así, por eso sus valores son algo más largos)',
+          ),
+        },
+        {
+          label: l('QTc 公式（QT 单位 ms，RR 单位 s）', 'QTc formulas (QT in ms, RR in s)', 'Fórmulas del QTc (QT en ms, RR en s)'),
+          value: l(
+            'Bazett QT ÷ √RR（心率快时过度校正，慢时校正不足）；Fridericia QT ÷ ∛RR；Framingham QT + 154 × (1 − RR)；Hodges QT + 1.75 × (心率 − 60)',
+            'Bazett QT ÷ √RR (over-corrects at fast rates, under-corrects at slow ones); Fridericia QT ÷ ∛RR; Framingham QT + 154 × (1 − RR); Hodges QT + 1.75 × (rate − 60)',
+            'Bazett QT ÷ √RR (sobrecorrige con frecuencias rápidas e infracorrige con las lentas); Fridericia QT ÷ ∛RR; Framingham QT + 154 × (1 − RR); Hodges QT + 1,75 × (frecuencia − 60)',
+          ),
+        },
         {
           label: l('PR 间期', 'PR interval', 'Intervalo PR'),
           value: l('120–200 ms；> 200 ms 为一度房室传导阻滞；< 120 ms 为短 PR（找 δ 波）', '120–200 ms; > 200 ms first-degree AV block; < 120 ms short PR (look for a delta wave)', '120–200 ms; > 200 ms bloqueo AV de primer grado; < 120 ms PR corto (busca una onda delta)'),
@@ -239,6 +267,7 @@ const lesson: Lesson = {
         l('心率 120 次/分时用 Bazett，把正常 QT 叫作“延长”（或在 45 次/分时漏掉真正的长 QT）。', 'Using Bazett at 120/min and calling a normal QT “long”, or at 45/min and missing a long one.', 'Usar Bazett a 120 lpm y llamar “largo” a un QT normal, o a 45 lpm y pasar por alto uno largo.'),
         l('所有人用同一个 QTc 界值：男性 ≥ 450 ms，女性 ≥ 460 ms。', 'Applying one QTc limit to everyone: ≥ 450 ms in men, ≥ 460 ms in women.', 'Aplicar el mismo límite de QTc a todos: ≥ 450 ms en varones, ≥ 460 ms en mujeres.'),
         l('房颤时只在一个短 RR 后测 QT：应平均多个心搏。', 'In atrial fibrillation, measuring the QT after a single short RR: average several beats.', 'En la fibrilación auricular, medir el QT tras un único RR corto: promedia varios latidos.'),
+        l('把宽 QRS 的 QT 当作窄 QRS 来校正：QRS ≥ 120 ms 时改用 JT 间期或经 QRS 校正的 QT。', 'Correcting the QT of a wide QRS as if it were narrow: with a QRS ≥ 120 ms use the JT interval or a QRS-adjusted QT.', 'Corregir el QT de un QRS ancho como si fuera estrecho: con un QRS ≥ 120 ms usa el intervalo JT o un QT ajustado por el QRS.'),
       ],
     },
     {

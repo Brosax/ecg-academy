@@ -479,6 +479,34 @@ describe('s4: intervals on the tracings', () => {
     expect(Math.abs(b.hrBpm - 60)).toBeLessThan(1.5);
     expect(Math.abs(b.qtMs - 420)).toBeLessThan(10);
   });
+  it('PR sweep notes: about 3 small squares at 120–125 ms and about 5 at 195–200 ms (one small square = 40 ms)', () => {
+    for (const [v, squares] of [[120, 3], [125, 3], [195, 5], [200, 5]] as const) {
+      const pr = played('s4', 0, v).truth!.prMs!;
+      expect(Math.abs(pr - v), `${v} ms`).toBeLessThan(3);
+      expect(Math.abs(pr / 40 - squares), `${v} ms`).toBeLessThan(0.2);
+    }
+  });
+  it('rate sweep notes: QT ≈ QTc ≈ 405 ms at 60–62/min; the QT shortens while Fridericia holds; at 90–100/min QT 340–355, Fridericia about 405, Bazett about 430–440', () => {
+    for (const v of [60, 62]) {
+      const t = played('s4', 1, v).truth!;
+      for (const x of [t.qtMs, t.qtcBazettMs, t.qtcFridericiaMs]) expect(Math.abs(x - 405), `${v}/min`).toBeLessThan(6);
+    }
+    expect(played('s4', 1, 89).truth!.qtMs).toBeLessThan(played('s4', 1, 63).truth!.qtMs - 20);
+    for (const v of [63, 89]) expect(Math.abs(played('s4', 1, v).truth!.qtcFridericiaMs - 405), `${v}/min`).toBeLessThan(6);
+    for (const v of [90, 100]) {
+      const t = played('s4', 1, v).truth!;
+      expect(t.qtMs, `${v}/min`).toBeGreaterThan(338);
+      expect(t.qtMs, `${v}/min`).toBeLessThan(357);
+      expect(Math.abs(t.qtcFridericiaMs - 405), `${v}/min`).toBeLessThan(6);
+      expect(t.qtcBazettMs, `${v}/min`).toBeGreaterThan(427);
+      expect(t.qtcBazettMs, `${v}/min`).toBeLessThan(444);
+    }
+  });
+  it('QTc-calculator caption: RR about 460 ms in the hook and about 1330 ms in contrast A', () => {
+    const meanRr = (e: Ecg) => rrs(e).reduce((s, x) => s + x, 0) / rrs(e).length;
+    expect(Math.abs(meanRr(ecgOf(blocksOf('s4', 'hook')[0].ecg)) - 460)).toBeLessThan(15);
+    expect(Math.abs(meanRr(ecgOf(blocksOf('s4', 'contrast')[0].left.ecg)) - 1330)).toBeLessThan(30);
+  });
 });
 
 describe('s5: axis on the tracings', () => {
