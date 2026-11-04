@@ -878,14 +878,49 @@ describe('h8: Brugada and early repolarisation on the tracings', () => {
     expect(e.truth!.qrsMs).toBeLessThan(120);
     expect(qrs(e, 'V6').min).toBeLessThan(-0.15);
   });
-  it('early repolarisation: J about 1–1.5 mm in II, III, aVF and V4–V6 (inferolateral); V2–V3 < 2.5 mm; QRS < 120 ms', () => {
-    const e = ecgOf(blocksOf('h8', 'ecg')[0].ecg);
+  it('early repolarisation (J-wave film frame 2): J about 1–1.6 mm in II, III, aVF and V4–V6 (inferolateral); V2–V3 < 2.5 mm; QRS < 120 ms; under 1 mm in all six on the same heart at st 0.06', () => {
+    const [low, e] = frames('h8', 1);
     for (const l of ['II', 'III', 'aVF', 'V4', 'V5', 'V6'] as const) {
       expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.09);
       expect(stAt(e, l), l).toBeLessThan(0.2);
+      expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
+      expect(stAt(e, l), l).toBeLessThanOrEqual(0.165);
+      expect(stAt(low, l), `${l} at st 0.06`).toBeLessThan(0.1);
     }
     for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThan(0.25);
     expect(e.truth!.qrsMs).toBeLessThan(120);
+    const [a, b] = blocksOf('h8', 'film')[1].frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req : null));
+    expect(a).toEqual({ ...b, dials: { ...b!.dials, st: 0.06 } });
+  });
+  it('electrode film notes: on the type 1 heart, V1–V2 in the 5th space have J about 1 mm (< 2 mm); the 4th space J about 3.5 mm with T about −4 mm; the 3rd space J about 5–7 mm with a deeper T; every other lead unchanged', () => {
+    expect(blocksOf('h8', 'film')[0].frames[1].ecg).toEqual(blocksOf('h8', 'heart')[0].ecg);
+    const [low, std, high] = frames('h8', 0);
+    for (const l of ['V1', 'V2'] as const) {
+      near(stAt(low, l), 1);
+      expect(stAt(low, l), l).toBeLessThan(0.2);
+      near(stAt(std, l), 3.5);
+      near(tw(std, l).min, -4);
+      expect(stAt(high, l), l).toBeGreaterThanOrEqual(0.5);
+      expect(stAt(high, l), l).toBeLessThanOrEqual(0.72);
+      expect(tw(high, l).min, l).toBeLessThan(tw(std, l).min);
+    }
+    for (const l of [...LIMB, 'V3', 'V4', 'V5', 'V6'] as const) {
+      expect(low.signal.leads[l], l).toEqual(std.signal.leads[l]);
+      expect(high.signal.leads[l], l).toEqual(std.signal.leads[l]);
+    }
+  });
+  it('J sweep notes (V2 read-out at J+60): about 0.6–1 mm at 0.06–0.10 and 1.1–1.4 mm at 0.11–0.14, T upright and the ST not coved throughout', () => {
+    for (const [v, lo, hi] of [[0.06, 0.055, 0.065], [0.1, 0.095, 0.105], [0.11, 0.105, 0.115], [0.14, 0.135, 0.145]] as const) {
+      const e = played('h8', 0, v);
+      expect(stAt(e, 'V2', 60), `${v}`).toBeGreaterThanOrEqual(lo);
+      expect(stAt(e, 'V2', 60), `${v}`).toBeLessThanOrEqual(hi);
+      expect(tUpright(e, 'V2'), `${v}`).toBe(true);
+      expect(stAt(e, 'V2', 60), `${v}: not coved`).toBeGreaterThanOrEqual(stAt(e, 'V2') - 0.005);
+    }
+  });
+  it('pitfall: in early repolarisation the V6 ST/T ratio stays under 0.25 (J-wave film frame 2)', () => {
+    const e = frames('h8', 1)[1];
+    expect(stAt(e, 'V6', 60) / tw(e, 'V6').max).toBeLessThan(0.25);
   });
   it('live (early repolarisation): the st dial moves the whole pattern — V2 J about 0.6–1.3 mm, II about 0.8–1.6 mm — with V6 ST/T < 0.25 throughout', () => {
     const b = blocksOf('h8', 'live')[0];
