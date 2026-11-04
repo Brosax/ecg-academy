@@ -21,6 +21,7 @@ import h7 from '../../src/course/lessons/h7';
 import h8 from '../../src/course/lessons/h8';
 import h9 from '../../src/course/lessons/h9';
 import { realisedDials, startDials } from '../../src/course/live';
+import * as M from '../../src/figures/scenes/moving-paper.math';
 import { baselineBefore, qrsWaves } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
@@ -601,11 +602,21 @@ describe('h4: low voltage and alternans on the tracings', () => {
     expect(Math.abs(obese.truth!.axisDeg.qrs + 15)).toBeLessThan(5);
     for (const l of LIMB) expect(qrs(obese, l).p2p, l).toBeLessThan(0.5);
   });
-  it('half-gain figure: the normal heart of the film, whose QRS in II is over 5 mm at 10 mm/mV and under 5 mm at 5 mm/mV', () => {
+  it('half-gain figure: the normal heart of the film at 75/min with no rate variability, so the scene narration holds (RR 800 ms, 75/min on every tour bracket); its QRS in II is over 5 mm at 10 mm/mV and under 5 mm at 5 mm/mV', () => {
     const fig = blocksOf('h4', 'figure')[0];
     expect(fig.figure).toEqual({ id: 'moving-paper', params: { gain: 5 } });
-    expect(fig.ecg).toEqual(blocksOf('h4', 'film')[0].frames[0].ecg);
-    const e = ecgOf(fig.ecg!);
+    const film = blocksOf('h4', 'film')[0].frames[0].ecg;
+    if (fig.ecg?.kind !== 'synth' || film.kind !== 'synth') throw new Error('expected synthetic sources');
+    expect(fig.ecg.req).toEqual({ ...film.req, dials: { rate: 75, hrv: 0 } });
+    const e = ecgOf(fig.ecg);
+    expect(Math.abs(e.truth!.hrBpm - 75)).toBeLessThan(1);
+    const plan = M.planFor(e.truth!.beats, e.signal.leads.II, e.signal.fs, e.signal.durationMs);
+    expect(plan).not.toBeNull();
+    for (const rr of plan!.rrMs) {
+      expect(M.rrShown(rr)).toBe(800);
+      expect(Math.round(M.rrLabel(rr, 25).bpm)).toBe(75);
+    }
+    expect(Math.abs(qrs(e, 'II').p2p - qrs(frames('h4', 0)[0], 'II').p2p), 'the same QRS as the film').toBeLessThan(0.01);
     expect(qrs(e, 'II').p2p).toBeGreaterThan(0.5);
     expect(qrs(e, 'II').p2p / 2).toBeLessThan(0.5);
   });

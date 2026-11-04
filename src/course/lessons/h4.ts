@@ -17,6 +17,8 @@ const GRID = { layout: '3x4+1' } as const;
 const NORMAL = synth('normal', 1261, { rate: 80 });
 const LOW = synth('low-voltage', 1261, { rate: 80 });
 const EMPHYSEMA = synth('low-voltage', 1261, { rate: 80 }, 'emphysema');
+/** the film's normal heart at the rate the moving-paper scene narrates (75/min, RR 800 ms, as in f4) */
+const PAPER = synth('normal', 1261, { rate: 75, hrv: 0 });
 
 const lesson: Lesson = {
   id: 'h4',
@@ -210,7 +212,7 @@ const lesson: Lesson = {
           note: l(
             '空气：同样小，电轴垂直（约 +80°），I 导联几乎没有 QRS（约 1 mm）。问题在胸腔，不在心肌。',
             'Air: small too, with a vertical axis (about +80°) and almost no QRS in I (about 1 mm). The problem is the chest, not the myocardium.',
-            'Aire: también pequeño, con eje vertical (unos +80°) y casi sin QRS en I (unos 1 mm). El problema es el tórax, no el miocardio.',
+            'Aire: también pequeño, con eje vertical (unos +80°) y casi sin QRS en I (alrededor de 1 mm). El problema es el tórax, no el miocardio.',
           ),
           marks: [{ auto: 'r', lead: 'I' }, { auto: 'r', lead: 'aVF' }],
         },
@@ -237,11 +239,11 @@ const lesson: Lesson = {
     {
       kind: 'figure',
       figure: { id: 'moving-paper', params: { gain: 5 } },
-      ecg: NORMAL,
+      ecg: PAPER,
       caption: l(
-        '同一颗正常心脏按半增益（5 mm/mV）记录：定标方波只有 5 mm 高，各波也矮一半，II 导联的 QRS 掉到 5 mm 以下。先看方波，再谈低电压。',
-        'The same normal heart recorded at half gain (5 mm/mV): the calibration pulse is only 5 mm tall and every wave is half as tall, so the QRS in II drops under 5 mm. Look at the pulse before you call low voltage.',
-        'El mismo corazón normal registrado a media ganancia (5 mm/mV): el pulso de calibración mide solo 5 mm y todas las ondas, la mitad; el QRS de II cae por debajo de 5 mm. Mira el pulso antes de hablar de bajo voltaje.',
+        '同一颗正常心脏，先按半增益（5 mm/mV）画：方波只有 5 mm，II 的 QRS 不到 5 mm。播放导览：10 mm/mV 起步，走一段 50 mm/s，再降到 5 mm/mV 又回到 10。先看方波，再谈低电压。',
+        'The same normal heart, first drawn at half gain (5 mm/mV): the pulse is only 5 mm and the QRS in II under 5 mm. Play the tour: it starts at 10 mm/mV, runs a stretch at 50 mm/s, drops to 5 mm/mV and comes back to 10. Read the pulse before you call low voltage.',
+        'El mismo corazón normal, dibujado primero a media ganancia (5 mm/mV): el pulso mide solo 5 mm y el QRS de II, menos de 5 mm. Reproduce el recorrido: empieza a 10 mm/mV, pasa un tramo a 50 mm/s, baja a 5 mm/mV y vuelve a 10. Mira el pulso antes de hablar de bajo voltaje.',
       ),
     },
     {
