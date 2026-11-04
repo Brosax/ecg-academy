@@ -572,36 +572,61 @@ describe('h4: low voltage and alternans on the tracings', () => {
       expect(e.truth!.hrBpm).toBeLessThan(90);
     }
   });
-  it('emphysema: precordial QRS < 10 mm, limb QRS < 5 mm (II, III, aVF about 4–5 mm), vertical axis 60–90°, P in II about 1 mm', () => {
-    const e = ecgOf(blocksOf('h4', 'ecg')[0].ecg);
+  it('emphysema (voltage film frame 4): precordial QRS < 10 mm, limb QRS < 5 mm (II, III, aVF about 4–5 mm), vertical axis about +80°, almost no QRS in I (about 1 mm), P in II under 1.5 mm', () => {
+    const e = frames('h4', 0)[3];
     for (const l of CHEST) expect(qrs(e, l).p2p, l).toBeLessThan(1.0);
     for (const l of LIMB) expect(qrs(e, l).p2p, l).toBeLessThan(0.5);
     for (const l of ['II', 'III', 'aVF'] as const) expect(qrs(e, l).p2p, l).toBeGreaterThanOrEqual(0.4);
-    expect(e.truth!.axisDeg.qrs).toBeGreaterThan(60);
-    expect(e.truth!.axisDeg.qrs).toBeLessThan(90);
+    expect(Math.abs(e.truth!.axisDeg.qrs - 80)).toBeLessThan(5);
+    near(qrs(e, 'I').p2p, 1);
     expect(pw(e, 'II').max).toBeLessThan(0.15);
   });
-  it('electrical alternans: V3 alternates (about 16 vs 6 mm) beat to beat while lead II alternates only about 1 mm; ~110/min with low limb voltage', () => {
-    const b = blocksOf('h4', 'ecg')[1];
-    expect(b.view?.lead).toBe('V3');
-    const e = ecgOf(b.ecg);
+  it('voltage film notes: normal II about 8.5 mm and V3 about 18 mm (the largest); low voltage is the same QRS at 0.45× in every lead (II about 4, V3 about 8 mm); obesity V3 about 8 mm with the axis about −15°', () => {
+    expect(blocksOf('h4', 'film')[0].frames[1].ecg).toEqual(blocksOf('h4', 'hook')[0].ecg);
+    const [normal, low, obese] = frames('h4', 0);
+    near(qrs(normal, 'II').p2p, 8.5);
+    near(qrs(normal, 'V3').p2p, 18);
+    for (const l of LIMB) expect(qrs(normal, l).p2p, l).toBeLessThanOrEqual(qrs(normal, 'II').p2p);
+    for (const l of CHEST) expect(qrs(normal, l).p2p, l).toBeLessThanOrEqual(qrs(normal, 'V3').p2p);
+    expect(low.truth!.beats.map((b) => b.qrsOn)).toEqual(normal.truth!.beats.map((b) => b.qrsOn));
+    for (const l of [...LIMB, ...CHEST]) expect(Math.abs(qrs(low, l).p2p / qrs(normal, l).p2p - 0.45), l).toBeLessThan(0.01);
+    near(qrs(low, 'II').p2p, 4);
+    near(qrs(low, 'V3').p2p, 8);
+    near(qrs(obese, 'V3').p2p, 8);
+    expect(Math.abs(obese.truth!.axisDeg.qrs + 15)).toBeLessThan(5);
+    for (const l of LIMB) expect(qrs(obese, l).p2p, l).toBeLessThan(0.5);
+  });
+  it('half-gain figure: the normal heart of the film, whose QRS in II is over 5 mm at 10 mm/mV and under 5 mm at 5 mm/mV', () => {
+    const fig = blocksOf('h4', 'figure')[0];
+    expect(fig.figure).toEqual({ id: 'moving-paper', params: { gain: 5 } });
+    expect(fig.ecg).toEqual(blocksOf('h4', 'film')[0].frames[0].ecg);
+    const e = ecgOf(fig.ecg!);
+    expect(qrs(e, 'II').p2p).toBeGreaterThan(0.5);
+    expect(qrs(e, 'II').p2p / 2).toBeLessThan(0.5);
+  });
+  it('electrical alternans (effusion film frame 2, V3 strip): V3 alternates (about 16 vs 6 mm) beat to beat while lead II alternates only about 1 mm; about 110/min with low limb voltage', () => {
+    const film = blocksOf('h4', 'film')[1];
+    expect(film.view?.lead).toBe('V3');
+    const e = frames('h4', 1)[1];
     const beats = e.truth!.beats;
     for (let k = 2; k < beats.length - 2; k++) {
       const a = qrs(e, 'V3', beats[k]).p2p;
       const c = qrs(e, 'V3', beats[k + 1]).p2p;
       expect(Math.max(a, c) / Math.min(a, c)).toBeGreaterThan(1.6);
+      near(Math.max(a, c), 16);
+      near(Math.min(a, c), 6);
       const d = Math.abs(qrs(e, 'II', beats[k]).p2p - qrs(e, 'II', beats[k + 1]).p2p);
       expect(d).toBeGreaterThan(0.04);
       expect(d).toBeLessThan(0.15);
     }
-    expect(e.truth!.hrBpm).toBeGreaterThan(102);
-    expect(e.truth!.hrBpm).toBeLessThan(120);
+    expect(Math.abs(e.truth!.hrBpm - 110)).toBeLessThan(5);
     for (const l of LIMB) expect(qrs(e, l).p2p, l).toBeLessThan(0.5);
   });
-  it('effusion without alternans: about 106/min, every limb QRS < 5 mm', () => {
-    const e = ecgOf(blocksOf('h4', 'ecg')[2].ecg);
+  it('effusion without alternans (effusion film frame 1): about 106/min, every limb QRS < 5 mm, V3 about 7.5 mm on every beat', () => {
+    const e = frames('h4', 1)[0];
     expect(Math.abs(e.truth!.hrBpm - 106)).toBeLessThan(3);
     for (const l of LIMB) expect(qrs(e, l).p2p, l).toBeLessThan(0.5);
+    for (const b of e.truth!.beats.slice(1, -1)) near(qrs(e, 'V3', b).p2p, 7.5, 0.3);
   });
 });
 

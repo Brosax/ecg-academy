@@ -18,7 +18,7 @@ const PENDING: ReadonlySet<string> = new Set(
     'r1 r2 r3 r4 r5 r6 r7 r8',
     't1 t2 t3 t4 t5 t6 t7',
     'i1 i2 i3 i4 i5 i6 i7 i8 i9 i10 i11',
-    'h4 h5 h6 h7 h8 h9',
+    'h5 h6 h7 h8 h9',
     'o1 o2 o3 o4 o5 o6 o7 o8 o9 o10 o11 o12',
     'x1 x2 x3 x4',
   ].flatMap((s) => s.split(' ')),
