@@ -572,7 +572,8 @@ describe('i5: lateral STEMI on the tracings', () => {
         expect(stAt(e, l), l).toBeLessThan(0.18);
       }
       expect(stAt(e, 'V3')).toBeLessThan(stAt(e, 'V2'));
-      expect(stAt(e, 'V3')).toBeGreaterThan(0.07);
+      expect(stAt(e, 'V3')).toBeGreaterThanOrEqual(0.075);
+      expect(stAt(e, 'V3')).toBeLessThanOrEqual(0.125);
       expect(stAt(e, 'V4')).toBeLessThan(0.1);
       for (const l of ['V5', 'V6'] as const) expect(Math.abs(stAt(e, l)), l).toBeLessThan(0.06);
       expect(stAt(e, 'III')).toBeLessThanOrEqual(-0.27);
@@ -586,22 +587,28 @@ describe('i5: lateral STEMI on the tracings', () => {
       for (const l of ['V5', 'V6'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.15);
       for (const l of ['I', 'aVL'] as const) {
         expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
+        expect(stAt(e, l), l).toBeLessThanOrEqual(0.125);
         expect(stAt(e, l), l).toBeLessThan(stAt(e, 'V5'));
       }
       expect(stAt(e, 'III')).toBeLessThanOrEqual(-0.1);
-      expect(stAt(e, 'III')).toBeGreaterThan(-0.15);
+      expect(stAt(e, 'III')).toBeGreaterThanOrEqual(-0.125);
       expect(Math.abs(stAt(e, 'II'))).toBeLessThan(0.03);
       for (const l of ['V1', 'V2', 'aVR'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
       for (const l of ['V1', 'V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThan(0.01);
     }
   });
-  it('injury sweep notes (J point): aVL ≥ 1 mm with I under 1 mm at 0.15–0.21; I and aVL both ≥ 1 mm at 0.22–0.28; III deeper than aVL is high at every value', () => {
+  it('injury sweep notes (J point): aVL ≥ 1 mm with I under 1 mm at 0.15–0.21; I and aVL both ≥ 1 mm at 0.22–0.28 with III the biggest deflection of all twelve leads; III deeper than aVL is high at every value', () => {
     for (const v of [0.15, 0.21]) {
       const e = played('i5', 0, v);
       expect(stAt(e, 'aVL'), `${v} aVL`).toBeGreaterThanOrEqual(0.1);
       expect(stAt(e, 'I'), `${v} I`).toBeLessThan(0.1);
     }
-    for (const v of [0.22, 0.28]) for (const l of ['I', 'aVL'] as const) expect(stAt(played('i5', 0, v), l), `${v} ${l}`).toBeGreaterThanOrEqual(0.1);
+    for (const v of [0.22, 0.28]) {
+      const e = played('i5', 0, v);
+      for (const l of ['I', 'aVL'] as const) expect(stAt(e, l), `${v} ${l}`).toBeGreaterThanOrEqual(0.1);
+      const others = ALL.filter((l) => l !== 'III').map((l) => Math.abs(stAt(e, l)));
+      expect(-stAt(e, 'III'), `${v}: III the biggest deflection`).toBeGreaterThan(Math.max(...others));
+    }
     for (const v of [0.15, 0.21, 0.22, 0.28]) {
       const e = played('i5', 0, v);
       expect(-stAt(e, 'III'), `${v}`).toBeGreaterThan(stAt(e, 'aVL'));
@@ -617,11 +624,11 @@ describe('i5: lateral STEMI on the tracings', () => {
       expect(stAt(e, l), l).toBeLessThanOrEqual(0.2);
     }
     for (const l of ['I', 'aVL'] as const) {
-      expect(stAt(e, l), l).toBeGreaterThan(0.08);
-      expect(stAt(e, l), l).toBeLessThan(0.14);
+      expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.075);
+      expect(stAt(e, l), l).toBeLessThanOrEqual(0.125);
     }
-    expect(stAt(e, 'III')).toBeLessThan(-0.08);
-    expect(stAt(e, 'III')).toBeGreaterThan(-0.14);
+    expect(stAt(e, 'III')).toBeLessThanOrEqual(-0.075);
+    expect(stAt(e, 'III')).toBeGreaterThanOrEqual(-0.125);
     expect(Math.abs(stAt(e, 'II'))).toBeLessThan(0.03);
     for (const l of ['V1', 'V2'] as const) expect(stAt(e, l), l).toBeLessThan(-0.05);
   });
@@ -632,7 +639,8 @@ describe('i5: lateral STEMI on the tracings', () => {
     expect(stAt(e, 'V2')).toBeGreaterThan(0.12);
     expect(stAt(e, 'V2')).toBeGreaterThanOrEqual(stAt(e, 'V1') - 0.02);
     expect(stAt(e, 'V3')).toBeLessThan(stAt(e, 'V2'));
-    expect(stAt(e, 'V3')).toBeGreaterThan(0.07);
+    expect(stAt(e, 'V3')).toBeGreaterThanOrEqual(0.075);
+    expect(stAt(e, 'V3')).toBeLessThanOrEqual(0.125);
     expect(stAt(e, 'V4')).toBeLessThan(0.1);
     for (const l of ['V5', 'V6'] as const) expect(Math.abs(stAt(e, l)), l).toBeLessThan(0.06);
   });
