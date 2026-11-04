@@ -521,8 +521,31 @@ describe('i4: inferior and RV infarction on the tracings', () => {
     expect(stAt(e, 'V4R')).toBeGreaterThanOrEqual(0.05);
     expect(stAt(e, 'III')).toBeGreaterThan(Math.max(stAt(e, 'II'), stAt(e, 'aVF')));
   });
-  it('posterior extension: V1–V4 depressed (deepest in V3), upright T in V3, III > II with I and aVL depressed and V5–V6 not elevated (dominant RCA)', () => {
-    const e = ecgOf(blocksOf('i4', 'ecg')[0].ecg);
+  it('film: RCA frame = the hook with V1 flat; LCx II ≥ III with I flat, V5–V6 rising and aVL down; RV frame V1 about 1 mm over an inferior STEMI', () => {
+    expect(blocksOf('i4', 'film')[0].frames[0].ecg).toEqual(blocksOf('i4', 'hook')[0].ecg);
+    expect(Math.abs(stAt(frame('i4', 0, 0), 'V1'))).toBeLessThan(0.04);
+    const lcx = frame('i4', 0, 1);
+    expect(stAt(lcx, 'II')).toBeGreaterThanOrEqual(stAt(lcx, 'III'));
+    expect(Math.abs(stAt(lcx, 'I'))).toBeLessThan(0.03);
+    for (const l of ['V5', 'V6'] as const) expect(stAt(lcx, l), l).toBeGreaterThan(0.05);
+    expect(stAt(lcx, 'aVL')).toBeLessThan(-0.05);
+    const rv = frame('i4', 0, 2);
+    expect(stAt(rv, 'V1')).toBeGreaterThanOrEqual(0.08);
+    expect(stAt(rv, 'V1')).toBeLessThan(0.14);
+    expect(stAt(rv, 'III')).toBeGreaterThan(stAt(rv, 'II'));
+  });
+  it('injury sweep notes: III above II and aVL below the baseline at every value; I and aVL deeper at 0.40 than at 0.25', () => {
+    for (const v of [0.15, 0.2, 0.24, 0.25, 0.32, 0.4]) {
+      const e = played('i4', 0, v);
+      expect(stAt(e, 'III'), `${v}`).toBeGreaterThan(stAt(e, 'II') + 0.02);
+      expect(stAt(e, 'aVL'), `${v}`).toBeLessThan(-0.05);
+    }
+    const [lo, hi] = [played('i4', 0, 0.25), played('i4', 0, 0.4)];
+    for (const l of ['I', 'aVL'] as const) expect(stAt(hi, l), l).toBeLessThan(stAt(lo, l) - 0.03);
+    for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(hi, l), l).toBeGreaterThan(stAt(lo, l) + 0.05);
+  });
+  it('posterior extension frame: V1–V4 depressed (deepest in V3), upright T in V3, III > II with I and aVL depressed and V5–V6 not elevated (dominant RCA)', () => {
+    const e = frame('i4', 0, 3);
     for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
     for (const l of ['V1', 'V2', 'V4'] as const) expect(stAt(e, 'V3'), l).toBeLessThan(stAt(e, l));
     expect(tUpright(e, 'V3')).toBe(true);
