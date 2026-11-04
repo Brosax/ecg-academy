@@ -16,10 +16,12 @@ import t5 from '../../src/course/lessons/t5';
 import t6 from '../../src/course/lessons/t6';
 import t7 from '../../src/course/lessons/t7';
 import { realisedDials, startDials } from '../../src/course/live';
+import { baselineBefore, qrsWaves } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { Ecg } from '../../src/core/ecg';
 import type { L10n } from '../../src/core/l10n';
 import type { StdLead } from '../../src/core/leads';
+import type { RegionId } from '../../src/core/regions';
 import type { EcgSource } from '../../src/practice/api';
 import { generateItem } from '../../src/practice';
 import { generate, scenarios, type SynthRequest } from '../../src/synth';
@@ -49,6 +51,15 @@ function sourcesOf(lesson: Lesson): { readonly path: string; readonly src: EcgSo
         break;
       case 'contrast':
         out.push({ path: `${p}.left`, src: b.left.ecg }, { path: `${p}.right`, src: b.right.ecg });
+        break;
+      case 'film':
+        b.frames.forEach((f, k) => out.push({ path: `${p}.frames[${k}]`, src: f.ecg }));
+        break;
+      case 'check':
+        if ('inline' in b.item) {
+          out.push({ path: `${p}.item`, src: b.item.inline.ecg });
+          if (b.item.inline.kind === 'compare') out.push({ path: `${p}.item.ecg2`, src: b.item.inline.ecg2 });
+        }
         break;
       default:
         break;
@@ -258,6 +269,49 @@ function excursion(e: Ecg, lead: StdLead, tRef: number, t0: number, t1: number):
 }
 const rrs = (e: Ecg): number[] => e.truth!.beats.slice(1).map((b, i) => b.qrsOn - e.truth!.beats[i].qrsOn);
 const mid = (e: Ecg) => e.truth!.beats[Math.floor(e.truth!.beats.length / 2)];
+/** what a playing live block shows with its played dial at `v` (its other dials at their start values) */
+function played(id: string, i: number, v: number): Ecg {
+  const b = blocksOf(id, 'live')[i];
+  if (!b.play) throw new Error(`${id}: live block ${i} does not play`);
+  const sc = scenarios().find((s) => s.id === b.scenario);
+  if (!sc) throw new Error(`unknown scenario ${b.scenario}`);
+  const dials = { ...startDials(sc, b.variant, b.dials.map((d) => d.id), b.play), [b.play.dial]: v };
+  return ecgOf({ scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed, dials });
+}
+const frames = (id: string, k: number): Ecg[] => blocksOf(id, 'film')[k].frames.map((f) => ecgOf(f.ecg));
+/** largest deviation of a lead over [t0, t1] from the straight line joining its ends (a wave riding on a slope) */
+function detrended(e: Ecg, lead: StdLead, t0: number, t1: number): number {
+  const a = at(e, lead, t0);
+  const z = at(e, lead, t1);
+  let best = 0;
+  for (let t = t0; t <= t1; t += 2) {
+    const d = at(e, lead, t) - (a + ((z - a) * (t - t0)) / (t1 - t0));
+    if (Math.abs(d) > Math.abs(best)) best = d;
+  }
+  return best;
+}
+/** P onset of each beat minus the T end of the beat before (negative: the P starts on the previous T) */
+const pAfterT = (e: Ecg): number[] => e.truth!.beats.slice(1).map((b, i) => b.pOn! - e.truth!.beats[i].tOff);
+const hiddenShare = (e: Ecg): number => e.truth!.atrial.filter((a) => !a.visible).length / e.truth!.atrial.length;
+/** median peak-to-peak of the baseline between T end + 40 ms and the next QRS − 40 ms (f or F waves), mV */
+function diastolicP2p(e: Ecg, lead: StdLead): number {
+  const b = e.truth!.beats;
+  const out: number[] = [];
+  for (let i = 0; i + 1 < b.length; i++) {
+    const t0 = b[i].tOff + 40;
+    const t1 = b[i + 1].qrsOn - 40;
+    if (t1 - t0 < 150) continue;
+    let mx = -Infinity;
+    let mn = Infinity;
+    for (let t = t0; t <= t1; t += 2) {
+      mx = Math.max(mx, at(e, lead, t));
+      mn = Math.min(mn, at(e, lead, t));
+    }
+    out.push(mx - mn);
+  }
+  return out.sort((x, y) => x - y)[Math.floor(out.length / 2)];
+}
+const median = (xs: readonly number[]): number => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)];
 
 describe('t1 on the tracings', () => {
   it('worked AVRT: ~190/min, retrograde P′ ~115 ms after QRS onset, negative in I and aVL, positive in III and aVF', () => {
@@ -285,6 +339,88 @@ describe('t1 on the tracings', () => {
     expect(r).toBeGreaterThan(0.035);
     expect(r).toBeLessThan(0.1);
   });
+  it('P′ film: sinus P upright in II with PR about 150 ms and RP > PR; AVNRT P′ starts inside the QRS with a pseudo-S in II; AVRT P′ after the QRS in II, RP about 115 ms and < P′R; AT P′ about 180/min, QRS about 90/min, each blocked P′ on the ST–T of the beat before', () => {
+    const [sinus, avnrt, avrt, at21] = frames('t1', 0);
+    const s = sinus.truth!;
+    const sb = mid(sinus);
+    expect(Math.abs(s.prMs! - 150)).toBeLessThan(5);
+    expect(detrended(sinus, 'II', sb.pOn!, sb.pOff!)).toBeGreaterThan(0.05);
+    for (const rr of rrs(sinus)) expect(rr - s.prMs!).toBeGreaterThan(s.prMs!);
+    const nb = mid(avnrt);
+    expect(nb.pOn! - nb.qrsOn).toBeGreaterThan(0);
+    expect(nb.pOn! - nb.qrsOn).toBeLessThan(avnrt.truth!.qrsMs);
+    expect(excursion(avnrt, 'II', nb.qrsOn, nb.qrsOff, nb.qrsOff + 40)).toBeLessThan(-0.1);
+    const vb = mid(avrt);
+    const rp = vb.pOn! - vb.qrsOn;
+    expect(Math.abs(rp - 115)).toBeLessThan(5);
+    expect(vb.pOn!).toBeGreaterThan(vb.qrsOff);
+    expect(detrended(avrt, 'II', vb.pOn!, vb.pOff!)).toBeGreaterThan(0.05);
+    for (const rr of rrs(avrt)) expect(rr - rp).toBeGreaterThan(rp);
+    const a = at21.truth!;
+    expect(Math.abs(a.atrialRateBpm! - 180)).toBeLessThan(3);
+    expect(Math.abs(a.hrBpm - 90)).toBeLessThan(2);
+    const blocked = a.atrial.filter((x) => x.conductedTo === null && x.t > a.beats[0].qrsOn && x.t < a.beats[a.beats.length - 1].qrsOn);
+    expect(blocked.length).toBeGreaterThanOrEqual(10);
+    for (const x of blocked) {
+      const prev = [...a.beats].reverse().find((b) => b.qrsOn < x.t)!;
+      expect(x.t).toBeGreaterThan(prev.qrsOff);
+      expect(x.t).toBeLessThan(prev.tOff);
+    }
+  });
+  it('sinus sweep notes: P clear of the previous T, PR about 150 ms and RP > PR at 102–124; P within 25 ms of the T end at 125–133; P starting before the T end on every beat, one P per QRS, at 134–150', () => {
+    for (const v of [102, 124]) {
+      const e = played('t1', 0, v);
+      expect(Math.min(...pAfterT(e)), `${v}`).toBeGreaterThan(0);
+      expect(Math.abs(e.truth!.prMs! - 150), `${v}`).toBeLessThan(5);
+      for (const rr of rrs(e)) expect(rr - e.truth!.prMs!, `${v}`).toBeGreaterThan(e.truth!.prMs!);
+    }
+    for (const v of [125, 133]) for (const g of pAfterT(played('t1', 0, v))) expect(Math.abs(g), `${v}`).toBeLessThan(25);
+    for (const v of [134, 150]) {
+      const e = played('t1', 0, v);
+      expect(Math.max(...pAfterT(e)), `${v}`).toBeLessThan(0);
+      expect(Math.abs(e.truth!.atrialRateBpm! - e.truth!.hrBpm), `${v}`).toBeLessThan(1);
+    }
+  });
+  it('AVRT heart: ventricles activated first, atria about 115 ms after QRS onset, the pathway highlighted', () => {
+    const e = ecgOf(blocksOf('t1', 'heart')[0].ecg);
+    const rs = e.regions!;
+    const b = mid(e);
+    const buf = new Float32Array(rs.ids.length);
+    const state = (id: RegionId, t: number): number => {
+      rs.stateAt(t, buf);
+      return buf[rs.ids.indexOf(id)];
+    };
+    const atriaStart = (t: number): boolean => (['ra', 'la'] as const).some((id) => state(id, t) > 0 && state(id, t) < 1);
+    expect(state('lv-mid-anteroseptal', b.qrsOn + 60)).toBeGreaterThanOrEqual(1);
+    expect(atriaStart(b.qrsOn + 60)).toBe(false);
+    let t = b.qrsOn + 60;
+    while (!atriaStart(t) && t < b.qrsOn + 300) t += 2;
+    expect(Math.abs(t - b.qrsOn - 115)).toBeLessThan(5);
+    expect(rs.highlights['lv-basal-anterolateral']).toBe('pathway');
+  });
+  it('flutter sweep notes: 2:1 at 150/min with about half the F waves hidden; 3:1 at 100/min; 4:1 at 75/min with most F waves showing; atria at 300/min throughout', () => {
+    for (const [v, hr] of [[2, 150], [3, 100], [4, 75]] as const) {
+      const e = played('t1', 1, v);
+      expect(Math.abs(e.truth!.hrBpm - hr), `${v}:1`).toBeLessThan(1);
+      expect(e.truth!.atrialRateBpm, `${v}:1`).toBe(300);
+      expect(Math.max(...rrs(e)) - Math.min(...rrs(e)), `${v}:1 regular`).toBeLessThan(10);
+    }
+    expect(Math.abs(hiddenShare(played('t1', 1, 2)) - 0.5)).toBeLessThan(0.1);
+    expect(hiddenShare(played('t1', 1, 4))).toBeLessThan(0.35);
+  });
+  it('long-RP contrast: RP > PR in both; atypical AVNRT P′ negative in II, III and aVF; sinus P upright in II', () => {
+    const c = blocksOf('t1', 'contrast')[0];
+    const [atyp, sinus] = [ecgOf(c.left.ecg), ecgOf(c.right.ecg)];
+    for (const e of [atyp, sinus]) {
+      const b = mid(e);
+      const pr = b.qrsOn - b.pOn!;
+      for (const rr of rrs(e)) expect(rr - pr).toBeGreaterThan(pr);
+    }
+    const ab = mid(atyp);
+    for (const l of ['II', 'III', 'aVF'] as const) expect(detrended(atyp, l, ab.pOn!, ab.pOff!), l).toBeLessThan(-0.1);
+    const sb = mid(sinus);
+    expect(detrended(sinus, 'II', sb.pOn!, sb.pOff!)).toBeGreaterThan(0.05);
+  });
 });
 
 describe('t2 on the tracings', () => {
@@ -295,14 +431,141 @@ describe('t2 on the tracings', () => {
     for (const r of ratios) expect([3, 4, 5]).toContain(r);
     expect(new Set(ratios).size).toBeGreaterThanOrEqual(2);
   });
+  it('laddergram: the worked flutter tracing, an F every 200 ms, every 3rd, 4th or 5th F conducted', () => {
+    const fig = blocksOf('t2', 'figure').find((b) => b.figure.id === 'laddergram')!;
+    expect(fig.ecg).toEqual(blocksOf('t2', 'worked')[0].ecg);
+    const atr = ecgOf(fig.ecg!).truth!.atrial;
+    for (let i = 1; i < atr.length; i++) expect(Math.abs(atr[i].t - atr[i - 1].t - 200)).toBeLessThan(3);
+    const conducted = atr.flatMap((a, i) => (a.conductedTo !== null ? [i] : []));
+    for (let k = 1; k < conducted.length; k++) expect([3, 4, 5]).toContain(conducted[k] - conducted[k - 1]);
+  });
+  it('irregular film: AF RR with no pattern; flutter = the worked tracing; two PACs with P′ negative in II and a less-than-compensatory pause; sinus arrhythmia with one P and one PR; bigeminy pairs a sinus beat with an early wide QRS that has no P', () => {
+    const film = blocksOf('t2', 'film')[0];
+    const [af, , pac, sa, big] = frames('t2', 0);
+    expect(af.truth!.rhythm).toBe('atrial-fibrillation');
+    expect(Math.max(...rrs(af)) - Math.min(...rrs(af))).toBeGreaterThan(300);
+    expect(film.frames[1].ecg).toEqual(blocksOf('t2', 'worked')[0].ecg);
+    const pb = pac.truth!.beats;
+    const early = pb.flatMap((b, i) => (b.kind === 'atrial' ? [i] : []));
+    expect(early.length).toBe(2);
+    const sinusRr = median(pb.slice(1).flatMap((b, i) => (b.kind === 'sinus' && pb[i].kind === 'sinus' ? [b.qrsOn - pb[i].qrsOn] : [])));
+    const s = pb.find((b) => b.kind === 'sinus')!;
+    expect(detrended(pac, 'II', s.pOn!, s.pOff!)).toBeGreaterThan(0.05);
+    for (const i of early) {
+      expect(detrended(pac, 'II', pb[i].pOn!, pb[i].pOff!), `PAC ${i}`).toBeLessThan(-0.05);
+      expect(pb[i].qrsOn - pb[i - 1].qrsOn, `PAC ${i} early`).toBeLessThan(0.8 * sinusRr);
+      expect(pb[i + 1].qrsOn - pb[i - 1].qrsOn, `PAC ${i} pause`).toBeLessThan(2 * sinusRr - 100);
+    }
+    const sb = sa.truth!.beats;
+    expect(sb.every((b) => b.kind === 'sinus')).toBe(true);
+    const prs = sb.map((b) => b.qrsOn - b.pOn!);
+    expect(Math.max(...prs) - Math.min(...prs)).toBeLessThan(5);
+    expect(Math.max(...rrs(sa)) - Math.min(...rrs(sa))).toBeGreaterThan(200);
+    const bb = big.truth!.beats;
+    bb.forEach((b, i) => expect(b.kind, `beat ${i}`).toBe(bb[0].kind === 'ventricular' ? (i % 2 ? 'sinus' : 'ventricular') : i % 2 ? 'ventricular' : 'sinus'));
+    const pvcs = bb.filter((b) => b.kind === 'ventricular');
+    for (const b of pvcs) {
+      expect(b.qrsOff - b.qrsOn).toBeGreaterThanOrEqual(120);
+      expect(b.pOn).toBeNull();
+    }
+    const coupling = bb.flatMap((b, i) => (b.kind === 'ventricular' && i > 0 ? [b.qrsOn - bb[i - 1].qrsOn] : []));
+    expect(Math.max(...coupling) - Math.min(...coupling)).toBeLessThan(10);
+    const after = bb.flatMap((b, i) => (b.kind === 'ventricular' && i + 1 < bb.length ? [bb[i + 1].qrsOn - b.qrsOn] : []));
+    expect(Math.min(...after)).toBeGreaterThan(2 * Math.max(...coupling));
+  });
+  it('f-wave sweep notes: V1 f waves over 1 mm at 0.7–0.9 and under 1 mm at 0.2–0.45; the RR identical at every setting', () => {
+    for (const v of [0.7, 0.9]) expect(diastolicP2p(played('t2', 0, v), 'V1'), `${v}`).toBeGreaterThan(0.1);
+    for (const v of [0.2, 0.45]) expect(diastolicP2p(played('t2', 0, v), 'V1'), `${v}`).toBeLessThan(0.1);
+    const ref = rrs(played('t2', 0, 0.9));
+    for (const v of [0.2, 0.46, 0.69]) expect(rrs(played('t2', 0, v)), `${v}`).toEqual(ref);
+    expect(played('t2', 0, 0.2).truth!.rhythm).toBe('atrial-fibrillation');
+  });
+  it('rate film: about 130/min irregular; about 45/min irregular; about 45/min regular escape with f waves and complete AV block; pre-excited AF about 190/min, wide QRS varying beat to beat, shortest RR about 225 ms', () => {
+    const [untreated, slow, regular, pre] = frames('t2', 1);
+    expect(Math.abs(untreated.truth!.hrBpm - 130)).toBeLessThanOrEqual(5);
+    expect(Math.max(...rrs(untreated)) - Math.min(...rrs(untreated))).toBeGreaterThan(300);
+    expect(Math.abs(slow.truth!.hrBpm - 45)).toBeLessThanOrEqual(3);
+    expect(Math.max(...rrs(slow)) - Math.min(...rrs(slow))).toBeGreaterThan(300);
+    const r = regular.truth!;
+    expect(Math.abs(r.hrBpm - 45)).toBeLessThanOrEqual(3);
+    expect(Math.max(...rrs(regular)) - Math.min(...rrs(regular))).toBeLessThan(10);
+    expect(r.findings).toContain('av-block-3');
+    expect(r.beats.every((b) => b.kind.startsWith('escape'))).toBe(true);
+    expect(diastolicP2p(regular, 'V1')).toBeGreaterThan(0.05);
+    const p = pre.truth!;
+    expect(Math.abs(p.hrBpm - 190)).toBeLessThanOrEqual(5);
+    expect(Math.abs(Math.min(...rrs(pre)) - 225)).toBeLessThan(5);
+    const widths = p.beats.map((b) => b.qrsOff - b.qrsOn);
+    expect(Math.max(...widths)).toBeGreaterThanOrEqual(140);
+    expect(Math.max(...widths) - Math.min(...widths)).toBeGreaterThan(30);
+    expect(p.findings).toContain('wpw');
+  });
 });
 
 describe('t3 on the tracings', () => {
   it('hook and worked: 2:1 flutter, ventricles 150/min, atria 300/min', () => {
-    for (const src of [blocksOf('t3', 'hook')[0].ecg, blocksOf('t3', 'worked')[0].ecg]) {
+    for (const src of [blocksOf('t3', 'hook')[0].ecg, blocksOf('t3', 'worked')[0].ecg, blocksOf('t3', 'heart')[0].ecg]) {
       const t = ecgOf(src).truth!;
       expect(Math.abs(t.hrBpm - 150)).toBeLessThan(3);
       expect(t.atrialRateBpm).toBe(300);
+    }
+  });
+  it('laddergram: the hook strip, an F every 200 ms, every second F conducted and visible, every blocked F hidden', () => {
+    const fig = blocksOf('t3', 'figure').find((b) => b.figure.id === 'laddergram')!;
+    expect(fig.ecg).toEqual(blocksOf('t3', 'hook')[0].ecg);
+    const t = ecgOf(fig.ecg!).truth!;
+    const inStrip = t.atrial.filter((a) => a.t > t.beats[0].qrsOn && a.t < t.beats[t.beats.length - 1].qrsOn);
+    for (let i = 1; i < t.atrial.length; i++) expect(Math.abs(t.atrial[i].t - t.atrial[i - 1].t - 200)).toBeLessThan(3);
+    inStrip.forEach((a, i) => {
+      expect(a.conductedTo === null, `F ${i}`).toBe(inStrip[0].conductedTo === null ? i % 2 === 0 : i % 2 === 1);
+      expect(a.visible, `F ${i}`).toBe(a.conductedTo !== null);
+    });
+  });
+  it('direction film: one heart; counter-clockwise F negative in II, III, aVF and upright in V1; clockwise F positive inferiorly and negative in V1', () => {
+    const film = blocksOf('t3', 'film')[0];
+    const [ccw, cw] = film.frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req : null));
+    expect({ ...cw!, variant: undefined }).toEqual({ ...ccw!, variant: undefined });
+    const [a, b] = frames('t3', 0);
+    const swing = (e: Ecg, lead: StdLead) => {
+      const bs = e.truth!.beats;
+      const up: number[] = [];
+      const dn: number[] = [];
+      for (let i = 0; i + 1 < bs.length; i++) {
+        const xs: number[] = [];
+        for (let t = bs[i].tOff + 30; t <= bs[i + 1].qrsOn - 30; t += 2) xs.push(at(e, lead, t));
+        if (xs.length < 100) continue;
+        const m = median(xs);
+        up.push(Math.max(...xs) - m);
+        dn.push(m - Math.min(...xs));
+      }
+      return { up: median(up), dn: median(dn) };
+    };
+    for (const l of ['II', 'III', 'aVF'] as const) {
+      expect(swing(a, l).dn, `ccw ${l}`).toBeGreaterThan(1.5 * swing(a, l).up);
+      expect(swing(b, l).up, `cw ${l}`).toBeGreaterThan(1.5 * swing(b, l).dn);
+    }
+    expect(swing(a, 'V1').up).toBeGreaterThan(1.5 * swing(a, 'V1').dn);
+    expect(swing(b, 'V1').dn).toBeGreaterThan(1.5 * swing(b, 'V1').up);
+    expect(a.truth!.rhythm).toBe('atrial-flutter');
+    expect(b.truth!.rhythm).toBe('atrial-flutter');
+  });
+  it('ratio sweep notes: 2:1 at 150/min with about half the F waves hidden; 3:1 at 100/min with more F showing; 4:1 at 75/min with three F per RR; atria at 300/min throughout', () => {
+    const [two, three, four] = [2, 3, 4].map((v) => played('t3', 0, v));
+    for (const [e, hr] of [[two, 150], [three, 100], [four, 75]] as const) {
+      expect(Math.abs(e.truth!.hrBpm - hr), `${hr}`).toBeLessThan(1);
+      expect(e.truth!.atrialRateBpm, `${hr}`).toBe(300);
+    }
+    expect(Math.abs(hiddenShare(two) - 0.5)).toBeLessThan(0.1);
+    expect(hiddenShare(three)).toBeLessThan(hiddenShare(two) - 0.1);
+    for (const rr of rrs(four)) expect(Math.round(rr / 200)).toBe(4);
+    expect(hiddenShare(four)).toBeLessThan(0.35);
+  });
+  it('variable-block strip: every RR within 0.2 F–F of a whole multiple of 200 ms, from 3 to 5', () => {
+    const e = ecgOf(blocksOf('t3', 'ecg')[0].ecg);
+    expect(e.truth!.atrialRateBpm).toBe(300);
+    for (const rr of rrs(e)) {
+      expect(Math.abs(rr / 200 - Math.round(rr / 200)), `${rr}`).toBeLessThan(0.2);
+      expect([3, 4, 5]).toContain(Math.round(rr / 200));
     }
   });
 });
@@ -317,6 +580,73 @@ describe('t4 on the tracings', () => {
     for (const l of ['I', 'aVL'] as const) expect(excursion(e, l, b.qrsOn, b.qrsOn, b.qrsOn + 40), l).toBeLessThan(-0.1);
     expect(excursion(e, 'V1', b.qrsOn, b.qrsOn, b.qrsOn + 60)).toBeGreaterThan(0.3);
   });
+  it('WPW heart: the region at the pathway depolarises at QRS onset, at least 20 ms before any other ventricular region', () => {
+    const e = ecgOf(blocksOf('t4', 'heart')[0].ecg);
+    const rs = e.regions!;
+    const b = mid(e);
+    const buf = new Float32Array(rs.ids.length);
+    const first = new Map<string, number>();
+    for (let t = b.qrsOn - 40; t < b.qrsOn + 150; t += 2) {
+      rs.stateAt(t, buf);
+      rs.ids.forEach((id, k) => {
+        if (!first.has(id) && /^(lv|rv)-/.test(id) && buf[k] > 0 && buf[k] < 1) first.set(id, t - b.qrsOn);
+      });
+    }
+    expect(rs.highlights['lv-basal-anterolateral']).toBe('pathway');
+    const ap = first.get('lv-basal-anterolateral')!;
+    expect(Math.abs(ap)).toBeLessThanOrEqual(10);
+    for (const [id, t] of first) if (id !== 'lv-basal-anterolateral') expect(t, id).toBeGreaterThanOrEqual(ap + 20);
+  });
+  it('mimic film: every frame is the hook ECG; V1 wide and mainly positive; negative delta in I and aVL; T opposite to the QRS in II, III, aVF and V1–V6; I nearly isoelectric, aVF upright, axis beyond +90°', () => {
+    const hook = blocksOf('t4', 'hook')[0].ecg;
+    for (const f of blocksOf('t4', 'film')[0].frames) expect(f.ecg).toEqual(hook);
+    const e = ecgOf(hook);
+    const b = mid(e);
+    const net = (lead: StdLead, t0: number, t1: number) => {
+      const a = e.signal.leads[lead];
+      const base = baselineBefore(a, e.signal.fs, b.qrsOn);
+      let mx = -Infinity;
+      let mn = Infinity;
+      for (let t = t0; t <= t1; t += 2) {
+        mx = Math.max(mx, at(e, lead, t) - base);
+        mn = Math.min(mn, at(e, lead, t) - base);
+      }
+      return { net: mx + mn, p2p: mx - mn };
+    };
+    expect(e.truth!.qrsMs).toBeGreaterThanOrEqual(120);
+    expect(net('V1', b.qrsOn, b.qrsOff).net).toBeGreaterThan(0.1);
+    for (const l of ['I', 'aVL'] as const) expect(excursion(e, l, b.qrsOn, b.qrsOn, b.qrsOn + 30), l).toBeLessThan(-0.1);
+    for (const l of ['II', 'III', 'aVF', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6'] as const) {
+      expect(net(l, b.qrsOn, b.qrsOff).net, `${l} QRS`).toBeGreaterThan(0.1);
+      expect(net(l, b.j + 40, b.tOff).net, `${l} T`).toBeLessThan(-0.04);
+    }
+    const i = net('I', b.qrsOn, b.qrsOff);
+    expect(Math.abs(i.net)).toBeLessThan(0.25 * i.p2p);
+    expect(net('aVF', b.qrsOn, b.qrsOff).net).toBeGreaterThan(0.3);
+    expect(e.truth!.axisDeg.qrs).toBeGreaterThan(90);
+  });
+  it('pathway film: sinus PR about 115 ms with QRS about 120 ms; orthodromic AVRT narrow and regular at about 190/min with the P′ after the QRS; antidromic AVRT regular, about 185/min, QRS about 155 ms; pre-excited AF about 200/min, irregular, QRS width varying with narrower beats, shortest RR about 210 ms', () => {
+    const [sinus, ortho, anti, af] = frames('t4', 1);
+    expect(Math.abs(sinus.truth!.prMs! - 115)).toBeLessThan(5);
+    expect(Math.abs(sinus.truth!.qrsMs - 120)).toBeLessThan(5);
+    expect(sinus.truth!.findings).toContain('wpw');
+    const o = ortho.truth!;
+    expect(Math.abs(o.hrBpm - 190)).toBeLessThan(5);
+    expect(o.qrsMs).toBeLessThan(110);
+    expect(Math.max(...rrs(ortho)) - Math.min(...rrs(ortho))).toBeLessThan(10);
+    expect(mid(ortho).pOn!).toBeGreaterThan(mid(ortho).qrsOff);
+    const a = anti.truth!;
+    expect(Math.abs(a.hrBpm - 185)).toBeLessThan(5);
+    expect(Math.abs(a.qrsMs - 155)).toBeLessThan(5);
+    expect(Math.max(...rrs(anti)) - Math.min(...rrs(anti))).toBeLessThan(10);
+    const p = af.truth!;
+    expect(Math.abs(p.hrBpm - 200)).toBeLessThan(5);
+    expect(Math.abs(Math.min(...rrs(af)) - 210)).toBeLessThan(5);
+    expect(Math.max(...rrs(af)) - Math.min(...rrs(af))).toBeGreaterThan(150);
+    const widths = p.beats.map((x) => x.qrsOff - x.qrsOn);
+    expect(Math.max(...widths)).toBeGreaterThanOrEqual(150);
+    expect(widths.filter((w) => w < 110).length).toBeGreaterThanOrEqual(2);
+  });
 });
 
 describe('t5 on the tracings', () => {
@@ -330,12 +660,124 @@ describe('t5 on the tracings', () => {
     expect(t.findings).toContain('av-dissociation');
     expect(t.atrial.filter((a) => a.conductedTo === null && a.visible).length).toBeGreaterThanOrEqual(3);
   });
-  it('the capture/fusion strip has captures at beats 7 and 22 and a fusion beat at 9', () => {
-    const blk = blocksOf('t5', 'ecg').find((b) => b.ecg.kind === 'synth' && b.ecg.req.variant === 'captures')!;
-    const beats = ecgOf(blk.ecg).truth!.beats;
+  it('capture film: one strip in every frame; sinus P at about 68/min dissociated; narrow upright early captures at beats 7 and 22; a fusion beat of about 115 ms at beat 9, between the capture and the VT widths', () => {
+    const film = blocksOf('t5', 'film')[0];
+    for (const f of film.frames) expect(f.ecg).toEqual(film.frames[0].ecg);
+    const e = ecgOf(film.frames[0].ecg);
+    const t = e.truth!;
+    const beats = t.beats;
+    expect(Math.abs(t.atrialRateBpm! - 68)).toBeLessThan(3);
+    expect(t.findings).toContain('av-dissociation');
     expect(beats[7].kind).toBe('capture');
     expect(beats[9].kind).toBe('fusion');
     expect(beats[22].kind).toBe('capture');
+    const w = (i: number) => beats[i].qrsOff - beats[i].qrsOn;
+    const netII = (i: number) => {
+      const a = e.signal.leads.II;
+      const base = baselineBefore(a, e.signal.fs, beats[i].qrsOn);
+      let mx = -Infinity;
+      let mn = Infinity;
+      for (let x = beats[i].qrsOn; x <= beats[i].qrsOff; x += 2) {
+        mx = Math.max(mx, at(e, 'II', x) - base);
+        mn = Math.min(mn, at(e, 'II', x) - base);
+      }
+      return mx + mn;
+    };
+    const vtRr = median(rrs(e));
+    for (const i of [7, 22]) {
+      expect(w(i), `capture ${i}`).toBeLessThan(100);
+      expect(netII(i), `capture ${i}`).toBeGreaterThan(0.2);
+      expect(beats[i].qrsOn - beats[i - 1].qrsOn, `capture ${i} early`).toBeLessThan(vtRr - 10);
+    }
+    expect(netII(5)).toBeLessThan(-0.2);
+    expect(Math.abs(w(9) - 115)).toBeLessThan(5);
+    expect(w(9)).toBeGreaterThan(w(7));
+    expect(w(9)).toBeLessThan(w(5));
+  });
+  it('VT heart: activation starts at the inferior scar focus and spreads region by region over most of a QRS of about 160 ms; the atria stay sinus and dissociated', () => {
+    const e = ecgOf(blocksOf('t5', 'heart')[0].ecg);
+    const rs = e.regions!;
+    const b = mid(e);
+    const buf = new Float32Array(rs.ids.length);
+    const first = new Map<string, number>();
+    for (let t = b.qrsOn - 40; t < b.qrsOn + 250; t += 2) {
+      rs.stateAt(t, buf);
+      rs.ids.forEach((id, k) => {
+        if (!first.has(id) && /^(lv|rv)-/.test(id) && buf[k] > 0 && buf[k] < 1) first.set(id, t - b.qrsOn);
+      });
+    }
+    expect(rs.highlights['lv-apical-inferior']).toBe('focus');
+    expect(rs.highlights['lv-mid-inferior']).toBe('infarct');
+    expect(Math.abs(first.get('lv-apical-inferior')!)).toBeLessThanOrEqual(4);
+    expect(Math.min(...first.values())).toBe(first.get('lv-apical-inferior'));
+    expect(Math.max(...first.values())).toBeGreaterThan(80);
+    expect(Math.abs(e.truth!.qrsMs - 160)).toBeLessThan(5);
+    expect(e.truth!.atrial.every((a) => a.kind === 'sinus' && a.conductedTo === null)).toBe(true);
+  });
+  it('VT sweep notes: 75–100 ms of flat line and some dissociated P visible at 140–150 (sinus about 80/min); under 25 ms and at most 2 P visible at 185–200; QRS about 160 ms with a northwest axis at both ends', () => {
+    const flat = (e: Ecg) => median(rrs(e)) - (mid(e).tOff - mid(e).qrsOn);
+    const visibleP = (e: Ecg) => e.truth!.atrial.filter((a) => a.conductedTo === null && a.visible).length;
+    for (const v of [140, 150]) {
+      const e = played('t5', 0, v);
+      expect(flat(e), `${v}`).toBeGreaterThan(75);
+      expect(flat(e), `${v}`).toBeLessThan(100);
+      expect(visibleP(e), `${v}`).toBeGreaterThanOrEqual(3);
+      expect(Math.abs(e.truth!.atrialRateBpm! - 80), `${v}`).toBeLessThan(3);
+    }
+    for (const v of [185, 200]) {
+      const e = played('t5', 0, v);
+      expect(flat(e), `${v}`).toBeLessThan(25);
+      expect(visibleP(e), `${v}`).toBeLessThanOrEqual(2);
+    }
+    for (const v of [140, 200]) {
+      const t = played('t5', 0, v).truth!;
+      expect(Math.abs(t.qrsMs - 160), `${v}`).toBeLessThan(5);
+      expect(t.axisDeg.qrs, `${v}`).toBeLessThan(-90);
+      expect(t.rhythm).toBe('vt-monomorphic');
+    }
+  });
+  it('mimics film: an early aberrant PAC with rsR′ in V1 and qRS in V6; pre-excited AF irregular with shortest RR about 235 ms; every QRS paced and wide; right-arm artefact in I, II and aVR with III untouched and a steady RR', () => {
+    const [ab, pre, paced, art] = frames('t5', 1);
+    const bs = ab.truth!.beats;
+    const b = bs[6];
+    expect(b.kind).toBe('atrial');
+    expect(b.qrsOff - b.qrsOn).toBeGreaterThanOrEqual(120);
+    expect(b.qrsOn - bs[5].qrsOn).toBeLessThan(0.8 * median(rrs(ab)));
+    const labels = (lead: StdLead) => qrsWaves(ab.signal.leads[lead], ab.signal.fs, b.qrsOn, b.qrsOff).map((x) => x.label).join('');
+    expect(labels('V1')).toBe('rsR′');
+    expect(labels('V6')).toBe('qRS');
+    expect(Math.abs(Math.min(...rrs(pre)) - 235)).toBeLessThan(5);
+    expect(Math.max(...rrs(pre)) - Math.min(...rrs(pre))).toBeGreaterThan(150);
+    expect(paced.truth!.beats.every((x) => x.kind === 'paced-ventricular' && x.qrsOff - x.qrsOn >= 120)).toBe(true);
+    const artReq = blocksOf('t5', 'film')[1].frames[3].ecg;
+    if (artReq.kind !== 'synth') throw new Error('synthetic artefact frame expected');
+    const clean = ecgOf({ ...artReq.req, recording: { noise: { motion: { electrode: 'RA', tMs: 2600, durMs: 3600, mv: 0 } } } });
+    const diff = (l: StdLead) => Math.max(...art.signal.leads[l].map((x, i) => Math.abs(x - clean.signal.leads[l][i])));
+    expect(diff('III')).toBeLessThan(1e-6);
+    for (const l of ['I', 'II', 'aVR'] as const) expect(diff(l), l).toBeGreaterThan(0.2);
+    expect(Math.max(...rrs(art)) - Math.min(...rrs(art))).toBeLessThan(60);
+  });
+  it('VT vs antidromic AVRT contrast: V4–V6 mainly negative in the VT and positive in the AVRT; ventricular flutter about 300/min with a cycle of about 200 ms', () => {
+    const c = blocksOf('t5', 'contrast')[0];
+    const [vt, avrt] = [ecgOf(c.left.ecg), ecgOf(c.right.ecg)];
+    const net = (e: Ecg, lead: StdLead) => {
+      const b = mid(e);
+      const base = baselineBefore(e.signal.leads[lead], e.signal.fs, b.qrsOn);
+      let mx = -Infinity;
+      let mn = Infinity;
+      for (let x = b.qrsOn; x <= b.qrsOff; x += 2) {
+        mx = Math.max(mx, at(e, lead, x) - base);
+        mn = Math.min(mn, at(e, lead, x) - base);
+      }
+      return mx + mn;
+    };
+    for (const l of ['V4', 'V5', 'V6'] as const) {
+      expect(net(vt, l), `VT ${l}`).toBeLessThan(-0.1);
+      expect(net(avrt, l), `AVRT ${l}`).toBeGreaterThan(0.1);
+    }
+    const vf = ecgOf(blocksOf('t5', 'ecg').find((b) => b.ecg.kind === 'synth' && b.ecg.req.scenario === 'ventricular-flutter')!.ecg);
+    expect(Math.abs(vf.truth!.hrBpm - 300)).toBeLessThan(5);
+    expect(Math.abs(median(rrs(vf)) - 200)).toBeLessThan(5);
   });
 });
 
@@ -351,21 +793,138 @@ describe('t6 on the tracings', () => {
     expect(left.rhythm).toBe('vt-polymorphic');
     expect(left.findings).not.toContain('long-qt');
   });
-  it('the artefact strip is sinus rhythm with regular QRS through the burst', () => {
-    const blk = blocksOf('t6', 'ecg').find((b) => b.ecg.kind === 'synth' && b.ecg.req.scenario === 'motion-artefact')!;
-    const e = ecgOf(blk.ecg);
-    expect(e.truth!.rhythm).toBe('sinus-rhythm');
-    for (const rr of rrs(e)) expect(Math.abs(rr - 830)).toBeLessThan(60);
+  it('artefact film: sinus rhythm with regular QRS through the burst (RR about 830 ms, marked beats inside it); the burst sits at about 3–6 s in II; with the electrode still the same heart beats identically and III never changes', () => {
+    const film = blocksOf('t6', 'film')[1];
+    expect(film.frames[1].ecg).toEqual(film.frames[0].ecg);
+    const [noisy, , still] = frames('t6', 1);
+    expect(noisy.truth!.rhythm).toBe('sinus-rhythm');
+    for (const rr of rrs(noisy)) expect(Math.abs(rr - 830)).toBeLessThan(60);
+    const meanRr = rrs(noisy).reduce((s, x) => s + x, 0) / rrs(noisy).length;
+    expect(Math.abs(meanRr - 830)).toBeLessThan(10);
+    for (const i of [4, 5]) {
+      expect(noisy.truth!.beats[i].qrsOn, `beat ${i}`).toBeGreaterThan(2600);
+      expect(noisy.truth!.beats[i].qrsOn, `beat ${i}`).toBeLessThan(6200);
+    }
+    expect(still.truth!.beats.map((b) => b.qrsOn)).toEqual(noisy.truth!.beats.map((b) => b.qrsOn));
+    const fs = noisy.signal.fs;
+    const d = (l: StdLead, t0: number, t1: number) => {
+      let m = 0;
+      for (let i = Math.round((t0 * fs) / 1000); i < Math.round((t1 * fs) / 1000); i++) m = Math.max(m, Math.abs(noisy.signal.leads[l][i] - still.signal.leads[l][i]));
+      return m;
+    };
+    expect(d('III', 0, 10_000)).toBeLessThan(1e-6);
+    expect(d('II', 2600, 6200)).toBeGreaterThan(0.2);
+    expect(d('II', 0, 2500)).toBeLessThan(1e-6);
+    expect(d('II', 6400, 10_000)).toBeLessThan(1e-6);
+  });
+  it('VF sweep notes: about 2 mV of II at 0.9–1 and about 1–1.3 mV at 0.5–0.6, VF throughout; the fine-VF frame is far smaller', () => {
+    const p2p = (e: Ecg) => {
+      const a = e.signal.leads.II;
+      const fs = e.signal.fs;
+      const out: number[] = [];
+      for (let s = 0; s + fs <= a.length; s += fs) {
+        let mx = -Infinity;
+        let mn = Infinity;
+        for (let i = s; i < s + fs; i++) {
+          mx = Math.max(mx, a[i]);
+          mn = Math.min(mn, a[i]);
+        }
+        out.push(mx - mn);
+      }
+      return median(out);
+    };
+    for (const v of [0.9, 1]) {
+      const e = played('t6', 0, v);
+      expect(Math.abs(p2p(e) - 2), `${v}`).toBeLessThan(0.15);
+      expect(e.truth!.rhythm).toBe('ventricular-fibrillation');
+    }
+    for (const v of [0.5, 0.6]) {
+      const e = played('t6', 0, v);
+      expect(p2p(e), `${v}`).toBeGreaterThan(1);
+      expect(p2p(e), `${v}`).toBeLessThan(1.3);
+      expect(e.truth!.rhythm).toBe('ventricular-fibrillation');
+    }
+    const fine = frames('t6', 0)[2];
+    expect(Math.abs(p2p(fine) - 0.2)).toBeLessThan(0.05);
+    expect(p2p(fine)).toBeLessThan(0.3 * p2p(played('t6', 0, 0.5)));
+  });
+  it('shock film: VF with no beats; ventricular flutter about 300/min, cycle about 200 ms varying ≤ 30 ms; fine VF; P waves at about 52/min with no QRS', () => {
+    const [vf, vfl, fine, asys] = frames('t6', 0);
+    expect(vf.truth!.rhythm).toBe('ventricular-fibrillation');
+    expect(vf.truth!.beats.length).toBe(0);
+    expect(Math.abs(vfl.truth!.hrBpm - 300)).toBeLessThan(5);
+    expect(Math.abs(median(rrs(vfl)) - 200)).toBeLessThan(5);
+    expect(Math.max(...rrs(vfl)) - Math.min(...rrs(vfl))).toBeLessThanOrEqual(30);
+    expect(fine.truth!.rhythm).toBe('ventricular-fibrillation');
+    const a = asys.truth!;
+    expect(a.rhythm).toBe('asystole');
+    expect(a.beats.length).toBe(0);
+    expect(Math.abs(a.atrialRateBpm! - 52)).toBeLessThan(3);
+    expect(a.atrial.every((x) => x.conductedTo === null)).toBe(true);
   });
 });
 
 describe('t7 on the tracings', () => {
-  it('hook is asystole, the escape strip is about 34/min with a wide QRS', () => {
+  it('hook is asystole; the complete-AV-block heart: sinus P about 78/min, none conducted, a wide ventricular escape about 34/min that starts at the apex', () => {
     expect(ecgOf(blocksOf('t7', 'hook')[0].ecg).truth!.rhythm).toBe('asystole');
-    const esc = blocksOf('t7', 'ecg').find((b) => b.ecg.kind === 'synth' && b.ecg.req.scenario === 'av-block-3')!;
-    const t = ecgOf(esc.ecg).truth!;
+    const e = ecgOf(blocksOf('t7', 'heart')[0].ecg);
+    const t = e.truth!;
     expect(Math.abs(t.hrBpm - 34)).toBeLessThan(3);
     expect(t.qrsMs).toBeGreaterThanOrEqual(120);
+    expect(Math.abs(t.atrialRateBpm! - 78)).toBeLessThan(3);
+    expect(t.atrial.every((a) => a.conductedTo === null)).toBe(true);
+    expect(t.beats.every((b) => b.kind === 'escape-ventricular')).toBe(true);
+    const rs = e.regions!;
+    const b = mid(e);
+    const buf = new Float32Array(rs.ids.length);
+    const first = new Map<string, number>();
+    for (let x = b.qrsOn - 40; x < b.qrsOn + 200; x += 2) {
+      rs.stateAt(x, buf);
+      rs.ids.forEach((id, k) => {
+        if (!first.has(id) && /^(lv|rv)-/.test(id) && buf[k] > 0 && buf[k] < 1) first.set(id, x - b.qrsOn);
+      });
+    }
+    expect(Math.min(...first.values())).toBe(first.get('lv-apex'));
+  });
+  it('pulse film: a wide regular VT at about 150/min; an organised sinus rhythm at about 70/min', () => {
+    const [vt, organised] = frames('t7', 0);
+    expect(vt.truth!.rhythm).toBe('vt-monomorphic');
+    expect(Math.abs(vt.truth!.hrBpm - 150)).toBeLessThan(5);
+    expect(vt.truth!.qrsMs).toBeGreaterThanOrEqual(120);
+    expect(Math.max(...rrs(vt)) - Math.min(...rrs(vt))).toBeLessThan(20);
+    expect(organised.truth!.rhythm).toBe('sinus-rhythm');
+    expect(Math.abs(organised.truth!.hrBpm - 70)).toBeLessThan(3);
+  });
+  it('post-ROSC film: ST up 1–3.5 mm in V1–V4 with II, III and aVF down; QT about 505 ms at about 64/min with QTc over 500 ms; PR about 115 ms with QRS about 125 ms and pre-excitation; coved ST about 3.5 mm into a negative T in V1–V2', () => {
+    const [stemi, lqt, wpw, brugada] = frames('t7', 1);
+    const st = (e: Ecg, lead: StdLead, plus = 0) => {
+      const b = mid(e);
+      return at(e, lead, b.j + plus) - baselineBefore(e.signal.leads[lead], e.signal.fs, b.qrsOn);
+    };
+    for (const l of ['V1', 'V2', 'V3', 'V4'] as const) {
+      expect(st(stemi, l), l).toBeGreaterThanOrEqual(0.1);
+      expect(st(stemi, l), l).toBeLessThanOrEqual(0.35);
+    }
+    for (const l of ['II', 'III', 'aVF'] as const) expect(st(stemi, l), l).toBeLessThan(-0.05);
+    const q = lqt.truth!;
+    expect(Math.abs(q.qtMs - 505)).toBeLessThan(5);
+    expect(Math.abs(q.hrBpm - 64)).toBeLessThan(2);
+    for (const qtc of [q.qtcBazettMs, q.qtcFridericiaMs]) {
+      expect(qtc).toBeGreaterThan(q.qtMs);
+      expect(qtc).toBeGreaterThan(500);
+    }
+    expect(Math.abs(wpw.truth!.prMs! - 115)).toBeLessThan(5);
+    expect(Math.abs(wpw.truth!.qrsMs - 125)).toBeLessThan(5);
+    expect(wpw.truth!.findings).toContain('wpw');
+    for (const l of ['V1', 'V2'] as const) {
+      expect(st(brugada, l), l).toBeGreaterThanOrEqual(0.3);
+      expect(st(brugada, l), l).toBeLessThanOrEqual(0.4);
+      expect(st(brugada, l, 60), l).toBeLessThan(st(brugada, l));
+      const b = mid(brugada);
+      let mn = Infinity;
+      for (let x = b.j + 80; x <= b.tOff; x += 2) mn = Math.min(mn, at(brugada, l, x) - baselineBefore(brugada.signal.leads[l], brugada.signal.fs, b.qrsOn));
+      expect(mn, `${l} T`).toBeLessThan(-0.1);
+    }
   });
   it('drills 10-second recognition: a speed-round text precedes the drill', () => {
     const kinds = lessonById('t7').blocks.map((b) => b.kind);

@@ -72,12 +72,116 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('先定义词，再分两步走', 'Define the word first, then two steps', 'Define primero la palabra, luego dos pasos'),
-      body: l(
-        '**SVT（室上性心动过速）**现行定义：静息时心房和/或心室率 > 100 次/分、**机制涉及希氏束或以上组织**的心动过速。**心房扑动和多源性房速包括在内**；房颤按惯例排除（有自己的指南）；**AVRT 也算 SVT**，尽管它的环路用到了心室。连续 ≥ 3 搏即称一阵心动过速。\n判读分两步：\n- **第一步：规则还是不规则？**不规则 → 房颤、多源性房速或比例不固定的房扑/房速（下一课，t2）。\n- **第二步（本课）：规则的窄 QRS 心动过速 → 找心房活动。**在 II、III、aVF 和 V1 里找 P′，要一条够长的节律条；P′ 最常藏的地方是 QRS 终末部和 T 波里。\n找到（或确认找不到）P′ 后，问它相对 QRS 在哪里：\n- **看不见 P′，或 P′ 就在 QRS 终末端**（V1 假性 r′，II/III/aVF 假性 S）⇒ 典型 AVNRT。\n- **短 RP：P′ 在 ST 段内，RP < PR**（体表约 90 ms 为界）⇒ 顺向型 AVRT（或长 PR 的房速）。\n- **长 RP：RP > PR** ⇒ 房速、非典型 AVNRT、PJRT、窦性心动过速。\n- **P′ 比 QRS 多** ⇒ 房速或房扑（不依赖房室结）。',
-        '**SVT** is currently defined as a tachycardia (atrial and/or ventricular rate > 100/min at rest) whose **mechanism involves tissue from the His bundle or above**. **Atrial flutter and MAT are included**; AF is conventionally excluded (it has its own guidelines); **AVRT is SVT** even though its circuit uses the ventricle. >= 3 consecutive beats is the working threshold for calling a run a tachycardia.\nReading it is two steps:\n- **Step 1: regular or irregular?** Irregular -> AF, MAT, or flutter / AT with variable block (next lesson, t2).\n- **Step 2 (this lesson): a regular narrow-QRS tachycardia -> find the atrial activity.** Hunt for the P′ in II, III, aVF and V1, on a long enough strip; where it hides most often is the QRS end and the T wave.\nOnce you have found it (or established it is not visible), ask where it sits relative to the QRS:\n- **No visible P′, or a P′ right at the QRS end** (pseudo-r′ in V1, pseudo-S in II/III/aVF) -> typical AVNRT.\n- **Short RP: P′ in the ST segment, RP < PR** (about 90 ms on the surface ECG is the cut-off) -> orthodromic AVRT (or AT with a long PR).\n- **Long RP: RP > PR** -> AT, atypical AVNRT, PJRT, sinus tachycardia.\n- **More P′ than QRS** -> AT or flutter (AV-node-independent).',
-        '**La TSV** se define hoy como una taquicardia (frecuencia auricular y/o ventricular > 100 lpm en reposo) cuyo **mecanismo implica tejido del His o por encima**. **El flutter auricular y la TAM están incluidos**; la FA se excluye por convención (tiene sus propias guías); **la TRAV es una TSV** aunque su circuito use el ventrículo. >= 3 latidos consecutivos es el umbral habitual para llamar salva a una taquicardia.\nLa lectura son dos pasos:\n- **Paso 1: ¿regular o irregular?** Irregular -> FA, TAM o flutter/TA con conducción variable (próxima lección, t2).\n- **Paso 2 (esta lección): taquicardia regular de QRS estrecho -> busca la actividad auricular.** Caza la P′ en II, III, aVF y V1, en una tira lo bastante larga; donde más se esconde es en el final del QRS y dentro de la onda T.\nCuando la hayas encontrado (o hayas comprobado que no se ve), pregúntate dónde está respecto al QRS:\n- **P′ no visible, o justo al final del QRS** (pseudo-r′ en V1, pseudo-S en II/III/aVF) -> TRIN típica.\n- **RP corto: P′ en el segmento ST, RP < PR** (unos 90 ms en el ECG de superficie como corte) -> TRAV ortodrómica (o TA con PR largo).\n- **RP largo: RP > PR** -> TA, TRIN atípica, PJRT, taquicardia sinusal.\n- **Más P′ que QRS** -> TA o flutter (independiente del nodo AV).',
+      kind: 'film',
+      title: l('P′ 在哪里？', 'Where is the P′?', '¿Dónde está la P′?'),
+      view: STRIP,
+      frames: [
+        {
+          label: l('窦速', 'Sinus', 'Sinusal'),
+          ecg: synth('sinus-tachycardia', 611, { rate: 120 }),
+          note: l(
+            '直立的 P 在每个 QRS **之前**，PR 约 150 ms，RP 比 PR 长：长 RP。窦性形态 ⇒ 窦性心动过速。',
+            'An upright P **before** each QRS, PR about 150 ms, RP longer than PR: long RP. Sinus shape → sinus tachycardia.',
+            'Una P positiva **antes** de cada QRS, PR de unos 150 ms y RP más largo que el PR: RP largo. Morfología sinusal → taquicardia sinusal.',
+          ),
+          marks: [{ auto: 'p' }, { auto: 'pr' }],
+        },
+        {
+          label: l('房室结折返', 'AVNRT', 'TRIN'),
+          ecg: synth('avnrt', 603),
+          note: l(
+            'QRS 前没有 P′。环路在房室结内，心房与心室同时激动：P′ 只在 QRS 终末留下一个**假性 S** ⇒ 典型 AVNRT。',
+            'No P′ before the QRS. The circuit is inside the AV node and fires atria and ventricles together: the P′ leaves only a **pseudo-S** at the QRS end → typical AVNRT.',
+            'No hay P′ antes del QRS. El circuito está dentro del nodo AV y activa aurículas y ventrículos a la vez: la P′ solo deja un **pseudo-S** al final del QRS → TRIN típica.',
+          ),
+          marks: [{ auto: 'p', label: l('P′（假性 S）', 'P′ (pseudo-S)', 'P′ (pseudo-S)') }],
+        },
+        {
+          label: l('房室折返', 'AVRT', 'TRAV'),
+          ecg: synth('avrt', 604),
+          note: l(
+            'P′ 与 QRS 分开，骑在 **ST 段**上：RP 约 115 ms，比 P′R 短 ⇒ 顺向型 AVRT。',
+            'The P′ is separate from the QRS, riding on the **ST segment**: RP about 115 ms, shorter than the P′R → orthodromic AVRT.',
+            'La P′ está separada del QRS, sobre el **segmento ST**: RP de unos 115 ms, más corto que el P′R → TRAV ortodrómica.',
+          ),
+          marks: [{ auto: 'p', label: l('P′', 'P′', 'P′') }],
+        },
+        {
+          label: l('房速 2:1', 'AT 2:1', 'TA 2:1'),
+          ecg: synth('atrial-tachycardia', 606, undefined, 'block'),
+          note: l(
+            '**P′ 比 QRS 多**：180 对 90 次/分，一个在 QRS 前，另一个藏在前一搏的 ST–T 上 ⇒ 房速或房扑，不依赖房室结。',
+            '**More P′ than QRS**: 180 vs 90/min, one before each QRS and one hidden on the ST–T of the beat before → AT or flutter, independent of the AV node.',
+            '**Más P′ que QRS**: 180 frente a 90 lpm, una antes de cada QRS y otra escondida en el ST-T del latido previo → TA o flutter, independiente del nodo AV.',
+          ),
+          marks: [{ auto: 'p', label: l('P′（下传）', 'P′ (conducted)', 'P′ (conducida)') }, { auto: 'blocked-p' }],
+        },
+      ],
+      predict: {
+        question: l(
+          'AVNRT 的环路在房室结内，心房和心室几乎同时激动。它的 P′ 会在哪里？',
+          'In AVNRT the circuit lies inside the AV node, so atria and ventricles are activated almost together. Where will its P′ be?',
+          'En la TRIN el circuito está dentro del nodo AV, así que aurículas y ventrículos se activan casi a la vez. ¿Dónde estará su P′?',
+        ),
+        options: [
+          l('在 QRS 之前', 'Before the QRS', 'Antes del QRS'),
+          l('在 QRS 之中或终末', 'Inside the QRS or at its end', 'Dentro del QRS o en su final'),
+          l('在 ST–T 中间', 'In the middle of the ST–T', 'En mitad del ST-T'),
+        ],
+        answer: 1,
+      },
+      caption: l(
+        '规则的窄 QRS 心动过速：在 II、III、aVF、V1 找 P′，再看它在 QRS 之前、之中、之后，还是比 QRS 多。',
+        'Regular narrow-QRS tachycardia: hunt the P′ in II, III, aVF and V1, then ask whether it sits before, inside or after the QRS, or outnumbers it.',
+        'Taquicardia regular de QRS estrecho: busca la P′ en II, III, aVF y V1 y mira si está antes, dentro o después del QRS, o si hay más P′ que QRS.',
+      ),
+    },
+    {
+      kind: 'live',
+      scenario: 'sinus-tachycardia',
+      seed: 609,
+      dials: [{ id: 'rate' }],
+      view: STRIP,
+      marks: [{ auto: 't', beat: 4 }, { auto: 'p', beat: 5 }],
+      play: {
+        dial: 'rate',
+        from: 102,
+        to: 150,
+        notes: [
+          {
+            min: 102,
+            max: 124,
+            text: l(
+              '前一个 T 结束后 P 才出现，两者分开。PR 约 150 ms，RP 更长。',
+              'The P appears after the previous T has ended, clear of it. PR about 150 ms; the RP is longer.',
+              'La P aparece cuando ya ha acabado la T anterior, separada de ella. PR de unos 150 ms; el RP es más largo.',
+            ),
+          },
+          { min: 125, max: 133, text: l('P 紧贴在前一个 T 的末尾。', 'The P now starts right at the end of the previous T.', 'La P empieza ya justo al final de la T anterior.') },
+          {
+            min: 134,
+            max: 150,
+            text: l(
+              'P 在前一个 T 结束前就开始：骑在 T 上，容易漏看。仍是每个 QRS 一个 P。',
+              'The P starts before the previous T has ended: it rides on the T and is easy to miss. Still one P per QRS.',
+              'La P empieza antes de que acabe la T anterior: cabalga sobre ella y es fácil pasarla por alto. Sigue habiendo una P por QRS.',
+            ),
+          },
+        ],
+      },
+      predict: {
+        question: l(
+          '窦性心率从 102 升到 150 次/分，PR 几乎不变。P 波会移到哪里？',
+          'The sinus rate climbs from 102 to 150/min while the PR stays about the same. Where does the P wave go?',
+          'La frecuencia sinusal sube de 102 a 150 lpm y el PR apenas cambia. ¿Adónde se desplaza la onda P?',
+        ),
+        options: [l('进入 QRS', 'Into the QRS', 'Dentro del QRS'), l('爬上前一个 T 波', 'Onto the T wave before it', 'Sobre la onda T anterior'), l('消失', 'It disappears', 'Desaparece')],
+        answer: 1,
+      },
+      caption: l(
+        '心率越快，RR 越短，P 离前一个 T 越近。P′ 最常藏在 QRS 终末和 T 波里。',
+        'The faster the rate, the shorter the RR and the closer the P comes to the T before it. A P′ hides most often at the QRS end and in the T wave.',
+        'Cuanto más rápida la frecuencia, más corto el RR y más se acerca la P a la T anterior. La P′ se esconde sobre todo al final del QRS y dentro de la onda T.',
       ),
     },
     {
@@ -107,6 +211,50 @@ const lesson: Lesson = {
         {
           label: l('迷走手法 / 腺苷疗效', 'Vagal manoeuvres / adenosine efficacy', 'Maniobras vagales / eficacia de la adenosina'),
           value: l('迷走手法终止 AVNRT 仅 19–54%（改良 Valsalva 约 43%）；腺苷终止大多数发作', 'Vagal manoeuvres terminate AVNRT in only 19-54% (modified Valsalva about 43%); adenosine terminates most episodes', 'Las maniobras vagales terminan la TRIN solo en el 19-54% (Valsalva modificado, unos 43%); la adenosina termina la mayoría de los episodios'),
+        },
+        {
+          label: l('一阵心动过速', 'A run of tachycardia', 'Salva de taquicardia'),
+          value: l('连续 ≥ 3 搏、频率 > 100 次/分', '>= 3 consecutive beats at > 100/min', '>= 3 latidos consecutivos a > 100 lpm'),
+        },
+        {
+          label: l('RP/PR 算法', 'The RP/PR algorithm', 'El algoritmo RP/PR'),
+          value: l(
+            'P′ 看不见或在 QRS 终末 ⇒ 典型 AVNRT；短 RP（P′ 在 ST 段，RP < PR）⇒ 顺向型 AVRT，或长 PR 的房速；长 RP（RP > PR）⇒ 房速、非典型 AVNRT、PJRT、窦速——看 P′ 方向与形态；P′ 比 QRS 多 ⇒ 房速或房扑',
+            'P′ invisible or at the QRS end -> typical AVNRT; short RP (P′ in the ST segment, RP < PR) -> orthodromic AVRT, or AT with a long PR; long RP (RP > PR) -> AT, atypical AVNRT, PJRT, sinus tachycardia: read the P′ polarity and shape; more P′ than QRS -> AT or flutter',
+            'P′ invisible o al final del QRS -> TRIN típica; RP corto (P′ en el segmento ST, RP < PR) -> TRAV ortodrómica, o TA con PR largo; RP largo (RP > PR) -> TA, TRIN atípica, PJRT, taquicardia sinusal: lee la polaridad y la forma de la P′; más P′ que QRS -> TA o flutter',
+          ),
+        },
+        {
+          label: l('假性 r′ / 假性 S', 'Pseudo-r′ / pseudo-S', 'Pseudo-r′ / pseudo-S'),
+          value: l(
+            '特异度 91–100%，敏感度低：与基础窦性 ECG 对比会消失；没有它不能排除 AVNRT',
+            'Specificity 91-100% but low sensitivity: it vanishes on the baseline sinus ECG; its absence does not rule AVNRT out',
+            'Especificidad del 91-100% pero baja sensibilidad: desaparece en el ECG sinusal basal; su ausencia no descarta la TRIN',
+          ),
+        },
+        {
+          label: l('AVNRT 对 AVRT：其他线索', 'AVNRT vs AVRT: other clues', 'TRIN frente a TRAV: otras pistas'),
+          value: l(
+            'AVNRT 见于任何年龄、基础 ECG 正常；AVRT 患者更年轻，基础 ECG 可见预激；QRS 电交替与 ST 压低更支持 AVRT',
+            'AVNRT at any age with a normal baseline ECG; AVRT in younger patients, whose baseline ECG may show pre-excitation; QRS alternans and ST depression favour AVRT',
+            'TRIN a cualquier edad con ECG basal normal; TRAV en pacientes más jóvenes, con posible preexcitación en el ECG basal; la alternancia del QRS y la depresión del ST favorecen la TRAV',
+          ),
+        },
+        {
+          label: l('迷走手法 / 腺苷的诊断性反应', 'Diagnostic response to vagal manoeuvres / adenosine', 'Respuesta diagnóstica a maniobras vagales / adenosina'),
+          value: l(
+            '终止且最后一个事件是 P′ ⇒ 依赖房室结（AVNRT/AVRT，房速可能性很小）；以 QRS 结束无鉴别价值；出现房室阻滞而房律继续 ⇒ 房速或房扑；逐渐减慢再加快 ⇒ 窦速或自律性房速；全程记录 12 导联',
+            'Termination with a P′ as the last event -> AV-node-dependent (AVNRT/AVRT; AT very unlikely); ending on a QRS does not discriminate; AV block with the atrial rhythm continuing -> AT or flutter; gradual slowing then re-acceleration -> sinus tachycardia or automatic AT; record a 12-lead throughout',
+            'Terminación con una P′ como último evento -> dependiente del nodo AV (TRIN/TRAV; TA muy improbable); terminar en un QRS no discrimina; bloqueo AV con el ritmo auricular persistente -> TA o flutter; enlentecimiento gradual y reaceleración -> taquicardia sinusal o TA automática; graba un ECG de 12 derivaciones todo el tiempo',
+          ),
+        },
+        {
+          label: l('P′ 的方向指向起源', 'P′ polarity points to the origin', 'La polaridad de la P′ señala el origen'),
+          value: l(
+            'I、aVL 倒置 ⇒ 左房起源（如左上肺静脉：下壁与 V1 直立）；II、III、aVF 倒置 ⇒ 低位或逆行起源',
+            'Negative in I and aVL -> left atrial origin (e.g. the left superior pulmonary vein: upright inferiorly and in V1); negative in II, III and aVF -> a low or retrograde origin',
+            'Negativa en I y aVL -> origen auricular izquierdo (p. ej. vena pulmonar superior izquierda: positiva en las inferiores y en V1); negativa en II, III y aVF -> origen bajo o retrógrado',
+          ),
         },
       ],
       source:
@@ -140,9 +288,9 @@ const lesson: Lesson = {
         {
           title: l('在 II、III、aVF 和 V1 里找 P′', 'Hunt the P′ in II, III, aVF and V1', 'Caza la P′ en II, III, aVF y V1'),
           body: l(
-            '逐个导联看 QRS 之后的 ST 段：I 和 aVL 里有一个小而清晰的**负向**波，III、aVF 里同一时刻是一个小的**正向**驼峰；II 导联里它几乎是等电位的、混在 T 波升支里——只看 II 会漏掉它。它每搏位置相同：**逆行 P′**。',
-            'Look at the ST segment after each QRS, lead by lead: in I and aVL there is a small, crisp **negative** deflection, and at the same instant a small **positive** hump in III and aVF; in II it is nearly isoelectric and melts into the T upstroke — read II alone and you miss it. It sits identically every beat: a **retrograde P′**.',
-            'Mira el segmento ST tras cada QRS, derivación por derivación: en I y aVL hay una pequeña deflexión **negativa** nítida y, en el mismo instante, una pequeña joroba **positiva** en III y aVF; en II es casi isoeléctrica y se funde con la rama ascendente de la T: si lees solo II, se te escapa. Ocupa el mismo lugar en cada latido: una **P′ retrógrada**.',
+            '逐个导联看 QRS 之后的 ST 段：I 和 aVL 里有一个小而清晰的**负向**波，III、aVF 里同一时刻是一个小的**正向**驼峰；II 导联里它骑在 T 波升支上，很容易漏看。它每搏位置相同：**逆行 P′**。',
+            'Look at the ST segment after each QRS, lead by lead: in I and aVL there is a small, crisp **negative** deflection, and at the same instant a small **positive** hump in III and aVF; in II it rides on the T upstroke and is easy to miss. It sits identically every beat: a **retrograde P′**.',
+            'Mira el segmento ST tras cada QRS, derivación por derivación: en I y aVL hay una pequeña deflexión **negativa** nítida y, en el mismo instante, una pequeña joroba **positiva** en III y aVF; en II cabalga sobre la rama ascendente de la T y es fácil que se te escape. Ocupa el mismo lugar en cada latido: una **P′ retrógrada**.',
           ),
           marks: [{ auto: 'p', lead: 'I', label: l('P′', 'P′', 'P′') }, { auto: 'p', lead: 'aVL', label: l('P′', 'P′', 'P′') }],
           highlightLeads: ['I', 'aVL', 'III', 'aVF'],
@@ -170,23 +318,14 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'contrast',
-      title: l('P′ 藏在哪里：AVNRT 对 AVRT', 'Where the P′ hides: AVNRT vs AVRT', 'Dónde se esconde la P′: TRIN frente a TRAV'),
-      view: STRIP,
-      left: {
-        ecg: synth('avnrt', 603),
-        caption: l('AVNRT，176 次/分：P′ 埋在 QRS 里——II 导联呈假性 S', 'AVNRT, 176/min: the P′ is buried in the QRS — a pseudo-S here in II', 'TRIN, 176 lpm: la P′ está enterrada en el QRS; aquí en II hace un pseudo-S'),
-        marks: [{ auto: 'p', label: l('P′（假性 S）', "P′ (pseudo-S)", 'P′ (pseudo-S)') }],
-      },
-      right: {
-        ecg: synth('avrt', 604),
-        caption: l('AVRT，190 次/分：P′ 与 QRS 分开，落在 ST 段上', 'AVRT, 190/min: the P′ is separate from the QRS, landing on the ST segment', 'TRAV, 190 lpm: la P′ está separada del QRS y cae sobre el segmento ST'),
-        marks: [{ auto: 'p', label: l('P′', 'P′', 'P′') }],
-      },
-      point: l(
-        '同是规则的窄 QRS 心动过速，**一个时间差分出两个诊断**：典型 AVNRT 的环路几乎不出房室结，心房回波与 QRS 几乎同时发生，P′ 看不见或只在 QRS 终末端露头（V1 假性 r′、下壁导联假性 S），可见时 RP < 90 ms；顺向型 AVRT 的冲动必须先激动心室、再经旁路折返心房，P′ 落在 ST 段，RP ≥ 90 ms 而短于半个 RR。',
-        'Two regular narrow-QRS tachycardias, and **one timing difference makes two diagnoses**: the typical AVNRT circuit barely leaves the AV node, so the atrial echo is nearly simultaneous with the QRS — the P′ is invisible or peeks only at the QRS end (pseudo-r′ in V1, pseudo-S inferiorly), with RP < 90 ms when visible; in orthodromic AVRT the impulse must first activate the ventricle and return through the pathway, so the P′ lands in the ST segment with RP >= 90 ms but less than half the RR.',
-        'Dos taquicardias regulares de QRS estrecho y **una diferencia de tiempos da dos diagnósticos**: el circuito de la TRIN típica apenas sale del nodo AV, de modo que el eco auricular es casi simultáneo al QRS (la P′ es invisible o asoma solo al final del QRS: pseudo-r′ en V1, pseudo-S en las derivaciones inferiores), con RP < 90 ms cuando se ve; en la TRAV ortodrómica el impulso debe activar primero el ventrículo y volver por la vía, así que la P′ cae en el segmento ST, con RP >= 90 ms pero menor que medio RR.',
+      kind: 'heart',
+      ecg: synth('avrt', 602),
+      showConduction: true,
+      emphasize: ['lv-basal-anterolateral'],
+      caption: l(
+        '顺向型 AVRT：拖动光标走一搏。心室先激动，约 115 ms 后心房才激动：冲动经旁路（高亮处）回到心房。这段回程把 P′ 推到 ST 段上。',
+        'Orthodromic AVRT: move the cursor through one beat. The ventricles fire first and the atria about 115 ms later: the impulse returns to them through the pathway (highlighted). That return trip pushes the P′ onto the ST segment.',
+        'TRAV ortodrómica: mueve el cursor a lo largo de un latido. Primero se activan los ventrículos y unos 115 ms después las aurículas: el impulso vuelve a ellas por la vía accesoria (resaltada). Ese viaje de vuelta lleva la P′ hasta el segmento ST.',
       ),
     },
     {
@@ -195,23 +334,53 @@ const lesson: Lesson = {
       view: STRIP_V1,
       marks: [{ auto: 'p', lead: 'V1', label: l('P′（假性 r′）', 'P′ (pseudo-r′)', 'P′ (pseudo-r′)') }],
       caption: l(
-        '同一份 AVNRT，换看 V1：逆行 P′ 落在 QRS 终末——先在 S 波升支上留下切迹，再越过基线约半毫米，形成一个小的终末正向波：**假性 r′**（不是右束支阻滞的 r′，QRS 并不宽）。与基础窦性 ECG 对比，这个终末变形会消失——这正是它的价值。假性 r′/假性 S 特异度很高（91–100%）但敏感度低：像这里这样不到 1 mm 时很容易漏看，没有它也不能排除 AVNRT——II 导联的假性 S 是另一条线索。',
-        'The same AVNRT, now in V1: the retrograde P′ falls on the QRS end — it notches the upstroke of the S and then rises about half a millimetre above the baseline as a small terminal positive deflection: a **pseudo-r′** (not a bundle-branch r′: the QRS is not wide). Compare with the baseline sinus ECG and the terminal distortion vanishes — which is exactly its value. The pseudo-r′ / pseudo-S is highly specific (91-100%) but not sensitive: under 1 mm, as here, it is easy to miss, and its absence does not rule AVNRT out — the pseudo-S in II is the other clue.',
-        'La misma TRIN, ahora en V1: la P′ retrógrada cae sobre el final del QRS; deja una muesca en la rama ascendente de la S y después sube alrededor de medio milímetro por encima de la línea de base como una pequeña deflexión terminal positiva: un **pseudo-r′** (no es la r′ de un bloqueo de rama: el QRS no es ancho). Compárala con el ECG sinusal basal y la deformación terminal desaparece: ahí está su valor. El pseudo-r′ / pseudo-S es muy específico (91-100%) pero poco sensible: con menos de 1 mm, como aquí, es fácil pasarlo por alto, y su ausencia no descarta la TRIN; el pseudo-S en II es la otra pista.',
+        'AVNRT 换看 V1：P′ 落在 QRS 终末，越过基线约半毫米，成一个小的终末正向波：**假性 r′**（QRS 不宽，不是束支阻滞）。不到 1 mm，很容易漏看。',
+        'AVNRT in V1: the P′ falls on the QRS end and rises about half a millimetre above the baseline as a small terminal positive wave, a **pseudo-r′** (the QRS is not wide: no bundle-branch block). Under 1 mm, it is easy to miss.',
+        'TRIN en V1: la P′ cae al final del QRS y sube alrededor de medio milímetro sobre la línea de base como una pequeña onda terminal positiva, un **pseudo-r′** (el QRS no es ancho: no es un bloqueo de rama). Con menos de 1 mm, es fácil pasarlo por alto.',
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('atrial-tachycardia', 606, undefined, 'block'),
+      kind: 'live',
+      scenario: 'atrial-flutter',
+      seed: 609,
+      dials: [{ id: 'conductionRatio' }],
       view: STRIP,
-      marks: [
-        { auto: 'p', label: l('P′（下传）', "P′ (conducted)", 'P′ (conducida)') },
-        { auto: 'blocked-p' },
-      ],
+      marks: [{ auto: 'f-waves' }],
+      play: {
+        dial: 'conductionRatio',
+        from: 2,
+        to: 4,
+        notes: [
+          {
+            min: 2,
+            max: 2,
+            text: l('2:1：QRS 150 次/分，规则。约一半 F 波藏在 QRS 和 T 里。', '2:1: QRS at 150/min, regular. About half the F waves hide in the QRS and the T.', '2:1: QRS a 150 lpm, regular. Cerca de la mitad de las ondas F se esconden en el QRS y la T.'),
+          },
+          { min: 3, max: 3, text: l('3:1：房室结多挡住一个 F，QRS 降到 100 次/分。', '3:1: the AV node blocks one more F; the QRS falls to 100/min.', '3:1: el nodo AV bloquea una F más; el QRS baja a 100 lpm.') },
+          {
+            min: 4,
+            max: 4,
+            text: l(
+              '4:1：QRS 75 次/分，锯齿露了出来。心房仍是 300 次/分 ⇒ 房扑不需要房室结。',
+              '4:1: QRS at 75/min and the sawtooth shows. The atria still beat at 300/min → flutter does not need the AV node.',
+              '4:1: QRS a 75 lpm y aparece el diente de sierra. Las aurículas siguen a 300 lpm → el flutter no necesita el nodo AV.',
+            ),
+          },
+        ],
+      },
+      predict: {
+        question: l(
+          '迷走手法或腺苷会减慢房室传导。如果这条 150 次/分的规则心动过速是 2:1 房扑，你会看到什么？',
+          'Vagal manoeuvres or adenosine slow AV conduction. If this regular 150/min tachycardia is 2:1 flutter, what will you see?',
+          'Las maniobras vagales o la adenosina enlentecen la conducción AV. Si esta taquicardia regular a 150 lpm es un flutter 2:1, ¿qué verás?',
+        ),
+        options: [l('突然终止', 'It stops abruptly', 'Se detiene de golpe'), l('QRS 变慢，F 波照样出现', 'The QRS slows and the F waves keep coming', 'El QRS se enlentece y las ondas F siguen'), l('毫无变化', 'Nothing changes', 'No cambia nada')],
+        answer: 1,
+      },
       caption: l(
-        '房速伴 2:1 房室传导：心房焦点约 180 次/分，**每两个 P′ 只有一个下传**，被阻断的 P′ 正好藏在前面那个 T 波里——心室率约 90 次/分。**P′ 比 QRS 多** ⇒ 心动过速不依赖房室结（房速或房扑）。下传的 P′ 异于窦性（此焦点在左上肺静脉：下壁及 V1 直立、I 与 aVL 倒置）。腺苷或迷走手法加重房室阻滞、暴露全部 P′，而心动过速依旧——诊断即成。',
-        'Atrial tachycardia with 2:1 AV conduction: the atrial focus fires at about 180/min and **only every second P′ conducts**; the blocked P′ hides exactly in the previous T wave, so the ventricular rate is about 90/min. **More P′ than QRS** -> the tachycardia does not need the AV node (AT or flutter). The conducted P′ is unlike sinus (this focus is in the left superior pulmonary vein: upright inferiorly and in V1, negative in I and aVL). Adenosine or vagal manoeuvres increase the AV block and uncover all the P′ while the tachycardia continues — and there is the diagnosis.',
-        'Taquicardia auricular con conducción AV 2:1: el foco auricular dispara a unos 180 lpm y **solo conduce una de cada dos P′**; la P′ bloqueada se esconde justo en la onda T previa, de modo que la frecuencia ventricular ronda 90 lpm. **Más P′ que QRS**: la taquicardia no depende del nodo AV (TA o flutter). La P′ conducida no es sinusal (el foco está en la vena pulmonar superior izquierda: positiva en las inferiores y en V1, negativa en I y aVL). La adenosina o las maniobras vagales aumentan el bloqueo AV y destapan todas las P′ mientras la taquicardia sigue: ahí está el diagnóstico.',
+        '把房室传导调慢，就像迷走手法或腺苷：心房节律照常 ⇒ 房扑或房速。用药时全程记录 12 导联。',
+        'Slow AV conduction, as vagal manoeuvres or adenosine do: the atrial rhythm carries on → flutter or AT. Record a 12-lead throughout.',
+        'Enlentece la conducción AV, como hacen las maniobras vagales o la adenosina: el ritmo auricular sigue → flutter o TA. Graba un ECG de 12 derivaciones todo el tiempo.',
       ),
     },
     {
@@ -229,18 +398,9 @@ const lesson: Lesson = {
         marks: [{ auto: 'p' }, { auto: 'pr' }],
       },
       point: l(
-        '长 RP（RP > PR）分支的鉴别：房速、非典型 AVNRT、PJRT、窦性心动过速。**P′ 的方向和形态是钥匙**：II、III、aVF 深倒的 P′ 是逆行或低位起源（PJRT、非典型 AVNRT、低位房速），且非典型 AVNRT 常呈 P′-QRS 一前一后紧贴；而**直立、窦性形态的 P** 说明是窦性心动过速——起病渐进、心率随诱因波动，报告写完后要接着问“为什么”（发热、疼痛、出血、缺氧、甲亢、肺栓塞……）。',
-        'The long-RP branch (RP > PR) differential: AT, atypical AVNRT, PJRT, sinus tachycardia. **The polarity and shape of the P′ are the key**: a P′ deeply negative in II, III and aVF is retrograde or from a low focus (PJRT, atypical AVNRT, low atrial AT), and in atypical AVNRT each P′ clings to the QRS that follows it; an **upright, sinus-shaped P** means sinus tachycardia — gradual onset, a rate that drifts with the provocation, and once your report says it, the next word is "why" (fever, pain, bleeding, hypoxia, hyperthyroidism, pulmonary embolism...).',
-        'El diferencial de la rama de RP largo (RP > PR): TA, TRIN atípica, PJRT y taquicardia sinusal. **La polaridad y la forma de la P′ son la clave**: una P′ profundamente negativa en II, III y aVF es retrógrada o de un foco bajo (PJRT, TRIN atípica, TA baja), y en la TRIN atípica cada P′ se pega al QRS que la sigue; una **P positiva y de morfología sinusal** indica taquicardia sinusal: inicio gradual, frecuencia que oscila con el estímulo y, tras escribirla en el informe, la palabra siguiente es "por qué" (fiebre, dolor, sangrado, hipoxia, hipertiroidismo, tromboembolia pulmonar...).',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('迷走手法与腺苷：治疗即诊断', 'Vagal manoeuvres and adenosine: the treatment is the test', 'Maniobras vagales y adenosina: el tratamiento es la prueba'),
-      body: l(
-        '对血流动力学稳定的规则窄 QRS 心动过速，迷走手法和腺苷既是终止手段，也是**诊断试验**——但必须**全程记录 12 导联**：\n- **终止时最后一个事件是 P′**（逆行 P′ 未下传）⇒ 依赖房室结的心动过速：AVNRT 或 AVRT，房速可能性很小；以 QRS 结束则没有鉴别价值。\n- **出现房室阻滞而房性快速心律失常继续**（P′/F 波暴露出来）⇒ 房速或房扑——它们不需要房室结。\n- **逐渐减慢再逐渐加快** ⇒ 窦性心动过速或自律性房速。\n- 用药前先看 δ 波：**预激时腺苷可诱发快心室率的房颤**（见 t4）。\nAVNRT 与 AVRT 的其他判别点：AVNRT 任何年龄、基础 ECG 正常；AVRT 更年轻、基础 ECG 可见预激；QRS 电交替与 ST 压低更多见于 AVRT；P′ 可见时 90 ms 的 RP 界值最实用。',
-        'In a haemodynamically stable regular narrow-QRS tachycardia, vagal manoeuvres and adenosine are both termination and **diagnostic test** — but a **12-lead must be running throughout**:\n- **Termination with the last event a P′** (a retrograde P′ that is not conducted) -> an AV-node-dependent tachycardia: AVNRT or AVRT, and AT is very unlikely; ending on a QRS does not discriminate.\n- **AV block appears while the atrial tachyarrhythmia continues** (the P′ / F waves uncovered) -> AT or flutter — they do not need the AV node.\n- **Gradual slowing and then re-acceleration** -> sinus tachycardia or automatic AT.\n- Look for a delta wave before giving the drug: **in pre-excitation adenosine can precipitate AF with a fast ventricular response** (see t4).\nOther AVNRT-vs-AVRT discriminators: AVNRT at any age with a normal baseline ECG; AVRT in younger patients, the baseline ECG may show pre-excitation; QRS alternans and ST depression favour AVRT; and when the P′ is visible, the 90 ms RP cut-off is the most useful single sign.',
-        'En una taquicardia regular de QRS estrecho hemodinámicamente estable, las maniobras vagales y la adenosina son a la vez terminación y **prueba diagnóstica**, pero debe haber un **ECG de 12 derivaciones grabando todo el tiempo**:\n- **Terminación con la P′ como último evento** (una P′ retrógrada que no conduce) -> taquicardia dependiente del nodo AV: TRIN o TRAV, y la TA es muy improbable; terminar en un QRS no discrimina.\n- **Aparece bloqueo AV mientras la taquiarritmia auricular sigue** (las P′ / ondas F quedan al descubierto) -> TA o flutter: no necesitan el nodo AV.\n- **Enlentecimiento gradual y reaceleración** -> taquicardia sinusal o TA automática.\n- Busca la onda delta antes de administrarla: **con preexcitación la adenosina puede precipitar una FA con respuesta ventricular rápida** (ver t4).\nOtros criterios TRIN frente a TRAV: la TRIN a cualquier edad con ECG basal normal; la TRAV en pacientes más jóvenes, con posible preexcitación en el ECG basal; la alternancia del QRS y la depresión del ST favorecen la TRAV; y cuando la P′ es visible, el corte de RP en 90 ms es el signo aislado más útil.',
+        '两条都是长 RP（RP > PR），**P′ 的方向和形态**定诊断：II、III、aVF 深倒 ⇒ 逆行或低位起源（非典型 AVNRT、PJRT、低位房速）；直立、窦性形态 ⇒ 窦性心动过速，接着要问“为什么”（发热、疼痛、出血、缺氧、甲亢、肺栓塞……）。',
+        'Both have a long RP (RP > PR); **the P′ polarity and shape** decide: deeply negative in II, III and aVF -> retrograde or low origin (atypical AVNRT, PJRT, low AT); upright and sinus-shaped -> sinus tachycardia, and then ask why (fever, pain, bleeding, hypoxia, hyperthyroidism, pulmonary embolism...).',
+        'Las dos tienen RP largo (RP > PR); **la polaridad y la forma de la P′** deciden: profundamente negativa en II, III y aVF -> origen retrógrado o bajo (TRIN atípica, PJRT, TA baja); positiva y de morfología sinusal -> taquicardia sinusal, y después pregúntate por qué (fiebre, dolor, sangrado, hipoxia, hipertiroidismo, tromboembolia pulmonar...).',
       ),
     },
     { kind: 'check', item: { family: 'narrow-tachy', seed: 7 } },
@@ -283,6 +443,11 @@ const lesson: Lesson = {
           '心动过速终止后不看基础 ECG：显性旁路（WPW 图形）会改变处理与风险评估（t4）；AVRT 终止后第一条窦性心律就是你的答案。',
           'Not checking the baseline ECG after termination: a manifest pathway (WPW pattern) changes management and risk assessment (t4); the first sinus beat after an AVRT stops is your answer.',
           'No mirar el ECG basal tras la terminación: una vía manifiesta (patrón WPW) cambia el manejo y la estratificación de riesgo (t4); el primer latido sinusal tras detenerse una TRAV es tu respuesta.',
+        ),
+        l(
+          '不先排除预激就给腺苷：WPW 时它可诱发快心室率的房颤（见 t4）。',
+          'Giving adenosine without first looking for pre-excitation: in WPW it can precipitate AF with a fast ventricular response (see t4).',
+          'Administrar adenosina sin buscar antes la preexcitación: en el WPW puede precipitar una FA con respuesta ventricular rápida (ver t4).',
         ),
       ],
     },
