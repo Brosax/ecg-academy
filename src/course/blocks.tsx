@@ -15,20 +15,21 @@ import type { EcgTruth } from '../core/ecg';
 import { FINDINGS } from '../core/findings';
 import type { L10n } from '../core/l10n';
 import { hashString } from '../core/rng';
-import { Figure, HEART_PHASES, PHASE_LABEL_KEY, phaseBeats, SceneTransport, tsn, useScene, type Beat, type FigureProps, type SceneState } from '../figures';
+import { Figure, HEART_PHASES, PHASE_LABEL_KEY, phaseBeats, Predict, prefersReducedMotion, Reserve, SceneTransport, tsn, useScene, type Beat, type FigureProps, type SceneState } from '../figures';
 import { Heart3D } from '../heart3d';
 import { lt } from '../i18n';
 import { tc } from '../i18n/common';
 import { tco } from '../i18n/course';
-import type { DrillRunnerProps, Item } from '../practice/api';
+import type { DrillRunnerProps, Item, ItemView } from '../practice/api';
 import type { DialId, DialRange, SynthResult } from '../synth';
 import { Badge, Button, Feedback, Icon, LinkButton } from '../ui';
-import type { AutoMark, Block, Lesson, LessonMark } from './api';
+import type { AutoMark, Block, Lesson, LessonMark, Prediction } from './api';
 import {
   drillMastery,
   drillRunner,
   generateItem,
   itemPlayer,
+  loadEcg,
   progressTick,
   realCase,
   scenarioDef,
@@ -36,10 +37,11 @@ import {
   synthesize,
 } from './deps';
 import { EcgDisplay, EcgPanel, EcgPlaceholder, useEcg } from './EcgFrame';
-import { DIAL_META, dialStep, pickDials, realisedDials, startDials } from './live';
+import { DIAL_META, dialStep, liveNote, pickDials, realisedDials, startDials, sweepValues } from './live';
 import { defaultBeat } from './marks';
 import { labLinks } from './lab';
 import { Markup } from './LessonText';
+import { optionOrder } from './predict';
 import { reviewKeys } from './stages';
 
 type BlockOf<K extends Block['kind']> = Extract<Block, { readonly kind: K }>;
@@ -57,6 +59,7 @@ const KIND_KEY: Readonly<Record<Block['kind'], CourseKey>> = {
   criteria: 'kindCriteria',
   worked: 'kindWorked',
   contrast: 'kindContrast',
+  film: 'kindFilm',
   check: 'kindCheck',
   drill: 'kindDrill',
   real: 'kindReal',
@@ -76,6 +79,7 @@ export function blockTitle(b: Block): L10n | null {
     case 'criteria':
     case 'worked':
     case 'contrast':
+    case 'film':
       return b.title;
     default:
       return null;
@@ -91,10 +95,11 @@ export function blockLabel(b: Block): string {
 const pct = (x: number) => Math.round(x * 100);
 const commaIfEs = (s: string) => (store.lang.value === 'es' ? s.replace('.', ',') : s);
 
-function Caption(props: { readonly text?: L10n }) {
+/** `hidden`: the caption keeps its space but stays unseen until the learner has committed to a prediction. */
+function Caption(props: { readonly text?: L10n; readonly hidden?: boolean }) {
   if (!props.text) return null;
   return (
-    <figcaption class="crs-caption">
+    <figcaption class={`crs-caption${props.hidden ? ' is-hidden' : ''}`} aria-hidden={props.hidden || undefined}>
       <Markup text={lt(props.text)} />
     </figcaption>
   );
@@ -135,6 +140,8 @@ export function BlockView(props: BlockViewProps) {
       );
     case 'live':
       return <LiveBlock block={b} />;
+    case 'film':
+      return <FilmBlock block={b} />;
     case 'figure':
       return <FigureBlock block={b} />;
     case 'heart':
@@ -240,6 +247,83 @@ function fmtDial(id: DialId, v: number): string {
 
 type LiveState = { readonly status: 'loading' } | { readonly status: 'ready'; readonly res: SynthResult } | { readonly status: 'error' };
 
+/** ms per frame: a dial sweep reads as motion; a film frame stays long enough to read its note */
+const SWEEP_MS = 160;
+const FILM_MS = 3200;
+
+/**
+ * A one-shot animation over `count` frames: play() runs 0 → count − 1 once and holds on the last frame (reduced motion
+ * jumps straight there). `onFrame` sees every frame the playhead lands on, including seeks.
+ */
+function usePlayhead(count: number, stepMs: number, onFrame?: (i: number) => void) {
+  const [frame, setFrame] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const [played, setPlayed] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const cb = useRef(onFrame);
+  cb.current = onFrame;
+  useEffect(() => () => clearTimeout(timer.current), []);
+  const land = (i: number) => {
+    setFrame(i);
+    cb.current?.(i);
+  };
+  const stop = () => {
+    clearTimeout(timer.current);
+    setPlaying(false);
+  };
+  const play = () => {
+    clearTimeout(timer.current);
+    setPlayed(true);
+    if (count < 2 || prefersReducedMotion()) {
+      setPlaying(false);
+      land(Math.max(0, count - 1));
+      return;
+    }
+    setPlaying(true);
+    land(0);
+    let i = 0;
+    const tick = () => {
+      i++;
+      land(i);
+      if (i < count - 1) timer.current = setTimeout(tick, stepMs);
+      else setPlaying(false);
+    };
+    timer.current = setTimeout(tick, stepMs);
+  };
+  const seek = (i: number) => {
+    stop();
+    land(i);
+  };
+  return { frame, playing, played, play, stop, seek };
+}
+
+/** The view without its highlighted leads: before a prediction is revealed nothing on the tracing may point at the answer. */
+const unmarked = (v: ItemView | undefined): ItemView | undefined => (v?.highlightLeads ? { ...v, highlightLeads: undefined } : v);
+
+/** Commit-before-reveal for an experiment: picking an option and pressing Reveal plays it. */
+function PredictGate(props: { readonly predict: Prediction; readonly playing: boolean; readonly onReveal: () => void }) {
+  const p = props.predict;
+  return (
+    <Predict
+      question={lt(p.question)}
+      options={optionOrder(p).map((i) => ({ id: String(i), label: lt(p.options[i]) }))}
+      correct={String(p.answer)}
+      playing={props.playing}
+      onReveal={props.onReveal}
+    />
+  );
+}
+
+/** The explanation that follows the experiment; its box keeps the size of the longest note (layout stability). */
+function NoteBox(props: { readonly notes: readonly L10n[]; readonly current: L10n | undefined }) {
+  if (props.notes.length === 0) return null;
+  return (
+    <Reserve block class={`crs-note${props.current ? '' : ' is-empty'}`} reserve={props.notes.map((n) => <Markup text={lt(n)} />)}>
+      <span aria-live="polite">{props.current ? <Markup text={lt(props.current)} /> : null}</span>
+    </Reserve>
+  );
+}
+
 function LiveBlock(props: { readonly block: BlockOf<'live'> }) {
   const b = props.block;
   const sc = scenarioDef(b.scenario);
@@ -271,7 +355,7 @@ function LiveBlock(props: { readonly block: BlockOf<'live'> }) {
         return;
       }
       const ids = b.dials.map((d) => d.id);
-      const start = startDials(sc, b.variant, ids);
+      const start = startDials(sc, b.variant, ids, b.play);
       const res = run(start);
       if (!res) {
         setState({ status: 'error' });
@@ -290,27 +374,67 @@ function LiveBlock(props: { readonly block: BlockOf<'live'> }) {
   }, [b]);
   useEffect(() => () => clearTimeout(timer.current), []);
 
+  // a failed regeneration keeps the last good tracing on screen
+  const show = (res: SynthResult | null) => setState((s) => (res ? { status: 'ready', res } : s.status === 'ready' ? s : { status: 'error' }));
+
+  const play = b.play;
+  const [revealed, setRevealed] = useState(!b.predict);
+  const sweep = useMemo(() => {
+    const r = play && sc ? sc.dials[play.dial] : undefined;
+    const from = play ? initial.current[play.dial] : undefined;
+    return play && r && from !== undefined && active.includes(play.dial) ? sweepValues(play.dial, r, from, play.to) : [];
+  }, [b, sc, active]);
+  const head = usePlayhead(sweep.length, SWEEP_MS, (i) => {
+    if (!play || !values) return;
+    const vals = { ...values, [play.dial]: sweep[i] };
+    clearTimeout(timer.current);
+    setValues(vals);
+    setPending(false);
+    show(run(vals));
+  });
+
   const change = (vals: Partial<Record<DialId, number>>) => {
+    head.stop();
     setValues(vals);
     setPending(true);
     clearTimeout(timer.current);
     timer.current = setTimeout(() => {
-      const res = run(vals);
-      // a failed regeneration keeps the last good tracing on screen
-      setState((s) => (res ? { status: 'ready', res } : s.status === 'ready' ? s : { status: 'error' }));
+      show(run(vals));
       setPending(false);
     }, 80);
   };
 
+  const note = liveNote(play, values, initial.current);
+
   return (
     <figure class="crs-fig crs-live">
       {state.status === 'ready' ? (
-        <EcgDisplay ecg={state.res.ecg} view={b.view} marks={b.marks} />
+        <EcgDisplay ecg={state.res.ecg} view={revealed ? b.view : unmarked(b.view)} marks={revealed ? b.marks : undefined} />
       ) : (
         <EcgPlaceholder layout={b.view?.layout} status={state.status} />
       )}
+      {b.predict && sweep.length > 1 && (
+        <PredictGate
+          predict={b.predict}
+          playing={head.playing}
+          onReveal={() => {
+            setRevealed(true);
+            head.play();
+          }}
+        />
+      )}
+      {sweep.length > 1 && (
+        <div class="crs-play">
+          {revealed && (
+            <Button size="sm" tone={head.played ? 'ghost' : 'primary'} icon={head.played ? 'refresh' : 'play'} disabled={head.playing} onClick={head.play}>
+              {head.played ? tco('liveReplay') : tco('livePlay')}
+            </Button>
+          )}
+          <NoteBox notes={(play?.notes ?? []).map((n) => n.text)} current={revealed ? note?.text : undefined} />
+        </div>
+      )}
       {sc && values && active.length > 0 && (
-        <fieldset class="crs-dials">
+        <fieldset class="crs-dials" disabled={!revealed || head.playing}>
           <legend class="crs-label">{tco('liveDials')}</legend>
           {b.dials.filter((d) => active.includes(d.id)).map((d) => {
             const r = sc.dials[d.id] as DialRange;
@@ -350,7 +474,59 @@ function LiveBlock(props: { readonly block: BlockOf<'live'> }) {
           </div>
         </fieldset>
       )}
-      <Caption text={b.caption} />
+      <Caption text={b.caption} hidden={!revealed} />
+    </figure>
+  );
+}
+
+// ── film: engine states in turn, in one place ──────────────────────────────────────────────────────────────────────
+
+function FilmBlock(props: { readonly block: BlockOf<'film'> }) {
+  const b = props.block;
+  const [revealed, setRevealed] = useState(!b.predict);
+  const head = usePlayhead(b.frames.length, FILM_MS);
+  // every frame is loaded up front, so stepping never falls back to a placeholder
+  useEffect(() => {
+    for (const f of b.frames) loadEcg(f.ecg).catch((e: unknown) => console.warn('course: film frame not available', e));
+  }, [b]);
+  const f = b.frames[head.frame];
+  return (
+    <figure class="crs-fig crs-film">
+      {b.predict && (
+        <PredictGate
+          predict={b.predict}
+          playing={head.playing}
+          onReveal={() => {
+            setRevealed(true);
+            head.play();
+          }}
+        />
+      )}
+      <div class="crs-play">
+        <div class="crs-film__frames" role="group" aria-label={tco('filmFrames')}>
+          {b.frames.map((fr, i) => (
+            <button
+              type="button"
+              key={i}
+              class={`crs-film__chip${i === head.frame ? ' is-on' : ''}`}
+              aria-pressed={i === head.frame}
+              disabled={!revealed}
+              onClick={() => head.seek(i)}
+            >
+              <span class="crs-film__n tabular">{i + 1}</span>
+              <Reserve reserve={[lt(fr.label)]}>{revealed ? lt(fr.label) : ''}</Reserve>
+            </button>
+          ))}
+        </div>
+        {revealed && (
+          <Button size="sm" tone={head.played ? 'ghost' : 'primary'} icon={head.played ? 'refresh' : 'play'} disabled={head.playing} onClick={head.play}>
+            {head.played ? tco('liveReplay') : tco('filmPlay')}
+          </Button>
+        )}
+        <NoteBox notes={b.frames.map((x) => x.note)} current={revealed ? f.note : undefined} />
+      </div>
+      <EcgPanel source={f.ecg} view={revealed ? b.view : unmarked(b.view)} marks={revealed ? f.marks : undefined} />
+      <Caption text={b.caption} hidden={!revealed} />
     </figure>
   );
 }

@@ -15,6 +15,7 @@ const synth = (scenario: string, seed: number, dials?: Partial<Record<DialId, nu
 });
 const GRID = { layout: '3x4+1' } as const;
 const STRIP_V1 = { layout: 'strip', lead: 'V1' } as const;
+const ARVC = synth('arvc', 1304, { rate: 64 });
 
 const lesson: Lesson = {
   id: 'h6',
@@ -62,7 +63,7 @@ const lesson: Lesson = {
         'Un deportista competitivo de 22 años consultado por palpitaciones al esfuerzo: las ondas T están invertidas en V1-V3, el QRS no es ancho y no hay dolor torácico. ¿Qué hay en tu lista? Decide tus tres primeras opciones y luego mira la solución.',
       ),
       reveal: l(
-        'QRS 不宽，所以这不是束支阻滞的**继发性**T波倒置；22 岁也早已过了"幼年型T波"的年龄（运动员只接受到 16 岁）。**致心律失常性右心室心肌病（ARVC）就在这份清单的最上面**：>14 岁、不伴完全性右束支阻滞的 V1–V3（或更广）T波倒置，是它的主要复极标准。再回头看 V1–V3 每个 QRS 的末端：紧贴 QRS 终点之后还有一个向上的小偏折——**ε波**，右心室最晚除极的那点心肌留下的签名。',
+        'QRS 不宽，所以这不是束支阻滞的**继发性**T波倒置；22 岁也早已过了"幼年型T波"的年龄（运动员只在 16 岁以下才接受）。**致心律失常性右心室心肌病（ARVC）就在这份清单的最上面**：>14 岁、不伴完全性右束支阻滞的 V1–V3（或更广）T波倒置，是它的主要复极标准。再回头看 V1–V3 每个 QRS 的末端：紧贴 QRS 终点之后还有一个向上的小偏折——**ε波**，右心室最晚除极的那点心肌留下的签名。',
         'The QRS is not wide, so this is not the **secondary** T inversion of a bundle-branch block; and at 22 the patient is well past the age of a "juvenile pattern" (accepted in athletes only under 16). **Arrhythmogenic right ventricular cardiomyopathy sits at the top of that list**: T inversion in V1–V3 or beyond, without complete RBBB, over 14 years of age, is its major repolarisation criterion. Now look again at the end of every QRS in V1–V3: just after the QRS ends there is a small upward blip — the **epsilon wave**, the signature of the last myocardium in the right ventricle to depolarise.',
         'El QRS no es ancho, así que no se trata de la inversión de la T **secundaria** a un bloqueo de rama; y con 22 años el paciente ya ha dejado atrás la edad del «patrón juvenil» (en deportistas solo se acepta por debajo de los 16). **La miocardiopatía arritmogénica del ventrículo derecho encabeza esa lista**: la inversión de la T en V1-V3 o más allá, sin BRD completa, en mayores de 14 años, es su criterio mayor de repolarización. Vuelve ahora al final de cada QRS en V1-V3: justo después de que termina el QRS hay una pequeña deflexión positiva: la **onda épsilon**, la firma del último miocardio del ventrículo derecho en despolarizarse.',
       ),
@@ -70,21 +71,12 @@ const lesson: Lesson = {
     {
       kind: 'heart',
       ecg: synth('arvc', 1302, { rate: 66 }),
-      emphasize: ['rv-outflow', 'rv-basal', 'rv-apical'],
+      emphasize: ['rv-outflow', 'rv-basal'],
       showConduction: true,
       caption: l(
-        '右心室的三个角——流出道、基底部（流入道）和心尖——构成"发育不良三角"。桥粒基因缺陷让心肌被纤维脂肪组织逐步取代，传导随之变慢：右胸导联的终末激动延长，少数患者还能在 QRS 之后记录到来自最晚除极区的小偏折（ε波）。病变并不止于右心室：左心室（尤其下侧壁）也会受累。',
-        'The three corners of the right ventricle — outflow tract, base (inflow) and apex — form the "triangle of dysplasia". A desmosomal gene defect lets fibro-fatty tissue replace myocardium there, and conduction slows with it: terminal activation in the right precordial leads is prolonged, and in a minority of patients a small deflection from the latest-activated region can be recorded after the QRS (the epsilon wave). The disease does not stop at the right ventricle: the left ventricle (inferolateral wall especially) is involved too.',
-        'Los tres ángulos del ventrículo derecho —tracto de salida, base (tracto de entrada) y ápex— forman el «triángulo de displasia». Un defecto genético desmosómico permite que tejido fibrograso sustituya al miocardio en esa zona y la conducción se enlentece: la activación terminal en las derivaciones precordiales derechas se prolonga y, en una minoría de pacientes, puede registrarse tras el QRS una pequeña deflexión procedente de la región de activación más tardía (la onda épsilon). La enfermedad no se limita al ventrículo derecho: el ventrículo izquierdo (sobre todo la pared inferolateral) también se afecta.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('一种病，三个心电图签名', 'One disease, three ECG signatures', 'Una enfermedad, tres firmas electrocardiográficas'),
-      body: l(
-        'ARVC 是遗传性桥粒疾病：心肌细胞间连接脆弱，右心室心肌被纤维脂肪组织取代。心电图从三个层面签名：\n- **除极**：右心室传导延迟——V1–V3 终末激动时间（TAD）≥55 ms；部分患者出现ε波，即 QRS 终点之后的小偏折；\n- **复极**：V1–V3 或更广的T波倒置，**不伴完全性右束支阻滞**（>14 岁，主要标准）；左心室受累时肢体导联可出现低电压；\n- **心律失常**：起源于右心室的室性早搏（PVC）或室速，呈左束支阻滞（LBBB）形态；电轴上偏提示流出道以外的右心室起源。\n临床面孔：年轻的运动员，运动诱发的心悸、晕厥，甚至猝死；家族中可能有青年猝死。2020 Padua 标准还补上了左心侧面——**左心室优势型**：下侧壁T波倒置 + 低电压，右胸导联可以几乎正常。',
-        'ARVC is an inherited disease of the desmosomes: the links between myocytes are fragile and right ventricular myocardium is replaced by fibro-fatty tissue. The ECG signs it at three levels:\n- **Depolarisation**: delayed right ventricular conduction — terminal activation duration (TAD) ≥55 ms in V1–V3; in some patients an epsilon wave, a small deflection after the end of the QRS;\n- **Repolarisation**: T inversion in V1–V3 or beyond **without complete RBBB** (over 14 y, major criterion); with LV involvement the limb-lead voltage can be low;\n- **Arrhythmia**: PVCs or VT arising from the right ventricle, with LBBB morphology; a superior axis suggests an RV origin outside the outflow tract.\nThe clinical face: a young athlete with exercise-triggered palpitations, syncope, even sudden death; there may be sudden death at a young age in the family. The 2020 Padua criteria added the left-sided face — the **left-dominant form**: inferolateral T inversion plus low voltage, with right precordial leads that can look almost normal.',
-        'La MAVD es una enfermedad hereditaria de los desmosomas: los enlaces entre los miocitos son frágiles y el miocardio del ventrículo derecho es sustituido por tejido fibrograso. El ECG la firma en tres planos:\n- **Despolarización**: conducción ventricular derecha enlentecida: tiempo de activación terminal (TAD) ≥55 ms en V1-V3; en algunos pacientes, una onda épsilon, una pequeña deflexión tras el final del QRS;\n- **Repolarización**: inversión de la T en V1-V3 o más allá **sin BRD completa** (mayores de 14 años, criterio mayor); con afectación del VI, el voltaje en las derivaciones de extremidades puede ser bajo;\n- **Arritmia**: EV o TV originados en el ventrículo derecho, con morfología de BRI; un eje superior sugiere un origen ventricular derecho fuera del tracto de salida.\nLa cara clínica: un deportista joven con palpitaciones, síncopes desencadenados por el ejercicio e incluso muerte súbita; puede haber muerte súbita juvenil en la familia. Los criterios de Padua 2020 añadieron la cara izquierda: la **forma de predominio izquierdo**: inversión de la T inferolateral más bajo voltaje, con derivaciones precordiales derechas casi normales.',
+        'ARVC 多从高亮的右心室流出道和三尖瓣下（流入道）基底游离壁开始：桥粒缺陷让心肌被纤维脂肪取代，传导变慢，右胸导联的终末激动延长，少数人在 QRS 之后留下 ε 波。左心室也会受累。',
+        'ARVC usually starts in the highlighted RV outflow tract and the basal free wall below the tricuspid valve (the inflow): a desmosomal defect lets fibro-fatty tissue replace myocardium, conduction slows, right precordial terminal activation lengthens and a minority show an epsilon wave after the QRS. The LV can be involved too.',
+        'La MAVD suele empezar en el tracto de salida y en la pared libre basal bajo la tricúspide (la entrada) del VD, resaltados: un defecto desmosómico sustituye miocardio por tejido fibrograso, la conducción se enlentece, la activación terminal precordial derecha se alarga y una minoría muestra una onda épsilon tras el QRS. El VI también puede afectarse.',
       ),
     },
     {
@@ -144,15 +136,58 @@ const lesson: Lesson = {
         'Marcus FI et al. Circulation 2010;121:1533-1541; Corrado D et al. Int J Cardiol 2020;319:106-110; Zeppenfeld K et al. 2022 ESC Guidelines for ventricular arrhythmias and the prevention of sudden cardiac death. Eur Heart J 2022;43:3997-4126',
     },
     {
-      kind: 'ecg',
-      ecg: synth('arvc', 1304, { rate: 64 }),
-      view: GRID,
-      // the epsilon wave has no AutoMark: it is not one of the named waves — describe it and let the learner find it
-      marks: [{ auto: 'qrs', lead: 'V1' }, { auto: 't', lead: 'V2' }],
+      kind: 'film',
+      title: l('三种 V1–V3 T 波倒置', 'Three T inversions in V1–V3', 'Tres inversiones de la T en V1-V3'),
+      view: { layout: '3x4+1', highlightLeads: ['V1', 'V2', 'V3'] },
+      frames: [
+        {
+          label: l('幼年型', 'Juvenile', 'Juvenil'),
+          ecg: synth('juvenile-t', 1309),
+          note: l(
+            'V1–V3 的 T 倒置，QRS 窄（约 95 ms），QRS 之后什么也没有：幼年型，运动员只在 16 岁以下算正常。',
+            'T inverted in V1–V3, a narrow QRS (about 95 ms) and nothing after it: the juvenile pattern, normal in athletes only under 16.',
+            'T negativa en V1-V3, QRS estrecho (unos 95 ms) y nada tras él: patrón juvenil, normal en deportistas solo por debajo de los 16 años.',
+          ),
+          marks: [{ auto: 't', lead: 'V2' }],
+        },
+        {
+          label: l('右束支阻滞', 'RBBB', 'Bloqueo de rama derecha'),
+          ecg: synth('rbbb', 1304, { rate: 64 }),
+          note: l(
+            'QRS 约 140 ms，V1 呈 rsR′：T 倒置跟着阻滞走（继发性）。ARVC 的 T 标准要求不伴完全性右束支阻滞。',
+            'QRS about 140 ms with rsR′ in V1: the T inversion follows the block (secondary). The ARVC T criterion needs the absence of complete RBBB.',
+            'QRS de unos 140 ms con rsR′ en V1: la inversión de la T sigue al bloqueo (secundaria). El criterio de la T de la MAVD exige que no haya BRD completa.',
+          ),
+          marks: [{ auto: 'qrs', lead: 'V1' }],
+        },
+        {
+          label: l('右室心肌病', 'ARVC', 'MAVD'),
+          ecg: ARVC,
+          note: l(
+            'QRS 约 115 ms（<120），V1–V2 的 T 深倒约 7 mm，V3 也倒置：成人身上这是 ARVC 的主要标准。接着去 QRS 之后找。',
+            'QRS about 115 ms (<120), T inverted about 7 mm in V1–V2 and in V3 too: in an adult this is the major ARVC criterion. Now hunt after the QRS.',
+            'QRS de unos 115 ms (<120), T negativa de unos 7 mm en V1-V2 y también en V3: en un adulto es el criterio mayor de MAVD. Ahora busca tras el QRS.',
+          ),
+          marks: [{ auto: 'qrs', lead: 'V1' }, { auto: 't', lead: 'V2' }],
+        },
+      ],
+      predict: {
+        question: l(
+          '第 1 帧 V1–V3 的 T 波倒置。它的 QRS 有多宽？QRS 终点和 T 波之间有什么？',
+          'In frame 1 the T is inverted in V1–V3. How wide is its QRS, and what lies between the QRS end and the T?',
+          'En el fotograma 1 la T está invertida en V1-V3. ¿Qué anchura tiene su QRS y qué hay entre el final del QRS y la T?',
+        ),
+        options: [
+          l('<120 ms，之后什么也没有', 'Under 120 ms, nothing after it', 'Menos de 120 ms, nada después'),
+          l('<120 ms，之后有一个小偏折', 'Under 120 ms, a small blip after it', 'Menos de 120 ms, una pequeña deflexión después'),
+          l('≥120 ms，V1 呈 rsR′', '120 ms or more, with rsR′ in V1', '120 ms o más, con rsR′ en V1'),
+        ],
+        answer: 0,
+      },
       caption: l(
-        'V1 的 QRS 括号是参照物：在它结束的地方逐跳细看——紧贴 QRS 终点之后有一个贴着基线的小偏折，就是**ε波**。自动标注画不出它（它不是 P/QRS/T 这样的命名波），这一项只能靠你的眼睛。第二条线索在 V2：**T波倒置**。窄 QRS + V1–V3 T波倒置 + ε波——三个签名凑齐了两个半。',
-        'The QRS bracket in V1 is the reference: look beat by beat at where it ends — a small deflection riding the baseline just after the QRS finishes is the **epsilon wave**. The automatic marks cannot draw it (it is not one of the named waves like P, QRS or T); this one is for your eyes only. The second clue sits in V2: **T inversion**. Narrow QRS + T inversion V1–V3 + epsilon wave — two and a half of the three signatures together.',
-        'El corchete del QRS en V1 sirve de referencia: mira latido a latido dónde termina; una pequeña deflexión sobre la línea de base justo después del QRS es la **onda épsilon**. Las marcas automáticas no pueden dibujarla (no es una de las ondas con nombre, como P, QRS o T); esta queda solo para tus ojos. La segunda pista está en V2: **inversión de la T**. QRS estrecho + inversión de la T en V1-V3 + onda épsilon: dos firmas y media de las tres.',
+        '一条线：先看年龄（幼年型仅 <16 岁），再看 QRS 宽度（右束支阻滞自带 T 倒置），最后去 QRS 之后找小偏折。',
+        'One line: age first (juvenile only under 16), then the QRS width (RBBB brings its own T inversion), then hunt for the blip after the QRS.',
+        'Una línea: primero la edad (juvenil solo por debajo de 16), después la anchura del QRS (el BRD trae su propia T negativa) y por último busca la pequeña deflexión tras el QRS.',
       ),
     },
     {
@@ -164,16 +199,16 @@ const lesson: Lesson = {
         {
           title: l('第一步：多大年龄？', 'Step 1: how old?', 'Paso 1: ¿qué edad tiene?'),
           body: l(
-            '幼年型T波只在儿童期正常，运动员中接受到 16 岁为止；本例 29 岁，V1–V3 的T波倒置不能再用"幼年型"解释。反过来也要记准界值：ARVC 的T波倒置标准从 >14 岁起算。',
-            'The juvenile T pattern is normal only in childhood, and in athletes it is accepted up to 16 years; at 29, T inversion in V1–V3 can no longer be filed as "juvenile". In the other direction, get the threshold right: the ARVC T-inversion criterion applies from over 14 years of age.',
-            'El patrón juvenil de la T solo es normal en la infancia y en deportistas se acepta hasta los 16 años; a los 29, la inversión de la T en V1-V3 ya no puede etiquetarse de «juvenil». Y a la inversa, fija bien el umbral: el criterio de inversión de la T de la MAVD se aplica a partir de los 14 años.',
+            '幼年型T波只在儿童期正常，运动员中只在 16 岁以下接受；本例 29 岁，V1–V3 的T波倒置不能再用"幼年型"解释。反过来也要记准界值：ARVC 的T波倒置标准从 >14 岁起算。',
+            'The juvenile T pattern is normal only in childhood, and in athletes it is accepted only under 16 years; at 29, T inversion in V1–V3 can no longer be filed as "juvenile". In the other direction, get the threshold right: the ARVC T-inversion criterion applies from over 14 years of age.',
+            'El patrón juvenil de la T solo es normal en la infancia y en deportistas solo se acepta por debajo de los 16 años; a los 29, la inversión de la T en V1-V3 ya no puede etiquetarse de «juvenil». Y a la inversa, fija bien el umbral: el criterio de inversión de la T de la MAVD se aplica a partir de los 14 años.',
           ),
         },
         {
           title: l('第二步：QRS 宽不宽？', 'Step 2: is the QRS wide?', 'Paso 2: ¿el QRS es ancho?'),
           body: l(
-            '完全性右束支阻滞的继发性T波倒置一定伴随 ≥120 ms 的宽 QRS 和 rSR′ 形态；ARVC 的标准明确要求**不伴完全性右束支阻滞**。本图 QRS 不宽——T波倒置不是束支阻滞的继发改变。',
-            'The secondary T inversion of complete RBBB always rides on a wide QRS ≥120 ms with an rSR′ shape; the ARVC criterion explicitly requires the **absence of complete RBBB**. Here the QRS is not wide — the T inversion is not secondary to a block.',
+            '完全性右束支阻滞的继发性T波倒置一定伴随 ≥120 ms 的宽 QRS 和 rsR′ 形态；ARVC 的标准明确要求**不伴完全性右束支阻滞**。本图 QRS 不宽——T波倒置不是束支阻滞的继发改变。',
+            'The secondary T inversion of complete RBBB always rides on a wide QRS ≥120 ms with an rsR′ shape; the ARVC criterion explicitly requires the **absence of complete RBBB**. Here the QRS is not wide — the T inversion is not secondary to a block.',
             'La inversión secundaria de la T de la BRD completa siempre cabalga sobre un QRS ancho ≥120 ms con morfología rsR′; el criterio de la MAVD exige expresamente la **ausencia de BRD completa**. Aquí el QRS no es ancho: la inversión de la T no es secundaria a un bloqueo.',
           ),
           marks: [{ auto: 'qrs', lead: 'V1' }],
@@ -201,7 +236,7 @@ const lesson: Lesson = {
     },
     {
       kind: 'contrast',
-      title: l('ε波之后 vs r′波之内', 'After the QRS vs inside the QRS', 'Después del QRS frente a dentro del QRS'),
+      title: l('ε波之后 vs R′波之内', 'After the QRS vs inside the QRS', 'Después del QRS frente a dentro del QRS'),
       view: GRID,
       left: {
         ecg: synth('arvc', 1306, { rate: 70 }),
@@ -210,33 +245,59 @@ const lesson: Lesson = {
       },
       right: {
         ecg: synth('irbbb', 1307, { rate: 72 }),
-        caption: l('不完全性右束支阻滞：V1 呈 rSr′，QRS 仍 <120 ms（运动员的常见正常变异）', 'Incomplete RBBB: rSr′ in V1 with the QRS still <120 ms (a common normal variant in athletes)', 'Bloqueo incompleto de rama derecha: rSr′ en V1 con el QRS aún <120 ms (variante normal frecuente en deportistas)'),
+        caption: l('不完全性右束支阻滞：V1 呈 rSR′，QRS 仍 <120 ms（运动员的常见正常变异）', 'Incomplete RBBB: rSR′ in V1 with the QRS still <120 ms (a common normal variant in athletes)', 'Bloqueo incompleto de rama derecha: rSR′ en V1 con el QRS aún <120 ms (variante normal frecuente en deportistas)'),
         marks: [{ auto: 'qrs', lead: 'V1' }],
       },
       point: l(
-        '两者都在右胸导联出现"晚到的右向力量"，区别在于它落在哪里。iRBBB：迟发的除极仍在 QRS **之内**完成——V1 出现第二个向上的 r′，QRS <120 ms，T波只是跟着 r′ 走。ARVC：没有 rSr′，QRS 本身不宽，T波倒置独立于任何束支阻滞，小偏折落在 QRS 终点**之后**——ε波。一句话：r′ 在 QRS 里，ε波在 QRS 外。',
-        'Both show a "late rightward force" in the right precordial leads; what differs is where it lands. iRBBB: the late activation still finishes **inside** the QRS — a second upright r′ in V1, QRS <120 ms, and the T simply follows the r′. ARVC: no rSr′, the QRS itself is not wide, the T inversion stands independently of any bundle-branch block, and the small deflection lands **after** the QRS ends — the epsilon wave. One line: the r′ lives inside the QRS, the epsilon wave outside it.',
-        'Ambos muestran una «fuerza derecha tardía» en las precordiales derechas; la diferencia es dónde acaba. BIRD: la activación tardía termina aún **dentro** del QRS: una segunda r′ positiva en V1, QRS <120 ms, y la T se limita a seguir a la r′. MAVD: sin rSr′, el QRS en sí no es ancho, la inversión de la T es independiente de cualquier bloqueo de rama y la pequeña deflexión cae **después** del final del QRS: la onda épsilon. En una frase: la r′ vive dentro del QRS, la épsilon fuera.',
+        '两者都在右胸导联出现"晚到的右向力量"，区别在于它落在哪里。iRBBB：迟发的除极仍在 QRS **之内**完成——V1 出现第二个向上的 R′，QRS <120 ms，T波只是跟着 R′ 走。ARVC：QRS 本身不宽（末端至多一个很小的 r′），T波倒置独立于任何束支阻滞，小偏折落在 QRS 终点**之后**——ε波。一句话：R′ 在 QRS 里，ε波在 QRS 外。',
+        'Both show a "late rightward force" in the right precordial leads; what differs is where it lands. iRBBB: the late activation still finishes **inside** the QRS — a second upright R′ in V1, QRS <120 ms, and the T simply follows the R′. ARVC: the QRS itself is not wide (at most a small terminal r′), the T inversion stands independently of any bundle-branch block, and the small deflection lands **after** the QRS ends — the epsilon wave. One line: the R′ lives inside the QRS, the epsilon wave outside it.',
+        'Ambos muestran una «fuerza derecha tardía» en las precordiales derechas; la diferencia es dónde acaba. BIRD: la activación tardía termina aún **dentro** del QRS: una segunda R′ positiva en V1, QRS <120 ms, y la T se limita a seguir a la R′. MAVD: el QRS en sí no es ancho (como mucho, una r′ terminal pequeña), la inversión de la T es independiente de cualquier bloqueo de rama y la pequeña deflexión cae **después** del final del QRS: la onda épsilon. En una frase: la R′ vive dentro del QRS, la épsilon fuera.',
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('arvc', 1308, { rate: 74 }),
+      kind: 'film',
+      title: l('在 QRS 之内，还是之后？', 'Inside the QRS, or after it?', '¿Dentro del QRS o después?'),
       view: STRIP_V1,
-      marks: [{ auto: 'qrs', lead: 'V1' }],
+      frames: [
+        {
+          label: l('ε 波', 'Epsilon wave', 'Onda épsilon'),
+          ecg: ARVC,
+          note: l(
+            'QRS 括号结束后约 30 ms，基线上还有一个小偏折（约 0.7 mm）：ε 波。自动标注画不出它，只能靠你的眼睛。',
+            'About 30 ms after the QRS bracket ends, a small blip (about 0.7 mm) still rides the baseline: the epsilon wave. No auto-mark draws it; only your eyes find it.',
+            'Unos 30 ms después de que termine el corchete del QRS, una pequeña deflexión (unos 0,7 mm) sigue sobre la línea de base: la onda épsilon. Ninguna marca automática la dibuja; solo tus ojos.',
+          ),
+          marks: [{ auto: 'qrs', lead: 'V1' }],
+        },
+        {
+          label: l('R′ 波', 'R′ wave', 'Onda R′'),
+          ecg: synth('irbbb', 1307, { rate: 72 }),
+          note: l(
+            '不完全性右束支阻滞：迟到的右向力量是括号**之内**的高 R′（约 7 mm），QRS 约 115 ms，之后什么也没有。',
+            'Incomplete RBBB: the late right force is a tall R′ (about 7 mm) **inside** the bracket, QRS about 115 ms, and nothing after it.',
+            'Bloqueo incompleto de rama derecha: la fuerza derecha tardía es una R′ alta (unos 7 mm) **dentro** del corchete, QRS de unos 115 ms, y nada después.',
+          ),
+          marks: [{ auto: 'qrs', lead: 'V1' }],
+        },
+      ],
+      predict: {
+        question: l(
+          '看这条 V1：QRS 结束到 T 波之间有什么？',
+          'Look at this V1 strip: what lies between the end of the QRS and the T?',
+          'Mira esta tira de V1: ¿qué hay entre el final del QRS y la T?',
+        ),
+        options: [
+          l('什么也没有：基线平直', 'Nothing: a flat baseline', 'Nada: la línea de base es plana'),
+          l('一个小偏折，不到 1 mm', 'A small blip, under 1 mm', 'Una pequeña deflexión, de menos de 1 mm'),
+          l('一个约 5 mm 高的波', 'A wave about 5 mm tall', 'Una onda de unos 5 mm'),
+        ],
+        answer: 1,
+        ordered: true,
+      },
       caption: l(
-        '10 秒的 V1，QRS 括号作参照：逐跳盯着每个 QRS 的终点看，紧跟其后的小偏折就是ε波。两点提醒：它只见于少数 ARVC 患者，**没有它什么也排除不了**；而且它很脆弱——低增益或滤波会把它抹平，纸速太慢时它被挤进 QRS 末端。这就是"纸到 QRS 为止"会漏掉它的原因。',
-        'Ten seconds of V1 with the QRS bracket as reference: fix your eyes on the end of every QRS; the small deflection right after it is the epsilon wave. Two cautions: it appears in only a minority of ARVC patients, so **its absence excludes nothing**; and it is fragile — low gain or a filter smooths it away, and at slow paper speed it is squeezed into the QRS end. That is exactly why "reading to the end of the QRS" misses it.',
-        'Diez segundos de V1 con el corchete del QRS como referencia: fija la vista en el final de cada QRS; la pequeña deflexión justo después es la onda épsilon. Dos avisos: solo aparece en una minoría de pacientes con MAVD, así que **su ausencia no excluye nada**; y es frágil: una ganancia baja o un filtro la borran y, con velocidad de registro lenta, se aprieta contra el final del QRS. Por eso «leer hasta el final del QRS» la pasa por alto.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('心电图提出问题，多指标给出诊断', 'The ECG asks the question; the work-up answers it', 'El ECG plantea la pregunta; el estudio la responde'),
-      body: l(
-        '当 12 导联提出 ARVC 这个问题，剩下的按清单走：\n- **病史与家族史**：运动相关晕厥、心悸、心律失常史；家族中 <40 岁的猝死。\n- **Holter**：24 h PVC >500 次；PVC/室速的 LBBB 形态——电轴上偏提示流出道以外的右心室起源，电轴下偏更常见于（常为良性的）流出道起源。\n- **影像**：超声心动图 + 心脏磁共振——右心室壁运动异常、变薄、脂肪浸润/延迟强化。\n- **家系筛查与遗传咨询**：桥粒基因（如 plakophilin-2）。\n- **运动与ICD**：评估期间停竞技运动；ICD 植入由专科团队按危险分层决定。\n- **别忘了左心室优势型**：下侧壁T波倒置 + 肢体导联低电压，而右胸导联近乎正常——同一疾病的左心面孔（Padua 2020）。\n心电图是入口，不是判决：诊断由多指标共同做出——**转诊**。',
-        'Once the 12-lead raises the question of ARVC, the rest follows a checklist:\n- **History and family history**: exercise-related syncope, palpitations, arrhythmia; sudden death under 40 in the family.\n- **Holter**: >500 PVCs/24 h; LBBB morphology of PVCs/VT — a superior axis suggests an RV origin outside the outflow tract, an inferior axis is more typical of the (usually benign) outflow tract.\n- **Imaging**: echocardiogram + cardiac MRI — RV wall-motion abnormalities, thinning, fat infiltration / late gadolinium enhancement.\n- **Family screening and genetic counselling**: desmosomal genes (e.g. plakophilin-2).\n- **Sport and ICD**: competitive sport stops while the evaluation runs; ICD implantation is decided by the specialist team on risk strata.\n- **Do not forget the left-dominant form**: inferolateral T inversion + low limb voltage with near-normal right precordial leads — the left-sided face of the same disease (Padua 2020).\nThe ECG is the entrance, not the verdict: the diagnosis is made by multiple criteria together — **refer**.',
-        'Cuando las 12 derivaciones plantean la pregunta de la MAVD, el resto sigue una lista:\n- **Anamnesis y antecedentes familiares**: síncopes relacionados con el ejercicio, palpitaciones, arritmias; muerte súbita antes de los 40 años en la familia.\n- **Holter**: >500 EV/24 h; morfología de BRI de los EV/TV: un eje superior sugiere un origen en el VD fuera del tracto de salida y un eje inferior es más típico del tracto de salida (habitualmente benigno).\n- **Imagen**: ecocardiograma + resonancia magnética cardíaca: anomalías de la contractilidad de la pared del VD, adelgazamiento, infiltración grasa / realce tardío.\n- **Cribado familiar y consejo genético**: genes desmosómicos (p. ej., plakofilina-2).\n- **Deporte y DAI**: retirada del deporte competitivo durante el estudio; el implante de DAI lo decide el equipo especializado según los estratos de riesgo.\n- **No olvides la forma de predominio izquierdo**: inversión de la T inferolateral + bajo voltaje en extremidades con precordiales derechas casi normales: la cara izquierda de la misma enfermedad (Padua 2020).\nEl ECG es la puerta de entrada, no la sentencia: el diagnóstico lo dan varios criterios juntos: **deriva**.',
+        'R′ 在 QRS 里，ε 波在 QRS 外。ε 波只见于少数 ARVC，没有它什么也排除不了；低增益、滤波或慢纸速都会抹掉它。',
+        'The R′ lives inside the QRS, the epsilon wave outside it. Epsilon appears in only a minority of ARVC, so its absence excludes nothing; low gain, filters or slow paper erase it.',
+        'La R′ vive dentro del QRS y la épsilon, fuera. La épsilon solo aparece en una minoría de MAVD, así que su ausencia no excluye nada; la ganancia baja, los filtros o el papel lento la borran.',
       ),
     },
     { kind: 'check', item: { family: 'substrates', seed: 1 } },
@@ -246,9 +307,9 @@ const lesson: Lesson = {
       kind: 'pitfalls',
       items: [
         l(
-          '把 16 岁以上运动员 V1–V3 的T波倒置叫作"幼年型"：幼年型在运动员中只到 16 岁为止；成人 V1 的T波倒置可为正常、V2 偶见，延伸到 V3 或更远（>14 岁且无完全性右束支阻滞）就要按 ARVC 主要标准去评估。',
-          'Calling T inversion V1–V3 "juvenile" in athletes over 16: the juvenile pattern runs only up to 16 years in athletes; in adults T inversion in V1 alone can be normal and in V2 is occasionally seen, but extending to V3 or beyond (over 14 y, no complete RBBB) demands work-up under the major ARVC criterion.',
-          'Llamar «juvenil» a la inversión de la T en V1-V3 en deportistas mayores de 16 años: el patrón juvenil solo llega hasta los 16 años en deportistas; en adultos, la T negativa aislada en V1 puede ser normal y en V2 se ve en ocasiones, pero extenderse a V3 o más allá (mayor de 14 años, sin BRD completa) obliga a estudiarla como criterio mayor de MAVD.',
+          '把 16 岁及以上运动员 V1–V3 的T波倒置叫作"幼年型"：幼年型在运动员中只限 16 岁以下；成人 V1 的T波倒置可为正常、V2 偶见，延伸到 V3 或更远（>14 岁且无完全性右束支阻滞）就要按 ARVC 主要标准去评估。',
+          'Calling T inversion V1–V3 "juvenile" in athletes aged 16 or over: the juvenile pattern counts only under 16 years in athletes; in adults T inversion in V1 alone can be normal and in V2 is occasionally seen, but extending to V3 or beyond (over 14 y, no complete RBBB) demands work-up under the major ARVC criterion.',
+          'Llamar «juvenil» a la inversión de la T en V1-V3 en deportistas de 16 años o más: el patrón juvenil solo cuenta por debajo de los 16 años en deportistas; en adultos, la T negativa aislada en V1 puede ser normal y en V2 se ve en ocasiones, pero extenderse a V3 o más allá (mayor de 14 años, sin BRD completa) obliga a estudiarla como criterio mayor de MAVD.',
         ),
         l(
           'ε波漏掉，因为"QRS 已经结束"：终末激动包括 S 波升支的延迟和 QRS 之后的小偏折；低增益、滤波或慢纸速都会把它抹掉——每一份疑似图都要主动扫一遍 QRS 终点之后。',
@@ -286,9 +347,9 @@ const lesson: Lesson = {
           'La onda épsilon = una pequeña deflexión terminal tras el final del QRS en V1-V3 (mayor en los criterios del Grupo de Trabajo 2010, reducida a menor en Padua 2020); tiempo de activación terminal ≥55 ms: hay que buscar ambos de forma activa.',
         ),
         l(
-          '三种T波倒置一条线：看年龄（幼年型仅 <16 岁）和 QRS（右束支阻滞的继发性T波倒置必有宽 QRS/rSR′）；r′ 在 QRS 之内，ε波在 QRS 之外。',
-          'Three T inversions, one line: check the age (juvenile only under 16) and the QRS (secondary T inversion of RBBB always has a wide QRS/rSR′); the r′ lives inside the QRS, the epsilon wave outside it.',
-          'Tres inversiones de la T en una línea: comprueba la edad (juvenil solo por debajo de 16) y el QRS (la inversión secundaria de la BRD siempre tiene QRS ancho/rsR′); la r′ vive dentro del QRS y la épsilon, fuera.',
+          '三种T波倒置一条线：看年龄（幼年型仅 <16 岁）和 QRS（右束支阻滞的继发性T波倒置必有宽 QRS/rsR′）；R′ 在 QRS 之内，ε波在 QRS 之外。',
+          'Three T inversions, one line: check the age (juvenile only under 16) and the QRS (secondary T inversion of RBBB always has a wide QRS/rsR′); the R′ lives inside the QRS, the epsilon wave outside it.',
+          'Tres inversiones de la T en una línea: comprueba la edad (juvenil solo por debajo de 16) y el QRS (la inversión secundaria de la BRD siempre tiene QRS ancho/rsR′); la R′ vive dentro del QRS y la épsilon, fuera.',
         ),
         l(
           '心电图是入口不是判决：Holter（LBBB 形态 PVC/室速、电轴上偏、>500 次/24 h）、超声与心脏磁共振、家系筛查、停竞技运动、ICD 按危险分层——转诊；并记住左心室优势型（下侧壁T↓ + 低电压）。',

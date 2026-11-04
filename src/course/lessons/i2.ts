@@ -70,20 +70,11 @@ const lesson: Lesson = {
     },
     {
       kind: 'figure',
-      figure: { id: 'territories' },
+      figure: { id: 'territories', params: { highlight: 'inferior' } },
       caption: l(
-        '点击每个供血区域：动脉（前位观）→ 心壁（短轴切面）→ 导联组。前降支 LAD 走行于前室间沟 → V1–V4；右冠状动脉 RCA 走行于右房室沟 → II、III、aVF；回旋支 LCx 走行于左房室沟 → I、aVL、V5–V6（以及背面的 V7–V9）。',
-        'Tap each territory: artery (anterior view) → wall (short-axis slice) → lead group. The LAD runs in the anterior interventricular groove → V1–V4; the RCA in the right AV groove → II, III, aVF; the LCx in the left AV groove → I, aVL, V5–V6 (and V7–V9 around the back).',
-        'Toca cada territorio: arteria (vista anterior) → pared (corte de eje corto) → grupo de derivaciones. La descendente anterior discurre por el surco interventricular anterior → V1-V4; la coronaria derecha, por el surco auriculoventricular derecho → II, III, aVF; la circunfleja, por el surco auriculoventricular izquierdo → I, aVL, V5-V6 (y V7-V9 por detrás).',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('三支树，一面心壁一支', 'Three trees, one wall each', 'Tres árboles, una pared cada uno'),
-      body: l(
-        '- **LAD（前降支）**：前壁与室间隔 → V1–V4；近段闭塞可累及 V1–V6 ± I/aVL（广泛前壁）。\n- **RCA（右冠状动脉）**：下壁与右心室 → II、III、aVF、V3R/V4R（± V1）；约 90% 的心脏为右优势型（后降支来自 RCA）。\n- **LCx（回旋支）**：侧壁与后壁 → I、aVL、V5–V6、V7–V9；它面向“电安静”区，梗死常不典型或只表现为镜像。\n- RCA 还发出窦房结动脉（约 55%）与房室结动脉：下壁 STEMI 要警惕缓慢心律与房室传导阻滞（见第 i4 课）。',
-        '- **LAD**: anterior wall and septum → V1–V4; a proximal occlusion can reach V1–V6 ± I/aVL (extensive anterior).\n- **RCA**: inferior wall and right ventricle → II, III, aVF, V3R/V4R (± V1); about 90% of hearts are right-dominant (the posterior descending artery comes from the RCA).\n- **LCx**: lateral and posterior walls → I, aVL, V5–V6, V7–V9; it faces electrically quiet territory, so its infarcts are often subtle or pure mirror images.\n- The RCA also gives the sinus node artery (about 55%) and the AV node artery: expect bradycardia and AV block in inferior STEMI (lesson i4).',
-        '- **Descendente anterior (DA)**: pared anterior y tabique → V1-V4; una oclusión proximal puede alcanzar V1-V6 ± I/aVL (anterior extenso).\n- **Coronaria derecha (CD)**: pared inferior y ventrículo derecho → II, III, aVF, V3R/V4R (± V1); cerca del 90% de los corazones son de dominancia derecha (la descendente posterior nace de la CD).\n- **Circunfleja (Cx)**: paredes lateral y posterior → I, aVL, V5-V6, V7-V9; mira a territorio «eléctricamente silente», por lo que sus infartos son a menudo sutiles o pura imagen especular.\n- La CD da también la rama del nodo sinusal (≈55%) y la del nodo AV: espera bradicardia y bloqueo AV en el IAMCEST inferior (lección i4).',
+        '点击每个供血区域：动脉 → 心壁 → 导联组。LAD → V1–V4；RCA → II、III、aVF；LCx → I、aVL、V5–V6，以及背面的 V7–V9。',
+        'Tap each territory: artery → wall → lead group. LAD → V1–V4; RCA → II, III, aVF; LCx → I, aVL, V5–V6, and V7–V9 around the back.',
+        'Toca cada territorio: arteria → pared → grupo de derivaciones. DA → V1-V4; CD → II, III, aVF; Cx → I, aVL, V5-V6, y V7-V9 por detrás.',
       ),
     },
     {
@@ -143,15 +134,15 @@ const lesson: Lesson = {
             'Find the lead with the clearest J-point elevation among the chest leads (here the tallest is V2).',
             'Busca la derivación con mayor ascenso del punto J entre las precordiales (aquí la mayor es V2).',
           ),
-          marks: [{ auto: 'st60', lead: 'V2' }],
+          marks: [{ auto: 'j', lead: 'V2' }],
           highlightLeads: ['V1', 'V2', 'V3', 'V4'],
         },
         {
           title: l('分组相邻导联', 'Group the contiguous leads', 'Agrupa las derivaciones contiguas'),
           body: l(
-            'V1–V3 抬高（V4 仅约 0.5 mm）：前间壁组。患者为 64 岁女性，V2–V3 界值 1.5 mm：V2 约 2.5 mm、V3 约 2 mm，均超过。V5–V6 与 I/aVL 不在其中——不是广泛前壁。',
-            'V1–V3 are elevated (V4 only about 0.5 mm): the anteroseptal group. The patient is a woman of 64, so the V2–V3 limit is 1.5 mm: V2 at about 2.5 mm and V3 at about 2 mm both exceed it. V5–V6 and I/aVL are spared — not an extensive anterior MI.',
-            'V1-V3 están elevadas (V4 apenas 0,5 mm): el grupo anteroseptal. La paciente es una mujer de 64 años, así que el límite en V2-V3 es 1,5 mm: V2, con unos 2,5 mm, y V3, con unos 2 mm, lo superan. V5-V6 e I/aVL se libran: no es un anterior extenso.',
+            'V1–V3 抬高（V4 不到 1 mm）：前间壁组。患者为 64 岁女性，V2–V3 界值 1.5 mm：V2 约 2.5 mm、V3 约 2 mm，均超过。V5–V6 与 I/aVL 不在其中——不是广泛前壁。',
+            'V1–V3 are elevated (V4 under 1 mm): the anteroseptal group. The patient is a woman of 64, so the V2–V3 limit is 1.5 mm: V2 at about 2.5 mm and V3 at about 2 mm both exceed it. V5–V6 and I/aVL are spared — not an extensive anterior MI.',
+            'V1-V3 están elevadas (V4 por debajo de 1 mm): el grupo anteroseptal. La paciente es una mujer de 64 años, así que el límite en V2-V3 es 1,5 mm: V2, con unos 2,5 mm, y V3, con unos 2 mm, lo superan. V5-V6 e I/aVL se libran: no es un anterior extenso.',
           ),
           highlightLeads: ['V1', 'V2', 'V3', 'V5', 'V6', 'I', 'aVL'],
         },
@@ -178,8 +169,8 @@ const lesson: Lesson = {
     },
     {
       kind: 'heart',
-      ecg: synth('stemi-inferior', 823),
-      emphasize: ['lv-mid-inferior', 'lv-basal-inferior'],
+      ecg: synth('stemi-inferior', 821),
+      emphasize: ['lv-basal-inferoseptal', 'lv-basal-inferior', 'lv-mid-inferoseptal', 'lv-mid-inferior', 'lv-apical-inferior', 'lv-basal-inferolateral'],
       caption: l(
         '同一张下壁 STEMI，换到心脏上读：播放一个心动周期，下壁节段亮起——RCA 走行的右房室沟就在这些节段旁边。II、III、aVF 从下方正对这面墙，所以损伤电流把它们的 ST 段抬起来。',
         'The same inferior STEMI, read on the heart: play one beat and the inferior segments light up — the RCA runs in the right AV groove beside them. II, III and aVF face this wall from below, so the injury current lifts their ST segments.',
@@ -215,25 +206,102 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('rv-infarction', 826, undefined, undefined, ['V3R', 'V4R']),
-      view: { layout: 'single', lead: 'V4R' },
-      marks: [{ auto: 'st', lead: 'V4R' }],
+      kind: 'film',
+      title: l('按区域找罪犯血管', 'Culprit by territory', 'La arteria responsable por territorios'),
+      view: { layout: '3x4+1' },
+      frames: [
+        {
+          label: l('前壁 → LAD', 'Anterior → LAD', 'Anterior → DA'),
+          ecg: synth('stemi-anterior', 828),
+          note: l(
+            'V1–V4抬高，V3最高；II、III、aVF压低：前壁 → LAD。',
+            'V1–V4 up, most in V3; II, III and aVF down: the front wall → LAD.',
+            'V1-V4 elevadas, sobre todo V3; II, III y aVF descendidas: la pared anterior → DA.',
+          ),
+          marks: [{ auto: 'j', lead: 'V3' }, { auto: 'j', lead: 'III' }],
+        },
+        {
+          label: l('下壁 → RCA', 'Inferior → RCA', 'Inferior → CD'),
+          ecg: synth('stemi-inferior', 824),
+          note: l(
+            'II、III、aVF抬高，III > II；I和aVL压低：下壁 → RCA。',
+            'II, III and aVF up with III > II; I and aVL down: the inferior wall → RCA.',
+            'II, III y aVF elevadas con III > II; I y aVL descendidas: la pared inferior → CD.',
+          ),
+          marks: [{ auto: 'j', lead: 'III' }, { auto: 'j', lead: 'II' }, { auto: 'j', lead: 'aVL' }],
+        },
+        {
+          label: l('侧壁 → LCx', 'Lateral → LCx', 'Lateral → Cx'),
+          ecg: synth('stemi-lateral', 829),
+          note: l(
+            'I、aVL、V5–V6抬高，III压低：侧壁 → LCx或钝缘支。',
+            'I, aVL and V5–V6 up, III down: the lateral wall → LCx or an obtuse marginal.',
+            'I, aVL y V5-V6 elevadas, III descendida: la pared lateral → Cx o una rama marginal.',
+          ),
+          marks: [{ auto: 'j', lead: 'aVL' }, { auto: 'j', lead: 'V6' }],
+        },
+        {
+          label: l('后侧壁 → LCx', 'Posterolateral → LCx', 'Posterolateral → Cx'),
+          ecg: synth('stemi-posterior', 827),
+          note: l(
+            'V1–V2压低、T波直立，V5–V6抬高：后壁和侧壁 → 多为LCx。后壁只给镜像：加做V7–V9。',
+            'V1–V2 down with upright T waves, V5–V6 up: back and side walls → usually LCx. The back wall shows only its mirror: record V7–V9.',
+            'V1-V2 descendidas con T positivas, V5-V6 elevadas: paredes posterior y lateral → habitualmente Cx. La posterior solo da su espejo: registra V7-V9.',
+          ),
+          marks: [{ auto: 't', lead: 'V2' }, { auto: 'j', lead: 'V6' }],
+        },
+        {
+          label: l('右心室 → 近端RCA', 'RV → proximal RCA', 'VD → CD proximal'),
+          ecg: synth('rv-infarction', 826),
+          note: l(
+            '下壁STEMI加V1抬高约1 mm：右心室受累 → 近端RCA。RCA也供应窦房结和房室结：留意心率。',
+            'Inferior STEMI plus V1 up about 1 mm: the right ventricle joins → proximal RCA. The RCA also feeds the sinus and AV nodes: check the rate.',
+            'IAMCEST inferior con V1 elevada alrededor de 1 mm: se suma el ventrículo derecho → CD proximal. La CD irriga también los nodos sinusal y AV: vigila la frecuencia.',
+          ),
+          marks: [{ auto: 'j', lead: 'V1' }, { auto: 'rr' }],
+        },
+      ],
+      predict: {
+        question: l('后壁闭塞时，V1–V3 会出现什么？', 'When the back wall is occluded, what will V1–V3 show?', 'Cuando se ocluye la pared posterior, ¿qué mostrarán V1-V3?'),
+        options: [
+          l('ST抬高', 'ST elevation', 'Elevación del ST'),
+          l('ST压低，T波直立', 'ST depression with upright T waves', 'Descenso del ST con ondas T positivas'),
+          l('没有变化', 'Nothing', 'Nada'),
+        ],
+        answer: 1,
+      },
       caption: l(
-        '还是下壁 STEMI（II、III、aVF 抬高，V1 也高）。把导联切换到 V4R——右侧第 5 肋间隙锁骨中线，V4 的镜像。**ST 抬高 ≥ 0.5 mm（< 30 岁男性 ≥ 1 mm）= 右心室受累**：近端 RCA。每个下壁 STEMI 都要记录这根导联。',
-        'Still an inferior STEMI (elevation in II, III, aVF and V1 as well). Switch the lead picker to V4R — the 5th right intercostal space, midclavicular line, the mirror of V4. **ST elevation ≥ 0.5 mm (≥ 1 mm in men < 30 y) = right ventricular involvement**: proximal RCA. Record this lead in every inferior STEMI.',
-        'Sigue siendo un IAMCEST inferior (elevación en II, III, aVF y también en V1). Cambia la derivación a V4R: 5.º espacio intercostal derecho, línea medioclavicular, la imagen especular de V4. **Elevación del ST ≥ 0,5 mm (≥ 1 mm en varones < 30 años) = afectación del ventrículo derecho**: CD proximal. Registra esta derivación en todo IAMCEST inferior.',
+        '五支闭塞，五组导联。每一帧先说出心壁，再说出血管。',
+        'Five occlusions, five lead groups. In each frame name the wall first, then the artery.',
+        'Cinco oclusiones, cinco grupos de derivaciones. En cada fotograma nombra primero la pared y después la arteria.',
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('stemi-posterior', 827),
-      view: { layout: '3x4+1', highlightLeads: ['V1', 'V2', 'I', 'aVL', 'V5', 'V6'] },
-      marks: [{ auto: 'st', lead: 'V2' }],
+      kind: 'film',
+      title: l('V4R：右心室有没有受累？', 'V4R: is the right ventricle involved?', 'V4R: ¿está afectado el ventrículo derecho?'),
+      view: { layout: 'single', lead: 'V4R' },
+      frames: [
+        {
+          label: l('右心室未受累', 'RV spared', 'VD respetado'),
+          ecg: synth('stemi-inferior', 824, undefined, undefined, ['V3R', 'V4R']),
+          note: l('下壁STEMI，V4R平坦：右心室未受累。', 'An inferior STEMI with a flat V4R: the right ventricle is spared.', 'Un IAMCEST inferior con V4R plana: el ventrículo derecho se libra.'),
+          marks: [{ auto: 'j', lead: 'V4R' }],
+        },
+        {
+          label: l('右心室受累', 'RV involved', 'VD afectado'),
+          ecg: synth('rv-infarction', 826, undefined, undefined, ['V3R', 'V4R']),
+          note: l(
+            'V4R抬高超过1 mm（界值0.5 mm）：右心室受累 → 近端RCA。右心室梗死依赖前负荷，慎用硝酸酯。',
+            'V4R up more than 1 mm (limit 0.5 mm): right ventricle involved → proximal RCA. It is preload-dependent: be careful with nitrates.',
+            'V4R elevada más de 1 mm (límite 0,5 mm): ventrículo derecho afectado → CD proximal. Depende de la precarga: cautela con los nitratos.',
+          ),
+          marks: [{ auto: 'j', lead: 'V4R' }],
+        },
+      ],
       caption: l(
-        '先只看胸前导联：V1–V2 呈水平型 ST **压低**，其后 T 波直立（V1–V3）。这不是“前壁缺血”——是**后壁闭塞的镜像**（后壁背对 V1–V3）。再看全图：V5–V6 也有抬高（约 1–1.5 mm），I、aVL 轻度抬高（不到 1 mm）——后侧壁 STEMI，罪犯血管多为 LCx。没有侧壁抬高时，V1–V3 孤立性压低就是唯一的线索 ⇒ 加做 V7–V9。下一屏从背面看同一位患者。',
-        'Look at the chest leads first: V1–V2 show horizontal ST **depression** ending in upright T waves (V1–V3). This is not "anterior ischaemia" — it is the **mirror of a posterior occlusion** (the posterior wall faces away from V1–V3). Now the whole tracing: V5–V6 are elevated too (about 1–1.5 mm), with I and aVL slightly up (under 1 mm) — a posterolateral STEMI, usually the LCx. When the lateral leads are silent, isolated V1–V3 depression is the only clue ⇒ record V7–V9. The next screen looks at the same patient from behind.',
-        'Mira primero las precordiales: V1-V2 muestran **descenso** horizontal del ST seguido de ondas T positivas (V1-V3). No es «isquemia anterior»: es la **imagen especular de una oclusión posterior** (la pared posterior mira al lado opuesto de V1-V3). Ahora el trazado completo: V5-V6 también están elevadas (unos 1-1,5 mm), con I y aVL algo elevadas (menos de 1 mm): IAMCEST posterolateral, habitualmente por la Cx. Cuando las laterales son silentes, el descenso aislado en V1-V3 es la única pista ⇒ registra V7-V9. La siguiente pantalla mira al mismo paciente por detrás.',
+        'V4R放在右胸第5肋间隙锁骨中线上，是V4的镜像。每个下壁STEMI都要记录。',
+        'V4R sits in the 5th right intercostal space on the midclavicular line, the mirror of V4. Record it in every inferior STEMI.',
+        'V4R va en el 5.º espacio intercostal derecho, línea medioclavicular, la imagen especular de V4. Regístrala en todo IAMCEST inferior.',
       ),
     },
     {
@@ -242,9 +310,9 @@ const lesson: Lesson = {
       view: { layout: 'single', lead: 'V8' },
       marks: [{ auto: 'st', lead: 'V8' }],
       caption: l(
-        '同一位患者、同一次记录：V8（肩胛下角处，与 V6 同一水平）直接面向后壁——**ST 抬高 ≥ 0.5 mm（< 40 岁男性 ≥ 1 mm）证实后壁闭塞**，罪犯血管多为 LCx。后壁 STEMI 按 STEMI 处理（第 i6 课深入讲解）。',
-        'Same patient, same recording: V8 (at the tip of the scapula, level with V6) faces the posterior wall directly — **ST elevation ≥ 0.5 mm (≥ 1 mm in men < 40 y) confirms a posterior occlusion**, usually the LCx. A posterior STEMI is managed as a STEMI (lesson i6 goes deeper).',
-        'El mismo paciente, el mismo registro: V8 (en la punta de la escápula, a la altura de V6) mira de frente a la pared posterior: **elevación del ST ≥ 0,5 mm (≥ 1 mm en varones < 40 años) confirma la oclusión posterior**, habitualmente de la Cx. El IAMCEST posterior se trata como un IAMCEST (la lección i6 lo desarrolla).',
+        '后侧壁那一帧的同一位患者，加做背部导联：V8（肩胛下角，与V6同一水平）**ST抬高 ≥ 0.5 mm**，证实后壁闭塞。',
+        'The posterolateral patient again, with leads on the back: V8 (tip of the scapula, level with V6) shows **ST elevation ≥ 0.5 mm**, confirming the posterior occlusion.',
+        'El paciente posterolateral de nuevo, con derivaciones en la espalda: V8 (punta de la escápula, a la altura de V6) muestra **elevación del ST ≥ 0,5 mm**, que confirma la oclusión posterior.',
       ),
     },
     {

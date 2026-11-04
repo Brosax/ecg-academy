@@ -63,62 +63,79 @@ const lesson: Lesson = {
         'Un varón de 68 años, ECG preoperatorio de rutina, sin ningún dolor torácico. ¿Qué hay en V1-V3? ¿Qué ocurrió aquí… y cuándo?',
       ),
       reveal: l(
-        'V1–V3 呈 **QS 型**，ST 段已回到基线，T 波小而直立：一次**已经愈合的前壁心肌梗死**——事件发生在数天到数年之前。心电图此刻记录的是**瘢痕**，不是事件：Q 波一旦形成通常会终身保留。所以今天的任务是给梗死**断代**——读 ST 和 T，而不是只盯着 Q。',
-        'V1-V3 show **QS complexes** with the ST back at baseline and small upright T waves: a **healed anterior myocardial infarction** — the event happened days to years ago. The ECG is recording the **scar**, not the event: once formed, Q waves usually stay for life. Today\'s task is therefore to **date** the infarct — read the ST and the T, not just the Q.',
-        'V1-V3 muestran **complejos QS** con el ST de vuelta a la línea de base y ondas T pequeñas y positivas: un **infarto anterior ya cicatrizado**; el evento ocurrió hace días o años. El ECG registra ahora la **cicatriz**, no el evento: una vez formadas, las ondas Q suelen mantenerse de por vida. La tarea de hoy es, por tanto, **datar** el infarto: lee el ST y la T, no solo la Q.',
+        'V1–V3 呈 **QS 型**，ST 段已回到基线，V2–V3 的 T 波直立：一次**已经愈合的前壁心肌梗死**——事件发生在数天到数年之前。心电图此刻记录的是**瘢痕**，不是事件：Q 波一旦形成通常会终身保留。所以今天的任务是给梗死**断代**——读 ST 和 T，而不是只盯着 Q。',
+        'V1-V3 show **QS complexes** with the ST back at baseline and upright T waves in V2-V3: a **healed anterior myocardial infarction** — the event happened days to years ago. The ECG is recording the **scar**, not the event: once formed, Q waves usually stay for life. Today\'s task is therefore to **date** the infarct — read the ST and the T, not just the Q.',
+        'V1-V3 muestran **complejos QS** con el ST de vuelta a la línea de base y ondas T positivas en V2-V3: un **infarto anterior ya cicatrizado**; el evento ocurrió hace días o años. El ECG registra ahora la **cicatriz**, no el evento: una vez formadas, las ondas Q suelen mantenerse de por vida. La tarea de hoy es, por tanto, **datar** el infarto: lee el ST y la T, no solo la Q.',
       ),
     },
     {
-      kind: 'text',
-      title: l('一条时间线：未再灌注 STEMI 的自然病程', 'One timeline: the natural history of an unreperfused STEMI', 'Una línea de tiempo: la historia natural de un IAMCEST sin reperfusión'),
-      body: l(
-        '- **分钟**：超急性 T 波——宽基底、粗大、对称，出现在 ST 抬高之前（复习第 i7 课）。\n- **分钟至数小时**：ST 段抬高（损伤电流）。\n- **约 1–12 小时**：R 波丢失，Q 波出现。\n- **数小时至数天**：T 波开始倒置——**此时 ST 仍抬高**。\n- **数天至约 2 周**：ST 段回落至基线（下壁梗死回落更快）。\n- **数周至数月**：T 波可恢复正常；**Q 波通常持续存在**。\n- 再灌注（自发或治疗）会打乱并压缩这条时间线：ST 迅速回落、T 提早倒置，甚至出现一过性 Q 波。',
-        '- **Minutes**: hyperacute T waves — broad-based, bulky, symmetric, before any ST elevation (lesson i7).\n- **Minutes to hours**: ST elevation (the injury current).\n- **About 1-12 h**: R-wave loss; Q waves appear.\n- **Hours to days**: T inversion begins — **while the ST is still elevated**.\n- **Days to about 2 weeks**: the ST returns to baseline (sooner in inferior MI).\n- **Weeks to months**: the T may normalise; **the Q usually persists**.\n- Reperfusion (spontaneous or therapeutic) scrambles and shortens this timeline: rapid ST fall, early T inversion, even transient Q waves.',
-        '- **Minutos**: ondas T hiperagudas, de base ancha, voluminosas y simétricas, antes de cualquier elevación del ST (lección i7).\n- **Minutos a horas**: elevación del ST (la corriente de lesión).\n- **Unas 1-12 h**: pérdida de la R y aparición de las ondas Q.\n- **Horas a días**: la T empieza a negativizarse **con el ST todavía elevado**.\n- **Días a unas 2 semanas**: el ST vuelve a la línea de base (antes en el infarto inferior).\n- **Semanas a meses**: la T puede normalizarse; **la Q suele persistir**.\n- La reperfusión (espontánea o terapéutica) altera y acorta esta línea de tiempo: caída rápida del ST, T negativa precoz e incluso ondas Q transitorias.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('stemi-evolution', 962, undefined, 'hyperacute'),
-      view: { layout: 'single', lead: 'V2' },
-      marks: [{ auto: 't', lead: 'V2' }],
-      caption: l(
-        '同一患者，三联图之一：胸痛 10 分钟。V2 只有一个**宽大、粗钝的 T 波**骑在小 QRS 上——ST 还没抬。数分钟内的最早信号。',
-        'The same patient, panel 1 of 3: 10 minutes of chest pain. V2 shows only a **broad, bulky T wave** riding on a small QRS — the ST has not moved yet. The earliest sign, within minutes.',
-        'El mismo paciente, panel 1 de 3: 10 minutos de dolor. En V2 solo hay una **onda T ancha y voluminosa** sobre un QRS pequeño; el ST aún no se ha elevado. El primer signo, en cuestión de minutos.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('stemi-evolution', 963),
-      view: { layout: 'single', lead: 'V2' },
-      marks: [
-        { auto: 'j', lead: 'V2' },
-        { auto: 'st', lead: 'V2' },
+      kind: 'film',
+      title: l('同一颗心：未再灌注 STEMI 的时间线', 'One heart: the timeline of an unreperfused STEMI', 'Un corazón: la cronología de un IAMCEST sin reperfusión'),
+      view: { layout: '3x4+1', highlightLeads: ['V1', 'V2', 'V3'] },
+      frames: [
+        {
+          label: l('数分钟', 'Minutes', 'Minutos'),
+          ecg: synth('stemi-evolution', 964, undefined, 'hyperacute'),
+          note: l(
+            '数分钟：V2 的 T 波宽大，比它的 R 波还高；ST 还没抬起（不到 1 mm）。',
+            'Minutes: in V2 a broad, bulky T, taller than its R; the ST has not risen yet (under 1 mm).',
+            'Minutos: en V2 una T ancha y voluminosa, más alta que su R; el ST aún no ha subido (menos de 1 mm).',
+          ),
+          marks: [{ auto: 'r', lead: 'V2' }, { auto: 't', lead: 'V2' }],
+        },
+        {
+          label: l('数小时', 'Hours', 'Horas'),
+          ecg: synth('stemi-evolution', 964),
+          note: l(
+            '数小时：V2 的 ST 从 J 点抬高近 3 mm，T 波“站”在上面；III 压低是镜像。R 波还在，还没有 Q 波。',
+            'Hours: in V2 the ST rises nearly 3 mm from the J point with the T standing on it; III is down, the mirror. The R is still there, no Q yet.',
+            'Horas: en V2 el ST sube casi 3 mm desde el punto J con la T encima; III desciende, el espejo. La R sigue ahí, aún sin Q.',
+          ),
+          marks: [{ auto: 'j', lead: 'V2' }, { auto: 'j', lead: 'III' }],
+        },
+        {
+          label: l('约 1 天', 'About a day', 'Alrededor de un día'),
+          ecg: synth('stemi-evolution', 964, undefined, 'evolving'),
+          note: l(
+            '约 12–24 小时：R 波丢失，V2 出现 Q 波，T 波在 ST 仍抬高（约 1 mm）时开始倒置。',
+            'About 12–24 h: the R is lost, a Q appears in V2, and the T turns negative while the ST is still up (about 1 mm).',
+            'Unas 12–24 h: se pierde la R, aparece una Q en V2 y la T se negativiza con el ST aún elevado (alrededor de 1 mm).',
+          ),
+          marks: [{ auto: 'q', lead: 'V2' }, { auto: 't', lead: 'V2' }],
+        },
+        {
+          label: l('数周后', 'Weeks later', 'Semanas después'),
+          ecg: synth('stemi-evolution', 964, undefined, 'old'),
+          note: l(
+            '数周后：V1–V3 呈 QS，ST 回到基线，和开头那份图相似。Q 波通常终身保留。',
+            'Weeks later: QS in V1–V3, ST back on the baseline, like the opening tracing. The Q usually stays for life.',
+            'Semanas después: QS en V1–V3, ST de vuelta a la línea de base, como el trazado inicial. La Q suele quedarse de por vida.',
+          ),
+          marks: [{ auto: 'q', lead: 'V2' }, { auto: 'st', lead: 'V2' }],
+        },
       ],
+      predict: {
+        question: l(
+          '数小时时，V2 以 R 波开始。大约一天后，V2 会以什么开始？',
+          'Hours in, V2 starts with an R. About a day later, how will V2 start?',
+          'A las pocas horas, V2 empieza con una R. Alrededor de un día después, ¿cómo empezará V2?',
+        ),
+        options: [
+          l('以 Q 波开始：R 波没了', 'With a Q: the R is gone', 'Con una Q: la R ha desaparecido'),
+          l('仍是同样的 R 波', 'With the same R', 'Con la misma R'),
+          l('以更高的 R 波开始', 'With a taller R', 'Con una R más alta'),
+        ],
+        answer: 0,
+      },
       caption: l(
-        '三联图之二：数小时后。J 点处的 **ST 段已弓背抬高**，T 波“站”在抬高的 ST 之上——损伤电流全功率，QRS 尚未受损。',
-        'Panel 2 of 3: hours later. The **ST is elevated** from the J point and the T stands on top of it — the injury current at full power, the QRS still intact.',
-        'Panel 2 de 3: horas después. El **ST está elevado** desde el punto J y la T se apoya sobre él: la corriente de lesión a plena potencia, con el QRS todavía intacto.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('stemi-evolution', 964, undefined, 'evolving'),
-      view: { layout: 'single', lead: 'V2' },
-      marks: [
-        { auto: 'q', lead: 'V2' },
-        { auto: 't', lead: 'V2' },
-      ],
-      caption: l(
-        '三联图之三：约 12–24 小时。R 波丢失、**Q 波出现**，T 波在 ST 仍抬高时开始倒置——坏死已发生，梗死正在“演变”。再往后就是本课开头的那幅：陈旧期，Q 波仍在、ST 已回落。',
-        'Panel 3 of 3: about 12-24 h. The R is lost, **the Q has appeared**, and the T starts to invert while the ST is still up — necrosis has happened and the infarct is "evolving". After this comes the tracing that opened the lesson: the old phase, Q still there, ST back down.',
-        'Panel 3 de 3: unas 12-24 h. La R se pierde, **aparece la Q** y la T empieza a negativizarse con el ST aún elevado: la necrosis ya ocurrió y el infarto está «en evolución». Después llega el registro que abría la lección: la fase antigua, con la Q presente y el ST normalizado.',
+        '同一颗心，没有再灌注，一帧一帧。再灌注会压缩这条时间线：ST 很快回落、T 提早倒置，甚至出现一过性 Q 波；下壁梗死的 ST 回落更快。',
+        'One heart, no reperfusion, frame by frame. Reperfusion shortens this timeline: fast ST fall, early T inversion, even transient Q waves; the ST settles sooner in inferior MI.',
+        'Un corazón, sin reperfusión, fotograma a fotograma. La reperfusión acorta esta cronología: caída rápida del ST, T negativa precoz e incluso Q transitorias; el ST se normaliza antes en el infarto inferior.',
       ),
     },
     {
       kind: 'criteria',
-      title: l('给梗死断代与病理性 Q：现行标准', 'Dating an infarct and the pathological Q: current criteria', 'Datado del infarto y onda Q patológica: criterios actuales'),
+      title: l('给梗死断代与病理性 Q：现行标准', 'Dating an infarct and the pathological Q: current criteria', 'Datación del infarto y onda Q patológica: criterios actuales'),
       items: [
         {
           label: l('时间线（未再灌注）', 'Timeline (unreperfused)', 'Cronología (sin reperfusión)'),
@@ -176,6 +193,14 @@ const lesson: Lesson = {
             'Resolución del ST <50% (en la derivación de mayor elevación) a los 60-90 min ⇒ angioplastia de rescate; completa ≥70%, parcial 30-70%, nula <30%',
           ),
         },
+        {
+          label: l('再灌注的其他信号', 'Other signs of reperfusion', 'Otros signos de reperfusión'),
+          value: l(
+            '胸痛缓解；加速性室性自主心律（AIVR，良性）；2 小时内 T 波终末倒置。直接 PCI 后 ST 持续抬高提示无复流',
+            'Pain relief; accelerated idioventricular rhythm (AIVR, benign); terminal T inversion within 2 h. Persistent ST elevation after primary PCI suggests no-reflow',
+            'Alivio del dolor; ritmo idioventricular acelerado (RIVA, benigno); negativización terminal de la T en las primeras 2 h. La elevación persistente del ST tras la ICP primaria sugiere no-reflow',
+          ),
+        },
       ],
       source:
         'Thygesen K et al. Fourth Universal Definition of Myocardial Infarction. Eur Heart J 2019;40:237-269; Wagner GS et al. AHA/ACCF/HRS Part VI: Acute ischemia/infarction. Circulation 2009;119:e262-e270; Klein LR, Shroff GR, Beeman W, Smith SW. Am J Emerg Med 2015;33:786-790',
@@ -199,9 +224,9 @@ const lesson: Lesson = {
         {
           title: l('达到病理性标准了吗？', 'Do they meet the criteria?', '¿Cumplen los criterios?'),
           body: l(
-            'II/III/aVF 是一个相邻组：II 的 Q 约 35 ms、深约 5 mm，III 与 aVF 是深 QS——II 与 aVF **两个**导联达标，标准满足（UDMI 不单独用 III 计数；单是 III 一个小 Q 可什么都不是，见正常变异）。顺带看电轴：约 −40°。下壁 Q 波把电轴拉向左上；下壁呈 Q/QS 而不是 rS 时，不要报成左前分支阻滞。',
-            'II/III/aVF form one contiguous group: II has a Q of about 35 ms and about 5 mm deep, and III and aVF are deep QS complexes — **two** leads, II and aVF, qualify, so the criterion is met (UDMI does not count III on its own; a small Q in III alone can mean nothing at all, see the normal variants). Note the axis on the way: about −40°. Inferior Q waves drag the axis up and left; when the inferior leads show Q/QS rather than rS, do not call it left anterior fascicular block.',
-            'II/III/aVF forman un grupo contiguo: II tiene una Q de unos 35 ms y unos 5 mm de profundidad, y III y aVF son QS profundos: **dos** derivaciones, II y aVF, cumplen, y el criterio está satisfecho (la UDMI no cuenta III por sí sola; una Q pequeña solo en III puede no significar nada, véanse las variantes normales). Fíjate de paso en el eje: unos −40°. Las Q inferiores desplazan el eje arriba y a la izquierda; si las inferiores muestran Q/QS y no rS, no lo informes como bloqueo fascicular anterior izquierdo.',
+            'II/III/aVF 是一个相邻组：II 的 Q 约 35 ms、深近 5 mm，III 与 aVF 是深 QS——II 与 aVF **两个**导联达标，标准满足（UDMI 不单独用 III 计数；单是 III 一个小 Q 可什么都不是，见正常变异）。顺带看电轴：约 −40°。下壁 Q 波把电轴拉向左上；下壁呈 Q/QS 而不是 rS 时，不要报成左前分支阻滞。',
+            'II/III/aVF form one contiguous group: II has a Q of about 35 ms and nearly 5 mm deep, and III and aVF are deep QS complexes — **two** leads, II and aVF, qualify, so the criterion is met (UDMI does not count III on its own; a small Q in III alone can mean nothing at all, see the normal variants). Note the axis on the way: about −40°. Inferior Q waves drag the axis up and left; when the inferior leads show Q/QS rather than rS, do not call it left anterior fascicular block.',
+            'II/III/aVF forman un grupo contiguo: II tiene una Q de unos 35 ms y casi 5 mm de profundidad, y III y aVF son QS profundos: **dos** derivaciones, II y aVF, cumplen, y el criterio está satisfecho (la UDMI no cuenta III por sí sola; una Q pequeña solo en III puede no significar nada, véanse las variantes normales). Fíjate de paso en el eje: unos −40°. Las Q inferiores desplazan el eje arriba y a la izquierda; si las inferiores muestran Q/QS y no rS, no lo informes como bloqueo fascicular anterior izquierdo.',
           ),
           marks: [{ auto: 'q', lead: 'II' }, { auto: 'q', lead: 'aVF' }],
           highlightLeads: ['II', 'III', 'aVF'],
@@ -209,13 +234,13 @@ const lesson: Lesson = {
         {
           title: l('ST 和 T 怎么说？', 'What do the ST and T say?', '¿Qué dicen el ST y la T?'),
           body: l(
-            'ST 段等电位，T 波直立。急性期 ST 会抬高；演变期 T 在 ST 仍抬高时倒置。这里 ST 已回落、T 已“安静”——**陈旧**。',
-            'The ST is isoelectric and the T upright. In the acute phase the ST would be elevated; in the evolving phase the T inverts while the ST is still up. Here the ST is back and the T has "settled" — **old**.',
-            'El ST es isoeléctrico y la T positiva. En la fase aguda el ST estaría elevado; en la evolución la T se negativiza con el ST aún alto. Aquí el ST se ha normalizado y la T se ha «calmado»: **antiguo**.',
+            'ST 段等电位，II 和 aVF 的 T 波直立。急性期 ST 会抬高；演变期 T 在 ST 仍抬高时倒置。这里 ST 已回落、T 已“安静”——**陈旧**。',
+            'The ST is isoelectric, and the T is upright in II and aVF. In the acute phase the ST would be elevated; in the evolving phase the T inverts while the ST is still up. Here the ST is back and the T has "settled" — **old**.',
+            'El ST es isoeléctrico y la T es positiva en II y aVF. En la fase aguda el ST estaría elevado; en la evolución la T se negativiza con el ST aún alto. Aquí el ST se ha normalizado y la T se ha «calmado»: **antiguo**.',
           ),
           marks: [
             { auto: 'st', lead: 'III' },
-            { auto: 't', lead: 'III' },
+            { auto: 't', lead: 'II' },
           ],
         },
         {
@@ -223,50 +248,40 @@ const lesson: Lesson = {
           body: l(
             '报告“陈旧性下壁心肌梗死”。下一步：核对旧图（Q 是新的还是多年前的？）、超声心动图（室壁运动、有无室壁瘤）；若有任何症状或怀疑——**查肌钙蛋白**：陈旧的图形从不排除今天的新事件。',
             'Report "old inferior myocardial infarction". Next: compare old tracings (is this Q new, or years old?), echocardiography (wall motion, aneurysm?); and if there is any symptom or doubt — **measure troponin**: an old pattern never excludes a new event today.',
-            'Reporta «infarto antiguo de cara inferior». Después: compara con ECG antiguos (¿esta Q es nueva o de hace años?), ecocardiograma (movimiento parietal, ¿aneurisma?); y si hay síntomas o dudas, **pide troponina**: un patrón antiguo nunca excluye un evento nuevo hoy.',
+            'Informa «infarto antiguo de cara inferior». Después: compara con ECG antiguos (¿esta Q es nueva o de hace años?), ecocardiograma (movimiento parietal, ¿aneurisma?); y si hay síntomas o dudas, **pide troponina**: un patrón antiguo nunca excluye un evento nuevo hoy.',
           ),
         },
       ],
     },
     {
-      kind: 'ecg',
-      ecg: synth('old-mi', 966, undefined, 'fragmented'),
-      view: { layout: '3x4+1', highlightLeads: ['V1', 'V2', 'V3', 'V4'] },
-      marks: [{ auto: 'qrs', lead: 'V4' }],
+      kind: 'figure',
+      figure: { id: 'territories', params: { highlight: 'inferior' } },
       caption: l(
-        '除了 Q 波（这里 V1–V3 呈 QS），还要找**碎裂 QRS**——RSR′ 型或额外的切迹（此处 V4 的 S 波之后多了一个 r′），代表激动绕行瘢痕的传导延迟。无束支阻滞时它是瘢痕的标志（支持性证据，不属于 UDMI 的 Q 波标准）；没有 Q 波时，它可能是唯一的线索。同一情景还有下壁、侧壁变体：Q（或碎裂）的位置跟着供血区走（第 i2 课的地图）。',
-        'Beyond the Q waves (QS in V1-V3 here), look for **fragmented QRS** — an RSR′ pattern or extra notching (here an extra r′ after the S in V4) — conduction detouring around scar. Without a bundle-branch block it is a marker of scar (supportive evidence, not part of the UDMI Q-wave criteria); where Q waves are absent it may be the only clue. The same scenario has inferior and lateral variants: the Q (or the fragmentation) follows the perfusion map from lesson i2.',
-        'Además de las ondas Q (aquí QS en V1-V3), busca el **QRS fragmentado** — un patrón RSR′ o muescas adicionales (aquí una r′ de más tras la S en V4) —: la conducción rodeando la cicatriz. Sin bloqueo de rama es un marcador de cicatriz (prueba de apoyo, no forma parte de los criterios de onda Q de la UDMI); si no hay ondas Q, puede ser la única pista. El mismo escenario tiene variantes inferior y lateral: la Q (o la fragmentación) sigue el mapa de perfusión de la lección i2.',
+        'Q 波和当初的 ST 抬高走同一张地图：哪组导联有病理性 Q，就是哪面心壁的瘢痕（第 I2 课）。',
+        'Q waves follow the same map the ST elevation did: the leads with pathological Q waves name the scarred wall (lesson I2).',
+        'Las ondas Q siguen el mismo mapa que siguió la elevación del ST: las derivaciones con Q patológicas nombran la pared cicatrizada (lección I2).',
       ),
     },
     {
-      kind: 'text',
-      title: l('再灌注的信号：谁成功了，谁要挽救性 PCI', 'Signs of reperfusion: who succeeded, who needs rescue PCI', 'Signos de reperfusión: quién reperfundió y quién necesita angioplastia de rescate'),
-      body: l(
-        '- 溶栓后 **60–90 分钟复查心电图**，在抬高最明显的导联测 ST：回落 ≥70% = 完全；30–70% = 部分；<30% = 无。\n- **<50% ⇒ 溶栓失败 ⇒ 挽救性 PCI**——不要继续等。\n- 其他再灌注信号：胸痛缓解、**加速性室性自主心律（AIVR）**——良性的“血管已再开”信号（第 r2 课）、2 小时内 T 波终末部倒置。\n- 直接 PCI 后 ST 持续抬高提示微血管阻塞（无复流），预后较差。\n- 心肌顿抑可产生**一过性 Q 波**，再灌注后数天内消失——Q 波不等于永久瘢痕的保证。',
-        '- **Repeat the ECG 60-90 min after fibrinolysis** and measure the ST in the lead with the most elevation: resolution ≥70% complete; 30-70% partial; <30% none.\n- **<50% ⇒ failed fibrinolysis ⇒ rescue PCI** — do not keep waiting.\n- Other reperfusion signs: pain relief, **accelerated idioventricular rhythm (AIVR)** — a benign "the artery has reopened" sign (lesson r2) — and early terminal T inversion within 2 h.\n- Persistent ST elevation after primary PCI suggests microvascular obstruction (no-reflow) and a worse prognosis.\n- Stunned myocardium can produce **transient Q waves** that vanish within days of reperfusion — a Q wave is not a guarantee of permanent scar.',
-        '- **Repite el ECG 60-90 min tras la fibrinólisis** y mide el ST en la derivación de mayor elevación: resolución ≥70% completa; 30-70% parcial; <30% nula.\n- **<50% ⇒ fibrinólisis fallida ⇒ angioplastia de rescate**: no sigas esperando.\n- Otros signos de reperfusión: alivio del dolor, **ritmo idioventricular acelerado (RIVA)** — signo benigno de «la arteria se ha reabierto» (lección r2) — y negativización terminal precoz de la T en las primeras 2 h.\n- La elevación persistente del ST tras la ICP primaria sugiere obstrucción microvascular (no-reflow) y peor pronóstico.\n- El miocardio aturdido puede generar **ondas Q transitorias** que desaparecen en días tras la reperfusión: una onda Q no garantiza cicatriz permanente.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('左心室室壁瘤：留下来的是抬高的 ST', 'LV aneurysm: the ST elevation that stayed', 'Aneurisma ventricular izquierdo: la elevación del ST que no se fue'),
-      body: l(
-        '- 大面积透壁梗死（尤其前壁）愈合后，室壁可变成一个薄、瘢痕化的**反常运动囊**：收缩期向外膨出。\n- 囊的持续“损伤电流”让 **ST 抬高留在 Q 波之上**——超过 4–6 周，这就不再是急性事件。\n- 关键鉴别（Klein 2015）：**T/QRS 振幅比**。T 相对 QRS 小 ⇒ 陈旧室壁瘤；V1–V4 任一导联 T/QRS 大 ⇒ 急性前壁 STEMI。\n- 图形本身不激活导管室：先核对旧图、肌钙蛋白与超声心动图，再决定去向。',
-        '- After a large transmural infarct heals (anterior especially), the wall can become a thin, scarred, **dyskinetic sac** that bulges outward in systole.\n- The sac\'s persistent "injury current" leaves the **ST elevation sitting on top of Q waves** — beyond 4-6 weeks this is no longer an acute event.\n- The key discriminator (Klein 2015): the **T/QRS amplitude ratio**. A T small relative to the QRS ⇒ an old aneurysm; a large T/QRS in any of V1-V4 ⇒ an acute anterior STEMI.\n- The pattern alone does not activate the cath lab: check old tracings, troponin and echocardiography before deciding the pathway.',
-        '- Tras cicatrizar un infarto transmural extenso (sobre todo anterior), la pared puede convertirse en un **saco discinético**, fino y cicatricial, que se expande hacia fuera en sístole.\n- Su «corriente de lesión» persistente deja la **elevación del ST sobre las ondas Q**: pasadas 4-6 semanas ya no es un evento agudo.\n- El discriminador clave (Klein 2015): el **cociente de amplitudes T/QRS**. Una T pequeña respecto al QRS ⇒ aneurisma antiguo; un cociente T/QRS grande en cualquiera de V1-V4 ⇒ IAMCEST anterior agudo.\n- El patrón por sí solo no activa el laboratorio de hemodinámica: comprueba ECG antiguos, troponina y ecocardiografía antes de decidir la vía.',
+      kind: 'heart',
+      ecg: synth('old-mi', 966, undefined, 'fragmented'),
+      emphasize: ['lv-mid-anteroseptal', 'lv-mid-anterior', 'lv-apical-anterior', 'lv-apical-septal', 'lv-apex'],
+      caption: l(
+        '播放一个心动周期：亮起的瘢痕不再除极，V1–V3 隔着它看到心腔：QS。激动绕过瘢痕边缘，在 V4 的 S 波后多出一个 r′：碎裂 QRS。',
+        'Play one beat: the lit scar no longer depolarises, so V1–V3 look through it into the cavity: QS. The wavefront detours around its edge and adds an r′ after the S in V4: fragmented QRS.',
+        'Reproduce un latido: la cicatriz iluminada ya no se despolariza, así que V1–V3 miran a través de ella a la cavidad: QS. El frente rodea su borde y añade una r′ tras la S en V4: QRS fragmentado.',
       ),
     },
     {
       kind: 'contrast',
-      title: l('同样 V1–V4 抬高：室壁瘤还是急性？', 'Same V1-V4 elevation: aneurysm or acute?', 'Misma elevación en V1-V4: ¿aneurisma o agudo?'),
+      title: l('前壁 ST 抬高：室壁瘤还是急性？', 'Anterior ST elevation: aneurysm or acute?', 'Elevación anterior del ST: ¿aneurisma o agudo?'),
       view: { layout: '6x2' },
       left: {
         ecg: synth('lv-aneurysm', 967),
         caption: l(
-          'A：QS 波之上 ST 抬高，T **小**、与 QRS 不成比例——陈旧室壁瘤（数月到数年前的前壁梗死）',
-          'A: ST elevation on QS complexes with a T **small** and out of proportion to the QRS — an old aneurysm (anterior infarct months to years ago)',
-          'A: elevación del ST sobre complejos QS con una T **pequeña** y desproporcionada al QRS: aneurisma antiguo (infarto anterior de hace meses o años)',
+          'A：宽 Q 波之上 ST 抬高，T **小**、与 QRS 不成比例——陈旧室壁瘤（数月到数年前的前壁梗死）',
+          'A: ST elevation over wide Q waves with a T **small** and out of proportion to the QRS — an old aneurysm (anterior infarct months to years ago)',
+          'A: elevación del ST sobre ondas Q anchas con una T **pequeña** y desproporcionada al QRS: aneurisma antiguo (infarto anterior de hace meses o años)',
         ),
         marks: [
           { auto: 'q', lead: 'V2' },
@@ -287,9 +302,9 @@ const lesson: Lesson = {
         ],
       },
       point: l(
-        '两份图都是“V1–V4 ST 抬高”。**A**：QS + 抬高的 ST + 相对 QRS 很小的 T（V1–V4 每个导联的 T/QRS 都小）——室壁瘤，事件早已过去。**B**：T 大、相对 QRS 成比例甚至更大——急性，事件在此时。同一个形态，不同的时间：比值把两者分开；但决定去向的是旧图 + 肌钙蛋白 + 超声，而不是任何单幅图形。',
-        'Both tracings show "ST elevation in V1-V4". **A**: QS complexes + elevated ST + a T that is tiny relative to the QRS (a small T/QRS in every lead V1-V4) — an aneurysm; the event is long past. **B**: a large T, proportionate to the QRS or bigger — acute; the event is now. Same shape, different time: the ratio separates them; but the pathway is decided by old tracings + troponin + echo, never by a single tracing.',
-        'Ambos registros muestran «elevación del ST en V1-V4». **A**: complejos QS + ST elevado + una T minúscula respecto al QRS (cociente T/QRS bajo en todas las derivaciones V1-V4): aneurisma; el evento pasó hace tiempo. **B**: T grande, proporcional al QRS o mayor: agudo; el evento es ahora. Misma forma, distinto tiempo: el cociente los separa; pero la vía la deciden los ECG antiguos, la troponina y el ecocardiograma, nunca un solo registro.',
+        '两份图都是“V2–V3 ST 抬高”。**A**：宽 Q 波 + 抬高的 ST + 相对 QRS 很小的 T（V1–V4 每个导联的 T/QRS 都小）——室壁瘤，事件早已过去。**B**：T 大、相对 QRS 成比例甚至更大——急性，事件在此时。同一个形态，不同的时间：比值把两者分开；但决定去向的是旧图 + 肌钙蛋白 + 超声，而不是任何单幅图形。',
+        'Both tracings show "ST elevation in V2-V3". **A**: wide Q waves + elevated ST + a T that is tiny relative to the QRS (a small T/QRS in every lead V1-V4) — an aneurysm; the event is long past. **B**: a large T, proportionate to the QRS or bigger — acute; the event is now. Same shape, different time: the ratio separates them; but the pathway is decided by old tracings + troponin + echo, never by a single tracing.',
+        'Ambos registros muestran «elevación del ST en V2-V3». **A**: ondas Q anchas + ST elevado + una T minúscula respecto al QRS (cociente T/QRS bajo en todas las derivaciones V1-V4): aneurisma; el evento pasó hace tiempo. **B**: T grande, proporcional al QRS o mayor: agudo; el evento es ahora. Misma forma, distinto tiempo: el cociente los separa; pero la vía la deciden los ECG antiguos, la troponina y el ecocardiograma, nunca un solo registro.',
       ),
     },
     { kind: 'check', item: { family: 'ischemia-patterns', seed: 31 } },
@@ -311,7 +326,7 @@ const lesson: Lesson = {
         l(
           'Q 波被当作“急性”来报：Q 只说明有瘢痕——给梗死断代靠 ST 和 T（ST 抬高 = 此刻；ST 已回落而 T 异常 = 演变期/陈旧）。',
           'Q waves reported as "acute": a Q only proves scar — date the infarct by the ST and T (ST up = now; ST back with abnormal T = evolving/old).',
-          'Reportar las ondas Q como «agudas»: la Q solo demuestra cicatriz; data el infarto por el ST y la T (ST elevado = ahora; ST normalizado con T alterada = en evolución/antiguo).',
+          'Informar las ondas Q como «agudas»: la Q solo demuestra cicatriz; data el infarto por el ST y la T (ST elevado = ahora; ST normalizado con T alterada = en evolución/antiguo).',
         ),
         l(
           '陈旧室壁瘤被当作急性 STEMI 再次激活导管室：Q 波上的 ST 抬高 + V1–V4 小 T/QRS 比值支持陈旧——先找旧图、查肌钙蛋白。',

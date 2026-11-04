@@ -20,6 +20,23 @@ Audience: medical students (and nurses/residents). UI in zh / en / es.
 - The truth used for grading (intervals, axis, rhythm labels) comes from the model's own timing, and must agree with what is
   measurable on the signal.
 
+## Lessons teach by doing — 2026-11-04
+- User decision: the whole course teaches through animations and small experiments with short, plain notes beside
+  them, not prose. Lessons after Foundations use `live` with `play` (a one-shot dial sweep with notes), `film` (2–6
+  engine states in one place), `heart` and `figure` blocks; how-to and rules: `docs/design/learn-by-doing.md`.
+- `tests/course/learn-by-doing.test.ts` gates stages S–X (text blocks ≤ 200 zh chars, captions ≤ 120, notes ≤ 80,
+  ≥ 3 live/heart/figure/film blocks, ≥ 1 that plays) and keeps every criteria item of
+  `tests/course/fixtures/criteria-baseline.json` word for word.
+- Every number in a note is asserted against the engine's truth in the stage test; a prediction's answer must not be
+  visible before the reveal (the player hides notes, marks, highlights, frame labels and the caption; titles must not
+  tell).
+- Every number or shape anywhere in a lesson's text is asserted at the precision its words claim (tolerance table in
+  the doc); a prediction is answered from the tracing, never from a card, caption or earlier block. The player shuffles
+  options (seeded, `src/course/predict.ts`) unless `ordered: true` marks a scale.
+- `tests/course/mark-beats.test.ts` gates every mark: on a mixed strip it names its `beat`, and every auto mark draws
+  in a panel the viewer shows (also at the end of a live sweep). Three review rounds on 2026-11-04 are logged in
+  `docs/review/learn-by-doing-2026-11-04.md`.
+
 ## Heart Lab (`src/lab/`) — merged 2026-10-17
 - The user decided to merge the old site into this one: ECG Academy is the main site; the old "Dynamic Electrocardiogram"
   app (3D heart + live 12-lead, disease library, blood flow, click-to-freeze) is copied into `src/lab/` as the Heart Lab

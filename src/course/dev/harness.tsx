@@ -37,6 +37,8 @@ function sourcesOf(b: Block): EcgSource[] {
       return b.ecg ? [b.ecg] : [];
     case 'contrast':
       return [b.left.ecg, b.right.ecg];
+    case 'film':
+      return b.frames.map((f) => f.ecg);
     default:
       return [];
   }

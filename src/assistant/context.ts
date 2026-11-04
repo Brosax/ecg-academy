@@ -83,6 +83,8 @@ export function blockText(b: Block, lang: Lang): string {
       return p(b.caption);
     case 'figure':
       return p(b.caption);
+    case 'film':
+      return [p(b.title), p(b.caption)].join('\n');
     case 'criteria':
       return [p(b.title), ...b.items.map((i) => `- ${p(i.label)}: ${p(i.value)}`)].join('\n');
     case 'worked':

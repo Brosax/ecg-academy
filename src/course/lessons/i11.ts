@@ -70,12 +70,12 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('模仿者阶梯', 'The mimic ladder', 'La escalera de imitadores'),
-      body: l(
-        '每一份"ST 抬高"都先过这道阶梯，再决定是否激活导管室：\n- **早期复极**：凹面抬高起自带切迹的 J 点，V2–V5 加下侧壁肢体导联；年轻男性、无疼痛、与旧图一致（第 i7 课）。\n- **心包炎**：广泛凹面抬高 + PR 压低（aVR 抬高）；除 aVR/V1 外无对应性压低；演变以天–周计。\n- **LVH 与 LBBB/起搏**：V1–V3 的不一致抬高属于底图预期——用比例与 Sgarbossa 判读（第 i10 课）。\n- **Brugada 1 型**：V1–V2 穹窿形抬高 ≥2 mm 下斜进倒置 T；是通道病，不是梗死。\n- **高钾血症**：窄基底"帐篷"T → P 消失 → QRS 增宽，可呈假 STEMI；先治钾。\n- **Takotsubo**：老年女性 + 应激，抬高常超出一个供血区、对应性压低少；心电图无法与 STEMI 区分。\n- **陈旧室壁瘤**：Q 波之上持续抬高，T 相对 QRS 小（第 i9 课）。\n**支持 STEMI 的五条**：对应性压低、动态演变、单一供血区分布、QRS 终末部变形、临床风险高。',
-        'Run every "ST elevation" past this ladder before anyone activates a cath lab:\n- **Early repolarization**: concave elevation from a notched J point, V2–V5 plus inferolateral limb leads; a young pain-free man, unchanged on old tracings (lesson i7).\n- **Pericarditis**: widespread concave elevation + PR depression (PR elevation in aVR); no reciprocal depression except aVR/V1; evolves over days to weeks.\n- **LVH and LBBB/pacing**: discordant V1–V3 elevation is part of the baseline — read with proportionality and Sgarbossa (lesson i10).\n- **Brugada type 1**: coved elevation ≥2 mm in V1–V2 descending into a negative T; a channelopathy, not an infarct.\n- **Hyperkalaemia**: narrow-based "tented" T → P loss → wide QRS, which can fake a STEMI; treat the potassium first.\n- **Takotsubo**: older woman + stress; elevation often beyond one territory with little reciprocity; the ECG cannot separate it from STEMI.\n- **Old aneurysm**: persistent elevation over Q waves with a T small for the QRS (lesson i9).\n**Five signs that favour STEMI**: reciprocal depression, dynamic evolution, one-territory distribution, terminal QRS distortion, high clinical risk.',
-        'Pasa toda «elevación del ST» por esta escalera antes de activar una sala de hemodinámica:\n- **Repolarización precoz**: elevación cóncava desde un punto J con muesca, V2–V5 más derivaciones inferolaterales; varón joven sin dolor, sin cambios en trazados antiguos (lección i7).\n- **Pericarditis**: elevación cóncava difusa + descenso del PR (PR elevado en aVR); sin descenso recíproco salvo aVR/V1; evoluciona en días-semanas.\n- **HVI y BRI/marcapasos**: la elevación discordante en V1–V3 es parte del trazado base; léela con proporcionalidad y Sgarbossa (lección i10).\n- **Brugada tipo 1**: elevación en cúpula ≥2 mm en V1–V2 que desciende hacia una T negativa; una canalopatía, no un infarto.\n- **Hiperpotasemia**: T «acampada» de base estrecha → pérdida de la P → QRS ancho, capaz de simular un IAMCEST; trata primero el potasio.\n- **Tako-tsubo**: mujer mayor + estrés; elevación a menudo más allá de un territorio con poca reciprocidad; el ECG no la separa del IAMCEST.\n- **Aneurisma antiguo**: elevación persistente sobre ondas Q con una T pequeña para el QRS (lección i9).\n**Cinco signos a favor del IAMCEST**: descenso recíproco, evolución dinámica, distribución de un solo territorio, distorsión terminal del QRS, riesgo clínico alto.',
+      kind: 'figure',
+      figure: { id: 'decision-tree', params: { tree: 'st-elevation' } },
+      caption: l(
+        '每一份 ST 抬高都走一遍这棵树：先看 QRS（LBBB、起搏、LVH 转到第 I10 课的规则），再看形态与分布。',
+        'Walk every ST elevation through this tree: the QRS first (LBBB, pacing and LVH branch to the rules of lesson I10), then the shape and the distribution.',
+        'Pasa toda elevación del ST por este árbol: primero el QRS (BRI, marcapasos e HVI van a las reglas de la lección I10), después la forma y la distribución.',
       ),
     },
     {
@@ -179,9 +179,9 @@ const lesson: Lesson = {
         {
           title: l('核对单第二行：对应性', 'Checklist line 2: reciprocity', 'Segunda línea: reciprocidad'),
           body: l(
-            '真正的前壁 STEMI 应在 II、III、aVF 出现镜像性压低；这里下壁导联接近等电位。心尖球形变性的损伤向量指向心尖，缺乏可以产生镜像的"对侧壁"——第二行也失分。但记住：失分只是降低可能性，从不排除闭塞。',
-            'A true anterior STEMI should mirror with depression in II, III and aVF; here the inferior leads stay nearly isoelectric. The injury vector of apical ballooning points at the apex, with no "opposite wall" to generate a mirror — the second line fails too. But note: failing lines lower the probability; they never exclude occlusion.',
-            'Un IAMCEST anterior verdadero debería espejarse con descenso en II, III y aVF; aquí las derivaciones inferiores permanecen prácticamente isoeléctricas. El vector de lesión del ballooning apical apunta al ápex, sin «pared opuesta» que genere el espejo: también falla la segunda línea. Pero recuerda: fallar las líneas baja la probabilidad, nunca excluye la oclusión.',
+            '真正的前壁 STEMI 应在 II、III、aVF 出现镜像性压低；这里 III、aVF 接近等电位，II 反而轻度抬高。心尖球形变性的损伤向量指向心尖，缺乏可以产生镜像的"对侧壁"——第二行也失分。但记住：失分只是降低可能性，从不排除闭塞。',
+            'A true anterior STEMI should mirror with depression in II, III and aVF; here III and aVF stay nearly isoelectric and II is slightly up, not down. The injury vector of apical ballooning points at the apex, with no "opposite wall" to generate a mirror — the second line fails too. But note: failing lines lower the probability; they never exclude occlusion.',
+            'Un IAMCEST anterior verdadero debería espejarse con descenso en II, III y aVF; aquí III y aVF permanecen prácticamente isoeléctricas y II incluso sube un poco. El vector de lesión del ballooning apical apunta al ápex, sin «pared opuesta» que genere el espejo: también falla la segunda línea. Pero recuerda: fallar las líneas baja la probabilidad, nunca excluye la oclusión.',
           ),
           marks: [{ auto: 'st', lead: 'III' }],
           highlightLeads: ['II', 'III', 'aVF'],
@@ -197,73 +197,121 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'ecg',
-      ecg: synth('takotsubo', 1003, undefined, 'late'),
-      view: { layout: '3x4+1', highlightLeads: ['V4', 'V5', 'V6'] },
-      marks: [{ auto: 't', lead: 'V5' }, { auto: 'qt', lead: 'V5' }],
+      kind: 'film',
+      title: l('Takotsubo：同一颗心，几天之后', 'Takotsubo: the same heart, days later', 'Tako-tsubo: el mismo corazón, días después'),
+      view: { layout: '3x4+1', highlightLeads: ['V3', 'V4', 'V5', 'V6'] },
+      frames: [
+        {
+          label: l('急性期', 'Acute', 'Fase aguda'),
+          ecg: synth('takotsubo', 1002),
+          note: l(
+            '急性期：V3–V6 抬高（V4 最高，约 3 mm），V1 不抬高，aVR 压低，III、aVF 接近等电位。',
+            'Acute: V3–V6 up (most in V4, about 3 mm), V1 not up, aVR down, III and aVF close to flat.',
+            'Fase aguda: V3–V6 elevadas (máxima en V4, unos 3 mm), V1 sin elevar, aVR descendida, III y aVF casi isoeléctricas.',
+          ),
+          marks: [{ auto: 'j', lead: 'V4' }, { auto: 'j', lead: 'aVR' }],
+        },
+        {
+          label: l('几天后', 'Days later', 'Días después'),
+          ecg: synth('takotsubo', 1002, undefined, 'late'),
+          note: l(
+            '同一颗心，几天后：抬高消失；V3–V6 和 I 的 T 波深倒（V4–V5 约 11 mm），QT 约 480 ms。数周内恢复。',
+            'Same heart, days later: the elevation has gone; deep T inversion in V3–V6 and I (about 11 mm in V4–V5), QT about 480 ms. It recovers over weeks.',
+            'El mismo corazón, días después: la elevación ha desaparecido; T negativas profundas en V3–V6 e I (unos 11 mm en V4–V5), QT de unos 480 ms. Se recupera en semanas.',
+          ),
+          marks: [{ auto: 't', lead: 'V5' }, { auto: 'qt', lead: 'V5' }],
+        },
+      ],
+      predict: {
+        question: l(
+          '几天后抬高消失。T 波倒置最深会在哪里？',
+          'Days later the elevation has gone. Where will the T waves be inverted most deeply?',
+          'Días después la elevación ha desaparecido. ¿Dónde serán más profundas las T negativas?',
+        ),
+        options: [l('V4–V5', 'V4–V5', 'V4–V5'), l('III 和 aVF', 'III and aVF', 'III y aVF'), l('V1–V2', 'V1–V2', 'V1–V2')],
+        answer: 0,
+      },
       caption: l(
-        '同一位患者，三天后，疼痛已缓解：急性期的抬高已消失，V4–V6（与 I、aVL）T 波倒置，QT 明显延长（QTc 约 505 ms，Fridericia）——takotsubo 的晚期图形，数周内逐渐恢复。这里的倒置还较浅（约 2 mm）；典型的晚期 takotsubo 倒置更深、更广泛。这一期同样会被误读为缺血性 T 波倒置（第 i9 课）甚至脑性 T 波：决定因素是时间线与急性期那份心电图。',
-        'The same patient, three days later, pain free: the acute elevation has gone, the T waves are inverted in V4–V6 (and I, aVL) and the QT is markedly prolonged (QTc about 505 ms, Fridericia) — the late takotsubo pattern, gradually resolving over weeks. The inversion here is still shallow (about 2 mm); in the typical late phase it is deeper and more widespread. This phase too gets misread as ischaemic T inversion (lesson i9) or even cerebral T waves: the timeline and the acute-phase tracing decide.',
-        'La misma paciente, tres días después, sin dolor: la elevación aguda ha desaparecido, las T son negativas en V4–V6 (e I, aVL) y el QT está marcadamente alargado (QTc unos 505 ms, Fridericia): el patrón tardío del tako-tsubo, que se resuelve gradualmente en semanas. Aquí la inversión aún es poco profunda (unos 2 mm); en la fase tardía típica es más profunda y extensa. Esta fase también se malinterpreta como inversión isquémica de la T (lección i9) o incluso como T cerebrales: deciden la línea temporal y el ECG de la fase aguda.',
+        '心电图不能区分 takotsubo 与 STEMI：先走 STEMI 路径，由造影定论。最初几天警惕与长 QT 相关的心律失常。',
+        'The ECG cannot tell takotsubo from a STEMI: start on the STEMI pathway and let angiography decide. In the first days, watch for arrhythmias of the long QT.',
+        'El ECG no distingue el tako-tsubo de un IAMCEST: empieza por la vía del IAMCEST y deja que decida la coronariografía. En los primeros días, vigila las arritmias del QT largo.',
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('early-repolarization', 1004),
-      view: { layout: '3x4+1', highlightLeads: ['V2', 'V3', 'II', 'aVF'] },
-      marks: [{ auto: 'j', lead: 'II' }, { auto: 'st60', lead: 'V3' }],
+      kind: 'film',
+      title: l('模仿者阶梯', 'The mimic ladder', 'La escalera de imitadores'),
+      view: { layout: '3x4+1' },
+      frames: [
+        {
+          label: l('心包炎', 'Pericarditis', 'Pericarditis'),
+          ecg: synth('pericarditis', 1001),
+          note: l(
+            '开头那份图：凹面抬高跨过多个供血区，II 的 PR 压低、aVR 的 PR 抬高，除 aVR 外没有镜像压低。',
+            'The opening tracing: concave elevation across several territories, PR down in II and up in aVR, no mirror except in aVR.',
+            'El trazado inicial: elevación cóncava en varios territorios, PR descendido en II y elevado en aVR, sin espejo salvo en aVR.',
+          ),
+          marks: [{ auto: 'pr-segment', lead: 'II' }, { auto: 'pr-segment', lead: 'aVR' }],
+        },
+        {
+          label: l('早期复极', 'Early repolarisation', 'Repolarización precoz'),
+          ecg: synth('early-repolarization', 1004),
+          note: l(
+            'J 点带切迹，V1–V6 和 II、III、aVF 凹面抬高（下壁 1–2 mm），除 aVR 外没有镜像：无症状年轻人的变异。',
+            'Notched J, concave elevation in V1–V6 and II, III, aVF (1–2 mm inferiorly), no mirror except aVR: a variant in a young, pain-free man.',
+            'J con muesca, elevación cóncava en V1–V6 y II, III, aVF (1–2 mm en las inferiores), sin espejo salvo aVR: una variante en un joven sin dolor.',
+          ),
+          marks: [{ auto: 'j', lead: 'II' }, { auto: 'j', lead: 'V3' }],
+        },
+        {
+          label: l('Brugada 1 型', 'Brugada type 1', 'Brugada tipo 1'),
+          ecg: synth('brugada-type1', 1005),
+          note: l(
+            'V1–V2 穹窿形抬高 ≥ 2 mm，下斜进入倒置 T，V3 正常：通道病。危险在心律（猝死），要转诊评估，不是抗栓。',
+            'Coved elevation ≥ 2 mm in V1–V2 sliding into a negative T, V3 normal: a channelopathy. The danger is the rhythm (sudden death): refer, no antithrombotics.',
+            'Elevación en cúpula ≥ 2 mm en V1–V2 que cae a una T negativa, V3 normal: una canalopatía. El peligro es el ritmo (muerte súbita): deriva, sin antitrombóticos.',
+          ),
+          marks: [{ auto: 'j', lead: 'V1' }, { auto: 't', lead: 'V1' }],
+        },
+        {
+          label: l('高钾血症', 'Hyperkalaemia', 'Hiperpotasemia'),
+          ecg: synth('hyperkalemia', 1006),
+          note: l(
+            'V3–V5 窄基底的帐篷 T（V4 的 T 比 R 高），PR ≥ 200 ms，QRS 在上限附近：先查血钾。',
+            'Narrow, tented T in V3–V5 (in V4 taller than the R), PR ≥ 200 ms, QRS near the upper limit: check the potassium first.',
+            'T estrecha y picuda en V3–V5 (en V4 más alta que la R), PR ≥ 200 ms, QRS cerca del límite: pide primero la potasemia.',
+          ),
+          marks: [{ auto: 't', lead: 'V4' }, { auto: 'pr', lead: 'II' }],
+        },
+        {
+          label: l('重度高钾', 'Severe hyperkalaemia', 'Hiperpotasemia grave'),
+          ecg: synth('hyperkalemia-severe', 1007),
+          note: l(
+            'P 波消失，QRS 宽过 150 ms 并与 T 波融合：很像“大面积 STEMI”。先用钙剂、降钾，再谈导管室。',
+            'No P waves, a QRS over 150 ms merging into the T: it can pass for a "huge STEMI". Calcium and potassium-lowering come before any cath lab.',
+            'Sin ondas P, QRS de más de 150 ms fundido con la T: puede pasar por un «IAMCEST enorme». Calcio y bajar el potasio antes que la hemodinámica.',
+          ),
+          marks: [{ auto: 'qrs', lead: 'V2' }],
+        },
+        {
+          label: l('陈旧室壁瘤', 'Old aneurysm', 'Aneurisma antiguo'),
+          ecg: synth('lv-aneurysm', 1008),
+          note: l(
+            'V2–V3 有宽 Q 波，其上 ST 仍抬高，但 V1–V4 的 T 波相对 QRS 都很小：陈旧室壁瘤，不是新事件。',
+            'Wide Q waves in V2–V3 with the ST still up, but T waves small for their QRS in V1–V4: an old aneurysm, not a new event.',
+            'Ondas Q anchas en V2–V3 con el ST aún elevado, pero T pequeñas para su QRS en V1–V4: un aneurisma antiguo, no un evento nuevo.',
+          ),
+          marks: [{ auto: 'q', lead: 'V2' }, { auto: 't', lead: 'V2' }],
+        },
+      ],
       caption: l(
-        '24 岁男性，无任何症状：ST 从**带切迹的 J 点**凹面向上抬起，分布于 V1–V6 与下壁导联（II、III、aVF 约 1–1.5 mm），**没有对应性压低**（aVR 除外）——早期复极。在无症状的年轻人这是良性变异；陷阱在于把标签贴到有危险因素、正在疼痛的 55 岁人身上——那时按闭塞处理、做系列心电图，公式只当辅助（第 i7 课）。',
-        'A 24-year-old man with no symptoms: **concave** ST rising from a **notched J point**, distributed over V1–V6 and the inferior leads (about 1–1.5 mm in II, III and aVF), and **no reciprocal depression** (aVR apart) — early repolarization. In a symptom-free young person this is a benign variant; the trap is pasting the label onto a 55-year-old with risk factors and ongoing pain — there, treat as occlusion, take serial ECGs, and use the formula only as an aid (lesson i7).',
-        'Un varón de 24 años sin síntomas: ST **cóncavo** que sube desde un **punto J con muesca**, distribuido por V1–V6 y las derivaciones inferiores (alrededor de 1-1,5 mm en II, III y aVF), y **sin descenso recíproco** (salvo aVR): repolarización precoz. En una persona joven asintomática es una variante benigna; la trampa es pegar la etiqueta a un paciente de 55 años con factores de riesgo y dolor activo: ahí trátalo como oclusión, haz ECG seriados y usa la fórmula solo como ayuda (lección i7).',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('brugada-type1', 1005),
-      view: { layout: '3x4+1', highlightLeads: ['V1', 'V2', 'V6'] },
-      marks: [{ auto: 'st', lead: 'V1' }, { auto: 't', lead: 'V1' }],
-      caption: l(
-        '38 岁男性，晕厥后：V1–V2 穹窿形 ST 抬高 ≥2 mm，下斜直接进入倒置 T 波——Brugada 1 型，唯一具诊断意义的型别；鞍形的 2 型不诊断（可在第 2–3 肋间复测，可能转为 1 型）。与 V1 的 rSr\u2032 鉴别：Brugada 的 r\u2032 宽而圆钝（β 角 > 58°），束支的 r\u2032 窄而锐利且 V6 有配套宽 S 波。这不是 STEMI：没有供血区，也没有对应性压低的问题——它的急症在心律（猝死风险），处理是转诊评估，不是抗栓。',
-        'A 38-year-old man after syncope: coved ST elevation ≥2 mm in V1–V2 sloping straight into a negative T — Brugada type 1, the only diagnostic type; the saddleback type 2 is not (re-record V1–V2 in the 2nd–3rd intercostal space, where it may convert). Versus rSr\u2032 in V1: the Brugada r\u2032 is broad and rounded (β angle > 58°), the bundle-branch r\u2032 narrow and sharp with a matching wide S in V6. This is not a STEMI: no territory, no reciprocity question — its emergency is arrhythmic (sudden-death risk), and the action is referral, not antithrombotics.',
-        'Un varón de 38 años tras un síncope: elevación del ST en cúpula ≥2 mm en V1–V2 que desciende directamente hacia una T negativa: Brugada tipo 1, el único tipo diagnóstico; el tipo 2 en silla de montar no lo es (repite V1–V2 en el 2.º–3.º espacio intercostal, donde puede convertirse). Frente al rSr\u2032 en V1: la r\u2032 de Brugada es ancha y redondeada (ángulo β > 58°), la del bloqueo de rama, estrecha y afilada con S ancha en V6. Esto no es un IAMCEST: no hay territorio ni pregunta de reciprocidad; su urgencia es arrítmica (riesgo de muerte súbita) y la actuación es derivación, no antitrombóticos.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('hyperkalemia', 1006),
-      view: { layout: '3x4+1', highlightLeads: ['V3', 'V4', 'V5', 'II'] },
-      marks: [{ auto: 't', lead: 'V4' }, { auto: 'qrs', lead: 'V4' }],
-      caption: l(
-        '61 岁女性，肾功能不全、乏力：V3–V5 与 II 最明显的**窄基底、对称"帐篷"T**（V4 的 T 比 R 还高），PR 稍延长、P 波变低，QRS 在上限——中度高钾血症。随血钾升高依次出现：帐篷 T → P 消失 → 增宽变形的 QRS（可呈假 STEMI 或类 Brugada）→ 正弦波。注意帐篷 T 是**窄**的：闭塞的超急性 T 宽大、与 QRS 不成比例（第 i7 课）。心电图与血钾数值相关很差——按患者和化验处理。',
-        'A 61-year-old woman with renal failure and weakness: **narrow-based, symmetric "tented" T waves**, clearest in V3–V5 and II (in V4 the T is taller than the R), slightly long PR, flattening P and a QRS at its upper limit — moderate hyperkalaemia. As potassium rises: tented T → P lost → a wide bizarre QRS (pseudo-STEMI or Brugada-like) → sine wave. Note the tented T is **narrow**: the hyperacute T of occlusion is broad and bulky relative to the QRS (lesson i7). The ECG correlates poorly with the potassium number — treat the patient and the laboratory.',
-        'Una mujer de 61 años con insuficiencia renal y debilidad: **T «acampadas», simétricas y de base estrecha**, más claras en V3–V5 y II (en V4 la T es más alta que la R), PR algo largo, P plana y QRS en el límite alto: hiperpotasemia moderada. Al subir el potasio: T acampadas → pérdida de la P → QRS ancho y bizarro (pseudo-IAMCEST o tipo Brugada) → onda sinusoidal. Fíjate en que la T acampada es **estrecha**: la T hiperaguda de la oclusión es ancha y voluminosa respecto al QRS (lección i7). El ECG correlaciona mal con la cifra de potasio: trata al paciente y la analítica.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('hyperkalemia-severe', 1007),
-      view: { layout: '3x4+1', highlightLeads: ['V2', 'V3'] },
-      caption: l(
-        '68 岁男性，透析漏做一次：P 波消失，QRS 宽到与 T 波融合——正弦波前期的重度高钾血症。这正是最容易被当成"大面积 STEMI"的图形：间期已无法测量，**模式本身就是诊断与急症**。处理是钙剂、转移钾与排钾——先查血钾，再谈肝素和导管室。高钾血症的任何心电图改变都是急症，且血钾数值与图形轻重相关很差。',
-        'A 68-year-old man who missed a dialysis session: P waves gone, the QRS so wide it merges with the T — severe pre-sine-wave hyperkalaemia. This is exactly the tracing most easily called a "massive STEMI": the intervals can no longer be measured, and **the pattern itself is the diagnosis and the emergency**. Treatment is calcium, shifting and removing potassium — check the K before anyone talks about heparin or a cath lab. Any ECG change of hyperkalaemia is an emergency, and the potassium level correlates poorly with how bad the tracing looks.',
-        'Un varón de 68 años que faltó a una sesión de diálisis: sin ondas P, con el QRS tan ancho que se fusiona con la T: hiperpotasemia grave, previa a la onda sinusoidal. Es justo el trazado que más fácilmente se llama «IAMCEST masivo»: los intervalos ya no se pueden medir y **el propio patrón es el diagnóstico y la urgencia**. El tratamiento es calcio, trasladar el potasio al interior celular y eliminarlo: comprueba el K antes de hablar de heparina o sala de hemodinámica. Cualquier cambio electrocardiográfico de la hiperpotasemia es una urgencia, y la cifra de potasio correlaciona mal con el aspecto del trazado.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('lv-aneurysm', 1008),
-      view: { layout: '3x4+1', highlightLeads: ['V1', 'V2', 'V3', 'V4'] },
-      marks: [{ auto: 'q', lead: 'V2' }, { auto: 'st', lead: 'V2' }, { auto: 't', lead: 'V2' }],
-      caption: l(
-        '66 岁男性，无胸痛，一年前前壁心肌梗死：V1–V3 呈 QS 波，其上 ST 持续抬高，而 T 波**小**、与 QRS 不成比例（V1–V4 每一导联 T/QRS ≤ 0.36）——陈旧室壁瘤，不是急性事件（复习第 i9 课）。V1–V4 任一导联 T/QRS 大则支持急性前壁 STEMI。在重新激活导管室之前：调旧图、测肌钙蛋白、做超声心动图。',
-        'A 66-year-old man, chest-pain free, anterior MI a year ago: QS complexes in V1–V3 with persistent ST elevation on top and a T **small** and out of proportion to the QRS (T/QRS ≤ 0.36 in every lead V1–V4) — an old aneurysm, not an acute event (recap lesson i9). A large T/QRS in any of V1–V4 favours acute anterior STEMI. Before anyone re-activates a cath lab: pull the old tracing, measure troponin, get an echo.',
-        'Un varón de 66 años, sin dolor torácico, con un infarto anterior hace un año: complejos QS en V1–V3 con elevación persistente del ST encima y una T **pequeña** y desproporcionada al QRS (T/QRS ≤ 0,36 en todas las derivaciones V1–V4): un aneurisma antiguo, no un evento agudo (repaso de la lección i9). Un cociente T/QRS alto en cualquiera de V1–V4 favorece el IAMCEST anterior agudo. Antes de reactivar la sala de hemodinámica: rescatar el ECG antiguo, medir troponina y pedir un ecocardiograma.',
+        '六份图都可能被当成闭塞，没有一份是急性闭塞。每一份先问三件事：分布、PR 段、对应性压低。',
+        'Six tracings that can pass for an occlusion; none of them is one. For each, ask three things: distribution, PR segment, reciprocal depression.',
+        'Seis trazados que pueden pasar por una oclusión y ninguno lo es. En cada uno, pregunta tres cosas: distribución, segmento PR y descenso recíproco.',
       ),
     },
     {
       kind: 'contrast',
-      title: l('两个问题分开心包炎与前壁 STEMI', 'Two questions separate pericarditis from anterior STEMI', 'Dos preguntas separan la pericarditis del IAMCEST anterior'),
+      title: l('三个问题分开心包炎与前壁 STEMI', 'Three questions separate pericarditis from anterior STEMI', 'Tres preguntas separan la pericarditis del IAMCEST anterior'),
       view: { layout: '6x2' },
       left: {
         ecg: synth('pericarditis', 1009),
@@ -284,9 +332,9 @@ const lesson: Lesson = {
         marks: [{ auto: 'st', lead: 'V3' }, { auto: 'st', lead: 'III' }],
       },
       point: l(
-        '**分布**：A 的抬高凹面向上、遍布多个供血区；B 的抬高锁定 V1–V4，一个 LAD 供血区。**PR 段**：A 在 II 压低、aVR 抬高（心房损伤）；B 的 PR 正常。再看对应性：A 除 aVR/V1 外没有镜像压低，B 在 II、III、aVF 有真正的**对应性压低**。两个问题、两条路径：A 用抗炎治疗（阿司匹林/NSAID + 秋水仙碱），B 进导管室。',
-        '**Distribution**: in A the elevation is concave and spread across several territories; in B it is locked to V1–V4, one LAD territory. **PR segment**: A shows depression in II and elevation in aVR (atrial injury); the PR in B is normal. Then reciprocity: A has no mirror depression outside aVR/V1, while B shows true **reciprocal depression** in II, III and aVF. Two questions, two pathways: A gets anti-inflammatory treatment (aspirin/NSAID + colchicine), B goes to the cath lab.',
-        '**Distribución**: en A la elevación es cóncava y repartida por varios territorios; en B está acotada a V1–V4, un territorio de la DA. **Segmento PR**: A muestra descenso en II y elevación en aVR (lesión auricular); el PR de B es normal. Y la reciprocidad: A no tiene descenso especular fuera de aVR/V1, mientras B muestra **descenso recíproco** verdadero en II, III y aVF. Dos preguntas, dos vías: A recibe tratamiento antiinflamatorio (ácido acetilsalicílico/AINE + colchicina) y B va a la sala de hemodinámica.',
+        '**分布**：A 的抬高凹面向上、遍布多个供血区；B 的抬高锁定 V1–V4，一个 LAD 供血区。**PR 段**：A 在 II 压低、aVR 抬高（心房损伤）；B 的 PR 正常。再看对应性：A 除 aVR/V1 外没有镜像压低，B 在 II、III、aVF 有真正的**对应性压低**。三个问题、两条路径：A 用抗炎治疗（阿司匹林/NSAID + 秋水仙碱），B 进导管室。',
+        '**Distribution**: in A the elevation is concave and spread across several territories; in B it is locked to V1–V4, one LAD territory. **PR segment**: A shows depression in II and elevation in aVR (atrial injury); the PR in B is normal. Then reciprocity: A has no mirror depression outside aVR/V1, while B shows true **reciprocal depression** in II, III and aVF. Three questions, two pathways: A gets anti-inflammatory treatment (aspirin/NSAID + colchicine), B goes to the cath lab.',
+        '**Distribución**: en A la elevación es cóncava y repartida por varios territorios; en B está acotada a V1–V4, un territorio de la DA. **Segmento PR**: A muestra descenso en II y elevación en aVR (lesión auricular); el PR de B es normal. Y la reciprocidad: A no tiene descenso especular fuera de aVR/V1, mientras B muestra **descenso recíproco** verdadero en II, III y aVF. Tres preguntas, dos vías: A recibe tratamiento antiinflamatorio (ácido acetilsalicílico/AINE + colchicina) y B va a la sala de hemodinámica.',
       ),
     },
     { kind: 'check', item: { family: 'occlusion', seed: 24 } },
@@ -328,7 +376,7 @@ const lesson: Lesson = {
         l(
           '过度信任有危险因素者的"早期复极"：早期复极属于年轻人、无疼痛、与旧图一致；新发抬高 + 胸痛 ⇒ 按闭塞处理，做系列心电图，别让标签代替判读。',
           'Over-trusting "early repolarization" in a patient with risk factors: early repolarization belongs to the young, the pain-free and the unchanged-on-old-tracings; new elevation + chest pain ⇒ manage as occlusion and take serial ECGs — do not let a label do the reading.',
-          'Confía de más en la «repolarización precoz» de un paciente con factores de riesgo: la repolarización precoz es de jóvenes, sin dolor e igual en trazados antiguos; elevación nueva + dolor torácico ⇒ manéjalo como oclusión y haz ECG seriados: no dejes que una etiqueta lea por ti.',
+          'Confiar demasiado en la «repolarización precoz» de un paciente con factores de riesgo: la repolarización precoz es de jóvenes, sin dolor e igual en trazados antiguos; elevación nueva + dolor torácico ⇒ manéjalo como oclusión y haz ECG seriados: no dejes que una etiqueta lea por ti.',
         ),
       ],
     },

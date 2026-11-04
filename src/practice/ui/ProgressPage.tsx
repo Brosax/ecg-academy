@@ -9,7 +9,7 @@ import { lt } from '../../i18n/index';
 import { tp } from '../../i18n/practice';
 import { Badge, Icon, ProgressRing } from '../../ui/index';
 import { COMPETENCIES } from '../api';
-import { calibration, criticalStatus, DAY_MS, findingOfCard, isPassed, learningCurve, MASTERY_TARGET } from '../core/mastery';
+import { calibration, criticalStatus, DAY_MS, findingOfCard, isPassed, learningCurve, MASTERY_TARGET, overconfident } from '../core/mastery';
 import { allAttempts, allCards, masteryOf, overallMastery, progressVersion } from '../core/progress';
 import { familiesTraining, familyAvailable, getSpec } from '../core/families';
 import { fname } from '../core/text';
@@ -161,7 +161,7 @@ export function ProgressPage() {
         ) : (
           <>
             <CalibrationChart rows={calib} labels={[tp('conf1'), tp('conf2'), tp('conf3')]} />
-            {sure.n >= 5 && sure.accuracy !== null && sure.accuracy < 0.8 && <p class="pr-warn">{tp('overconfident')}</p>}
+            {overconfident(sure) && <p class="pr-warn">{tp('overconfident')}</p>}
           </>
         )}
       </section>

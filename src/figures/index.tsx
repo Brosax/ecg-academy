@@ -34,7 +34,7 @@ export type { FigureId, FigureParams, FigureProps } from './api';
 export { FIGURE_IDS, SCENE_IDS } from './api';
 export type { SceneId } from './api';
 // scene runtime pieces the course may use (HeartBlock transport, narration box); nothing from scene/* is imported elsewhere
-export { HEART_PHASES, JOURNEY_PHASES, PHASE_LABEL_KEY, phaseBeats, SceneTransport, tsn, useScene } from './scene/index';
+export { HEART_PHASES, JOURNEY_PHASES, PHASE_LABEL_KEY, phaseBeats, Predict, SceneTransport, tsn, useScene } from './scene/index';
 export type { Beat, BeatDef, SceneState, Timeline } from './scene/index';
 export { prefersReducedMotion, Reserve } from './shared';
 export { TREES, TREE_IDS } from './trees/index';

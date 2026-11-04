@@ -101,14 +101,56 @@ export function authoredDialValue(sc: ScenarioDef, variant: string | undefined, 
  * Start values of a live block's dials: only dials the scenario allows (ScenarioDef.dials), each at its authored value
  * or the middle of its range, clamped and on the step grid.
  */
-export function startDials(sc: ScenarioDef, variant: string | undefined, ids: readonly DialId[]): Partial<Record<DialId, number>> {
+export function startDials(
+  sc: ScenarioDef,
+  variant: string | undefined,
+  ids: readonly DialId[],
+  play?: { readonly dial: DialId; readonly from?: number },
+): Partial<Record<DialId, number>> {
   const out: Partial<Record<DialId, number>> = {};
   for (const id of ids) {
     const r = sc.dials[id];
     if (!r) continue;
-    out[id] = snapDial(id, r, authoredDialValue(sc, variant, id) ?? (r.min + r.max) / 2);
+    const from = play?.dial === id ? play.from : undefined;
+    out[id] = snapDial(id, r, from ?? authoredDialValue(sc, variant, id) ?? (r.min + r.max) / 2);
   }
   return out;
+}
+
+/**
+ * The values a played dial passes through, from → to, on the slider grid: both ends included, no repeats, at most
+ * `frames` of them (fewer when the grid is coarser), so every frame of the animation is a tracing the slider could show.
+ */
+export function sweepValues(id: DialId, r: DialRange, from: number, to: number, frames = 24): number[] {
+  const a = snapDial(id, r, from);
+  const b = snapDial(id, r, to);
+  const out: number[] = [];
+  const n = Math.max(1, frames - 1);
+  for (let k = 0; k <= n; k++) {
+    const v = snapDial(id, r, a + ((b - a) * k) / n);
+    if (out[out.length - 1] !== v) out.push(v);
+  }
+  return out;
+}
+
+/** The note whose [min, max] holds v (the first one, if authored ranges touch). */
+export function noteAt<N extends { readonly min: number; readonly max: number }>(notes: readonly N[] | undefined, v: number): N | undefined {
+  return notes?.find((n) => v >= n.min - 1e-9 && v <= n.max + 1e-9);
+}
+
+/**
+ * The note for what is on screen. Notes are written for the other dials at their start values, so once the learner
+ * moves another dial no note shows rather than a stale one.
+ */
+export function liveNote<N extends { readonly min: number; readonly max: number }>(
+  play: { readonly dial: DialId; readonly notes?: readonly N[] } | undefined,
+  values: Readonly<Partial<Record<DialId, number>>> | null,
+  start: Readonly<Partial<Record<DialId, number>>>,
+): N | undefined {
+  if (!play || !values) return undefined;
+  const v = values[play.dial];
+  const othersAtStart = (Object.keys(start) as DialId[]).every((id) => id === play.dial || values[id] === start[id]);
+  return v !== undefined && othersAtStart ? noteAt(play.notes, v) : undefined;
 }
 
 /** The dials the engine realised (present in `applied`), in the block's order. */

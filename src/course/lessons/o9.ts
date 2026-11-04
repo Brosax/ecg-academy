@@ -5,12 +5,17 @@
  */
 import { l } from '../../core/l10n';
 import type { EcgSource } from '../../practice/api';
-import type { DialId } from '../../synth/api';
+import type { DialId, PlacementSpec } from '../../synth/api';
 import type { Lesson } from '../api';
 
 const synth = (scenario: string, seed: number, dials?: Partial<Record<DialId, number>>, variant?: string): EcgSource => ({
   kind: 'synth',
   req: { scenario, seed, ...(variant ? { variant } : {}), ...(dials ? { dials } : {}) },
+});
+/** One heart (normal, 72/min) recorded through another electrode placement: only the recording changes. */
+const placed = (seed: number, placement?: PlacementSpec): EcgSource => ({
+  kind: 'synth',
+  req: { scenario: 'normal', seed, dials: { rate: 72 }, ...(placement ? { recording: { placement } } : {}) },
 });
 
 const lesson: Lesson = {
@@ -49,12 +54,60 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('先查记录，再查心脏', 'Check the recording before the heart', 'Comprueba el registro antes que el corazón'),
-      body: l(
-        '读到“不对劲”的肢体导联，先查记录再查心脏（f6 的规则）。所有接反签名都来自同一条原理：导联是两个电极电位之差，交换电极就是给导联换符号或换位置。\n- **LA/RA（左右上肢）**：I 导联 P、QRS、T 全倒置；II↔III 互换；aVR↔aVL 互换；aVF 不变；V1–V6 完全正常。\n- **LA/LL（左上肢/左下肢）**：I↔II 互换；aVL↔aVF 互换；III 倒置；aVR 正常——I 导联不倒，最容易漏。\n- **RA/LL（右上肢/左下肢）**：I、II、III 看起来全都倒置；貌似下壁 Q 波或低位房性心律。\n- **任何涉及右腿（中性）电极的反接**：某个肢体导联几乎变成直线。\n所有肢体接反中 **V1–V6 都不受影响**——胸前一旦异常，想别的（右位心、病变、胸导联错位）。',
-        'When the limb leads look wrong, check the recording before the heart (the f6 rule). Every reversal signature follows one principle: a lead is the difference between two electrodes, so swapping them flips a lead\'s sign or moves it.\n- **LA/RA (both arms)**: lead I fully inverted (P, QRS, T); II↔III swapped; aVR↔aVL swapped; aVF unchanged; V1–V6 completely normal.\n- **LA/LL (left arm / left leg)**: I↔II swapped; aVL↔aVF swapped; III inverted; aVR normal — no inverted lead I to alert you, so the easiest to miss.\n- **RA/LL (right arm / left leg)**: I, II and III all look inverted; mimics inferior Q waves or a low atrial rhythm.\n- **Any reversal involving the right-leg (neutral) electrode**: one limb lead collapses to almost a flat line.\nIn every limb reversal **V1–V6 are unaffected** — if the chest leads are abnormal, think of something else (dextrocardia, disease, chest-electrode misplacement).',
-        'Cuando las derivaciones periféricas parecen raras, comprueba el registro antes que el corazón (la regla de f6). Todas las firmas de inversión siguen un mismo principio: una derivación es la diferencia entre dos electrodos, así que intercambiarlos cambia el signo o el puesto de la derivación.\n- **AI/AD (los dos brazos)**: la derivación I invertida por completo (P, QRS y T); II↔III intercambiadas; aVR↔aVL intercambiadas; aVF sin cambios; V1-V6 totalmente normales.\n- **AI/PI (brazo izquierdo / pierna izquierda)**: I↔II intercambiadas; aVL↔aVF intercambiadas; III invertida; aVR normal: como la I no se invierte, es la más fácil de pasar por alto.\n- **AD/PI (brazo derecho / pierna izquierda)**: I, II y III parecen todas invertidas; simula ondas Q inferiores o un ritmo auricular bajo.\n- **Cualquier inversión en la que intervenga el electrodo de la pierna derecha (neutro)**: una derivación periférica se queda casi en línea plana.\nEn todas las inversiones de miembros **V1-V6 no se afectan**: si las precordiales son anómalas, piensa en otra cosa (dextrocardia, enfermedad, mala colocación de los electrodos torácicos).',
+      kind: 'figure',
+      figure: { id: 'cable-swap', params: { start: 'correct' } },
+      ecg: placed(1561),
+      caption: l(
+        '导联是两个电极之差。交换两根导线，导联就会翻转或互换位置；RA、LA、LL之间互换从不改变胸导联。逐一试试每种接反。',
+        'A lead is the difference between two electrodes. Swap two cables and leads flip or trade places; swaps among RA, LA and LL never change the chest leads. Try each swap.',
+        'Una derivación es la diferencia entre dos electrodos. Intercambia dos cables y las derivaciones se invierten o cambian de sitio; los intercambios entre RA, LA y LL nunca cambian las precordiales. Prueba cada inversión.',
+      ),
+    },
+    {
+      kind: 'film',
+      title: l('同一颗心，接错肢体导线', 'One heart, the limb cables wrong', 'Un corazón, los cables de miembros mal puestos'),
+      view: { layout: '3x4+1', highlightLeads: ['I', 'II', 'III', 'aVR', 'aVL', 'aVF'] },
+      frames: [
+        {
+          label: l('接法正确', 'Correct', 'Correcto'),
+          ecg: placed(1561),
+          note: l('接法正确：I和II的P、QRS、T都直立，P在II最高；aVR全为负。', 'Correct cables: P, QRS and T upright in I and II, the P tallest in II; aVR all negative.', 'Cables correctos: P, QRS y T positivas en I y II, con la P más alta en II; aVR todo negativo.'),
+          marks: [{ auto: 'p', lead: 'II' }],
+        },
+        {
+          label: l('左右上肢接反', 'LA/RA swapped', 'Inversión AI/AD'),
+          ecg: placed(1561, { limbs: { RA: 'LA', LA: 'RA' } }),
+          note: l('两上肢接反：I导联完全倒置（P、QRS、T）；II与III互换，aVR与aVL互换；aVF和V1–V6不变。', 'Arm cables swapped: lead I fully inverted (P, QRS, T); II and III trade places, so do aVR and aVL; aVF and V1–V6 unchanged.', 'Cables de los brazos invertidos: I del todo invertida (P, QRS, T); II y III se intercambian, igual que aVR y aVL; aVF y V1–V6 no cambian.'),
+          marks: [{ auto: 'p', lead: 'I' }],
+        },
+        {
+          label: l('左上肢与左下肢接反', 'LA/LL swapped', 'Inversión AI/PI'),
+          ecg: placed(1561, { limbs: { LA: 'LL', LL: 'LA' } }),
+          note: l('左上肢与左下肢接反：I与II互换，aVL与aVF互换，III倒置，aVR不变。线索：I的P波比II大。', 'Left arm and left leg swapped: I and II trade places, aVL and aVF too, III inverts, aVR unchanged. Clue: the P is bigger in I than in II.', 'Brazo y pierna izquierdos invertidos: I y II se intercambian, aVL y aVF también, III se invierte y aVR no cambia. Pista: la P es mayor en I que en II.'),
+          marks: [{ auto: 'p', lead: 'I' }, { auto: 'p', lead: 'II' }],
+        },
+        {
+          label: l('右上肢与左下肢接反', 'RA/LL swapped', 'Inversión AD/PI'),
+          ecg: placed(1561, { limbs: { RA: 'LL', LL: 'RA' } }),
+          note: l('右上肢与左下肢接反：I、II、III看起来都倒置，aVR变直立，aVF变成负的：像下壁Q波或低位房性心律。', 'Right arm and left leg swapped: I, II and III all look inverted, aVR turns upright and aVF negative: it can pass for inferior Q waves or a low atrial rhythm.', 'Brazo derecho y pierna izquierda invertidos: I, II y III parecen invertidas, aVR se vuelve positiva y aVF negativa: puede pasar por Q inferiores o un ritmo auricular bajo.'),
+          marks: [{ auto: 'p', lead: 'II' }],
+        },
+        {
+          label: l('左上肢与右下肢接反', 'LA/RL swapped', 'Inversión AI/PD'),
+          ecg: placed(1561, { limbs: { LA: 'RL', RL: 'LA' } }),
+          note: l('左上肢导线接到右腿（中性电极）：III几乎成了一条直线，I和II一模一样，胸导联也稍有改变。', 'Left-arm cable on the right leg (the neutral electrode): lead III goes almost flat, I and II look identical, and the chest leads shift a little.', 'Cable del brazo izquierdo en la pierna derecha (el electrodo neutro): III queda casi plana, I y II son idénticas y las precordiales cambian algo.'),
+          marks: [{ auto: 'qrs', lead: 'III' }],
+        },
+      ],
+      predict: {
+        question: l('把两根上肢导线互换，I导联会怎样？', 'Swap the two arm cables. What happens to lead I?', 'Intercambia los dos cables de los brazos. ¿Qué le pasa a la derivación I?'),
+        options: [l('完全倒置', 'It turns fully upside down', 'Se invierte por completo'), l('变成直线', 'It goes flat', 'Se queda plana'), l('不变', 'Nothing', 'Nada')],
+        answer: 0,
+      },
+      caption: l(
+        '肢体导联看起来不对时，先查记录再查心脏。上肢与左下肢导线互换不影响V1–V6，中性电极（RL）接错也只让它们稍有改变；胸导联明显异常，就要想别的原因。',
+        'When the limb leads look wrong, check the recording before the heart. Swapping arm and left-leg cables never touches V1–V6, and a misplaced neutral (RL) cable shifts them only a little; if the chest leads are clearly abnormal, think of something else.',
+        'Si las derivaciones de miembros parecen raras, revisa el registro antes que el corazón. Intercambiar los cables de brazos y pierna izquierda no toca V1–V6, y el cable neutro (PD) mal puesto solo las cambia algo; si las precordiales fallan claramente, piensa en otra cosa.',
       ),
     },
     {
@@ -85,6 +138,14 @@ const lesson: Lesson = {
           label: l('胸导联电极错位', 'Precordial misplacement', 'Mala colocación precordial'),
           value: l('R 波递增中断/孤立跳变；V1–V2 过高：rSr′ + V1–V2 P 波倒置，貌似 iRBBB 或 Brugada', 'Broken R progression / an isolated jump; V1–V2 too high: rSr′ + negative P in V1–V2, mimicking iRBBB or Brugada', 'Progresión de la R rota o salto aislado; V1-V2 altas: rSr′ y P negativa en V1-V2, simulando bloqueo de rama derecha incompleto o Brugada'),
         },
+        {
+          label: l('其他放置规则', 'Other placement rules', 'Otras reglas de colocación'),
+          value: l(
+            '肢体电极放在躯干（Mason–Likar，运动试验）：电轴和电压会变，须在图上注明；V1–V2 过低可掩盖真正的图形；有意放在第 2–3 肋间是筛查 Brugada；做系列对比前先确认电极位置相同',
+            'Limb electrodes on the torso (Mason–Likar, exercise ECG): axis and voltages change, so label the tracing; V1–V2 too low can hide a real pattern; V1–V2 in the 2nd–3rd space on purpose is the Brugada screen; confirm identical positions before any serial comparison',
+            'Electrodos de miembros en el torso (Mason-Likar, prueba de esfuerzo): cambian el eje y los voltajes, anótalo en el trazado; V1-V2 demasiado bajos pueden ocultar un patrón real; V1-V2 en el 2.º-3.er espacio a propósito es el cribado de Brugada; confirma posiciones idénticas antes de cualquier comparación seriada',
+          ),
+        },
       ],
       source: 'Batchvarov VN, Malik M, Camm AJ. Europace 2007;9:1081-1090; Kligfield P et al. AHA/ACCF/HRS Part I: The electrocardiogram and its technology. Circulation 2007;115:1306-1324',
     },
@@ -107,19 +168,19 @@ const lesson: Lesson = {
         {
           title: l('aVR 不能裁决', 'aVR does not decide', 'La aVR no decide'),
           body: l(
-            'aVR 的 P 直立（aVL 倒置）——两者都符合：接反时 aVR↔aVL 互换，右位心时镜像的心房朝向 aVR。aVR 只确认“确实反了”，不能告诉你为什么。',
-            'The P is upright in aVR (inverted in aVL) — both explanations fit: with reversed cables aVR and aVL swap, and in dextrocardia the mirrored atria point towards aVR. aVR confirms that something is flipped, but not why.',
-            'La P es positiva en aVR (negativa en aVL): encaja con las dos; con los cables invertidos aVR y aVL se intercambian, y en la dextrocardia las aurículas en espejo apuntan hacia aVR. La aVR confirma que algo está invertido, pero no por qué.',
+            'aVL 的 P 明确倒置，aVR 的 P 只略高于基线——两者都符合：接反时 aVR↔aVL 互换，右位心时镜像的心房背离 aVL。这两个导联只确认“确实反了”，不能告诉你为什么。',
+            'The P is clearly inverted in aVL and only just above the line in aVR — both explanations fit: with reversed cables aVR and aVL swap, and in dextrocardia the mirrored atria point away from aVL. These two leads confirm that something is flipped, but not why.',
+            'La P es claramente negativa en aVL y apenas positiva en aVR: encaja con las dos; con los cables invertidos aVR y aVL se intercambian, y en la dextrocardia las aurículas en espejo se alejan de aVL. Estas dos derivaciones confirman que algo está invertido, pero no por qué.',
           ),
-          marks: [{ auto: 'p', lead: 'aVR' }],
+          marks: [{ auto: 'p', lead: 'aVR' }, { auto: 'p', lead: 'aVL' }],
           highlightLeads: ['aVR', 'aVL'],
         },
         {
           title: l('裁决者：V1–V6', 'The decider: V1–V6', 'La decisiva: V1-V6'),
           body: l(
-            '从 V1 走到 V6：R 波**越来越小**——递增不良，到 V6 几乎全负。肢体接反不会碰胸前导联，所以这不是电缆的问题：**右位心**。若 R 波平滑递增，答案就是接反——回到上一份图。',
-            'Walk V1 to V6: the R wave gets **smaller and smaller** — poor progression, almost fully negative by V6. Limb reversals never touch the chest leads, so this is not a cable problem: **dextrocardia**. Had the R progressed smoothly, the answer would be the cable reversal of the previous tracing.',
-            'Recorre de V1 a V6: la onda R se hace **cada vez más pequeña**: mala progresión, casi negativa del todo en V6. Las inversiones de miembros nunca tocan las precordiales, así que esto no es un problema de cables: **dextrocardia**. Si la R hubiera progresado con suavidad, la respuesta sería la inversión de cables del trazado anterior.',
+            '从 V1 走到 V6：R 波**从 V1 到 V4 越来越小**，到 V5–V6 几乎消失，这两个导联几乎全负——R 波递减，与正常相反。肢体接反不会碰胸前导联，所以这不是电缆的问题：**右位心**。若 R 波平滑递增，答案就是接反——回到上一份图。',
+            'Walk V1 to V6: the R wave gets **smaller from V1 to V4** and is all but gone in V5–V6, which are almost fully negative — the reverse of normal progression. Limb reversals never touch the chest leads, so this is not a cable problem: **dextrocardia**. Had the R progressed smoothly, the answer would be the cable reversal of the previous tracing.',
+            'Recorre de V1 a V6: la onda R se hace **más pequeña de V1 a V4** y casi desaparece en V5-V6, que son casi negativas del todo: lo contrario de la progresión normal. Las inversiones de miembros nunca tocan las precordiales, así que esto no es un problema de cables: **dextrocardia**. Si la R hubiera progresado con suavidad, la respuesta sería la inversión de cables del trazado anterior.',
           ),
           marks: [{ auto: 'r', lead: 'V1' }, { auto: 'r', lead: 'V6' }],
           highlightLeads: ['V1', 'V3', 'V6'],
@@ -155,56 +216,38 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('electrode-reversal-la-ll', 1565),
-      view: { layout: '3x4+1', highlightLeads: ['I', 'II', 'III', 'aVL', 'aVF'] },
-      marks: [{ auto: 'p', lead: 'I' }, { auto: 'p', lead: 'II' }],
+      kind: 'film',
+      title: l('同一颗心，胸导电极放错', 'One heart, the chest electrodes wrong', 'Un corazón, los electrodos precordiales mal puestos'),
+      view: { layout: '3x4+1', highlightLeads: ['V1', 'V2', 'V3', 'V4'] },
+      frames: [
+        {
+          label: l('位置正确', 'Correct', 'Correcto'),
+          ecg: placed(1567),
+          note: l('位置正确：R波从V1到V4一步步长高（约1、5、12、14 mm），V1的P波正负双相。', 'Correct sites: the R grows step by step from V1 to V4 (about 1, 5, 12, 14 mm); the P in V1 is up-down.', 'Posiciones correctas: la R crece paso a paso de V1 a V4 (unos 1, 5, 12, 14 mm); la P de V1 es bifásica.'),
+          marks: [{ auto: 'r', lead: 'V2' }, { auto: 'r', lead: 'V3' }],
+        },
+        {
+          label: l('V2与V3接反', 'V2/V3 swapped', 'V2/V3 invertidos'),
+          ecg: placed(1567, { chest: { V2: 'V3', V3: 'V2' } }),
+          note: l('V2与V3导线接反：V2突然变高（约12 mm），V3又掉回约5 mm，V4再高起来：孤立的跳跃 = 接错线。', 'V2 and V3 cables swapped: V2 is suddenly tall (about 12 mm), V3 drops back to about 5 mm, V4 is tall again: an isolated jump means a swap.', 'Cables de V2 y V3 invertidos: V2 de pronto alta (unos 12 mm), V3 vuelve a unos 5 mm y V4 vuelve a ser alta: un salto aislado es un cambio de cables.'),
+          marks: [{ auto: 'r', lead: 'V2' }, { auto: 'r', lead: 'V3' }],
+        },
+        {
+          label: l('V1–V2过高', 'V1–V2 too high', 'V1–V2 demasiado altos'),
+          ecg: placed(1567, { chest: { V1: { ics: 2, line: 'sternal', side: 'R' }, V2: { ics: 2, line: 'sternal', side: 'L' } } }),
+          note: l('V1–V2放在第2肋间：V1的P波变成全负，V2的r波从约5 mm缩到约2 mm。会被当成R波递增不良或前壁梗死。', 'V1–V2 in the 2nd intercostal space: the P in V1 turns fully negative and the r in V2 shrinks from about 5 to 2 mm. It can pass for poor R progression or an anterior infarct.', 'V1–V2 en el 2.º espacio intercostal: la P de V1 se vuelve negativa y la r de V2 baja de unos 5 a 2 mm. Puede pasar por mala progresión de R o un infarto anterior.'),
+          marks: [{ auto: 'p', lead: 'V1' }, { auto: 'r', lead: 'V2' }],
+        },
+      ],
+      predict: {
+        question: l('把V2和V3的导线互换，R波递增会是什么样？', 'Swap the V2 and V3 cables. What will the R progression look like?', 'Intercambia los cables de V2 y V3. ¿Cómo será la progresión de la R?'),
+        options: [l('出现跳跃：V2高、V3矮', 'A jump: tall in V2, small in V3', 'Un salto: alta en V2, pequeña en V3'), l('和原来一样平滑', 'As smooth as before', 'Tan suave como antes'), l('所有R波倒置', 'Every R inverted', 'Todas las R invertidas')],
+        answer: 0,
+      },
       caption: l(
-        'LA/LL 接反：I 与 II 互换、aVL 与 aVF 互换、III 倒置、**aVR 正常**——没有一个倒置的 I 导联来提醒你。隐秘线索：I 导联的 P 波**大于** II 导联（正常窦性 P 在 II 最高）。当 I 和 II 长得像双胞胎时，想想交换。',
-        'LA/LL reversal: I and II have swapped, aVL and aVF have swapped, III is inverted and **aVR is normal** — there is no inverted lead I to warn you. The subtle clue: the P wave in lead I is **larger** than in lead II (a normal sinus P is tallest in II). When I and II look like twins, think of a swap.',
-        'Inversión AI/PI: I y II se han intercambiado, aVL y aVF también, III está invertida y **aVR es normal**: no hay una derivación I invertida que te avise. La pista sutil: la onda P de la derivación I es **mayor** que la de la II (la P sinusal normal es más alta en II). Cuando I y II parecen gemelas, piensa en un intercambio.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('neutral-cable-reversal', 1566),
-      view: { layout: '3x4+1', highlightLeads: ['III'] },
-      marks: [{ auto: 'qrs', lead: 'III' }],
-      caption: l(
-        '左上肢与右腿（中性）电极反接：III 导联几乎成一条直线。凡是**一个**肢体导联变得近乎平坦，都要怀疑中性（右腿）电极。不要忽略它，也不要过度解读——重录一份。',
-        'Left-arm / right-leg (neutral) reversal: lead III collapses to almost a flat line. Whenever **one** limb lead becomes nearly flat, suspect the neutral (right-leg) electrode. Do not ignore it, and do not over-read it — re-record.',
-        'Inversión del electrodo de brazo izquierdo y pierna derecha (neutro): la derivación III se queda casi en línea plana. Siempre que **una** derivación periférica se vuelva casi plana, sospecha del electrodo neutro (pierna derecha). No la ignores ni la sobreinterpretes: repite el ECG.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('胸导联：错位而不是病', 'The chest leads: misplacement, not disease', 'Las precordiales: mala colocación, no enfermedad'),
-      body: l(
-        '胸导联的错误不是接反，而是**放错位置**：\n- 交换胸导联电缆会打断平滑的 R 波递增与 T 波演变——典型表现是**一个导联的孤立跳变**；\n- **V1–V2 放得过高**（第 2 肋间）：rSr′ 貌似不完全右束支阻滞，V1–V2 的 P 波倒置、递增不良，甚至 Brugada 样 ST——先摸肋骨再下诊断（注意：第 2–3 肋间的高 V1–V2 也是 Brugada 筛查的正规做法，别把故意的高位当成失误）；\n- V1–V2 放得过低可能掩盖真实图形；\n- 运动心电图把肢体电极放在躯干（Mason–Likar）：电轴与电压都会变，必须写在记录上；\n- **系列对比前先确认电极位置一致**——位置不同会凭空造出“新变化”。',
-        'Chest-lead errors are not reversals but **wrong positions**:\n- Swapped chest cables break the smooth R-wave progression and T-wave evolution — classically an **isolated jump in one lead**;\n- **V1–V2 placed too high** (2nd intercostal space): an rSr′ mimicking incomplete RBBB, negative P waves in V1–V2, poor progression, even a Brugada-like ST — palpate the ribs before diagnosing (note: V1–V2 in the 2nd–3rd space is also the deliberate way to screen for Brugada; do not mistake intent for error);\n- V1–V2 placed too low can hide a true pattern;\n- Exercise ECGs put the limb electrodes on the torso (Mason–Likar): axis and voltages change, and this must be written on the tracing;\n- **Before any serial comparison, confirm identical electrode positions** — different positions manufacture "new changes".',
-        'Los errores de las precordiales no son inversiones sino **posiciones equivocadas**:\n- Cables precordiales intercambiados rompen la progresión suave de la R y la evolución de la T: lo típico es un **salto aislado en una derivación**;\n- **V1-V2 colocadas demasiado altas** (2.º espacio intercostal): una rSr′ que simula un bloqueo de rama derecha incompleto, P negativa en V1-V2, mala progresión e incluso un ST tipo Brugada: palpa las costillas antes de diagnosticar (ojo: V1-V2 en el 2.º-3.º espacio es también la forma deliberada de cribar el síndrome de Brugada; no confundas la intención con el error);\n- V1-V2 demasiado bajas pueden ocultar un patrón real;\n- El ECG de esfuerzo coloca los electrodos de los miembros en el tronco (Mason-Likar): el eje y los voltajes cambian, y hay que anotarlo en el trazado;\n- **Antes de comparar series, confirma que la colocación de los electrodos es idéntica**: posiciones distintas fabrican «cambios nuevos».',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('precordial-misplacement', 1567),
-      view: { layout: '3x4+1', highlightLeads: ['V2', 'V3', 'V4'] },
-      marks: [{ auto: 'r', lead: 'V2' }, { auto: 'r', lead: 'V3' }],
-      caption: l(
-        'V2/V3 电缆互换：R 波在 V2 意外变高、在 V3 塌下去、到 V4 又回来。递增应当**平滑单调**——哪里断开、哪里跳变，先查电极。',
-        'V2/V3 cables swapped: the R wave is unexpectedly tall in V2, collapses in V3 and returns by V4. Progression should be **smooth and monotonic** — wherever it breaks or jumps, check the electrodes first.',
-        'Cables de V2/V3 intercambiados: la R es inesperadamente alta en V2, se hunde en V3 y vuelve en V4. La progresión debe ser **suave y monótona**: donde se rompa o salte, comprueba primero los electrodos.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('precordial-misplacement-high', 1568),
-      view: { layout: '3x4+1', highlightLeads: ['V1', 'V2'] },
-      marks: [{ auto: 'p', lead: 'V1' }],
-      caption: l(
-        'V1–V2 放在第 2 肋间：V1 的 **P 波倒置**、V2 的 R 变小、递增不良。教科书还会加上 rSr′ 与 Brugada 样 ST——许多“Brugada 惊魂”正是从这里开始。回到第 4 肋间（胸骨角往下数两根肋骨）再录一份。',
-        'V1–V2 in the 2nd intercostal space: a **negative P wave** in V1, a smaller R in V2 and poor progression. The textbook adds an rSr′ and a Brugada-like ST — many a "Brugada scare" starts exactly here. Return to the 4th space (two ribs below the sternal angle) and record again.',
-        'V1-V2 en el 2.º espacio intercostal: **P negativa** en V1, R más pequeña en V2 y mala progresión. El libro añade una rSr′ y un ST tipo Brugada: muchos «sustos de Brugada» empiezan justo aquí. Vuelve al 4.º espacio (dos costillas por debajo del ángulo esternal) y repite el ECG.',
+        'R波递增应平滑单调；哪里断开或跳跃，先查电极。V1有负P就数一数肋间：第4肋间在胸骨角下两根肋骨。',
+        'R progression should be smooth and steady; wherever it breaks or jumps, check the electrodes first. A negative P in V1: count the ribs, the 4th space is two ribs below the sternal angle.',
+        'La progresión de la R debe ser suave y constante; donde se rompa o salte, revisa primero los electrodos. Una P negativa en V1: cuenta las costillas; el 4.º espacio está dos costillas por debajo del ángulo esternal.',
       ),
     },
     { kind: 'check', item: { family: 'artefacts', seed: 1 } },
@@ -233,9 +276,9 @@ const lesson: Lesson = {
     {
       kind: 'summary',
       points: [
-        l('肢体接反不碰胸前导联：LA/RA = I 导联全倒置、II↔III、aVR↔aVL、aVF 不变，V1–V6 正常。', 'Limb reversals spare the chest leads: LA/RA = lead I fully inverted, II↔III, aVR↔aVL, aVF unchanged, V1–V6 normal.', 'Las inversiones de miembros no tocan las precordiales: AI/AD = derivación I invertida por completo, II↔III, aVR↔aVL, aVF sin cambios y V1-V6 normales.'),
+        l('上肢与左下肢导线互换不碰胸前导联：LA/RA = I 导联全倒置、II↔III、aVR↔aVL、aVF 不变，V1–V6 正常。', 'Arm and left-leg cable swaps spare the chest leads: LA/RA = lead I fully inverted, II↔III, aVR↔aVL, aVF unchanged, V1–V6 normal.', 'Los intercambios de cables de brazos y pierna izquierda no tocan las precordiales: AI/AD = derivación I invertida por completo, II↔III, aVR↔aVL, aVF sin cambios y V1-V6 normales.'),
         l('I 导联倒置 + V1–V6 R 波递增不良 = 右位心，不是接反；右侧胸导联可证实。', 'Inverted lead I + poor R progression across V1–V6 = dextrocardia, not cable reversal; right-sided chest leads confirm it.', 'Derivación I invertida + mala progresión de la R en V1-V6 = dextrocardia, no inversión de cables; las precordiales derechas lo confirman.'),
-        l('LA/LL 最隐秘（I↔II、aVR 正常、I 的 P 大于 II）；涉及中性电极的反接让一个导联近乎平坦。', 'LA/LL is the subtlest (I↔II, aVR normal, P larger in I than in II); any reversal involving the neutral electrode flattens one lead.', 'La AI/PI es la más sutil (I↔II, aVR normal, P mayor en I que en II); toda inversión que afecte al electrodo neutro aplana una derivación.'),
+        l('LA/LL 最隐秘（I↔II、aVR 正常、I 的 P 大于 II）；上肢导线与中性电极（RL）互换让一个导联近乎平坦（LA/RL→III，RA/RL→II），LL/RL 互换几乎没有变化。', 'LA/LL is the subtlest (I↔II, aVR normal, P larger in I than in II); an arm cable swapped with the neutral (RL) one flattens one lead (LA/RL→III, RA/RL→II), while LL/RL changes almost nothing.', 'La AI/PI es la más sutil (I↔II, aVR normal, P mayor en I que en II); cambiar un cable de brazo por el del electrodo neutro (PD) aplana una derivación (AI/PD→III, AD/PD→II), mientras que PI/PD apenas cambia nada.'),
         l('胸导联错位打断 R 波递增（孤立跳变）；V1–V2 过高貌似 iRBBB/Brugada。先查记录，再查心脏。', 'Chest-lead misplacement breaks R progression (an isolated jump); high V1–V2 mimics iRBBB/Brugada. Check the recording before the heart.', 'La mala colocación precordial rompe la progresión de la R (salto aislado); V1-V2 altas simulan un bloqueo de rama derecha incompleto o Brugada. Comprueba el registro antes que el corazón.'),
       ],
     },

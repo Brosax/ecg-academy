@@ -5,7 +5,7 @@
  *
  * Tracings (checked against the model truth, tests/course/lessons-o.test.ts): `pericarditis` = sinus ≈ 96/min,
  * concave ST elevation (vs TP) ≈ 1.7 mm in II and ≈ 2–3 mm in V3–V4, ST depression only in aVR, PR depression ≈ 1 mm
- * in II and V4–V6 with PR elevation ≈ 1 mm in aVR, ST/T in V6 ≈ 0.5 (ST from the PR segment, as the ratio is defined);
+ * in II and V4–V6 with PR elevation ≈ 1 mm in aVR, ST/T in V6 ≈ 0.55 (ST from the PR segment, as the ratio is defined);
  * `early-repolarization` has no PR shift and, since the 2026-10-29 final engine fix (tall, broad lateral T), a V6 ST/T
  * ≈ 0.2: the ER contrast shows both clues — the PR segment in II and the ST/T ratio in V6.
  * The engine does not draw Spodick's sign (a downsloping TP segment): it is taught in text only.
@@ -82,33 +82,59 @@ const lesson: Lesson = {
         'Dolor torácico con elevación difusa del ST: ¿IAMCEST o pericarditis? Enumera las características que comprobarás en los próximos dos minutos.',
       ),
       reveal: l(
-        '**分布**、**PR 段**和**对应性**。这里 ST 凹面向上，在 I、II、aVF 和 V2–V6 广泛抬高（跨越血管分区），只有 aVR（和 V1）压低；PR 段在 II 和 V4–V6 压低、在 aVR 抬高——这是心包的弥漫性炎症，而不是某一支冠状动脉的地图。',
-        '**Distribution**, the **PR segment** and **reciprocity**. Here the ST is concave and widely elevated in I, II, aVF and V2–V6 (crossing coronary territories), depressed only in aVR (and V1); the PR segment is depressed in II and V4–V6 and elevated in aVR — diffuse inflammation of the pericardium, not the map of one coronary artery.',
-        '**Distribución**, **segmento PR** y **reciprocidad**. Aquí el ST es cóncavo y está elevado de forma difusa en I, II, aVF y V2–V6 (cruza territorios coronarios), y solo desciende en aVR (y V1); el PR desciende en II y V4–V6 y se eleva en aVR: inflamación difusa del pericardio, no el mapa de una arteria coronaria.',
+        '**分布**、**PR 段**和**对应性**。这里 ST 凹面向上，在 I、II、aVF 和 V2–V6 广泛抬高（跨越血管分区），只有 aVR 压低；PR 段在 II 和 V4–V6 压低、在 aVR 抬高——这是心包的弥漫性炎症，而不是某一支冠状动脉的地图。',
+        '**Distribution**, the **PR segment** and **reciprocity**. Here the ST is concave and widely elevated in I, II, aVF and V2–V6 (crossing coronary territories), depressed only in aVR; the PR segment is depressed in II and V4–V6 and elevated in aVR — diffuse inflammation of the pericardium, not the map of one coronary artery.',
+        '**Distribución**, **segmento PR** y **reciprocidad**. Aquí el ST es cóncavo y está elevado de forma difusa en I, II, aVF y V2–V6 (cruza territorios coronarios), y solo desciende en aVR; el PR desciende en II y V4–V6 y se eleva en aVR: inflamación difusa del pericardio, no el mapa de una arteria coronaria.',
       ),
     },
     {
-      kind: 'text',
-      title: l('三个问题', 'The three questions', 'Las tres preguntas'),
-      body: l(
-        '心包本身没有电活动；心电图看到的是**紧贴心包的心外膜**的炎症（损伤电流）：\n- **第一问：分布**。ST 抬高跨越血管分区（肢体 + 胸前广泛）、凹面向上 → 心包炎；局限在一组相邻导联 → STEMI（i1）。\n- **第二问：PR 段**。心房外膜的损伤电流使 PR 段压低（aVR 的 PR 抬高）——最特异的线索，也最常被忽略。量 PR 段要以 TP 段为基线。\n- **第三问：对应性**。心包炎只在 aVR（常含 V1）压低；STEMI 有镜像（下壁 STEMI 看 I/aVL，i4）。\n**Spodick 征**：TP 段向下倾斜（从 T 波末端到下一个 P 波逐渐下降），支持心包炎，但敏感性有限，心率快时也难评估。\n若有旧图，再看**演变**：心包炎 ST 先回基线、之后 T 才倒置；STEMI 的 T 倒置与 ST 抬高同期出现，并有 Q 波演变。',
-        'The pericardium itself is electrically silent; the ECG sees the inflammation (an injury current) of the **epicardium right underneath it**:\n- **Question one: distribution.** ST elevation crossing coronary territories (limb + precordial, widespread), concave → pericarditis; confined to one contiguous group → STEMI (i1).\n- **Question two: the PR segment.** The atrial epicardial injury current depresses the PR segment (elevating it in aVR) — the most specific clue, and the most often missed. Measure the PR segment against the TP segment.\n- **Question three: reciprocity.** Pericarditis depresses only aVR (often V1 too); a STEMI has a mirror (for an inferior STEMI look at I/aVL, i4).\n**Spodick’s sign**: a downsloping TP segment (the line falls steadily from the end of the T to the next P) supports pericarditis, but its sensitivity is limited and it is hard to judge at fast rates.\nIf an old tracing exists, add **evolution**: in pericarditis the ST returns to baseline first and only then does the T invert; in a STEMI the T inverts while the ST is still up, with Q waves evolving.',
-        'El pericardio no tiene actividad eléctrica propia; el ECG ve la inflamación (una corriente de lesión) del **epicardio que está justo debajo**:\n- **Primera pregunta: distribución.** Elevación del ST que cruza territorios coronarios (periféricas y precordiales, difusa) y cóncava → pericarditis; limitada a un grupo contiguo → IAMCEST (i1).\n- **Segunda pregunta: el segmento PR.** La corriente de lesión del epicardio auricular desciende el PR (y lo eleva en aVR): la pista más específica y la más olvidada. Mide el PR respecto al segmento TP.\n- **Tercera pregunta: reciprocidad.** La pericarditis solo desciende aVR (a menudo también V1); el IAMCEST tiene su imagen especular (en el inferior, mira I/aVL, i4).\n**Signo de Spodick**: un segmento TP descendente (la línea baja de forma continua desde el final de la T hasta la siguiente P) apoya la pericarditis, pero su sensibilidad es limitada y es difícil de valorar con frecuencias altas.\nSi hay un ECG previo, añade la **evolución**: en la pericarditis el ST vuelve primero a la línea de base y solo después se invierte la T; en el IAMCEST la T se invierte con el ST todavía elevado y aparecen ondas Q.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('pericarditis', 1522),
-      view: { layout: '3x4+1', highlightLeads: ['II', 'aVR', 'V5'] },
-      marks: [
-        { auto: 'pr-segment', lead: 'II' },
-        { auto: 'pr-segment', lead: 'aVR' },
-        { auto: 'st', lead: 'V4' },
-      ],
+      kind: 'heart',
+      ecg: synth('pericarditis', 1521),
       caption: l(
-        '把测量做出来，以 TP 段为基线：PR 段在 II 和 V4–V6 低约 1 mm，在 aVR 反而高出约 1 mm（标记处）；ST 段在 II 抬高约 1.5–2 mm、在 V3–V4 约 2–3 mm，都是凹面向上，aVR 的 ST 压低。如果你从已经压低的 PR 段量起，ST 抬高会显得更高（II 约 3 mm、V4 约 3.5 mm）——这又是一个要盯着 PR 段的理由。PR 段的偏移只有约 1 mm，必须盯着基线看才看得见。',
-        'Make the measurements against the TP segment: the PR segment sits about 1 mm low in II and V4–V6 and about 1 mm high in aVR (marked); the ST is elevated about 1.5–2 mm in II and about 2–3 mm in V3–V4, all concave, and depressed in aVR. Measured from the already depressed PR segment, the ST elevation looks taller (about 3 mm in II, 3.5 mm in V4) — one more reason to watch the PR segment. Its shift is only about 1 mm: you only see it if you keep your eye on the baseline.',
-        'Haz las mediciones respecto al segmento TP: el PR está alrededor de 1 mm por debajo en II y V4–V6 y alrededor de 1 mm por encima en aVR (marcado); el ST está elevado alrededor de 1,5-2 mm en II y de 2-3 mm en V3–V4, siempre cóncavo, y descendido en aVR. Si lo mides desde el PR, que ya está descendido, la elevación del ST parece mayor (unos 3 mm en II y 3,5 mm en V4): otra razón para vigilar el PR. Su desplazamiento es de solo 1 mm: solo lo ves si no le quitas ojo a la línea de base.',
+        '心包本身不产生电信号；心电图看到的是紧贴其下、包绕全心的心外膜损伤：面对各壁的导联ST都抬高，只有望向心腔的aVR压低。心房外膜也受累：PR段下移。',
+        'The pericardium itself is electrically silent; the ECG sees the injured epicardium right under it, all around the heart: the ST rises in leads facing every wall and falls only in aVR, which looks into the cavity. The atrial epicardium is inflamed too: the PR segment drops.',
+        'El pericardio es eléctricamente mudo; el ECG ve el epicardio lesionado justo debajo, alrededor de todo el corazón: el ST sube en las derivaciones que miran a cada pared y solo baja en aVR, que mira a la cavidad. El epicardio auricular también se inflama: el segmento PR baja.',
+      ),
+    },
+    {
+      kind: 'film',
+      title: l('三个问题，都以TP段为基线', 'Three questions, measured against TP', 'Tres preguntas, medidas contra el TP'),
+      view: { layout: '3x4+1', highlightLeads: ['II', 'aVR', 'aVL', 'V4'] },
+      frames: [
+        {
+          label: l('正常', 'Normal', 'Normal'),
+          ecg: synth('normal', 1522, { rate: 96 }),
+          note: l('正常，96次/分：每个导联的PR段、ST段和TP段都在同一条线上。', 'Normal at 96/min: in every lead the PR segment, the ST and the TP segment sit on one line.', 'Normal a 96 lpm: en todas las derivaciones el segmento PR, el ST y el segmento TP están en la misma línea.'),
+          marks: [{ auto: 'pr-segment', lead: 'II' }, { auto: 'st', lead: 'V4' }],
+        },
+        {
+          label: l('一：分布', '1: distribution', '1: distribución'),
+          ecg: synth('pericarditis', 1522),
+          note: l('问题一：哪里抬高？I、II、aVF和V2–V6同时抬高，凹面向上：没有哪一支冠脉同时供应这么多。', 'Question 1: where is the ST up? I, II, aVF and V2–V6 at once, concave: no single artery supplies all that.', 'Pregunta 1: ¿dónde sube el ST? En I, II, aVF y V2–V6 a la vez, cóncavo: ninguna arteria sola irriga todo eso.'),
+          marks: [{ auto: 'st', lead: 'II' }, { auto: 'st', lead: 'V4' }],
+        },
+        {
+          label: l('二：PR段', '2: PR segment', '2: segmento PR'),
+          ecg: synth('pericarditis', 1522),
+          note: l('问题二：PR段在II和V4–V6低于TP约1 mm，在aVR高约1 mm。最特异的线索。', 'Question 2: the PR segment sits about 1 mm below TP in II and V4–V6 and about 1 mm above it in aVR. The most specific clue.', 'Pregunta 2: el segmento PR queda alrededor de 1 mm bajo el TP en II y V4–V6 y alrededor de 1 mm por encima en aVR. La pista más específica.'),
+          marks: [{ auto: 'pr-segment', lead: 'II' }, { auto: 'pr-segment', lead: 'aVR' }],
+        },
+        {
+          label: l('三：对应性', '3: reciprocity', '3: reciprocidad'),
+          ecg: synth('pericarditis', 1522),
+          note: l('问题三：只有aVR压低，aVL保持平直。下壁STEMI会在aVL留下镜像压低。', 'Question 3: only aVR is depressed; aVL stays flat. An inferior STEMI would leave a mirror depression in aVL.', 'Pregunta 3: solo aVR está descendido; aVL sigue plano. Un IAMCEST inferior dejaría un descenso en espejo en aVL.'),
+          marks: [{ auto: 'st', lead: 'aVR' }, { auto: 'st', lead: 'aVL' }],
+        },
+      ],
+      predict: {
+        question: l('心包炎让包绕全心的心外膜受损。ST会在哪里压低？', 'Pericarditis injures the epicardium all around the heart. Where will the ST be depressed?', 'La pericarditis lesiona el epicardio alrededor de todo el corazón. ¿Dónde estará descendido el ST?'),
+        options: [l('只在aVR', 'Only in aVR', 'Solo en aVR'), l('在一支冠脉对面的导联', 'In the leads facing away from one artery', 'En las derivaciones opuestas a una arteria'), l('到处都压低', 'Everywhere', 'En todas partes')],
+        answer: 0,
+      },
+      caption: l(
+        'PR段压低和ST抬高都对着TP段判断，不要对着已被拉低的PR段；V6的ST/T比值（下文讲解）是例外。TP段逐渐下斜（Spodick征）支持心包炎。',
+        'Judge PR depression and ST elevation against the TP segment, not against the PR, which is already pulled down; the V6 ST/T ratio (explained below) is the exception. A downsloping TP (Spodick’s sign) supports pericarditis.',
+        'Juzga el descenso del PR y la elevación del ST contra el segmento TP, no contra el PR, que ya está descendido; el cociente ST/T de V6 (se explica más abajo) es la excepción. Un TP descendente (signo de Spodick) apoya la pericarditis.',
       ),
     },
     {
@@ -144,7 +170,7 @@ const lesson: Lesson = {
         },
         {
           title: l('查对应性', 'Check reciprocity', 'Comprueba la reciprocidad'),
-          body: l('压低出现在哪里？只有 aVR（V1 也基本平）。I 和 aVL 没有镜像压低——如果是下壁 STEMI，aVL 一定会压低（i4）。', 'Where is the depression? Only in aVR (V1 is roughly flat). There is no mirror depression in I and aVL — an inferior STEMI would depress aVL (i4).', '¿Dónde está el descenso? Solo en aVR (V1 está prácticamente plana). No hay descenso especular en I ni aVL; un IAMCEST inferior descendería aVL (i4).'),
+          body: l('压低出现在哪里？只有 aVR。I 和 aVL 没有镜像压低——如果是下壁 STEMI，aVL 一定会压低（i4）。', 'Where is the depression? Only in aVR. There is no mirror depression in I and aVL — an inferior STEMI would depress aVL (i4).', '¿Dónde está el descenso? Solo en aVR. No hay descenso especular en I ni aVL; un IAMCEST inferior descendería aVL (i4).'),
           highlightLeads: ['aVR', 'aVL', 'I'],
         },
         {
@@ -202,30 +228,45 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('积液与压塞：电压变小、心脏摆动', 'Effusion and tamponade: smaller voltage, a swinging heart', 'Derrame y taponamiento: menos voltaje y un corazón que se balancea'),
-      body: l(
-        '心包里的液体像一层导电的“短路”，把心脏的电场分流掉，所以：\n- **低电压**：所有肢体导联 QRS 峰峰值 <5 mm，或所有胸前导联 <10 mm。低电压的其他原因：肥胖、肺气肿、浸润性心肌病（淀粉样变）、甲减、大面积梗死（h4）——低电压是“去找原因”，不是诊断。\n- **电交替**：大量积液中心脏逐搏前后摆动，QRS 振幅（有时连同 P、T）高低交替。它特异性高、敏感性低。\n- **窦性心动过速**：每搏量下降，心率代偿。\n**心脏压塞是临床诊断**：低血压、颈静脉怒张、心音遥远（Beck 三联征），奇脉，心动过速。心电图可以提示、不能排除；看到低电压 + 心动过速 + 呼吸困难或低血压，**马上做超声**——压塞需要心包穿刺，不是等心电图“更典型”。',
-        'Fluid in the pericardium acts as a conductive "short circuit" that shunts the heart’s electrical field away, so:\n- **low voltage**: peak-to-peak QRS <5 mm in every limb lead, or <10 mm in every precordial lead. Other causes of low voltage: obesity, emphysema, infiltrative cardiomyopathy (amyloid), hypothyroidism, extensive infarction (h4) — low voltage means "go and find the cause", not a diagnosis;\n- **electrical alternans**: in a large effusion the heart swings back and forth beat by beat, so the QRS amplitude (sometimes the P and T too) alternates. Highly specific, not sensitive;\n- **sinus tachycardia**: the stroke volume falls and the rate compensates.\n**Tamponade is a clinical diagnosis**: hypotension, raised JVP, muffled heart sounds (Beck’s triad), pulsus paradoxus, tachycardia. The ECG can suggest it but cannot exclude it; low voltage + tachycardia + breathlessness or hypotension means **echo now** — tamponade needs pericardiocentesis, not a more typical ECG.',
-        'El líquido del pericardio actúa como un "cortocircuito" conductor que deriva el campo eléctrico del corazón, por eso:\n- **bajo voltaje**: QRS pico a pico <5 mm en todas las derivaciones de los miembros o <10 mm en todas las precordiales. Otras causas de bajo voltaje: obesidad, enfisema, miocardiopatía infiltrativa (amiloidosis), hipotiroidismo, infarto extenso (h4); el bajo voltaje significa "busca la causa", no es un diagnóstico;\n- **alternancia eléctrica**: en un derrame grande el corazón se balancea latido a latido, de modo que la amplitud del QRS (a veces también de la P y la T) alterna. Muy específica, poco sensible;\n- **taquicardia sinusal**: cae el volumen sistólico y la frecuencia compensa.\n**El taponamiento es un diagnóstico clínico**: hipotensión, ingurgitación yugular, tonos apagados (tríada de Beck), pulso paradójico y taquicardia. El ECG puede sugerirlo pero no descartarlo; bajo voltaje + taquicardia + disnea o hipotensión significa **ecocardiografía ya**: el taponamiento necesita una pericardiocentesis, no un ECG más típico.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('pericardial-effusion', 1525),
-      view: { layout: '3x4+1' },
-      marks: [{ auto: 'qrs', lead: 'I' }, { auto: 'rr', lead: 'II' }],
+      kind: 'film',
+      title: l('心脏周围有了液体', 'Fluid around the heart', 'Líquido alrededor del corazón'),
+      view: { layout: '3x4+1', lead: 'V3', highlightLeads: ['II', 'V3'] },
+      frames: [
+        {
+          label: l('心动过速', 'Tachycardia', 'Taquicardia'),
+          ecg: synth('sinus-tachycardia', 1525, { rate: 106 }),
+          note: l('窦速106次/分，电压正常：II导联QRS约9 mm。', 'Sinus tachycardia at 106/min with normal voltage: the QRS in II is about 9 mm.', 'Taquicardia sinusal a 106 lpm con voltaje normal: el QRS de II mide unos 9 mm.'),
+          marks: [{ auto: 'qrs', lead: 'II' }],
+        },
+        {
+          label: l('大量积液', 'Large effusion', 'Derrame grande'),
+          ecg: synth('pericardial-effusion', 1525),
+          note: l('同样的心率，大量心包积液：每个肢体导联QRS都不到5 mm（II约4 mm），胸导联也变小。', 'Same rate, a large effusion: the QRS is under 5 mm in every limb lead (II about 4 mm), and the chest leads shrink too.', 'La misma frecuencia con un derrame grande: el QRS no llega a 5 mm en ninguna derivación de miembros (II unos 4 mm) y las precordiales también se encogen.'),
+          marks: [{ auto: 'qrs', lead: 'II' }],
+        },
+        {
+          label: l('电交替', 'Alternans', 'Alternancia'),
+          ecg: synth('electrical-alternans', 1529),
+          note: l('心脏在液体里摆动：V3的R波一高一低、逐搏交替，节律仍规则。很特异，但不敏感。', 'The heart swings in the fluid: the R in V3 goes tall, short, tall, short, beat by beat, while the rhythm stays regular. Very specific, not sensitive.', 'El corazón se balancea en el líquido: la R de V3 alterna alta, baja, alta, baja, latido a latido, con el ritmo regular. Muy específica, poco sensible.'),
+          marks: [{ auto: 'r', lead: 'V3', beat: 5 }, { auto: 'r', lead: 'V3', beat: 6 }],
+        },
+      ],
+      predict: {
+        question: l('心包积液把心脏的电流分流掉了。QRS会怎样？', 'The fluid shunts the heart’s current away. What happens to the QRS?', 'El líquido deriva la corriente del corazón. ¿Qué le pasa al QRS?'),
+        options: [l('变小', 'It gets smaller', 'Se hace más pequeño'), l('变宽', 'It gets wider', 'Se ensancha'), l('变高', 'It gets taller', 'Se hace más alto')],
+        answer: 0,
+      },
       caption: l(
-        '大量心包积液：所有肢体导联 QRS 都不到 5 mm（低电压），窦性心动过速约 106 次/分。胸前导联也变小了。仅凭这份图你说不出原因——它只告诉你“去做超声”。',
-        'A large pericardial effusion: the QRS is under 5 mm in every limb lead (low voltage), with sinus tachycardia at about 106/min. The chest leads are smaller too. From this tracing alone you cannot name the cause — it only tells you "get an echo".',
-        'Derrame pericárdico abundante: el QRS mide menos de 5 mm en todas las derivaciones de los miembros (bajo voltaje), con taquicardia sinusal a unos 106 lpm. Las precordiales también son pequeñas. Solo con este trazado no puedes nombrar la causa: solo te dice "pide una ecocardiografía".',
+        '低电压的意思是“去找原因”：积液、肥胖、肺气肿、淀粉样变、甲减、大面积梗死。低电压 + 心动过速 + 气促：立即做超声。',
+        'Low voltage means “find the cause”: effusion, obesity, emphysema, amyloid, hypothyroidism, extensive infarction. Low voltage + tachycardia + breathlessness: echo now.',
+        'El bajo voltaje significa «busca la causa»: derrame, obesidad, enfisema, amiloidosis, hipotiroidismo, infarto extenso. Bajo voltaje + taquicardia + disnea: ecocardiograma ya.',
       ),
     },
     {
       kind: 'worked',
       title: l('找到电交替', 'Finding electrical alternans', 'Encontrar la alternancia eléctrica'),
       ecg: synth('electrical-alternans', 1526),
-      view: { layout: '3x4+1', highlightLeads: ['V3', 'V4'] },
+      view: { layout: '3x4+1', lead: 'V3', highlightLeads: ['V3', 'V4'] },
       steps: [
         {
           title: l('心率与电压', 'Rate and voltage', 'Frecuencia y voltaje'),
@@ -235,7 +276,7 @@ const lesson: Lesson = {
         {
           title: l('逐搏比较 R 波', 'Compare the R waves beat by beat', 'Compara las R latido a latido'),
           body: l('在 V3–V4 里，从左到右逐个看 R 波的高度：高、低、高、低……相邻两搏的振幅交替，而节律本身是规则的。肢体导联太小，交替不明显——找 QRS 最大的导联。', 'In V3–V4, look at the height of each R from left to right: tall, short, tall, short… Neighbouring beats alternate in amplitude while the rhythm itself stays regular. The limb leads are too small to show it — look where the QRS is biggest.', 'En V3–V4 mira la altura de cada R de izquierda a derecha: alta, baja, alta, baja… Los latidos vecinos alternan en amplitud mientras el ritmo sigue siendo regular. Las derivaciones de los miembros son demasiado pequeñas para mostrarlo: busca donde el QRS es mayor.'),
-          marks: [{ auto: 'r', lead: 'V3', beat: 4 }, { auto: 'r', lead: 'V3', beat: 5 }],
+          marks: [{ auto: 'r', lead: 'V3', beat: 5 }, { auto: 'r', lead: 'V3', beat: 6 }],
           highlightLeads: ['V3', 'V4'],
         },
         {
@@ -265,7 +306,7 @@ const lesson: Lesson = {
     {
       kind: 'pitfalls',
       items: [
-        l('PR 段压低被忽略（最特异的线索）——或者以 PR 段本身当基线去量 ST。', 'Overlooking PR depression (the most specific clue) — or using the PR segment itself as the baseline for the ST.', 'No ver el descenso del PR (la pista más específica), o usar el propio PR como línea de base para medir el ST.'),
+        l('PR 段压低被忽略（最特异的线索）——或者拿已被拉低的 PR 段而不是 TP 段去判断 ST 抬高（只有 V6 的 ST/T 比值以 PR 段为基线）。', 'Overlooking PR depression (the most specific clue) — or judging ST elevation against the depressed PR segment instead of the TP (only the V6 ST/T ratio uses the PR).', 'No ver el descenso del PR (la pista más específica), o juzgar la elevación del ST contra el PR descendido en lugar del TP (solo el cociente ST/T de V6 usa el PR).'),
         l('肌钙蛋白升高就把心包炎改成心肌梗死（心肌心包炎存在）——但也别反过来：有疑问就按 STEMI 路径评估。', 'Changing pericarditis to MI just because troponin is up (myopericarditis exists) — but not the reverse either: when in doubt, assess along the STEMI pathway.', 'Cambiar la pericarditis por infarto solo porque sube la troponina (existe la miopericarditis), pero tampoco al revés: ante la duda, valora por la vía del IAMCEST.'),
         l('把年轻人的早期复极叫作心包炎（或相反）：量 V6 的 ST/T 比值，看 PR 段，问症状。', 'Calling a young person’s early repolarisation pericarditis (or the reverse): measure the ST/T ratio in V6, check the PR segment, ask about symptoms.', 'Llamar pericarditis a la repolarización precoz de un joven (o al revés): mide el cociente ST/T en V6, mira el PR y pregunta por los síntomas.'),
         l('电交替被当作伪差或体位变化。', 'Electrical alternans dismissed as artefact or posture.', 'Despachar la alternancia eléctrica como artefacto o cambio postural.'),

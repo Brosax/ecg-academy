@@ -100,6 +100,12 @@ describe('resolveMarks', () => {
     expect(one({ auto: 'qt' })[0]).toMatchObject({ t0: qrsOn(1), t1: qrsOn(1) + 400, color: 'repol' });
     expect(one({ auto: 'rr' })[0]).toMatchObject({ t0: qrsOn(1), t1: qrsOn(2), label: { en: 'RR 800 ms' } });
   });
+  it('a mark without a lead goes on the shown lead of a one-lead view, else on II', () => {
+    expect(one({ auto: 'qt' }, { layout: 'strip', lead: 'V5' })[0]).toMatchObject({ lead: 'V5' });
+    expect(one({ auto: 'qt' }, { layout: 'single', lead: 'V2' })[0]).toMatchObject({ lead: 'V2' });
+    expect(one({ auto: 'qt' }, { layout: '3x4+1', lead: 'V5' })[0]).toMatchObject({ lead: 'II' });
+    expect(one({ auto: 'qt', lead: 'V1' }, { layout: 'strip', lead: 'V5' })[0]).toMatchObject({ lead: 'V1' });
+  });
   it('an explicit beat index wins (and an index out of range draws nothing)', () => {
     expect(one({ auto: 'qrs', beat: PVC_BEAT })[0]).toMatchObject({ t0: qrsOn(PVC_BEAT), t1: qrsOn(PVC_BEAT) + 150, label: { en: 'QRS 150 ms' } });
     expect(one({ auto: 'qrs', beat: 99 })).toEqual([]);

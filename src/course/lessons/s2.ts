@@ -49,12 +49,34 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('心电图纸就是一只钟', 'The paper is a clock', 'El papel es un reloj'),
-      body: l(
-        '标准走纸速度 25 mm/s 时：\n- 1 小格 = 1 mm = **40 ms**\n- 1 大格 = 5 mm = **200 ms**\n- 5 大格 = 1 s，1 分钟 = **300 大格 = 1500 小格**\n所以：心率（次/分）= 300 ÷ 大格数 = 1500 ÷ 小格数 = 60 000 ÷ RR（ms）。\n**先看走纸速度**：50 mm/s 时同样的数字要换成 600 和 3000。',
-        'At the standard paper speed of 25 mm/s:\n- 1 small square = 1 mm = **40 ms**\n- 1 large square = 5 mm = **200 ms**\n- 5 large squares = 1 s, so one minute = **300 large = 1500 small squares**\nTherefore rate (/min) = 300 ÷ large squares = 1500 ÷ small squares = 60 000 ÷ RR (ms).\n**Check the paper speed first**: at 50 mm/s the constants become 600 and 3000.',
-        'A la velocidad estándar de 25 mm/s:\n- 1 cuadro pequeño = 1 mm = **40 ms**\n- 1 cuadro grande = 5 mm = **200 ms**\n- 5 cuadros grandes = 1 s, así que un minuto = **300 grandes = 1500 pequeños**\nPor tanto, frecuencia (lpm) = 300 ÷ cuadros grandes = 1500 ÷ cuadros pequeños = 60 000 ÷ RR (ms).\n**Comprueba antes la velocidad del papel**: a 50 mm/s las constantes pasan a ser 600 y 3000.',
+      kind: 'live',
+      scenario: 'normal',
+      seed: 207,
+      dials: [{ id: 'rate' }],
+      view: STRIP,
+      marks: [{ auto: 'rr' }],
+      play: {
+        dial: 'rate',
+        from: 60,
+        to: 100,
+        notes: [
+          { min: 60, max: 62, text: l('R 波相隔 **5 个大格** = 1 秒：300 ÷ 5 = **60 次/分**。', 'R waves **5 large squares** apart = 1 s: 300 ÷ 5 = **60/min**.', 'Ondas R a **5 cuadros grandes** = 1 s: 300 ÷ 5 = **60 lpm**.') },
+          { min: 63, max: 72, text: l('下一个 R 落在两条粗线之间：改数小格，1500 ÷ 小格数。', 'The next R falls between heavy lines: count small squares, 1500 ÷ n.', 'La siguiente R cae entre líneas gruesas: cuenta cuadros pequeños, 1500 ÷ n.') },
+          { min: 73, max: 77, text: l('相隔 **4 个大格**（800 ms）：300 ÷ 4 = **75 次/分**。', '**4 large squares** apart (800 ms): 300 ÷ 4 = **75/min**.', 'A **4 cuadros grandes** (800 ms): 300 ÷ 4 = **75 lpm**.') },
+          { min: 78, max: 97, text: l('又落在粗线之间。1 小格 = 40 ms：用 1500 ÷ 小格数。', 'Between heavy lines again. 1 small square = 40 ms: use 1500 ÷ n.', 'De nuevo entre líneas gruesas. 1 cuadro pequeño = 40 ms: usa 1500 ÷ n.') },
+          { min: 98, max: 100, text: l('相隔 **3 个大格**（600 ms）：300 ÷ 3 = **100 次/分**。', '**3 large squares** apart (600 ms): 300 ÷ 3 = **100/min**.', 'A **3 cuadros grandes** (600 ms): 300 ÷ 3 = **100 lpm**.') },
+        ],
+      },
+      predict: {
+        question: l('心率从 60 升到 100 次/分，两个 R 波之间会剩几个大格？', 'As the rate climbs from 60 to 100/min, how many large squares will separate the R waves?', 'Si la frecuencia sube de 60 a 100 lpm, ¿cuántos cuadros grandes separarán las ondas R?'),
+        options: [l('2 个', '2', '2'), l('3 个', '3', '3'), l('4 个', '4', '4')],
+        answer: 1,
+        ordered: true,
+      },
+      caption: l(
+        '纸就是一只钟：1 大格 = 200 ms，5 大格 = 1 秒。看 RR 随心率缩短，记住 300、150、100、75、60、50。',
+        'The paper is a clock: 1 large square = 200 ms, 5 = 1 s. Watch the RR shrink as the rate rises; learn 300, 150, 100, 75, 60, 50.',
+        'El papel es un reloj: 1 cuadro grande = 200 ms, 5 = 1 s. Mira cómo se acorta el RR al subir la frecuencia; memoriza 300, 150, 100, 75, 60, 50.',
       ),
     },
     {
@@ -112,15 +134,25 @@ const lesson: Lesson = {
     },
     {
       kind: 'live',
-      scenario: 'normal',
+      scenario: 'sinus-tachycardia',
       seed: 204,
       dials: [{ id: 'rate' }],
       view: STRIP,
       marks: [{ auto: 'rr' }],
+      play: {
+        dial: 'rate',
+        from: 102,
+        to: 150,
+        notes: [
+          { min: 102, max: 106, text: l('RR ≈ 14–15 小格：1500 ÷ 15 = 100。差 1 小格就差约 7 次/分。', 'RR ≈ 14–15 small squares: 1500 ÷ 15 = 100. One square off is about 7/min.', 'RR ≈ 14–15 cuadros pequeños: 1500 ÷ 15 = 100. Un cuadro de error son unos 7 lpm.') },
+          { min: 107, max: 144, text: l('大格法只能说“100 到 150 之间”：数小格才准。', 'Large squares only say "between 100 and 150": count small squares.', 'Los cuadros grandes solo dicen «entre 100 y 150»: cuenta cuadros pequeños.') },
+          { min: 145, max: 150, text: l('相隔 **2 个大格** = 10 小格：1500 ÷ 10 = **150 次/分**。', '**2 large squares** = 10 small apart: 1500 ÷ 10 = **150/min**.', 'A **2 cuadros grandes** = 10 pequeños: 1500 ÷ 10 = **150 lpm**.') },
+        ],
+      },
       caption: l(
-        '把心率从 60 拖到 100 次/分。接近 100 次/分时，差 1 个小格就差约 6 次/分——心率快时要数小格（1500 法）。',
-        'Slide the rate from 60 to 100/min. Near 100/min, one small square changes the estimate by about 6/min: at fast rates, count small squares (the 1500 rule).',
-        'Desliza la frecuencia de 60 a 100 lpm. Cerca de 100 lpm, un solo cuadro pequeño cambia la estimación en unos 6 lpm: con frecuencias rápidas, cuenta cuadros pequeños (regla de 1500).',
+        '心率越快，一个小格代表的心率差越大。快心率一律数小格（1500 法）。',
+        'The faster the rate, the more one small square is worth. At fast rates always count small squares (the 1500 rule).',
+        'Cuanto más rápida la frecuencia, más vale un cuadro pequeño. Con frecuencias rápidas cuenta siempre cuadros pequeños (regla de 1500).',
       ),
     },
     {
@@ -159,12 +191,40 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
+      kind: 'film',
       title: l('不规则节律：数，不要除', 'Irregular rhythm: count, do not divide', 'Ritmo irregular: cuenta, no dividas'),
-      body: l(
-        'RR 间期不等时（心房颤动、频发期前收缩、明显的窦性心律不齐），300 和 1500 法只描述了一个心动周期，而不是整个节律。\n- 数 10 秒节律条上全部 QRS 波群，乘以 6。\n- 不要在 3×4 排列的单列上数：每列只有 2.5 秒，漏数一个波群就差 24 次/分。\n- 需要时报告范围（例如最快和最慢的 RR 各相当于多少次/分）。',
-        'When the RR intervals vary (atrial fibrillation, frequent ectopic beats, marked sinus arrhythmia), the 300 and 1500 rules describe one cycle, not the rhythm.\n- Count every QRS on the 10-s rhythm strip and multiply by 6.\n- Do not count on one column of the 3×4 sheet: it shows only 2.5 s, so one missed complex is an error of 24/min.\n- Give the range when it matters (the rates of the shortest and the longest RR).',
-        'Cuando los intervalos RR varían (fibrilación auricular, extrasístoles frecuentes, arritmia sinusal marcada), las reglas de 300 y 1500 describen un ciclo, no el ritmo.\n- Cuenta todos los QRS de la tira de ritmo de 10 s y multiplica por 6.\n- No cuentes en una sola columna del formato 3×4: solo muestra 2,5 s y un complejo perdido supone un error de 24 lpm.\n- Da el intervalo si importa (las frecuencias del RR más corto y del más largo).',
+      view: STRIP,
+      frames: [
+        {
+          label: l('规则', 'Regular', 'Regular'),
+          ecg: synth('sinus-tachycardia', 205, { rate: 115 }),
+          note: l('每个 RR 都一样长：任取一对 R 波，1500 ÷ 小格数 ≈ 115 次/分。', 'Every RR is the same: any pair of R waves gives 1500 ÷ n ≈ 115/min.', 'Todos los RR son iguales: cualquier par de R da 1500 ÷ n ≈ 115 lpm.'),
+          marks: [{ auto: 'rr' }],
+        },
+        {
+          label: l('随呼吸变化', 'Breathing with', 'Varía con la respiración'),
+          ecg: synth('sinus-arrhythmia', 208),
+          note: l('RR 随呼吸忽长忽短：只量一对会偏，改数 10 秒内的 QRS × 6。', 'RR stretches and shrinks with breathing: one pair misleads, so count QRS in 10 s × 6.', 'El RR se alarga y acorta con la respiración: un par engaña; cuenta los QRS de 10 s × 6.'),
+          // the shortest RR on the strip: one pair that misleads
+          marks: [{ auto: 'rr', beat: 9 }],
+        },
+        {
+          label: l('完全不规则', 'Irregularly irregular', 'Irregularmente irregular'),
+          ecg: synth('atrial-fibrillation', 206),
+          note: l('没有两个 RR 相同：每对给出不同的“心率”。只能数整条 10 秒，再乘以 6。', 'No two RR alike: each pair gives a different "rate". Count the whole 10 s and multiply by 6.', 'No hay dos RR iguales: cada par da otra «frecuencia». Cuenta los 10 s enteros y multiplica por 6.'),
+          // the shortest RR on the strip: its "rate" is far from the 10-s count
+          marks: [{ auto: 'rr', beat: 16 }],
+        },
+      ],
+      predict: {
+        question: l('这三条里，哪几条可以用 300 或 1500 法？', 'Which of these three strips can you read with the 300 or 1500 rule?', '¿En cuáles de estas tres tiras sirve la regla de 300 o de 1500?'),
+        options: [l('只有第 1 条', 'Only strip 1', 'Solo la 1'), l('第 1 和第 2 条', 'Strips 1 and 2', 'La 1 y la 2'), l('三条都可以', 'All three', 'Las tres')],
+        answer: 0,
+      },
+      caption: l(
+        '不规则就只数不除。别在 3×4 排列的 2.5 秒单列上数：漏一个波就差 24 次/分。',
+        'Irregular means count, do not divide. Never count on a 2.5-s column of the 3×4 sheet: one missed beat is 24/min.',
+        'Irregular significa contar, no dividir. No cuentes en una columna de 2,5 s del formato 3×4: un latido perdido son 24 lpm.',
       ),
     },
     { kind: 'check', item: { family: 'rate', seed: 4 } },

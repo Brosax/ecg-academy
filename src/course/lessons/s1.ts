@@ -15,6 +15,11 @@ const synth = (scenario: string, seed: number, dials?: Partial<Record<DialId, nu
 });
 /** the worked-example ECG: every interval set to a round, normal value */
 const NORMAL_READ = synth('normal', 101, { rate: 75, pr: 160, qrs: 90, qtc: 410, axis: 60 });
+/** the hook: pre-excitation, PR ≈ 116 ms, QRS ≈ 125 ms, about 72/min */
+const PRE_EXCITED = synth('wpw', 127);
+/** the first-step check's ECG, recorded three ways: only the recording chain changes */
+const CHECKED = { scenario: 'normal', seed: 106 } as const;
+const NEVER_MISS_SEED = 111;
 
 const nextStep: Item = {
   id: 's1:next-step',
@@ -91,25 +96,16 @@ const lesson: Lesson = {
   blocks: [
     {
       kind: 'hook',
-      ecg: synth('wpw', 127),
+      ecg: PRE_EXCITED,
       question: l(
         '给你一分钟：这份心电图正常吗？想好你的结论和理由。',
         'You have one minute. Is this ECG normal? Decide your verdict and the reason.',
         'Tienes un minuto. ¿Es normal este ECG? Decide tu conclusión y el motivo.',
       ),
       reveal: l(
-        '不正常。心率和节律没有问题，但 **PR 间期短（约 115 ms，< 120 ms）**，QRS 起始部顿挫（δ 波），QRS 增宽（约 125 ms），V1 的 R 波明显（R ≥ S），II、III、aVF 和 V3–V6 的 T 波倒置：心室预激，T 波倒置是它的继发性复极改变。每次都测 PR 的人在第 4 步就找到原因，用一个诊断解释了所有异常；直接“看形态”的人常把倒置的 T 波读成缺血，把 V1 明显的 R 波读成后壁梗死或右束支阻滞。这正是固定顺序的意义。',
-        'It is not. The rate and rhythm are fine, but the **PR is short (about 115 ms, < 120 ms)**, the QRS starts with a slurred upstroke (a delta wave) and is wide (about 125 ms), V1 has a prominent R wave (R ≥ S), and the T waves are inverted in II, III, aVF and V3–V6: ventricular pre-excitation, with the T inversion as its secondary repolarisation change. A reader who measures the PR every time finds the cause at step 4 and explains every abnormality with one diagnosis; a reader who jumps straight to “morphology” tends to call the inverted T waves ischaemia and the prominent R in V1 a posterior infarct or RBBB. That is what a fixed order is for.',
-        'No lo es. La frecuencia y el ritmo son correctos, pero el **PR es corto (unos 115 ms, < 120 ms)**, el QRS empieza con un empastamiento (onda delta) y es ancho (unos 125 ms), V1 tiene una R prominente (R ≥ S) y las T son negativas en II, III, aVF y V3–V6: preexcitación ventricular, con la T negativa como alteración secundaria de la repolarización. Quien mide el PR siempre encuentra la causa en el paso 4 y explica todas las anomalías con un solo diagnóstico; quien salta directamente a la “morfología” suele llamar isquemia a las T negativas e infarto posterior o bloqueo de rama derecha a la R prominente de V1. Para eso sirve un orden fijo.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('为什么要固定顺序', 'Why a fixed order', 'Por qué un orden fijo'),
-      body: l(
-        '有经验的读图者把整体印象和清单结合起来，而清单防止的是**遗漏**：\n- 每个间期都测，即使心电图“看起来正常”；\n- 找到第一个异常后继续读（最常见的错误就是找到一个就停下）；\n- 最后才看计算机诊断，免得它先入为主。',
-        'Experienced readers combine a quick overall impression with a checklist, and the checklist is what prevents **omissions**:\n- you measure every interval, even when the tracing “looks normal”;\n- you keep going after the first finding (the commonest error is to stop once something is found);\n- you read the computer statement last, so it cannot anchor your read.',
-        'Los lectores con experiencia combinan una impresión global rápida con una lista de comprobación, y la lista es lo que evita las **omisiones**:\n- mides todos los intervalos, aunque el trazado “parezca normal”;\n- sigues después del primer hallazgo (el error más frecuente es parar en cuanto se encuentra algo);\n- lees el informe automático al final, para que no condicione tu lectura.',
+        '不正常：**心室预激**。心率和节律都没问题，原因藏在后面的一步里。下面按顺序走一遍，看是哪一步找到它，又怎样用一个诊断解释所有异常。',
+        'It is not: **ventricular pre-excitation**. The rate and rhythm are fine; the cause sits in a later step. Walk the order below, see which step finds it, and how one diagnosis then explains every abnormality.',
+        'No lo es: **preexcitación ventricular**. La frecuencia y el ritmo son correctos; la causa está en un paso posterior. Recorre el orden a continuación, mira qué paso la encuentra y cómo un solo diagnóstico explica después todas las anomalías.',
       ),
     },
     {
@@ -228,12 +224,126 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'text',
+      kind: 'film',
+      title: l('按顺序读：一个诊断解释全部', 'Read in order: one diagnosis explains it all', 'Lee en orden: un diagnóstico lo explica todo'),
+      frames: [
+        {
+          label: l('心率、节律', 'Rate, rhythm', 'Frecuencia, ritmo'),
+          ecg: PRE_EXCITED,
+          note: l('第 2–3 步：约 72 次/分，每个 QRS 前有窦性 P 波。到这里都正常。', 'Steps 2–3: about 72/min, a sinus P before every QRS. Normal so far.', 'Pasos 2–3: unos 72 lpm, una P sinusal antes de cada QRS. Normal hasta aquí.'),
+          marks: [{ auto: 'rr' }, { auto: 'p' }],
+        },
+        {
+          label: l('PR', 'PR', 'PR'),
+          ecg: PRE_EXCITED,
+          note: l('第 4 步：PR 约 115 ms，不到 120：**短 PR**。不要停，问为什么。', 'Step 4: PR about 115 ms, under 120: a **short PR**. Do not stop; ask why.', 'Paso 4: PR de unos 115 ms, menos de 120: **PR corto**. No te detengas; pregúntate por qué.'),
+          marks: [{ auto: 'pr' }],
+        },
+        {
+          label: l('QRS', 'QRS', 'QRS'),
+          ecg: PRE_EXCITED,
+          note: l('第 5 步：QRS 约 125 ms，起始部顿挫（**δ 波**）：心室预激，短 PR 有了解释。', 'Step 5: QRS about 125 ms, opening with a slurred **delta wave**: pre-excitation explains the short PR.', 'Paso 5: QRS de unos 125 ms que empieza con un empastamiento (**onda delta**): la preexcitación explica el PR corto.'),
+          marks: [{ auto: 'qrs' }, { auto: 'delta' }],
+        },
+        {
+          label: l('T 波', 'T waves', 'Ondas T'),
+          ecg: PRE_EXCITED,
+          note: l('第 8 步：II、III、aVF 和 V3–V6 的 T 波倒置：预激的继发改变，不是缺血。', 'Step 8: T inverted in II, III, aVF and V3–V6: secondary to the pre-excitation, not ischaemia.', 'Paso 8: T negativas en II, III, aVF y V3–V6: secundarias a la preexcitación, no isquemia.'),
+          marks: [{ auto: 't', lead: 'III' }, { auto: 't', lead: 'V5' }],
+        },
+      ],
+      predict: {
+        question: l('开头那份图：心率和节律都正常。按顺序，下一步看什么？', 'The opening tracing: rate and rhythm are normal. In the order, what do you look at next?', 'El trazado del principio: la frecuencia y el ritmo son normales. Siguiendo el orden, ¿qué miras ahora?'),
+        options: [l('第 4 步：PR', 'Step 4: the PR', 'Paso 4: el PR'), l('第 8 步：T 波', 'Step 8: the T waves', 'Paso 8: las ondas T'), l('机器的自动诊断', 'The computer statement', 'El informe automático')],
+        answer: 0,
+      },
+      caption: l(
+        '同一份图，每步只看一样东西。测 PR 的人在第 4 步就找到原因，再用它解释后面的一切。',
+        'One tracing, one thing per step. Whoever measures the PR finds the cause at step 4 and uses it to explain the rest.',
+        'Un trazado, una cosa por paso. Quien mide el PR encuentra la causa en el paso 4 y con ella explica el resto.',
+      ),
+    },
+    {
+      kind: 'film',
+      title: l('第 1 步：先查记录', 'Step 1: check the recording first', 'Paso 1: comprueba primero el registro'),
+      frames: [
+        {
+          label: l('接线正确', 'Correct', 'Correcto'),
+          ecg: { kind: 'synth', req: CHECKED },
+          note: l('I 导联的 P、QRS、T 都直立，aVR 倒置：左右手电极接对了。', 'Lead I has upright P, QRS and T, and aVR is negative: the arm cables are right.', 'La derivación I tiene P, QRS y T positivas y aVR es negativa: los cables de los brazos están bien.'),
+        },
+        {
+          label: l('左右手接反', 'Arm cables swapped', 'Cables de brazos invertidos'),
+          ecg: { kind: 'synth', req: { ...CHECKED, recording: { placement: { limbs: { RA: 'LA', LA: 'RA' } } } } },
+          note: l('I 导联整个倒置，aVR 的 QRS 和 T 变成直立：先怀疑左右手电极接反，再读别的。', 'Lead I is all negative and aVR has an upright QRS and T: suspect swapped arm cables before reading anything else.', 'La derivación I es totalmente negativa y aVR tiene QRS y T positivos: sospecha cables de brazos invertidos antes de leer nada más.'),
+        },
+        {
+          label: l('电极噪声', 'Noisy electrode', 'Electrodo con ruido'),
+          ecg: { kind: 'synth', req: { ...CHECKED, recording: { noise: { emgMv: 0.05, emgOn: ['LA'] } } } },
+          note: l('I、III、aVL 有细密的毛刺，II 却干净：问题在左手电极。先修好记录再测量。', 'Fine fuzz in I, III and aVL while II stays clean: the left-arm electrode. Fix the recording before you measure.', 'Temblor muscular fino en I, III y aVL con II limpia: el electrodo del brazo izquierdo. Arregla el registro antes de medir.'),
+        },
+      ],
+      predict: {
+        question: l('把左右手电极对调，I 导联会怎样？', 'Swap the two arm cables. What happens to lead I?', 'Intercambia los cables de los brazos. ¿Qué le pasa a la derivación I?'),
+        options: [l('整个倒过来', 'It turns upside down', 'Se invierte por completo'), l('不变', 'Nothing', 'Nada'), l('变大一倍', 'It doubles in size', 'Duplica su tamaño')],
+        answer: 0,
+      },
+      caption: l(
+        '同一颗心脏，只改记录。接错或噪声会让正常的心电图看起来异常：第 1 步就把它查出来。',
+        'One heart; only the recording changes. Wrong cables or noise make a normal ECG look abnormal: catch it at step 1.',
+        'Un mismo corazón; solo cambia el registro. Cables mal puestos o ruido hacen que un ECG normal parezca anormal: detéctalo en el paso 1.',
+      ),
+    },
+    {
+      kind: 'film',
       title: l('签字之前：“不可漏诊”筛查', 'Before you sign: the never-miss screen', 'Antes de firmar: el cribado de lo que no se puede pasar por alto'),
-      body: l(
-        '下结论前问自己六个问题：\n- 有没有急性冠脉闭塞或其等同图形？\n- 有没有高钾血症？\n- QT 是否延长？\n- 有没有心室预激？\n- 有没有 Brugada 1 型图形？\n- 有没有高度房室传导阻滞？\n每一个都会改变今天的处理，后面各有专门的课。',
-        'Ask six questions before you conclude:\n- an acute coronary occlusion or one of its equivalents?\n- hyperkalaemia?\n- a long QT?\n- pre-excitation?\n- a Brugada type 1 pattern?\n- high-grade AV block?\nEach one changes what happens today, and each has its own lesson later.',
-        'Hazte seis preguntas antes de concluir:\n- ¿oclusión coronaria aguda o uno de sus equivalentes?\n- ¿hiperpotasemia?\n- ¿QT largo?\n- ¿preexcitación?\n- ¿patrón de Brugada tipo 1?\n- ¿bloqueo AV de alto grado?\nCada una cambia lo que se hace hoy, y cada una tiene su propia lección más adelante.',
+      frames: [
+        {
+          label: l('急性闭塞', 'Occlusion', 'Oclusión'),
+          ecg: synth('stemi-anterior', NEVER_MISS_SEED),
+          note: l(
+            '急性冠脉闭塞，或它的等同图形？这里 V1–V4 的 ST 抬高，III、aVF 镜像压低：先按闭塞处理。',
+            'An acute occlusion, or one of its equivalents? Here ST is up in V1–V4 with a mirror-image dip in III and aVF: occlusion until proven otherwise.',
+            '¿Oclusión aguda o uno de sus equivalentes? Aquí el ST sube en V1–V4 con descenso especular en III y aVF: oclusión mientras no se demuestre lo contrario.',
+          ),
+        },
+        {
+          label: l('高钾', 'Potassium', 'Potasio'),
+          ecg: synth('hyperkalemia', NEVER_MISS_SEED),
+          note: l('V3–V4 的 T 波高尖、比 R 波还高，PR 和 QRS 变长：想到高钾血症。', 'Peaked T waves taller than the R in V3–V4, with a longer PR and QRS: think hyperkalaemia.', 'T picudas, más altas que la R en V3–V4, con PR y QRS más largos: piensa en hiperpotasemia.'),
+        },
+        {
+          label: l('长 QT', 'Long QT', 'QT largo'),
+          ecg: synth('long-qt', NEVER_MISS_SEED, { qtc: 520, rate: 60 }),
+          note: l(
+            'QT 约 520 ms，60 次/分（RR 约 1 s），所以 QTc ≈ QT ≈ 520 ms：> 500 ms 为高危。不测量就看不出来。',
+            'QT about 520 ms at 60/min (RR about 1 s), so QTc ≈ QT ≈ 520 ms: over 500 ms is high risk. You only see it if you measure it.',
+            'QT de unos 520 ms a 60 lpm (RR de 1 s aprox.), así que QTc ≈ QT ≈ 520 ms: > 500 ms es de alto riesgo. Solo lo ves si lo mides.',
+          ),
+          marks: [{ auto: 'qt' }, { auto: 'rr' }],
+        },
+        {
+          label: l('预激', 'Pre-excitation', 'Preexcitación'),
+          ecg: synth('wpw', NEVER_MISS_SEED),
+          note: l('PR < 120 ms，QRS 起始部有 δ 波：心室预激。', 'PR under 120 ms and a delta wave at the start of the QRS: pre-excitation.', 'PR < 120 ms y onda delta al inicio del QRS: preexcitación.'),
+          marks: [{ auto: 'pr' }, { auto: 'delta' }],
+        },
+        {
+          label: l('Brugada 1 型', 'Brugada type 1', 'Brugada tipo 1'),
+          ecg: synth('brugada-type1', NEVER_MISS_SEED),
+          note: l('V1–V2 穹窿形 ST 抬高 ≥ 2 mm，下斜进入倒置的 T 波：Brugada 1 型。', 'Coved ST elevation ≥ 2 mm in V1–V2 sloping into a negative T: Brugada type 1.', 'Elevación del ST en cúpula ≥ 2 mm en V1–V2 que desciende hacia una T negativa: Brugada tipo 1.'),
+        },
+        {
+          label: l('高度房室阻滞', 'High-grade AV block', 'Bloqueo AV de alto grado'),
+          ecg: synth('av-block-high-grade', NEVER_MISS_SEED),
+          note: l('P 波约 96 次/分，只有三分之一下传，心室率约 32 次/分：高度房室传导阻滞。', 'P waves at about 96/min, but only one in three conducts: a ventricular rate of about 32/min. High-grade AV block.', 'Ondas P a unos 96 lpm, pero solo conduce una de cada tres: frecuencia ventricular de unos 32 lpm. Bloqueo AV de alto grado.'),
+          marks: [{ auto: 'blocked-p' }],
+        },
+      ],
+      caption: l(
+        '签字前，在图上再找一遍这六种绝不能漏掉的情况。每一种都会改变今天的处理，后面各有专门的课。',
+        'Before you sign, check the tracing for these six things you must never miss. Each changes what happens today, and each has its own lesson later.',
+        'Antes de firmar, busca en el trazado estas seis cosas que nunca se pueden pasar por alto. Cada una cambia lo que se hace hoy y cada una tiene su propia lección más adelante.',
       ),
     },
     {
@@ -248,9 +358,9 @@ const lesson: Lesson = {
         caption: l('按顺序读：第 1–8 步', 'Read it in order: steps 1–8', 'Léelo en orden: pasos 1–8'),
       },
       point: l(
-        'B 在三步上不正常：PR 约 205 ms（第 4 步），QRS 约 115 ms（第 5 步），V3–V5 的 T 波高尖、基底窄，与 R 波一样高甚至更高（第 8 步）。单看每一项都不显眼，合在一起再经过“不可漏诊”筛查，就指向高钾血症——这是急症。在电轴之后就停下的人会漏掉它。',
-        'B is abnormal at three steps: PR about 205 ms (step 4), QRS about 115 ms (step 5) and tall, narrow-based, peaked T waves in V3–V5, as tall as the R waves or taller (step 8). Each is subtle on its own; together, and with the never-miss screen, they point to hyperkalaemia, an emergency. A reader who stops after the axis misses it.',
-        'B es anormal en tres pasos: PR de unos 205 ms (paso 4), QRS de unos 115 ms (paso 5) y ondas T altas, picudas y de base estrecha en V3–V5, tan altas como las R o más (paso 8). Cada uno es sutil por separado; juntos, y con el cribado final, apuntan a una hiperpotasemia, que es una urgencia. Quien se detiene tras el eje la pasa por alto.',
+        'B 在三步上不正常：PR 约 205 ms（第 4 步），QRS 约 115 ms（第 5 步），V3–V5 的 T 波高尖、基底窄，V3–V4 的 T 波比 R 波还高（第 8 步）。单看每一项都不显眼，合在一起再经过“不可漏诊”筛查，就指向高钾血症——这是急症。在电轴之后就停下的人会漏掉它。',
+        'B is abnormal at three steps: PR about 205 ms (step 4), QRS about 115 ms (step 5) and tall, narrow-based, peaked T waves in V3–V5, taller than the R in V3–V4 (step 8). Each is subtle on its own; together, and with the never-miss screen, they point to hyperkalaemia, an emergency. A reader who stops after the axis misses it.',
+        'B es anormal en tres pasos: PR de unos 205 ms (paso 4), QRS de unos 115 ms (paso 5) y ondas T altas, picudas y de base estrecha en V3–V5, más altas que la R en V3–V4 (paso 8). Cada uno es sutil por separado; juntos, y con el cribado final, apuntan a una hiperpotasemia, que es una urgencia. Quien se detiene tras el eje la pasa por alto.',
       ),
     },
     { kind: 'check', item: { inline: firstStep } },
@@ -274,6 +384,7 @@ const lesson: Lesson = {
         l('先看计算机诊断：它会先入为主，而它最常错在节律和电极错接上。', 'Reading the computer statement first: it anchors you, and it is most often wrong on rhythm and on electrode errors.', 'Leer primero el informe automático: condiciona la lectura, y se equivoca sobre todo en el ritmo y en los errores de electrodos.'),
         l('跳过第 1 步：电极接反或半电压会让正常的心脏看起来异常（反之亦然）。', 'Skipping step 1: reversed cables or half gain make a normal heart look abnormal, or the reverse.', 'Saltarse el paso 1: los cables invertidos o la media ganancia hacen que un corazón normal parezca anormal, o al revés.'),
         l('“目测”间期：短 PR、长 QT、115 ms 的 QRS 乍看都像正常。', '“Eyeballing” intervals: a short PR, a long QT or a QRS of 115 ms all look normal at a glance.', 'Calcular los intervalos “a ojo”: un PR corto, un QT largo o un QRS de 115 ms parecen normales a primera vista.'),
+        l('直接跳到形态：预激时倒置的 T 波像缺血，V1 明显的 R 波像后壁梗死或右束支阻滞。', 'Jumping straight to morphology: with pre-excitation the inverted T waves look like ischaemia, and the prominent R in V1 like a posterior infarct or RBBB.', 'Saltar directamente a la morfología: con preexcitación las T negativas parecen isquemia, y la R prominente de V1, un infarto posterior o un bloqueo de rama derecha.'),
         l('不和旧心电图比较：很多发现是否紧急，取决于它是不是新出现的。', 'Not comparing with a previous ECG: whether a finding is new often decides whether it is urgent.', 'No comparar con un ECG previo: que un hallazgo sea nuevo a menudo decide si es urgente.'),
       ],
     },

@@ -83,18 +83,51 @@ const lesson: Lesson = {
       ecg: synth('rv-infarction', 862),
       emphasize: ['rv-basal', 'lv-basal-inferior', 'lv-mid-inferior'],
       caption: l(
-        '在心脏上读这份下壁 STEMI：RCA 走行于右房室沟，先发出右心室缘支再绕到下壁——当闭塞位于**右心室支之前**，下壁与右心室游离壁（此处 rv-basal 亮起）一起缺血。右心室游离壁正对 V1 与右胸导联 V3R/V4R，所以它的损伤电流在那里表现为 ST 抬高。RCA 还发出房室结动脉：下壁 STEMI 出现缓慢心律时不必意外。',
-        'Read this inferior STEMI on the heart: the RCA runs in the right AV groove and gives its RV marginal branches before reaching the inferior wall — when the occlusion sits **before the RV branches**, the inferior wall and the RV free wall (rv-basal lights up here) become ischaemic together. The RV free wall faces V1 and the right-sided leads V3R/V4R, so its injury current shows there as ST elevation. The RCA also gives the AV node artery: bradycardia in an inferior STEMI should be no surprise.',
-        'Lee este IAMCEST inferior sobre el corazón: la coronaria derecha discurre por el surco auriculoventricular derecho y da sus ramas marginales del VD antes de llegar a la pared inferior; cuando la oclusión está **antes de las ramas del VD**, la pared inferior y la pared libre del VD (aquí se ilumina rv-basal) se isquemian juntas. La pared libre del VD mira a V1 y a las derivaciones derechas V3R/V4R, por eso su corriente de lesión se muestra allí como elevación del ST. La CD da también la arteria del nodo AV: la bradicardia en un IAMCEST inferior no debe sorprender.',
+        '播放一个心动周期。RCA 在到达下壁之前先发出右心室支：闭塞在这些分支之前，下壁和右心室游离壁一起亮起。右心室正对 V1 和 V3R/V4R。',
+        'Play one beat. The RCA gives its RV branches before it reaches the inferior wall: occluded before them, the inferior wall and the RV free wall light up together. The RV faces V1 and V3R/V4R.',
+        'Reproduce un latido. La CD da sus ramas del VD antes de llegar a la pared inferior: ocluida antes de ellas, la pared inferior y la pared libre del VD se iluminan juntas. El VD mira a V1 y a V3R/V4R.',
       ),
     },
     {
-      kind: 'text',
-      title: l('RCA 还是 LCx：两个读数', 'RCA or LCx: two readings', 'CD o Cx: dos lecturas'),
-      body: l(
-        '下壁由 RCA（约 90% 的心脏为右优势型）或 LCx 供血，两个读数把它们分开：\n- **III 与 II 谁更高**：III（+120°）比 II（+60°）更朝右。RCA 的损伤向量朝右下 ⇒ **ST↑ III > II**；LCx 的向量朝左下 ⇒ **ST↑ II ≥ III**。\n- **I 导联**：RCA ⇒ I（± aVL）镜像性 ST 压低；LCx ⇒ I 导联等电位，V5–V6 常同时抬高（aVL 仍可压低）。\n为什么要区分：只有 RCA 近段闭塞才累及右心室（V4R）；两支都可向后延伸；而 LCx 下壁梗死最响亮的线索可能就在侧壁或后壁导联。',
-        'The inferior wall is fed by the RCA (about 90% of hearts are right-dominant) or by the LCx; two readings separate them:\n- **Which is taller, III or II?** III (+120°) looks further right than II (+60°). An RCA injury vector points right and down ⇒ **ST elevation III > II**; an LCx vector points left and down ⇒ **ST elevation II ≥ III**.\n- **Lead I**: RCA ⇒ mirror ST depression in I (± aVL); LCx ⇒ lead I isoelectric, and V5–V6 often elevate with it (aVL may stay depressed).\nWhy it matters: only a proximal RCA occlusion involves the right ventricle (V4R); both arteries can extend posteriorly; and in an LCx inferior MI the loudest clues may sit in the lateral or posterior leads.',
-        'La pared inferior depende de la coronaria derecha (cerca del 90% de los corazones son de dominancia derecha) o de la circunfleja; dos lecturas las separan:\n- **¿Cuál está más elevada, III o II?** III (+120°) mira más a la derecha que II (+60°). El vector de lesión de la CD se dirige abajo y a la derecha ⇒ **elevación del ST III > II**; el de la Cx, abajo y a la izquierda ⇒ **elevación II ≥ III**.\n- **Derivación I**: CD ⇒ descenso especular del ST en I (± aVL); Cx ⇒ I isoeléctrica, y V5–V6 suelen elevarse con ella (aVL puede seguir descendida).\nPor qué importa: solo la oclusión proximal de la CD afecta al ventrículo derecho (V4R); ambas pueden extenderse hacia atrás; y en el infarto inferior por Cx las pistas más claras pueden estar en las derivaciones laterales o posteriores.',
+      kind: 'live',
+      scenario: 'stemi-inferior',
+      seed: 861,
+      dials: [{ id: 'st' }],
+      marks: [{ auto: 'j', lead: 'III' }, { auto: 'j', lead: 'II' }, { auto: 'j', lead: 'aVL' }],
+      play: {
+        dial: 'st',
+        from: 0.15,
+        to: 0.4,
+        notes: [
+          {
+            min: 0.15,
+            max: 0.24,
+            text: l(
+              '损伤还小：III 已经高于 II，aVL 已经低于基线。方向在变大之前就定了。',
+              'Small injury: III already sits above II and aVL already dips below the baseline. The direction is set before the size grows.',
+              'Lesión pequeña: III ya está por encima de II y aVL ya cae bajo la línea de base. La dirección está fijada antes de crecer.',
+            ),
+          },
+          {
+            min: 0.25,
+            max: 0.4,
+            text: l(
+              '损伤变大：所有导联按比例放大，III 仍高于 II，I 和 aVL 压得更深：方向而不是大小指向 RCA。',
+              'Bigger injury: every lead scales, III stays above II, I and aVL sink deeper. The direction, not the size, names the RCA.',
+              'Lesión mayor: todas las derivaciones crecen, III sigue por encima de II, I y aVL bajan más. La dirección, no el tamaño, señala la CD.',
+            ),
+          },
+        ],
+      },
+      predict: {
+        question: l('损伤电流变大时，II 会超过 III 吗？', 'As the injury current grows, will II overtake III?', 'Al crecer la corriente de lesión, ¿superará II a III?'),
+        options: [l('不会：III 一直更高', 'No: III stays taller', 'No: III sigue más alta'), l('会：损伤够大时 II 更高', 'Yes: II wins once the injury is large', 'Sí: II gana cuando la lesión es grande')],
+        answer: 0,
+      },
+      caption: l(
+        '开头那份图，加一个损伤电流旋钮。III 从 +120° 看，II 从 +60° 看：朝右下的损伤矢量抬高 III 更多。',
+        'The opening tracing with an injury dial. III looks from +120°, II from +60°: an injury vector aimed right and down lifts III more.',
+        'El trazado inicial con un mando de lesión. III mira desde +120°, II desde +60°: un vector de lesión dirigido abajo y a la derecha eleva más III.',
       ),
     },
     {
@@ -182,9 +215,9 @@ const lesson: Lesson = {
         {
           title: l('加做 V4R', 'Add V4R', 'Añade V4R'),
           body: l(
-            'RCA 已定位，还要问闭塞在右心室支之前还是之后。V1 本身已抬高（正常 V1 的 ST 轻微压低或等电位）——这是右心室游离壁损伤的第一个线索。切到 V4R：**ST 抬高 ≥ 0.5 mm（< 30 岁男性 ≥ 1 mm）= 右心室受累**。',
-            'The RCA is named; now ask whether the occlusion sits before or after its RV branches. V1 itself is elevated (normally the ST in V1 is slightly depressed or isoelectric) — the first clue of RV free-wall injury. Switch to V4R: **ST elevation ≥ 0.5 mm (≥ 1 mm in men < 30 y) = right ventricular involvement**.',
-            'La CD está identificada; ahora pregunta si la oclusión está antes o después de sus ramas para el VD. La propia V1 está elevada (normalmente el ST en V1 está ligeramente descendido o isoeléctrico): la primera pista de lesión de la pared libre del VD. Cambia a V4R: **elevación del ST ≥ 0,5 mm (≥ 1 mm en varones < 30 años) = afectación del ventrículo derecho**.',
+            'RCA 已定位，还要问闭塞在右心室支之前还是之后。V1 本身已抬高（正常 V1 的 ST 接近基线）——这是右心室游离壁损伤的第一个线索。切到 V4R：**ST 抬高 ≥ 0.5 mm（< 30 岁男性 ≥ 1 mm）= 右心室受累**。',
+            'The RCA is named; now ask whether the occlusion sits before or after its RV branches. V1 itself is elevated (normally the ST in V1 is near the baseline) — the first clue of RV free-wall injury. Switch to V4R: **ST elevation ≥ 0.5 mm (≥ 1 mm in men < 30 y) = right ventricular involvement**.',
+            'La CD está identificada; ahora pregunta si la oclusión está antes o después de sus ramas para el VD. La propia V1 está elevada (normalmente el ST en V1 está cerca de la línea de base): la primera pista de lesión de la pared libre del VD. Cambia a V4R: **elevación del ST ≥ 0,5 mm (≥ 1 mm en varones < 30 años) = afectación del ventrículo derecho**.',
           ),
           view: { layout: 'single', lead: 'V4R' },
           marks: [{ auto: 'st', lead: 'V4R' }],
@@ -224,34 +257,61 @@ const lesson: Lesson = {
         ],
       },
       point: l(
-        '两张都是下壁 STEMI，下一步却不同。A（RCA）：**现在就记录 V3R/V4R**——右心室受累意味着近段闭塞，硝酸酯类要谨慎，还要警惕缓慢性心律与房室传导阻滞（房室结动脉通常来自 RCA）。B（LCx）：右心室不受累（右心室支来自 RCA），但要细读 I/aVL、V5–V6，并想到后壁——LCx 的梗死向侧壁和背侧延伸。',
-        'Both are inferior STEMIs, but the next step differs. A (RCA): **record V3R/V4R now** — RV involvement means a proximal occlusion, nitrates need caution, and bradyarrhythmias and AV block are on the watch list (the AV node artery usually comes from the RCA). B (LCx): the right ventricle is spared (the RV branches come from the RCA), but read I/aVL and V5–V6 carefully and think of the back — an LCx infarct extends lateral and posterior.',
-        'Ambos son IAMCEST inferiores, pero el paso siguiente es distinto. A (CD): **registra V3R/V4R ahora**: la afectación del VD indica oclusión proximal, los nitratos exigen cautela y hay que vigilar bradiarritmias y bloqueo AV (la arteria del nodo AV suele nacer de la CD). B (Cx): el VD se libra (las ramas del VD nacen de la CD), pero lee con calma I/aVL y V5–V6 y piensa en la cara posterior: el infarto por Cx se extiende hacia el lateral y hacia atrás.',
+        '两张都是下壁 STEMI，下一步却不同。A（RCA）：**现在就记录 V3R/V4R**——右心室受累意味着近段闭塞，硝酸酯类要谨慎，还要警惕缓慢性心律与房室传导阻滞（房室结动脉通常来自 RCA）。B（LCx）：右心室通常不受累（右心室支来自 RCA），但要细读 I/aVL、V5–V6，并想到后壁——LCx 的梗死向侧壁和背侧延伸。',
+        'Both are inferior STEMIs, but the next step differs. A (RCA): **record V3R/V4R now** — RV involvement means a proximal occlusion, nitrates need caution, and bradyarrhythmias and AV block are on the watch list (the AV node artery usually comes from the RCA). B (LCx): the right ventricle is usually spared (the RV branches come from the RCA), but read I/aVL and V5–V6 carefully and think of the back — an LCx infarct extends lateral and posterior.',
+        'Ambos son IAMCEST inferiores, pero el paso siguiente es distinto. A (CD): **registra V3R/V4R ahora**: la afectación del VD indica oclusión proximal, los nitratos exigen cautela y hay que vigilar bradiarritmias y bloqueo AV (la arteria del nodo AV suele nacer de la CD). B (Cx): el VD suele librarse (las ramas del VD nacen de la CD), pero lee con calma I/aVL y V5–V6 y piensa en la cara posterior: el infarto por Cx se extiende hacia el lateral y hacia atrás.',
       ),
     },
     {
-      kind: 'text',
-      title: l('右心室受累时的三个临床动作', 'Three clinical moves when the RV is involved', 'Tres acciones clínicas cuando afecta al VD'),
-      body: l(
-        '- **前负荷**：右心室梗死依赖足够的前负荷；硝酸酯类（以及利尿剂）可引起严重低血压。低血压而**肺部清晰**的病人先补液，再考虑升压药。\n- **预后**：右心室受累是下壁梗死预后不良的**独立预测因子**（Zehender 1993：更高的住院死亡率与并发症）——“下壁梗死是良性的”是个迷思。\n- **传导**：房室结动脉通常来自 RCA——窦缓、一度到三度房室传导阻滞都常见，可能需要临时起搏；传导阻滞多集中在最初 24 小时。\n- **时间窗**：V4R 的 ST 抬高可能只持续数小时——**胸痛还在时就记录**，别等。',
-        '- **Preload**: an RV infarct depends on adequate preload; nitrates (and diuretics) can cause severe hypotension. A hypotensive patient with **clear lungs** needs fluids first, vasopressors second.\n- **Prognosis**: RV involvement is an **independent predictor** of poor outcome in inferior MI (Zehender 1993: higher in-hospital mortality and complications) — the "inferior MI is benign" idea is a myth.\n- **Conduction**: the AV node artery usually comes from the RCA — sinus bradycardia and first- to third-degree AV block are all common, temporary pacing may be needed, and blocks cluster in the first 24 hours.\n- **Time window**: V4R ST elevation can last only a few hours — **record it while the pain is still on**, not later.',
-        '- **Precarga**: el infarto del VD depende de una precarga suficiente; los nitratos (y los diuréticos) pueden provocar hipotensión grave. Un paciente hipotenso con **campos pulmonares limpios** necesita primero volumen y después vasopresores.\n- **Pronóstico**: la afectación del VD es un **predictor independiente** de mal pronóstico en el infarto inferior (Zehender 1993: mayor mortalidad y complicaciones hospitalarias): la idea de que «el infarto inferior es benigno» es un mito.\n- **Conducción**: la arteria del nodo AV suele nacer de la CD: la bradicardia sinusal y los bloqueos AV de primer a tercer grado son frecuentes, puede necesitarse marcapasos temporal, y los bloqueos se concentran en las primeras 24 horas.\n- **Ventana temporal**: la elevación del ST en V4R puede durar solo unas horas: **regístrala mientras dura el dolor**, no después.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('stemi-inferior', 866, undefined, 'posterior'),
-      view: { layout: '3x4+1', highlightLeads: ['V1', 'V2', 'V3'] },
-      marks: [
-        { auto: 'st', lead: 'II' },
-        { auto: 'st', lead: 'III' },
-        { auto: 'st', lead: 'V2' },
-        { auto: 't', lead: 'V2' },
+      kind: 'film',
+      title: l('下壁 STEMI：哪支动脉，往哪里延伸？', 'Inferior STEMI: which artery, which extension?', 'IAMCEST inferior: ¿qué arteria y qué extensión?'),
+      view: { layout: '3x4+1' },
+      frames: [
+        {
+          label: l('RCA', 'RCA', 'CD'),
+          ecg: synth('stemi-inferior', 861),
+          note: l(
+            '开头那份图：III > II，I 和 aVL 压低 ⇒ RCA。V1 平坦，但仍要加做 V4R。',
+            'The opening tracing: III > II with I and aVL down ⇒ RCA. V1 is flat here; record V4R anyway.',
+            'El trazado inicial: III > II con I y aVL descendidas ⇒ CD. Aquí V1 está plana; registra V4R de todos modos.',
+          ),
+          marks: [{ auto: 'j', lead: 'III' }, { auto: 'j', lead: 'II' }, { auto: 'j', lead: 'I' }],
+        },
+        {
+          label: l('LCx', 'LCx', 'Cx'),
+          ecg: synth('stemi-inferior', 865, undefined, 'lcx'),
+          note: l(
+            'II ≥ III，I 平坦，V5–V6 抬起 ⇒ LCx。aVL 仍然压低。细读侧壁导联，想到后壁。',
+            'II ≥ III, lead I flat, V5–V6 rising ⇒ LCx. aVL still dips. Read the lateral leads and think of the back wall.',
+            'II ≥ III, I plana, V5–V6 subiendo ⇒ Cx. aVL sigue descendida. Lee las laterales y piensa en la pared posterior.',
+          ),
+          marks: [{ auto: 'j', lead: 'II' }, { auto: 'j', lead: 'I' }, { auto: 'j', lead: 'V6' }],
+        },
+        {
+          label: l('加右心室', '+ right ventricle', '+ ventrículo derecho'),
+          ecg: synth('rv-infarction', 862),
+          note: l(
+            '下壁 STEMI 加 V1 抬高约1 mm：右心室游离壁受累 → 近端 RCA。用 V4R 确认；硝酸酯要谨慎。',
+            'Inferior STEMI plus V1 up about 1 mm: the RV free wall joins → proximal RCA. Confirm in V4R; be careful with nitrates.',
+            'IAMCEST inferior con V1 elevada alrededor de 1 mm: se suma la pared libre del VD → CD proximal. Confírmalo en V4R; cautela con los nitratos.',
+          ),
+          marks: [{ auto: 'j', lead: 'V1' }],
+        },
+        {
+          label: l('加后壁', '+ posterior wall', '+ pared posterior'),
+          ecg: synth('stemi-inferior', 866, undefined, 'posterior'),
+          note: l(
+            'V1–V4 压低、V3 最深、T 波直立：后壁加入。III > II、V5–V6 不抬高 → 优势型 RCA。加做 V7–V9。',
+            'V1–V4 down, deepest in V3, upright T: the back wall joins. III > II and V5–V6 not up → a dominant RCA. Record V7–V9.',
+            'V1–V4 descendidas, máximo en V3, T positiva: se suma la pared posterior. III > II y V5–V6 sin elevar → CD dominante. Registra V7–V9.',
+          ),
+          marks: [{ auto: 'j', lead: 'V3' }, { auto: 't', lead: 'V3' }],
+        },
       ],
       caption: l(
-        '下壁 STEMI 的第二个延伸方向：除 II、III、aVF 抬高外，**V1–V4 呈水平型 ST 压低**，V3 最深（V3 的 T 波直立）——这不是“前壁缺血”，而是**后壁受累的镜像**（后壁背对 V1–V3）。再用本课的规则：这里 III > II，I、aVL 压低，V5–V6 不抬高——优势型 RCA 连同其后侧支一起闭塞：下后壁。此时加做 **V7–V9**：ST 抬高 ≥ 0.5 mm（< 40 岁男性 ≥ 1 mm）证实后壁闭塞；治疗上仍按 STEMI（第 i6 课深入讲解后壁）。',
-        'The second direction an inferior STEMI extends: alongside the elevation in II, III and aVF, **V1–V4 show horizontal ST depression**, deepest in V3 (upright T in V3) — not "anterior ischaemia" but the **mirror of posterior involvement** (the posterior wall faces away from V1–V3). Apply this lesson\'s rule too: here III > II, I and aVL are depressed and V5–V6 are not elevated — a dominant RCA whose posterolateral branch also feeds the back wall: inferoposterior. Record **V7–V9**: ST elevation ≥ 0.5 mm (≥ 1 mm in men < 40 y) confirms posterior occlusion; it is still managed as a STEMI (lesson i6 goes deeper into the posterior wall).',
-        'La segunda dirección de extensión del IAMCEST inferior: además de la elevación en II, III y aVF, **V1–V4 muestran descenso horizontal del ST**, máximo en V3 (T positiva en V3) — no es «isquemia anterior», sino la **imagen especular de la afectación posterior** (la pared posterior mira al lado opuesto de V1–V3). Aplica también la regla de esta lección: aquí III > II, I y aVL están descendidas y V5–V6 no se elevan: una CD dominante cuya rama posterolateral irriga también la cara posterior: inferoposterior. Registra entonces **V7–V9**: la elevación del ST ≥ 0,5 mm (≥ 1 mm en varones < 40 años) confirma la oclusión posterior; sigue tratándose como un IAMCEST (la lección i6 desarrolla la pared posterior).',
+        '每个下壁 STEMI 问三件事：哪支动脉（III 对 II、I 导联），右心室（V1、V4R），后壁（V1–V3、V7–V9）。',
+        'Ask three things of every inferior STEMI: which artery (III vs II, lead I), the right ventricle (V1, V4R), the back wall (V1–V3, V7–V9).',
+        'Haz tres preguntas a todo IAMCEST inferior: qué arteria (III frente a II, derivación I), el ventrículo derecho (V1, V4R) y la pared posterior (V1–V3, V7–V9).',
       ),
     },
     { kind: 'check', item: { family: 'territory', seed: 37 } },
@@ -263,7 +323,7 @@ const lesson: Lesson = {
       ids: [6683, 15227, 17772],
       caption: l(
         '三份真实的下壁梗死：69 岁和 52 岁女性（数据库分期 II–III，陈旧）、63 岁男性（时期不明）。它们是 Q 波梗死，不是急性 STEMI：RCA/LCx 的 ST 规则和 V4R 只用于急性抬高，对陈旧梗死没有意义。这里练的是慢性版本：在 II、III、aVF 找病理性 Q 波（≥ 30 ms、≥ 1 mm），并说出“RCA（多数）或 LCx”；第三份再看 V1–V2——R 波偏高、T 波直立，可能是陈旧后壁梗死的 Q 波等价物（第 i6 课）。先想好答案再揭晓。',
-        'Three real inferior infarcts: women of 69 and 52 (database stage II–III, old) and a man of 63 (age unknown). They are Q-wave infarcts, not acute STEMIs: the RCA/LCx ST rules and V4R belong to acute elevation and mean nothing in an old infarct. Practise the chronic version instead: find the pathological Q waves in II, III and aVF (≥ 30 ms and ≥ 1 mm) and name "RCA (most) or LCx"; in the third, look at V1–V2 as well — a prominent R with an upright T can be the Q-wave equivalent of an old posterior infarct (lesson i6). Commit to an answer, then reveal.',
+        'Three real inferior infarcts: women of 69 and 52 (database stage II–III, old) and a man of 63 (infarct of unknown age). They are Q-wave infarcts, not acute STEMIs: the RCA/LCx ST rules and V4R belong to acute elevation and mean nothing in an old infarct. Practise the chronic version instead: find the pathological Q waves in II, III and aVF (≥ 30 ms and ≥ 1 mm) and name "RCA (most) or LCx"; in the third, look at V1–V2 as well — a prominent R with an upright T can be the Q-wave equivalent of an old posterior infarct (lesson i6). Commit to an answer, then reveal.',
         'Tres infartos inferiores reales: mujeres de 69 y 52 años (estadio II–III de la base de datos, antiguos) y un varón de 63 (antigüedad desconocida). Son infartos con onda Q, no IAMCEST agudos: las reglas CD/Cx del ST y la V4R pertenecen a la elevación aguda y no significan nada en un infarto antiguo. Practica la versión crónica: busca las ondas Q patológicas en II, III y aVF (≥ 30 ms y ≥ 1 mm) y di «CD (la mayoría) o Cx»; en el tercero mira además V1–V2: una R prominente con T positiva puede ser el equivalente de onda Q de un infarto posterior antiguo (lección i6). Decide tu respuesta y después mira la solución.',
       ),
     },

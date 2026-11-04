@@ -83,3 +83,28 @@ describe('resolveMarks on a synthetic anterior STEMI', () => {
     expect(label).toContain(`+${(st * 10).toFixed(1)} mm`);
   });
 });
+
+describe('f-wave labels', () => {
+  it('AF: a few f labels in the gaps between beats, at least 600 ms apart, never one per wavelet', () => {
+    for (const [scenario, seed] of [['atrial-fibrillation', 3], ['af-regularised', 1450]] as const) {
+      const ecg = ecgOf(scenario, seed);
+      const beats = ecg.truth!.beats;
+      const fs = resolveMarks(ecg, [{ auto: 'f-waves' }], { layout: 'strip', lead: 'II' });
+      const wavelets = ecg.truth!.atrial.filter((e) => e.kind === 'fibrillation').length;
+      expect(fs.length, scenario).toBeGreaterThan(0);
+      expect(fs.length, scenario).toBeLessThanOrEqual(8);
+      expect(fs.length, scenario).toBeLessThan(wavelets / 4);
+      const ts = fs.map((m) => (m.kind === 'wave' ? m.t : NaN));
+      ts.slice(1).forEach((t, i) => expect(t - ts[i], scenario).toBeGreaterThanOrEqual(600));
+      for (const t of ts) expect(beats.some((b) => t >= b.qrsOn - 20 && t <= b.qrsOff + 20), `${scenario}: f label at ${t} on a QRS`).toBe(false);
+      if (scenario === 'af-regularised') for (const t of ts) expect(beats.some((b) => t >= b.qrsOn - 20 && t <= b.tOff + 20), `${t} in a gap`).toBe(false);
+      expect(ts[ts.length - 1], `${scenario}: labels reach the last quarter of the strip`).toBeGreaterThan(0.75 * ecg.signal.durationMs);
+    }
+  });
+
+  it('flutter: every F wave in the panel keeps its label', () => {
+    const ecg = ecgOf('atrial-flutter', 3);
+    const fs = resolveMarks(ecg, [{ auto: 'f-waves' }], { layout: 'strip', lead: 'II' });
+    expect(fs.length).toBe(ecg.truth!.atrial.filter((e) => e.kind === 'flutter').length);
+  });
+});

@@ -142,6 +142,11 @@ export interface CalibrationRow {
 
 export const CONFIDENCE_EXPECTED: Readonly<Record<1 | 2 | 3, number>> = { 1: 0.4, 2: 0.7, 3: 0.95 };
 
+/** The "Sure" row warrants a warning: at least five answers, fewer than 80 % right. */
+export function overconfident(sure: Pick<CalibrationRow, 'n' | 'accuracy'>): boolean {
+  return sure.n >= 5 && sure.accuracy !== null && sure.accuracy < 0.8;
+}
+
 export function calibration(attempts: readonly Pick<Attempt, 'score' | 'confidence'>[]): CalibrationRow[] {
   return ([1, 2, 3] as const).map((c) => {
     const xs = attempts.filter((a) => a.confidence === c).map((a) => a.score);

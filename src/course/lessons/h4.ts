@@ -13,6 +13,12 @@ const synth = (scenario: string, seed: number, dials?: Partial<Record<DialId, nu
   req: { scenario, seed, ...(variant ? { variant } : {}), ...(dials ? { dials } : {}) },
 });
 const GRID = { layout: '3x4+1' } as const;
+/** one seed and rate for the voltage film: low-voltage at this seed is the normal QRS scaled by its torso gain */
+const NORMAL = synth('normal', 1261, { rate: 80 });
+const LOW = synth('low-voltage', 1261, { rate: 80 });
+const EMPHYSEMA = synth('low-voltage', 1261, { rate: 80 }, 'emphysema');
+/** the film's normal heart at the rate the moving-paper scene narrates (75/min, RR 800 ms, as in f4) */
+const PAPER = synth('normal', 1261, { rate: 75, hrv: 0 });
 
 const lesson: Lesson = {
   id: 'h4',
@@ -52,7 +58,7 @@ const lesson: Lesson = {
   blocks: [
     {
       kind: 'hook',
-      ecg: synth('low-voltage', 1261, { rate: 80 }),
+      ecg: LOW,
       view: GRID,
       question: l(
         '这份 12 导联心电图上，所有肢体导联的 QRS 都不足 5 mm，所有胸导联的 QRS 都不足 10 mm。信号去哪儿了？先想好你最先想到的三个病因，再揭晓。',
@@ -63,15 +69,6 @@ const lesson: Lesson = {
         '两个方向：**能发电的心肌变少**，或者**心肌与电极之间的东西变多**。这就是 QRS 低电压——标准：全部肢体导联 QRS 振幅 <5 mm，和/或全部胸导联 <10 mm。本图本身说不出病因——心率 80 次/分、没有电交替、没有肺型 P 波，只剩“小”这一条线索；所以要背阶梯：心包积液、肥胖、肺气肿（COPD）、甲状腺功能减退、浸润性心肌病（淀粉样变）、严重心肌疾病。低电压从来不是最终诊断——它的价值在于逼你问"为什么"。',
         'Two directions: **less myocardium generating the signal**, or **more material between it and the electrodes**. This is low QRS voltage — definition: all limb-lead QRS amplitudes <5 mm, and/or all precordial QRS amplitudes <10 mm. This tracing does not name its own cause — rate 80/min, no alternans, no P pulmonale, nothing but smallness — which is why you need the ladder: pericardial effusion, obesity, emphysema (COPD), hypothyroidism, infiltrative cardiomyopathy (amyloid), severe myocardial disease. Low voltage is never a final diagnosis — its value is forcing the question "why?".',
         'Dos direcciones: **menos miocardio que genera la señal** o **más tejido entre él y los electrodos**. Esto es bajo voltaje del QRS: todas las amplitudes del QRS en extremidades <5 mm y/o todas en precordiales <10 mm. Este trazado no dice su causa (80 lpm, sin alternancia, sin P pulmonar: solo queda lo pequeño), y por eso necesitas la escalera: derrame pericárdico, obesidad, enfisema (EPOC), hipotiroidismo, miocardiopatía infiltrativa (amiloide), miocardiopatía grave. El bajo voltaje nunca es un diagnóstico final: su valor es obligarte a preguntar «¿por qué?».',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('信号去哪儿了', 'Where the signal goes', 'Adónde va la señal'),
-      body: l(
-        '心电图测量的是到达体表的电位，它由两件事决定：**电源**（心肌的质量与除极向量）和**传输**（心肌到电极之间的组织）。低电压有两条路：\n- 传输被衰减——肥胖（脂肪）、肺气肿（空气）、心包积液（液体），甚至大量胸腔积液，都在电源与电极之间隔了一层；\n- 电源被削弱——浸润性心肌病（淀粉样变）取代了能除极的心肌，或广泛的心肌损伤与瘢痕。\n所以同一张"小 QRS"背后可以藏着完全不同的病：一个肥胖的健康人，或一个心壁很厚却几乎发不出电的淀粉样变患者。读图之外，必须问临床和超声。',
-        'The ECG measures the potential that reaches the body surface, and two things set it: the **source** (the mass and depolarisation vector of the myocardium) and the **transfer** (the tissues between myocardium and electrodes). Low voltage has two roads:\n- a dampened transfer — obesity (fat), emphysema (air), pericardial effusion (fluid), even a large pleural effusion interpose a layer between the source and the electrodes;\n- a weakened source — infiltrative disease (amyloid) replaces myocardium that could depolarise, or extensive damage and scarring does.\nSo the same "small QRS" can hide opposite diseases: a healthy person with obesity, or an amyloid patient with very thick walls that barely generate a signal. Beyond the tracing you must ask the patient and the echo.',
-        'El ECG mide el potencial que llega a la superficie del cuerpo, y dos cosas lo determinan: la **fuente** (la masa y el vector de despolarización del miocardio) y la **transmisión** (los tejidos entre el miocardio y los electrodos). El bajo voltaje tiene dos caminos:\n- una transmisión amortiguada: la obesidad (grasa), el enfisema (aire), el derrame pericárdico (líquido) e incluso un derrame pleural importante interponen una capa entre la fuente y los electrodos;\n- una fuente debilitada: la enfermedad infiltrativa (amiloide) sustituye a miocardio capaz de despolarizarse, o lo hacen un daño y una cicatriz extensos.\nAsí, el mismo «QRS pequeño» puede esconder enfermedades opuestas: una persona sana con obesidad o un paciente con amiloidosis de paredes muy gruesas que apenas genera señal. Más allá del trazado, hay que preguntar a la clínica y al ecocardiograma.',
       ),
     },
     {
@@ -151,7 +148,7 @@ const lesson: Lesson = {
             'Measure the QRS amplitude in each of I, II, III, aVR, aVL and aVF — from the top of the tallest positive wave to the bottom of the deepest negative one (peak to peak): the largest here is II at about 4 mm, all <5 mm. If any single lead reaches 5 mm, "low limb voltage" is not met.',
             'Mide la amplitud del QRS en I, II, III, aVR, aVL y aVF, desde la cima de la onda positiva más alta hasta el fondo de la negativa más profunda (pico a pico): la mayor es II, con unos 4 mm; todas <5 mm. Si una sola derivación llega a 5 mm, no se cumple el «bajo voltaje en extremidades».',
           ),
-          marks: [{ auto: 'r', lead: 'II' }, { auto: 's', lead: 'aVR' }],
+          marks: [{ auto: 'r', lead: 'II' }, { auto: 'q', lead: 'aVR' }],
           highlightLeads: ['I', 'II', 'III', 'aVR', 'aVL', 'aVF'],
         },
         {
@@ -175,55 +172,110 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'text',
-      title: l('红旗：心壁很厚，电压却很低', 'Red flag: thick walls, low voltage', 'Señal de alarma: paredes gruesas, voltaje bajo'),
-      body: l(
-        '浸润性心肌病最典型的代表是**心脏淀粉样变**：蛋白沉积在心肌间质里，室壁增厚，能正常除极的心肌反而变少。于是出现教科书级的矛盾——**超声室壁厚，心电图电压低**（电压–质量不匹配）。红旗组合：\n- 低电压，或电压与室壁厚度不成比例地低；\n- V1–V3 假性梗死 Q/QS，而没有梗死病史；\n- 房室或室内传导阻滞（想想"无明确病因的年轻房室阻滞"）；\n- 心房颤动。\n遇到"壁厚 + 电压低"先想淀粉样变，再去做超声、血清游离轻链和核素显像；反过来也要记住，**电压正常同样不能排除淀粉样变**。',
-        'The archetype of infiltrative disease is **cardiac amyloidosis**: protein deposits fill the interstitium, the walls thicken, yet less myocardium depolarises normally. The result is a textbook contradiction — **thick walls on echo, low voltage on the ECG** (voltage–mass discordance). The red-flag package:\n- low voltage, or voltage disproportionately low for the wall thickness;\n- pseudo-infarct Q/QS in V1–V3 with no infarct history;\n- AV or intraventricular conduction disease (think of "unexplained AV block in younger adults");\n- atrial fibrillation.\nWhen walls are thick and voltage low, think amyloid first and go on to echo, serum free light chains and scintigraphy; and in the other direction, remember that **normal voltage does not exclude amyloid either**.',
-        'El arquetipo de la enfermedad infiltrativa es la **amiloidosis cardíaca**: los depósitos de proteína ocupan el intersticio, las paredes se engrosan y, sin embargo, menos miocardio se despolariza con normalidad. El resultado es una contradicción de libro: **paredes gruesas en el ecocardiograma, voltaje bajo en el ECG** (discordancia voltaje-masa). El paquete de señales de alarma:\n- bajo voltaje, o voltaje desproporcionadamente bajo para el grosor parietal;\n- Q/QS de pseudoinfarto en V1-V3 sin infarto previo;\n- trastorno de conducción AV o intraventricular (piensa en el «bloqueo AV sin causa clara en adultos jóvenes»);\n- fibrilación auricular.\nAnte paredes gruesas con voltaje bajo, piensa primero en la amiloidosis y sigue con ecocardiograma, cadenas ligeras libres séricas y gammagrafía; y a la inversa, recuerda que **un voltaje normal tampoco la excluye**.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('low-voltage', 1263, { rate: 78 }, 'emphysema'),
+      kind: 'film',
+      title: l('信号去哪儿了', 'Where the signal goes', 'Adónde va la señal'),
       view: GRID,
-      marks: [{ auto: 'r', lead: 'I' }, { auto: 'r', lead: 'V3' }],
+      frames: [
+        {
+          label: l('正常', 'Normal', 'Normal'),
+          ecg: NORMAL,
+          note: l(
+            '肢体导联最大的 QRS 约 8.5 mm（II），胸导联最大约 18 mm（V3）。',
+            'The largest limb-lead QRS is about 8.5 mm (II), the largest chest QRS about 18 mm (V3).',
+            'El QRS mayor de las extremidades mide unos 8,5 mm (II) y el mayor precordial unos 18 mm (V3).',
+          ),
+          marks: [{ auto: 'r', lead: 'II' }, { auto: 'r', lead: 'V3' }],
+        },
+        {
+          label: l('低电压', 'Low voltage', 'Bajo voltaje'),
+          ecg: LOW,
+          note: l(
+            'QRS 形状不变，每个导联都缩到一半以下：肢体导联全部 <5 mm（II 约 4 mm），胸导联全部 <10 mm（V3 约 8 mm）。',
+            'Same QRS shapes, every lead under half the size: all limb leads <5 mm (II about 4 mm), all chest leads <10 mm (V3 about 8 mm).',
+            'Mismas formas del QRS, todas las derivaciones a menos de la mitad: extremidades todas <5 mm (II unos 4 mm), precordiales todas <10 mm (V3 unos 8 mm).',
+          ),
+          marks: [{ auto: 'r', lead: 'II' }, { auto: 'r', lead: 'V3' }],
+        },
+        {
+          label: l('肥胖', 'Obesity', 'Obesidad'),
+          ecg: synth('low-voltage', 1261, { rate: 80 }, 'obesity'),
+          note: l(
+            '脂肪：一样小（V3 约 8 mm），电轴向左转到约 −15°。',
+            'Fat: just as small (V3 about 8 mm), and the axis turns left to about −15°.',
+            'Grasa: igual de pequeño (V3 unos 8 mm) y el eje gira a la izquierda hasta unos −15°.',
+          ),
+          marks: [{ auto: 'r', lead: 'V3' }],
+        },
+        {
+          label: l('肺气肿', 'Emphysema', 'Enfisema'),
+          ecg: EMPHYSEMA,
+          note: l(
+            '空气：同样小，电轴垂直（约 +80°），I 导联几乎没有 QRS（约 1 mm）。问题在胸腔，不在心肌。',
+            'Air: small too, with a vertical axis (about +80°) and almost no QRS in I (about 1 mm). The problem is the chest, not the myocardium.',
+            'Aire: también pequeño, con eje vertical (unos +80°) y casi sin QRS en I (alrededor de 1 mm). El problema es el tórax, no el miocardio.',
+          ),
+          marks: [{ auto: 'r', lead: 'I' }, { auto: 'r', lead: 'aVF' }],
+        },
+      ],
+      predict: {
+        question: l(
+          '在心脏和电极之间加一层脂肪、空气或液体，QRS 会怎样？',
+          'Put a layer of fat, air or fluid between the heart and the electrodes. What happens to the QRS?',
+          'Pon una capa de grasa, aire o líquido entre el corazón y los electrodos. ¿Qué le pasa al QRS?',
+        ),
+        options: [
+          l('每个导联都变小', 'Smaller in every lead', 'Más pequeño en todas las derivaciones'),
+          l('只有胸导联变小', 'Smaller in the chest leads only', 'Más pequeño solo en las precordiales'),
+          l('变宽', 'Wider', 'Más ancho'),
+        ],
+        answer: 0,
+      },
       caption: l(
-        '同一低电压场景的"肺气肿"版本：胸导联全部 <10 mm，肢体导联也全部 <5 mm（最大的 II、III、aVF 约 4–5 mm）；再看电轴——约 +80°，**垂直位**，I 和 aVL 几乎没有 QRS。空气把信号隔掉，过度充气的肺把膈肌压低、心脏变成垂直位。本图的 P 波还不高（II 约 1 mm）；完整的肺气肿图形常再加上肺型 P 波和右偏电轴。这是胸腔的问题，不是心肌的问题：不要按"严重心肌疾病"去追查。',
-        'The "emphysema" face of the same low voltage: every precordial QRS is <10 mm and every limb QRS <5 mm (the largest, II, III and aVF, about 4–5 mm); now look at the axis — about +80°, **vertical**, with almost no QRS in I and aVL. Air dampens the signal, and the hyperinflated lungs flatten the diaphragm and hang the heart vertically. The P is not yet tall here (about 1 mm in II); the full emphysema picture often adds P pulmonale and a rightward axis. The problem is in the chest, not in the myocardium: do not chase it as "severe myocardial disease".',
-        'La cara «enfisema» del mismo bajo voltaje: todos los QRS precordiales miden <10 mm y todos los de extremidades <5 mm (los mayores, II, III y aVF, unos 4-5 mm); mira ahora el eje: unos +80°, **vertical**, casi sin QRS en I y aVL. El aire amortigua la señal y los pulmones hiperinsuflados aplanan el diafragma y verticalizan el corazón. Aquí la P aún no es alta (alrededor de 1 mm en II); el cuadro completo del enfisema suele añadir P pulmonar y eje derecho. El problema está en el tórax, no en el miocardio; no lo persigas como «miocardiopatía grave».',
+        '小 QRS 有两条路：心脏与电极之间多了东西（脂肪、空气、心包或胸腔积液），或能发电的心肌变少（淀粉样变：壁厚而电压低）。低电压是线索，不是诊断。',
+        'Two roads to a small QRS: something between heart and electrodes (fat, air, pericardial or pleural fluid), or less myocardium making the signal (amyloid: thick walls, low voltage). Low voltage is a clue, not a diagnosis.',
+        'Dos caminos hacia un QRS pequeño: algo entre el corazón y los electrodos (grasa, aire, líquido pericárdico o pleural) o menos miocardio que genere la señal (amiloide: paredes gruesas, voltaje bajo). El bajo voltaje es una pista, no un diagnóstico.',
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('electrical-alternans', 1264, { rate: 112 }),
-      // the heart swings towards and away from the chest wall: the alternation is largest in V2–V4, small in the (low-voltage) limb leads
+      kind: 'figure',
+      figure: { id: 'moving-paper', params: { gain: 5 } },
+      ecg: PAPER,
+      caption: l(
+        '同一颗正常心脏，先按半增益（5 mm/mV）画：方波只有 5 mm，II 的 QRS 不到 5 mm。播放导览：10 mm/mV 起步，走一段 50 mm/s，再降到 5 mm/mV 又回到 10。先看方波，再谈低电压。',
+        'The same normal heart, first drawn at half gain (5 mm/mV): the pulse is only 5 mm and the QRS in II under 5 mm. Play the tour: it starts at 10 mm/mV, runs a stretch at 50 mm/s, drops to 5 mm/mV and comes back to 10. Read the pulse before you call low voltage.',
+        'El mismo corazón normal, dibujado primero a media ganancia (5 mm/mV): el pulso mide solo 5 mm y el QRS de II, menos de 5 mm. Reproduce el recorrido: empieza a 10 mm/mV, pasa un tramo a 50 mm/s, baja a 5 mm/mV y vuelve a 10. Mira el pulso antes de hablar de bajo voltaje.',
+      ),
+    },
+    {
+      kind: 'film',
+      title: l('心包积液：心脏摆不摆？', 'Effusion: does the heart swing?', 'Derrame: ¿oscila el corazón?'),
       view: { layout: 'strip', lead: 'V3' },
-      marks: [{ auto: 'r', lead: 'V3', beat: 8 }, { auto: 'r', lead: 'V3', beat: 9 }],
+      frames: [
+        {
+          label: l('积液', 'Effusion', 'Derrame'),
+          ecg: synth('pericardial-effusion', 1265, { rate: 106 }),
+          note: l(
+            'V3 的 QRS 小（约 7.5 mm），窦性心动过速约 106 次/分，每一跳都一样大：没有电交替。',
+            'A small QRS in V3 (about 7.5 mm), sinus tachycardia at about 106/min, every beat the same size: no alternans.',
+            'QRS pequeño en V3 (unos 7,5 mm), taquicardia sinusal de unos 106 lpm y todos los latidos iguales: sin alternancia.',
+          ),
+          marks: [{ auto: 'rr' }],
+        },
+        {
+          label: l('电交替', 'Alternans', 'Alternancia'),
+          ecg: synth('electrical-alternans', 1264, { rate: 112 }),
+          note: l(
+            'QRS 一跳高（约 16 mm）、一跳低（约 6 mm），逐搏交替：电交替。心脏在大量积液里摆动，心率约 110 次/分。',
+            'The QRS is tall one beat (about 16 mm) and small the next (about 6 mm): electrical alternans. The heart swings in a large effusion, at about 110/min.',
+            'El QRS es alto en un latido (unos 16 mm) y pequeño en el siguiente (unos 6 mm): alternancia eléctrica. El corazón oscila en un derrame grande, a unos 110 lpm.',
+          ),
+          marks: [{ auto: 'r', lead: 'V3', beat: 8 }, { auto: 'r', lead: 'V3', beat: 9 }],
+        },
+      ],
       caption: l(
-        'V3 导联，10 秒：QRS 一跳高（峰-峰约 16 mm）、一跳低（约 6 mm），逐搏交替——**电交替**。机制是"摆动的心脏"：大量心包积液中，心脏每搏向胸壁靠近又离开，所以交替在面对前胸的 V2–V4 最明显；本图肢体导联本身电压就低，交替只有约 1 mm（II 约 3 mm 对 4 mm）——只看 II 导联节律条很容易漏掉它。背景是约 110 次/分的窦性心动过速，肢体导联低电压。P 和 T 也一起交替时叫“全心电交替”，本图 T 几乎不变。电交替说明积液已大到能让心脏摆动，压塞的可能性随之升高。',
-        'Lead V3, 10 s: the QRS is tall one beat (about 16 mm peak to peak) and small the next (about 6 mm), alternating beat by beat — **electrical alternans**. The mechanism is the "swinging heart": inside a large pericardial effusion the heart moves towards the chest wall and away again every beat, so the alternation is largest in V2–V4, which face the front of the chest; in the already low-voltage limb leads of this tracing it is only about 1 mm (lead II about 3 vs 4 mm) — read only the lead II rhythm strip and you can easily miss it. Underneath: a sinus tachycardia of about 110/min with low limb-lead voltage. When the P and T alternate too it is called total alternans; here the T hardly changes. Alternans means the effusion is big enough to let the heart swing, and tamponade becomes more likely.',
-        'Derivación V3, 10 s: el QRS es alto en un latido (unos 16 mm pico a pico) y pequeño en el siguiente (unos 6 mm), alternando latido a latido: **alternancia eléctrica**. El mecanismo es el «corazón oscilante»: dentro de un derrame pericárdico importante el corazón se acerca a la pared torácica y se aleja en cada latido, así que la alternancia es máxima en V2-V4, que miran a la cara anterior del tórax; en las derivaciones de extremidades de este trazado, ya de bajo voltaje, es de solo 1 mm (II, unos 3 frente a 4 mm): si solo lees la tira de ritmo de II, se te escapa con facilidad. Debajo: taquicardia sinusal de unos 110 lpm con bajo voltaje en extremidades. Cuando también alternan la P y la T se habla de alternancia total; aquí la T apenas cambia. La alternancia indica que el derrame ya permite que el corazón oscile y el taponamiento se vuelve más probable.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('pericardial-effusion', 1265, { rate: 106 }),
-      view: GRID,
-      marks: [{ auto: 'r', lead: 'I' }, { auto: 'rr' }],
-      caption: l(
-        '心包积液的日常面貌：全部导联小 QRS + 窦性心动过速（本图约 106 次/分），没有电交替。电交替要积液够大、心脏摆得起来才会出现——所以"有"分量很重，"没有"什么也排除不了。',
-        'The everyday face of a pericardial effusion: a small QRS in every lead plus sinus tachycardia (about 106/min here), without alternans. Alternans needs an effusion large enough for the heart to swing — so its presence weighs heavily, and its absence excludes nothing.',
-        'La cara cotidiana de un derrame pericárdico: QRS pequeño en todas las derivaciones más taquicardia sinusal (aquí unos 106 lpm), sin alternancia. La alternancia exige un derrame lo bastante grande como para que el corazón oscile: su presencia pesa mucho y su ausencia no excluye nada.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('压塞：心电图之后是病人', 'Tamponade: after the ECG comes the patient', 'Taponamiento: después del ECG viene el paciente'),
-      body: l(
-        '大量积液走向心脏压塞时，心电图给出三联征：**低电压 + 电交替 + 窦性心动过速**。但它们出现得晚、也不敏感——压塞始终是**临床**诊断：血压下降、心音遥远、颈静脉压升高（Beck 三联征），奇脉，气促。如果病人在休克而你还在等电交替出现，病人就危险了：疑诊压塞立刻做超声，必要时心包穿刺，不要等心电图"长得典型"。',
-        'As a large effusion moves towards tamponade, the ECG offers a triad: **low voltage + electrical alternans + sinus tachycardia**. But these appear late and are insensitive — tamponade is always a **clinical** diagnosis: falling blood pressure, muffled heart sounds, raised jugular venous pressure (Beck\'s triad), pulsus paradoxus, dyspnoea. A patient who is shocked while you wait for alternans to appear is a patient in danger: when tamponade is suspected, echo now and pericardiocentesis if needed — do not wait for the ECG to "look typical".',
-        'Cuando un derrame importante avanza hacia el taponamiento, el ECG ofrece una tríada: **bajo voltaje + alternancia eléctrica + taquicardia sinusal**. Pero aparecen tarde y son insensibles: el taponamiento es siempre un diagnóstico **clínico**: descenso de la tensión arterial, ruidos cardíacos apagados, presión venosa yugular elevada (tríada de Beck), pulso paradójico, disnea. Un paciente en shock mientras esperas a que aparezca la alternancia es un paciente en peligro: ante la sospecha de taponamiento, ecocardiograma inmediato y pericardiocentesis si hace falta; no esperes a que el ECG «parezca típico».',
+        '电交替要积液大到心脏摆得起来：有它分量重，没有它什么也排除不了。低电压 + 电交替 + 窦速让压塞更可能，但压塞是临床诊断。',
+        'Alternans needs an effusion big enough for the heart to swing: its presence weighs heavily, its absence excludes nothing. Low voltage + alternans + sinus tachycardia make tamponade more likely, but tamponade is a clinical diagnosis.',
+        'La alternancia exige un derrame tan grande que el corazón oscile: su presencia pesa mucho y su ausencia no excluye nada. Bajo voltaje + alternancia + taquicardia sinusal hacen más probable el taponamiento, pero este es un diagnóstico clínico.',
       ),
     },
     {
@@ -270,6 +322,11 @@ const lesson: Lesson = {
           '把电交替当成伪差或体位变化：窦性心动过速背景下整份 P–QRS–T 逐搏交替，在写"电极松了"之前先想摆动的心脏。',
           'Calling electrical alternans artefact or a positional wobble: with the whole P–QRS–T alternating beat by beat on a sinus tachycardia, think of the swinging heart before writing "loose electrode".',
           'Llamar a la alternancia eléctrica artefacto o variación postural: con todo el P-QRS-T alternando latido a latido sobre una taquicardia sinusal, piensa en el corazón oscilante antes de escribir «electrodo suelto».',
+        ),
+        l(
+          '只在 II 导联节律条上找电交替：心脏朝前胸摆动，交替在 V2–V4 最大，低电压的肢体导联里可能只有约 1 mm。',
+          'Looking for alternans only on the lead II rhythm strip: the heart swings towards the front of the chest, so the alternation is largest in V2–V4 and may be only about 1 mm in the low-voltage limb leads.',
+          'Buscar la alternancia solo en la tira de ritmo de II: el corazón oscila hacia la cara anterior del tórax, así que la alternancia es máxima en V2-V4 y en las derivaciones de miembros, de bajo voltaje, puede ser de solo alrededor de 1 mm.',
         ),
         l(
           '低电压 + 超声室壁厚却不想到淀粉样变：电压–质量不匹配加上 V1–V3 假性梗死 Q/QS，是浸润性心肌病的信号；电压正常也同样不能排除。',

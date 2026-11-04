@@ -5,8 +5,8 @@
  *
  * Tracings (checked against the model truth, tests/course/lessons-o.test.ts): `digoxin-effect` draws a shallow sagging
  * ST (≈ 0.5–1 mm in V4–V6, deepening from J to J+60) with a low T, PR ≈ 190 ms and a QTc ≈ 390 ms (short-normal, not
- * long). The toxicity rhythms are their own scenarios (one source each); the catalogue has no bidirectional VT and no
- * AF with complete AV block ("regularised AF"), so both are taught in text and on the real case 1065 (slow AF on digoxin).
+ * long). The toxicity rhythms are their own scenarios (one source each), "regularised AF" included; the catalogue has
+ * no bidirectional VT, so it lives in the criteria.
  */
 import { l } from '../../core/l10n';
 import type { EcgSource, Item } from '../../practice/api';
@@ -119,15 +119,6 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('地高辛对心电图做了什么', 'What digoxin does to the ECG', 'Qué le hace la digoxina al ECG'),
-      body: l(
-        '地高辛抑制心肌细胞的钠钾泵，细胞内钙增多（正性肌力），同时：\n- **心室复极提前、平台期缩短**：ST 段从 J 点起就向下“垂”成一条弧线，T 波变低，QT 偏短——这就是“鱼钩样”的效应；\n- **迷走张力升高、房室结传导变慢**：PR 稍长，房颤时心室率下降——这是治疗作用；\n- **剂量过高时**，细胞内钙超载引起延迟后除极（自律性升高），而房室结被压得更狠（传导降低）——两件事同时出现，就是中毒节律的来源。\n所以读洋地黄心电图分两层：**ST–T 告诉你“在用药”，节律告诉你“是否中毒”。**',
-        'Digoxin blocks the sodium–potassium pump of the myocyte, so intracellular calcium rises (the inotropic effect), and at the same time:\n- **ventricular repolarisation starts earlier and the plateau shortens**: from the J point the ST sags down in a curve, the T gets lower and the QT shorter — the "scooped" effect;\n- **vagal tone rises and AV-nodal conduction slows**: a slightly longer PR, and a slower ventricular rate in AF — the therapeutic action;\n- **at excess dose** calcium overload triggers delayed afterdepolarisations (more automaticity) while the AV node is pushed even harder (less conduction) — both at once, and that is where every toxic rhythm comes from.\nSo read a digoxin ECG in two layers: **the ST–T tells you "on the drug"; the rhythm tells you "toxic or not".**',
-        'La digoxina bloquea la bomba de sodio-potasio del miocito, de modo que sube el calcio intracelular (el efecto inotrópico) y, a la vez:\n- **la repolarización ventricular empieza antes y la meseta se acorta**: desde el punto J el ST cae en curva, la T baja y el QT se acorta; es el efecto "en cuchara";\n- **aumenta el tono vagal y se enlentece la conducción por el nodo AV**: PR algo más largo y menor frecuencia ventricular en la FA; es la acción terapéutica;\n- **con dosis excesivas**, la sobrecarga de calcio desencadena pospotenciales tardíos (más automaticidad) mientras el nodo AV se frena todavía más (menos conducción): las dos cosas a la vez, y de ahí sale cada ritmo tóxico.\nAsí que lee un ECG con digoxina en dos capas: **el ST-T te dice "toma el fármaco"; el ritmo te dice "intoxicado o no".**',
-      ),
-    },
-    {
       kind: 'heart',
       ecg: synth('digoxin-effect', 1442),
       showConduction: true,
@@ -139,18 +130,32 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('digoxin-effect', 1443),
+      kind: 'film',
+      title: l('用药之前与之后', 'Before and on the drug', 'Antes y con el fármaco'),
       view: { layout: 'strip', lead: 'V5' },
-      marks: [
-        { auto: 'j', lead: 'V5' },
-        { auto: 'st60', lead: 'V5' },
-        { auto: 'qt', lead: 'V5' },
+      frames: [
+        {
+          label: l('用药前', 'Before', 'Antes'),
+          ecg: synth('normal', 1443, { rate: 68 }),
+          note: l('V5，68次/分：ST平直，T波直立。PR 160 ms，QT约390 ms。', 'V5 at 68/min: a level ST and an upright T. PR 160 ms, QT about 390 ms.', 'V5 a 68 lpm: ST horizontal y T positiva. PR de 160 ms, QT de unos 390 ms.'),
+          marks: [{ auto: 'j' }, { auto: 'pr' }, { auto: 'qt' }],
+        },
+        {
+          label: l('地高辛', 'Digoxin', 'Digoxina'),
+          ecg: synth('digoxin-effect', 1443, { rate: 68 }),
+          note: l('J点低约0.7 mm，J+60更低（约1 mm）：ST一路下垂，滑进低平的T波。QT缩到约350 ms，PR 190 ms。', 'J about 0.7 mm low, lower still at J+60 (about 1 mm): the ST keeps sagging into a low T. QT down to about 350 ms, PR 190 ms.', 'J unos 0,7 mm por debajo y más aún a J+60 (alrededor de 1 mm): el ST sigue cayendo hacia una T baja. QT baja a unos 350 ms, PR de 190 ms.'),
+          marks: [{ auto: 'j' }, { auto: 'st60' }, { auto: 'pr' }, { auto: 'qt' }],
+        },
       ],
+      predict: {
+        question: l('地高辛缩短平台期（ST）。QT会怎样？', 'Digoxin shortens the plateau (the ST). What happens to the QT?', 'La digoxina acorta la meseta (el ST). ¿Qué le pasa al QT?'),
+        options: [l('变短', 'It shortens', 'Se acorta'), l('变长', 'It lengthens', 'Se alarga'), l('不变', 'It stays the same', 'No cambia')],
+        answer: 0,
+      },
       caption: l(
-        '放大看 V5：J 点只低约 0.5 mm，到 J+60 ms 更低（约 0.7 mm）——ST 段是**一路往下垂**的弧线，再“滑”进一个低平的 T 波，像反向的对勾。压低很浅，QT 不长（QTc 约 390 ms）。缺血性压低的形态正相反：多为水平或直线下斜、常更深。',
-        'Zoom in on V5: the J point sits only about 0.5 mm low and the ST is lower still at J+60 ms (about 0.7 mm) — the segment **keeps sagging** in a curve and slides into a low T, like a reversed tick. The depression is shallow and the QT is not long (QTc about 390 ms). Ischaemic depression looks the other way round: usually horizontal or straight-downsloping, and often deeper.',
-        'Amplía V5: el punto J está solo unos 0,5 mm por debajo y el ST cae todavía más a J+60 ms (unos 0,7 mm): el segmento **sigue cayendo** en curva y se desliza hacia una T baja, como un signo de verificación invertido. El descenso es poco profundo y el QT no es largo (QTc de unos 390 ms). El descenso isquémico es al revés: habitualmente horizontal o descendente rectilíneo, y a menudo más profundo.',
+        'ST–T说明“在用药”，不说明中毒。缺血性压低多为水平或直线下斜，且常更深。',
+        'The ST–T says "on the drug", not "toxic". Ischaemic depression is usually horizontal or straight-downsloping, and often deeper.',
+        'El ST-T dice «toma el fármaco», no «intoxicado». El descenso isquémico suele ser horizontal o descendente rectilíneo, y a menudo más profundo.',
       ),
     },
     {
@@ -244,45 +249,50 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
+      kind: 'film',
       title: l('中毒的面孔', 'The faces of toxicity', 'Las caras de la intoxicación'),
-      body: l(
-        '中毒 = 自律性↑ + 传导↓。要认识的面孔：\n- **频发室早或室早二联律**（最常见）；\n- **房速伴房室阻滞**（教科书组合：快的心房、慢的心室）；\n- **加速性交界性心律**（房颤患者身上表现为心室率突然变规则）；\n- **“规整化”房颤**：房颤变得慢而绝对规则 = 完全性房室阻滞 + 交界性逸搏——绝不是“心室率控制得很好”；\n- **双向性室速**：QRS 电轴逐搏左右交替，几乎只见于洋地黄中毒（或罕见的遗传性离子通道病）；\n- **高度房室阻滞、严重窦缓或窦房阻滞**。\n急性大剂量中毒还会出现**高钾血症**（钠钾泵被抑制），它是预后不良的标志，也是使用 Fab 的指征之一。慢性中毒多发生在肾功能恶化、低钾或加用相互作用药物的老年人身上；血药浓度要在末次服药至少 6 小时后采血才可解读。',
-        'Toxicity = ↑automaticity + ↓conduction. Learn its faces:\n- **frequent PVCs or ventricular bigeminy** (the commonest);\n- **atrial tachycardia with AV block** (the textbook pairing: fast atria, slow ventricles);\n- **accelerated junctional rhythm** (in a patient with AF it shows as a ventricular rate that suddenly turns regular);\n- **"regularised" AF**: AF becomes slow and perfectly regular = complete AV block + junctional escape — never "well controlled";\n- **bidirectional VT**: the QRS axis alternates beat to beat, almost only seen in digoxin toxicity (or rare inherited channelopathies);\n- **high-grade AV block, severe sinus bradycardia or SA block**.\nAcute large overdoses also cause **hyperkalaemia** (the pump is blocked) — a marker of a poor outcome and one of the indications for Fab. Chronic toxicity typically affects older patients whose renal function worsens, whose potassium falls or who start an interacting drug; a digoxin level is interpretable only when drawn at least 6 hours after the last dose.',
-        'Intoxicación = ↑automaticidad + ↓conducción. Aprende sus caras:\n- **EV frecuentes o bigeminismo ventricular** (lo más común);\n- **taquicardia auricular con bloqueo AV** (la pareja clásica: aurículas rápidas, ventrículos lentos);\n- **ritmo de la unión acelerado** (en un paciente con FA aparece como una frecuencia ventricular que de pronto se vuelve regular);\n- **FA "regularizada"**: la FA se vuelve lenta y perfectamente regular = bloqueo AV completo + escape de la unión; nunca es "bien controlada";\n- **TV bidireccional**: el eje del QRS alterna latido a latido; casi exclusiva de la intoxicación digitálica (o de canalopatías hereditarias raras);\n- **bloqueo AV avanzado, bradicardia sinusal intensa o bloqueo sinoauricular**.\nLas sobredosis agudas importantes causan además **hiperpotasemia** (la bomba está bloqueada), marcador de mal pronóstico y una de las indicaciones del Fab. La intoxicación crónica afecta sobre todo a ancianos cuya función renal empeora, cuyo potasio baja o que empiezan un fármaco que interacciona; la digoxinemia solo es interpretable si se extrae al menos 6 horas después de la última dosis.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('atrial-tachycardia', 1449, undefined, 'block'),
       view: { layout: 'strip', lead: 'II' },
-      marks: [{ auto: 'blocked-p', lead: 'II' }],
+      frames: [
+        {
+          label: l('二联律', 'Bigeminy', 'Bigeminismo'),
+          ecg: synth('ventricular-bigeminy', 1451),
+          note: l('每隔一跳就是一个提前出现的宽大室早：室早二联律，最常见的中毒节律（自律性↑）。', 'Every other beat is an early, wide PVC: ventricular bigeminy, the commonest toxic rhythm (↑automaticity).', 'Un latido sí y otro no es una EV precoz y ancha: bigeminismo ventricular, el ritmo tóxico más frecuente (↑automaticidad).'),
+          marks: [{ auto: 'rr', beat: 4 }],
+        },
+        {
+          label: l('房速伴阻滞', 'AT with block', 'TA con bloqueo'),
+          ecg: synth('atrial-tachycardia', 1452, undefined, 'block'),
+          note: l('P′约180次/分，QRS约90次/分：每隔一个P′就被阻滞，藏在T波的上升支里。快的心房，慢的心室。', 'P′ waves at about 180/min, QRS at about 90/min: every second P′ is blocked, hidden in the upslope of the T. Fast atria, slow ventricles.', 'P′ a unos 180 lpm y QRS a unos 90 lpm: cada segunda P′ se bloquea, escondida en la rama ascendente de la T. Aurículas rápidas, ventrículos lentos.'),
+          marks: [{ auto: 'blocked-p' }],
+        },
+        {
+          label: l('加速性交界性', 'Accelerated junctional', 'Unión acelerada'),
+          ecg: synth('accelerated-junctional-rhythm', 1448),
+          note: l('窄QRS，规则，约80次/分，前面没有P波：交界区加快了。房颤患者心室率突然变规则，常是它。', 'Narrow, regular QRS at about 80/min with no P in front: the junction has sped up. In AF it shows as a rate that suddenly turns regular.', 'QRS estrecho y regular a unos 80 lpm, sin P delante: la unión se ha acelerado. En la FA aparece como una frecuencia que de pronto se regulariza.'),
+          marks: [{ auto: 'rr' }],
+        },
+        {
+          label: l('完全性阻滞', 'Complete block', 'Bloqueo completo'),
+          ecg: synth('av-block-3', 1450),
+          note: l('P波按自己的节奏走；QRS窄而绝对规则，约45次/分，与P无关：完全性房室阻滞（传导↓）。', 'P waves march on their own; the QRS is narrow and perfectly regular at about 45/min, unrelated to them: complete AV block (↓conduction).', 'Las P van a su ritmo; el QRS es estrecho y perfectamente regular a unos 45 lpm, sin relación con ellas: bloqueo AV completo (↓conducción).'),
+          marks: [{ auto: 'rr' }],
+        },
+        {
+          label: l('“规整化”房颤', 'Regularised AF', 'FA regularizada'),
+          ecg: synth('af-regularised', 1450),
+          note: l('f波在基线上抖动，QRS却慢而绝对规则（约45次/分）：房颤加完全性阻滞。这不是“控制得好”。', 'f waves on the baseline, yet the QRS is slow and perfectly regular (about 45/min): AF with complete block. This is not “good control”.', 'Ondas f en la línea de base, pero el QRS es lento y perfectamente regular (unos 45 lpm): FA con bloqueo completo. Esto no es «buen control».'),
+          marks: [{ auto: 'rr' }, { auto: 'f-waves' }],
+        },
+      ],
+      predict: {
+        question: l('中毒 = 自律性↑ + 传导↓。最常见的中毒节律室早二联律，体现的是哪一半？', 'Toxicity = ↑automaticity + ↓conduction. Bigeminy, the commonest toxic rhythm, shows which half?', 'Intoxicación = ↑automaticidad + ↓conducción. El bigeminismo, el ritmo tóxico más frecuente, ¿qué mitad muestra?'),
+        options: [l('自律性升高', 'More automaticity', 'Más automaticidad'), l('传导减慢', 'Less conduction', 'Menos conducción'), l('都不是', 'Neither', 'Ninguna')],
+        answer: 0,
+      },
       caption: l(
-        '房速伴 2:1 房室传导（II）：心房约 180 次/分，标记的是没有下传的 P′；心室约 90 次/分。服地高辛的患者出现这个图形，先想中毒——快的心房（自律性↑）配慢的心室（传导↓）。别把它读成窦速：每个 QRS 之间藏着第二个 P′——这里它骑在 T 波末端。',
-        'Atrial tachycardia with 2:1 AV conduction (II): atria at about 180/min, the marks show the non-conducted P′ waves; ventricles at about 90/min. In a patient on digoxin this picture means toxicity until proven otherwise — fast atria (↑automaticity) with slow ventricles (↓conduction). Do not read it as sinus tachycardia: a second P′ hides between every pair of QRS complexes — here it rides on the end of the T.',
-        'Taquicardia auricular con conducción AV 2:1 (II): aurículas a unos 180 lpm, las marcas señalan las P′ no conducidas; ventrículos a unos 90 lpm. En un paciente con digoxina, esta imagen es intoxicación mientras no se demuestre lo contrario: aurículas rápidas (↑automaticidad) con ventrículos lentos (↓conducción). No la leas como taquicardia sinusal: entre cada par de QRS se esconde una segunda P′; aquí cabalga sobre el final de la T.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('accelerated-junctional-rhythm', 1448),
-      view: { layout: 'strip', lead: 'II' },
-      marks: [{ auto: 'rr', lead: 'II' }],
-      caption: l(
-        '加速性交界性心律（II）：窄 QRS、规则、约 80 次/分，QRS 前没有窦性 P 波，逆行 P′ 跟在 QRS 之后。交界区的自律性被“点燃”了。服地高辛的房颤患者，心室率突然变得**规则**，常常就是这个节律（或完全性阻滞加逸搏）在接管。',
-        'Accelerated junctional rhythm (II): narrow, regular QRS at about 80/min, no sinus P before the QRS, a retrograde P′ just after it. The junction’s automaticity has been switched on. In an AF patient on digoxin, a ventricular rate that suddenly turns **regular** is often this rhythm (or complete block with an escape) taking over.',
-        'Ritmo de la unión acelerado (II): QRS estrecho y regular a unos 80 lpm, sin P sinusal delante y con una P′ retrógrada justo detrás. La automaticidad de la unión se ha encendido. En un paciente con FA y digoxina, una frecuencia ventricular que de pronto se vuelve **regular** suele ser este ritmo (o un bloqueo completo con escape) tomando el mando.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('av-block-3', 1450),
-      view: { layout: 'strip', lead: 'II' },
-      marks: [{ auto: 'rr', lead: 'II' }],
-      caption: l(
-        '完全性房室阻滞伴交界性逸搏（II）：P 波按自己的频率走，QRS 窄而绝对规则、约 45 次/分，两者无关。现在把心房换成房颤：f 波 + 绝对规则的慢 QRS——这就是“规整化”房颤。地高辛患者出现它，是中毒，需要停药、查电解质并监护。',
-        'Complete AV block with a junctional escape (II): the P waves march at their own rate, the QRS is narrow and perfectly regular at about 45/min, and the two are unrelated. Now replace the atria with AF: f waves plus a slow, perfectly regular QRS — that is "regularised" AF. In a patient on digoxin it means toxicity: stop the drug, check the electrolytes, monitor.',
-        'Bloqueo AV completo con escape de la unión (II): las P van a su propia frecuencia, el QRS es estrecho y perfectamente regular a unos 45 lpm, y no hay relación entre ambos. Ahora cambia las aurículas por una FA: ondas f más un QRS lento y perfectamente regular; eso es la FA "regularizada". En un paciente con digoxina significa intoxicación: suspende el fármaco, revisa los electrolitos y monitoriza.',
+        '中毒看节律。服地高辛时出现这些节律，先当中毒处理：停药、查电解质、监护。',
+        'Toxicity is read in the rhythm. On digoxin, treat any of these as toxicity until proven otherwise: stop it, check electrolytes, monitor.',
+        'La intoxicación se lee en el ritmo. Con digoxina, cualquiera de estos es intoxicación mientras no se demuestre lo contrario: suspende, revisa electrolitos, monitoriza.',
       ),
     },
     { kind: 'check', item: { family: 'metabolic', seed: 26 } },

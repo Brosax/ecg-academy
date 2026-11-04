@@ -88,27 +88,43 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('寒冷对心电图做了什么', 'What cold does to the ECG', 'Qué le hace el frío al ECG'),
-      body: l(
-        '体温下降让所有离子通道都变慢，于是心电图上“每样东西都拉长”：\n- **窦房结变慢**：窦性心动过缓（中度低温常 <50 次/分）；\n- **传导变慢**：PR 延长，QRS 增宽；\n- **复极变慢**：QT 延长；\n- **心外膜与心内膜的差异被放大**：左室心外膜在动作电位早期出现明显的“切迹”（瞬时外向电流），而心内膜没有——这个跨壁电压差在体表心电图上就是 **J 点的驼峰**，即 Osborn 波。体温越低，驼峰越大；复温后消失。\n**分级（WMS 2019）**：轻度 32–35 °C、中度 28–32 °C、重度 <28 °C。Osborn 波多在 32 °C 以下出现；房颤常见于中度；28 °C 以下室颤和停搏的风险陡增，粗暴搬动、插管等刺激都可能诱发室颤。',
-        'Falling temperature slows every ion channel, so on the ECG "everything gets longer":\n- **the sinus node slows**: sinus bradycardia (often <50/min in moderate hypothermia);\n- **conduction slows**: a longer PR and a wider QRS;\n- **repolarisation slows**: a longer QT;\n- **the epicardium–endocardium difference is exaggerated**: the LV epicardium develops a prominent early "notch" in its action potential (the transient outward current) and the endocardium does not — that transmural voltage gradient is the **hump at the J point** on the surface ECG, the Osborn wave. The colder the patient, the bigger the hump; it disappears on rewarming.\n**Staging (WMS 2019)**: mild 32–35 °C, moderate 28–32 °C, severe <28 °C. Osborn waves usually appear below about 32 °C; AF is common in moderate hypothermia; below 28 °C the risk of VF and asystole rises steeply, and rough handling or procedures such as intubation can trigger VF.',
-        'Al bajar la temperatura se enlentecen todos los canales iónicos, así que en el ECG "todo se alarga":\n- **el nodo sinusal se frena**: bradicardia sinusal (a menudo <50 lpm en la hipotermia moderada);\n- **la conducción se enlentece**: PR más largo y QRS más ancho;\n- **la repolarización se enlentece**: QT más largo;\n- **se exagera la diferencia entre epicardio y endocardio**: el epicardio del VI desarrolla una "muesca" precoz marcada en su potencial de acción (la corriente transitoria de salida) y el endocardio no; ese gradiente transmural es la **joroba del punto J** en el ECG de superficie, la onda de Osborn. Cuanto más frío, mayor la joroba; desaparece al recalentar.\n**Estadios (WMS 2019)**: leve 32–35 °C, moderada 28–32 °C, grave <28 °C. Las ondas de Osborn suelen aparecer por debajo de unos 32 °C; la FA es frecuente en la hipotermia moderada; por debajo de 28 °C el riesgo de FV y asistolia se dispara, y una movilización brusca o maniobras como la intubación pueden desencadenar una FV.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('hypothermia', 1482, { rate: 46 }),
-      view: { layout: '3x4+1', highlightLeads: ['II', 'aVF', 'V4', 'V5', 'V6'] },
-      marks: [
-        { auto: 'j', lead: 'II', label: l('Osborn 波', 'Osborn wave', 'onda de Osborn') },
-        { auto: 'j', lead: 'V5' },
-        { auto: 'pr', lead: 'II' },
+      kind: 'film',
+      title: l('慢，还是冷？', 'Slow, or cold?', '¿Lento o frío?'),
+      view: { layout: '3x4+1', highlightLeads: ['II', 'aVF', 'V5'] },
+      frames: [
+        {
+          label: l('正常', 'Normal', 'Normal'),
+          ecg: synth('normal', 1482, { rate: 75 }),
+          note: l('正常体温，75次/分：PR 160 ms，QRS约95 ms，QT约380 ms。', 'Normal temperature at 75/min: PR 160 ms, QRS about 95 ms, QT about 380 ms.', 'Temperatura normal a 75 lpm: PR de 160 ms, QRS de unos 95 ms, QT de unos 380 ms.'),
+          marks: [{ auto: 'pr', lead: 'II' }, { auto: 'qrs', lead: 'II' }, { auto: 'qt', lead: 'II' }],
+        },
+        {
+          label: l('心动过缓', 'Bradycardia', 'Bradicardia'),
+          ecg: synth('sinus-bradycardia', 1482, { rate: 46 }),
+          note: l('只是慢到46次/分：PR和QRS不变，QT约445 ms只因心率慢。没有驼峰。', 'Only slowed to 46/min: PR and QRS unchanged, QT about 445 ms just because the rate is slow. No hump.', 'Solo más lento, a 46 lpm: PR y QRS sin cambios, QT de unos 445 ms solo por la frecuencia lenta. Sin joroba.'),
+          marks: [{ auto: 'pr', lead: 'II' }, { auto: 'qrs', lead: 'II' }, { auto: 'qt', lead: 'II' }],
+        },
+        {
+          label: l('低体温', 'Hypothermia', 'Hipotermia'),
+          ecg: synth('hypothermia', 1482, { rate: 46 }),
+          note: l('同样46次/分，但冷：PR约230 ms，QRS约140 ms（量到末尾的驼峰，即Osborn波），QT约540 ms。', 'Same 46/min, but cold: PR about 230 ms, QRS about 140 ms (to the end of its hump, the Osborn wave), QT about 540 ms.', 'Los mismos 46 lpm, pero frío: PR de unos 230 ms, QRS de unos 140 ms (hasta el final de su joroba, la onda de Osborn), QT de unos 540 ms.'),
+          marks: [
+            { auto: 'j', lead: 'II', label: l('Osborn 波', 'Osborn wave', 'onda de Osborn') },
+            { auto: 'j', lead: 'V5' },
+            { auto: 'pr', lead: 'II' },
+            { auto: 'qt', lead: 'II' },
+          ],
+        },
       ],
+      predict: {
+        question: l('寒冷让所有离子通道变慢。同一心率下，PR、QRS和QT会怎样？', 'Cold slows every ion channel. At the same rate, what happens to the PR, QRS and QT?', 'El frío enlentece todos los canales iónicos. A la misma frecuencia, ¿qué les pasa al PR, el QRS y el QT?'),
+        options: [l('三者都延长', 'All three lengthen', 'Los tres se alargan'), l('只有QT延长', 'Only the QT lengthens', 'Solo se alarga el QT'), l('三者都缩短', 'All three shorten', 'Los tres se acortan')],
+        answer: 0,
+      },
       caption: l(
-        '全 12 导联：驼峰贴在每个 QRS 的末尾，II、III、aVF 和 V4–V6 最明显，aVR 里是它的倒影（向下的切迹）——分布在下壁与侧壁。再测间期：心率约 46 次/分，PR 约 230 ms，QRS 约 140 ms（量到驼峰结束处——驼峰是 QRS 的终末部分，J 点在它的末端），QTc（Fridericia）约 490 ms。每一样都“拉长”了——这就是低温。',
-        'All 12 leads: the hump sits on the end of every QRS, clearest in II, III, aVF and V4–V6, with its mirror image (a downward notch) in aVR — an inferior and lateral distribution. Now measure: rate about 46/min, PR about 230 ms, QRS about 140 ms (measured to the end of the hump — the hump is the terminal part of the QRS, and the J point is where it ends), QTc (Fridericia) about 490 ms. Everything is "longer" — that is the cold.',
-        'Las 12 derivaciones: la joroba está al final de cada QRS, más clara en II, III, aVF y V4–V6, con su imagen especular (una muesca hacia abajo) en aVR: distribución inferior y lateral. Ahora mide: frecuencia de unos 46 lpm, PR de unos 230 ms, QRS de unos 140 ms (medido hasta el final de la joroba: la joroba es la parte terminal del QRS y el punto J está donde termina), QTc (Fridericia) de unos 490 ms. Todo está "alargado": es el frío.',
+        '同一心率下比较，才看得出哪些是冷造成的：PR、QRS、QT都延长，J点出现驼峰（多在约32 °C以下出现，越冷越大）。',
+        'Compare at the same rate to see what the cold does: PR, QRS and QT all lengthen and a hump appears at J (usually below about 32 °C, bigger when colder).',
+        'Compara a la misma frecuencia para ver lo que hace el frío: PR, QRS y QT se alargan y aparece una joroba en J (suele aparecer por debajo de unos 32 °C y crece con el frío).',
       ),
     },
     {
@@ -153,15 +169,6 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'text',
-      title: l('J 波的几个来源', 'Where a J wave can come from', 'De dónde puede venir una onda J'),
-      body: l(
-        '同一个“驼峰”有几位候选者：\n- **低体温**：J 波较大、分布广（下壁+侧壁），伴心动过缓、PR/QRS/QT 全部延长与寒战伪差；\n- **早期复极**（s7、h8）：年轻健康人，心率正常，下壁或侧壁导联的 J 点切迹/顿挫，常伴凹面向上的 ST 抬高，QT 正常；\n- **高钙血症**（o2）：QT **短**（ST 段几乎消失），重度时偶见 J 样波；\n- **STEMI**：J 点抬高之后是持续抬高的 ST 段，分布在一个冠状动脉区域，并有对应性压低——它是“抬高的 ST 段”，不是“J 点上的小驼峰”。\n**上下文决定诊断**：体温、年龄、症状、用药、血钙。',
-        'Several candidates make the same hump:\n- **hypothermia**: larger, widespread (inferior + lateral) J waves with bradycardia, a long PR, QRS and QT and shivering artefact;\n- **early repolarisation** (s7, h8): young and healthy, normal rate, a J notch or slur in inferior or lateral leads, often with concave ST elevation and a normal QT;\n- **hypercalcaemia** (o2): a **short** QT (almost no ST segment), with J-like waves only occasionally in severe cases;\n- **STEMI**: the J point is followed by a persistently elevated ST segment in one coronary territory with reciprocal depression — it is "an elevated ST segment", not "a small hump on the J point".\n**Context decides**: temperature, age, symptoms, drugs, calcium.',
-        'Varios candidatos dibujan la misma joroba:\n- **hipotermia**: ondas J mayores y difusas (inferior y lateral) con bradicardia, PR, QRS y QT largos y artefacto por escalofríos;\n- **repolarización precoz** (s7, h8): joven y sano, frecuencia normal, muesca o empastamiento J en derivaciones inferiores o laterales, a menudo con ST elevado cóncavo y QT normal;\n- **hipercalcemia** (o2): QT **corto** (casi sin segmento ST), con ondas tipo J solo ocasionalmente en los casos graves;\n- **IAMCEST**: tras el punto J viene un ST persistentemente elevado en un territorio coronario, con descenso recíproco; es "un ST elevado", no "una pequeña joroba en el punto J".\n**El contexto decide**: temperatura, edad, síntomas, fármacos y calcio.',
-      ),
-    },
-    {
       kind: 'contrast',
       title: l('Osborn 波还是早期复极？', 'Osborn waves or early repolarisation?', '¿Ondas de Osborn o repolarización precoz?'),
       view: STRIP,
@@ -182,44 +189,62 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'contrast',
-      title: l('QT 往哪边走：低温还是高钙？', 'Which way does the QT go: cold or calcium?', '¿Hacia dónde va el QT: frío o calcio?'),
-      view: STRIP,
-      left: {
-        ecg: synth('hypothermia', 1488, { rate: 48 }),
-        caption: l('低体温：QT 长（QTc 约 490 ms）', 'Hypothermia: long QT (QTc about 490 ms)', 'Hipotermia: QT largo (QTc de unos 490 ms)'),
-        marks: [{ auto: 'qt', lead: 'II' }],
-      },
-      right: {
-        ecg: synth('hypercalcemia', 1485),
-        caption: l('高钙血症：QT 短（QTc 约 335 ms），T 紧贴 QRS', 'Hypercalcaemia: short QT (QTc about 335 ms), the T hugging the QRS', 'Hipercalcemia: QT corto (QTc de unos 335 ms), la T pegada al QRS'),
-        marks: [{ auto: 'qt', lead: 'II' }],
-      },
-      point: l(
-        '高钙偶尔也会在 J 点留下小切迹，但它和低温走的是**相反的方向**：高钙把 ST 段“拿走”、QT 变短；低温把一切拉长、QT 变长。这份高钙图上没有 J 波——常见情况——可 QT 已经说明了一切。看到 J 点驼峰时，量 QT：长 → 想冷；短 → 想钙。',
-        'Hypercalcaemia can occasionally leave a small notch at the J point too, but it goes the **opposite way** from the cold: calcium takes the ST segment away and shortens the QT; the cold stretches everything and lengthens it. This hypercalcaemia tracing has no J wave at all — the usual case — yet the QT already tells the story. When you meet a J-point hump, measure the QT: long → think cold; short → think calcium.',
-        'La hipercalcemia también puede dejar alguna vez una pequeña muesca en el punto J, pero va en **sentido contrario** al frío: el calcio quita el segmento ST y acorta el QT; el frío lo alarga todo, también el QT. Este trazado de hipercalcemia no tiene ninguna onda J (lo habitual) y aun así el QT lo dice todo. Ante una joroba en el punto J, mide el QT: largo → piensa en frío; corto → piensa en calcio.',
+      kind: 'film',
+      title: l('J点驼峰从哪来？', 'Where does a J-point hump come from?', '¿De dónde sale una joroba en el punto J?'),
+      view: { layout: '3x4+1', highlightLeads: ['II', 'III', 'aVL'] },
+      frames: [
+        {
+          label: l('低体温', 'Hypothermia', 'Hipotermia'),
+          ecg: synth('hypothermia', 1488, { rate: 48 }),
+          note: l('冷：QRS末尾有驼峰，之后ST平；48次/分时QT约530 ms，很长。', 'Cold: a hump at the end of the QRS, then a flat ST; at 48/min the QT is about 530 ms, long.', 'Frío: una joroba al final del QRS y luego un ST plano; a 48 lpm el QT mide unos 530 ms, largo.'),
+          marks: [{ auto: 'j', lead: 'II' }, { auto: 'qt', lead: 'II' }],
+        },
+        {
+          label: l('高钙', 'High calcium', 'Calcio alto'),
+          ecg: synth('hypercalcemia', 1485),
+          note: l('高钙：T波从J点直接升起，QT短（约310 ms）。偶有J点切迹，但QT走的是相反方向。', 'High calcium: the T takes off at J and the QT is short (about 310 ms). A J notch is rare, and the QT goes the other way.', 'Calcio alto: la T arranca en J y el QT es corto (unos 310 ms). Una muesca en J es rara, y el QT va en sentido contrario.'),
+          marks: [{ auto: 'j', lead: 'II' }, { auto: 'qt', lead: 'II' }],
+        },
+        {
+          label: l('下壁STEMI', 'Inferior STEMI', 'IAMCEST inferior'),
+          ecg: synth('stemi-inferior', 1490),
+          note: l('STEMI：不是驼峰，而是II、III、aVF持续抬高的ST段（III最高），aVL对应性压低。', 'STEMI: not a hump but an ST that stays raised in II, III and aVF (highest in III), with reciprocal depression in aVL.', 'IAMCEST: no es una joroba sino un ST que sigue elevado en II, III y aVF (más en III), con descenso recíproco en aVL.'),
+          marks: [{ auto: 'st60', lead: 'III' }, { auto: 'st60', lead: 'aVL' }],
+        },
+      ],
+      caption: l(
+        'J点驼峰本身不诊断。先量QT、看ST，再结合体温、年龄、症状、用药和血钙。',
+        'A J-point hump diagnoses nothing on its own. Measure the QT, look at the ST, then weigh temperature, age, symptoms, drugs and calcium.',
+        'Una joroba en J no diagnostica nada por sí sola. Mide el QT, mira el ST y luego valora temperatura, edad, síntomas, fármacos y calcio.',
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('muscle-tremor', 1486),
+      kind: 'film',
+      title: l('寒战与缓慢房颤', 'Shivering and slow AF', 'Escalofríos y FA lenta'),
       view: { layout: '3x4+1', highlightLeads: ['I', 'III', 'aVL', 'II'] },
+      frames: [
+        {
+          label: l('安静', 'Still', 'Quieto'),
+          ecg: synth('hypothermia', 1486, { rate: 46 }),
+          note: l('低体温、没有寒战：基线干净，P波和驼峰都看得清。', 'Hypothermic and not shivering: a clean baseline, the P waves and humps easy to see.', 'Hipotermia sin escalofríos: línea de base limpia, P y jorobas fáciles de ver.'),
+          marks: [{ auto: 'p', lead: 'II' }, { auto: 'j', lead: 'II' }],
+        },
+        {
+          label: l('寒战', 'Shivering', 'Escalofríos'),
+          ecg: { kind: 'synth', req: { scenario: 'hypothermia', seed: 1486, dials: { rate: 46 }, recording: { noise: { emgMv: 0.05, emgOn: ['LA'] } } } },
+          note: l('同一颗心，开始寒战：I、III、aVL布满细快的肌电干扰（左上肢电极），II仍干净。在II读节律。', 'Same heart, now shivering: fine, fast muscle noise in I, III and aVL (left-arm electrode), lead II still clean. Read the rhythm in II.', 'El mismo corazón, ahora con escalofríos: ruido muscular fino y rápido en I, III y aVL (electrodo del brazo izquierdo), con II limpia. Lee el ritmo en II.'),
+        },
+        {
+          label: l('缓慢房颤', 'Slow AF', 'FA lenta'),
+          ecg: synth('atrial-fibrillation', 1489, { fCoarseness: 0.4 }, 'slow'),
+          note: l('没有P波，RR绝对不规则，约55次/分：缓慢房颤，中度低温时常见，复温后多自行转复。', 'No P waves, an irregularly irregular RR at about 55/min: slow AF, common in moderate hypothermia, usually gone after rewarming.', 'Sin P, RR irregularmente irregular a unos 55 lpm: FA lenta, frecuente en la hipotermia moderada; suele ceder al recalentar.'),
+          marks: [{ auto: 'rr', lead: 'II', beat: 1 }, { auto: 'rr', lead: 'II', beat: 5 }],
+        },
+      ],
       caption: l(
-        '寒战的样子：快速、不规则的细小肌电干扰叠加在基线上（这里来自左上肢电极：I、III、aVL 最乱，II 干净）。它会掩盖 P 波、让人以为是房颤或房扑。真正的 QRS 仍按原来的 RR 规则地走过去，找干净的导联读节律（o10）。轻中度低温的患者常在寒战；重度低温时寒战反而停止。',
-        'What shivering looks like: fast, irregular, fine muscle noise riding on the baseline (here from the left-arm electrode: worst in I, III and aVL, lead II clean). It can hide the P waves and pass for AF or flutter. The real QRS complexes still march through at the same RR; read the rhythm in the clean lead (o10). Patients with mild or moderate hypothermia often shiver; in severe hypothermia shivering stops.',
-        'Así se ven los escalofríos: un ruido muscular fino, rápido e irregular sobre la línea de base (aquí del electrodo del brazo izquierdo: peor en I, III y aVL, con II limpia). Puede ocultar las P y pasar por FA o flutter. Los QRS reales siguen desfilando con el mismo RR; lee el ritmo en la derivación limpia (o10). En la hipotermia leve o moderada el paciente suele tiritar; en la grave el escalofrío desaparece.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('atrial-fibrillation', 1489, { fCoarseness: 0.4 }, 'slow'),
-      view: STRIP,
-      marks: [{ auto: 'rr', lead: 'II' }],
-      caption: l(
-        '缓慢心室率的心房颤动：没有 P 波，RR 绝对不规则，约 50 次/分。中度低温时房颤很常见，通常随复温自行转复——不需要抗心律失常药或电复律，也别急着用房室结阻滞药控制一个本来就慢的心室率。',
-        'Atrial fibrillation with a slow ventricular response: no P waves, an irregularly irregular RR at about 50/min. AF is common in moderate hypothermia and usually reverts on its own with rewarming — it needs no antiarrhythmic or cardioversion, and an already slow ventricular rate needs no AV-nodal blocker.',
-        'Fibrilación auricular con respuesta ventricular lenta: sin ondas P, RR irregularmente irregular a unas 50 lpm. La FA es frecuente en la hipotermia moderada y suele revertir sola al recalentar: no necesita antiarrítmicos ni cardioversión, y una frecuencia ventricular ya lenta no necesita frenadores del nodo AV.',
+        '寒战会掩盖P波，被当成房颤或房扑：找干净的导联（o10）。重度低温时寒战停止。缓慢房颤要复温，不要用药。',
+        'Shivering can hide the P waves and pass for AF or flutter: find the clean lead (o10). In severe hypothermia shivering stops. Slow AF needs rewarming, not drugs.',
+        'Los escalofríos ocultan las P y pasan por FA o flúter: busca la derivación limpia (o10). En la hipotermia grave dejan de aparecer. La FA lenta necesita recalentamiento, no fármacos.',
       ),
     },
     { kind: 'check', item: { family: 'metabolic', seed: 2 } },
@@ -235,7 +260,7 @@ const lesson: Lesson = {
         l('缓慢房颤被当作原发性心律失常处理，忽略了体温。', 'Slow AF treated as a primary arrhythmia while the temperature is ignored.', 'Tratar la FA lenta como una arritmia primaria ignorando la temperatura.'),
         l('粗暴搬动重度低温患者，诱发室颤。', 'Handling a severely hypothermic patient roughly and triggering VF.', 'Movilizar con brusquedad a un paciente con hipotermia grave y desencadenar una FV.'),
         l('用 J 波大小当温度计：用体温计量核心体温。', 'Using J-wave size as a thermometer: measure the core temperature with a thermometer.', 'Usar el tamaño de la onda J como termómetro: mide la temperatura central con un termómetro.'),
-        l('寒战伪差读成房颤/房扑并给药：找干净导联，QRS 仍规则走过去。', 'Shivering artefact read as AF or flutter and treated: find the clean lead where the QRS still marches regularly.', 'Leer el artefacto por escalofríos como FA o flutter y tratarlo: busca la derivación limpia donde el QRS sigue desfilando regular.'),
+        l('寒战伪差读成房颤/房扑并给药：找干净导联，QRS 仍规则走过去。', 'Shivering artefact read as AF or flutter and treated: find the clean lead where the QRS still marches regularly.', 'Leer el artefacto por escalofríos como FA o flúter y tratarlo: busca la derivación limpia donde el QRS sigue desfilando regular.'),
       ],
     },
     {

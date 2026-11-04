@@ -50,12 +50,48 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('钙管的是 ST 段', 'Calcium governs the ST segment', 'El calcio gobierna el segmento ST'),
-      body: l(
-        '动作电位 2 期（平台期）对应 ST 段，平台期的长短主要由钙电流决定：\n- **低钙血症**（慢性肾病、甲状旁腺或甲状腺手术后、维生素 D 缺乏、急性胰腺炎、大量输血）：ST 段延长且仍为等电位，T 波迟到但宽度正常 → **QT 延长**。除 QT 外图形可以很安静。\n- **高钙血症**（恶性肿瘤最常见，其次原发性甲状旁腺功能亢进）：ST 段缩短甚至消失，T 波几乎从 J 点直接起飞 → **QT 缩短**；重度高钙偶见类 Osborn（J）波。\n- 两种情况下 **T 波自身的宽度都大致正常**——QT 的变化由 ST 段驱动。这正是钙与钾、与药物的区别：钾改的是 T 波的形态（第 o1 课），药物改的常是 T 的宽度（第 h7 课）。',
-        'Phase 2 of the action potential, the plateau, maps onto the ST segment, and plateau length is governed largely by calcium currents:\n- **Hypocalcaemia** (chronic kidney disease, post-parathyroid or post-thyroid surgery, vitamin D deficiency, acute pancreatitis, massive transfusion): a longer, still-isoelectric ST with a late but normal-width T → **long QT**. Apart from the QT the tracing can look very quiet.\n- **Hypercalcaemia** (malignancy first, primary hyperparathyroidism second): the ST shortens or disappears and the T takes off almost at the J point → **short QT**; Osborn (J)-like waves appear occasionally in severe cases.\n- In both, **the T wave itself keeps roughly its normal width** — the QT change is driven by the ST. That is the contrast with potassium, which reshapes the T (lesson o1), and with drugs, which usually widen it (lesson h7).',
-        'La fase 2 del potencial de acción, la meseta, se corresponde con el segmento ST, y la duración de la meseta depende sobre todo de las corrientes de calcio:\n- **Hipocalcemia** (enfermedad renal crónica, cirugía paratiroidea o tiroidea, déficit de vitamina D, pancreatitis aguda, transfusión masiva): un ST más largo pero aún isoeléctrico, con una T tardía pero de anchura normal → **QT largo**. Salvo por el QT, el trazado puede ser muy tranquilo.\n- **Hipercalcemia** (primero las neoplasias, después el hiperparatiroidismo primario): el ST se acorta o desaparece y la T despega casi en el punto J → **QT corto**; en casos graves aparecen a veces ondas tipo Osborn (J).\n- En ambas, **la propia onda T conserva una anchura aproximadamente normal**: el cambio del QT lo impulsa el ST. Ese es el contraste con el potasio, que remodela la T (lección o1), y con los fármacos, que suelen ensancharla (lección h7).',
+      kind: 'figure',
+      figure: { id: 'action-potential', params: { cell: 'ventricular' } },
+      ecg: synth('normal', 1427, { rate: 75 }),
+      caption: l(
+        'ST段就是心室动作电位的2期（平台期）。钙决定平台期有多长：低钙把它拉长，高钙把它缩短。',
+        'The ST segment is phase 2 of the ventricular action potential, the plateau. Calcium sets how long it lasts: low calcium stretches it, high calcium shortens it.',
+        'El segmento ST es la fase 2 del potencial de acción ventricular, la meseta. El calcio fija cuánto dura: el calcio bajo la alarga y el alto la acorta.',
+      ),
+    },
+    {
+      kind: 'film',
+      title: l('同一心率，三种血钙', 'One rate, three calcium levels', 'Una frecuencia, tres niveles de calcio'),
+      view: STRIP,
+      frames: [
+        {
+          label: l('正常', 'Normal', 'Normal'),
+          ecg: synth('normal', 1427, { rate: 75 }),
+          note: l('正常，75次/分：ST段很短，接着就是T波。QT约380 ms。', 'Normal at 75/min: a short ST, then the T. QT about 380 ms.', 'Normal a 75 lpm: un ST corto y luego la T. QT de unos 380 ms.'),
+          marks: [{ auto: 'st' }, { auto: 'qt' }],
+        },
+        {
+          label: l('低钙', 'Low calcium', 'Calcio bajo'),
+          ecg: synth('hypocalcemia', 1427, { rate: 75 }),
+          note: l('低钙：平直的ST段一直延长，T波起得晚，但T波本身没有变宽。QT约470 ms。', 'Low Ca: the flat ST runs on and the T starts late, but the T itself is no wider. QT about 470 ms.', 'Calcio bajo: el ST plano se alarga y la T empieza tarde, pero la T no es más ancha. QT de unos 470 ms.'),
+          marks: [{ auto: 'st' }, { auto: 'qt' }],
+        },
+        {
+          label: l('高钙', 'High calcium', 'Calcio alto'),
+          ecg: synth('hypercalcemia', 1427, { rate: 75 }),
+          note: l('高钙：几乎没有ST段，T波从J点直接升起，宽度不变。QT约310 ms。', 'High Ca: almost no ST; the T takes off from the J point, no narrower than before. QT about 310 ms.', 'Calcio alto: casi no hay ST; la T arranca desde el punto J, sin estrecharse. QT de unos 310 ms.'),
+          marks: [{ auto: 'j' }, { auto: 'qt' }],
+        },
+      ],
+      predict: {
+        question: l('钙改变的是QT里的哪一段？', 'Which part of the QT does calcium change?', '¿Qué parte del QT cambia el calcio?'),
+        options: [l('ST段', 'The ST segment', 'El segmento ST'), l('T波的宽度', 'The width of the T', 'La anchura de la T'), l('QRS', 'The QRS', 'El QRS')],
+        answer: 0,
+      },
+      caption: l(
+        '钙决定ST段有多长。先问“ST去哪了？”，再读QT。高钙多见于肿瘤和原发性甲旁亢。',
+        'Calcium sets how long the ST lasts. Ask “where did the ST go?”, then read the QT. High calcium: think cancer and primary hyperparathyroidism.',
+        'El calcio fija cuánto dura el ST. Pregunta «¿dónde está el ST?» y luego lee el QT. Calcio alto: piensa en cáncer e hiperparatiroidismo primario.',
       ),
     },
     {
@@ -133,17 +169,6 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'ecg',
-      ecg: synth('hypercalcemia', 1427),
-      view: STRIP,
-      marks: [{ auto: 'j' }, { auto: 'qt' }],
-      caption: l(
-        '高钙血症：ST 段几乎不存在，T 波直接从 J 点起飞，QT 缩短（此处 QTc ≈ 335 ms）。T 的宽度仍正常——是起飞得早，不是飞得快。见于恶性肿瘤与高甲状旁腺素血症；重度时偶见类 Osborn 波。',
-        'Hypercalcaemia: there is almost no ST segment, the T takes off straight from the J point and the QT is short (QTc ≈ 335 ms here). The T width is still normal — it takes off early, it does not fly faster. Seen with malignancy and hyperparathyroidism; Osborn-like waves occasionally in severe cases.',
-        'Hipercalcemia: casi no hay segmento ST, la T despega directamente del punto J y el QT es corto (QTc ≈ 335 ms aquí). La anchura de la T sigue siendo normal: despega pronto, no vuela más rápido. Se ve en neoplasias e hiperparatiroidismo; a veces ondas tipo Osborn en casos graves.',
-      ),
-    },
-    {
       kind: 'contrast',
       title: l('ST 去哪了？', 'Where did the ST go?', '¿Dónde está el ST?'),
       view: STRIP,
@@ -164,15 +189,6 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('镁：看不见的电解质', 'Magnesium: the electrolyte you cannot see', 'Magnesio: el electrolito que no se ve'),
-      body: l(
-        '**低镁血症**在心电图上与低钾血症难以区分：T 波平坦或倒置、U 波显著（V2–V3 最清楚）、TdP 风险升高，且常与低钾同时存在（第 o1 课）。没有任何一段波形属于“镁”——镁没有自己的波。\n- 因此 **TdP 时经验性治疗**：静脉硫酸镁、纠正钾、停用延长 QT 的药物、必要时超速起搏——不必等血镁结果。\n- **高镁血症**（多为肾衰竭叠加含镁抗酸药/泻药）：窦性心动过缓、PR 延长直至 AV 传导阻滞，极高水平时 T 波尖耸；临床伴低血压与腱反射消失。',
-        '**Hypomagnesaemia** is hard to separate from hypokalaemia on the ECG: flat or inverted T, prominent U (clearest in V2–V3), higher TdP risk, and it often travels with low potassium (lesson o1). No part of the trace belongs to magnesium — magnesium has no wave of its own.\n- So in **TdP you treat empirically**: IV magnesium sulphate, correct the potassium, stop QT-prolonging drugs, overdrive pacing if needed — without waiting for the serum level.\n- **Hypermagnesaemia** (usually renal failure plus magnesium-containing antacids or laxatives): sinus bradycardia, PR prolongation into AV block, peaked T at very high levels; clinically hypotension and absent tendon reflexes.',
-        'La **hipomagnesemia** es difícil de separar de la hipopotasemia en el ECG: T plana o invertida, U prominente (más clara en V2–V3), mayor riesgo de TdP, y a menudo va junto con potasio bajo (lección o1). Ninguna parte del trazado pertenece al magnesio: el magnesio no tiene onda propia.\n- Por eso, en la **TdP se trata de forma empírica**: sulfato de magnesio intravenoso, corregir el potasio, retirar los fármacos que alargan el QT, estimulación rápida si hace falta, sin esperar el resultado sérico.\n- **Hipermagnesemia** (habitualmente insuficiencia renal más antiácidos o laxantes con magnesio): bradicardia sinusal, PR largo hasta bloqueo AV, T apuntada con niveles muy altos; clínicamente hipotensión y abolición de los reflejos osteotendinosos.',
-      ),
-    },
-    {
       kind: 'ecg',
       ecg: synth('hypokalemia', 1430),
       view: { layout: 'strip', lead: 'V2' },
@@ -184,12 +200,44 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('长 QT 先问 ST，短 QT 想到钙与地高辛', 'A long QT: ask the ST first. A short QT: think calcium and digoxin', 'QT largo: pregunta primero al ST. QT corto: piensa en calcio y digoxina'),
-      body: l(
-        '看到 QT 异常，先定位是哪一段在变化：\n- **QT 长、ST 长、T 宽度正常** → 钙。**QT 长、T 变宽变形** → 药物、缺血、先天性长 QT（第 h7 课）。测量规矩不变：切线法量到 T 终点、不算 U 波、用最长导联，心率快时优先 Fridericia。\n- **QT 短**的两大鉴别是高钙血症与**洋地黄效应**：地高辛造成下斜型（鱼钩样/反钩状）ST 压低，在 R 波高的导联最清楚，伴 T 低平、QT 缩短、PR 略延长——这是药物暴露，不是中毒（第 o3 课）。勺状 ST 伴短 QT 与钙的分别，一量 QT、一看分布就清楚；不要把它报成缺血性 ST 压低。',
-        'When the QT looks wrong, first locate which segment is doing the changing:\n- **Long QT with a long ST and a normal-width T** → calcium. **Long QT with a wide, distorted T** → drugs, ischaemia, congenital long QT (lesson h7). The measuring rules do not change: tangent method to the T end, U excluded, longest-QT lead, prefer Fridericia at fast rates.\n- The two big causes of a **short QT** are hypercalcaemia and **digitalis effect**: digoxin produces downsloping (“reverse-tick”, scooped) ST depression, clearest in leads with tall R waves, with a low T, a shortened QT and a mildly longer PR — drug exposure, not toxicity (lesson o3). Scooped ST with a short QT separates from calcium the moment you measure the QT and look at the distribution; do not report it as ischaemic ST depression.',
-        'Cuando el QT parece anómalo, localiza primero qué segmento está cambiando:\n- **QT largo con ST largo y T de anchura normal** → calcio. **QT largo con T ancha y deformada** → fármacos, isquemia, QT largo congénito (lección h7). Las reglas de medición no cambian: método de la tangente hasta el final de la T, sin la U, en la derivación de QT más largo, y Fridericia si la frecuencia es alta.\n- Las dos grandes causas del **QT corto** son la hipercalcemia y el **efecto digitálico**: la digoxina produce un descenso del ST con pendiente descendente («en cuchara», en «gancho invertido»), más claro en derivaciones con R altas, con T baja, QT corto y PR algo más largo — exposición al fármaco, no intoxicación (lección o3). El ST en cuchara con QT corto se separa del calcio en cuanto mides el QT y miras la distribución; no lo informes como descenso isquémico del ST.',
+      kind: 'film',
+      title: l('QT变了：是哪一段在变？', 'The QT changed: which part moved?', 'El QT cambió: ¿qué parte se movió?'),
+      view: { layout: 'strip', lead: 'V5' },
+      frames: [
+        {
+          label: l('低钙', 'Low calcium', 'Calcio bajo'),
+          ecg: synth('hypocalcemia', 1427, { rate: 75 }),
+          note: l('QT长，多出来的都是ST段；T波本身不宽：想到钙。', 'Long QT, and the extra length is all ST; the T itself is not wide. Think calcium.', 'QT largo, y lo que sobra es todo ST; la T en sí no es ancha. Piensa en el calcio.'),
+          marks: [{ auto: 'st' }, { auto: 'qt' }],
+        },
+        {
+          label: l('药物', 'Drug', 'Fármaco'),
+          ecg: synth('long-qt', 1427, { rate: 75 }, 'drug'),
+          note: l('QT同样长（约480 ms），但这里T波低而宽：想到药物、缺血或先天性长QT（第h7课）。', 'Just as long (QT about 480 ms), but here the T is low and wide: think drugs, ischaemia or congenital long QT (lesson h7).', 'Igual de largo (QT de unos 480 ms), pero aquí la T es baja y ancha: piensa en fármacos, isquemia o QT largo congénito (lección h7).'),
+          marks: [{ auto: 't' }, { auto: 'qt' }],
+        },
+        {
+          label: l('高钙', 'High calcium', 'Calcio alto'),
+          ecg: synth('hypercalcemia', 1427, { rate: 75 }),
+          note: l('QT短，ST段没了：T波从J点开始。想到高钙。', 'Short QT and the ST is gone: the T starts at the J point. Think high calcium.', 'QT corto y sin ST: la T empieza en el punto J. Piensa en calcio alto.'),
+          marks: [{ auto: 'j' }, { auto: 'qt' }],
+        },
+        {
+          label: l('地高辛', 'Digoxin', 'Digoxina'),
+          ecg: synth('digoxin-effect', 1427, { rate: 70 }),
+          note: l('QT也缩短，但V5的ST像勺子一样凹到基线以下，T波低，PR 190 ms：地高辛效应（第o3课）。', 'A shorter QT too, but the ST in V5 sags below the line like a scoop, with a low T and a PR of 190 ms: digoxin effect (lesson o3).', 'También un QT más corto, pero el ST de V5 se hunde bajo la línea como una cuchara, con T baja y PR de 190 ms: efecto digitálico (lección o3).'),
+          marks: [{ auto: 'st60' }, { auto: 'pr' }, { auto: 'qt' }],
+        },
+      ],
+      predict: {
+        question: l('两个长QT：一个长在ST段，一个长在T波。哪个指向钙？', 'Two long QTs: one from a long ST, one from a wide T. Which one points to calcium?', 'Dos QT largos: uno por un ST largo y otro por una T ancha. ¿Cuál apunta al calcio?'),
+        options: [l('ST段长的那个', 'The long ST', 'El del ST largo'), l('T波宽的那个', 'The wide T', 'El de la T ancha')],
+        answer: 0,
+      },
+      caption: l(
+        '先找出是哪一段变了：ST段（钙）还是T波（药物、先天性）。QT短：想到高钙或地高辛。',
+        'Before naming a cause, find which part moved: the ST (calcium) or the T (drugs, congenital). A short QT: high calcium or digoxin.',
+        'Antes de poner una causa, busca qué parte se movió: el ST (calcio) o la T (fármacos, congénito). QT corto: calcio alto o digoxina.',
       ),
     },
     { kind: 'check', item: { family: 'metabolic', seed: 1 } },
@@ -227,6 +275,11 @@ const lesson: Lesson = {
           'TdP 时从不考虑镁——镁在心电图上没有自己的波，经验性补镁不必等化验。',
           'Never considering magnesium in TdP — magnesium has no wave of its own on the ECG, and empirical replacement does not wait for the lab.',
           'No considerar nunca el magnesio en la TdP: el magnesio no tiene onda propia en el ECG y la reposición empírica no espera al laboratorio.',
+        ),
+        l(
+          '心率快时仍用 Bazett 校正 QT：它会高估 QTc，改用 Fridericia。',
+          'Correcting a fast-rate QT with Bazett: it overestimates the QTc; use Fridericia.',
+          'Corregir con Bazett un QT a frecuencia alta: sobrestima el QTc; usa Fridericia.',
         ),
       ],
     },

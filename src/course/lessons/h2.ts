@@ -14,6 +14,8 @@ const synth = (scenario: string, seed: number, dials?: Partial<Record<DialId, nu
   req: { scenario, seed, ...(variant ? { variant } : {}), ...(dials ? { dials } : {}) },
 });
 const GRID = { layout: '3x4+1' } as const;
+/** one seed and rate for the voltage film: the LVH and LVH-with-ST–T scenarios share their QRS at this seed */
+const LVH = synth('lvh', 1222, { rate: 72 });
 
 const lesson: Lesson = {
   id: 'h2',
@@ -68,15 +70,6 @@ const lesson: Lesson = {
         '电压达到左心室肥厚标准：Sokolow-Lyon 约 38 mm（>35 mm，阳性）；Cornell 约 35 mm、Peguero-Lo Presti 约 40 mm，按男性界值也阳性——三条一致；实际工作中标准常不一致，一条阳性就够报告电压阳性。而 ST-T 是**继发性改变**：面向高 R 波的导联（I、aVL、V5–V6）ST 压低、T 不对称倒置，V1–V3 出现镜像的 ST 抬高。报告写"**左心室肥厚伴继发性ST-T改变**"——"劳损（strain）"一词已过时。',
         'The voltage meets LVH criteria: Sokolow-Lyon about 38 mm (>35 mm, positive); Cornell about 35 mm and Peguero-Lo Presti about 40 mm are positive even at the male cut-offs — all three agree here; in practice criteria often disagree, and one positive criterion is enough to call LVH voltage. The ST–T is a **secondary** change: ST depression with asymmetric T inversion in the leads facing the tall R (I, aVL, V5–V6), with the mirror image — ST elevation — in V1–V3. Report "**LVH with secondary ST–T abnormality**"; the word "strain" is out.',
         'El voltaje cumple criterios de HVI: Sokolow-Lyon de unos 38 mm (>35 mm, positivo); Cornell de unos 35 mm y Peguero-Lo Presti de unos 40 mm son positivos incluso con los umbrales masculinos: aquí coinciden los tres; en la práctica los criterios discrepan a menudo y basta uno positivo para informar voltaje de HVI. El ST-T es una alteración **secundaria**: descenso del ST con T invertida asimétrica en las derivaciones que miran a la R alta (I, aVL, V5-V6), con la imagen en espejo —elevación del ST— en V1-V3. Informa de «**HVI con alteración secundaria del ST-T**»; el término «sobrecarga» («strain») está en desuso.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('电压住在哪里', 'Where the voltage lives', 'Dónde vive el voltaje'),
-      body: l(
-        '左心室朝向左后方，正对 **V5–V6 和 aVL**：肥厚的心肌产生更大的除极向量，这些导联的 R 波随之增高。右胸导联（V1–V2）从"背面"看同一个向量，把它写成深 S 波。每条电压标准都是把两侧的数字相加：\n- Sokolow-Lyon：S V1 + R V5/V6 中较大者；\n- Cornell：S V3 + R aVL；\n- Peguero-Lo Presti：最深的 S（任何导联）+ S V4。\n测量前先确认定准电压：标准为 10 mm/mV，半电压会把一切减半。仅有电压阳性时报告"左心室肥厚"，ST-T 另行描述。',
-        'The left ventricle points leftward and backward, straight at **V5–V6 and aVL**: hypertrophied muscle generates a larger depolarisation vector, and the R waves in those leads grow. The right precordial leads (V1–V2) see the same vector from "behind" and write it as a deep S. Every voltage criterion adds one number from each side:\n- Sokolow-Lyon: S V1 + the larger of R V5/V6;\n- Cornell: S V3 + R aVL;\n- Peguero-Lo Presti: the deepest S in any lead + S V4.\nCheck the calibration before measuring: standard gain is 10 mm/mV, and half gain halves everything. Voltage alone is reported as "LVH"; the ST–T is described separately.',
-        'El ventrículo izquierdo se dirige hacia atrás y a la izquierda, justo hacia **V5-V6 y aVL**: el músculo hipertrofiado genera un vector de despolarización mayor y crece la R en esas derivaciones. Las derivaciones precordiales derechas (V1-V2) ven el mismo vector «desde detrás» y lo escriben como una S profunda. Cada criterio de voltaje suma un número de cada lado:\n- Sokolow-Lyon: S V1 + la mayor de R V5/V6;\n- Cornell: S V3 + R aVL;\n- Peguero-Lo Presti: la S más profunda de cualquier derivación + S V4.\nComprueba la calibración antes de medir: la ganancia estándar es 10 mm/mV y con la mitad de ganancia todo se reduce a la mitad. Solo el voltaje positivo se informa como «HVI»; el ST-T se describe aparte.',
       ),
     },
     {
@@ -143,19 +136,89 @@ const lesson: Lesson = {
             'Criterios clásicos de voltaje: sensibilidad ~10-25 %, especificidad ~85-99 % frente al ecocardiograma; un ECG normal no excluye la HVI',
           ),
         },
+        {
+          label: l('传导阻滞时', 'With a conduction defect', 'Con un trastorno de conducción'),
+          value: l(
+            '左前分支阻滞：I/aVL 的 R 波标准不可靠，改用 S III + 胸导联最大 R+S ≥30 mm（男）/ ≥28 mm（女）；左束支阻滞：电压不可靠，诊断左心室肥厚要非常谨慎；右束支阻滞：标准敏感度下降',
+            'LAFB: R-wave criteria in I/aVL are unreliable; use S III + the largest precordial R+S ≥30 mm (men) / ≥28 mm (women). LBBB: voltage is unreliable; diagnose LVH only with great caution. RBBB: the criteria lose sensitivity',
+            'BFAI: los criterios de onda R en I/aVL no son fiables; usa S III + la mayor R+S precordial ≥30 mm (varones) / ≥28 mm (mujeres). Bloqueo de rama izquierda: el voltaje no es fiable; diagnostica HVI solo con gran cautela. Bloqueo de rama derecha: los criterios pierden sensibilidad',
+          ),
+        },
       ],
       source:
         'Hancock EW et al. AHA/ACCF/HRS Part V: ECG changes associated with cardiac chamber hypertrophy. Circulation 2009;119:e251-e261; Peguero JG et al. J Am Coll Cardiol 2017;69:1694-1703; Romhilt DW, Estes EH. Am Heart J 1968;75:752-758',
     },
     {
+      kind: 'film',
+      title: l('正常 → 左心室肥厚 → 伴继发性ST-T改变', 'Normal → LVH → LVH with secondary ST–T', 'Normal → HVI → HVI con alteración secundaria del ST-T'),
+      view: { layout: '3x4+1', highlightLeads: ['V1', 'V5', 'V6', 'aVL'] },
+      frames: [
+        {
+          label: l('正常', 'Normal', 'Normal'),
+          ecg: synth('normal', 1222, { rate: 72 }),
+          note: l(
+            'S V1 约 6 mm + R V5 约 14 mm ≈ 20 mm，远低于 35 mm。V5–V6 的 T 直立。',
+            'S V1 about 6 mm + R V5 about 14 mm ≈ 20 mm, far below 35 mm. The T is upright in V5–V6.',
+            'S V1 de unos 6 mm + R V5 de unos 14 mm ≈ 20 mm, muy por debajo de 35 mm. La T es positiva en V5-V6.',
+          ),
+          marks: [{ auto: 's', lead: 'V1' }, { auto: 'r', lead: 'V5' }],
+        },
+        {
+          label: l('左心室肥厚', 'LVH', 'HVI'),
+          ecg: LVH,
+          note: l(
+            'S V1 约 19 mm + R V6 约 18 mm ≈ 37 mm（>35 mm）：Sokolow-Lyon 阳性。V5–V6 的 T 仍直立：只有电压。',
+            'S V1 about 19 mm + R V6 about 18 mm ≈ 37 mm (>35 mm): Sokolow-Lyon positive. The T is still upright in V5–V6: voltage only.',
+            'S V1 de unos 19 mm + R V6 de unos 18 mm ≈ 37 mm (>35 mm): Sokolow-Lyon positivo. La T sigue positiva en V5-V6: solo voltaje.',
+          ),
+          marks: [{ auto: 's', lead: 'V1' }, { auto: 'r', lead: 'V6' }],
+        },
+        {
+          label: l('伴 ST-T 改变', 'With ST–T change', 'Con alteración del ST-T'),
+          ecg: synth('lvh-strain', 1222, { rate: 72 }),
+          note: l(
+            'QRS 与上一帧相同。V6 的 ST 压低约 1 mm、T 倒置约 4 mm，与高 R 方向相反；V1–V2 镜像 ST 抬高约 2 mm。',
+            'The QRS is the same as in the last frame. In V6 the ST drops about 1 mm and the T inverts about 4 mm, against the tall R; V1–V2 mirror it with about 2 mm of ST elevation.',
+            'El QRS es el mismo del fotograma anterior. En V6 el ST baja alrededor de 1 mm y la T se invierte unos 4 mm, en contra de la R alta; V1-V2 lo reflejan con unos 2 mm de elevación del ST.',
+          ),
+          marks: [{ auto: 'st', lead: 'V6' }, { auto: 't', lead: 'V6' }, { auto: 'st', lead: 'V1' }],
+        },
+      ],
+      predict: {
+        question: l(
+          '正常心电图上 R 波在 V4–V5 附近最高。左心室壁增厚后，哪个导联的 R 最高？',
+          'On the normal tracing the R peaks around V4–V5. Once the LV wall thickens, which lead has the tallest R?',
+          'En el trazado normal la R alcanza su máximo hacia V4-V5. Cuando la pared del VI se engrosa, ¿qué derivación tiene la R más alta?',
+        ),
+        options: [l('V4', 'V4', 'V4'), l('V5', 'V5', 'V5'), l('V6', 'V6', 'V6')],
+        answer: 2,
+        ordered: true,
+      },
+      caption: l(
+        '电压标准量的是 QRS。继发性 ST-T 跟着 QRS 走、与主波相反，本身不代表缺血。报告：“左心室肥厚伴继发性ST-T改变”。',
+        'The voltage criteria measure the QRS. The secondary ST–T follows the QRS, opposite the main deflection, and by itself does not mean ischaemia. Report: "LVH with secondary ST–T abnormality".',
+        'Los criterios de voltaje miden el QRS. El ST-T secundario sigue al QRS, opuesto a la deflexión principal, y por sí solo no significa isquemia. Informe: «HVI con alteración secundaria del ST-T».',
+      ),
+    },
+    {
       kind: 'heart',
-      ecg: synth('lvh', 1222, { rate: 72 }),
+      ecg: LVH,
       showConduction: true,
       emphasize: ['lv-basal-anterolateral', 'lv-mid-anterolateral', 'lv-apical-lateral', 'lv-apex', 'lv-mid-inferior', 'lv-mid-inferolateral'],
       caption: l(
-        '播放一个心动周期。肥厚的左心室壁产生更强的除极向量，指向 V5–V6 和 aVL：R 波增高；同一向量背离右胸电极，被写成深 S 波。电压标准测量的正是这个向量的两端。',
-        'Play one beat. The hypertrophied LV wall generates a stronger depolarisation vector aimed at V5–V6 and aVL: the R grows. The same vector points away from the right precordial electrodes and is written as a deep S. The voltage criteria measure the two ends of this vector.',
-        'Reproduce un latido. La pared hipertrofiada del VI genera un vector de despolarización más intenso dirigido a V5-V6 y aVL: la R crece. El mismo vector se aleja de los electrodos precordiales derechos y se escribe como una S profunda. Los criterios de voltaje miden los dos extremos de este vector.',
+        '播放一个心动周期。肥厚的左心室壁产生更强的除极向量，并更偏向左后方，朝向 V6 和 aVL：那里的 R 波增高；同一向量背离右胸电极，被写成深 S 波。电压标准测量的正是这个向量的两端。',
+        'Play one beat. The hypertrophied LV wall generates a stronger depolarisation vector, turned further left and back towards V6 and aVL: the R there grows. The same vector points away from the right precordial electrodes and is written as a deep S. The voltage criteria measure the two ends of this vector.',
+        'Reproduce un latido. La pared hipertrofiada del VI genera un vector de despolarización más intenso y más girado hacia la izquierda y atrás, hacia V6 y aVL: allí la R crece. El mismo vector se aleja de los electrodos precordiales derechos y se escribe como una S profunda. Los criterios de voltaje miden los dos extremos de este vector.',
+      ),
+    },
+    {
+      kind: 'figure',
+      figure: { id: 'vector-loop', params: { plane: 'both' } },
+      ecg: LVH,
+      caption: l(
+        '同一份左心室肥厚心电图的 QRS 环：指向左后方，朝向 V6 和 aVL，背离 V1–V2。所以 V6 和 aVL 写出更高的 R 波，V1–V2 写出深 S 波。',
+        'The QRS loop of the same LVH tracing points left and back: towards V6 and aVL, away from V1–V2. So V6 and aVL write taller R waves, and V1–V2 deep S waves.',
+        'El bucle del QRS de ese mismo trazado de HVI apunta a la izquierda y atrás: hacia V6 y aVL, lejos de V1-V2. Por eso V6 y aVL escriben R más altas, y V1-V2 S profundas.',
       ),
     },
     {
@@ -207,26 +270,6 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'ecg',
-      ecg: synth('lvh-strain', 1224, { rate: 80 }),
-      view: { layout: '3x4+1', highlightLeads: ['I', 'aVL', 'V6', 'V1'] },
-      marks: [{ auto: 'j', lead: 'V6' }, { auto: 'st', lead: 'V6' }, { auto: 't', lead: 'V6' }, { auto: 'st', lead: 'V1' }],
-      caption: l(
-        '继发性ST-T改变的三个特征：与主波 R 方向**相反**；ST 压低伴 T 不对称倒置（降支缓、升支陡）；V1–V3 出现镜像 ST 抬高。它不是原发性（缺血性）改变，本身不等于冠心病，也不能据此推断压力负荷还是容量负荷——那超出了心电图能说的范围。',
-        'Three features of the secondary ST–T abnormality: it points **opposite** the dominant R; ST depression with an asymmetric inverted T (gentle descent, steep return); and the mirror ST elevation in V1–V3. It is not a primary (ischaemic) change and by itself does not mean coronary disease — nor can you infer pressure vs volume load from it; that is beyond what the ECG can say.',
-        'Tres rasgos de la alteración secundaria del ST-T: se dirige en sentido **opuesto** a la R dominante; descenso del ST con T invertida asimétrica (descenso suave, retorno abrupto); y la elevación del ST en espejo en V1-V3. No es una alteración primaria (isquémica) ni significa por sí sola cardiopatía isquémica, y tampoco permite deducir sobrecarga de presión frente a volumen: eso va más allá de lo que el ECG puede decir.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('敏感度、人群与传导阻滞', 'Sensitivity, demographics and conduction defects', 'Sensibilidad, demografía y trastornos de conducción'),
-      body: l(
-        '经典电压标准的敏感度只有约 10–25 %（特异度 85–99 %）：**心电图正常不能排除左心室肥厚**，超声才是裁判。\n电压还受人群影响：年轻人、男性、黑种人、胸壁薄者电压更高；女性、老年人、肥胖、COPD、心包积液时更低。Cornell 分性别设置阈值，35–40 岁以下仅凭电压诊断要谨慎。\n传导阻滞会破坏标准：**左前分支阻滞**时 I/aVL 的 R 波标准不可靠（改用 S III + 最大胸导联 R+S ≥30 mm 男 / ≥28 mm 女）；**左束支阻滞**时电压标准不可靠，诊断左心室肥厚要非常谨慎；**右束支阻滞**时标准敏感度下降。',
-        'Classic voltage criteria are only ~10–25 % sensitive (specificity 85–99 %): **a normal ECG does not exclude LVH** — echo is the arbiter.\nVoltage also depends on the person: higher in young adults, men, Black individuals and thin chests; lower in women, older age, obesity, COPD and pericardial effusion. Cornell is sex-specific, and voltage-only LVH under ~35–40 y deserves caution.\nConduction defects break the criteria: with **LAFB**, R-wave criteria in I/aVL are unreliable (use S III + the largest precordial R+S, ≥30 mm men / ≥28 mm women); with **LBBB** voltage criteria are unreliable — diagnose LVH only with great caution; with **RBBB** the criteria lose sensitivity.',
-        'Los criterios clásicos de voltaje tienen solo ~10-25 % de sensibilidad (especificidad 85-99 %): **un ECG normal no excluye la HVI**; el ecocardiograma es el árbitro.\nEl voltaje también depende de la persona: mayor en jóvenes, varones, personas negras y tórax delgado; menor en mujeres, edad avanzada, obesidad, EPOC y derrame pericárdico. Cornell es específico por sexo, y la «HVI solo por voltaje» antes de los ~35-40 años debe interpretarse con cautela.\nLos trastornos de conducción invalidan los criterios: con **bloqueo fascicular anterior izquierdo** los criterios de onda R en I/aVL no son fiables (usar S III + la mayor R+S precordial, ≥30 mm en varones / ≥28 mm en mujeres); con **bloqueo de rama izquierda** el voltaje no es fiable: diagnosticar HVI solo con gran cautela; con **bloqueo de rama derecha** los criterios pierden sensibilidad.',
-      ),
-    },
-    {
       kind: 'contrast',
       title: l('只有电压，还是电压加 ST-T？', 'Voltage only, or voltage plus ST–T?', '¿Solo voltaje, o voltaje más ST-T?'),
       view: GRID,
@@ -237,7 +280,11 @@ const lesson: Lesson = {
       },
       right: {
         ecg: synth('lvh-strain', 1226, { rate: 84 }),
-        caption: l('左心室肥厚伴继发性ST-T改变：同样的电压，加上反向的 ST-T', 'LVH with secondary ST–T abnormality: same voltage, plus the reversed ST–T', 'HVI con alteración secundaria del ST-T: el mismo voltaje, más el ST-T invertido'),
+        caption: l(
+          '左心室肥厚伴继发性ST-T改变：同样达到电压标准，加上反向的 ST-T',
+          'LVH with secondary ST–T abnormality: voltage criteria met too, plus the reversed ST–T',
+          'HVI con alteración secundaria del ST-T: también cumple los criterios de voltaje, más el ST-T invertido',
+        ),
         marks: [{ auto: 'st', lead: 'V5' }, { auto: 't', lead: 'V5' }],
       },
       point: l(
@@ -268,9 +315,9 @@ const lesson: Lesson = {
           'Escribir «sobrecarga» («strain»): el término actual es «HVI con alteración secundaria del ST-T», y la sobrecarga de presión o de volumen no puede deducirse del ECG.',
         ),
         l(
-          '一条标准阴性就当作排除：电压标准敏感度只有 10–25 %，心电图正常不能排除左心室肥厚。',
-          'Treating one negative criterion as exclusion: voltage criteria are only 10–25 % sensitive; a normal ECG does not exclude LVH.',
-          'Tratar un criterio negativo como exclusión: los criterios de voltaje tienen una sensibilidad del 10-25 %; un ECG normal no excluye la HVI.',
+          '一条标准阴性就当作排除：电压标准敏感度只有 10–25 %，心电图正常不能排除左心室肥厚；女性、老年、肥胖、COPD 和心包积液还会压低电压。',
+          'Treating one negative criterion as exclusion: voltage criteria are only 10–25 % sensitive and a normal ECG does not exclude LVH; female sex, older age, obesity, COPD and pericardial effusion lower the voltage further.',
+          'Tratar un criterio negativo como exclusión: los criterios de voltaje tienen una sensibilidad del 10-25 % y un ECG normal no excluye la HVI; el sexo femenino, la edad avanzada, la obesidad, la EPOC y el derrame pericárdico reducen aún más el voltaje.',
         ),
         l(
           '不看定准电压就测量：半电压（5 mm/mV）会把所有数字减半，标准全部"转阴"。',

@@ -4,7 +4,7 @@
  * is drawn.
  */
 import { describe, expect, it } from 'vitest';
-import { authoredDialValue, dialStep, pickDials, realisedDials, snapDial, startDials } from '../../src/course/live';
+import { authoredDialValue, dialStep, liveNote, noteAt, pickDials, realisedDials, snapDial, startDials, sweepValues } from '../../src/course/live';
 import { l } from '../../src/core/l10n';
 import { generate, scenarios, type ScenarioDef } from '../../src/synth';
 
@@ -54,6 +54,46 @@ describe('start values', () => {
   it('keep only realised dials', () => {
     expect(realisedDials(['rate', 'pr', 'axis'], { rate: 70, axis: 40 })).toEqual(['rate', 'axis']);
     expect(pickDials({ rate: 70, pr: 160 }, ['pr'])).toEqual({ pr: 160 });
+  });
+
+  it('a played dial starts where the experiment says, on the grid', () => {
+    expect(startDials(base, undefined, ['rate', 'pr'], { dial: 'rate', from: 61.4 })).toEqual({ rate: 61, pr: 160 });
+    expect(startDials(base, undefined, ['rate'], { dial: 'pr', from: 200 })).toEqual({ rate: 72 });
+  });
+});
+
+describe('played experiments', () => {
+  it('a sweep runs from → to on the slider grid, both ends included, no repeats, at most the frame budget', () => {
+    const r = { min: 60, max: 100 };
+    const up = sweepValues('rate', r, 60, 100, 24);
+    expect(up[0]).toBe(60);
+    expect(up[up.length - 1]).toBe(100);
+    expect(up.length).toBeLessThanOrEqual(24);
+    expect(new Set(up).size).toBe(up.length);
+    for (let i = 1; i < up.length; i++) expect(up[i]).toBeGreaterThan(up[i - 1]);
+    expect(sweepValues('rate', r, 100, 60, 24)).toEqual([...up].reverse());
+    expect(sweepValues('rate', r, 60, 62, 24)).toEqual([60, 61, 62]);
+    expect(sweepValues('rate', r, 20, 300, 5)).toEqual([60, 70, 80, 90, 100]);
+  });
+
+  it('the note on screen is the one whose range holds the value', () => {
+    const notes = [
+      { min: 60, max: 62, text: l('a', 'a', 'a') },
+      { min: 73, max: 77, text: l('b', 'b', 'b') },
+    ];
+    expect(noteAt(notes, 61)?.text.en).toBe('a');
+    expect(noteAt(notes, 77)?.text.en).toBe('b');
+    expect(noteAt(notes, 70)).toBeUndefined();
+    expect(noteAt(undefined, 70)).toBeUndefined();
+  });
+
+  it('no note once the learner moves a dial the notes were not written for', () => {
+    const play = { dial: 'rate' as const, notes: [{ min: 60, max: 62, text: l('a', 'a', 'a') }] };
+    const start = { rate: 60, qtc: 405 };
+    expect(liveNote(play, { rate: 61, qtc: 405 }, start)?.text.en).toBe('a');
+    expect(liveNote(play, { rate: 61, qtc: 450 }, start)).toBeUndefined();
+    expect(liveNote(undefined, { rate: 61 }, start)).toBeUndefined();
+    expect(liveNote(play, null, start)).toBeUndefined();
   });
 });
 

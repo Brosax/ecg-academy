@@ -7,8 +7,9 @@
  *  - The default beat is the dominant beat (most frequent beat kind, not aberrant) that sits best inside the panels
  *    where the mark's lead is drawn: a 3×4 sheet shows each lead for 2.5 s only, so a V2 mark must use a beat inside
  *    the V2 column. `beat` (an index into truth.beats) overrides the choice.
- *  - Default lead: II (the conventional rhythm / interval lead) — interval brackets drawn in all 13 panels would bury
- *    the tracing. `lead: 'all'` on a morphology mark (q, r, s, j, st60) is expanded to the twelve standard leads.
+ *  - Default lead: the shown lead in a one-lead view ('single' / 'strip'), else II (the conventional rhythm / interval
+ *    lead) — interval brackets drawn in all 13 panels would bury the tracing. `lead: 'all'` on a morphology mark (q, r,
+ *    s, j, st60) is expanded to the twelve standard leads.
  *  - Estimates (BeatMarks has no T onset, delta end or pacing-spike time): T onset = half-way from J to the T peak;
  *    δ = the first 35 % of the QRS (20–60 ms); a ventricular pacing spike = the paced beat's QRS onset.
  */
@@ -110,8 +111,9 @@ type Win = readonly [number, number];
  * Time windows of the sheet panels that show `lead` (one entry per panel; 'all' = every panel). Mirrors the viewer's
  * layout rules (src/ecg/layout.ts): 3×4 columns of a quarter page each plus full-width rhythm strips; 6×2 and 12×1
  * show the first half page / whole page in every lead; single / strip show the window. The player passes exactly the
- * options it gives the viewer; if the learner then changes layout or speed in the viewer toolbar, default beats are
- * not re-chosen (a mark may then sit in another column) — teaching ECGs with marks open without the toolbar.
+ * options it gives the viewer; if the learner then changes layout, speed or lead in the viewer toolbar, default beats
+ * and lead-less marks are not re-chosen (a mark may then sit in another column) — teaching ECGs with marks open
+ * without the toolbar.
  */
 export function leadWindows(lead: Lead | 'all', durationMs: number, o: ResolveOptions = {}): Win[] {
   const layout = o.layout ?? '3x4+1';
@@ -338,6 +340,27 @@ export function deltaEndEstimate(b: BeatMarks): number {
   return b.qrsOn + Math.max(20, Math.min(60, 0.35 * (b.qrsOff - b.qrsOn)));
 }
 
+/** fibrillatory waves labelled at most this often and this many times: one label per wavelet buries the tracing */
+const FIB_GAP_MS = 600;
+const FIB_MAX = 8;
+
+/**
+ * A few fibrillatory waves to label, spread over the whole panel: those in the gaps between beats (QRS onset to T end
+ * ± 20 ms excluded), spaced by the panel width / FIB_MAX but never closer than FIB_GAP_MS; when no wavelet falls in a
+ * gap (fast AF), the same spacing over the wavelets outside the QRS.
+ */
+function sparseFibrillation(ts: readonly number[], truth: EcgTruth, spanMs: number): number[] {
+  const step = Math.max(FIB_GAP_MS, spanMs / FIB_MAX);
+  const within = (t: number, tail: (b: BeatMarks) => number) => truth.beats.some((b) => t >= b.qrsOn - 20 && t <= tail(b) + 20);
+  const pickSpaced = (cand: readonly number[]) => {
+    const out: number[] = [];
+    for (const t of cand) if (out.length < FIB_MAX && (out.length === 0 || t - out[out.length - 1] >= step)) out.push(t);
+    return out;
+  };
+  const gaps = pickSpaced(ts.filter((t) => !within(t, (b) => b.tOff)));
+  return gaps.length > 0 ? gaps : pickSpaced(ts.filter((t) => !within(t, (b) => b.qrsOff)));
+}
+
 function medianPDuration(truth: EcgTruth): number {
   const d = truth.beats.filter((b) => b.pOn !== null && b.pOff !== null).map((b) => (b.pOff as number) - (b.pOn as number));
   if (d.length === 0) return 100;
@@ -373,9 +396,12 @@ function resolveOne(ecg: Ecg, truth: EcgTruth, m: AutoMark, lead: Lead | 'all', 
     if (m.auto === 'f-waves') {
       const wins = leadWindows(l, ecg.signal.durationMs, o);
       const narrow = wins.reduce<Win | null>((a, w) => (a === null || w[1] - w[0] < a[1] - a[0] ? w : a), null) ?? [0, ecg.signal.durationMs];
-      return truth.atrial
-        .filter((e) => (e.kind === 'flutter' || e.kind === 'fibrillation') && e.t >= narrow[0] && e.t <= narrow[1])
-        .map((e): EcgMark => ({ kind: 'wave', lead: l, t: e.t, label: text(e.kind === 'flutter' ? 'F' : 'f'), color }));
+      const inWin = truth.atrial.filter((e) => e.t >= narrow[0] && e.t <= narrow[1]);
+      const flutter = inWin.filter((e) => e.kind === 'flutter').map((e) => e.t);
+      const fib = sparseFibrillation(inWin.filter((e) => e.kind === 'fibrillation').map((e) => e.t), truth, narrow[1] - narrow[0]);
+      return [...flutter.map((t) => ({ t, f: 'F' })), ...fib.map((t) => ({ t, f: 'f' }))]
+        .sort((a, b) => a.t - b.t)
+        .map((x): EcgMark => ({ kind: 'wave', lead: l, t: x.t, label: text(x.f), color }));
     }
     if (m.auto === 'blocked-p') {
       const dur = medianPDuration(truth);
@@ -465,7 +491,7 @@ export function resolveMarks(ecg: Ecg, marks: readonly LessonMark[] | undefined,
       continue;
     }
     if (!truth) continue;
-    const lead = m.lead ?? DEFAULT_MARK_LEAD;
+    const lead = m.lead ?? (o.layout === 'single' || o.layout === 'strip' ? (o.lead ?? DEFAULT_MARK_LEAD) : DEFAULT_MARK_LEAD);
     const leads: readonly (Lead | 'all')[] = lead === 'all' && PER_LEAD.has(m.auto) ? STD_LEADS : [lead];
     for (const l of leads) out.push(...resolveOne(ecg, truth, m, l, o));
   }

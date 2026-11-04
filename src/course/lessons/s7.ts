@@ -14,7 +14,7 @@ const synth = (scenario: string, seed: number, dials?: Partial<Record<DialId, nu
   kind: 'synth',
   req: { scenario, seed, ...(variant ? { variant } : {}), ...(dials ? { dials } : {}) },
 });
-const CHEST = ['V1', 'V2', 'V3', 'V4', 'V5', 'V6'] as const;
+const NEVER_SEED = 712;
 
 const athleteCheck: Item = {
   id: 's7:athlete-workup',
@@ -78,50 +78,86 @@ const lesson: Lesson = {
         'Futbolista de 22 años, asintomático, en el reconocimiento previo a la competición. Enumera lo que ves y di qué hallazgos requieren más pruebas.',
       ),
       reveal: l(
-        '窦性心动过缓（约 48 次/分）伴轻度窦性心律不齐，V1 呈 rSr′（不完全性右束支阻滞图形，QRS 约 115 ms），胸导联电压高（SV1 + RV5 ≈ 36 mm，单纯达到左心室肥厚的电压标准），II 和 V5–V6 有 J 点切迹、J 点抬高约 1–1.5 mm（已达到正式早期复极图形的标准）。**都不需要进一步检查**：对训练有素的运动员，这些都是训练相关改变。哪些表现需要检查，本课后面会列出（例如 V1–V3 以外或侧壁的 T 波倒置、ST 段压低、病理性 Q 波、QRS ≥ 140 ms）。',
-        'Sinus bradycardia (about 48/min) with mild sinus arrhythmia, an rSr′ in V1 (incomplete RBBB pattern, QRS about 115 ms), tall chest-lead voltages (SV1 + RV5 ≈ 36 mm: an isolated voltage criterion for LVH) and J-point notches with about 1–1.5 mm of J elevation in II and V5–V6 (enough for the formal early repolarisation pattern). **None needs further tests**: in a trained athlete all of them are training-related. What would need work-up is listed later in this lesson (for example T inversion beyond V1–V3 or in the lateral leads, ST depression, pathological Q waves, a QRS ≥ 140 ms).',
-        'Bradicardia sinusal (unos 48 lpm) con arritmia sinusal leve, rSr′ en V1 (patrón de bloqueo incompleto de rama derecha, QRS de unos 115 ms), voltajes precordiales altos (SV1 + RV5 ≈ 36 mm: un criterio aislado de voltaje de HVI) y muescas en el punto J con una elevación de J de 1-1,5 mm en II y V5-V6 (suficiente para el patrón formal de repolarización precoz). **Ninguno requiere más pruebas**: en un deportista entrenado todos son cambios relacionados con el entrenamiento. Lo que sí requeriría estudio se enumera más adelante en esta lección (por ejemplo, T negativas más allá de V1–V3 o en las derivaciones laterales, descenso del ST, ondas Q patológicas o un QRS ≥ 140 ms).',
+        '窦性心动过缓（约 48 次/分）伴轻度窦性心律不齐，V1 呈 rSr′（不完全性右束支阻滞图形，QRS 约 115 ms），胸导联电压高（SV1 + RV5 ≈ 36 mm，单纯达到左心室肥厚的电压标准），II 和 V5–V6 的 J 点抬高约 1–1.5 mm（2017 运动员标准称之为“早期复极/ST 抬高”，比本课讲的切迹/顿挫定义宽松）。**都不需要进一步检查**：对训练有素的运动员，这些都是训练相关改变。哪些表现需要检查，本课后面会列出（例如 V1–V3 以外或侧壁的 T 波倒置、ST 段压低、病理性 Q 波、QRS ≥ 140 ms）。',
+        'Sinus bradycardia (about 48/min) with mild sinus arrhythmia, an rSr′ in V1 (incomplete RBBB pattern, QRS about 115 ms), tall chest-lead voltages (SV1 + RV5 ≈ 36 mm: an isolated voltage criterion for LVH) and about 1–1.5 mm of J-point elevation in II and V5–V6 (what the 2017 athlete criteria call “early repolarisation / ST elevation”, a looser use of the term than the notch-or-slur definition taught in this lesson). **None needs further tests**: in a trained athlete all of them are training-related. What would need work-up is listed later in this lesson (for example T inversion beyond V1–V3 or in the lateral leads, ST depression, pathological Q waves, a QRS ≥ 140 ms).',
+        'Bradicardia sinusal (unos 48 lpm) con arritmia sinusal leve, rSr′ en V1 (patrón de bloqueo incompleto de rama derecha, QRS de unos 115 ms), voltajes precordiales altos (SV1 + RV5 ≈ 36 mm: un criterio aislado de voltaje de HVI) y una elevación del punto J de unos 1–1,5 mm en II y V5–V6 (lo que los criterios de deportistas de 2017 llaman “repolarización precoz / elevación del ST”, un uso más laxo del término que la definición por la muesca o el empastamiento que enseña esta lección). **Ninguno requiere más pruebas**: en un deportista entrenado todos son cambios relacionados con el entrenamiento. Lo que sí requeriría estudio se enumera más adelante en esta lección (por ejemplo, T negativas más allá de V1–V3 o en las derivaciones laterales, descenso del ST, ondas Q patológicas o un QRS ≥ 140 ms).',
       ),
     },
     {
-      kind: 'text',
-      title: l('为什么要认识变异', 'Why variants matter', 'Por qué importan las variantes'),
-      body: l(
-        '过度诊断是有代价的：不必要的检查、焦虑，以及被错误禁赛的运动员。本课讲每周都会遇到的变异：\n- 早期复极图形和正常的 ST 抬高；\n- 幼年型 T 波；\n- rSr′ 与不完全性右束支阻滞；\n- 运动员心脏；\n- 儿童。',
-        'Over-calling has a cost: unnecessary tests, anxiety, and athletes wrongly stopped from sport. This lesson covers the variants you will meet every week:\n- the early repolarisation pattern and normal ST elevation;\n- the juvenile T-wave pattern;\n- rSr′ and incomplete RBBB;\n- the athlete’s heart;\n- children.',
-        'Sobrediagnosticar tiene un coste: pruebas innecesarias, ansiedad y deportistas apartados del deporte sin motivo. Esta lección trata las variantes que verás cada semana:\n- el patrón de repolarización precoz y la elevación normal del ST;\n- el patrón juvenil de la onda T;\n- la rSr′ y el bloqueo incompleto de rama derecha;\n- el corazón del deportista;\n- los niños.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('early-repolarization', 701),
-      marks: [{ auto: 'j', lead: 'II' }, { auto: 'j', lead: 'aVF' }, { auto: 'j', lead: 'V4' }],
+      kind: 'live',
+      scenario: 'early-repolarization',
+      seed: 701,
+      dials: [{ id: 'st' }],
+      marks: [{ auto: 'j', lead: 'II' }, { auto: 'j', lead: 'aVF' }, { auto: 'j', lead: 'V5' }],
+      play: {
+        dial: 'st',
+        from: 0.06,
+        to: 0.14,
+        notes: [
+          {
+            min: 0.06,
+            max: 0.08,
+            text: l(
+              'J 标记前的**切迹**：II 约 3.5 mm、aVF 约 3 mm，QRS < 120 ms：图形已经在了。之后的 ST 还 < 1 mm。',
+              'The **notch** just before the J mark: about 3.5 mm in II, 3 mm in aVF, QRS < 120 ms. The pattern is already there; the ST after it is under 1 mm.',
+              'La **muesca** justo antes de la marca J: unos 3,5 mm en II y 3 mm en aVF, QRS < 120 ms. El patrón ya está; el ST que sigue está por debajo de 1 mm.',
+            ),
+          },
+          {
+            min: 0.09,
+            max: 0.14,
+            text: l(
+              'II 在 J 标记处的 ST 也到了 1 mm，切迹仍约 3.5–4 mm。决定图形的是切迹，不是 ST。',
+              'The ST at the J mark in II now reaches 1 mm too; the notch is still about 3.5–4 mm. The notch decides the pattern, not the ST.',
+              'El ST en la marca J de II llega ahora también a 1 mm; la muesca sigue en unos 3,5–4 mm. Lo que define el patrón es la muesca, no el ST.',
+            ),
+          },
+        ],
+      },
+      predict: {
+        question: l(
+          '我们把 ST 旋钮调高。看 II 和 aVF 的 QRS 末端：那里的切迹会怎样？',
+          'We turn the ST dial up. Watch the end of the QRS in II and aVF: what happens to the notch there?',
+          'Subimos el mando del ST. Mira el final del QRS en II y aVF: ¿qué le pasa a la muesca?',
+        ),
+        options: [
+          l('从头到尾都在，其后的 ST 逐渐抬高', 'It stays from start to end while the ST after it rises', 'Sigue ahí de principio a fin mientras sube el ST que la sigue'),
+          l('等 ST 抬高之后才出现', 'It appears only once the ST has risen', 'Solo aparece cuando el ST ya ha subido'),
+          l('随着 ST 抬高而消失', 'It fades away as the ST rises', 'Desaparece a medida que sube el ST'),
+        ],
+        answer: 0,
+      },
       caption: l(
-        '早期复极图形：R 波下降支上的切迹或顿挫（J 波），在 ≥ 2 个相邻的下壁或侧壁导联 ≥ 1 mm，QRS < 120 ms。不要求 ST 抬高。年轻男性和运动员常见；无症状时不需要进一步检查。',
-        'Early repolarisation pattern: a notch or slur on the down-slope of the R wave (the J wave), ≥ 1 mm in ≥ 2 contiguous inferior or lateral leads, with a QRS < 120 ms. ST elevation is not required. It is common in young men and athletes and, without symptoms, needs no further tests.',
-        'Patrón de repolarización precoz: una muesca o un empastamiento en la rama descendente de la R (la onda J), ≥ 1 mm en ≥ 2 derivaciones contiguas inferiores o laterales, con QRS < 120 ms. No exige elevación del ST. Es frecuente en varones jóvenes y deportistas y, sin síntomas, no requiere más pruebas.',
+        '早期复极看 QRS 末端**切迹或顿挫的顶点**，不看 ST：两个相邻下壁或侧壁导联 ≥ 1 mm。这里切迹 > 2 mm、在下壁、其后 ST 水平，属高危特征；但只在有症状（如不明原因晕厥）或猝死家族史时才有意义，否则仍是正常变异。',
+        'Early repolarisation is read at the **top of the notch or slur** at the end of the QRS, not at the ST: ≥ 1 mm in two contiguous inferior or lateral leads. This notch is over 2 mm, inferior, with a horizontal ST after it: higher-risk features, but they matter only with symptoms such as unexplained syncope or a family history of sudden death. Otherwise it is a normal variant.',
+        'La repolarización precoz se mide en el **vértice de la muesca o del empastamiento** al final del QRS, no en el ST: ≥ 1 mm en dos derivaciones contiguas inferiores o laterales. Esta muesca supera los 2 mm, es inferior y el ST que sigue es horizontal: rasgos de mayor riesgo, que solo importan si hay síntomas (como un síncope inexplicado) o antecedentes familiares de muerte súbita. Si no, es una variante normal.',
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('juvenile-t', 703),
-      view: { highlightLeads: [...CHEST] },
-      marks: [{ auto: 't', lead: 'V2' }, { auto: 't', lead: 'V5' }],
+      kind: 'film',
+      title: l('每周都会遇到的变异', 'Variants you meet every week', 'Variantes que verás cada semana'),
+      frames: [
+        {
+          label: l('幼年型 T 波', 'Juvenile T', 'T juvenil'),
+          ecg: synth('juvenile-t', 703),
+          note: l(
+            '16 岁女孩：V1–V3 的 T 波倒置，V4 起直立。16 岁以前正常；从 16 岁起倒置到 V3，非运动员多为良性，运动员属异常。',
+            'Girl of 16: T inverted in V1–V3, upright from V4. Normal under 16; from 16, inversion reaching V3 is usually benign in a non-athlete but abnormal in an athlete.',
+            'Chica de 16 años: T negativa en V1–V3 y positiva desde V4. Normal antes de los 16; desde los 16, que llegue a V3 suele ser benigno en un no deportista, pero es anormal en un deportista.',
+          ),
+          marks: [{ auto: 't', lead: 'V2' }, { auto: 't', lead: 'V5' }],
+        },
+        {
+          label: l('V1 的 rSr′', 'rSr′ in V1', 'rSr′ en V1'),
+          ecg: synth('irbbb', 704),
+          note: l('V1 呈 rSr′，QRS 约 118 ms（110–119）：不完全性右束支阻滞。QRS < 110 ms 的 rSr′ 只是正常变异。', 'rSr′ in V1 with a QRS of about 118 ms (110–119): incomplete RBBB. An rSr′ under 110 ms is just a normal variant.', 'rSr′ en V1 con QRS de unos 118 ms (110–119): bloqueo incompleto de rama derecha. Una rSr′ por debajo de 110 ms es solo una variante normal.'),
+          marks: [{ auto: 'qrs', lead: 'V1' }, { auto: 'r', lead: 'V1' }],
+        },
+      ],
       caption: l(
-        '16 岁女孩的幼年型 T 波：V1–V3 的 T 波倒置，V4 起直立。局限于 V1–V3 的 T 波倒置在 16 岁以前属正常。16 岁起只有 V1 倒置是正常的，V2 有时也可以；像这里这样延伸到 V3 属于临界表现——多为持续存在的幼年型 T 波，见于百分之几的年轻女性，通常是良性的，但运动员、有症状或有猝死家族史时需要评估（例外：黑人运动员 T 波倒置前有 J 点抬高和凸面型 ST 抬高，见于 V1–V4）。',
-        'Juvenile T-wave pattern in a 16-year-old girl: T inversion in V1–V3, upright from V4. T inversion confined to V1–V3 is normal until 16 years of age. From 16, inversion in V1 alone is normal and in V2 sometimes; inversion reaching V3, as here, is a borderline finding — usually a persistent juvenile pattern, seen in a few per cent of young women and mostly benign, but it needs evaluation in an athlete, with symptoms or with a family history of sudden death (exception: Black athletes with J-point and convex ST elevation before T inversion in V1–V4).',
-        'Patrón juvenil de la onda T en una chica de 16 años: T negativa en V1–V3 y positiva desde V4. La T negativa limitada a V1–V3 es normal hasta los 16 años. A partir de los 16, la T negativa solo en V1 es normal, y a veces en V2; si llega a V3, como aquí, es un hallazgo límite: casi siempre un patrón juvenil persistente, presente en un pequeño porcentaje de mujeres jóvenes y casi siempre benigno, pero hay que estudiarlo en un deportista, si hay síntomas o si hay antecedentes familiares de muerte súbita (excepción: deportistas de raza negra con elevación del punto J y ST convexo antes de la T negativa en V1–V4).',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('irbbb', 704),
-      view: { highlightLeads: ['V1', 'I', 'V6'] },
-      marks: [{ auto: 'qrs', lead: 'V1' }, { auto: 'r', lead: 'V1' }],
-      caption: l(
-        '不完全性右束支阻滞：右束支阻滞的形态（V1 呈 rSr′，I 和 V6 的 S 波顿挫），QRS 110–119 ms（这里约 118 ms）。QRS < 110 ms 的 rSr′ 是正常变异，不应称为不完全性右束支阻滞。在运动员中，不完全性右束支阻滞属于训练相关改变。',
-        'Incomplete RBBB: the RBBB shape (rSr′ in V1, slurred S in I and V6) with a QRS of 110–119 ms (here about 118 ms). An rSr′ with a QRS < 110 ms is a normal variant and should not be called incomplete RBBB. In athletes, incomplete RBBB is training-related.',
-        'Bloqueo incompleto de rama derecha: la morfología del bloqueo de rama derecha (rSr′ en V1, S empastada en I y V6) con QRS de 110–119 ms (aquí unos 118 ms). Una rSr′ con QRS < 110 ms es una variante normal y no debe llamarse bloqueo incompleto de rama derecha. En deportistas, es un cambio relacionado con el entrenamiento.',
+        '两种常见变异，各有一条界线：T 波倒置到哪个导联、QRS 有多宽。',
+        'Two common variants, each with one line to check: how far the T inversion reaches, and how wide the QRS is.',
+        'Dos variantes frecuentes, cada una con un límite que comprobar: hasta dónde llega la T negativa y cuánto mide el QRS.',
       ),
     },
     {
@@ -152,17 +188,41 @@ const lesson: Lesson = {
           label: l('V1 的 rSr′', 'rSr′ in V1', 'rSr′ en V1'),
           value: l('QRS < 110 ms 为正常变异；110–119 ms 为不完全性右束支阻滞', 'QRS < 110 ms: normal variant; 110–119 ms: incomplete RBBB', 'QRS < 110 ms: variante normal; 110–119 ms: bloqueo incompleto de rama derecha'),
         },
+        {
+          label: l('不完全性右束支阻滞的形态', 'Incomplete RBBB: the shape', 'Bloqueo incompleto de rama derecha: la morfología'),
+          value: l(
+            'V1 呈 rSr′，I 和 V6 的 S 波顿挫；成人 QRS < 120 ms（110–119 ms）',
+            'rSr′ in V1 with a slurred S in I and V6; QRS < 120 ms in adults (110–119 ms)',
+            'rSr′ en V1 con S empastada en I y V6; QRS < 120 ms en adultos (110–119 ms)',
+          ),
+        },
+        {
+          label: l('16 岁起 T 波倒置到 V3', 'T inversion reaching V3 from 16 y', 'T negativa hasta V3 desde los 16 años'),
+          value: l(
+            '持续的幼年型 T 波：非运动员多为良性，有症状或猝死家族史时需评估；运动员按 2017 国际标准属异常（黑人运动员复极图形除外）',
+            'Persistent juvenile pattern: usually benign in a non-athlete, but evaluate with symptoms or a family history of sudden death; abnormal in an athlete under the 2017 international criteria (except the Black-athlete repolarisation pattern)',
+            'Patrón juvenil persistente: suele ser benigno en un no deportista, pero hay que estudiarlo si hay síntomas o antecedentes familiares de muerte súbita; en un deportista es anormal según los criterios internacionales de 2017 (salvo el patrón de repolarización del deportista de raza negra)',
+          ),
+        },
+        { label: l('儿童：心率', 'Children: rate', 'Niños: frecuencia'), value: l('更快：出生后数月中位数约 150 次/分，青少年约 75–80 次/分', 'Faster: median about 150/min in the first months, about 75–80/min in teenagers', 'Más rápida: mediana de unos 150 lpm en los primeros meses, unos 75–80 lpm en adolescentes') },
+        {
+          label: l('儿童：PR 与 QRS', 'Children: PR and QRS', 'Niños: PR y QRS'),
+          value: l('更短；一度房室传导阻滞指 PR 超过年龄别第 98 百分位，而不是 > 200 ms', 'Shorter; first-degree AV block means a PR above the 98th centile for age, not > 200 ms', 'Más cortos; el bloqueo AV de primer grado es un PR por encima del percentil 98 para la edad, no > 200 ms'),
+        },
+        {
+          label: l('新生儿', 'Newborns', 'Recién nacidos'),
+          value: l('电轴偏右、右心室占优势（V1 高 R）是正常的，在最初几年逐渐消退', 'A rightward axis and RV dominance (tall R in V1) are normal and fade over the first years', 'El eje derecho y el predominio del ventrículo derecho (R alta en V1) son normales y desaparecen en los primeros años'),
+        },
+        {
+          label: l('儿童：V1 的 T 波', 'Children: T in V1', 'Niños: T en V1'),
+          value: l(
+            '出生后一周内转为倒置并保持到青春期；1 周至青春期之间直立提示右心室肥厚。用年龄别参考表',
+            'Inverts within the first week and stays inverted until adolescence; upright between 1 week and adolescence suggests RV hypertrophy. Use age-specific tables',
+            'Se hace negativa en la primera semana y sigue así hasta la adolescencia; positiva entre la primera semana y la adolescencia sugiere hipertrofia ventricular derecha. Usa tablas por edad',
+          ),
+        },
       ],
       source: 'Macfarlane PW et al. J Am Coll Cardiol 2015;66:470; Antzelevitch C et al. Heart Rhythm 2016;13:e295; Zeppenfeld K et al. Eur Heart J 2022;43:3997; Thygesen K et al. Eur Heart J 2019;40:237; Sharma S, Drezner JA et al. J Am Coll Cardiol 2017;69:1057; Surawicz B et al. Circulation 2009;119:e235',
-    },
-    {
-      kind: 'text',
-      title: l('运动员心电图', 'The athlete’s ECG', 'El ECG del deportista'),
-      body: l(
-        '规律的耐力和力量训练会重塑心脏，心电图也会反映出来。2017 国际标准把表现分为三组：\n- **训练相关（正常）**：不需要检查；\n- **临界**：单独一项没问题，两项或以上需要评估；\n- **异常**：无论训练多少，都需要评估。',
-        'Regular endurance and strength training remodels the heart, and the ECG shows it. The 2017 international criteria sort findings into three groups:\n- **training-related (normal)**: no tests needed;\n- **borderline**: one alone is fine, two or more need evaluation;\n- **abnormal**: always need evaluation, whatever the training.',
-        'El entrenamiento regular de resistencia y de fuerza remodela el corazón, y el ECG lo refleja. Los criterios internacionales de 2017 agrupan los hallazgos en tres grupos:\n- **relacionados con el entrenamiento (normales)**: no requieren pruebas;\n- **límite**: uno solo no importa; dos o más requieren estudio;\n- **anormales**: siempre requieren estudio, sea cual sea el entrenamiento.',
-      ),
     },
     {
       kind: 'criteria',
@@ -187,6 +247,10 @@ const lesson: Lesson = {
             'T inversion ≥ 1 mm in ≥ 2 contiguous leads beyond the exceptions (especially lateral or inferolateral); ST depression ≥ 0.5 mm; pathological Q waves; complete LBBB; QRS ≥ 140 ms; epsilon wave; pre-excitation; QTc ≥ 470 ms (men) or ≥ 480 ms (women); Brugada type 1; rate < 30/min or pauses ≥ 3 s; PR ≥ 400 ms; Mobitz II or third-degree block; ≥ 2 PVCs per tracing; atrial tachyarrhythmias',
             'T negativa ≥ 1 mm en ≥ 2 derivaciones contiguas fuera de las excepciones (sobre todo laterales o inferolaterales); descenso del ST ≥ 0,5 mm; ondas Q patológicas; bloqueo completo de rama izquierda; QRS ≥ 140 ms; onda épsilon; preexcitación; QTc ≥ 470 ms (varones) o ≥ 480 ms (mujeres); Brugada tipo 1; frecuencia < 30 lpm o pausas ≥ 3 s; PR ≥ 400 ms; Mobitz II o bloqueo de tercer grado; ≥ 2 extrasístoles ventriculares por trazado; taquiarritmias auriculares',
           ),
+        },
+        {
+          label: l('黑人运动员复极图形', 'Black-athlete repolarisation pattern', 'Patrón de repolarización del deportista de raza negra'),
+          value: l('V1–V4 的 J 点抬高和凸面型 ST 抬高，随后 T 波倒置：在黑人运动员中属正常', 'J-point elevation and convex ST elevation followed by T inversion in V1–V4: normal in Black athletes', 'Elevación del punto J y del ST convexo seguida de T negativa en V1–V4: normal en deportistas de raza negra'),
         },
       ],
       source: 'Sharma S, Drezner JA et al. International recommendations for electrocardiographic interpretation in athletes. J Am Coll Cardiol 2017;69:1057; Eur Heart J 2018;39:1466',
@@ -214,9 +278,9 @@ const lesson: Lesson = {
         {
           title: l('复极', 'Repolarisation', 'Repolarización'),
           body: l(
-            '下壁和侧壁导联有 J 点切迹，J 点抬高约 1–1.5 mm（II、V5–V6，已达到正式早期复极图形的标准）——早期复极属于正常组。没有 ST 压低，T 波倒置不超过 V2：没有异常组表现。',
-            'J notches with about 1–1.5 mm of J-point elevation in the inferior and lateral leads (II, V5–V6: enough for the formal early repolarisation pattern) — early repolarisation belongs to the normal group. No ST depression and no T inversion beyond V2: nothing from the abnormal group.',
-            'Muescas J con una elevación del punto J de 1-1,5 mm en las derivaciones inferiores y laterales (II, V5-V6: suficiente para el patrón formal de repolarización precoz); la repolarización precoz pertenece al grupo normal. Sin descenso del ST ni T negativas más allá de V2: nada del grupo anormal.',
+            'II 和 V5–V6 的 J 点抬高约 1–1.5 mm。2017 运动员标准称之为早期复极/ST 抬高（比上面的切迹/顿挫定义宽松），归入正常组。没有 ST 压低，T 波倒置不超过 V2：没有异常组表现。',
+            'About 1–1.5 mm of J-point elevation in II and V5–V6. The 2017 athlete criteria call this early repolarisation / ST elevation (a looser use than the notch-or-slur definition above) and put it in the normal group. No ST depression and no T inversion beyond V2: nothing from the abnormal group.',
+            'Elevación del punto J de unos 1–1,5 mm en II y V5–V6. Los criterios de deportistas de 2017 la llaman repolarización precoz / elevación del ST (un uso más laxo que la definición por la muesca o el empastamiento de arriba) y la sitúan en el grupo normal. Sin descenso del ST ni T negativas más allá de V2: nada del grupo anormal.',
           ),
           marks: [{ auto: 'j', lead: 'V5' }, { auto: 'j', lead: 'II' }],
           highlightLeads: ['V1', 'V2', 'V4', 'V5', 'V6', 'II', 'aVF'],
@@ -241,9 +305,9 @@ const lesson: Lesson = {
         marks: [{ auto: 't', lead: 'V5' }, { auto: 'st60', lead: 'V5' }],
       },
       point: l(
-        'A：T 波倒置只在右胸导联（V1–V3），V4 起直立——幼年型。16 岁以前它就是正常的；16 岁时延伸到 V3 属于临界，多为良性，但运动员或有症状时要再看一眼。B：侧壁导联 V5–V6 以及 I、aVL 的 T 波倒置伴 ST 压低，V1–V3 的 S 波很深：侧壁 T 波倒置永远不是正常变异，这里是左心室肥厚伴继发性 ST–T 改变（在年轻运动员身上要想到心肌病）。',
-        'A: T inversion only in the right chest leads (V1–V3), upright from V4: the juvenile pattern. Under 16 it is simply normal; at 16, inversion reaching V3 is borderline — mostly benign, but worth a second look in an athlete or with symptoms. B: T inversion with ST depression in the lateral leads V5–V6 and in I and aVL, with deep S waves in V1–V3. Lateral T inversion is never a normal variant: here it is LVH with secondary ST–T abnormality (in a young athlete, think of cardiomyopathy).',
-        'A: T negativa solo en las precordiales derechas (V1–V3) y positiva desde V4: patrón juvenil. Antes de los 16 años es sencillamente normal; a los 16, que llegue a V3 es un hallazgo límite, casi siempre benigno, pero conviene revisarlo en un deportista o si hay síntomas. B: T negativa con descenso del ST en las derivaciones laterales V5–V6 y en I y aVL, con ondas S profundas en V1–V3. La T negativa lateral nunca es una variante normal: aquí es una HVI con alteración secundaria del ST–T (en un deportista joven, piensa en una miocardiopatía).',
+        'A：T 波倒置只在右胸导联（V1–V3），V4 起直立——幼年型。16 岁以前它就是正常的；从 16 岁起延伸到 V3 就不再是正常的幼年型：非运动员多为良性，但运动员属异常，有症状时也要评估。B：侧壁导联 V5–V6 以及 I、aVL 的 T 波倒置伴 ST 压低，V1–V3 的 S 波很深：侧壁 T 波倒置永远不是正常变异，这里是左心室肥厚伴继发性 ST–T 改变（在年轻运动员身上要想到心肌病）。',
+        'A: T inversion only in the right chest leads (V1–V3), upright from V4: the juvenile pattern. Under 16 it is simply normal; from 16, inversion reaching V3 is no longer the normal juvenile pattern: often benign in a non-athlete, but abnormal in an athlete and worth evaluating with symptoms. B: T inversion with ST depression in the lateral leads V5–V6 and in I and aVL, with deep S waves in V1–V3. Lateral T inversion is never a normal variant: here it is LVH with secondary ST–T abnormality (in a young athlete, think of cardiomyopathy).',
+        'A: T negativa solo en las precordiales derechas (V1–V3) y positiva desde V4: patrón juvenil. Antes de los 16 años es sencillamente normal; desde los 16, que llegue a V3 ya no es el patrón juvenil normal: suele ser benigno en un no deportista, pero es anormal en un deportista y hay que estudiarlo si hay síntomas. B: T negativa con descenso del ST en las derivaciones laterales V5–V6 y en I y aVL, con ondas S profundas en V1–V3. La T negativa lateral nunca es una variante normal: aquí es una HVI con alteración secundaria del ST–T (en un deportista joven, piensa en una miocardiopatía).',
       ),
     },
     {
@@ -259,18 +323,47 @@ const lesson: Lesson = {
         caption: l('38 岁男性', 'Man, 38', 'Varón de 38 años'),
       },
       point: l(
-        'A：从有切迹的 J 点开始凹面向上的 ST 抬高，V2–V3 的 T 波直立（V1 的 T 浅倒，单独出现在 V1 是正常的），下壁导联也有 J 点切迹：早期复极，正常。B：V1–V2 穹窿形（coved）ST 抬高 ≥ 2 mm，下斜进入倒置的 T 波，其他导联没有类似改变：Brugada 1 型图形。它永远不是正常变异，需要转诊（第 H8 课）。',
-        'A: concave ST elevation from a notched J point, upright T waves in V2–V3 (the T in V1 is shallowly inverted, which is normal in V1 alone), J notches in the inferior leads too: early repolarisation, normal. B: coved ST elevation ≥ 2 mm in V1–V2 sloping down into a negative T, nothing similar elsewhere: Brugada type 1 pattern. It is never a normal variant and needs referral (lesson H8).',
-        'A: elevación cóncava del ST desde un punto J con muesca, ondas T positivas en V2–V3 (la T de V1 es negativa y poco profunda, algo normal cuando se limita a V1), y muescas J también en las derivaciones inferiores: repolarización precoz, normal. B: elevación del ST en forma de cúpula (coved) ≥ 2 mm en V1–V2 que desciende hacia una T negativa, sin nada parecido en otras derivaciones: patrón de Brugada tipo 1. Nunca es una variante normal y requiere derivación (lección H8).',
+        'A：V2 的 ST 凹面向上抬高，V2–V3 的 T 波直立（V1 的 T 浅倒，单独出现在 V1 是正常的），II、aVF、V5 和 V6 有 J 点切迹：早期复极，正常。B：V1–V2 穹窿形（coved）ST 抬高 ≥ 2 mm，下斜进入倒置的 T 波，其他导联没有类似改变：Brugada 1 型图形。它永远不是正常变异，需要转诊（第 H8 课）。',
+        'A: concave ST elevation in V2, upright T waves in V2–V3 (the T in V1 is shallowly inverted, which is normal in V1 alone), and J notches in II, aVF, V5 and V6: early repolarisation, normal. B: coved ST elevation ≥ 2 mm in V1–V2 sloping down into a negative T, nothing similar elsewhere: Brugada type 1 pattern. It is never a normal variant and needs referral (lesson H8).',
+        'A: elevación cóncava del ST en V2, ondas T positivas en V2–V3 (la T de V1 es negativa y poco profunda, algo normal cuando se limita a V1) y muescas J en II, aVF, V5 y V6: repolarización precoz, normal. B: elevación del ST en forma de cúpula (coved) ≥ 2 mm en V1–V2 que desciende hacia una T negativa, sin nada parecido en otras derivaciones: patrón de Brugada tipo 1. Nunca es una variante normal y requiere derivación (lección H8).',
       ),
     },
     {
-      kind: 'text',
-      title: l('儿童，简要', 'Children, briefly', 'Niños, en breve'),
-      body: l(
-        '儿童不是缩小的成人：\n- 心率更快（出生后数月中位数约 150 次/分，青少年约 75–80 次/分）；\n- PR 和 QRS 更短；儿童一度房室传导阻滞指 PR 超过年龄别第 98 百分位，而不是 > 200 ms；\n- 新生儿电轴偏右、右心室占优势（V1 高 R）是正常的，在最初几年逐渐消退；\n- V1 的 T 波在出生后一周内转为倒置，并在整个儿童期保持倒置：1 周至青春期之间 V1 的 T 波直立提示右心室肥厚。\n请使用年龄别参考表。',
-        'Children are not small adults:\n- faster rates (median about 150/min in the first months, about 75–80/min in teenagers);\n- shorter PR and QRS; first-degree AV block in a child means a PR above the age-specific 98th centile, not > 200 ms;\n- a rightward axis and RV dominance (tall R in V1) are normal in newborns and fade over the first years;\n- the T in V1 inverts within the first week and stays inverted through childhood: an upright T in V1 between 1 week and adolescence suggests RV hypertrophy.\nUse age-specific reference tables.',
-        'Los niños no son adultos pequeños:\n- frecuencias más rápidas (mediana de unos 150 lpm en los primeros meses, unos 75–80 lpm en adolescentes);\n- PR y QRS más cortos; en un niño, el bloqueo AV de primer grado es un PR por encima del percentil 98 para su edad, no > 200 ms;\n- el eje derecho y el predominio del ventrículo derecho (R alta en V1) son normales en el recién nacido y desaparecen en los primeros años;\n- la T de V1 se hace negativa en la primera semana y sigue así durante la infancia: una T positiva en V1 entre la primera semana y la adolescencia sugiere hipertrofia ventricular derecha.\nUsa tablas de referencia por edad.',
+      kind: 'film',
+      title: l('永远不是变异', 'Never a variant', 'Nunca son una variante'),
+      frames: [
+        {
+          label: l('病理性 Q 波', 'Pathological Q', 'Q patológica'),
+          ecg: synth('old-mi', NEVER_SEED),
+          note: l('V2–V3 呈 QS 波：本该长出 R 波的地方完全没有 R。病理性 Q 波永远需要检查。', 'QS complexes in V2–V3: no R at all where it should grow. Pathological Q waves always need work-up.', 'Complejos QS en V2–V3: ninguna R donde debería crecer. Las Q patológicas siempre requieren estudio.'),
+        },
+        {
+          label: l('QRS ≥ 140 ms', 'QRS ≥ 140 ms', 'QRS ≥ 140 ms'),
+          ecg: synth('lbbb', NEVER_SEED, { qrs: 150 }),
+          note: l('QRS 约 150 ms，完全性左束支阻滞：≥ 140 ms 永远不是“运动员心脏”。', 'QRS about 150 ms, complete LBBB: ≥ 140 ms is never “athlete’s heart”.', 'QRS de unos 150 ms, bloqueo completo de rama izquierda: ≥ 140 ms nunca es “corazón de deportista”.'),
+          marks: [{ auto: 'qrs', lead: 'V6' }],
+        },
+        {
+          label: l('预激', 'Pre-excitation', 'Preexcitación'),
+          ecg: synth('wpw', NEVER_SEED),
+          note: l('PR 约 115 ms，QRS 起始部有 δ 波：心室预激需要评估，与训练无关。', 'PR about 115 ms with a delta wave: pre-excitation needs evaluation, whatever the training.', 'PR de unos 115 ms con onda delta: la preexcitación requiere estudio, sea cual sea el entrenamiento.'),
+          marks: [{ auto: 'pr' }, { auto: 'delta' }],
+        },
+        {
+          label: l('长 QTc', 'Long QTc', 'QTc largo'),
+          ecg: synth('long-qt', NEVER_SEED, { qtc: 500, rate: 60 }),
+          note: l(
+            'QT 约 500 ms，60 次/分（RR 约 1 s），所以 QTc ≈ QT ≈ 500 ms：超过男性 470、女性 480 ms 的界值。绝非训练所致。',
+            'QT about 500 ms at 60/min (RR about 1 s), so QTc ≈ QT ≈ 500 ms: over the 470-ms (men) and 480-ms (women) limits. Never a result of training.',
+            'QT de unos 500 ms a 60 lpm (RR de 1 s aprox.), así que QTc ≈ QT ≈ 500 ms: por encima de los límites de 470 ms (varones) y 480 ms (mujeres). Nunca es fruto del entrenamiento.',
+          ),
+          marks: [{ auto: 'qt' }, { auto: 'rr' }],
+        },
+      ],
+      caption: l(
+        '训练会让心率变慢、电压变高、出现 rSr′ 和 J 点切迹，但不会造成这些。看到任何一项都要进一步评估。',
+        'Training slows the rate, raises voltage and brings rSr′ and J notches, but it never makes these. Any one of them needs work-up.',
+        'El entrenamiento frena la frecuencia, aumenta el voltaje y da rSr′ y muescas J, pero nunca produce esto. Cualquiera de ellos requiere estudio.',
       ),
     },
     { kind: 'check', item: { family: 'spot', seed: 6 } },
@@ -283,9 +376,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [15112, 13683, 2084],
       caption: l(
-        '三位年轻或中年成人。每份都测 QRS，看 V1–V3 和 V2–V4 的 ST，然后判断“正常或正常变异”还是“需要评估”。其中一份标注为不完全性右束支阻滞：同意这个标注之前，先量一量它的 QRS。',
-        'Three young or middle-aged adults. For each, measure the QRS, look at V1–V3 and at the ST in V2–V4, then decide “normal or normal variant” versus “needs evaluation”. One carries the label incomplete RBBB: measure its QRS before you agree with the label.',
-        'Tres adultos jóvenes o de mediana edad. En cada uno, mide el QRS, mira V1–V3 y el ST en V2–V4, y decide “normal o variante normal” frente a “requiere estudio”. Uno lleva la etiqueta de bloqueo incompleto de rama derecha: mide su QRS antes de aceptarla.',
+        '三位 16 至 42 岁的受检者。每份都测 QRS，看 V1–V3 和 V2–V4 的 ST，然后判断“正常或正常变异”还是“需要评估”。其中一份标注为不完全性右束支阻滞：同意这个标注之前，先量一量它的 QRS。',
+        'Three people aged 16 to 42. For each, measure the QRS, look at V1–V3 and at the ST in V2–V4, then decide “normal or normal variant” versus “needs evaluation”. One carries the label incomplete RBBB: measure its QRS before you agree with the label.',
+        'Tres personas de 16 a 42 años. En cada ECG, mide el QRS, mira V1–V3 y el ST en V2–V4, y decide “normal o variante normal” frente a “requiere estudio”. Uno de ellos lleva la etiqueta de bloqueo incompleto de rama derecha: mide su QRS antes de aceptarla.',
       ),
     },
     {

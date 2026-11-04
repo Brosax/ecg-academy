@@ -13,6 +13,7 @@ const synth = (scenario: string, seed: number, dials?: Partial<Record<DialId, nu
   req: { scenario, seed, ...(variant ? { variant } : {}), ...(dials ? { dials } : {}) },
 });
 const STRIP = { layout: 'strip', lead: 'II' } as const;
+const STRIP_V1 = { layout: 'strip', lead: 'V1' } as const;
 
 const lesson: Lesson = {
   id: 't2',
@@ -70,12 +71,126 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('不规则≠房颤：先问两个问题', 'Irregular does not mean AF: ask two questions first', 'Irregular no significa FA: haz primero dos preguntas'),
-      body: l(
-        '“不规则”是个入口，不是诊断。问两个问题：\n- **有没有心房活动？**——P′波、锯齿状F波、f波，还是什么都没有？\n- **RR的不规则有没有模式？**——绝对无章、成组、随呼吸渐变，还是藏着倍数关系？\n六个答案对应六个节律：\n- 心房颤动：无P，f波，RR绝对不齐；\n- 房扑不等比下传：锯齿F波，RR聚在恒定F–F的整数倍上；\n- 多源性房速：≥3种P′形态，心房率>100次/分，P′之间有等电位线（同样的图形而心率<100次/分 = 游走性心房起搏点，多为良性）；\n- 频发房早：提前且形态不同的P′，其后间歇小于完全代偿（r5）；\n- 窦性心律不齐：同一个P、同一个PR，PP随呼吸平滑变化（s3）；\n- 室性二联律：一窦一室早，长-短循环——“规则的不规则”。',
-        '"Irregular" is a gate, not a diagnosis. Ask two questions:\n- **Is there atrial activity?** — P′ waves, sawtooth F waves, f waves, or nothing at all?\n- **Is there a pattern in the irregularity?** — totally random, grouped, swinging with respiration, or hiding a set of multiples?\nSix answers match six rhythms:\n- atrial fibrillation: no P, f waves, irregularly irregular RR;\n- flutter with variable block: sawtooth F waves, RR clustering at multiples of a constant F–F;\n- MAT: ≥3 P′ morphologies, atrial rate >100/min, isoelectric baseline between P′ (the same picture below 100/min = wandering atrial pacemaker, usually benign);\n- frequent PACs: early P′ of a different shape, pause less than compensatory (r5);\n- sinus arrhythmia: the same P at the same PR, PP swinging smoothly with respiration (s3);\n- ventricular bigeminy: one sinus beat, one PVC, long-short repeating — a "regularly irregular" rhythm.',
-        '«Irregular» es una puerta, no un diagnóstico. Haz dos preguntas:\n- **¿Hay actividad auricular?** — ¿ondas P′, ondas F en dientes de sierra, ondas f o nada?\n- **¿Hay un patrón en la irregularidad?** — ¿caótica del todo, agrupada, oscilando con la respiración o escondiendo múltiplos?\nSeis respuestas corresponden a seis ritmos:\n- fibrilación auricular: sin P, ondas f, RR irregularmente irregular;\n- flutter con conducción variable: ondas F en dientes de sierra, RR agrupados en múltiplos de un F–F constante;\n- TAM: ≥3 morfologías de P′, frecuencia auricular >100 lpm, línea isoeléctrica entre P′ (la misma imagen por debajo de 100 lpm = marcapasos auricular migratorio, casi siempre benigno);\n- extrasístoles auriculares frecuentes: P′ precoz de morfología distinta, pausa menor que compensatoria (r5);\n- arritmia sinusal: la misma P con el mismo PR, PP oscilando suavemente con la respiración (s3);\n- bigeminismo ventricular: un latido sinusal y una extrasístole ventricular, largo-corto que se repite: un ritmo «regularmente irregular».',
+      kind: 'film',
+      title: l('五种不规则节律', 'Five irregular rhythms', 'Cinco ritmos irregulares'),
+      view: STRIP,
+      frames: [
+        {
+          label: l('房颤', 'AF', 'FA'),
+          ecg: synth('atrial-fibrillation', 621, { fCoarseness: 0.55, ventricularResponse: 120 }),
+          note: l('没有重复的 P，只有 f 波；RR 长短不一，找不到任何模式 ⇒ 房颤。', 'No repeating P, only f waves; the RR vary with no pattern at all → AF.', 'Ninguna P que se repita, solo ondas f; el RR varía sin patrón alguno → FA.'),
+          marks: [{ auto: 'f-waves' }, { auto: 'rr', beat: 3 }],
+        },
+        {
+          label: l('房扑不等比', 'Flutter, variable', 'Flutter variable'),
+          ecg: synth('atrial-flutter', 622, undefined, 'variable'),
+          note: l(
+            '锯齿状 F 波；每个 RR 都是 F–F（约 200 ms）的整数倍 ⇒ 房扑不等比下传，不是房颤。',
+            'Sawtooth F waves; every RR is a whole multiple of the F–F (about 200 ms) → flutter with variable block, not AF.',
+            'Ondas F en diente de sierra; cada RR es un múltiplo entero del F–F (unos 200 ms) → flutter con conducción variable, no FA.',
+          ),
+          marks: [{ auto: 'f-waves' }, { auto: 'rr', beat: 7 }],
+        },
+        {
+          label: l('房早', 'PACs', 'Extrasístoles auriculares'),
+          ecg: synth('pac', 634, undefined, 'frequent'),
+          note: l(
+            '两个提前的搏动，P′ 在 II 倒置、不同于窦性 P；其后的间歇小于完全代偿 ⇒ 房早。',
+            'Two early beats whose P′ is negative in II, unlike the sinus P; the pause after each is less than compensatory → PACs.',
+            'Dos latidos precoces con una P′ negativa en II, distinta de la P sinusal; la pausa siguiente es menor que compensatoria → extrasístoles auriculares.',
+          ),
+          marks: [{ auto: 'p', beat: 1, label: l('P′', 'P′', 'P′') }],
+        },
+        {
+          label: l('窦性心律不齐', 'Sinus arrhythmia', 'Arritmia sinusal'),
+          ecg: synth('sinus-arrhythmia', 628, { rate: 72, hrv: 0.16 }),
+          note: l(
+            '同一个 P、同一个 PR；PP 随呼吸一阵长一阵短，没有提前的搏动 ⇒ 窦性心律不齐。',
+            'The same P and the same PR; the PP lengthens and shortens in waves with breathing, and nothing comes early → sinus arrhythmia.',
+            'La misma P y el mismo PR; el PP se alarga y se acorta en oleadas con la respiración y nada llega antes de tiempo → arritmia sinusal.',
+          ),
+          marks: [{ auto: 'p', beat: 3 }, { auto: 'rr', beat: 3 }],
+        },
+        {
+          label: l('室性二联律', 'Bigeminy', 'Bigeminismo'),
+          ecg: synth('ventricular-bigeminy', 627),
+          note: l(
+            '一个窦性搏动、一个提前的宽 QRS（其前无 P），长–短成对重复：“规则的不规则” ⇒ 室性二联律。',
+            'One sinus beat, then an early wide QRS with no P before it; the long–short pair repeats: regularly irregular → ventricular bigeminy.',
+            'Un latido sinusal y después un QRS ancho precoz sin P delante; el par largo-corto se repite: regularmente irregular → bigeminismo ventricular.',
+          ),
+          marks: [{ auto: 'qrs', beat: 6 }],
+        },
+      ],
+      predict: {
+        question: l(
+          '房扑不等比下传时，心房一直按一个固定周期跳动。它的 RR 会是什么样？',
+          'In flutter with variable block the atria keep one fixed cycle. What will its RR intervals look like?',
+          'En el flutter con conducción variable las aurículas mantienen un ciclo fijo. ¿Cómo serán sus intervalos RR?',
+        ),
+        options: [
+          l('完全随机，像房颤', 'Completely random, like AF', 'Totalmente aleatorios, como en la FA'),
+          l('都是同一个短间期的整数倍', 'Whole multiples of one short interval', 'Múltiplos enteros de un intervalo corto'),
+          l('全都相等', 'All equal', 'Todos iguales'),
+        ],
+        answer: 1,
+      },
+      caption: l(
+        '“不规则”是入口，不是诊断。问两个问题：有没有心房活动？不规则里有没有模式？',
+        '"Irregular" is a gate, not a diagnosis. Ask two questions: is there atrial activity? Is there a pattern in the irregularity?',
+        '«Irregular» es una puerta, no un diagnóstico. Haz dos preguntas: ¿hay actividad auricular? ¿Hay un patrón en la irregularidad?',
+      ),
+    },
+    {
+      kind: 'live',
+      scenario: 'atrial-fibrillation',
+      seed: 629,
+      dials: [{ id: 'fCoarseness' }],
+      view: STRIP_V1,
+      marks: [{ auto: 'f-waves', lead: 'V1' }],
+      play: {
+        dial: 'fCoarseness',
+        from: 0.9,
+        to: 0.2,
+        notes: [
+          {
+            min: 0.7,
+            max: 0.9,
+            text: l(
+              '粗大的 f 波：V1 里超过 1 mm，容易看见。但大小、形状、间距都不等，没有重复的 P。',
+              'Coarse f waves: over 1 mm in V1 and easy to see. But they vary in size, shape and spacing: no repeating P.',
+              'Ondas f gruesas: más de 1 mm en V1 y fáciles de ver. Pero varían de tamaño, forma y separación: ninguna P que se repita.',
+            ),
+          },
+          { min: 0.46, max: 0.69, text: l('旋钮只改变 f 波：RR 一点没变。', 'The dial changes only the f waves: the RR stays exactly the same.', 'El mando solo cambia las ondas f: el RR no cambia nada.') },
+          {
+            min: 0.2,
+            max: 0.45,
+            text: l(
+              '细小的 f 波：不到 1 mm，基线几乎是平的。诊断仍靠绝对不齐的 RR 和没有重复的 P。',
+              'Fine f waves: under 1 mm, the baseline looks almost flat. The diagnosis still rests on the irregularly irregular RR and no repeating P.',
+              'Ondas f finas: menos de 1 mm, la línea de base parece casi plana. El diagnóstico sigue apoyándose en el RR irregularmente irregular y en la ausencia de P que se repitan.',
+            ),
+          },
+        ],
+      },
+      predict: {
+        question: l(
+          '如果 f 波小到几乎看不见，还靠什么诊断房颤？',
+          'If the f waves shrink to almost nothing, what still proves AF?',
+          'Si las ondas f se reducen casi a nada, ¿qué sigue demostrando la FA?',
+        ),
+        options: [
+          l('什么也不靠：必须看见 f 波', 'Nothing: you need visible f waves', 'Nada: hacen falta ondas f visibles'),
+          l('绝对不齐的 RR，加上没有重复的 P', 'The irregularly irregular RR with no repeating P', 'El RR irregularmente irregular sin P que se repitan'),
+          l('心室率超过 100 次/分', 'A ventricular rate above 100/min', 'Una frecuencia ventricular de más de 100 lpm'),
+        ],
+        answer: 1,
+      },
+      caption: l(
+        'V1 是看 f 波最好的导联。把 f 波从粗调到细，看看什么变了、什么没变。',
+        'V1 is the best lead for f waves. Turn them from coarse to fine and watch what changes and what does not.',
+        'V1 es la mejor derivación para las ondas f. Pásalas de gruesas a finas y mira qué cambia y qué no.',
       ),
     },
     {
@@ -138,28 +253,73 @@ const lesson: Lesson = {
             '≥3 morfologías de P′, frecuencia auricular >100 lpm, línea isoeléctrica entre P′, PP/PR/RR variables',
           ),
         },
+        {
+          label: l('游走性心房起搏点（对比）', 'Wandering atrial pacemaker (for contrast)', 'Marcapasos auricular migratorio (contraste)'),
+          value: l('与 MAT 一样 ≥3 种 P′ 形态，但心率 < 100 次/分；多为良性', 'The same ≥3 P′ shapes as MAT but a rate < 100/min; usually benign', 'Las mismas ≥3 morfologías de P′ que la TAM pero con frecuencia < 100 lpm; casi siempre benigno'),
+        },
+        {
+          label: l('P′ 的方向指向病灶', 'P′ polarity points to the focus', 'La polaridad de la P′ señala el foco'),
+          value: l('II、III、aVF 倒置 ⇒ 低位起源；I、aVL 倒置 ⇒ 左房起源', 'Negative in II, III and aVF -> a low origin; negative in I and aVL -> left atrium', 'Negativa en II, III y aVF -> origen bajo; negativa en I y aVL -> aurícula izquierda'),
+        },
       ],
       source: 'Van Gelder IC et al. 2024 ESC Guidelines for the management of atrial fibrillation. Eur Heart J 2024;45:3314-3414',
     },
     {
-      kind: 'text',
-      title: l('心室率本身会说话', 'The ventricular rate speaks for itself', 'La frecuencia ventricular habla por sí sola'),
-      body: l(
-        '心室率不是一个需要控制的数字，而是诊断线索：\n- 未治疗的房颤通常**100–180次/分**——房室结的不应期和隐匿传导决定了这个窗口；\n- **>250次/分、宽QRS、逐搏变形**的不规则心动过速是预激合并房颤：激动经旁路下传，腺苷、维拉帕米、地高辛都禁用（t4）；\n- 没用减慢药物却<60次/分：怀疑房室传导本身有病；\n- 慢而**规则**：这不是“控制满意”，而是完全房室阻滞伴逸搏心律——经典原因是地高辛中毒，处理是评估起搏，不是庆祝。',
-        'The ventricular rate is not a number to control but a diagnostic clue:\n- untreated AF runs **100–180/min** — AV-nodal refractoriness and concealed conduction set that window;\n- an irregular tachycardia **above 250/min, wide, changing shape beat to beat** is pre-excited AF: the impulses come down an accessory pathway, and adenosine, verapamil and digoxin are all contraindicated (t4);\n- below 60/min with no rate-slowing drug on board: suspect disease of the AV conduction itself;\n- slow and **regular**: that is not "satisfactory control", it is complete AV block with an escape rhythm — classically digoxin toxicity; the answer is a pacing evaluation, not congratulations.',
-        'La frecuencia ventricular no es una cifra que controlar, sino una pista diagnóstica:\n- la FA sin tratamiento va a **100–180 lpm**: la refractariedad y la conducción oculta del nodo AV fijan esa ventana;\n- una taquicardia irregular **por encima de 250 lpm, ancha y cambiando de forma latido a latido** es FA preexcitada: los impulsos bajan por una vía accesoria, y adenosina, verapamilo y digoxina están contraindicados (t4);\n- por debajo de 60 lpm sin fármacos frenadores: sospecha enfermedad de la propia conducción AV;\n- lenta y **regular**: no es «control satisfactorio», es un bloqueo AV completo con ritmo de escape — clásicamente intoxicación por digoxina; la respuesta es valorar un marcapasos, no felicitarse.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('atrial-fibrillation', 625, undefined, 'slow'),
+      kind: 'film',
+      title: l('心室率会说话', 'The ventricular rate speaks', 'La frecuencia ventricular habla'),
       view: STRIP,
-      marks: [{ auto: 'f-waves' }, { auto: 'rr' }],
-      caption: l(
-        '缓慢心室率的房颤（未用药）。RR仍然绝对不齐——慢不改变诊断。现在问三件事：真的没在用减慢心率的药吗？房室传导本身有没有病？如果哪天RR变**规则**了，那是逸搏心律接管（完全房室阻滞），一个全新的诊断。',
-        'AF with a slow ventricular response (no drugs). The RR is still irregularly irregular — slowness does not change the diagnosis. Now ask three things: is the patient truly on no rate-slowing drug? is the AV conduction itself diseased? and if the RR ever becomes **regular**, an escape rhythm has taken over (complete AV block) — a completely new diagnosis.',
-        'FA con respuesta ventricular lenta (sin fármacos). El RR sigue irregularmente irregular: la lentitud no cambia el diagnóstico. Pregúntate tres cosas: ¿no toma realmente fármacos que frenen la frecuencia? ¿está enferma la propia conducción AV? Y si algún día el RR se vuelve **regular**, un ritmo de escape ha tomado el mando (bloqueo AV completo): un diagnóstico completamente nuevo.',
-      ),
+      frames: [
+        {
+          label: l('未治疗', 'Untreated', 'Sin tratamiento'),
+          ecg: synth('atrial-fibrillation', 621, { fCoarseness: 0.55, ventricularResponse: 120 }),
+          note: l('约 133 次/分，绝对不齐：落在未治疗房颤常见的 100–180 次/分之内。', 'About 133/min and irregularly irregular: inside the usual untreated window of 100–180/min.', 'Unos 133 lpm e irregularmente irregular: dentro de la ventana habitual sin tratamiento, 100–180 lpm.'),
+          marks: [{ auto: 'rr', beat: 3 }],
+        },
+        {
+          label: l('慢', 'Slow', 'Lenta'),
+          ecg: synth('atrial-fibrillation', 625, undefined, 'slow'),
+          note: l(
+            '约 45 次/分，仍绝对不齐：慢不改变诊断。如果没用减慢心率的药 ⇒ 房室传导本身有病。',
+            'About 45/min and still irregularly irregular: slowness does not change the diagnosis. If no rate-slowing drugs → disease of the AV conduction itself.',
+            'Unos 45 lpm y sigue irregularmente irregular: la lentitud no cambia el diagnóstico. Si no toma fármacos frenadores → enfermedad de la propia conducción AV.',
+          ),
+          marks: [{ auto: 'f-waves' }, { auto: 'rr', beat: 4 }],
+        },
+        {
+          label: l('慢而规则', 'Slow and regular', 'Lenta y regular'),
+          ecg: synth('af-regularised', 632),
+          note: l(
+            '约 44 次/分而且**规则**：f 波还在，心室却由逸搏驱动 ⇒ 完全房室阻滞，绝不是“控制良好”。',
+            'About 44/min and **regular**: the f waves go on, but an escape rhythm drives the ventricles → complete AV block, never "well controlled".',
+            'Unos 44 lpm y **regular**: las ondas f siguen, pero un ritmo de escape manda en los ventrículos → bloqueo AV completo, nunca «bien controlada».',
+          ),
+          marks: [{ auto: 'f-waves' }, { auto: 'rr' }],
+        },
+        {
+          label: l('预激房颤', 'Pre-excited AF', 'FA preexcitada'),
+          ecg: synth('preexcited-af', 633),
+          note: l(
+            '约 190 次/分、不规则，QRS 宽且逐搏变形；最短 RR 约 225 ms ⇒ 预激合并房颤，禁用房室结阻滞药。',
+            'About 190/min, irregular, with wide QRS complexes that change beat to beat; shortest RR about 225 ms → pre-excited AF: no AV-nodal blockers.',
+            'Unos 190 lpm, irregular, con QRS anchos que cambian de un latido a otro; RR más corto de unos 225 ms → FA preexcitada: nada de bloqueadores del nodo AV.',
+          ),
+          marks: [{ auto: 'qrs', beat: 24 }, { auto: 'rr', beat: 23 }],
+        },
+      ],
+      predict: {
+        question: l(
+          '第 2 帧是房颤，约 45 次/分，患者没有用任何减慢心率的药。它的 RR 会怎样？',
+          'Frame 2 is AF at about 45/min in a patient on no rate-slowing drugs. What will its RR do?',
+          'El fotograma 2 es una FA a unos 45 lpm en un paciente sin fármacos frenadores. ¿Qué hará su RR?',
+        ),
+        options: [
+          l('继续逐搏长短不一', 'Keep changing from beat to beat', 'Seguir cambiando de un latido a otro'),
+          l('变得规则', 'Become regular', 'Volverse regular'),
+          l('长短成对交替', 'Alternate long and short in pairs', 'Alternar largo y corto por parejas'),
+        ],
+        answer: 0,
+      },
+      caption: l('心室率不只是一个要控制的数字，它是诊断线索。', 'The ventricular rate is not just a number to control: it is a diagnostic clue.', 'La frecuencia ventricular no es solo una cifra que controlar: es una pista diagnóstica.'),
     },
     {
       kind: 'worked',
@@ -173,7 +333,7 @@ const lesson: Lesson = {
             'At first glance this also passes for "irregularly irregular". Set your calipers to the shortest RR and walk down the strip, measuring every interval.',
             'A primera vista también pasa por «irregularmente irregular». Ajusta el compás al RR más corto y recorre la tira midiendo cada intervalo.',
           ),
-          marks: [{ auto: 'rr' }],
+          marks: [{ auto: 'rr', beat: 4 }],
           view: { layout: 'strip', lead: 'II', calipers: true },
         },
         {
@@ -183,7 +343,7 @@ const lesson: Lesson = {
             'Every RR is (± a little jitter) a whole-number multiple of one short interval — that interval is the F–F (about 200 ms, an atrial rate near 300/min). True AF has no such common denominator.',
             'Cada RR es (± una pequeña oscilación) múltiplo entero de un intervalo corto: ese intervalo es el F–F (unos 200 ms, frecuencia auricular cercana a 300 lpm). La FA verdadera no tiene ese común denominador.',
           ),
-          marks: [{ auto: 'rr' }],
+          marks: [{ auto: 'rr', beat: 7 }],
         },
         {
           title: l('第三步：找到F波', 'Step 3: find the F waves', 'Paso 3: encuentra las ondas F'),
@@ -201,9 +361,19 @@ const lesson: Lesson = {
             'Flutter with variable AV block — not AF. Flutter gets its own lesson (t3); the lesson here is: **find the pattern inside the irregularity before you sign the report**.',
             'Flutter con conducción AV variable — no FA. El flutter tiene su propia lección (t3); lo que cuenta aquí: **encuentra el patrón dentro de la irregularidad antes de firmar el informe**.',
           ),
-          marks: [{ auto: 'rr' }],
+          marks: [{ auto: 'rr', beat: 4 }],
         },
       ],
+    },
+    {
+      kind: 'figure',
+      figure: { id: 'laddergram', params: { maxBeats: 8 } },
+      ecg: synth('atrial-flutter', 622, undefined, 'variable'),
+      caption: l(
+        '这条房扑的梯形图：心房层每 200 ms 一个 F，房室结只放过第 3、4 或 5 个，所以每个 RR 都是 F–F 的整数倍。',
+        'The ladder of that flutter strip: an F wave every 200 ms in the atrial tier, and the AV node lets only every 3rd, 4th or 5th through, so every RR is a whole multiple of the F–F.',
+        'La escalera de esa tira de flutter: una onda F cada 200 ms en el nivel auricular, y el nodo AV solo deja pasar una de cada 3, 4 o 5, así que cada RR es un múltiplo entero del F–F.',
+      ),
     },
     {
       kind: 'contrast',
@@ -212,7 +382,11 @@ const lesson: Lesson = {
       left: {
         ecg: synth('mat', 623),
         caption: l('74岁，慢阻肺急性加重', '74 years, acutely decompensated COPD', '74 años, EPOC descompensada'),
-        marks: [{ auto: 'p' }, { auto: 'p', beat: 3, label: l('另一种P′形态', 'another P′ shape', 'otra morfología de P′') }],
+        marks: [
+          { auto: 'p', beat: 3, label: l('P′', 'P′', 'P′') },
+          { auto: 'p', beat: 4, label: l('另一种P′形态', 'another P′ shape', 'otra morfología de P′') },
+          { auto: 'p', beat: 13, label: l('第三种P′形态', 'a third P′ shape', 'una tercera morfología de P′') },
+        ],
       },
       right: {
         ecg: synth('atrial-fibrillation', 624),
@@ -220,42 +394,9 @@ const lesson: Lesson = {
         marks: [{ auto: 'f-waves' }],
       },
       point: l(
-        '左：**≥3种P′形态**，各有各的PR和PP，P′之间回到等电位线，心房率>100次/分——多源性房速。心房是有组织的，只是起搏点在变换（P′极性还能指出病灶：II、III、aVF负向=低位起源，I、aVL负向=左房）。右：**完全没有P**，只有f波和绝对不齐的RR——房颤。左边的经典背景是严重肺病：治疗的是肺和缺氧；把MAT当房颤上地高辛是经典错误（地高辛中毒本身就会引起有组织的房速）。',
-        'Left: **≥3 P′ morphologies**, each with its own PR and PP, an isoelectric baseline between them, atrial rate >100/min — multifocal atrial tachycardia. The atria are organized; only the pacemaker keeps changing (P′ polarity even points to the focus: negative in II, III, aVF = a low origin; negative in I, aVL = left atrium). Right: **no P waves at all**, only f waves and an irregularly irregular RR — AF. The classic setting on the left is severe lung disease: you treat the lungs and the hypoxia; treating MAT as AF with digoxin is the classic error (digoxin toxicity itself causes organized atrial tachycardia).',
-        'Izquierda: **≥3 morfologías de P′**, cada una con su PR y su PP, línea isoeléctrica entre ellas y frecuencia auricular >100 lpm: taquicardia auricular multifocal. Las aurículas están organizadas; solo cambia el marcapasos (la polaridad de la P′ incluso señala el foco: negativa en II, III y aVF = origen bajo; negativa en I y aVL = aurícula izquierda). Derecha: **ninguna onda P**, solo ondas f y un RR irregularmente irregular: FA. El escenario clásico de la izquierda es la enfermedad pulmonar grave: se tratan el pulmón y la hipoxia; tratar la TAM como FA con digoxina es el error clásico (la propia intoxicación digoxínica causa taquicardias auriculares organizadas).',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('pac', 626, { rate: 76 }),
-      view: STRIP,
-      marks: [{ auto: 'p' }],
-      caption: l(
-        '一个房早就足以打破节律（本条只有一个；频发时整条都会显得“不规则”）。提前的P′形态与窦性P不同（这里起自左房下部：下壁导联倒置），其后的间歇小于完全代偿——窦房结被它重置了（r5）。当很早的房早落在T波上被挡住不下传时，节律看起来像窦性心动过缓：去T波里找P′。',
-        'One PAC is enough to break the rhythm (there is a single one on this strip; when they are frequent the whole strip looks "irregular"). The early P′ differs in shape from the sinus P (here it comes from the low left atrium: negative in the inferior leads), and the pause after it is less than compensatory — the sinus node has been reset (r5). When a very early PAC lands on the T wave and is blocked, the rhythm looks like sinus bradycardia: go searching inside the T waves.',
-        'Una sola extrasístole auricular basta para romper el ritmo (en esta tira hay una; cuando son frecuentes, toda la tira parece «irregular»). La P′ precoz tiene una morfología distinta de la P sinusal (aquí nace en la parte baja de la aurícula izquierda: negativa en las inferiores) y la pausa que sigue es menor que compensatoria: el nodo sinusal se ha reiniciado (r5). Cuando una extrasístole muy precoz cae sobre la onda T y se bloquea, el ritmo parece una bradicardia sinusal: busca la P′ dentro de las ondas T.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('ventricular-bigeminy', 627),
-      view: STRIP,
-      marks: [{ auto: 'qrs' }],
-      caption: l(
-        '“规则的不规则”：一个窦性搏动、一个提前的宽QRS（其前无相关P），长-短循环严格重复。这不是房颤——模式是周期性的。数心率时当心：6秒×10会被成对搏动带偏，逐搏数满整条再除以时间才可靠。',
-        'A "regularly irregular" rhythm: one sinus beat, one premature wide QRS with no P related to it, the long-short pair repeating exactly. This is not AF — the pattern is periodic. Mind the rate, too: the 6-seconds-times-10 rule is misled by pairing; count every beat over the whole strip and divide by time.',
-        'Un ritmo «regularmente irregular»: un latido sinusal, un QRS ancho precoz sin P relacionada, y el par largo-corto repitiéndose exacto. Esto no es FA: el patrón es periódico. Cuidado con la frecuencia: la regla de 6 s × 10 despista con el acoplamiento; cuenta todos los latidos de la tira y divide por el tiempo.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('sinus-arrhythmia', 628, { rate: 72, hrv: 0.16 }),
-      view: STRIP,
-      marks: [{ auto: 'p' }, { auto: 'rr' }],
-      caption: l(
-        '复习s3：窦性心律不齐也让RR不等——但P波相同、PR相同，PP随呼吸平滑地摆动，没有提前的搏动，没有混乱的基线。与房颤的差别一句话：**一切都在渐变，没有任何东西提前**。',
-        'Revision of s3: sinus arrhythmia also makes the RR vary — but the P is the same, the PR is the same, and the PP swings smoothly with respiration: no premature beats, no chaotic baseline. Against AF in one sentence: **everything changes gradually, nothing arrives early**.',
-        'Repaso de s3: la arritmia sinusal también hace variar el RR, pero la P es la misma, el PR es el mismo y el PP oscila suavemente con la respiración: nada precoz, ninguna línea de base caótica. Frente a la FA en una frase: **todo cambia de forma gradual, nada llega antes de tiempo**.',
+        '左：**≥3 种 P′ 形态**，PR、PP 各不相同，P′ 之间回到等电位线，心房率 > 100 次/分 ⇒ 多源性房速：心房有组织，只是起搏点在换。右：**完全没有 P**，只有 f 波 ⇒ 房颤。MAT 的背景是严重肺病：治肺和缺氧。',
+        'Left: **≥3 P′ shapes**, each with its own PR and PP, an isoelectric baseline between them and an atrial rate > 100/min → MAT: the atria are organized, only the pacemaker keeps changing. Right: **no P waves at all**, only f waves → AF. MAT belongs to severe lung disease: treat the lungs and the hypoxia.',
+        'Izquierda: **≥3 morfologías de P′**, cada una con su PR y su PP, línea isoeléctrica entre ellas y frecuencia auricular > 100 lpm → TAM: las aurículas están organizadas, solo cambia el marcapasos. Derecha: **ninguna onda P**, solo ondas f → FA. La TAM acompaña a la enfermedad pulmonar grave: trata el pulmón y la hipoxia.',
       ),
     },
     { kind: 'check', item: { family: 'irregular', seed: 13 } },
@@ -290,14 +431,24 @@ const lesson: Lesson = {
           '«Irregular significa FA»: el flutter con conducción variable pasa desapercibido; recorre el RR con el compás y los múltiplos se delatan solos.',
         ),
         l(
-          '房颤心室率慢而规则被写成“控制良好”：这是完全房室阻滞伴逸搏（地高辛中毒经典），下一步是评估起搏。',
-          'AF with a slow, regular rate reported as "well controlled": that is complete AV block with an escape (digoxin toxicity classic); the next step is a pacing evaluation.',
-          'Una FA lenta y regular informada como «bien controlada»: es un bloqueo AV completo con escape (clásico de intoxicación digoxínica); el siguiente paso es valorar un marcapasos.',
+          '房颤心室率慢而规则被写成“控制良好”：这是完全房室阻滞伴逸搏（地高辛中毒经典）——停用地高辛和其他减慢心率的药物，查血钾和地高辛浓度，再评估起搏。',
+          'AF with a slow, regular rate reported as "well controlled": that is complete AV block with an escape (digoxin toxicity classic); stop digoxin and other rate-slowing drugs, check K⁺ and the digoxin level, then assess for pacing.',
+          'Una FA lenta y regular informada como «bien controlada»: es un bloqueo AV completo con escape (clásico de intoxicación digoxínica); suspende la digoxina y los demás fármacos frenadores, mide el K⁺ y la digoxinemia, y después valora un marcapasos.',
         ),
         l(
           '伪差伪装成房颤：颤抖或松动的电极让基线毛糙——检查“f波”和RR的变化是否在每个导联一致出现。',
           'Artefact masquerading as AF: tremor or a loose electrode roughens the baseline — check that the "f waves" and the RR variation appear consistently in every lead.',
-          'Artefactos disfrazados de FA: el temblor o un electrodo suelto descuelgan la línea de base; comprueba que las «ondas f» y la variación del RR aparezcan de forma coherente en todas las derivaciones.',
+          'Artefactos disfrazados de FA: el temblor o un electrodo suelto ensucian la línea de base; comprueba que las «ondas f» y la variación del RR aparezcan de forma coherente en todas las derivaciones.',
+        ),
+        l(
+          '很早的房早落在 T 波上未下传，节律看起来像窦性心动过缓：去 T 波里找 P′。',
+          'A very early PAC that lands on the T wave and is blocked makes the rhythm look like sinus bradycardia: search the T waves for the P′.',
+          'Una extrasístole auricular muy precoz que cae sobre la T y se bloquea hace que el ritmo parezca una bradicardia sinusal: busca la P′ dentro de las ondas T.',
+        ),
+        l(
+          '用 6 秒 × 10 估二联律的心率：成对的搏动让结果忽高忽低——数满整条节律条，再除以时间。',
+          'Estimating the rate of bigeminy as 6 s × 10: the pairs make the count jump; count every beat on the whole strip and divide by its length.',
+          'Estimar la frecuencia de un bigeminismo con 6 s × 10: las parejas hacen saltar el recuento; cuenta todos los latidos de la tira y divide por su duración.',
         ),
       ],
     },

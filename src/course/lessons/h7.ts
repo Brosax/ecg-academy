@@ -69,15 +69,6 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('先把 QT 测对', 'Measure the QT properly first', 'Mide primero bien el QT'),
-      body: l(
-        'QT = **最早的 QRS 起点至 T 波终点**。四条规则：\n- 在 **QT 最长的导联**测量（常为 II 或 V2–V5），不要取平均；\n- T 波终点用**切线法**：T 波降支的切线与基线的交点——T 低平时尤其要这样定；\n- **剔除 U 波**：终点是 T 的终点，不是 QU 的终点；\n- 心率校正：**Bazett（QT/√RR）只在 60 次/分附近可靠**——快时过度校正、慢时校正不足；离开 60 优先用 Fridericia（QT/RR^(1/3)）、Framingham（QT + 0.154 × (1 − RR)）或 Hodges，尤其 >90 次/分；**QRS ≥120 ms 时改用 JT 间期**或经 QRS 校正的 QT。\n床边粗查：正常心率下 **QT 超过 RR 的一半**，先怀疑延长再细量。',
-        'The QT runs from the **earliest QRS onset to the end of the T wave**. Four rules:\n- measure in the **lead with the longest QT** (often II or V2–V5), never an average;\n- find the T end with the **tangent method**: where the tangent to the T downslope crosses the baseline — essential when the T is flat;\n- **leave the U wave out**: the end of the T, not the end of a QU;\n- correct for rate: **Bazett (QT/√RR) is only trustworthy near 60/min** — it over-corrects when fast and under-corrects when slow; away from 60 prefer Fridericia (QT/RR^(1/3)), Framingham (QT + 0.154 × (1 − RR)) or Hodges, above all beyond about 90/min; with a **QRS >=120 ms switch to the JT interval** or a QRS-adjusted QT.\nBedside screen: at normal rates a **QT longer than half the RR** raises the flag before you measure.',
-        'El QT va del **inicio más precoz del QRS al final de la onda T**. Cuatro reglas:\n- mide en la **derivación con el QT más largo** (a menudo II o V2-V5), nunca un promedio;\n- halla el final de la T con el **método de la tangente**: donde la tangente de la rama descendente cruza la línea de base —imprescindible cuando la T es plana—;\n- **excluye la onda U**: el final de la T, no el de una QU;\n- corrige por frecuencia: el **Bazett (QT/√RR) solo es fiable cerca de 60 lpm** —sobreestima con frecuencia alta y subestima con baja—; lejos de 60 prefiere Fridericia (QT/RR^(1/3)), Framingham (QT + 0,154 × (1 − RR)) u Hodges, en especial por encima de unos 90 lpm; con **QRS >=120 ms pasa al intervalo JT** o a un QT ajustado al QRS.\nCribado a la cabecera: con frecuencia normal, un **QT mayor que la mitad del RR** da la voz de alarma antes de medir.',
-      ),
-    },
-    {
       kind: 'criteria',
       title: l('QT 与 QTc 的阈值', 'QT and QTc thresholds', 'Umbrales del QT y del QTc'),
       items: [
@@ -185,23 +176,63 @@ const lesson: Lesson = {
       seed: 1323,
       dials: [
         { id: 'rate', label: l('心率', 'Rate', 'Frecuencia') },
-        { id: 'qtc', label: l('目标 QTc', 'Target QTc', 'QTc objetivo') },
+        { id: 'qtc', label: l('QTc（Fridericia 法）', 'QTc (Fridericia)', 'QTc (Fridericia)') },
       ],
       view: STRIP,
       marks: [{ auto: 'qt' }],
+      play: {
+        dial: 'qtc',
+        from: 490,
+        to: 560,
+        notes: [
+          {
+            min: 490,
+            max: 495,
+            text: l(
+              'Fridericia QTc 490–495 ms：已延长（复查仍 ≥480 ms 即诊断 LQTS），还没过 500 ms。QT 已占 RR 的一半以上。',
+              'Fridericia QTc 490–495 ms: prolonged (≥480 ms on repeat ECGs diagnoses LQTS), not yet past 500 ms. The QT already takes over half the RR.',
+              'QTc de Fridericia de 490-495 ms: prolongado (≥480 ms en ECG repetidos diagnostica LQTS), aún sin pasar de 500 ms. El QT ya ocupa más de la mitad del RR.',
+            ),
+          },
+          {
+            min: 501,
+            max: 560,
+            text: l(
+              'QTc 越过 500 ms：TdP 高危。若病人正在用延长 QT 的药物：停药，查血钾血镁并纠正。',
+              'QTc past 500 ms: high torsade risk. In a patient on a QT-prolonging drug: stop it, check and correct K and Mg.',
+              'QTc por encima de 500 ms: alto riesgo de torsade. Si el paciente toma un fármaco que alarga el QT: retíralo, comprueba el K y el Mg y corrígelos.',
+            ),
+          },
+        ],
+      },
+      predict: {
+        question: l(
+          '心率固定在 64 次/分，QTc 从 490 升到 560 ms。T 波终点会后移多少？',
+          'The rate stays at 64/min while the QTc climbs from 490 to 560 ms. How far does the T end move?',
+          'La frecuencia se mantiene en 64 lpm mientras el QTc sube de 490 a 560 ms. ¿Cuánto se desplaza el final de la T?',
+        ),
+        options: [
+          l('几乎不动', 'Barely at all', 'Casi nada'),
+          l('后移约 70 ms', 'About 70 ms later', 'Unos 70 ms más tarde'),
+          l('后移约 140 ms', 'About 140 ms later', 'Unos 140 ms más tarde'),
+        ],
+        answer: 1,
+        ordered: true,
+      },
       caption: l(
-        '长 QT，宽基底的 T。拖动 QTc 旋钮，看 T 的终点从 QTc 490 ms 推到 560 ms——**越过 500 ms 就进入 TdP 高危区**：如果病人正在用延长 QT 的药物，这就是停药、补钾补镁的信号。再动心率：QT 跟着 RR 变，看 Bazett 校正在不同 RR 下怎样摆动。',
-        'A long QT with a broad-based T. Drag the QTc dial and watch the T end move from a QTc of 490 ms to 560 ms — **crossing 500 ms enters the high-torsade-risk zone**: in a patient on a QT-prolonging drug, that is the signal to stop it and give K and Mg. Then move the rate: the QT follows the RR, and you can feel how the Bazett correction swings with it.',
-        'QT largo con T de base ancha. Arrastra el dial del QTc y mira cómo el final de la T pasa de un QTc de 490 ms a 560 ms: **cruzar los 500 ms es entrar en la zona de alto riesgo de torsade**; en un paciente con un fármaco que alarga el QT, es la señal de retirarlo y administrar K y Mg. Mueve después la frecuencia: el QT sigue al RR y percibes cómo oscila con él la corrección de Bazett.',
+        '看 T 的终点随 QTc 后移。之后再动心率：Fridericia QTc 不变时，心率越快 QT 越短。',
+        'Watch the T end move out as the QTc climbs. Then move the rate: at the same Fridericia QTc, a faster rate shortens the QT.',
+        'Mira cómo el final de la T se aleja al subir el QTc. Mueve después la frecuencia: con el mismo QTc de Fridericia, a más frecuencia, QT más corto.',
       ),
     },
     {
-      kind: 'text',
-      title: l('先天性长QT：数值与基因型', 'Congenital long QT: numbers and genotypes', 'QT largo congénito: cifras y genotipos'),
-      body: l(
-        '诊断看数值与评分：**复查 12 导联 QTc ≥480 ms**，或 **Schwartz 评分 >3**；**≥460 ms 加不明原因晕厥**时也要考虑。T 波形态提示基因型：\n- **LQT1**（KCNQ1）：T 波**宽大、基底宽**；运动、游泳、情绪激动是触发；\n- **LQT2**（KCNH2/hERG）：T 波**低平、有切迹或双峰**；声音与惊吓触发——闹钟、电话铃；\n- **LQT3**（SCN5A）：**ST 段长而平**，其后**迟发、窄而尖的 T**；安静与睡眠中发作。\n形态只是路标：药物和电解质紊乱能写出同样的形态。确诊靠数值、家族史与基因检测；处理方向是 β 受体阻滞剂、避免 QT 延长药物、家系筛查与猝死风险评估（转诊专科）。',
-        'The diagnosis runs on numbers and a score: **QTc >=480 ms on repeated 12-lead ECGs**, or a **Schwartz score >3**; also consider it at **>=460 ms with unexplained syncope**. The T shape hints at the genotype:\n- **LQT1** (KCNQ1): a **broad-based T**; exercise, swimming and emotion trigger events;\n- **LQT2** (KCNH2/hERG): a **low T with a notch or bifid**; sounds and startles trigger them — an alarm clock, a ringing phone;\n- **LQT3** (SCN5A): a **long flat ST** with a **late, narrow, peaked T**; events at rest or during sleep.\nThe shape is only a signpost: drugs and electrolyte disorders write the same shapes. The diagnosis is numbers, family history and genetic testing; management runs towards a beta-blocker, QT-prolonging drugs off, family screening and sudden-death risk assessment (refer).',
-        'El diagnóstico se apoya en cifras y una puntuación: **QTc >=480 ms en ECG de 12 derivaciones repetidos** o **puntuación de Schwartz >3**; considéralo también con **>=460 ms y síncope inexplicado**. La morfología de la T apunta al genotipo:\n- **LQT1** (KCNQ1): **T de base ancha**; ejercicio, natación y emociones como desencadenantes;\n- **LQT2** (KCNH2/hERG): **T baja, con muesca o bífida**; la desencadenan los ruidos y los sobresaltos —el despertador, el teléfono—;\n- **LQT3** (SCN5A): **ST largo y plano** con una **T tardía, estrecha y apuntada**; eventos en reposo o durante el sueño.\nLa morfología es solo una señal: los fármacos y los trastornos electrolíticos escriben las mismas formas. El diagnóstico son cifras, historia familiar y genética; el manejo va hacia un betabloqueante, retirar los fármacos que alargan el QT, cribado familiar y evaluación del riesgo de muerte súbita (derivación).',
+      kind: 'figure',
+      figure: { id: 'action-potential', params: { cell: 'ventricular' } },
+      ecg: synth('long-qt', 1321, { rate: 60 }),
+      caption: l(
+        'QT 就是从体表看到的心室动作电位：平台期（2 相）是 ST 段，快速复极（3 相）是 T 波。平台期拉长，ST 变长（LQT3、低钙）；3 相变慢，T 变宽（LQT1）。',
+        'The QT is the ventricular action potential seen from the skin: the plateau (phase 2) is the ST segment and fast repolarisation (phase 3) is the T. A longer plateau lengthens the ST (LQT3, low calcium); a slower phase 3 broadens the T (LQT1).',
+        'El QT es el potencial de acción ventricular visto desde la piel: la meseta (fase 2) es el segmento ST y la repolarización rápida (fase 3) es la T. Una meseta más larga alarga el ST (LQT3, calcio bajo); una fase 3 más lenta ensancha la T (LQT1).',
       ),
     },
     {
@@ -225,23 +256,55 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('long-qt', 1332, undefined, 'lqt2'),
-      view: { layout: '3x4+1', highlightLeads: ['V2', 'V3', 'II'] },
-      marks: [{ auto: 't', lead: 'V3' }, { auto: 'qt', lead: 'V3' }],
+      kind: 'film',
+      title: l('同一个 QT，四种 T', 'One QT, four T waves', 'Un mismo QT, cuatro ondas T'),
+      view: { layout: '3x4+1', highlightLeads: ['II', 'V3'] },
+      frames: [
+        {
+          label: l('LQT1 型', 'LQT1 type', 'Tipo LQT1'),
+          ecg: synth('long-qt', 1332),
+          note: l(
+            '64 次/分时 QT 约 505 ms：T 波基底宽。运动、游泳是 LQT1 的典型诱因。',
+            'QT about 505 ms at 64/min: a broad-based T. Exercise and swimming are the classic LQT1 triggers.',
+            'QT de unos 505 ms a 64 lpm: T de base ancha. El ejercicio y la natación son los desencadenantes clásicos del LQT1.',
+          ),
+          marks: [{ auto: 'qt', lead: 'V3' }],
+        },
+        {
+          label: l('LQT2 型', 'LQT2 type', 'Tipo LQT2'),
+          ecg: synth('long-qt', 1332, undefined, 'lqt2'),
+          note: l(
+            'QT 不变；II 的 T 低平（约 1 mm），V3 的 T 有两个驼峰、相隔约 100 ms。第二个驼峰属于 T，量到它的终点。声音与惊吓诱发。',
+            'Same QT; a low T in II (about 1 mm) and a bifid T in V3, humps about 100 ms apart. The second hump belongs to the T: measure to its end. Sounds and startles trigger it.',
+            'Mismo QT; T baja en II (alrededor de 1 mm) y T bífida en V3, con jorobas separadas unos 100 ms. La segunda joroba es de la T: mide hasta su final. La desencadenan ruidos y sobresaltos.',
+          ),
+          marks: [{ auto: 't', lead: 'V3' }, { auto: 'qt', lead: 'V3' }],
+        },
+        {
+          label: l('LQT3 型', 'LQT3 type', 'Tipo LQT3'),
+          ecg: synth('long-qt', 1332, undefined, 'lqt3'),
+          note: l(
+            'QT 不变；ST 段长而平（约 290 ms），其后是迟发、窄而尖的 T。安静或睡眠中发作。',
+            'Same QT; a long flat ST (about 290 ms), then a late, narrow, peaked T. Events come at rest or in sleep.',
+            'Mismo QT; ST largo y plano (unos 290 ms) y después una T tardía, estrecha y apuntada. Los eventos llegan en reposo o durante el sueño.',
+          ),
+          marks: [{ auto: 'st', lead: 'V3' }, { auto: 't', lead: 'V3' }],
+        },
+        {
+          label: l('药物', 'Drug', 'Fármaco'),
+          ecg: synth('long-qt', 1332, undefined, 'drug'),
+          note: l(
+            '阻滞 hERG 钾通道的药物写出类 LQT2 的双峰 T，T 之后还跟着一个 U 波：QT 量到 T 的终点，不含 U。',
+            'A drug that blocks the hERG potassium channel writes an LQT2-like bifid T, followed by a U wave after the T: measure the QT to the T end, U excluded.',
+            'Un fármaco que bloquea el canal de potasio hERG escribe una T bífida como la del LQT2, seguida de una onda U tras la T: mide el QT hasta el final de la T, sin la U.',
+          ),
+          marks: [{ auto: 't', lead: 'V3' }, { auto: 'u', lead: 'V3' }],
+        },
+      ],
       caption: l(
-        'LQT2 形态：肢体导联的 T 低平（II 不到 2.5 mm），V2–V3 的 T **有切迹、呈双峰**——两个驼峰相隔约 100 ms；QTc 约 520 ms。量 QT 时终点取第二个驼峰之后回到基线处——第二个驼峰是 T 的一部分，不是 U 波。声音与惊吓（闹钟、电话铃）是 LQT2 的典型触发；hERG 阻滞药物写出的正是这副面孔。',
-        'The LQT2 shape: a low T in the limb leads (under 2.5 mm in II) and a **notched, bifid T** in V2–V3 — two humps about 100 ms apart; QTc about 520 ms. Measure the QT to where the T returns to the baseline after the second hump: that hump is part of the T, not a U wave. Sounds and startles (an alarm clock, a ringing phone) are the classic LQT2 triggers, and hERG-blocking drugs write exactly this face.',
-        'La morfología del LQT2: T baja en las derivaciones de extremidades (menos de 2,5 mm en II) y una **T con muesca, bífida**, en V2-V3: dos jorobas separadas unos 100 ms; QTc de unos 520 ms. Mide el QT hasta donde la T vuelve a la línea de base tras la segunda joroba: esa joroba forma parte de la T, no es una onda U. Los ruidos y los sobresaltos (el despertador, el teléfono) son los desencadenantes clásicos del LQT2, y los fármacos que bloquean el hERG escriben exactamente esta cara.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('获得性长QT：药单与叠加因素', 'Acquired long QT: the drug list and the stack', 'QT largo adquirido: la lista de fármacos y la suma de factores'),
-      body: l(
-        '药物是最常见的获得性原因（按 CredibleMeds 分类记忆）：\n- **Ia 类**：奎尼丁、普鲁卡因胺、丙吡胺；**III 类**：索他洛尔、多非利特、伊布利特、胺碘酮（胺碘酮大幅延长 QT，却很少引发 TdP）；\n- **非心脏药物**：大环内酯类、氟喹诺酮类、抗精神病药（如氟哌啶醇）、美沙酮、昂丹司琼、三环类抗抑郁药、西酞普兰、唑类抗真菌药。\n**TdP（尖端扭转型室速）**＝QT 延长基础上的多形性室速，QRS 主波围绕基线扭转；常由**短-长-短序列**诱发，长间歇后那一搏的 T–U 波大而畸形。\n叠加因素让同一剂量的药物变得危险：**低钾、低镁、低钙、心动过缓或长间歇、肾功能不全、药物相互作用、女性、心衰/左心室肥厚、房颤复律后不久**。开药之前查一遍药单与电解质，正是 Drew 声明的核心建议。',
-        'Drugs are the commonest acquired cause (remember them by the CredibleMeds classes):\n- **class Ia**: quinidine, procainamide, disopyramide; **class III**: sotalol, dofetilide, ibutilide, amiodarone (amiodarone stretches the QT a great deal yet rarely causes TdP);\n- **non-cardiac drugs**: macrolides, fluoroquinolones, antipsychotics (e.g. haloperidol), methadone, ondansetron, tricyclic antidepressants, citalopram, azole antifungals.\n**TdP (torsade de pointes)** is polymorphic VT on a prolonged QT, its QRS twisting around the baseline; it usually starts with a **short–long–short sequence**, and the beat after the pause carries large, distorted T–U waves.\nThe stack makes the same dose dangerous: **hypokalaemia, hypomagnesaemia, hypocalcaemia, bradycardia or long pauses, renal impairment, drug interactions, female sex, heart failure/LVH, recent conversion from AF**. Checking the list and the electrolytes before the drug goes in is the core of the Drew statement.',
-        'Los fármacos son la causa adquirida más frecuente (memorízalos por las clases de CredibleMeds):\n- **clase Ia**: quinidina, procainamida, disopiramida; **clase III**: sotalol, dofetilida, ibutilida, amiodarona (la amiodarona alarga mucho el QT y, sin embargo, rara vez provoca TdP);\n- **fármacos no cardiacos**: macrólidos, fluoroquinolonas, antipsicóticos (p. ej., haloperidol), metadona, ondansetrón, antidepresivos tricíclicos, citalopram, antifúngicos azólicos.\nLa **TdP (torsade de pointes)** es una TV polimórfica sobre un QT prolongado, con el QRS retorciéndose alrededor de la línea de base; suele arrancar con una **secuencia corto-largo-corto**, y el latido tras la pausa muestra ondas T-U grandes y distorsionadas.\nLa suma vuelve peligrosa la misma dosis: **hipopotasemia, hipomagnesemia, hipocalcemia, bradicardia o pausas largas, insuficiencia renal, interacciones farmacológicas, sexo femenino, insuficiencia cardíaca/HVI, conversión reciente de FA**. Repasar la lista y los electrolitos antes de administrar el fármaco es el núcleo del documento de Drew.',
+        'T 的形态只提示基因型，药物和电解质会模仿它。诊断靠数值（复查 QTc ≥480 ms 或 Schwartz 评分）、家族史和基因。',
+        'The T shape only hints at the genotype, and drugs and electrolytes copy it. The diagnosis rests on the numbers (QTc ≥480 ms on repeat or the Schwartz score), the family history and genetics.',
+        'La forma de la T solo sugiere el genotipo, y los fármacos y los electrolitos la imitan. El diagnóstico se basa en las cifras (QTc ≥480 ms repetido o la puntuación de Schwartz), la historia familiar y la genética.',
       ),
     },
     {
@@ -321,9 +384,9 @@ const lesson: Lesson = {
       kind: 'pitfalls',
       items: [
         l(
-          '心率快时用 Bazett 报长 QT：>90 次/分它系统性虚高——换 Fridericia 或 Framingham 再下结论。',
-          'Calling long QT from Bazett at fast rates: beyond 90/min it runs systematically high — switch to Fridericia or Framingham before concluding.',
-          'Diagnosticar QT largo con Bazett en frecuencias altas: por encima de 90 lpm se infla de forma sistemática; cambia a Fridericia o Framingham antes de concluir.',
+          '离 60 次/分远时只信 Bazett：>90 次/分它过度校正、读数偏高；心率慢时它校正不足、读数偏低，会把长 QT 藏起来——换 Fridericia 或 Framingham 再下结论。',
+          'Trusting Bazett far from 60/min: beyond 90/min it over-corrects and reads high; at slow rates it under-corrects and reads low, which can hide a long QT — switch to Fridericia or Framingham before concluding.',
+          'Fiarse solo de Bazett lejos de 60 lpm: por encima de 90 lpm sobrecorrige y da cifras altas; con frecuencias lentas infracorrige y da cifras bajas que pueden ocultar un QT largo; cambia a Fridericia o Framingham antes de concluir.',
         ),
         l(
           '把 U 波量进 QT：低钾血症的"长 QT"常是 QU 间期；T 终点用切线法定，终点在 U 之前。',
