@@ -770,6 +770,8 @@ describe('h6: ARVC on the tracings', () => {
     const c = blocksOf('h6', 'contrast')[0];
     const e = ecgOf(c.right.ecg);
     expect(waves(e, 'V1').map((w) => w.label)).toEqual(['r', 'S', 'R′']);
+    const [, s, rPrime] = waves(e, 'V1');
+    expect(rPrime.mv, 'R′ taller than the S is deep').toBeGreaterThan(-s.mv);
     expect(e.truth!.qrsMs).toBeLessThan(120);
     expect(c.right.ecg).toEqual(blocksOf('h6', 'film')[1].frames[1].ecg);
     const a = waves(ecgOf(c.left.ecg), 'V1');
@@ -779,14 +781,14 @@ describe('h6: ARVC on the tracings', () => {
     const h = blocksOf('h6', 'heart')[0];
     expect([...(h.emphasize ?? [])].sort()).toEqual(['rv-basal', 'rv-outflow']);
   });
-  it('T-inversion film notes: juvenile T inverted V1–V3 with QRS about 95 ms and no epsilon; RBBB QRS about 140 ms with rsR′ and inverted T in V1; ARVC QRS about 115 ms with T about −7 mm in V1–V2 and inverted in V3', () => {
+  it('T-inversion film notes: juvenile T inverted V1–V3 with QRS about 95 ms and no epsilon; RBBB QRS about 140 ms with rsR′ in V1 (the notation the lesson uses for complete RBBB) and inverted T in V1; ARVC QRS about 115 ms with T about −7 mm in V1–V2 and inverted in V3', () => {
     const [juvenile, rbbb, arvc] = frames('h6', 0);
     for (const l of ['V1', 'V2', 'V3'] as const) expect(tInverted(juvenile, l), l).toBe(true);
     expect(Math.abs(juvenile.truth!.qrsMs - 95)).toBeLessThan(5);
     expect(juvenile.truth!.findings).not.toContain('epsilon-wave');
     expect(Math.abs(rbbb.truth!.qrsMs - 140)).toBeLessThan(5);
     expect(rbbb.truth!.findings).toContain('rbbb');
-    expect(hasRPrime(rbbb, 'V1')).toBe(true);
+    expect(waves(rbbb, 'V1').map((w) => w.label)).toEqual(['r', 's', 'R′']);
     expect(tInverted(rbbb, 'V1')).toBe(true);
     expect(Math.abs(arvc.truth!.qrsMs - 115)).toBeLessThan(5);
     for (const l of ['V1', 'V2'] as const) near(tw(arvc, l).min, -7);
