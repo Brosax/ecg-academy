@@ -535,8 +535,8 @@ describe('i4: inferior and RV infarction on the tracings', () => {
     for (const l of ['V5', 'V6'] as const) expect(stAt(lcx, l), l).toBeGreaterThan(0.05);
     expect(stAt(lcx, 'aVL')).toBeLessThan(-0.05);
     const rv = frame('i4', 0, 2);
-    expect(stAt(rv, 'V1')).toBeGreaterThanOrEqual(0.08);
-    expect(stAt(rv, 'V1')).toBeLessThan(0.14);
+    expect(stAt(rv, 'V1')).toBeGreaterThanOrEqual(0.075);
+    expect(stAt(rv, 'V1')).toBeLessThanOrEqual(0.125);
     expect(stAt(rv, 'III')).toBeGreaterThan(stAt(rv, 'II'));
   });
   it('injury sweep notes: III above II and aVL below the baseline at every value; I and aVL deeper at 0.40 than at 0.25', () => {

@@ -293,7 +293,7 @@ const lesson: Lesson = {
           note: l(
             '下壁 STEMI 加 V1 抬高约1 mm：右心室游离壁受累 → 近端 RCA。用 V4R 确认；硝酸酯要谨慎。',
             'Inferior STEMI plus V1 up about 1 mm: the RV free wall joins → proximal RCA. Confirm in V4R; be careful with nitrates.',
-            'IAMCEST inferior con V1 elevada unos 1 mm: se suma la pared libre del VD → CD proximal. Confírmalo en V4R; cautela con los nitratos.',
+            'IAMCEST inferior con V1 elevada alrededor de 1 mm: se suma la pared libre del VD → CD proximal. Confírmalo en V4R; cautela con los nitratos.',
           ),
           marks: [{ auto: 'j', lead: 'V1' }],
         },
