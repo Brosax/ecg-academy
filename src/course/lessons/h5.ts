@@ -200,7 +200,7 @@ const lesson: Lesson = {
           note: l(
             '同一颗心脏，QRS 不变，加上侧壁复极异常：V5–V6 的 ST 压低约 1 mm、T 倒置，I 和 aVL 的 T 也倒置。',
             'Same heart and QRS, plus a lateral repolarisation abnormality: about 1 mm of ST depression with T inversion in V5–V6, and inverted T in I and aVL.',
-            'Mismo corazón y mismo QRS, más una alteración lateral de la repolarización: descenso del ST de 1 mm con T negativa en V5-V6, y T negativa en I y aVL.',
+            'Mismo corazón y mismo QRS, más una alteración lateral de la repolarización: descenso del ST de alrededor de 1 mm con T negativa en V5-V6, y T negativa en I y aVL.',
           ),
           marks: [{ auto: 'st', lead: 'V6' }, { auto: 't', lead: 'V6' }],
         },
@@ -235,9 +235,9 @@ const lesson: Lesson = {
       ecg: APICAL,
       emphasize: ['lv-apex', 'lv-apical-anterior', 'lv-apical-septal', 'lv-apical-inferior', 'lv-apical-lateral'],
       caption: l(
-        '心尖肥厚型（Yamaguchi 综合征）：增厚的只是高亮的心尖节段。面对心尖的 V3–V5 写出高 R，再跟着巨大的倒置 T。',
-        'Apical HCM (Yamaguchi syndrome): only the highlighted apical segments are thick. V3–V5, which face the apex, write a tall R followed by a giant negative T.',
-        'MCH apical (síndrome de Yamaguchi): solo los segmentos apicales destacados están engrosados. V3-V5, que miran al ápex, escriben una R alta seguida de una T negativa gigante.',
+        '心尖肥厚型（Yamaguchi 综合征）：增厚的只是高亮的心尖节段。面对心尖的 V4–V5 写出高 R，再跟着巨大的倒置 T。',
+        'Apical HCM (Yamaguchi syndrome): only the highlighted apical segments are thick. V4–V5, which face the apex, write a tall R followed by a giant negative T.',
+        'MCH apical (síndrome de Yamaguchi): solo los segmentos apicales destacados están engrosados. V4-V5, que miran al ápex, escriben una R alta seguida de una T negativa gigante.',
       ),
     },
     {

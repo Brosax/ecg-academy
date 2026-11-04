@@ -21,6 +21,7 @@ import h7 from '../../src/course/lessons/h7';
 import h8 from '../../src/course/lessons/h8';
 import h9 from '../../src/course/lessons/h9';
 import { realisedDials, startDials } from '../../src/course/live';
+import * as M from '../../src/figures/scenes/moving-paper.math';
 import { baselineBefore, qrsWaves } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
@@ -493,7 +494,7 @@ describe('h3: RVH and right-heart load on the tracings', () => {
     expect(tInverted(e, 'III')).toBe(true);
     expect(tw(e, 'aVF').min).toBeLessThan(-0.05);
   });
-  it('COPD pattern (load film frame 3): P about 3 mm in II/III/aVF, QRS axis about +95°, II just over 5 mm, R in V1 < 1 mm', () => {
+  it('COPD pattern (load film frame 3): P about 3 mm in II/III/aVF, QRS axis about +95°, II just over 5 mm, R in V1 < 1 mm; every classic RVH voltage criterion negative (R V1, R/S V1, S V5/V6, R V1 + S V5/V6, R aVR)', () => {
     const e = frames('h3', 1)[2];
     for (const l of ['II', 'III', 'aVF'] as const) {
       expect(pw(e, l).max, l).toBeGreaterThanOrEqual(0.25);
@@ -504,8 +505,11 @@ describe('h3: RVH and right-heart load on the tracings', () => {
     expect(qrs(e, 'V1').max).toBeLessThan(0.1);
     expect(qrs(e, 'V1').p2p, 'V1 barely leaves the baseline').toBeLessThan(0.2);
     expect(qrs(e, 'V1').max, 'R/S V1 < 1').toBeLessThan(-qrs(e, 'V1').min);
-    expect(-qrs(e, 'V5').min, 'S V5 < 7 mm').toBeLessThan(0.7);
-    expect(qrs(e, 'V1').max - qrs(e, 'V5').min, 'R V1 + S V5 <= 10.5 mm').toBeLessThan(1.05);
+    for (const l of ['V5', 'V6'] as const) {
+      expect(-qrs(e, l).min, `S ${l} < 7 mm`).toBeLessThan(0.7);
+      expect(qrs(e, 'V1').max - qrs(e, l).min, `R V1 + S ${l} <= 10.5 mm`).toBeLessThan(1.05);
+    }
+    expect(qrs(e, 'aVR').max, 'R aVR < 5 mm').toBeLessThan(0.5);
   });
   it('heart: tall R in V1 over its S, deep S in V5, right axis', () => {
     const e = ecgOf(blocksOf('h3', 'heart')[0].ecg);
@@ -520,6 +524,8 @@ describe('h3: RVH and right-heart load on the tracings', () => {
     near(qrs(rbbb, 'V1').max, 11);
     expect(Math.abs(rbbb.truth!.qrsMs - 140)).toBeLessThan(5);
     expect(rbbb.truth!.findings).toContain('rbbb');
+    expect(rbbb.truth!.prMs!, 'prediction: on the RBBB frame only the width is off, the PR is normal').toBeGreaterThanOrEqual(120);
+    expect(rbbb.truth!.prMs!).toBeLessThan(200);
     expect(qrs(wpw, 'V1').max).toBeGreaterThan(-qrs(wpw, 'V1').min);
     expect(qrs(wpw, 'V1').max).toBeLessThan(-1.5 * qrs(wpw, 'V1').min);
     expect(Math.abs(wpw.truth!.prMs! - 115)).toBeLessThan(5);
@@ -596,11 +602,21 @@ describe('h4: low voltage and alternans on the tracings', () => {
     expect(Math.abs(obese.truth!.axisDeg.qrs + 15)).toBeLessThan(5);
     for (const l of LIMB) expect(qrs(obese, l).p2p, l).toBeLessThan(0.5);
   });
-  it('half-gain figure: the normal heart of the film, whose QRS in II is over 5 mm at 10 mm/mV and under 5 mm at 5 mm/mV', () => {
+  it('half-gain figure: the normal heart of the film at 75/min with no rate variability, so the scene narration holds (RR 800 ms, 75/min on every tour bracket); its QRS in II is over 5 mm at 10 mm/mV and under 5 mm at 5 mm/mV', () => {
     const fig = blocksOf('h4', 'figure')[0];
     expect(fig.figure).toEqual({ id: 'moving-paper', params: { gain: 5 } });
-    expect(fig.ecg).toEqual(blocksOf('h4', 'film')[0].frames[0].ecg);
-    const e = ecgOf(fig.ecg!);
+    const film = blocksOf('h4', 'film')[0].frames[0].ecg;
+    if (fig.ecg?.kind !== 'synth' || film.kind !== 'synth') throw new Error('expected synthetic sources');
+    expect(fig.ecg.req).toEqual({ ...film.req, dials: { rate: 75, hrv: 0 } });
+    const e = ecgOf(fig.ecg);
+    expect(Math.abs(e.truth!.hrBpm - 75)).toBeLessThan(1);
+    const plan = M.planFor(e.truth!.beats, e.signal.leads.II, e.signal.fs, e.signal.durationMs);
+    expect(plan).not.toBeNull();
+    for (const rr of plan!.rrMs) {
+      expect(M.rrShown(rr)).toBe(800);
+      expect(Math.round(M.rrLabel(rr, 25).bpm)).toBe(75);
+    }
+    expect(Math.abs(qrs(e, 'II').p2p - qrs(frames('h4', 0)[0], 'II').p2p), 'the same QRS as the film').toBeLessThan(0.01);
     expect(qrs(e, 'II').p2p).toBeGreaterThan(0.5);
     expect(qrs(e, 'II').p2p / 2).toBeLessThan(0.5);
   });
@@ -691,6 +707,14 @@ describe('h5: HCM on the tracings', () => {
     expect(tw(e, 'V2').min).toBeGreaterThan(-0.3);
     expect(qrs(e, 'V5').max).toBeGreaterThan(1.3);
   });
+  it('heart caption (apical): V4–V5 write a tall R (> 10 mm, over its S) followed by a giant negative T (> 10 mm)', () => {
+    const e = ecgOf(blocksOf('h5', 'heart')[1].ecg);
+    for (const l of ['V4', 'V5'] as const) {
+      expect(qrs(e, l).max, l).toBeGreaterThan(1.0);
+      expect(qrs(e, l).max, l).toBeGreaterThan(-qrs(e, l).min);
+      expect(tw(e, l).min, l).toBeLessThan(-1.0);
+    }
+  });
   it('contrast: HCM keeps a narrow q + tall R in aVL; the old lateral infarct writes a QS in aVL', () => {
     const c = blocksOf('h5', 'contrast')[0];
     const a = ecgOf(c.left.ecg);
@@ -739,11 +763,13 @@ describe('h6: ARVC on the tracings', () => {
     for (let ms = 5; ms <= 60; ms++) if (Math.abs(v(ms)) > Math.abs(v(at))) at = ms;
     return { peak: v(at), atMs: at, at10: v(10) };
   }
-  it('epsilon film notes: ARVC has a blip of about 0.7 mm about 30 ms after the QRS bracket, back on the baseline in between; iRBBB has an R′ of about 7 mm inside a QRS of about 115 ms and nothing after it', () => {
+  it('epsilon film notes and prediction: ARVC (the strip shown first) has a blip of about 0.7 mm (under 1 mm) about 30 ms after the QRS bracket, back on the baseline in between; iRBBB has an R′ of about 7 mm inside a QRS of about 115 ms and nothing after it', () => {
     expect(blocksOf('h6', 'film')[1].frames[0].ecg).toEqual(blocksOf('h6', 'film')[0].frames[2].ecg);
     const [arvc, irbbb] = frames('h6', 1);
     const eps = afterQrs(arvc);
     near(eps.peak, 0.7, 0.2);
+    expect(eps.peak, 'not a flat baseline').toBeGreaterThan(0.05);
+    expect(eps.peak, 'under 1 mm').toBeLessThan(0.1);
     expect(Math.abs(eps.atMs - 30)).toBeLessThanOrEqual(5);
     expect(Math.abs(eps.at10)).toBeLessThan(0.01);
     expect(hasRPrime(irbbb, 'V1')).toBe(true);
@@ -793,6 +819,17 @@ describe('h7: QT on the tracings', () => {
     for (let ms = b.j + 60; ms <= b.tOff - 10; ms += 2) if (v(ms) > 0.2 && v(ms) >= v(ms - 10) && v(ms) > v(ms + 10)) humps.push(ms);
     return humps;
   };
+  /** the top of each run of hump samples (a run breaks at a gap over 10 ms) */
+  const humpPeaks = (e: Ecg): number[] => {
+    const v = v3(e);
+    const runs: number[][] = [];
+    for (const ms of tHumps(e)) {
+      const last = runs[runs.length - 1];
+      if (last && ms - last[last.length - 1] <= 10) last.push(ms);
+      else runs.push([ms]);
+    }
+    return runs.map((r) => r.reduce((a, b) => (v(b) > v(a) ? b : a)));
+  };
   it('LQT2 shape (film frame 2): QTc about 520 ms, low T in II (about 1 mm, < 2.5 mm), a bifid T in V3 with humps about 100 ms apart', () => {
     const e = frames('h7', 0)[1];
     const v = v3(e);
@@ -802,11 +839,21 @@ describe('h7: QT on the tracings', () => {
     const humps = tHumps(e);
     expect(humps.length).toBeGreaterThanOrEqual(2);
     expect(humps[humps.length - 1] - humps[0]).toBeGreaterThan(70);
-    expect(Math.abs(humps[humps.length - 1] - humps[0] - 100)).toBeLessThanOrEqual(15);
+    const peaks = humpPeaks(e);
+    expect(peaks.length, 'two humps').toBe(2);
+    expect(Math.abs(peaks[1] - peaks[0] - 100), 'hump tops about 100 ms apart').toBeLessThanOrEqual(5);
     const notch = Math.min(...Array.from({ length: humps[humps.length - 1] - humps[0] }, (_, k) => v(humps[0] + k)));
     expect(notch).toBeLessThan(Math.min(v(humps[0]), v(humps[humps.length - 1])) - 0.05);
   });
-  it('genotype film notes: one QT of about 505 ms at 64/min in all four; LQT1 broad T; LQT3 flat ST for about 280 ms then a later, narrower T; the drug frame has a bifid T and a U wave after the T end', () => {
+  /** ms after J at which the V3 T first rises above 0.5 mm */
+  const tRise = (e: Ecg): number => {
+    const b = midBeat(e);
+    const v = v3(e);
+    let ms = b.j + 20;
+    while (v(ms) < 0.05) ms += 1;
+    return ms - b.j;
+  };
+  it('genotype film notes: one QT of about 505 ms at 64/min in all four; LQT1 broad-based T (V3 base over 200 ms, 1.5× the LQT3 base); LQT3 flat ST for about 290 ms then a later, narrower, taller T; the drug frame has a bifid T and a U wave after the T end', () => {
     const [lqt1, , lqt3, drug] = frames('h7', 0);
     for (const e of frames('h7', 0)) {
       expect(Math.abs(e.truth!.qtMs - 505)).toBeLessThan(5);
@@ -814,13 +861,16 @@ describe('h7: QT on the tracings', () => {
     }
     const peak = (e: Ecg) => midBeat(e).tPeak! - midBeat(e).j;
     const width = (e: Ecg) => midBeat(e).tOff - midBeat(e).tPeak!;
+    const base = (e: Ecg) => midBeat(e).tOff - midBeat(e).j - tRise(e);
+    expect(base(lqt1), 'LQT1 broad-based T').toBeGreaterThan(200);
+    expect(base(lqt1), 'LQT1 broad-based T').toBeGreaterThan(1.5 * base(lqt3));
     expect(peak(lqt3)).toBeGreaterThan(peak(lqt1) + 40);
     expect(width(lqt3)).toBeLessThan(width(lqt1) / 1.5);
+    expect(tw(lqt3, 'V3').max, 'LQT3 peaked: taller on a narrower base').toBeGreaterThan(tw(lqt1, 'V3').max);
     const b3 = midBeat(lqt3);
     const v = v3(lqt3);
-    let rise = b3.j + 20;
-    while (v(rise) < 0.05) rise += 1;
-    expect(Math.abs(rise - b3.j - 280)).toBeLessThanOrEqual(15);
+    const rise = b3.j + tRise(lqt3);
+    expect(Math.abs(rise - b3.j - 290)).toBeLessThanOrEqual(5);
     for (let ms = b3.j + 20; ms < rise - 20; ms += 5) expect(Math.abs(v(ms)), `flat ST at J+${ms - b3.j}`).toBeLessThan(0.02);
     expect(tHumps(drug).length).toBeGreaterThanOrEqual(2);
     const bd = midBeat(drug);
@@ -843,6 +893,17 @@ describe('h7: QT on the tracings', () => {
       expect(t.qtcFridericiaMs, `${q}`).toBeGreaterThan(500);
     }
     expect(Math.abs(played('h7', 0, 490).truth!.hrBpm - 64)).toBeLessThan(1);
+  });
+  it('live caption and Bazett pitfall: at one Fridericia QTc the QT shortens as the rate rises (50 → 80/min); Bazett reads under Fridericia at 50/min and over it at 80/min', () => {
+    const b = blocksOf('h7', 'live')[0];
+    for (const qtc of [500, 560]) {
+      const at = (rate: number) => ecgOf({ scenario: b.scenario, seed: b.seed, dials: { rate, qtc } }).truth!;
+      const [slow, fast] = [at(50), at(80)];
+      for (const t of [slow, fast]) expect(Math.abs(t.qtcFridericiaMs - qtc), `${qtc}`).toBeLessThan(3);
+      expect(fast.qtMs, `${qtc}`).toBeLessThan(slow.qtMs - 50);
+      expect(slow.qtcBazettMs, `${qtc}: low at a slow rate`).toBeLessThan(slow.qtcFridericiaMs - 10);
+      expect(fast.qtcBazettMs, `${qtc}: high at a fast rate`).toBeGreaterThan(fast.qtcFridericiaMs + 10);
+    }
   });
   it('hypokalaemia shows U waves; the true long QT does not reach its QTc through a U', () => {
     const c = blocksOf('h7', 'contrast')[1];
@@ -901,7 +962,7 @@ describe('h8: Brugada and early repolarisation on the tracings', () => {
       near(stAt(std, l), 3.5);
       near(tw(std, l).min, -4);
       expect(stAt(high, l), l).toBeGreaterThanOrEqual(0.5);
-      expect(stAt(high, l), l).toBeLessThanOrEqual(0.72);
+      expect(stAt(high, l), l).toBeLessThanOrEqual(0.7);
       expect(tw(high, l).min, l).toBeLessThan(tw(std, l).min);
     }
     for (const l of [...LIMB, 'V3', 'V4', 'V5', 'V6'] as const) {
@@ -917,6 +978,8 @@ describe('h8: Brugada and early repolarisation on the tracings', () => {
       expect(tUpright(e, 'V2'), `${v}`).toBe(true);
       expect(stAt(e, 'V2', 60), `${v}: not coved`).toBeGreaterThanOrEqual(stAt(e, 'V2') - 0.005);
     }
+    const top = played('h8', 0, 0.14);
+    for (const ms of [0, 60]) expect(stAt(top, 'V2', ms), `prediction: at the top of the dial V2 at J+${ms} stays well under 2.5 mm`).toBeLessThan(0.15);
   });
   it('pitfall: in early repolarisation the V6 ST/T ratio stays under 0.25 (J-wave film frame 2)', () => {
     const e = frames('h8', 1)[1];
@@ -963,12 +1026,16 @@ describe('h9: the athlete ECG on the tracings', () => {
     expect(Math.abs(frames('h9', 0)[1].truth!.prMs! - 220)).toBeLessThan(10);
     expect(Math.abs(frames('h9', 0)[1].truth!.prMs! - 220)).toBeLessThan(5);
   });
-  it('PR film notes: about 48/min with a PR of 160 ms; the first-degree frame is the same heart', () => {
+  it('PR film notes and prediction: about 48/min with a PR of 160 ms; the first-degree frame is the same heart with a longer PR, the same rate and a P before every QRS', () => {
     const [a, b] = blocksOf('h9', 'film')[0].frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req : null));
     expect({ ...a, variant: 'first-degree' }).toEqual(b);
-    const t = frames('h9', 0)[0].truth!;
+    const [normal, first] = frames('h9', 0);
+    const t = normal.truth!;
     expect(Math.abs(t.hrBpm - 48)).toBeLessThan(3);
     expect(Math.abs(t.prMs! - 160)).toBeLessThan(5);
+    expect(first.truth!.prMs!).toBeGreaterThan(t.prMs! + 40);
+    expect(Math.abs(first.truth!.hrBpm - t.hrBpm), 'the rate stays').toBeLessThan(0.5);
+    for (const bt of first.truth!.beats) expect(bt.pOn, 'a P before every QRS').not.toBeNull();
   });
   it('rate sweep notes: sinus with a P before every QRS and the PR fixed at 160 ms at 40–58/min, always above 30/min', () => {
     for (const v of [40, 49, 50, 58]) {

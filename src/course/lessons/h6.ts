@@ -63,7 +63,7 @@ const lesson: Lesson = {
         'Un deportista competitivo de 22 años consultado por palpitaciones al esfuerzo: las ondas T están invertidas en V1-V3, el QRS no es ancho y no hay dolor torácico. ¿Qué hay en tu lista? Decide tus tres primeras opciones y luego mira la solución.',
       ),
       reveal: l(
-        'QRS 不宽，所以这不是束支阻滞的**继发性**T波倒置；22 岁也早已过了"幼年型T波"的年龄（运动员只接受到 16 岁）。**致心律失常性右心室心肌病（ARVC）就在这份清单的最上面**：>14 岁、不伴完全性右束支阻滞的 V1–V3（或更广）T波倒置，是它的主要复极标准。再回头看 V1–V3 每个 QRS 的末端：紧贴 QRS 终点之后还有一个向上的小偏折——**ε波**，右心室最晚除极的那点心肌留下的签名。',
+        'QRS 不宽，所以这不是束支阻滞的**继发性**T波倒置；22 岁也早已过了"幼年型T波"的年龄（运动员只在 16 岁以下才接受）。**致心律失常性右心室心肌病（ARVC）就在这份清单的最上面**：>14 岁、不伴完全性右束支阻滞的 V1–V3（或更广）T波倒置，是它的主要复极标准。再回头看 V1–V3 每个 QRS 的末端：紧贴 QRS 终点之后还有一个向上的小偏折——**ε波**，右心室最晚除极的那点心肌留下的签名。',
         'The QRS is not wide, so this is not the **secondary** T inversion of a bundle-branch block; and at 22 the patient is well past the age of a "juvenile pattern" (accepted in athletes only under 16). **Arrhythmogenic right ventricular cardiomyopathy sits at the top of that list**: T inversion in V1–V3 or beyond, without complete RBBB, over 14 years of age, is its major repolarisation criterion. Now look again at the end of every QRS in V1–V3: just after the QRS ends there is a small upward blip — the **epsilon wave**, the signature of the last myocardium in the right ventricle to depolarise.',
         'El QRS no es ancho, así que no se trata de la inversión de la T **secundaria** a un bloqueo de rama; y con 22 años el paciente ya ha dejado atrás la edad del «patrón juvenil» (en deportistas solo se acepta por debajo de los 16). **La miocardiopatía arritmogénica del ventrículo derecho encabeza esa lista**: la inversión de la T en V1-V3 o más allá, sin BRD completa, en mayores de 14 años, es su criterio mayor de repolarización. Vuelve ahora al final de cada QRS en V1-V3: justo después de que termina el QRS hay una pequeña deflexión positiva: la **onda épsilon**, la firma del último miocardio del ventrículo derecho en despolarizarse.',
       ),
@@ -146,7 +146,7 @@ const lesson: Lesson = {
           note: l(
             'V1–V3 的 T 倒置，QRS 窄（约 95 ms），QRS 之后什么也没有：幼年型，运动员只在 16 岁以下算正常。',
             'T inverted in V1–V3, a narrow QRS (about 95 ms) and nothing after it: the juvenile pattern, normal in athletes only under 16.',
-            'T negativa en V1-V3, QRS estrecho (unos 95 ms) y nada tras él: patrón juvenil, normal en deportistas solo antes de los 16 años.',
+            'T negativa en V1-V3, QRS estrecho (unos 95 ms) y nada tras él: patrón juvenil, normal en deportistas solo por debajo de los 16 años.',
           ),
           marks: [{ auto: 't', lead: 'V2' }],
         },
@@ -181,9 +181,9 @@ const lesson: Lesson = {
         answer: 0,
       },
       caption: l(
-        '一条线：先看年龄（幼年型只到 16 岁），再看 QRS 宽度（右束支阻滞自带 T 倒置），最后去 QRS 之后找小偏折。',
-        'One line: age first (juvenile only up to 16), then the QRS width (RBBB brings its own T inversion), then hunt for the blip after the QRS.',
-        'Una línea: primero la edad (juvenil solo hasta los 16), después la anchura del QRS (el BRD trae su propia T negativa) y por último busca la pequeña deflexión tras el QRS.',
+        '一条线：先看年龄（幼年型仅 <16 岁），再看 QRS 宽度（右束支阻滞自带 T 倒置），最后去 QRS 之后找小偏折。',
+        'One line: age first (juvenile only under 16), then the QRS width (RBBB brings its own T inversion), then hunt for the blip after the QRS.',
+        'Una línea: primero la edad (juvenil solo por debajo de 16), después la anchura del QRS (el BRD trae su propia T negativa) y por último busca la pequeña deflexión tras el QRS.',
       ),
     },
     {
@@ -195,9 +195,9 @@ const lesson: Lesson = {
         {
           title: l('第一步：多大年龄？', 'Step 1: how old?', 'Paso 1: ¿qué edad tiene?'),
           body: l(
-            '幼年型T波只在儿童期正常，运动员中接受到 16 岁为止；本例 29 岁，V1–V3 的T波倒置不能再用"幼年型"解释。反过来也要记准界值：ARVC 的T波倒置标准从 >14 岁起算。',
-            'The juvenile T pattern is normal only in childhood, and in athletes it is accepted up to 16 years; at 29, T inversion in V1–V3 can no longer be filed as "juvenile". In the other direction, get the threshold right: the ARVC T-inversion criterion applies from over 14 years of age.',
-            'El patrón juvenil de la T solo es normal en la infancia y en deportistas se acepta hasta los 16 años; a los 29, la inversión de la T en V1-V3 ya no puede etiquetarse de «juvenil». Y a la inversa, fija bien el umbral: el criterio de inversión de la T de la MAVD se aplica a partir de los 14 años.',
+            '幼年型T波只在儿童期正常，运动员中只在 16 岁以下接受；本例 29 岁，V1–V3 的T波倒置不能再用"幼年型"解释。反过来也要记准界值：ARVC 的T波倒置标准从 >14 岁起算。',
+            'The juvenile T pattern is normal only in childhood, and in athletes it is accepted only under 16 years; at 29, T inversion in V1–V3 can no longer be filed as "juvenile". In the other direction, get the threshold right: the ARVC T-inversion criterion applies from over 14 years of age.',
+            'El patrón juvenil de la T solo es normal en la infancia y en deportistas solo se acepta por debajo de los 16 años; a los 29, la inversión de la T en V1-V3 ya no puede etiquetarse de «juvenil». Y a la inversa, fija bien el umbral: el criterio de inversión de la T de la MAVD se aplica a partir de los 14 años.',
           ),
         },
         {
@@ -277,8 +277,16 @@ const lesson: Lesson = {
         },
       ],
       predict: {
-        question: l('ε 波在哪里？', 'Where does the epsilon wave sit?', '¿Dónde está la onda épsilon?'),
-        options: [l('QRS 之内', 'Inside the QRS', 'Dentro del QRS'), l('紧跟 QRS 终点之后', 'Just after the QRS ends', 'Justo después del final del QRS'), l('T 波上', 'On the T wave', 'Sobre la onda T')],
+        question: l(
+          '看这条 V1：QRS 结束到 T 波之间有什么？',
+          'Look at this V1 strip: what lies between the end of the QRS and the T?',
+          'Mira esta tira de V1: ¿qué hay entre el final del QRS y la T?',
+        ),
+        options: [
+          l('什么也没有：基线平直', 'Nothing: a flat baseline', 'Nada: la línea de base es plana'),
+          l('一个小偏折，不到 1 mm', 'A small blip, under 1 mm', 'Una pequeña deflexión, de menos de 1 mm'),
+          l('一个约 5 mm 高的波', 'A wave about 5 mm tall', 'Una onda de unos 5 mm'),
+        ],
         answer: 1,
       },
       caption: l(
@@ -294,9 +302,9 @@ const lesson: Lesson = {
       kind: 'pitfalls',
       items: [
         l(
-          '把 16 岁以上运动员 V1–V3 的T波倒置叫作"幼年型"：幼年型在运动员中只到 16 岁为止；成人 V1 的T波倒置可为正常、V2 偶见，延伸到 V3 或更远（>14 岁且无完全性右束支阻滞）就要按 ARVC 主要标准去评估。',
-          'Calling T inversion V1–V3 "juvenile" in athletes over 16: the juvenile pattern runs only up to 16 years in athletes; in adults T inversion in V1 alone can be normal and in V2 is occasionally seen, but extending to V3 or beyond (over 14 y, no complete RBBB) demands work-up under the major ARVC criterion.',
-          'Llamar «juvenil» a la inversión de la T en V1-V3 en deportistas mayores de 16 años: el patrón juvenil solo llega hasta los 16 años en deportistas; en adultos, la T negativa aislada en V1 puede ser normal y en V2 se ve en ocasiones, pero extenderse a V3 o más allá (mayor de 14 años, sin BRD completa) obliga a estudiarla como criterio mayor de MAVD.',
+          '把 16 岁及以上运动员 V1–V3 的T波倒置叫作"幼年型"：幼年型在运动员中只限 16 岁以下；成人 V1 的T波倒置可为正常、V2 偶见，延伸到 V3 或更远（>14 岁且无完全性右束支阻滞）就要按 ARVC 主要标准去评估。',
+          'Calling T inversion V1–V3 "juvenile" in athletes aged 16 or over: the juvenile pattern counts only under 16 years in athletes; in adults T inversion in V1 alone can be normal and in V2 is occasionally seen, but extending to V3 or beyond (over 14 y, no complete RBBB) demands work-up under the major ARVC criterion.',
+          'Llamar «juvenil» a la inversión de la T en V1-V3 en deportistas de 16 años o más: el patrón juvenil solo cuenta por debajo de los 16 años en deportistas; en adultos, la T negativa aislada en V1 puede ser normal y en V2 se ve en ocasiones, pero extenderse a V3 o más allá (mayor de 14 años, sin BRD completa) obliga a estudiarla como criterio mayor de MAVD.',
         ),
         l(
           'ε波漏掉，因为"QRS 已经结束"：终末激动包括 S 波升支的延迟和 QRS 之后的小偏折；低增益、滤波或慢纸速都会把它抹掉——每一份疑似图都要主动扫一遍 QRS 终点之后。',

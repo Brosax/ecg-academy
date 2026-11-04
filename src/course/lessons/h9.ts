@@ -225,9 +225,9 @@ const lesson: Lesson = {
         answer: 0,
       },
       caption: l(
-        '心动过缓本身不产生症状；有症状才需要评估，起搏决定从不由数字单独作出。',
-        'Bradycardia by itself produces no symptoms; evaluation follows symptoms, and a pacing decision is never made from a number alone.',
-        'La bradicardia por sí sola no da síntomas; la evaluación sigue a los síntomas, y la decisión de marcapasos nunca se toma solo con un número.',
+        '训练性心动过缓本身不产生症状；有症状才需要评估，起搏决定从不由数字单独作出。',
+        'Training bradycardia by itself produces no symptoms; evaluation follows symptoms, and a pacing decision is never made from a number alone.',
+        'La bradicardia del entrenamiento por sí sola no da síntomas; la evaluación sigue a los síntomas, y la decisión de marcapasos nunca se toma solo con un número.',
       ),
     },
     {
@@ -285,9 +285,17 @@ const lesson: Lesson = {
         },
       ],
       predict: {
-        question: l('这位成年运动员的 PR 变成多少才进入异常档？', 'At what PR would this adult athlete move into the abnormal bin?', '¿Con qué PR pasaría este deportista adulto al grupo anormal?'),
-        options: [l('220 ms', '220 ms', '220 ms'), l('320 ms', '320 ms', '320 ms'), l('400 ms', '400 ms', '400 ms')],
-        answer: 2,
+        question: l(
+          '现在迷走张力拖慢的是这位运动员的房室结。图上会怎样变？',
+          'Now vagal tone holds back this athlete\'s AV node. What changes on the strip?',
+          'Ahora el tono vagal frena el nodo AV de este deportista. ¿Qué cambia en la tira?',
+        ),
+        options: [
+          l('PR 变长，心率不变', 'The PR lengthens, the rate stays', 'El PR se alarga y la frecuencia no cambia'),
+          l('心率变慢，PR 不变', 'The rate slows, the PR stays', 'La frecuencia baja y el PR no cambia'),
+          l('PR 变短，心率不变', 'The PR shortens, the rate stays', 'El PR se acorta y la frecuencia no cambia'),
+        ],
+        answer: 0,
       },
       caption: l(
         '一度阻滞和运动后消失的 Mobitz I 都是训练相关；运动中不消失的 Mobitz I 要评估，Mobitz II 和三度阻滞是异常。',
