@@ -1020,11 +1020,14 @@ describe('r6: bundle branch block on the tracings', () => {
     expect(shape(b, 'V6', bb).startsWith('q')).toBe(false);
     expect(qrsSpan(b, 'V6', bb).max).toBeGreaterThan(3 * -qrsSpan(b, 'V6', bb).min);
   });
-  it('rate-dependent LBBB (width film frame 3): wide beats end shorter cycles than narrow ones and take an LBBB shape (V1 rS, no q and a late R peak in I and V6); same PR; the marks sit on a wide beat', () => {
+  it('rate-dependent LBBB (width film frame 3): wide beats end shorter cycles than narrow ones (the prediction) and take an LBBB shape (V1 rS, no q and a late R peak in I and V6); same PR; the marks sit on a wide beat', () => {
     const e = frames('r6', 0)[2];
     const beats = e.truth!.beats;
     const cyc = beats.slice(1).map((b, i) => ({ rr: b.qrsOn - beats[i].qrsOn, wide: b.aberrant }));
     expect(Math.max(...cyc.filter((c) => c.wide).map((c) => c.rr))).toBeLessThan(Math.min(...cyc.filter((c) => !c.wide).map((c) => c.rr)));
+    const guess = blocksOf('r6', 'film')[0].predict!;
+    expect(guess.ordered, 'shorter / longer / no pattern is not a scale').toBeUndefined();
+    expect(guess.options[guess.answer].en).toBe('A shorter cycle');
     const p = prs(e);
     expect(Math.max(...p) - Math.min(...p)).toBeLessThan(5);
     const wide = beats.filter((b) => b.aberrant);
