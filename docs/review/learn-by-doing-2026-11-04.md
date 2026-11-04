@@ -92,7 +92,7 @@ Predicate from Phase A, checked on the real product:
 | Build | Single-file `dist/index.html`, 12320 KB. | `npm run build` |
 | Browser walk per stage | s2, r4, t5, i9, h3, o1, x3: chips, notes and caption hidden before the reveal, shown after, no placeholder, no console error. | dev server, 2026-11-04 |
 
-Blocks in S–X after the run: 94 films, 28 live (30 incl. F), 41 heart, 18 figures (28 incl. F).
+Blocks in S–X after the run: 94 films, 30 live, 42 heart, 28 figures (F adds 2 live, 1 heart and 10 figures).
 
 Open, not done in this run:
 
