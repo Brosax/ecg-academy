@@ -72,9 +72,9 @@ const lesson: Lesson = {
         'Los intervalos RR de esta tira varían. ¿Es anormal el ritmo? Decide qué pondrías en el informe.',
       ),
       reveal: l(
-        '每个 QRS 前都是**同样的直立 P 波、同样的 PR**。只有 PP 间期在平滑地变长、变短（这里约 730–990 ms）：**窦性心律不齐**，通常与呼吸有关——这是正常现象，年轻人尤其常见。',
-        'Every QRS is preceded by **the same upright P wave at the same PR**. Only the PP interval changes, lengthening and shortening smoothly (here from about 730 to 990 ms): **sinus arrhythmia**, usually respiratory. It is a normal finding, especially in young people.',
-        'Cada QRS va precedido de **la misma onda P positiva con el mismo PR**. Solo cambia el intervalo PP, que se alarga y se acorta de forma gradual (aquí de unos 730 a 990 ms): **arritmia sinusal**, habitualmente respiratoria. Es un hallazgo normal, sobre todo en jóvenes.',
+        '每个 QRS 前都是**同样的直立 P 波、同样的 PR**。只有 PP 间期在平滑地变长、变短（这里约 730–980 ms）：**窦性心律不齐**，通常与呼吸有关——这是正常现象，年轻人尤其常见。',
+        'Every QRS is preceded by **the same upright P wave at the same PR**. Only the PP interval changes, lengthening and shortening smoothly (here from about 730 to 980 ms): **sinus arrhythmia**, usually respiratory. It is a normal finding, especially in young people.',
+        'Cada QRS va precedido de **la misma onda P positiva con el mismo PR**. Solo cambia el intervalo PP, que se alarga y se acorta de forma gradual (aquí de unos 730 a 980 ms): **arritmia sinusal**, habitualmente respiratoria. Es un hallazgo normal, sobre todo en jóvenes.',
       ),
     },
     {
@@ -155,7 +155,8 @@ const lesson: Lesson = {
         {
           title: l('找 P 波', 'Find the P wave', 'Busca la onda P'),
           body: l('II 导联最容易看清 P 波。每个 QRS 前都有一个吗？', 'Lead II shows P waves best. Is there one before every QRS?', 'La derivación II es la que mejor muestra la onda P. ¿Hay una antes de cada QRS?'),
-          marks: [{ auto: 'p' }],
+          // beat 3 sits inside the aVR column of the 3×4 sheet, so steps 1–3 mark one and the same P
+          marks: [{ auto: 'p', beat: 3 }],
           highlightLeads: ['II'],
         },
         {
@@ -165,13 +166,13 @@ const lesson: Lesson = {
             'Upright in I, II and aVF, inverted in aVR: the atria are activated from top right to bottom left, so the impulse starts in the sinus node.',
             'Positiva en I, II y aVF, negativa en aVR: las aurículas se activan de arriba a la derecha hacia abajo a la izquierda, así que el impulso nace en el nodo sinusal.',
           ),
-          marks: [{ auto: 'p', lead: 'II' }, { auto: 'p', lead: 'aVR' }],
+          marks: [{ auto: 'p', lead: 'II', beat: 3 }, { auto: 'p', lead: 'aVR', beat: 3 }],
           highlightLeads: ['I', 'II', 'aVF', 'aVR'],
         },
         {
           title: l('每搏 PR 相同', 'The same PR every beat', 'El mismo PR en cada latido'),
           body: l('PR 恒定（这里约 160 ms）：每个 P 波以相同的延迟下传。', 'The PR is constant (here about 160 ms): every P conducts with the same delay.', 'El PR es constante (aquí unos 160 ms): cada P conduce con el mismo retraso.'),
-          marks: [{ auto: 'pr' }],
+          marks: [{ auto: 'pr', beat: 3 }],
         },
         {
           title: l('用分规测 PP', 'March out the PP', 'Recorre el PP con el compás'),
@@ -180,7 +181,8 @@ const lesson: Lesson = {
             'Set the calipers on one interval and walk them along the strip: it lengthens and shortens smoothly, by more than 120 ms. Same P, same PR, varying PP: **sinus arrhythmia**.',
             'Ajusta el compás a un intervalo y recórrelo a lo largo de la tira: se alarga y se acorta de forma gradual, más de 120 ms. Misma P, mismo PR, PP variable: **arritmia sinusal**.',
           ),
-          marks: [{ auto: 'rr' }],
+          // the shortest interval: walked along the strip, every other one is longer
+          marks: [{ auto: 'rr', beat: 7 }],
           view: { layout: 'strip', lead: 'II', calipers: true },
         },
       ],
@@ -191,7 +193,7 @@ const lesson: Lesson = {
       seed: 304,
       dials: [{ id: 'hrv' }],
       view: STRIP,
-      marks: [{ auto: 'p' }, { auto: 'pr' }],
+      marks: [{ auto: 'p', beat: 5 }, { auto: 'pr', beat: 5 }],
       play: {
         dial: 'hrv',
         from: 0.1,

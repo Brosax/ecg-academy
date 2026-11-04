@@ -442,20 +442,45 @@ describe('s2: rate on the tracings', () => {
 });
 
 describe('s3: sinus rhythm on the tracings', () => {
-  it('hook: same PR every beat, PP from about 730 to about 990 ms', () => {
+  it('hook: same PR every beat, PP from about 730 to about 980 ms', () => {
     const e = ecgOf(blocksOf('s3', 'hook')[0].ecg);
     const pp = rrs(e);
-    expect(Math.min(...pp)).toBeGreaterThan(700);
-    expect(Math.min(...pp)).toBeLessThan(760);
-    expect(Math.max(...pp)).toBeGreaterThan(960);
-    expect(Math.max(...pp)).toBeLessThan(1020);
+    expect(Math.abs(Math.min(...pp) - 730)).toBeLessThanOrEqual(5);
+    expect(Math.abs(Math.max(...pp) - 980)).toBeLessThanOrEqual(5);
     const prs = e.truth!.beats.map((b) => b.qrsOn - b.pOn!);
     expect(Math.max(...prs) - Math.min(...prs)).toBeLessThan(5);
   });
   it('worked: PR about 160 ms; PP varies by more than 120 ms', () => {
     const e = ecgOf(blocksOf('s3', 'worked')[0].ecg);
-    expect(Math.abs(e.truth!.prMs! - 160)).toBeLessThan(10);
+    expect(Math.abs(e.truth!.prMs! - 160)).toBeLessThanOrEqual(5);
     expect(Math.max(...rrs(e)) - Math.min(...rrs(e))).toBeGreaterThan(120);
+  });
+  it('worked marks: steps 1–3 mark one sinus P (upright in II, negative in aVR) inside the aVR column of the sheet, with its PR about 160 ms; step 4 marks the shortest interval, more than 120 ms shorter than the longest', () => {
+    const w = blocksOf('s3', 'worked')[0];
+    const e = ecgOf(w.ecg);
+    const beats = e.truth!.beats;
+    const marked = [markBeat(w.steps[0].marks, 'p'), markBeat(w.steps[1].marks, 'p', 'II'), markBeat(w.steps[1].marks, 'p', 'aVR'), markBeat(w.steps[2].marks, 'pr')];
+    expect(new Set(marked).size).toBe(1);
+    const b = beats[marked[0]];
+    expect(b.kind).toBe('sinus');
+    expect(pw(e, 'II', b).max).toBeGreaterThan(0.05);
+    expect(pw(e, 'aVR', b).min).toBeLessThan(-0.03);
+    expect(Math.abs(b.qrsOn - b.pOn! - 160)).toBeLessThanOrEqual(5);
+    const inColumn = leadWindows('aVR', e.signal.durationMs).some(([t0, t1]) => b.pOn! >= t0 && b.pOff! <= t1);
+    expect(inColumn, 'P inside the aVR column').toBe(true);
+    const rr = rrs(e)[markBeat(w.steps[3].marks, 'rr')];
+    expect(rr).toBe(Math.min(...rrs(e)));
+    expect(Math.max(...rrs(e)) - rr).toBeGreaterThan(120);
+  });
+  it('variability sweep marks: the marked beat is a sinus beat with a PR of about 160 ms at both ends of the sweep', () => {
+    const live = blocksOf('s3', 'live')[1];
+    const k = markBeat(live.marks, 'p');
+    expect(markBeat(live.marks, 'pr')).toBe(k);
+    for (const v of [0.1, 0.18]) {
+      const b = played('s3', 1, v).truth!.beats[k];
+      expect(b.kind, `${v}`).toBe('sinus');
+      expect(Math.abs(b.qrsOn - b.pOn! - 160), `${v}`).toBeLessThanOrEqual(5);
+    }
   });
   it('140/min film frame: the marked P starts before the marked T has ended', () => {
     const f = blocksOf('s3', 'film')[0].frames[2];
@@ -517,15 +542,16 @@ describe('s3: sinus rhythm on the tracings', () => {
     }
   });
   it('variability sweep notes: PP spread > 120 ms at 0.10–0.139 and 230–290 ms at 0.14–0.18, with a PR of 160 ms and the same P height in II on every beat', () => {
-    for (const v of [0.1, 0.139, 0.14, 0.18]) {
+    const sc = scenarios().find((s) => s.id === 'sinus-arrhythmia')!;
+    for (const v of [0.1, 0.139, ...sweepValues('hrv', sc.dials.hrv!, 0.14, 0.18)]) {
       const e = played('s3', 1, v);
       const beats = e.truth!.beats;
       const pp = beats.slice(1).map((b, i) => b.pOn! - beats[i].pOn!);
       const spread = Math.max(...pp) - Math.min(...pp);
       if (v < 0.14) expect(spread, `${v}`).toBeGreaterThan(120);
       else {
-        expect(spread, `${v}`).toBeGreaterThan(225);
-        expect(spread, `${v}`).toBeLessThan(295);
+        expect(spread, `${v}`).toBeGreaterThanOrEqual(230);
+        expect(spread, `${v}`).toBeLessThanOrEqual(290);
       }
       for (const b of beats) expect(Math.abs(b.qrsOn - b.pOn! - 160), `${v}`).toBeLessThan(5);
       const heights = beats.map((b) => pw(e, 'II', b).max);
@@ -917,6 +943,12 @@ interface RealClaim {
 const REAL_CLAIMS: Readonly<Partial<Record<(typeof IDS)[number], readonly RealClaim[]>>> = {
   s1: [{ id: 13683 }, { id: 21589 }, { id: 14918 }],
   s2: [{ id: 14918 }, { id: 8931 }, { id: 19505 }],
+  // "two of these show sinus arrhythmia and one a regular sinus rhythm"
+  s3: [
+    { id: 16233, has: ['sinus-arrhythmia'] },
+    { id: 2084, has: ['sinus-arrhythmia'] },
+    { id: 21589, has: ['sinus-rhythm'], not: ['sinus-arrhythmia'] },
+  ],
 };
 
 function realIdsOf(lesson: Lesson): number[] {
