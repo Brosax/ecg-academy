@@ -477,14 +477,14 @@ describe('x3: triage tracings', () => {
     expect(Math.abs(t.hrBpm - 92)).toBeLessThan(2);
     expect(t.qrsMs).toBeLessThan(110);
     for (const l of ['V2', 'V3', 'V4'] as const) {
-      expect(stAt(e, l, 60), l).toBeGreaterThan(0.22);
-      expect(stAt(e, l, 60), l).toBeLessThan(0.48);
+      expect(stAt(e, l, 60), l).toBeGreaterThanOrEqual(0.245);
+      expect(stAt(e, l, 60), l).toBeLessThan(0.455);
     }
     expect(stAt(e, 'V3', 60)).toBeGreaterThan(Math.max(stAt(e, 'V2', 60), stAt(e, 'V4', 60)));
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l, 60), l).toBeLessThan(-0.05);
     expect(t.findings).not.toContain('hyperkalemia');
   });
-  it('T-and-device film, hyperkalaemia: no visible P in II, QRS about 170 ms, T in V3–V5 well above the T in II', () => {
+  it('T-and-device film, hyperkalaemia: no visible P in II, QRS about 170 ms, tall T in V3–V5 (well above the T in II)', () => {
     const e = ecgOf(blocksOf('x3', 'film')[1].frames[0].ecg);
     const t = e.truth!;
     expect(t.findings).toContain('hyperkalemia');
@@ -494,14 +494,14 @@ describe('x3: triage tracings', () => {
     for (const l of ['V3', 'V4'] as const) expect(tw(e, l).max, l).toBeGreaterThan(2 * tw(e, 'II').max);
     expect(tw(e, 'V5').max).toBeGreaterThan(1.5 * tw(e, 'II').max);
   });
-  it('T-and-device film, digoxin effect: PR about 190 ms (upper normal), QTc not long, ST sagging below the baseline in V4–V6', () => {
+  it('T-and-device film, digoxin effect: PR about 190 ms (upper normal), QTc not long, a visible ST sag (≥ 0.5 mm below the baseline) in V4–V6', () => {
     const e = ecgOf(blocksOf('x3', 'film')[1].frames[1].ecg);
     const t = e.truth!;
     expect(t.findings).toContain('digoxin-effect');
     expect(Math.abs(t.prMs! - 190)).toBeLessThan(5);
     expect(t.prMs!).toBeLessThanOrEqual(200);
     expect(t.qtcFridericiaMs).toBeLessThan(420);
-    for (const l of ['V4', 'V5', 'V6'] as const) expect(stAt(e, l, 60), l).toBeLessThan(-0.02);
+    for (const l of ['V4', 'V5', 'V6'] as const) expect(stAt(e, l, 60), l).toBeLessThanOrEqual(-0.05);
   });
   it('T-and-device film, loss of capture: paced beats one stimulus interval apart, and gaps where a stimulus captured nothing', () => {
     const e = ecgOf(blocksOf('x3', 'film')[1].frames[2].ecg);

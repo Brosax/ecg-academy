@@ -3,7 +3,7 @@
  * The triage bins (act now / review today / routine) are this course's assessment framework and match the `triage`
  * drill: act now = any finding of severity 'critical' in src/core/findings.ts (Brugada type 1 without symptoms is
  * same-day, TRIAGE_OVERRIDE); occlusion urgency per Byrne 2023, unstable bradycardia per Kusumoto 2019 (2018
- * ACC/AHA/HRS), arrest rhythms per Soar 2021 ERC ALS, long QT: act now only with QTc ≥ 500 ms or torsades / symptoms
+ * ACC/AHA/HRS), arrest rhythms per Soar 2021 ERC ALS, unstable AF per Van Gelder 2024 ESC, long QT: act now only with QTc ≥ 500 ms or torsades / symptoms
  * such as syncope (AHA 2009 Part IV), otherwise review promptly (same day).
  *
  * ECGs: synthetic infra-His complete AV block (escape ≈ 34/min, QRS ≈ 150 ms, atrial ≈ 78/min), synthetic anterior
@@ -48,14 +48,14 @@ const slowReal: Item = {
   prompt: l(
     '十秒：86 岁女性的真实心电图，申请单没有临床信息。跑完十秒流程，选一个箱子。',
     'Ten seconds: a real ECG of an 86-year-old woman; the request slip gives no clinical details. Run the ten-second routine and pick a bin.',
-    'Diez segundos: ECG real de una mujer de 86 años; la petición no aporta datos clínicos. Haz la rutina de diez segundos y elige una categoría.',
+    'Diez segundos: ECG real de una mujer de 86 años; la petición no aporta datos clínicos. Haz el barrido de diez segundos y elige una categoría.',
   ),
   ecg: real(7688),
   view: GRID,
   explanation: l(
-    '**现在处理。** 第 0–3 秒就命中：心室率约 40 次/分，规则，QRS 窄——心脏科医师标注为**三度（完全性）房室传导阻滞**，窄 QRS 逸搏提示阻滞位于房室结/希氏束附近。患者此刻也许还稳定，但完全性阻滞属于“现在处理”：立即床旁评估（意识、血压、灌注），贴上除颤/起搏电极片，备好经皮起搏，持续监护，查药物（β 受体阻滞剂、地高辛）与钾。窄逸搏时阿托品可以一试；宽逸搏时通常无效（本课开头）。',
-    '**Act now.** The routine hits in seconds 0–3: ventricular rate about 40/min, regular, narrow QRS — labelled by the cardiologists as **third-degree (complete) AV block**; a narrow escape points to a block at the level of the AV node or His bundle. The patient may be stable right now, but complete block belongs in the act-now bin: assess at the bedside at once (consciousness, blood pressure, perfusion), put the defibrillation/pacing pads on, have transcutaneous pacing ready, monitor continuously, check drugs (beta-blockers, digoxin) and potassium. Atropine is worth trying with a narrow escape; with a wide escape it usually fails (this lesson\'s hook).',
-    '**Actuar ya.** La rutina acierta en los segundos 0-3: frecuencia ventricular de unas 40 lpm, regular, con QRS estrecho; los cardiólogos lo etiquetaron como **bloqueo AV de tercer grado (completo)**, y un escape estrecho sugiere un bloqueo a nivel del nodo AV o del His. Puede que la paciente esté estable ahora, pero el bloqueo completo va a la categoría de actuar ya: valoración inmediata a pie de cama (conciencia, presión arterial, perfusión), parches de desfibrilación/estimulación colocados, estimulación transcutánea preparada, monitorización continua y revisión de fármacos (betabloqueantes, digoxina) y del potasio. Con escape estrecho merece la pena probar atropina; con escape ancho suele fallar (el gancho de esta lección).',
+    '**现在处理。** 第 0–3 秒就命中：心室率约 40 次/分，QRS 窄——心脏科医师标注为**三度（完全性）房室传导阻滞**，窄 QRS 逸搏提示阻滞位于房室结/希氏束附近。患者此刻也许还稳定，但完全性阻滞属于“现在处理”：立即床旁评估（意识、血压、灌注），贴上除颤/起搏电极片，备好经皮起搏，持续监护，查药物（β 受体阻滞剂、地高辛）与钾。窄逸搏时阿托品可以一试；宽逸搏时通常无效（本课开头）。',
+    '**Act now.** The routine hits in seconds 0–3: ventricular rate about 40/min, narrow QRS — labelled by the cardiologists as **third-degree (complete) AV block**; a narrow escape points to a block at the level of the AV node or His bundle. The patient may be stable right now, but complete block belongs in the act-now bin: assess at the bedside at once (consciousness, blood pressure, perfusion), put the defibrillation/pacing pads on, have transcutaneous pacing ready, monitor continuously, check drugs (beta-blockers, digoxin) and potassium. Atropine is worth trying with a narrow escape; with a wide escape it usually fails (this lesson\'s hook).',
+    '**Actuar ya.** El barrido acierta en los segundos 0-3: frecuencia ventricular de unas 40 lpm, con QRS estrecho; los cardiólogos lo etiquetaron como **bloqueo AV de tercer grado (completo)**, y un escape estrecho sugiere un bloqueo a nivel del nodo AV o del His. Puede que la paciente esté estable ahora, pero el bloqueo completo va a la categoría de actuar ya: valoración inmediata a pie de cama (conciencia, presión arterial, perfusión), parches de desfibrilación/estimulación colocados, estimulación transcutánea preparada, monitorización continua y revisión de fármacos (betabloqueantes, digoxina) y del potasio. Con escape estrecho merece la pena probar atropina; con escape ancho suele fallar (el gancho de esta lección).',
   ),
   findings: ['av-block-3'],
   key: { options: BINS, correct: 'critical' },
@@ -69,11 +69,11 @@ const lesson: Lesson = {
   summary: l(
     '十秒流程把阅读压缩成决策：心率 → 致命节律（快/慢/无）→ ST → 钾/T 形态 → 设备；任何一步命中即进“现在处理”箱，其余阅读在患者安全之后完成。',
     'The ten-second routine compresses reading into a decision: rate → deadly rhythm (fast/slow/absent) → ST → K/T shape → device; any hit goes straight into the act-now bin, and the rest of the reading waits until the patient is safe.',
-    'La rutina de diez segundos convierte la lectura en una decisión: frecuencia → ritmo letal (rápido/lento/ausente) → ST → forma de K/T → dispositivo; cualquier acierto va directo a la categoría de actuar ya, y el resto de la lectura espera a que el paciente esté a salvo.',
+    'El barrido de diez segundos convierte la lectura en una decisión: frecuencia → ritmo letal (rápido/lento/ausente) → ST → forma de K/T → dispositivo; cualquier acierto va directo a la categoría de actuar ya, y el resto de la lectura espera a que el paciente esté a salvo.',
   ),
   objectives: [
     l('对一份陌生心电图在十秒内说出分诊箱（现在处理/当天评估/常规）与第一动作。', 'Put an unfamiliar ECG into a triage bin (act now / review today / routine) with a first action, in ten seconds.', 'Clasificar un ECG desconocido en una categoría de triaje (actuar ya / revisar hoy / rutina) con una primera acción, en diez segundos.'),
-    l('按固定顺序执行十秒流程：心率 → 致命节律 → ST → T 形状 → 起搏设备。', 'Run the ten-second routine in a fixed order: rate → deadly rhythm → ST → T shape → pacing device.', 'Ejecutar la rutina de diez segundos en orden fijo: frecuencia → ritmo letal → ST → forma de la T → dispositivo de estimulación.'),
+    l('按固定顺序执行十秒流程：心率 → 致命节律 → ST → T 形状 → 起搏设备。', 'Run the ten-second routine in a fixed order: rate → deadly rhythm → ST → T shape → pacing device.', 'Ejecutar el barrido de diez segundos en orden fijo: frecuencia → ritmo letal → ST → forma de la T → dispositivo de estimulación.'),
     l('背出“现在处理”清单——与分诊训练评分所用的危急表现清单一致。', 'Recite the act-now list — the same list of critical findings the triage drill grades you on.', 'Recitar la lista de actuar ya: la misma lista de hallazgos críticos con la que se puntúa el entrenamiento de triaje.'),
     l('把分诊决策与完整阅读分开：先安全，后 x1 的十步报告。', 'Separate the triage decision from the full read: safety first, the ten-step report from x1 afterwards.', 'Separar la decisión de triaje de la lectura completa: primero la seguridad, después el informe de diez pasos de x1.'),
   ],
@@ -114,6 +114,14 @@ const lesson: Lesson = {
         {
           label: l('现在处理', 'Act now', 'Actuar ya'),
           value: l('骤停与室性节律 · 二度 II 型/高度/三度阻滞 · STEMI 及等危症 · 高钾 · 钠通道阻滞剂中毒 · QTc ≥500 ms 或长 QT 伴尖端扭转/晕厥 · 低体温 · 急性肺栓塞 · 起搏器失夺获/感知过度 · 预激房颤', 'Arrest and ventricular rhythms · Mobitz II / high-grade / complete block · STEMI and equivalents · hyperkalaemia · Na-channel-blocker toxicity · QTc ≥ 500 ms, or long QT with torsades / syncope · hypothermia · acute PE · pacing failure to capture / oversensing · pre-excited AF', 'Ritmos de parada y ventriculares · Mobitz II / avanzado / completo · IAMCEST y equivalentes · hiperpotasemia · intoxicación por bloqueantes del sodio · QTc ≥ 500 ms, o QT largo con torsade / síncope · hipotermia · TEP agudo · fallo de captura / sobredetección · FA preexcitada'),
+        },
+        {
+          label: l('STEMI 等危症（现在处理）', 'STEMI equivalents (act now)', 'Equivalentes de IAMCEST (actuar ya)'),
+          value: l(
+            '后壁心梗 · 右心室心梗 · de Winter T 波 · Wellens 图形 · 超急性 T 波 · aVR 抬高伴广泛 ST 压低 · Sgarbossa 阳性的左束支阻滞或起搏心律',
+            'Posterior MI · RV MI · de Winter T waves · Wellens pattern · hyperacute T waves · aVR elevation with diffuse ST depression · Sgarbossa-positive LBBB or paced rhythm',
+            'IAM posterior · IAM del VD · ondas T de De Winter · patrón de Wellens · T hiperagudas · elevación en aVR con descenso difuso del ST · BRI o ritmo de marcapasos con Sgarbossa positivo',
+          ),
         },
         {
           label: l('当天评估', 'Review today', 'Revisar hoy'),
@@ -160,9 +168,9 @@ const lesson: Lesson = {
           label: l('室颤', 'VF', 'FV'),
           ecg: synth('ventricular-fibrillation', 1846),
           note: l(
-            '没有 QRS，只有杂乱的波：**心室颤动**。现在处理：确认无脉，立即心肺复苏，尽早电除颤。',
-            'No QRS, only chaotic waves: **VF**. Act now: confirm there is no pulse, start CPR, shock as early as you can.',
-            'Sin QRS, solo ondas caóticas: **FV**. Actuar ya: confirma que no hay pulso, inicia la RCP y desfibrila cuanto antes.',
+            '没有 QRS，只有杂乱的波：**心室颤动**。现在处理：呼叫复苏团队，查脉搏不超过 10 秒，立即心肺复苏，尽早电除颤。',
+            'No QRS, only chaotic waves: **VF**. Act now: call the resuscitation team, check the pulse for no more than 10 s, start CPR, shock as early as you can.',
+            'Sin QRS, solo ondas caóticas: **FV**. Actuar ya: llama al equipo de reanimación, comprueba el pulso durante 10 s como máximo, inicia la RCP y desfibrila cuanto antes.',
           ),
         },
         {
@@ -179,9 +187,9 @@ const lesson: Lesson = {
           label: l('快速房颤', 'Fast AF', 'FA rápida'),
           ecg: synth('atrial-fibrillation', 1847, undefined, 'rapid'),
           note: l(
-            '没有 P 波，RR 绝对不齐，约 140 次/分：**房颤伴快速心室率**。稳定：当天评估（控率、找原因、评估抗凝）；不稳定：现在处理。',
-            'No P waves, RR irregularly irregular, about 140/min: **AF with a fast ventricular rate**. Stable: review today (rate, cause, anticoagulation). Unstable: act now.',
-            'Sin ondas P, RR irregularmente irregular, unas 140 lpm: **FA con respuesta ventricular rápida**. Estable: revisar hoy (frecuencia, causa, anticoagulación). Inestable: actuar ya.',
+            '没有 P 波，RR 绝对不齐，约 140 次/分：**房颤伴快速心室率**。稳定：当天评估（控率、找原因、评估抗凝）；不稳定：现在处理，同步电复律。',
+            'No P waves, RR irregularly irregular, about 140/min: **AF with a fast ventricular rate**. Stable: review today (rate, cause, anticoagulation). Unstable: act now, synchronised cardioversion.',
+            'Sin ondas P, RR irregularmente irregular, unas 140 lpm: **FA con respuesta ventricular rápida**. Estable: revisar hoy (frecuencia, causa, anticoagulación). Inestable: actuar ya, cardioversión sincronizada.',
           ),
           marks: [{ auto: 'rr' }],
         },
@@ -226,7 +234,7 @@ const lesson: Lesson = {
     },
     {
       kind: 'criteria',
-      title: l('十秒流程，逐段', 'The ten-second routine, window by window', 'La rutina de diez segundos, tramo a tramo'),
+      title: l('十秒流程，逐段', 'The ten-second routine, window by window', 'El barrido de diez segundos, tramo a tramo'),
       items: [
         {
           label: l('第 0–3 秒 · 心率', 'Seconds 0–3 · rate', 'Segundos 0-3 · frecuencia'),
@@ -253,7 +261,7 @@ const lesson: Lesson = {
     },
     {
       kind: 'worked',
-      title: l('给十秒流程掐表：前壁 STEMI', 'Clocking the routine: an anterior STEMI', 'Cronometrando la rutina: un IAMCEST anterior'),
+      title: l('给十秒流程掐表：前壁 STEMI', 'Clocking the routine: an anterior STEMI', 'Cronometrando el barrido: un IAMCEST anterior'),
       ecg: STEMI,
       view: GRID,
       steps: [
@@ -285,7 +293,7 @@ const lesson: Lesson = {
       view: STRIP,
       left: {
         ecg: real(4408),
-        caption: l('真实病例：77 岁男性——窦性心动过速约 130 次/分，每个 QRS 前一个 P', 'Real case: a 77-year-old man — sinus tachycardia at about 130/min, a P before every QRS', 'Caso real: varón de 77 años; taquicardia sinusal a unas 130 lpm, una P antes de cada QRS'),
+        caption: l('真实病例：77 岁男性——标注为窦性心动过速，约 130 次/分', 'Real case: a 77-year-old man — labelled sinus tachycardia, about 130/min', 'Caso real: varón de 77 años; etiquetado como taquicardia sinusal, unas 130 lpm'),
       },
       right: {
         ecg: synth('av-block-3', 1843, undefined, 'infra-his'),
@@ -293,9 +301,9 @@ const lesson: Lesson = {
         marks: [{ auto: 'qrs', label: l('宽 QRS 逸搏', 'Wide escape QRS', 'QRS de escape ancho') }],
       },
       point: l(
-        '两份都“异常”，箱子相反。左：快而规则、每个 QRS 前有 P——窦性心动过速是**症状**，治疗对象是它背后的原因（发热、疼痛、失血、脓毒症、缺氧、休克），不是节律本身；箱子由原因决定，心电图本身最多是“当天”。右：慢而宽，P 与 QRS 各行其道——直接进“现在处理”箱：电极片、起搏。**心率数字不定箱：患者的稳定状态与节律的机制才定箱。**',
-        'Both are "abnormal"; the bins are opposite. Left: fast and regular with a P before every QRS — sinus tachycardia is a **symptom**, and the target of treatment is whatever drives it (fever, pain, blood loss, sepsis, hypoxia, shock), not the rhythm itself; the cause sets the bin, and the tracing on its own is at most "today". Right: slow and wide, P waves marching independently — straight into the act-now bin: pads on, pace. **The heart-rate number does not set the bin; the patient\'s stability and the mechanism of the rhythm do.**',
-        'Ambos son «anormales» y las categorías son opuestas. Izquierda: rápido y regular con una P antes de cada QRS; la taquicardia sinusal es un **síntoma** y el objetivo del tratamiento es lo que la provoca (fiebre, dolor, hemorragia, sepsis, hipoxia, shock), no el ritmo en sí; la causa decide la categoría, y el ECG por sí solo como mucho es «hoy». Derecha: lento y ancho, con ondas P independientes; directo a la categoría de actuar ya: parches y estimulación. **El número de frecuencia no decide la categoría; la estabilidad del paciente y el mecanismo del ritmo sí.**',
+        '两份都“异常”，箱子相反。左：快，标注为窦性心动过速——它是**症状**，治疗对象是它背后的原因（发热、疼痛、失血、脓毒症、缺氧、休克），不是节律本身；箱子由原因决定，心电图本身最多是“当天”。右：慢而宽，P 与 QRS 各行其道——直接进“现在处理”箱：电极片、起搏。**心率数字不定箱：患者的稳定状态与节律的机制才定箱。**',
+        'Both are "abnormal"; the bins are opposite. Left: fast and labelled sinus tachycardia, which is a **symptom**, and the target of treatment is whatever drives it (fever, pain, blood loss, sepsis, hypoxia, shock), not the rhythm itself; the cause sets the bin, and the tracing on its own is at most "today". Right: slow and wide, P waves marching independently — straight into the act-now bin: pads on, pace. **The heart-rate number does not set the bin; the patient\'s stability and the mechanism of the rhythm do.**',
+        'Ambos son «anormales» y las categorías son opuestas. Izquierda: rápido y etiquetado como taquicardia sinusal, que es un **síntoma** y el objetivo del tratamiento es lo que la provoca (fiebre, dolor, hemorragia, sepsis, hipoxia, shock), no el ritmo en sí; la causa decide la categoría, y el ECG por sí solo como mucho es «hoy». Derecha: lento y ancho, con ondas P independientes; directo a la categoría de actuar ya: parches y estimulación. **El número de frecuencia no decide la categoría; la estabilidad del paciente y el mecanismo del ritmo sí.**',
       ),
     },
     {
@@ -307,9 +315,9 @@ const lesson: Lesson = {
           label: l('高钾', 'Potassium', 'Potasio'),
           ecg: synth('hyperkalemia-severe', 1844, { rate: 58 }),
           note: l(
-            '找不到 P，QRS 约 170 ms，V3–V5 的 T 高尖、底窄：**重度高钾**（o1）。现在处理：先静推钙剂；这不是室速，别电击。',
-            'No P to be found, QRS about 170 ms, tall narrow-based T in V3–V5: **severe hyperkalaemia** (o1). Act now: IV calcium first; this is not VT, do not shock.',
-            'Sin P, QRS de unos 170 ms, T altas y de base estrecha en V3–V5: **hiperpotasemia grave** (o1). Actuar ya: calcio intravenoso primero; no es una TV, no descargues.',
+            '找不到 P，QRS 约 170 ms，V3–V5 的 T 高耸：**重度高钾**（o1）。现在处理：先静推钙剂；这不是室速，别电击。',
+            'No P to be found, QRS about 170 ms, tall T in V3–V5: **severe hyperkalaemia** (o1). Act now: IV calcium first; this is not VT, do not shock.',
+            'Sin P, QRS de unos 170 ms, T altas en V3–V5: **hiperpotasemia grave** (o1). Actuar ya: calcio intravenoso primero; no es una TV, no des una descarga.',
           ),
           marks: [
             { auto: 'qrs', lead: 'V4', label: l('QRS 增宽', 'QRS widening', 'QRS ancho') },
@@ -364,18 +372,18 @@ const lesson: Lesson = {
     {
       kind: 'pitfalls',
       items: [
-        l('患者正在崩溃，你还在量 PR——十秒流程没跑完就钻进了形态学细节。', 'The patient is crashing while you measure the PR — diving into morphological detail before the ten-second routine is done.', 'El paciente se está hundiendo mientras mides el PR: entrar en el detalle morfológico antes de terminar la rutina de diez segundos.'),
+        l('患者正在崩溃，你还在量 PR——十秒流程没跑完就钻进了形态学细节。', 'The patient is crashing while you measure the PR — diving into morphological detail before the ten-second routine is done.', 'El paciente se está hundiendo mientras mides el PR: entrar en el detalle morfológico antes de terminar el barrido de diez segundos.'),
         l('“临界”图既不升级也不随访：箱子必须三选一，写进报告最后一行。', 'The "borderline" tracing neither escalated nor followed up: a bin must be chosen, one of three, in the report\'s last line.', 'El ECG «dudoso» ni se escala ni se sigue: hay que elegir una de las tres categorías y escribirla en la última línea del informe.'),
         l('高钾的正弦波被当作室速送去电击——先找 P、看 QRS 与 T 的融合（o1）。', 'Hyperkalaemia\'s sine wave treated as VT and shocked — look for the P and the QRS-to-T fusion first (o1).', 'La onda sinusoidal de la hiperpotasemia tratada como TV y desfibrilada: busca primero la P y la fusión QRS-T (o1).'),
         l('心率“还行”就跳过 P–QRS 关系：约 40 次/分的规则窄 QRS 也可能是完全性阻滞。', 'Skipping the P–QRS relationship because the rate looks "acceptable": a regular narrow QRS at about 40/min can still be complete block.', 'Saltarse la relación P-QRS porque la frecuencia parece «aceptable»: un QRS estrecho y regular a unas 40 lpm también puede ser un bloqueo completo.'),
-        l('压力之下丢掉流程：越乱越要按顺序——心率 → 致命 → ST → K/T → 设备。', 'Abandoning the routine under pressure: the messier it gets, the stricter the order — rate → deadly → ST → K/T → device.', 'Abandonar la rutina bajo presión: cuanto mayor es el caos, más estricto el orden: frecuencia → letal → ST → K/T → dispositivo.'),
+        l('压力之下丢掉流程：越乱越要按顺序——心率 → 致命 → ST → K/T → 设备。', 'Abandoning the routine under pressure: the messier it gets, the stricter the order — rate → deadly → ST → K/T → device.', 'Abandonar el barrido bajo presión: cuanto mayor es el caos, más estricto el orden: frecuencia → letal → ST → K/T → dispositivo.'),
       ],
     },
     {
       kind: 'summary',
       points: [
         l('报告最后一行是三个箱之一：现在处理 / 当天评估 / 常规——由患者的稳定性与节律机制决定，不由图“多难看”决定。', 'The report\'s last line is one of three bins: act now / review today / routine — set by the patient\'s stability and the rhythm\'s mechanism, not by how odd the tracing looks.', 'La última línea del informe es una de tres categorías: actuar ya / revisar hoy / rutina; la fijan la estabilidad del paciente y el mecanismo del ritmo, no el aspecto extraño del ECG.'),
-        l('十秒流程：心率 → 致命（快/慢/无）→ ST → K/T 形态 → 设备；任何一步命中即停——放下分规，先动手。', 'The ten-second routine: rate → deadly (fast/slow/absent) → ST → K/T shape → device; any hit stops it — calipers down, hands on the patient.', 'La rutina de diez segundos: frecuencia → letal (rápido/lento/ausente) → ST → forma de K/T → dispositivo; cualquier acierto la detiene: compás abajo y manos sobre el paciente.'),
+        l('十秒流程：心率 → 致命（快/慢/无）→ ST → K/T 形态 → 设备；任何一步命中即停——放下分规，先动手。', 'The ten-second routine: rate → deadly (fast/slow/absent) → ST → K/T shape → device; any hit stops it — calipers down, hands on the patient.', 'El barrido de diez segundos: frecuencia → letal (rápido/lento/ausente) → ST → forma de K/T → dispositivo; cualquier acierto lo detiene: compás abajo y manos sobre el paciente.'),
         l('现在处理 = 全部危急表现：骤停与室性节律、高度/三度阻滞、STEMI 及等危症、高钾、钠通道阻滞剂、QTc ≥500 ms（或长 QT 伴尖端扭转/晕厥）、低体温、急性肺栓塞、起搏故障、预激房颤。', 'Act now = every critical finding: arrest and ventricular rhythms, high-grade / complete block, STEMI and equivalents, hyperkalaemia, Na-channel blockers, QTc ≥ 500 ms (or long QT with torsades / syncope), hypothermia, acute PE, pacing failure, pre-excited AF.', 'Actuar ya = todos los hallazgos críticos: ritmos de parada y ventriculares, bloqueo avanzado / completo, IAMCEST y equivalentes, hiperpotasemia, bloqueantes del sodio, QTc ≥ 500 ms (o QT largo con torsade / síncope), hipotermia, TEP agudo, fallo del marcapasos, FA preexcitada.'),
         l('快≠急、慢≠稳：4408 的窦速治病因，7688 与 16151 的完全性阻滞要电极片与起搏准备——心率数字不定箱。', 'Fast is not urgent and slow is not stable: 4408\'s sinus tachycardia gets its cause treated, the complete blocks of 7688 and 16151 get pads and pacing ready — the rate alone sets no bin.', 'Rápido no es urgente y lento no es estable: a la taquicardia sinusal del 4408 se le trata la causa; los bloqueos completos del 7688 y el 16151 reciben parches y estimulación preparada; la frecuencia por sí sola no decide la categoría.'),
         l('分诊不替代阅读：患者安全之后，x1 的十步报告照常完成。', 'Triage does not replace reading: once the patient is safe, the ten-step report from x1 is still written in full.', 'El triaje no sustituye a la lectura: cuando el paciente está a salvo, el informe de diez pasos de x1 se completa igual.'),
@@ -387,6 +395,7 @@ const lesson: Lesson = {
     'Soar J et al. European Resuscitation Council Guidelines 2021: Adult advanced life support. Resuscitation 2021;161:115-151',
     'Kusumoto FM et al. 2018 ACC/AHA/HRS Guideline on Bradycardia and Cardiac Conduction Delay. Circulation 2019;140:e382-e482',
     'Rautaharju PM et al. AHA/ACCF/HRS Part IV: The ST segment, T and U waves, and the QT interval. Circulation 2009;119:e241-e250',
+    'Van Gelder IC et al. 2024 ESC Guidelines for the management of atrial fibrillation. Eur Heart J 2024;45:3314-3414',
     'Castellano et al. 2004',
   ],
 };
