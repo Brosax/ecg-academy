@@ -728,7 +728,7 @@ describe('i6: posterior infarction on the tracings', () => {
 });
 
 describe('i7: subtle occlusion on the tracings', () => {
-  it('hook / "below the line" frame (man of 52): V2–V4 up to about 1 mm, most in V3, under the 2-mm limit, bulky T in V3, faint mirror in III', () => {
+  it('hook / "below the line" frame (man of 52): V2–V4 up to about 1 mm, most in V3, under the 2-mm limit, bulky T in V3, the faint mirror an inverted T in III', () => {
     for (const src of [blocksOf('i7', 'hook')[0].ecg, blocksOf('i7', 'film')[0].frames[1].ecg]) {
       const e = ecgOf(src);
       for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThan(0.2);
@@ -740,6 +740,7 @@ describe('i7: subtle occlusion on the tracings', () => {
       }
       expect(tw(e, 'V3').max).toBeGreaterThan(0.5 * qrs(e, 'V3').p2p);
       expect(stAt(e, 'III')).toBeLessThan(-0.02);
+      expect(tInverted(e, 'III')).toBe(true);
     }
   });
   it('hyperacute T: in V3 the T is taller than the R; the J point in V2 under 1 mm', () => {
@@ -749,26 +750,37 @@ describe('i7: subtle occlusion on the tracings', () => {
       expect(stAt(e, 'V2')).toBeLessThan(0.1);
     }
   });
-  it('contrast A (occlusion) elevation at most about 1 mm (V3 the highest); B (early repolarisation): V2–V3 about 1.5 mm at J+60 (slightly above A, under 2.5 mm), inferior J notches, no depression outside aVR', () => {
+  it('worked (man of 55): V3 T/QRS (R + S) about 0.85; J and J+60 in V2 about 0.5 mm', () => {
+    const e = ecgOf(blocksOf('i7', 'worked')[0].ecg);
+    expect(tw(e, 'V3').max / qrs(e, 'V3').p2p).toBeGreaterThanOrEqual(0.8);
+    expect(tw(e, 'V3').max / qrs(e, 'V3').p2p).toBeLessThanOrEqual(0.9);
+    for (const plus of [0, 60]) {
+      expect(stAt(e, 'V2', plus), `V2 J+${plus}`).toBeGreaterThanOrEqual(0.025);
+      expect(stAt(e, 'V2', plus), `V2 J+${plus}`).toBeLessThanOrEqual(0.075);
+    }
+  });
+  it('contrast A (occlusion) elevation at most about 1 mm (V3 the highest) with an inverted T in III; B (early repolarisation): V2–V3 about 1.5 mm at J+60 (slightly above A, under 2.5 mm), inferior J notches, no depression outside aVR; T/QRS (R + S) in V2 about two-thirds against a third, in V3 about 0.7 against 0.55', () => {
     const e = ecgOf(blocksOf('i7', 'contrast')[0].right.ecg);
     const a = ecgOf(blocksOf('i7', 'contrast')[0].left.ecg);
     expect(CHEST.reduce((m, l) => (stAt(a, l) > stAt(a, m) ? l : m))).toBe('V3');
     expect(stAt(a, 'V3')).toBeGreaterThanOrEqual(0.075);
     expect(stAt(a, 'V3')).toBeLessThanOrEqual(0.125);
+    expect(tInverted(a, 'III')).toBe(true);
     for (const l of ['V2', 'V3'] as const) {
       expect(stAt(e, l), l).toBeLessThan(0.25);
-      expect(stAt(e, l, 60), l).toBeGreaterThan(0.13);
+      expect(stAt(e, l, 60), l).toBeGreaterThanOrEqual(0.125);
+      expect(stAt(e, l, 60), l).toBeLessThanOrEqual(0.175);
       expect(stAt(e, l, 60), l).toBeGreaterThan(stAt(a, l, 60));
     }
     for (const l of ['V1', 'V4', 'V5', 'V6'] as const) expect(stAt(e, l), l).toBeGreaterThan(0.05);
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l), l).toBeGreaterThan(0.07);
     for (const l of ALL.filter((x) => x !== 'aVR')) expect(stAt(e, l), l).toBeGreaterThan(-0.05);
-    // proportion (point text): T/QRS in V2 about 1 in A against about half in B; in V3 about 1.05 against 0.9
-    const tq = (x: typeof e, l: AnyLead) => tw(x, l).max / Math.max(qrs(x, l).max, -qrs(x, l).min);
-    expect(tq(a, 'V2')).toBeGreaterThan(0.9);
-    expect(tq(e, 'V2')).toBeLessThan(0.6);
-    expect(tq(e, 'V3')).toBeLessThan(tq(a, 'V3'));
-    expect(tq(e, 'V3')).toBeGreaterThan(0.75);
+    const i7TOverQrs = (x: Ecg, l: AnyLead) => tw(x, l).max / qrs(x, l).p2p;
+    const near = (v: number, x: number) => Math.abs(v - x) <= 0.05;
+    expect(near(i7TOverQrs(a, 'V2'), 2 / 3), `A V2 ${i7TOverQrs(a, 'V2')}`).toBe(true);
+    expect(near(i7TOverQrs(e, 'V2'), 1 / 3), `B V2 ${i7TOverQrs(e, 'V2')}`).toBe(true);
+    expect(near(i7TOverQrs(a, 'V3'), 0.7), `A V3 ${i7TOverQrs(a, 'V3')}`).toBe(true);
+    expect(near(i7TOverQrs(e, 'V3'), 0.55), `B V3 ${i7TOverQrs(e, 'V3')}`).toBe(true);
   });
   it('serial film (same seed, hyperacute then acute): first J under 1 mm in V2–V4 with the V3 T almost as tall as the R and T inverted in III; repeat V2–V3 ≥ 2 mm, V3 about 3.5 mm, III and aVF 1–1.5 mm down, the inferior mirror deepened', () => {
     const [f1, f2] = blocksOf('i7', 'film')[1].frames;
@@ -781,8 +793,8 @@ describe('i7: subtle occlusion on the tracings', () => {
     expect(tw(first, 'V3').max).toBeLessThanOrEqual(qrs(first, 'V3').max);
     expect(tInverted(first, 'III')).toBe(true);
     for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.2);
-    expect(stAt(e, 'V3')).toBeGreaterThan(0.32);
-    expect(stAt(e, 'V3')).toBeLessThan(0.38);
+    expect(stAt(e, 'V3')).toBeGreaterThanOrEqual(0.325);
+    expect(stAt(e, 'V3')).toBeLessThanOrEqual(0.375);
     for (const l of ['III', 'aVF'] as const) {
       expect(stAt(e, l), l).toBeLessThanOrEqual(-0.1);
       expect(stAt(e, l), l).toBeGreaterThanOrEqual(-0.15);
