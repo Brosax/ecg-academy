@@ -930,14 +930,20 @@ describe('i8: Wellens, de Winter, aVR on the tracings', () => {
 });
 
 describe('i9: evolution, Q waves and aneurysm on the tracings', () => {
-  it('timeline film (one seed): hyperacute (V2 ST < 1 mm, T taller than R) → acute (V2 about 3 mm, III down) → evolving (Q in V2, T turning negative, ST still up about 1 mm) → old (QS V1–V3, ST back), as in the hook', () => {
+  it('timeline film (one seed): hyperacute (V2 ST < 1 mm, T taller than R) → acute (V2 about 3 mm, III down, R and no Q) → evolving (V2 starts with a Q, T inverted, ST still up about 1 mm) → old (QS V1–V3, ST back), as in the hook (with upright T in V2–V3)', () => {
     const film = blocksOf('i9', 'film')[0];
     expect(new Set(film.frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req.seed : -1))).size).toBe(1);
     const [p1, p2, p3, p4] = film.frames.map((f) => ecgOf(f.ecg));
     expect(tw(p1, 'V2').max).toBeGreaterThan(qrs(p1, 'V2').max);
-    expect(stAt(p2, 'V2')).toBeGreaterThan(0.25);
-    expect(stAt(p2, 'V2')).toBeLessThan(0.33);
+    expect(stAt(p2, 'V2')).toBeGreaterThanOrEqual(0.275);
+    expect(stAt(p2, 'V2')).toBeLessThanOrEqual(0.325);
     expect(stAt(p2, 'III')).toBeLessThan(-0.05);
+    // hours: the R still there, no Q; about a day: V2 starts with a Q, the R gone (the prediction), the T inverted
+    expect(shape(p2, 'V2'), 'hours: V2 starts with an R').toMatch(/^r/i);
+    expect(shape(p3, 'V2'), 'about a day: V2 starts with a Q').toMatch(/^q/i);
+    const p = film.predict!;
+    expect(p.options[p.answer].en).toBe('With a Q: the R is gone');
+    expect(tInverted(p3, 'V2')).toBe(true);
     expect(stAt(p3, 'V2')).toBeLessThan(0.13);
     for (const l of ['V1', 'V2', 'V3'] as const) {
       expect(qrs(p4, l).max, l).toBeLessThan(0.05);
@@ -951,19 +957,24 @@ describe('i9: evolution, Q waves and aneurysm on the tracings', () => {
     expect(stAt(p3, 'V2')).toBeGreaterThanOrEqual(0.075);
     expect(stAt(p3, 'V2')).toBeLessThanOrEqual(0.125);
     const old = ecgOf(blocksOf('i9', 'hook')[0].ecg);
-    for (const l of ['V2', 'V3'] as const) {
+    for (const l of ['V1', 'V2', 'V3'] as const) {
       expect(qrs(old, l).max, l).toBeLessThan(0.05);
       expect(Math.abs(stAt(old, l)), l).toBeLessThan(0.05);
     }
+    for (const l of ['V2', 'V3'] as const) expect(tUpright(old, l), `hook: upright T ${l}`).toBe(true);
   });
-  it('worked (old inferior): Q ≥ 30 ms and ≥ 1 mm in II, QS in III and aVF, ST isoelectric, axis about −40°', () => {
+  it('worked (old inferior): Q about 35 ms and about 5 mm deep in II, QS in III and aVF, ST isoelectric, T upright in II and aVF, axis about −40°', () => {
     const e = ecgOf(blocksOf('i9', 'worked')[0].ecg);
     expect(qDurMs(e, 'II')).toBeGreaterThanOrEqual(30);
-    expect(qrs(e, 'II').min).toBeLessThan(-0.1);
+    expect(qDurMs(e, 'II')).toBeLessThanOrEqual(40);
+    expect(shape(e, 'II')).toMatch(/^Q R/);
+    expect(qrs(e, 'II').min).toBeLessThanOrEqual(-0.475);
+    expect(qrs(e, 'II').min).toBeGreaterThanOrEqual(-0.525);
     for (const l of ['III', 'aVF'] as const) expect(qrs(e, l).max, l).toBeLessThan(0.05);
     for (const l of ['II', 'III', 'aVF'] as const) expect(Math.abs(stAt(e, l)), l).toBeLessThan(0.05);
-    expect(e.truth!.axisDeg.qrs).toBeGreaterThan(-55);
-    expect(e.truth!.axisDeg.qrs).toBeLessThan(-30);
+    for (const l of ['II', 'aVF'] as const) expect(tUpright(e, l), `upright T ${l}`).toBe(true);
+    expect(e.truth!.axisDeg.qrs).toBeGreaterThanOrEqual(-45);
+    expect(e.truth!.axisDeg.qrs).toBeLessThanOrEqual(-35);
   });
   it('fragmented QRS (heart block): QS in V1–V3 and an extra r′ after the S in V4', () => {
     const e = ecgOf(blocksOf('i9', 'heart')[0].ecg);
@@ -971,13 +982,18 @@ describe('i9: evolution, Q waves and aneurysm on the tracings', () => {
     for (const l of ['V2', 'V3'] as const) expect(qrs(e, l).max, l).toBeLessThan(0.05);
     expect(shape(e, 'V4')).toMatch(/r′/);
   });
-  it('contrast: aneurysm T/QRS < 0.36 in every lead V1–V4 with ST elevation over QS; acute STEMI T/QRS > 0.36 in V2', () => {
+  it('contrast: both elevated ≥ 1 mm in V2–V3; aneurysm over wide Q waves (≥ 40 ms) in V2–V3 with T/QRS < 0.36 in every lead V1–V4; acute STEMI with no Q in V1–V4 and T/QRS > 0.36 in V2', () => {
     const c = blocksOf('i9', 'contrast')[0];
     const a = ecgOf(c.left.ecg);
     for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(tOverQrs(a, l), l).toBeLessThan(0.36);
-    for (const l of ['V2', 'V3'] as const) expect(stAt(a, l), l).toBeGreaterThanOrEqual(0.1);
+    for (const l of ['V2', 'V3'] as const) {
+      expect(stAt(a, l), l).toBeGreaterThanOrEqual(0.1);
+      expect(qDurMs(a, l), l).toBeGreaterThanOrEqual(40);
+    }
     const b = ecgOf(c.right.ecg);
     expect(tOverQrs(b, 'V2')).toBeGreaterThan(0.36);
+    for (const l of ['V2', 'V3'] as const) expect(stAt(b, l), l).toBeGreaterThanOrEqual(0.1);
+    for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(shape(b, l), `B ${l} starts without a Q`).toMatch(/^r/i);
   });
 });
 
