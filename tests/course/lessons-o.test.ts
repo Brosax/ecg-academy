@@ -1216,11 +1216,47 @@ describe('o10: artefacts and filters on the tracings', () => {
       expect(excursion(motion, l, 2600, 6200), l).toBeGreaterThan(3 * excursion(motion, l, 200, 2400));
     }
   });
-  it('motion on RA (film frame and inline check): I, II, aVR swing widely between 2.6 and 6.2 s, III stays quiet', () => {
+  it('motion on RA (film frame and inline check): I, II, aVR swing widely between 2.6 and 6.2 s, III stays quiet; aVR swings as widely as I and II', () => {
     for (const e of [frames('o10', 0)[5], ecgOf(inlineItem('o10', 'o10:which-electrode').ecg)]) {
       const quiet = excursion(e, 'III', 2600, 6200);
       for (const l of ['I', 'II', 'aVR'] as const) expect(excursion(e, l, 2600, 6200), l).toBeGreaterThan(3 * quiet);
     }
+    const check = ecgOf(inlineItem('o10', 'o10:which-electrode').ecg);
+    for (const l of ['I', 'II'] as const) {
+      const ratio = excursion(check, 'aVR', 2600, 6200) / excursion(check, l, 2600, 6200);
+      expect(ratio, l).toBeGreaterThan(0.85);
+      expect(ratio, l).toBeLessThan(1.15);
+    }
+  });
+  it('worked tremor (LL): aVF as noisy as II and III, aVR and aVL about half; the RR marches at about 830 ms (72/min), the marked RR among them', () => {
+    const w = blocksOf('o10', 'worked')[0];
+    const e = ecgOf(w.ecg);
+    for (const l of ['II', 'III'] as const) {
+      const ratio = hfNoise(e, 'aVF') / hfNoise(e, l);
+      expect(ratio, l).toBeGreaterThan(0.85);
+      expect(ratio, l).toBeLessThan(1.15);
+    }
+    for (const l of ['aVR', 'aVL'] as const) {
+      const ratio = hfNoise(e, l) / hfNoise(e, 'II');
+      expect(ratio, l).toBeGreaterThan(0.4);
+      expect(ratio, l).toBeLessThan(0.7);
+    }
+    expect(Math.abs(e.truth!.hrBpm - 72)).toBeLessThan(1);
+    expect(Math.abs(60000 / e.truth!.hrBpm - 830)).toBeLessThan(5);
+    const [k] = markBeats(w.steps[1].marks, 'rr');
+    expect(Math.abs(rrs(e)[k] - 830)).toBeLessThanOrEqual(5);
+  });
+  it('tremor-or-AF contrast: the AF side is atrial fibrillation with an irregularly irregular RR, the RR mark on its longest interval', () => {
+    const c = contrastTitled('o10', 'Tremor artefact or AF?');
+    const af = ecgOf(c.right.ecg);
+    expect(af.truth!.rhythm).toBe('atrial-fibrillation');
+    const r = rrs(af);
+    expect(Math.max(...r) - Math.min(...r)).toBeGreaterThan(300);
+    const d = r.slice(1).map((x, i) => x - r[i]);
+    expect(d.slice(1).filter((x, i) => Math.sign(x) !== Math.sign(d[i])).length).toBeGreaterThanOrEqual(5);
+    const [k] = markBeats(c.right.marks, 'rr');
+    expect(af.truth!.beats[k].kind).toBe('atrial');
+    expect(r[k]).toBe(Math.max(...r));
   });
   it('filter film: one heart; diagnostic J in V4–V6 on the baseline; monitor J in V4–V6 about 1 mm low; zero-phase 0.67 Hz J back on the baseline', () => {
     const [diag, mon, zero] = frames('o10', 1);
