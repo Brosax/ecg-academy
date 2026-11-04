@@ -909,7 +909,9 @@ describe('h7: QT on the tracings', () => {
     for (let ms = bd.tOff + 10; ms <= bd.tOff + 150; ms += 2) u = Math.max(u, vd(ms));
     expect(u, 'U after the T end').toBeGreaterThan(0.1);
   });
-  it('QTc sweep notes (Fridericia read-out at the start rate of 64/min): 490–495 prolonged but not past 500 with the QT over half the RR; 500–560 past 500', () => {
+  it('QTc sweep notes (Fridericia read-out at the start rate of 64/min): 490–495 prolonged but not past 500 with the QT over half the RR; 501–560 past 500', () => {
+    const notes = blocksOf('h7', 'live')[0].play!.notes!;
+    expect(notes.map((n) => [n.min, n.max])).toEqual([[490, 495], [501, 560]]);
     for (const q of [490, 495]) {
       const t = played('h7', 0, q).truth!;
       expect(Math.abs(t.qtcFridericiaMs - q), `${q}`).toBeLessThan(3);
@@ -917,12 +919,22 @@ describe('h7: QT on the tracings', () => {
       expect(t.qtcFridericiaMs, `${q}`).toBeLessThan(500);
       expect(t.qtMs, `${q}: QT over half the RR`).toBeGreaterThan(30000 / t.hrBpm);
     }
-    for (const q of [500, 505, 560]) {
+    for (const q of [501, 505, 560]) {
       const t = played('h7', 0, q).truth!;
       expect(Math.abs(t.qtcFridericiaMs - q), `${q}`).toBeLessThan(3);
       expect(t.qtcFridericiaMs, `${q}`).toBeGreaterThan(500);
     }
     expect(Math.abs(played('h7', 0, 490).truth!.hrBpm - 64)).toBeLessThan(1);
+  });
+  it('QTc sweep prediction: at a fixed 64/min the T end (the QT mark) moves about 70 ms later from 490 to 560, with the RR unchanged', () => {
+    const [lo, hi] = [played('h7', 0, 490), played('h7', 0, 560)];
+    expect(Math.abs(hi.truth!.hrBpm - lo.truth!.hrBpm), 'the rate stays').toBeLessThan(0.1);
+    expect(Math.abs(hi.truth!.hrBpm - 64)).toBeLessThan(1);
+    const qt = (e: Ecg) => midBeat(e).tOff - midBeat(e).qrsOn;
+    expect(Math.abs(qt(hi) - qt(lo) - 70), `${(qt(hi) - qt(lo)).toFixed(1)} ms`).toBeLessThanOrEqual(5);
+    expect(Math.abs(hi.truth!.qtMs - lo.truth!.qtMs - 70)).toBeLessThanOrEqual(5);
+    const p = blocksOf('h7', 'live')[0].predict!;
+    expect(p.options[p.answer].en).toBe('About 70 ms later');
   });
   it('live caption and Bazett pitfall: at one Fridericia QTc the QT shortens as the rate rises (50 → 80/min); Bazett reads under Fridericia at 50/min and over it at 80/min', () => {
     const b = blocksOf('h7', 'live')[0];

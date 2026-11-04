@@ -195,20 +195,29 @@ const lesson: Lesson = {
             ),
           },
           {
-            min: 500,
+            min: 501,
             max: 560,
             text: l(
-              'QTc 越过 500 ms：TdP 高危。若病人正在用延长 QT 的药物：停药，补钾补镁。',
-              'QTc past 500 ms: high torsade risk. In a patient on a QT-prolonging drug: stop it, give K and Mg.',
-              'QTc por encima de 500 ms: alto riesgo de torsade. Si el paciente toma un fármaco que alarga el QT: retíralo y administra K y Mg.',
+              'QTc 越过 500 ms：TdP 高危。若病人正在用延长 QT 的药物：停药，查血钾血镁并纠正。',
+              'QTc past 500 ms: high torsade risk. In a patient on a QT-prolonging drug: stop it, check and correct K and Mg.',
+              'QTc por encima de 500 ms: alto riesgo de torsade. Si el paciente toma un fármaco que alarga el QT: retíralo, comprueba el K y el Mg y corrígelos.',
             ),
           },
         ],
       },
       predict: {
-        question: l('QTc 从 490 升到 560 ms。TdP 高危从哪里开始？', 'The QTc climbs from 490 to 560 ms. Where does high torsade risk begin?', 'El QTc sube de 490 a 560 ms. ¿Dónde empieza el alto riesgo de torsade?'),
-        options: [l('超过 450 ms', 'Past 450 ms', 'Por encima de 450 ms'), l('超过 500 ms', 'Past 500 ms', 'Por encima de 500 ms'), l('超过 550 ms', 'Past 550 ms', 'Por encima de 550 ms')],
+        question: l(
+          '心率固定在 64 次/分，QTc 从 490 升到 560 ms。T 波终点会后移多少？',
+          'The rate stays at 64/min while the QTc climbs from 490 to 560 ms. How far does the T end move?',
+          'La frecuencia se mantiene en 64 lpm mientras el QTc sube de 490 a 560 ms. ¿Cuánto se desplaza el final de la T?',
+        ),
+        options: [
+          l('几乎不动', 'Barely at all', 'Casi nada'),
+          l('后移约 70 ms', 'About 70 ms later', 'Unos 70 ms más tarde'),
+          l('后移约 140 ms', 'About 140 ms later', 'Unos 140 ms más tarde'),
+        ],
         answer: 1,
+        ordered: true,
       },
       caption: l(
         '看 T 的终点随 QTc 后移。之后再动心率：Fridericia QTc 不变时，心率越快 QT 越短。',
@@ -285,9 +294,9 @@ const lesson: Lesson = {
           label: l('药物', 'Drug', 'Fármaco'),
           ecg: synth('long-qt', 1332, undefined, 'drug'),
           note: l(
-            'hERG 阻滞药物写出类 LQT2 的双峰 T，T 之后还跟着一个 U 波：QT 量到 T 的终点，不含 U。',
-            'A hERG-blocking drug writes an LQT2-like bifid T, followed by a U wave after the T: measure the QT to the T end, U excluded.',
-            'Un fármaco que bloquea el hERG escribe una T bífida como la del LQT2, seguida de una onda U tras la T: mide el QT hasta el final de la T, sin la U.',
+            '阻滞 hERG 钾通道的药物写出类 LQT2 的双峰 T，T 之后还跟着一个 U 波：QT 量到 T 的终点，不含 U。',
+            'A drug that blocks the hERG potassium channel writes an LQT2-like bifid T, followed by a U wave after the T: measure the QT to the T end, U excluded.',
+            'Un fármaco que bloquea el canal de potasio hERG escribe una T bífida como la del LQT2, seguida de una onda U tras la T: mide el QT hasta el final de la T, sin la U.',
           ),
           marks: [{ auto: 't', lead: 'V3' }, { auto: 'u', lead: 'V3' }],
         },
