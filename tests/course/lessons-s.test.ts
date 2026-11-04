@@ -568,18 +568,22 @@ describe('s3: sinus rhythm on the tracings', () => {
 });
 
 describe('s4: intervals on the tracings', () => {
-  it('hook (130/min): QT about 325 ms, Bazett about 478 ms, Fridericia about 420 ms', () => {
-    const t = ecgOf(blocksOf('s4', 'hook')[0].ecg).truth!;
-    expect(Math.abs(t.hrBpm - 130)).toBeLessThan(2);
-    expect(Math.abs(t.qtMs - 325)).toBeLessThan(10);
-    expect(Math.abs(t.qtcBazettMs - 478)).toBeLessThan(8);
-    expect(Math.abs(t.qtcFridericiaMs - 420)).toBeLessThan(5);
+  it('hook (130/min): QT about 325 ms, RR 0.46 s, Bazett about 478 ms, Fridericia about 420 ms', () => {
+    const e = ecgOf(blocksOf('s4', 'hook')[0].ecg);
+    const t = e.truth!;
+    expect(Math.abs(t.hrBpm - 130)).toBeLessThanOrEqual(1);
+    expect(Math.abs(t.qtMs - 325)).toBeLessThanOrEqual(5);
+    expect(Math.abs(meanRr(e) - 460)).toBeLessThanOrEqual(5);
+    expect(Math.abs(t.qtcBazettMs - 478)).toBeLessThanOrEqual(5);
+    expect(Math.abs(t.qtcFridericiaMs - 420)).toBeLessThanOrEqual(5);
   });
   it('contrast A (45/min): QT about 462 ms, Bazett about 400 ms, Fridericia about 420 ms', () => {
-    const t = ecgOf(blocksOf('s4', 'contrast')[0].left.ecg).truth!;
-    expect(Math.abs(t.qtMs - 462)).toBeLessThan(10);
-    expect(Math.abs(t.qtcBazettMs - 400)).toBeLessThan(8);
-    expect(Math.abs(t.qtcFridericiaMs - 420)).toBeLessThan(5);
+    const e = ecgOf(blocksOf('s4', 'contrast')[0].left.ecg);
+    const t = e.truth!;
+    expect(Math.abs(t.hrBpm - 45)).toBeLessThanOrEqual(1);
+    expect(Math.abs(t.qtMs - 462)).toBeLessThanOrEqual(5);
+    expect(Math.abs(t.qtcBazettMs - 400)).toBeLessThanOrEqual(5);
+    expect(Math.abs(t.qtcFridericiaMs - 420)).toBeLessThanOrEqual(5);
   });
   it('worked: PR about 180 ms and QRS about 95 ms; QT about 420 ms at 60/min', () => {
     const [w1, w2] = blocksOf('s4', 'worked');
@@ -628,10 +632,20 @@ describe('s4: intervals on the tracings', () => {
     expect(Math.abs(end.truth.qtcBazettMs - 440)).toBeLessThan(5);
     expect(Math.abs(end.truth.qtcFridericiaMs - 405)).toBeLessThan(5);
   });
-  it('QTc-calculator caption: RR about 460 ms in the hook and about 1330 ms in contrast A', () => {
-    const meanRr = (e: Ecg) => rrs(e).reduce((s, x) => s + x, 0) / rrs(e).length;
-    expect(Math.abs(meanRr(ecgOf(blocksOf('s4', 'hook')[0].ecg)) - 460)).toBeLessThan(15);
-    expect(Math.abs(meanRr(ecgOf(blocksOf('s4', 'contrast')[0].left.ecg)) - 1330)).toBeLessThan(30);
+  it('QTc-calculator caption: the hook has QT 325 ms and RR 460 ms; contrast A has QT 462 ms and RR 1330 ms at 45/min', () => {
+    const hook = ecgOf(blocksOf('s4', 'hook')[0].ecg);
+    const slow = ecgOf(blocksOf('s4', 'contrast')[0].left.ecg);
+    expect(Math.abs(hook.truth!.qtMs - 325)).toBeLessThanOrEqual(5);
+    expect(Math.abs(meanRr(hook) - 460)).toBeLessThanOrEqual(5);
+    expect(Math.abs(slow.truth!.qtMs - 462)).toBeLessThanOrEqual(5);
+    expect(Math.abs(meanRr(slow) - 1330)).toBeLessThanOrEqual(5);
+    expect(Math.abs(slow.truth!.hrBpm - 45)).toBeLessThanOrEqual(1);
+  });
+  it('PR sweep prediction: at the end the PR spans 5 small squares', () => {
+    const p = blocksOf('s4', 'live')[0].predict!;
+    expect(p.ordered).toBe(true);
+    expect(p.options[p.answer].en).toBe('5');
+    expect(Math.abs(played('s4', 0, 200).truth!.prMs! / 40 - 5)).toBeLessThan(0.2);
   });
 });
 
@@ -948,6 +962,13 @@ const REAL_CLAIMS: Readonly<Partial<Record<(typeof IDS)[number], readonly RealCl
     { id: 16233, has: ['sinus-arrhythmia'] },
     { id: 2084, has: ['sinus-arrhythmia'] },
     { id: 21589, has: ['sinus-rhythm'], not: ['sinus-arrhythmia'] },
+  ],
+  // "one case sits exactly on an upper limit"; "another carries the label long QT: at about 95/min, does the label still
+  // hold with Fridericia?" (a woman: Fridericia stays under her 460-ms limit, so it does not)
+  s4: [
+    { id: 1101, not: ['long-qt'] },
+    { id: 5199, not: ['long-qt'], pr: [200, 200] },
+    { id: 11916, sex: 'F', has: ['long-qt'], hr: [94, 96], qtcF: [0, 459] },
   ],
 };
 
