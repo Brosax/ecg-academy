@@ -7,8 +7,9 @@
  *  - The default beat is the dominant beat (most frequent beat kind, not aberrant) that sits best inside the panels
  *    where the mark's lead is drawn: a 3×4 sheet shows each lead for 2.5 s only, so a V2 mark must use a beat inside
  *    the V2 column. `beat` (an index into truth.beats) overrides the choice.
- *  - Default lead: II (the conventional rhythm / interval lead) — interval brackets drawn in all 13 panels would bury
- *    the tracing. `lead: 'all'` on a morphology mark (q, r, s, j, st60) is expanded to the twelve standard leads.
+ *  - Default lead: the shown lead in a one-lead view ('single' / 'strip'), else II (the conventional rhythm / interval
+ *    lead) — interval brackets drawn in all 13 panels would bury the tracing. `lead: 'all'` on a morphology mark (q, r,
+ *    s, j, st60) is expanded to the twelve standard leads.
  *  - Estimates (BeatMarks has no T onset, delta end or pacing-spike time): T onset = half-way from J to the T peak;
  *    δ = the first 35 % of the QRS (20–60 ms); a ventricular pacing spike = the paced beat's QRS onset.
  */
@@ -465,7 +466,7 @@ export function resolveMarks(ecg: Ecg, marks: readonly LessonMark[] | undefined,
       continue;
     }
     if (!truth) continue;
-    const lead = m.lead ?? DEFAULT_MARK_LEAD;
+    const lead = m.lead ?? (o.layout === 'single' || o.layout === 'strip' ? (o.lead ?? DEFAULT_MARK_LEAD) : DEFAULT_MARK_LEAD);
     const leads: readonly (Lead | 'all')[] = lead === 'all' && PER_LEAD.has(m.auto) ? STD_LEADS : [lead];
     for (const l of leads) out.push(...resolveOne(ecg, truth, m, l, o));
   }

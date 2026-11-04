@@ -173,7 +173,6 @@ const lesson: Lesson = {
           ),
           marks: [{ auto: 'r', lead: 'V5' }, { auto: 's', lead: 'V1' }],
           highlightLeads: ['V1', 'V5'],
-          view: { layout: 'strip', lead: 'V5' },
         },
         {
           title: l('复极：判决在这里', 'Repolarisation: the verdict lives here', 'Repolarización: aquí está el veredicto'),

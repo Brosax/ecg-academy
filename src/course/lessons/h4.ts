@@ -148,7 +148,7 @@ const lesson: Lesson = {
             'Measure the QRS amplitude in each of I, II, III, aVR, aVL and aVF — from the top of the tallest positive wave to the bottom of the deepest negative one (peak to peak): the largest here is II at about 4 mm, all <5 mm. If any single lead reaches 5 mm, "low limb voltage" is not met.',
             'Mide la amplitud del QRS en I, II, III, aVR, aVL y aVF, desde la cima de la onda positiva más alta hasta el fondo de la negativa más profunda (pico a pico): la mayor es II, con unos 4 mm; todas <5 mm. Si una sola derivación llega a 5 mm, no se cumple el «bajo voltaje en extremidades».',
           ),
-          marks: [{ auto: 'r', lead: 'II' }, { auto: 's', lead: 'aVR' }],
+          marks: [{ auto: 'r', lead: 'II' }, { auto: 'q', lead: 'aVR' }],
           highlightLeads: ['I', 'II', 'III', 'aVR', 'aVL', 'aVF'],
         },
         {
