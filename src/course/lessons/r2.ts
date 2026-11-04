@@ -243,13 +243,13 @@ const lesson: Lesson = {
         {
           label: l('交界区抢位', 'Junction usurps', 'Usurpa la unión'),
           ecg: synth('accelerated-junctional-rhythm', 424, undefined, 'isorhythmic'),
-          note: l('窦性约 70、交界区约 76：下位起搏点跑赢窦房结（抢位）。P 在 QRS 旁漂移，偶尔下传一个。见于地高辛中毒、心脏术后。', 'Sinus about 70, junction about 76: the lower pacemaker outruns the sinus node (usurpation). The P drifts around the QRS; now and then one conducts. Seen in digoxin toxicity and after cardiac surgery.', 'Sinusal unos 70, unión unos 76: el marcapasos inferior adelanta al sinusal (usurpación). La P se desliza junto al QRS y alguna conduce. Se ve en la intoxicación digitálica y tras cirugía cardíaca.'),
+          note: l('窦性约 70、交界区约 76：下位起搏点跑赢窦房结（抢位）。P 在 QRS 旁漂移，偶尔下传一个。', 'Sinus about 70, junction about 76: the lower pacemaker outruns the sinus node (usurpation). The P drifts around the QRS; now and then one conducts.', 'Sinusal unos 70, unión unos 76: el marcapasos inferior adelanta al sinusal (usurpación). La P se desliza junto al QRS y alguna conduce.'),
           marks: [{ auto: 'p' }, { auto: 'qrs' }],
         },
         {
           label: l('心室抢位（AIVR）', 'Ventricle usurps (AIVR)', 'Usurpa el ventrículo (RIVA)'),
           ecg: synth('aivr', 426),
-          note: l('宽 QRS 约 76 次/分，略快于窦性 72：AIVR。找夺获（窄、提前）和融合波（宽度居中）。再灌注后常见，良性。', 'Wide QRS at about 76/min, just faster than sinus at 72: AIVR. Find the capture (narrow, early) and the fusion beat (in-between width). Common after reperfusion, benign.', 'QRS ancho a unos 76 lpm, algo más rápido que el sinusal de 72: RIVA. Busca la captura (estrecha, precoz) y la fusión (anchura intermedia). Frecuente tras la reperfusión, benigno.'),
+          note: l('宽 QRS 约 76 次/分，略快于窦性 72：AIVR。找夺获（窄、提前）和融合波（宽度居中）。', 'Wide QRS at about 76/min, just faster than sinus at 72: AIVR. Find the capture (narrow, early) and the fusion beat (in-between width).', 'QRS ancho a unos 76 lpm, algo más rápido que el sinusal de 72: RIVA. Busca la captura (estrecha, precoz) y la fusión (anchura intermedia).'),
           marks: [{ auto: 'qrs', label: l('室性 QRS', 'Ventricular QRS', 'QRS ventricular') }],
         },
         {
@@ -265,9 +265,9 @@ const lesson: Lesson = {
         answer: 2,
       },
       caption: l(
-        '“房室分离”只是描述。比较房率和室率，再写出机制：默认、抢位还是阻滞。',
-        '"AV dissociation" is only a description. Compare the atrial and ventricular rates, then write the mechanism: default, usurpation or block.',
-        '«Disociación AV» es solo una descripción. Compara las frecuencias auricular y ventricular y escribe el mecanismo: por defecto, usurpación o bloqueo.',
+        '“房室分离”只是描述。比较房率和室率，再写出机制：默认、抢位还是阻滞。加速性交界性心律见于地高辛中毒和心脏术后。',
+        '"AV dissociation" is only a description. Compare the atrial and ventricular rates, then write the mechanism: default, usurpation or block. An accelerated junctional rhythm is seen in digoxin toxicity and after cardiac surgery.',
+        '«Disociación AV» es solo una descripción. Compara las frecuencias auricular y ventricular y escribe el mecanismo: por defecto, usurpación o bloqueo. El ritmo de la unión acelerado se ve en la intoxicación digitálica y tras cirugía cardíaca.',
       ),
     },
     {
@@ -332,8 +332,8 @@ const lesson: Lesson = {
         ),
         l(
           '把再灌注后的 AIVR 当成再灌注失败：它不说明血管没开通，判断再灌注看 ST 段回落。',
-          'Reading AIVR after reperfusion as failed reperfusion: it says nothing about the artery; judge reperfusion by ST resolution.',
-          'Interpretar el RIVA tras la reperfusión como fracaso de la reperfusión: no informa sobre la arteria; la reperfusión se valora por la resolución del ST.',
+          'Reading AIVR after reperfusion as a sign of failure: it does not mean reperfusion failed; judge reperfusion by ST resolution.',
+          'Interpretar el RIVA tras la reperfusión como signo de fracaso: no significa que la reperfusión haya fracasado; la reperfusión se valora por la resolución del ST.',
         ),
       ],
     },
