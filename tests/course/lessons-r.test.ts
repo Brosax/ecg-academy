@@ -397,22 +397,27 @@ describe('r1: the sinus node on the tracings', () => {
 });
 
 describe('r2: escape and dissociation on the tracings', () => {
-  it('hook: junctional escape about 46/min, narrow, retrograde P′ about 110 ms before every QRS', () => {
+  it('hook: junctional escape at 46/min, narrow, retrograde P′ about 105 ms before every QRS', () => {
     const e = ecgOf(blocksOf('r2', 'hook')[0].ecg);
-    expect(Math.abs(e.truth!.hrBpm - 46)).toBeLessThan(2);
+    expect(Math.abs(e.truth!.hrBpm - 46)).toBeLessThanOrEqual(1);
     expect(e.truth!.qrsMs).toBeLessThan(110);
-    for (const pr of prs(e)) expect(Math.abs(pr - 108)).toBeLessThan(15);
+    expect(prs(e).length).toBe(e.truth!.beats.length);
+    for (const pr of prs(e)) expect(Math.abs(pr - 105)).toBeLessThanOrEqual(5);
   });
-  it('isorhythmic dissociation (mechanism film frame 1): sinus about 70, junction about 76; only an occasional P conducts', () => {
+  it('isorhythmic dissociation (mechanism film frame 1): sinus about 70, junction about 76; the one P that conducts within the strip is the one marked', () => {
     const e = frames('r2', 1)[0];
     const t = e.truth!;
     expect(t.atrialRateBpm!).toBeLessThan(t.hrBpm);
-    expect(Math.abs(t.atrialRateBpm! - 70)).toBeLessThan(2);
+    expect(Math.abs(t.atrialRateBpm! - 70)).toBeLessThanOrEqual(1);
     const esc = t.beats.flatMap((b, i) => (i > 0 && b.kind === 'escape-junctional' && t.beats[i - 1].kind === 'escape-junctional' ? [b.qrsOn - t.beats[i - 1].qrsOn] : []));
-    for (const rr of esc) expect(Math.abs(60000 / rr - 76)).toBeLessThan(1.5);
+    for (const rr of esc) expect(Math.abs(60000 / rr - 76)).toBeLessThanOrEqual(1);
     const captures = t.beats.filter((b) => b.kind === 'sinus').length;
     expect(captures).toBeGreaterThanOrEqual(1);
     expect(captures).toBeLessThanOrEqual(3);
+    const conducted = t.atrial.flatMap((a) => (a.conductedTo !== null ? [a.conductedTo] : []));
+    expect(markBeats('r2', 1, 0, 'p')).toEqual(conducted);
+    expect(markBeats('r2', 1, 0, 'qrs')).toEqual(conducted);
+    expect(t.beats[conducted[0]].kind).toBe('sinus');
   });
   it('escape film: the sinus node stops and a narrow junctional escape with no P comes about 1.43 s after the last beat', () => {
     const e = frames('r2', 0)[0];
@@ -436,25 +441,43 @@ describe('r2: escape and dissociation on the tracings', () => {
     expect(infra.truth!.qrsMs).toBeGreaterThanOrEqual(120);
     expect(blocksOf('r2', 'film')[1].frames[2].ecg).toEqual(blocksOf('r2', 'film')[0].frames[1].ecg);
   });
-  it('worked: sinus about 60, junction about 66, captures with the same narrow QRS', () => {
-    const t = ecgOf(blocksOf('r2', 'worked')[0].ecg).truth!;
-    expect(Math.abs((t.atrialRateBpm ?? 0) - 60)).toBeLessThan(2);
+  it('worked: sinus 60, junction 66 (the bracket), interrupted only by two early beats; the marked one is a capture with a normal PR and the same narrow QRS; the P marks show P waves before the QRS, on the T, and hidden P waves', () => {
+    const e = ecgOf(blocksOf('r2', 'worked')[0].ecg);
+    const t = e.truth!;
+    expect(Math.abs((t.atrialRateBpm ?? 0) - 60)).toBeLessThanOrEqual(1);
+    const r = rrs(e);
+    const [k] = stepBeats('r2', 0, 'rr');
+    expect([t.beats[k].kind, t.beats[k + 1].kind]).toEqual(['escape-junctional', 'escape-junctional']);
+    expect(Math.abs(60000 / r[k] - 66)).toBeLessThanOrEqual(1);
+    const early = r.flatMap((x, i) => (x < 0.6 * r[k] ? [i + 1] : []));
+    expect(early, 'two early beats').toHaveLength(2);
+    for (const i of early) expect(t.beats[i].kind, `early beat ${i}`).toBe('sinus');
+    const [c] = stepBeats('r2', 2, 'qrs');
+    expect(early).toContain(c);
+    const cap = t.beats[c];
+    expect(cap.pOn).not.toBeNull();
+    expect(cap.qrsOn - (cap.pOn ?? 0), 'a normal PR').toBeGreaterThanOrEqual(120);
+    expect(cap.qrsOn - (cap.pOn ?? 0), 'a normal PR').toBeLessThanOrEqual(200);
     const esc = t.beats.filter((b) => b.kind !== 'sinus');
-    expect(Math.abs(60000 / (esc[2].qrsOn - esc[1].qrsOn) - 66)).toBeLessThan(2);
-    const cap = t.beats.filter((b) => b.kind === 'sinus');
-    expect(cap.length).toBeGreaterThanOrEqual(1);
-    for (const c of cap) expect(Math.abs(c.qrsOff - c.qrsOn - (esc[0].qrsOff - esc[0].qrsOn))).toBeLessThan(10);
+    for (const i of early) expect(Math.abs(t.beats[i].qrsOff - t.beats[i].qrsOn - (esc[0].qrsOff - esc[0].qrsOn))).toBeLessThan(3);
+    const marked = t.atrial.filter((a) => a.conductedTo === null && a.visible);
+    expect(marked.length).toBeGreaterThanOrEqual(3);
+    expect(marked.some((a) => t.beats.some((b) => b.qrsOn - a.t > 0 && b.qrsOn - a.t < 300)), 'a P before a QRS').toBe(true);
+    expect(marked.some((a) => t.beats.some((b) => a.t > b.j && a.t < b.tOff)), 'a P on a T wave').toBe(true);
+    expect(t.atrial.some((a) => !a.visible), 'a P hidden in a QRS').toBe(true);
   });
-  it('AIVR (mechanism film frame 2): wide QRS at about 76/min against sinus about 72/min, a narrow early capture and a fusion beat of in-between width', () => {
+  it('AIVR (mechanism film frame 2): wide QRS at about 76/min against sinus at 72/min, a narrow early capture and a fusion beat of in-between width; the label sits on a ventricular beat', () => {
     const t = frames('r2', 1)[1].truth!;
     const kinds = t.beats.map((b) => b.kind);
     expect(kinds).toContain('capture');
     expect(kinds).toContain('fusion');
-    expect(Math.abs((t.atrialRateBpm ?? 0) - 72)).toBeLessThan(2);
+    expect(Math.abs((t.atrialRateBpm ?? 0) - 72)).toBeLessThanOrEqual(1);
     const w = (b: BeatMarks) => b.qrsOff - b.qrsOn;
     const v = t.beats.filter((b) => b.kind === 'ventricular');
+    const [labelled] = markBeats('r2', 1, 1, 'qrs');
+    expect(t.beats[labelled].kind).toBe('ventricular');
     const vrr = t.beats.flatMap((b, i) => (i > 0 && b.kind === 'ventricular' && t.beats[i - 1].kind === 'ventricular' ? [b.qrsOn - t.beats[i - 1].qrsOn] : []));
-    expect(Math.abs(60000 / (vrr.reduce((s, x) => s + x, 0) / vrr.length) - 76)).toBeLessThan(1.5);
+    expect(Math.abs(60000 / mean(vrr) - 76)).toBeLessThanOrEqual(1);
     for (const b of v) expect(w(b)).toBeGreaterThanOrEqual(120);
     const ci = t.beats.findIndex((b) => b.kind === 'capture');
     const cap = t.beats[ci];
@@ -468,9 +491,9 @@ describe('r2: escape and dissociation on the tracings', () => {
     const c = blocksOf('r2', 'contrast')[0];
     const a = ecgOf(c.left.ecg).truth!;
     const b = ecgOf(c.right.ecg).truth!;
-    expect(Math.abs(a.hrBpm - 46)).toBeLessThan(2);
+    expect(Math.abs(a.hrBpm - 46)).toBeLessThanOrEqual(1);
     expect(a.qrsMs).toBeLessThan(110);
-    expect(Math.abs(b.hrBpm - 32)).toBeLessThan(2);
+    expect(Math.abs(b.hrBpm - 32)).toBeLessThanOrEqual(1);
     expect(b.qrsMs).toBeGreaterThanOrEqual(120);
   });
   it('checks: escape rhythm and AV dissociation', async () => {

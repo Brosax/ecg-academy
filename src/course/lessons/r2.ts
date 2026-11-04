@@ -60,9 +60,9 @@ const lesson: Lesson = {
         'No se ve ninguna onda P positiva en esta tira y la frecuencia es de 46 lpm. ¿Es peligroso este ritmo? Decide tu respuesta antes de continuar.',
       ),
       reveal: l(
-        '每个 QRS **之前**紧贴着一个**倒置的 P′**（II 导联，P′R 约 110 ms），心率 46 次/分、QRS 窄、RR 规则：**交界性逸搏心律**。它不是原发性心律失常，而是一支救援起搏点——上面（窦房结或传导）出了问题，房室交界区按自己的固有频率接管了心室。要问的不是“怎么压制它”，而是“上面为什么不来”。',
-        'Every QRS is immediately preceded by an **inverted P′** (lead II, P′R about 110 ms); the rate is 46/min, the QRS narrow, the RR regular: a **junctional escape rhythm**. This is not a primary arrhythmia but a rescue pacemaker — something above (the sinus node or conduction) has failed, and the AV junction drives the ventricles at its own intrinsic rate. The question is not "how do I suppress it" but "why is nothing coming down".',
-        'Cada QRS va precedido de forma inmediata por una **P′ negativa** (derivación II, P′R de unos 110 ms); la frecuencia es de 46 lpm, el QRS estrecho y el RR regular: **ritmo de escape de la unión**. No es una arritmia primaria sino un marcapasos de rescate: algo por encima (el nodo sinusal o la conducción) ha fallado y la unión AV lleva los ventrículos a su frecuencia intrínseca. La pregunta no es «cómo lo suprimo», sino «por qué no baja nada».',
+        '每个 QRS **之前**紧贴着一个**倒置的 P′**（II 导联，P′R 约 105 ms），心率 46 次/分、QRS 窄、RR 规则：**交界性逸搏心律**。它不是原发性心律失常，而是一支救援起搏点——上面（窦房结或传导）出了问题，房室交界区按自己的固有频率接管了心室。要问的不是“怎么压制它”，而是“上面为什么不来”。',
+        'Every QRS is immediately preceded by an **inverted P′** (lead II, P′R about 105 ms); the rate is 46/min, the QRS narrow, the RR regular: a **junctional escape rhythm**. This is not a primary arrhythmia but a rescue pacemaker — something above (the sinus node or conduction) has failed, and the AV junction drives the ventricles at its own intrinsic rate. The question is not "how do I suppress it" but "why is nothing coming down".',
+        'Cada QRS va precedido de forma inmediata por una **P′ negativa** (derivación II, P′R de unos 105 ms); la frecuencia es de 46 lpm, el QRS estrecho y el RR regular: **ritmo de escape de la unión**. No es una arritmia primaria sino un marcapasos de rescate: algo por encima (el nodo sinusal o la conducción) ha fallado y la unión AV lleva los ventrículos a su frecuencia intrínseca. La pregunta no es «cómo lo suprimo», sino «por qué no baja nada».',
       ),
     },
     {
@@ -204,7 +204,7 @@ const lesson: Lesson = {
             'The narrow QRS complexes march at a regular RR (about 66/min), interrupted only by two early beats: a regular junctional pacemaker, not atrial fibrillation. Step 3 explains the two early beats.',
             'Los QRS estrechos avanzan con un RR regular (unos 66 lpm), interrumpido solo por dos latidos precoces: un marcapasos de la unión regular, no una fibrilación auricular. El paso 3 explica esos dos latidos precoces.',
           ),
-          marks: [{ auto: 'rr' }],
+          marks: [{ auto: 'rr', beat: 6 }],
         },
         {
           title: l('找 P 波并测 PP', 'Find the P waves and march the PP', 'Busca las ondas P y recorre el PP'),
@@ -213,7 +213,7 @@ const lesson: Lesson = {
             'Sweep the strip with calipers for P waves: they fire regularly too (60/min), but the PR is random — a P sometimes precedes the QRS, sometimes hides in it, sometimes lands on the T wave. Two clocks running independently.',
             'Recorre la tira con el compás buscando ondas P: también se disparan de forma regular (60 lpm), pero el PR no sigue ningún patrón: la P a veces precede al QRS, a veces se oculta en él y a veces cae sobre la onda T. Dos relojes que marchan por su cuenta.',
           ),
-          marks: [{ auto: 'p' }],
+          marks: [{ auto: 'blocked-p', label: l('P', 'P', 'P') }],
           view: { layout: 'strip', lead: 'II', calipers: true },
         },
         {
@@ -223,7 +223,7 @@ const lesson: Lesson = {
             'One QRS appears **early** (with the same shape as the rest — junctional beats are already narrow; a capture looks narrower only when it competes with a ventricular rhythm), with a conducting P just before it (a normal PR): a sinus impulse happened to find both the node and the ventricles excitable — a **ventricular capture**. A capture means the dissociation is "incomplete", and it proves conduction is not fully interrupted.',
             'Un QRS aparece **precoz** (con la misma morfología que los demás, porque los latidos de la unión ya son estrechos; la captura solo parece más estrecha cuando compite con un ritmo ventricular), con una P que conduce justo antes (PR normal): un impulso sinusal encontró excitables a la vez el nodo y los ventrículos: **captura ventricular**. Que haya capturas significa que la disociación es «incompleta» y demuestra que la conducción no está totalmente interrumpida.',
           ),
-          marks: [{ auto: 'qrs' }],
+          marks: [{ auto: 'qrs', beat: 5 }],
         },
         {
           title: l('下机制结论', 'Name the mechanism', 'Ponle nombre al mecanismo'),
@@ -244,13 +244,13 @@ const lesson: Lesson = {
           label: l('交界区抢位', 'Junction usurps', 'Usurpa la unión'),
           ecg: synth('accelerated-junctional-rhythm', 424, undefined, 'isorhythmic'),
           note: l('窦性约 70、交界区约 76：下位起搏点跑赢窦房结（抢位）。P 在 QRS 旁漂移，偶尔下传一个。', 'Sinus about 70, junction about 76: the lower pacemaker outruns the sinus node (usurpation). The P drifts around the QRS; now and then one conducts.', 'Sinusal unos 70, unión unos 76: el marcapasos inferior adelanta al sinusal (usurpación). La P se desliza junto al QRS y alguna conduce.'),
-          marks: [{ auto: 'p' }, { auto: 'qrs' }],
+          marks: [{ auto: 'p', beat: 7 }, { auto: 'qrs', beat: 7 }],
         },
         {
           label: l('心室抢位（AIVR）', 'Ventricle usurps (AIVR)', 'Usurpa el ventrículo (RIVA)'),
           ecg: synth('aivr', 426),
           note: l('宽 QRS 约 76 次/分，略快于窦性 72：AIVR。找夺获（窄、提前）和融合波（宽度居中）。', 'Wide QRS at about 76/min, just faster than sinus at 72: AIVR. Find the capture (narrow, early) and the fusion beat (in-between width).', 'QRS ancho a unos 76 lpm, algo más rápido que el sinusal de 72: RIVA. Busca la captura (estrecha, precoz) y la fusión (anchura intermedia).'),
-          marks: [{ auto: 'qrs', label: l('室性 QRS', 'Ventricular QRS', 'QRS ventricular') }],
+          marks: [{ auto: 'qrs', beat: 4, label: l('室性 QRS', 'Ventricular QRS', 'QRS ventricular') }],
         },
         {
           label: l('阻滞', 'Block', 'Bloqueo'),
