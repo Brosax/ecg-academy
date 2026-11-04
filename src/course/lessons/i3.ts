@@ -267,7 +267,7 @@ const lesson: Lesson = {
           marks: [{ auto: 't', lead: 'V3' }, { auto: 't', lead: 'III' }],
         },
         {
-          label: l('前间壁', 'Anteroseptal', 'Anteroseptal'),
+          label: l('前间壁 V1–V3', 'Anteroseptal V1–V3', 'Anteroseptal V1–V3'),
           ecg: synth('stemi-anteroseptal', 848),
           note: l(
             'V1–V3抬高，V2最高，V4不到1 mm；V5–V6、I、aVL平坦：前间壁 → D1之后的LAD。',
@@ -277,12 +277,12 @@ const lesson: Lesson = {
           marks: [{ auto: 'j', lead: 'V2' }, { auto: 'j', lead: 'V4' }],
         },
         {
-          label: l('前壁', 'Anterior', 'Anterior'),
+          label: l('前间壁 V1–V4', 'Anteroseptal V1–V4', 'Anteroseptal V1–V4'),
           ecg: synth('stemi-anterior', 846, { st: 0.3 }),
           note: l(
-            'V1–V4抬高，V3最高，II、III、aVF呈镜像：前壁 → LAD。',
-            'V1–V4 up, most in V3, with a mirror in II, III and aVF: anterior → LAD.',
-            'V1–V4 elevadas, máxima en V3, con espejo en II, III y aVF: anterior → DA.',
+            'V1–V4抬高，V3最高，II、III、aVF呈镜像：整个前间壁组 → LAD。',
+            'V1–V4 up, most in V3, with a mirror in II, III and aVF: the whole anteroseptal group → LAD.',
+            'V1–V4 elevadas, máxima en V3, con espejo en II, III y aVF: todo el grupo anteroseptal → DA.',
           ),
           marks: [{ auto: 'j', lead: 'V3' }, { auto: 'j', lead: 'III' }],
         },

@@ -487,7 +487,7 @@ describe('i3: anterior occlusion on the tracings', () => {
     }
     expect(tInverted(e, 'III')).toBe(true);
   });
-  it('family film: anteroseptal V1–V3 up with V2 highest, V4 < 1 mm, V5–V6/I/aVL flat; anterior V1–V4 up with V3 highest and an inferior mirror; anterolateral = the hook', () => {
+  it('family film: anteroseptal V1–V3 up with V2 highest, V4 < 1 mm, V5–V6/I/aVL flat; anteroseptal V1–V4 up with V3 highest and an inferior mirror; anterolateral = the hook', () => {
     const as = frame('i3', 0, 1);
     for (const l of ['V1', 'V2', 'V3'] as const) expect(stAt(as, l), l).toBeGreaterThanOrEqual(0.1);
     expect(CHEST.reduce((m, l) => (stAt(as, l) > stAt(as, m) ? l : m))).toBe('V2');
