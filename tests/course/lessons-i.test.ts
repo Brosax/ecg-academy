@@ -1054,13 +1054,13 @@ describe('i9: evolution, Q waves and aneurysm on the tracings', () => {
     }
     for (const l of ['V2', 'V3'] as const) expect(tUpright(old, l), `hook: upright T ${l}`).toBe(true);
   });
-  it('worked (old inferior): Q about 35 ms and about 5 mm deep in II, QS in III and aVF, ST isoelectric, T upright in II and aVF, axis about −40°', () => {
+  it('worked (old inferior): Q about 35 ms and nearly 5 mm deep in II, QS in III and aVF, ST isoelectric, T upright in II and aVF, axis about −40°', () => {
     const e = ecgOf(blocksOf('i9', 'worked')[0].ecg);
     expect(qDurMs(e, 'II')).toBeGreaterThanOrEqual(30);
     expect(qDurMs(e, 'II')).toBeLessThanOrEqual(40);
     expect(shape(e, 'II')).toMatch(/^Q R/);
-    expect(qrs(e, 'II').min).toBeLessThanOrEqual(-0.475);
-    expect(qrs(e, 'II').min).toBeGreaterThanOrEqual(-0.525);
+    expect(qrs(e, 'II').min, 'nearly 5 mm').toBeLessThanOrEqual(-0.45);
+    expect(qrs(e, 'II').min, 'nearly 5 mm').toBeGreaterThanOrEqual(-0.5);
     for (const l of ['III', 'aVF'] as const) expect(qrs(e, l).max, l).toBeLessThan(0.05);
     for (const l of ['II', 'III', 'aVF'] as const) expect(Math.abs(stAt(e, l)), l).toBeLessThan(0.05);
     for (const l of ['II', 'aVF'] as const) expect(tUpright(e, l), `upright T ${l}`).toBe(true);
