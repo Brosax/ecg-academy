@@ -707,6 +707,14 @@ describe('h5: HCM on the tracings', () => {
     expect(tw(e, 'V2').min).toBeGreaterThan(-0.3);
     expect(qrs(e, 'V5').max).toBeGreaterThan(1.3);
   });
+  it('heart caption (apical): V4–V5 write a tall R (> 10 mm, over its S) followed by a giant negative T (> 10 mm)', () => {
+    const e = ecgOf(blocksOf('h5', 'heart')[1].ecg);
+    for (const l of ['V4', 'V5'] as const) {
+      expect(qrs(e, l).max, l).toBeGreaterThan(1.0);
+      expect(qrs(e, l).max, l).toBeGreaterThan(-qrs(e, l).min);
+      expect(tw(e, l).min, l).toBeLessThan(-1.0);
+    }
+  });
   it('contrast: HCM keeps a narrow q + tall R in aVL; the old lateral infarct writes a QS in aVL', () => {
     const c = blocksOf('h5', 'contrast')[0];
     const a = ecgOf(c.left.ecg);
