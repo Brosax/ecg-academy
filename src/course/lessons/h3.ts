@@ -232,9 +232,9 @@ const lesson: Lesson = {
       ],
       predict: {
         question: l(
-          'V1 的 R 很高，QRS 140 ms。哪一项测量最先把右心室肥厚换成别的诊断？',
-          'A tall R in V1 and a QRS of 140 ms. Which measurement first swaps RVH for another diagnosis?',
-          'R alta en V1 y un QRS de 140 ms. ¿Qué medición cambia primero la HVD por otro diagnóstico?',
+          '这份图 V1 的 R 很高。先量一量：哪一项测量最先把右心室肥厚换成别的诊断？',
+          'This tracing has a tall R in V1. Measure it: which measurement first swaps RVH for another diagnosis?',
+          'Este trazado tiene una R alta en V1. Mídelo: ¿qué medición cambia primero la HVD por otro diagnóstico?',
         ),
         options: [l('QRS 时限', 'QRS width', 'Anchura del QRS'), l('PR 间期', 'PR interval', 'Intervalo PR'), l('V1 的 R 高度', 'R height in V1', 'Altura de la R en V1')],
         answer: 0,

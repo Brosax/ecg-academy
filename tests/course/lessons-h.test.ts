@@ -493,7 +493,7 @@ describe('h3: RVH and right-heart load on the tracings', () => {
     expect(tInverted(e, 'III')).toBe(true);
     expect(tw(e, 'aVF').min).toBeLessThan(-0.05);
   });
-  it('COPD pattern (load film frame 3): P about 3 mm in II/III/aVF, QRS axis about +95°, II just over 5 mm, R in V1 < 1 mm', () => {
+  it('COPD pattern (load film frame 3): P about 3 mm in II/III/aVF, QRS axis about +95°, II just over 5 mm, R in V1 < 1 mm; every classic RVH voltage criterion negative (R V1, R/S V1, S V5/V6, R V1 + S V5/V6, R aVR)', () => {
     const e = frames('h3', 1)[2];
     for (const l of ['II', 'III', 'aVF'] as const) {
       expect(pw(e, l).max, l).toBeGreaterThanOrEqual(0.25);
@@ -504,8 +504,11 @@ describe('h3: RVH and right-heart load on the tracings', () => {
     expect(qrs(e, 'V1').max).toBeLessThan(0.1);
     expect(qrs(e, 'V1').p2p, 'V1 barely leaves the baseline').toBeLessThan(0.2);
     expect(qrs(e, 'V1').max, 'R/S V1 < 1').toBeLessThan(-qrs(e, 'V1').min);
-    expect(-qrs(e, 'V5').min, 'S V5 < 7 mm').toBeLessThan(0.7);
-    expect(qrs(e, 'V1').max - qrs(e, 'V5').min, 'R V1 + S V5 <= 10.5 mm').toBeLessThan(1.05);
+    for (const l of ['V5', 'V6'] as const) {
+      expect(-qrs(e, l).min, `S ${l} < 7 mm`).toBeLessThan(0.7);
+      expect(qrs(e, 'V1').max - qrs(e, l).min, `R V1 + S ${l} <= 10.5 mm`).toBeLessThan(1.05);
+    }
+    expect(qrs(e, 'aVR').max, 'R aVR < 5 mm').toBeLessThan(0.5);
   });
   it('heart: tall R in V1 over its S, deep S in V5, right axis', () => {
     const e = ecgOf(blocksOf('h3', 'heart')[0].ecg);
@@ -520,6 +523,8 @@ describe('h3: RVH and right-heart load on the tracings', () => {
     near(qrs(rbbb, 'V1').max, 11);
     expect(Math.abs(rbbb.truth!.qrsMs - 140)).toBeLessThan(5);
     expect(rbbb.truth!.findings).toContain('rbbb');
+    expect(rbbb.truth!.prMs!, 'prediction: on the RBBB frame only the width is off, the PR is normal').toBeGreaterThanOrEqual(120);
+    expect(rbbb.truth!.prMs!).toBeLessThan(200);
     expect(qrs(wpw, 'V1').max).toBeGreaterThan(-qrs(wpw, 'V1').min);
     expect(qrs(wpw, 'V1').max).toBeLessThan(-1.5 * qrs(wpw, 'V1').min);
     expect(Math.abs(wpw.truth!.prMs! - 115)).toBeLessThan(5);
