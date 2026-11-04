@@ -429,6 +429,11 @@ describe('h2: LVH voltage and secondary ST–T on the tracings', () => {
     const p = blocksOf('h2', 'film')[0].predict!;
     expect(p.options[p.answer].en).toBe('V6');
   });
+  it('heart caption: from the normal frame to the same seed with LVH, the R grows in V6 and aVL', () => {
+    const [normal] = frames('h2', 0);
+    const lvh = ecgOf(blocksOf('h2', 'heart')[0].ecg);
+    for (const l of ['V6', 'aVL'] as const) expect(qrs(lvh, l).max, l).toBeGreaterThan(qrs(normal, l).max + 0.2);
+  });
   it('contrast: Sokolow-Lyon positive on both sides ("voltage criteria met too"); A keeps upright T in V5–V6', () => {
     const c = blocksOf('h2', 'contrast')[0];
     const a = ecgOf(c.left.ecg);

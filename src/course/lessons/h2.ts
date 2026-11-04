@@ -154,9 +154,9 @@ const lesson: Lesson = {
       showConduction: true,
       emphasize: ['lv-basal-anterolateral', 'lv-mid-anterolateral', 'lv-apical-lateral', 'lv-apex', 'lv-mid-inferior', 'lv-mid-inferolateral'],
       caption: l(
-        '播放一个心动周期。肥厚的左心室壁产生更强的除极向量，指向 V5–V6 和 aVL：R 波增高；同一向量背离右胸电极，被写成深 S 波。电压标准测量的正是这个向量的两端。',
-        'Play one beat. The hypertrophied LV wall generates a stronger depolarisation vector aimed at V5–V6 and aVL: the R grows. The same vector points away from the right precordial electrodes and is written as a deep S. The voltage criteria measure the two ends of this vector.',
-        'Reproduce un latido. La pared hipertrofiada del VI genera un vector de despolarización más intenso dirigido a V5-V6 y aVL: la R crece. El mismo vector se aleja de los electrodos precordiales derechos y se escribe como una S profunda. Los criterios de voltaje miden los dos extremos de este vector.',
+        '播放一个心动周期。肥厚的左心室壁产生更强的除极向量，并更偏向左后方，朝向 V6 和 aVL：那里的 R 波增高；同一向量背离右胸电极，被写成深 S 波。电压标准测量的正是这个向量的两端。',
+        'Play one beat. The hypertrophied LV wall generates a stronger depolarisation vector, turned further left and back towards V6 and aVL: the R there grows. The same vector points away from the right precordial electrodes and is written as a deep S. The voltage criteria measure the two ends of this vector.',
+        'Reproduce un latido. La pared hipertrofiada del VI genera un vector de despolarización más intenso y más girado hacia la izquierda y atrás, hacia V6 y aVL: allí la R crece. El mismo vector se aleja de los electrodos precordiales derechos y se escribe como una S profunda. Los criterios de voltaje miden los dos extremos de este vector.',
       ),
     },
     {
