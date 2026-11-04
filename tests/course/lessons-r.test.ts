@@ -652,16 +652,18 @@ describe('r4: Mobitz II to complete block on the tracings', () => {
     expect(sMs(right, 'V6', mid(right)), 'V6 S duration').toBeGreaterThan(40);
     for (const t of [a, b]) expect(Math.abs((t.atrialRateBpm ?? 0) / t.hrBpm - 2)).toBeLessThan(0.1);
   });
-  it('five-questions contrast: left PR lengthens over the marked cycle into the drop, narrow; right PR constant either side of the drop, wide RBBB', () => {
+  it('five-questions contrast: left PR lengthens over the marked cycle into the drop and the first PR after the pause is the shortest, narrow; right PR constant either side of the drop, wide RBBB', () => {
     const c = blocksOf('r4', 'contrast')[1];
     const left = ecgOf(c.left.ecg);
     const lb = left.truth!.beats;
     const lp = sideBeats('r4', 1, 'left', 'pr');
-    expect(lp.map((i) => i - lp[0])).toEqual([0, 1, 2]);
+    expect(lp.map((i) => i - lp[0])).toEqual([0, 1, 2, 3]);
     const lpr = lp.map((i) => lb[i].qrsOn - (lb[i].pOn ?? 0));
     expect(lpr[1]).toBeGreaterThan(lpr[0] + 50);
     expect(lpr[2]).toBeGreaterThan(lpr[1] + 20);
-    expect(rrs(left)[lp[2]], 'a P drops after the last marked PR').toBeGreaterThan(1300);
+    expect(rrs(left)[lp[2]], 'a P drops after the third marked PR').toBeGreaterThan(1300);
+    expect(lpr[3], 'the fourth mark, first after the pause, is far shorter than the last before it').toBeLessThan(lpr[2] - 100);
+    expect(lpr[3] - Math.min(...prs(left)), 'and the shortest PR on the strip').toBeLessThan(1);
     expect(left.truth!.qrsMs).toBeLessThan(110);
     const right = ecgOf(c.right.ecg);
     const rb = right.truth!.beats;
@@ -673,7 +675,7 @@ describe('r4: Mobitz II to complete block on the tracings', () => {
     expect(right.truth!.findings).toContain('rbbb');
     expect(v1Shape(right)).toMatch(/^r s r'$/);
   });
-  it('high-grade (ladder film frame 4): 3:1 — runs of two blocked P waves, atria about 96/min, ventricles about 32/min', () => {
+  it('high-grade (ladder film frame 4): 3:1 — runs of two blocked P waves (the prediction), atria about 96/min, ventricles about 32/min', () => {
     const t = frames('r4', 0)[3].truth!;
     let run = 0;
     let maxRun = 0;
@@ -682,8 +684,14 @@ describe('r4: Mobitz II to complete block on the tracings', () => {
       maxRun = Math.max(maxRun, run);
     }
     expect(maxRun).toBe(2);
-    expect(Math.abs(t.atrialRateBpm! - 96)).toBeLessThan(2);
-    expect(Math.abs(t.hrBpm - 32)).toBeLessThan(1);
+    const cond = t.atrial.flatMap((a, i) => (a.conductedTo !== null ? [i] : []));
+    for (let i = 1; i < cond.length; i++) expect(cond[i] - cond[i - 1], 'one P in three conducts').toBe(3);
+    expect(Math.abs(t.atrialRateBpm! - 96)).toBeLessThanOrEqual(1);
+    expect(Math.abs(t.hrBpm - 32)).toBeLessThanOrEqual(1);
+    const p = blocksOf('r4', 'film')[0].predict!;
+    expect(p.ordered).toBe(true);
+    expect(p.options.map((o) => o.en)).toEqual(['1', '2', '3']);
+    expect(Number(p.options[p.answer].en), 'the answer is the longest run of blocked P waves').toBe(maxRun);
   });
   it('heart: P at 75/min, PR 160 ms on every conducted beat, every fourth P blocked, RBBB', () => {
     const e = ecgOf(blocksOf('r4', 'heart')[0].ecg);
