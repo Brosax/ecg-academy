@@ -308,12 +308,14 @@ async function checkAnswers(id: string): Promise<string[]> {
 }
 
 describe('r1: the sinus node on the tracings', () => {
-  it('hook: sinus arrest — the pause is about 2.85 s, about 3.3 PP (not a multiple)', () => {
+  it('hook: sinus arrest — basic PP about 860 ms (70/min), the pause about 2.85 s = about 3.3 PP (not a multiple)', () => {
     const r = rrs(ecgOf(blocksOf('r1', 'hook')[0].ecg));
     const pause = Math.max(...r);
-    expect(Math.abs(pause - 2850)).toBeLessThan(60);
-    expect(pause / Math.min(...r)).toBeGreaterThan(3.1);
-    expect(pause / Math.min(...r)).toBeLessThan(3.5);
+    const pp = mean(r.filter((x) => x < 1000));
+    expect(Math.abs(pp - 860)).toBeLessThanOrEqual(5);
+    expect(Math.abs(60000 / pp - 70)).toBeLessThanOrEqual(1);
+    expect(Math.abs(pause - 2850)).toBeLessThanOrEqual(5);
+    expect(Math.abs(pause / pp - 3.3)).toBeLessThanOrEqual(0.05);
   });
   it('worked: SA exit block 4:3 — basic PP about 790 ms (76/min); the calipers walk P, P, P into the pause; the bracketed pause is about 1580 ms = 2 PP; the P after it returns on time', () => {
     const e = ecgOf(blocksOf('r1', 'worked')[0].ecg);
