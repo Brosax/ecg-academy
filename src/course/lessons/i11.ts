@@ -215,20 +215,20 @@ const lesson: Lesson = {
           label: l('几天后', 'Days later', 'Días después'),
           ecg: synth('takotsubo', 1002, undefined, 'late'),
           note: l(
-            '同一颗心，几天后：抬高消失；V3–V6 和 I 的 T 波深倒（V4–V5 约 10 mm），QT 约 480 ms。数周内恢复。',
-            'Same heart, days later: the elevation has gone; deep T inversion in V3–V6 and I (about 10 mm in V4–V5), QT about 480 ms. It recovers over weeks.',
-            'El mismo corazón, días después: la elevación ha desaparecido; T negativas profundas en V3–V6 e I (unos 10 mm en V4–V5), QT de unos 480 ms. Se recupera en semanas.',
+            '同一颗心，几天后：抬高消失；V3–V6 和 I 的 T 波深倒（V4–V5 约 11 mm），QT 约 480 ms。数周内恢复。',
+            'Same heart, days later: the elevation has gone; deep T inversion in V3–V6 and I (about 11 mm in V4–V5), QT about 480 ms. It recovers over weeks.',
+            'El mismo corazón, días después: la elevación ha desaparecido; T negativas profundas en V3–V6 e I (unos 11 mm en V4–V5), QT de unos 480 ms. Se recupera en semanas.',
           ),
           marks: [{ auto: 't', lead: 'V5' }, { auto: 'qt', lead: 'V5' }],
         },
       ],
       predict: {
-        question: l('抬高消失之后，takotsubo 还会留下什么？', 'Once the elevation has gone, what does takotsubo leave behind?', 'Cuando desaparece la elevación, ¿qué deja el tako-tsubo?'),
-        options: [
-          l('深倒的 T 波和延长的 QT', 'Deep T inversion and a long QT', 'T negativas profundas y un QT largo'),
-          l('病理性 Q 波', 'Pathological Q waves', 'Ondas Q patológicas'),
-          l('什么都不留', 'Nothing at all', 'Nada'),
-        ],
+        question: l(
+          '几天后抬高消失。T 波倒置最深会在哪里？',
+          'Days later the elevation has gone. Where will the T waves be inverted most deeply?',
+          'Días después la elevación ha desaparecido. ¿Dónde serán más profundas las T negativas?',
+        ),
+        options: [l('V4–V5', 'V4–V5', 'V4–V5'), l('III 和 aVF', 'III and aVF', 'III y aVF'), l('V1–V2', 'V1–V2', 'V1–V2')],
         answer: 0,
       },
       caption: l(
@@ -311,7 +311,7 @@ const lesson: Lesson = {
     },
     {
       kind: 'contrast',
-      title: l('两个问题分开心包炎与前壁 STEMI', 'Two questions separate pericarditis from anterior STEMI', 'Dos preguntas separan la pericarditis del IAMCEST anterior'),
+      title: l('三个问题分开心包炎与前壁 STEMI', 'Three questions separate pericarditis from anterior STEMI', 'Tres preguntas separan la pericarditis del IAMCEST anterior'),
       view: { layout: '6x2' },
       left: {
         ecg: synth('pericarditis', 1009),
@@ -332,9 +332,9 @@ const lesson: Lesson = {
         marks: [{ auto: 'st', lead: 'V3' }, { auto: 'st', lead: 'III' }],
       },
       point: l(
-        '**分布**：A 的抬高凹面向上、遍布多个供血区；B 的抬高锁定 V1–V4，一个 LAD 供血区。**PR 段**：A 在 II 压低、aVR 抬高（心房损伤）；B 的 PR 正常。再看对应性：A 除 aVR/V1 外没有镜像压低，B 在 II、III、aVF 有真正的**对应性压低**。两个问题、两条路径：A 用抗炎治疗（阿司匹林/NSAID + 秋水仙碱），B 进导管室。',
-        '**Distribution**: in A the elevation is concave and spread across several territories; in B it is locked to V1–V4, one LAD territory. **PR segment**: A shows depression in II and elevation in aVR (atrial injury); the PR in B is normal. Then reciprocity: A has no mirror depression outside aVR/V1, while B shows true **reciprocal depression** in II, III and aVF. Two questions, two pathways: A gets anti-inflammatory treatment (aspirin/NSAID + colchicine), B goes to the cath lab.',
-        '**Distribución**: en A la elevación es cóncava y repartida por varios territorios; en B está acotada a V1–V4, un territorio de la DA. **Segmento PR**: A muestra descenso en II y elevación en aVR (lesión auricular); el PR de B es normal. Y la reciprocidad: A no tiene descenso especular fuera de aVR/V1, mientras B muestra **descenso recíproco** verdadero en II, III y aVF. Dos preguntas, dos vías: A recibe tratamiento antiinflamatorio (ácido acetilsalicílico/AINE + colchicina) y B va a la sala de hemodinámica.',
+        '**分布**：A 的抬高凹面向上、遍布多个供血区；B 的抬高锁定 V1–V4，一个 LAD 供血区。**PR 段**：A 在 II 压低、aVR 抬高（心房损伤）；B 的 PR 正常。再看对应性：A 除 aVR/V1 外没有镜像压低，B 在 II、III、aVF 有真正的**对应性压低**。三个问题、两条路径：A 用抗炎治疗（阿司匹林/NSAID + 秋水仙碱），B 进导管室。',
+        '**Distribution**: in A the elevation is concave and spread across several territories; in B it is locked to V1–V4, one LAD territory. **PR segment**: A shows depression in II and elevation in aVR (atrial injury); the PR in B is normal. Then reciprocity: A has no mirror depression outside aVR/V1, while B shows true **reciprocal depression** in II, III and aVF. Three questions, two pathways: A gets anti-inflammatory treatment (aspirin/NSAID + colchicine), B goes to the cath lab.',
+        '**Distribución**: en A la elevación es cóncava y repartida por varios territorios; en B está acotada a V1–V4, un territorio de la DA. **Segmento PR**: A muestra descenso en II y elevación en aVR (lesión auricular); el PR de B es normal. Y la reciprocidad: A no tiene descenso especular fuera de aVR/V1, mientras B muestra **descenso recíproco** verdadero en II, III y aVF. Tres preguntas, dos vías: A recibe tratamiento antiinflamatorio (ácido acetilsalicílico/AINE + colchicina) y B va a la sala de hemodinámica.',
       ),
     },
     { kind: 'check', item: { family: 'occlusion', seed: 24 } },
@@ -376,7 +376,7 @@ const lesson: Lesson = {
         l(
           '过度信任有危险因素者的"早期复极"：早期复极属于年轻人、无疼痛、与旧图一致；新发抬高 + 胸痛 ⇒ 按闭塞处理，做系列心电图，别让标签代替判读。',
           'Over-trusting "early repolarization" in a patient with risk factors: early repolarization belongs to the young, the pain-free and the unchanged-on-old-tracings; new elevation + chest pain ⇒ manage as occlusion and take serial ECGs — do not let a label do the reading.',
-          'Confía de más en la «repolarización precoz» de un paciente con factores de riesgo: la repolarización precoz es de jóvenes, sin dolor e igual en trazados antiguos; elevación nueva + dolor torácico ⇒ manéjalo como oclusión y haz ECG seriados: no dejes que una etiqueta lea por ti.',
+          'Confiar demasiado en la «repolarización precoz» de un paciente con factores de riesgo: la repolarización precoz es de jóvenes, sin dolor e igual en trazados antiguos; elevación nueva + dolor torácico ⇒ manéjalo como oclusión y haz ECG seriados: no dejes que una etiqueta lea por ti.',
         ),
       ],
     },
