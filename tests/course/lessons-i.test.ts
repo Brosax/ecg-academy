@@ -21,6 +21,7 @@ import { generateItem } from '../../src/practice';
 import { mapScpToFindings } from '../../src/real/scp';
 import { rawMeta } from '../../src/real/library';
 import { generate, scenarios, type SynthRequest } from '../../src/synth';
+import { resolveWhere } from '../../src/synth/heart/territories';
 
 const IDS = ['i1', 'i2', 'i3', 'i4', 'i5', 'i6', 'i7', 'i8', 'i9', 'i10', 'i11'] as const;
 
@@ -451,6 +452,13 @@ describe('i2: territories on the tracings', () => {
     const e = ecgOf(hook);
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
     for (const l of ['I', 'aVL'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
+  });
+  it('heart block: the lit segments are the injured inferior segments (the whole proximal RCA territory)', () => {
+    const h = blocksOf('i2', 'heart')[0];
+    const req = h.ecg.kind === 'synth' ? h.ecg.req : null;
+    const sc = scenarios().find((s) => s.id === req?.scenario);
+    const injured = sc!.source.injury!.flatMap((x) => [...resolveWhere(x.where)]);
+    expect([...(h.emphasize ?? [])].sort()).toEqual([...new Set(injured)].sort());
   });
   it('contrast: A (RCA) III > II with depression in I; B (LCx) II ≥ III, I isoelectric, V5–V6 elevated, aVL still depressed', () => {
     const c = blocksOf('i2', 'contrast')[0];

@@ -144,4 +144,5 @@ The user asked for the second round's edits to be read before a PR.
   - Thin margins kept on purpose, all deterministic: s1 marked RR 1004 vs 1000 ± 5; x1 P in I 0.052 vs 0.05; x1 V4 0.220 vs 0.225; i10 V1 ST/S −0.256 vs −0.25; i1/i5 mirror depths 0.004–0.007 mV inside their bounds.
   - Ordered scales put the answer in the middle 12 times out of 22; the shuffle does not apply to scales.
 - Verified at 6ed70fb: full suite 5122 passed, 9 skipped, 0 failed; typecheck clean; build one `dist/index.html`, 12328 KB. Browser: t6's burst film (neutral title, no option names the artefact) and r4's frame-4 prediction (rates in the stem, 1 / 2 / 3 in order) read as written; no console error.
-- Not done: no fourth read of these fixes; the browser check covered t6 and r4 only.
+- After the merges: o7's alternans step read in the browser (V3 rhythm strip under the 12-lead sheet, R marks on two neighbouring beats, tall then short, as the step says). i2's heart block now lights the whole proximal RCA territory the scenario injures (six segments, was two), asserted like i1's. CLAUDE.md names the two new gates.
+- Not done: no fourth read of these fixes; the browser check covered t6, r4 and o7 only.

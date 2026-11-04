@@ -170,7 +170,7 @@ const lesson: Lesson = {
     {
       kind: 'heart',
       ecg: synth('stemi-inferior', 821),
-      emphasize: ['lv-mid-inferior', 'lv-basal-inferior'],
+      emphasize: ['lv-basal-inferoseptal', 'lv-basal-inferior', 'lv-mid-inferoseptal', 'lv-mid-inferior', 'lv-apical-inferior', 'lv-basal-inferolateral'],
       caption: l(
         '同一张下壁 STEMI，换到心脏上读：播放一个心动周期，下壁节段亮起——RCA 走行的右房室沟就在这些节段旁边。II、III、aVF 从下方正对这面墙，所以损伤电流把它们的 ST 段抬起来。',
         'The same inferior STEMI, read on the heart: play one beat and the inferior segments light up — the RCA runs in the right AV groove beside them. II, III and aVF face this wall from below, so the injury current lifts their ST segments.',

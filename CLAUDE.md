@@ -30,6 +30,12 @@ Audience: medical students (and nurses/residents). UI in zh / en / es.
 - Every number in a note is asserted against the engine's truth in the stage test; a prediction's answer must not be
   visible before the reveal (the player hides notes, marks, highlights, frame labels and the caption; titles must not
   tell).
+- Every number or shape anywhere in a lesson's text is asserted at the precision its words claim (tolerance table in
+  the doc); a prediction is answered from the tracing, never from a card, caption or earlier block. The player shuffles
+  options (seeded, `src/course/predict.ts`) unless `ordered: true` marks a scale.
+- `tests/course/mark-beats.test.ts` gates every mark: on a mixed strip it names its `beat`, and every auto mark draws
+  in a panel the viewer shows (also at the end of a live sweep). Three review rounds on 2026-11-04 are logged in
+  `docs/review/learn-by-doing-2026-11-04.md`.
 
 ## Heart Lab (`src/lab/`) — merged 2026-10-17
 - The user decided to merge the old site into this one: ECG Academy is the main site; the old "Dynamic Electrocardiogram"
