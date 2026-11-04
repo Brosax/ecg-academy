@@ -715,6 +715,42 @@ describe('h6: ARVC on the tracings', () => {
     expect(hasRPrime(e, 'V1')).toBe(true);
     expect(e.truth!.qrsMs).toBeLessThan(120);
   });
+  it('T-inversion film notes: juvenile T inverted V1–V3 with QRS about 95 ms and no epsilon; RBBB QRS about 140 ms with rsR′ and inverted T in V1; ARVC QRS about 115 ms with T about −7 mm in V1–V2 and inverted in V3', () => {
+    const [juvenile, rbbb, arvc] = frames('h6', 0);
+    for (const l of ['V1', 'V2', 'V3'] as const) expect(tInverted(juvenile, l), l).toBe(true);
+    expect(Math.abs(juvenile.truth!.qrsMs - 95)).toBeLessThan(5);
+    expect(juvenile.truth!.findings).not.toContain('epsilon-wave');
+    expect(Math.abs(rbbb.truth!.qrsMs - 140)).toBeLessThan(5);
+    expect(rbbb.truth!.findings).toContain('rbbb');
+    expect(hasRPrime(rbbb, 'V1')).toBe(true);
+    expect(tInverted(rbbb, 'V1')).toBe(true);
+    expect(Math.abs(arvc.truth!.qrsMs - 115)).toBeLessThan(5);
+    for (const l of ['V1', 'V2'] as const) near(tw(arvc, l).min, -7);
+    expect(tInverted(arvc, 'V3')).toBe(true);
+  });
+  /** V1 after the QRS bracket: the largest deflection between QRS end + 5 and + 60 ms, its delay, and the level at + 10 ms */
+  function afterQrs(e: Ecg) {
+    const b = midBeat(e);
+    const a = e.signal.leads.V1;
+    const fs = e.signal.fs;
+    const base = baselineBefore(a, fs, b.qrsOn);
+    const v = (ms: number) => a[Math.round(((b.qrsOff + ms) * fs) / 1000)] - base;
+    let at = 5;
+    for (let ms = 5; ms <= 60; ms++) if (Math.abs(v(ms)) > Math.abs(v(at))) at = ms;
+    return { peak: v(at), atMs: at, at10: v(10) };
+  }
+  it('epsilon film notes: ARVC has a blip of about 0.7 mm about 30 ms after the QRS bracket, back on the baseline in between; iRBBB has an R′ of about 7 mm inside a QRS of about 115 ms and nothing after it', () => {
+    expect(blocksOf('h6', 'film')[1].frames[0].ecg).toEqual(blocksOf('h6', 'film')[0].frames[2].ecg);
+    const [arvc, irbbb] = frames('h6', 1);
+    const eps = afterQrs(arvc);
+    near(eps.peak, 0.7, 0.2);
+    expect(Math.abs(eps.atMs - 30)).toBeLessThanOrEqual(5);
+    expect(Math.abs(eps.at10)).toBeLessThan(0.01);
+    expect(hasRPrime(irbbb, 'V1')).toBe(true);
+    near(qrs(irbbb, 'V1').max, 7);
+    expect(Math.abs(irbbb.truth!.qrsMs - 115)).toBeLessThan(5);
+    expect(Math.abs(afterQrs(irbbb).peak)).toBeLessThan(0.01);
+  });
 });
 
 describe('h7: QT on the tracings', () => {
