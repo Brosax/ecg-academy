@@ -312,13 +312,18 @@ const shape = (e: Ecg, l: AnyLead): string => {
 const tOverQrs = (e: Ecg, l: AnyLead): number => Math.max(tw(e, l).max, -tw(e, l).min) / qrs(e, l).p2p;
 
 describe('i1: measuring ST on the tracings', () => {
-  it('hook / worked (man of 58): J point ≥ 2 mm in V2–V3, highest in V3, ≥ 1 mm in V4, mirror ≤ −0.5 mm in III and aVF', () => {
+  it('hook / worked (man of 58): J point ≥ 2 mm in V2–V3, highest in V3, ≥ 1 mm in V4, V1 about 1 mm, mirror about −1 mm in III and aVF', () => {
     for (const src of [blocksOf('i1', 'hook')[0].ecg, blocksOf('i1', 'worked')[0].ecg]) {
       const e = ecgOf(src);
       for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.2);
       expect(stAt(e, 'V4')).toBeGreaterThanOrEqual(0.1);
       expect(CHEST.reduce((m, l) => (stAt(e, l) > stAt(e, m) ? l : m))).toBe('V3');
-      for (const l of ['III', 'aVF'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
+      expect(stAt(e, 'V1')).toBeGreaterThanOrEqual(0.075);
+      expect(stAt(e, 'V1')).toBeLessThanOrEqual(0.125);
+      for (const l of ['III', 'aVF'] as const) {
+        expect(stAt(e, l), l).toBeLessThanOrEqual(-0.075);
+        expect(stAt(e, l), l).toBeGreaterThanOrEqual(-0.125);
+      }
       expect(stAt(e, 'V3')).toBeLessThan(0.4);
     }
   });
@@ -337,7 +342,7 @@ describe('i1: measuring ST on the tracings', () => {
     expect(e.truth!.findings).toContain('st-depression-ischemic');
     for (const l of ['V4', 'V5', 'V6'] as const) {
       expect(stAt(e, l), l).toBeLessThanOrEqual(-0.075);
-      expect(stAt(e, l), l).toBeGreaterThan(-0.13);
+      expect(stAt(e, l), l).toBeGreaterThanOrEqual(-0.125);
       expect(Math.abs(stAt(e, l, 60) - stAt(e, l)), `${l} horizontal`).toBeLessThan(0.03);
     }
     for (const l of ALL) expect(stAt(e, l), l).toBeLessThan(0.1);
@@ -345,8 +350,8 @@ describe('i1: measuring ST on the tracings', () => {
   it('depression film: mirror III/aVF about −1 mm under V2–V4 elevation; high lateral II/III/aVF deeply down with I/aVL up; posterior V1–V3 about −1.5 mm with upright T and nothing elevated', () => {
     const mirror = frame('i1', 0, 1);
     for (const l of ['III', 'aVF'] as const) {
-      expect(stAt(mirror, l), l).toBeLessThan(-0.08);
-      expect(stAt(mirror, l), l).toBeGreaterThan(-0.14);
+      expect(stAt(mirror, l), l).toBeLessThanOrEqual(-0.075);
+      expect(stAt(mirror, l), l).toBeGreaterThanOrEqual(-0.125);
     }
     for (const l of ['V2', 'V3', 'V4'] as const) expect(stAt(mirror, l), l).toBeGreaterThanOrEqual(0.15);
     const hl = frame('i1', 0, 2);
