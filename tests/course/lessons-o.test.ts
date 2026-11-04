@@ -1328,7 +1328,7 @@ describe('o10: artefacts and filters on the tracings', () => {
       expect(ratio, l).toBeLessThan(1.15);
     }
   });
-  it('worked tremor (LL): aVF as noisy as II and III, aVR and aVL about half; the RR marches at about 830 ms (72/min), the marked RR among them', () => {
+  it('worked tremor (LL): aVF as noisy as II and III; the tremor alone (same heart without it subtracted) is half as big in aVR and aVL as in II; the RR marches at about 832 ms (72/min), the marked RR among them', () => {
     const w = blocksOf('o10', 'worked')[0];
     const e = ecgOf(w.ecg);
     for (const l of ['II', 'III'] as const) {
@@ -1336,17 +1336,25 @@ describe('o10: artefacts and filters on the tracings', () => {
       expect(ratio, l).toBeGreaterThan(0.85);
       expect(ratio, l).toBeLessThan(1.15);
     }
+    if (w.ecg.kind !== 'synth') throw new Error('o10 worked: expected a synthetic tracing');
+    const still = ecgOf({ ...w.ecg.req, recording: { noise: { tremor: { mv: 0, hz: 5, on: 'LL' } } } });
+    expect(still.truth!.beats).toEqual(e.truth!.beats);
+    const ripple = (l: StdLead) => {
+      const x = fault(e, still, l);
+      return Math.max(...x) - Math.min(...x);
+    };
+    expect(ripple('I')).toBeLessThan(0.002);
     for (const l of ['aVR', 'aVL'] as const) {
-      const ratio = hfNoise(e, l) / hfNoise(e, 'II');
-      expect(ratio, l).toBeGreaterThan(0.4);
-      expect(ratio, l).toBeLessThan(0.7);
+      const ratio = ripple(l) / ripple('II');
+      expect(ratio, l).toBeGreaterThan(0.45);
+      expect(ratio, l).toBeLessThan(0.55);
     }
     expect(Math.abs(e.truth!.hrBpm - 72)).toBeLessThan(1);
-    expect(Math.abs(60000 / e.truth!.hrBpm - 830)).toBeLessThan(5);
+    expect(Math.abs(60000 / e.truth!.hrBpm - 832)).toBeLessThan(5);
     const [k] = markBeats(w.steps[1].marks, 'rr');
-    expect(Math.abs(rrs(e)[k] - 830)).toBeLessThanOrEqual(5);
+    expect(Math.abs(rrs(e)[k] - 832)).toBeLessThanOrEqual(5);
   });
-  it('tremor-or-AF contrast: the AF side is atrial fibrillation with an irregularly irregular RR, the RR mark on its longest interval', () => {
+  it('tremor-or-AF contrast: the AF side is atrial fibrillation with an irregularly irregular RR, the RR marks on its shortest and longest intervals', () => {
     const c = contrastTitled('o10', 'Tremor artefact or AF?');
     const af = ecgOf(c.right.ecg);
     expect(af.truth!.rhythm).toBe('atrial-fibrillation');
@@ -1354,9 +1362,9 @@ describe('o10: artefacts and filters on the tracings', () => {
     expect(Math.max(...r) - Math.min(...r)).toBeGreaterThan(300);
     const d = r.slice(1).map((x, i) => x - r[i]);
     expect(d.slice(1).filter((x, i) => Math.sign(x) !== Math.sign(d[i])).length).toBeGreaterThanOrEqual(5);
-    const [k] = markBeats(c.right.marks, 'rr');
-    expect(af.truth!.beats[k].kind).toBe('atrial');
-    expect(r[k]).toBe(Math.max(...r));
+    const marked = markBeats(c.right.marks, 'rr');
+    for (const k of marked) expect(af.truth!.beats[k].kind).toBe('atrial');
+    expect(marked.map((k) => r[k])).toEqual([Math.min(...r), Math.max(...r)]);
   });
   it('filter film: one heart; diagnostic J in V4–V6 on the baseline; monitor J in V4–V6 about 1 mm low; zero-phase 0.67 Hz J back on the baseline', () => {
     const [diag, mon, zero] = frames('o10', 1);
