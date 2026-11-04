@@ -422,6 +422,21 @@ describe('s2: rate on the tracings', () => {
     }
     for (const rate of [145, 150]) expect(Math.abs(meanRr(swept(1, rate)) / 40 - 10), `${rate}/min`).toBeLessThan(0.6);
   });
+  it('clock sweep prediction: at 100/min 3 large squares separate the R waves', () => {
+    const p = blocksOf('s2', 'live')[0].predict!;
+    expect(p.ordered).toBe(true);
+    expect(p.options[p.answer].en).toBe('3');
+    expect(Math.abs(meanRr(played('s2', 0, 100)) / 200 - 3)).toBeLessThan(0.2);
+  });
+  it('film prediction: only strip 1 is regular enough for the 300 or 1500 rule', () => {
+    const film = blocksOf('s2', 'film')[0];
+    const p = film.predict!;
+    expect(p.ordered).toBeUndefined();
+    expect(p.options[p.answer].en).toBe('Only strip 1');
+    const [reg, sa, af] = film.frames.map((f) => ecgOf(f.ecg));
+    expect(Math.max(...rrs(reg)) - Math.min(...rrs(reg))).toBeLessThan(40);
+    for (const e of [sa, af]) expect(Math.max(...rrs(e)) - Math.min(...rrs(e))).toBeGreaterThan(120);
+  });
   it('film: regular at 115/min; sinus arrhythmia varies with breathing; AF irregularly irregular', () => {
     const [reg, sa, af] = blocksOf('s2', 'film')[0].frames.map((f) => ecgOf(f.ecg));
     expect(Math.abs(reg.truth!.hrBpm - 115)).toBeLessThan(3);
