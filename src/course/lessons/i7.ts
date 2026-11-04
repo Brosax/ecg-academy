@@ -62,9 +62,9 @@ const lesson: Lesson = {
         'Varón de 52 años, dolor torácico de 30 minutos. Este ECG no llega a los umbrales. Decídete: ¿es una oclusión?',
       ),
       reveal: l(
-        'V2–V4的J点抬高最多约1 mm（V3最高）——52岁男性在V2–V3需要 **2 mm**：毫米数不够。但看仔细：T波**宽底、粗大、对称**，相对下面的QRS来说过大，III的T波倒置，是轻微的镜像。未达界值的抬高 + 不成比例的T波 + 持续疼痛 = **很可能的闭塞**：按闭塞处理，15–30分钟内复查心电图，而不是放走患者。这正是本课要练的工具箱。',
-        'The J point in V2–V4 is raised only up to about 1 mm (most in V3) — a 52-year-old man needs **2 mm** in V2–V3: the millimetres fall short. But look closer: the T waves are **broad-based, bulky and symmetric**, far too large for the QRS beneath them, and the T in III is inverted, a faint mirror. Elevation under the line + a disproportionate T + ongoing pain = **probable occlusion**: treat it as one, repeat the ECG in 15–30 minutes, and do not send the patient home. That is the toolkit this lesson drills.',
-        'El punto J en V2–V4 está elevado como mucho alrededor de 1 mm (máximo en V3) —un varón de 52 años necesita **2 mm** en V2–V3: los milímetros no llegan. Pero mira mejor: las ondas T son **anchas de base, voluminosas y simétricas**, demasiado grandes para el QRS que las sostiene, y la T de III es negativa, un espejo leve. Elevación por debajo del umbral + T desproporcionada + dolor persistente = **oclusión probable**: trátala como tal, repite el ECG en 15–30 minutos y no mandes al paciente a casa. Esa es la caja de herramientas de esta lección.',
+        'V2–V4的J点抬高最多约1 mm（V3最高）——52岁男性在V2–V3需要 **2 mm**：毫米数不够。但看仔细：T波**宽底、粗大、对称**，相对下面的QRS来说过大，III的T波倒置，可能是轻微的镜像。未达界值的抬高 + 不成比例的T波 + 持续疼痛 = **很可能的闭塞**：按闭塞处理，15–30分钟内复查心电图，而不是放走患者。这正是本课要练的工具箱。',
+        'The J point in V2–V4 is raised only up to about 1 mm (most in V3) — a 52-year-old man needs **2 mm** in V2–V3: the millimetres fall short. But look closer: the T waves are **broad-based, bulky and symmetric**, far too large for the QRS beneath them, and the T in III is inverted, possibly a faint mirror. Elevation short of the threshold + a disproportionate T + ongoing pain = **probable occlusion**: treat it as one, repeat the ECG in 15–30 minutes, and do not send the patient home. That is the toolkit this lesson drills.',
+        'El punto J en V2–V4 está elevado como mucho alrededor de 1 mm (máximo en V3) —un varón de 52 años necesita **2 mm** en V2–V3: los milímetros no llegan. Pero mira mejor: las ondas T son **anchas de base, voluminosas y simétricas**, demasiado grandes para el QRS que las sostiene, y la T de III es negativa, quizá un espejo leve. Elevación por debajo del umbral + T desproporcionada + dolor persistente = **oclusión probable**: trátala como tal, repite el ECG en 15–30 minutos y no mandes al paciente a casa. Esa es la caja de herramientas de esta lección.',
       ),
     },
     {
@@ -88,7 +88,7 @@ const lesson: Lesson = {
           marks: [{ auto: 'r', lead: 'V3' }, { auto: 't', lead: 'V3' }],
         },
         {
-          label: l('未到界值', 'Below the line', 'Bajo el umbral'),
+          label: l('未到界值', 'Short of threshold', 'Bajo el umbral'),
           ecg: synth('stemi-anterior-subtle', 926),
           note: l(
             'V3 的 J 点约 1 mm，T 波比 R 波还高，III 的 T 波倒置。毫米不够，比例却不对。',
@@ -231,9 +231,9 @@ const lesson: Lesson = {
         marks: [{ auto: 'st60', lead: 'V3' }, { auto: 'j', lead: 'II' }],
       },
       point: l(
-        'A（闭塞）：抬高只有约1 mm，T波粗大对称，III的T波倒置（轻微的镜像），疼痛持续。B（早期复极）：ST从**带切迹的J点**呈**凹面向上**抬起，V2–V3甚至比A略高（约1.5 mm，仍低于24岁男性的2.5 mm），分布广（V1–V6加下壁导联的J点切迹），**没有对应性压低**（aVR除外），患者年轻且无疼痛。比例在这里有帮助：在 V2，A 的 T 波约为整个 QRS（R + S）的三分之二，B 只有约三分之一；但到了 V3 差距缩小（约 0.7 对 0.55），早期复极的 T 波也可以很大——所以单凭比例分不开这两份图，J点切迹、镜像、临床背景，尤其是复查的心电图，才能分开。拿不准时，把两组数字代进 **4变量公式**（QTc、V4的R波、V2的QRS振幅、V3的J+60抬高）：它是**辅助**——答案来自系列心电图和临床背景。',
-        'A (occlusion): only about 1 mm of elevation, bulky symmetric T waves, an inverted T in III (a faint mirror), and ongoing pain. B (early repolarization): **concave** ST rising from a **notched J point**, in V2–V3 slightly higher than A (about 1.5 mm, still under the 2.5 mm limit for a man of 24), widespread (V1–V6 plus J-point notching in the inferior leads), **no reciprocal depression** (aVR apart), a young pain-free patient. Proportion helps here: in V2 the T of A reaches about two-thirds of the whole QRS (R + S), the T of B only about a third; but in V3 the gap narrows (about 0.7 against 0.55) — T waves can be large in early repolarization too, so proportion alone does not separate these two tracings: the notched J, the mirror, the clinical story and above all the repeat ECG do. When in doubt, feed both sets of numbers to the **4-variable formula** (QTc, R in V4, QRS amplitude in V2, ST at J+60 in V3): it is an **aid** — the answer comes from serial ECGs and the clinical story.',
-        'A (oclusión): solo alrededor de 1 mm de elevación, T voluminosas y simétricas, una T negativa en III (un espejo leve) y dolor persistente. B (repolarización precoz): ST **cóncavo** que sube desde un **punto J con muesca**, en V2–V3 algo más alto que en A (unos 1,5 mm, aún por debajo del límite de 2,5 mm de un varón de 24 años), de distribución amplia (V1–V6 más muesca del punto J en las derivaciones inferiores), **sin descenso recíproco** (salvo aVR), paciente joven sin dolor. La proporción ayuda: en V2 la T de A alcanza unos dos tercios de todo el QRS (R + S) y la de B apenas un tercio; pero en V3 la diferencia se reduce (unos 0,7 frente a 0,55): en la repolarización precoz las T también pueden ser grandes, así que la proporción por sí sola no separa estos dos trazados; lo hacen la muesca en J, el espejo, la clínica y, sobre todo, el ECG repetido. Ante la duda, introduce ambos juegos de números en la **fórmula de 4 variables** (QTc, R en V4, amplitud del QRS en V2, ST en J+60 en V3): es una **ayuda**; la respuesta viene de los ECG seriados y de la clínica.',
+        'A（闭塞）：抬高只有约1 mm，T波粗大对称，III的T波倒置（可能是轻微的镜像），疼痛持续。B（早期复极）：ST从**带切迹的J点**呈**凹面向上**抬起，V2–V3甚至比A略高（约1.5 mm，仍低于24岁男性的2.5 mm），分布广（V1–V6加下壁导联的J点切迹），**没有对应性压低**（aVR除外），患者年轻且无疼痛。比例在这里有帮助：在 V2，A 的 T 波约为整个 QRS（R + S）的三分之二，B 只有约三分之一；但到了 V3 差距缩小（约 0.7 对 0.55），早期复极的 T 波也可以很大——所以单凭比例分不开这两份图，J点切迹、临床背景，尤其是复查的心电图，才能分开。拿不准时，把两组数字代进 **4变量公式**（QTc、V4的R波、V2的QRS振幅、V3的J+60抬高）：它是**辅助**——答案来自系列心电图和临床背景。',
+        'A (occlusion): only about 1 mm of elevation, bulky symmetric T waves, an inverted T in III (possibly a faint mirror), and ongoing pain. B (early repolarization): **concave** ST rising from a **notched J point**, in V2–V3 slightly higher than A (about 1.5 mm, still under the 2.5 mm limit for a man of 24), widespread (V1–V6 plus J-point notching in the inferior leads), **no reciprocal depression** (aVR apart), a young pain-free patient. Proportion helps here: in V2 the T of A reaches about two-thirds of the whole QRS (R + S), the T of B only about a third; but in V3 the gap narrows (about 0.7 against 0.55) — T waves can be large in early repolarization too, so proportion alone does not separate these two tracings: the notched J, the clinical story and above all the repeat ECG do. When in doubt, feed both sets of numbers to the **4-variable formula** (QTc, R in V4, QRS amplitude in V2, ST at J+60 in V3): it is an **aid** — the answer comes from serial ECGs and the clinical story.',
+        'A (oclusión): solo alrededor de 1 mm de elevación, T voluminosas y simétricas, una T negativa en III (quizá un espejo leve) y dolor persistente. B (repolarización precoz): ST **cóncavo** que sube desde un **punto J con muesca**, en V2–V3 algo más alto que en A (unos 1,5 mm, aún por debajo del límite de 2,5 mm de un varón de 24 años), de distribución amplia (V1–V6 más muesca del punto J en las derivaciones inferiores), **sin descenso recíproco** (salvo aVR), paciente joven sin dolor. La proporción ayuda: en V2 la T de A alcanza unos dos tercios de todo el QRS (R + S) y la de B apenas un tercio; pero en V3 la diferencia se reduce (unos 0,7 frente a 0,55): en la repolarización precoz las T también pueden ser grandes, así que la proporción por sí sola no separa estos dos trazados; lo hacen la muesca en J, la clínica y, sobre todo, el ECG repetido. Ante la duda, introduce ambos juegos de números en la **fórmula de 4 variables** (QTc, R en V4, amplitud del QRS en V2, ST en J+60 en V3): es una **ayuda**; la respuesta viene de los ECG seriados y de la clínica.',
       ),
     },
     {
@@ -337,9 +337,9 @@ const lesson: Lesson = {
           'Proporcionalidad: una T enorme sobre un QRS pequeño es anormal; la ausencia de onda S y de onda J en V2 o V3 señala distorsión terminal del QRS.',
         ),
         l(
-          '未达界值的毫米数 + 不成比例的T波 + 下壁镜像 + 持续疼痛 = 很可能的闭塞：15–30分钟内复查并对比旧图。',
-          'Millimetres under the line + a disproportionate T + an inferior mirror + ongoing pain = probable occlusion: repeat within 15–30 min and compare with the old tracing.',
-          'Milímetros por debajo del umbral + T desproporcionada + espejo inferior + dolor persistente = oclusión probable: repite en 15–30 min y compara con el trazado antiguo.',
+          '未达界值的毫米数 + 不成比例的T波 + 持续疼痛 = 很可能的闭塞：15–30分钟内复查并对比旧图。',
+          'Millimetres short of the threshold + a disproportionate T + ongoing pain = probable occlusion: repeat within 15–30 min and compare with the old tracing.',
+          'Milímetros por debajo del umbral + T desproporcionada + dolor persistente = oclusión probable: repite en 15–30 min y compara con el trazado antiguo.',
         ),
         l(
           '4变量公式（QTc、V4的R波、V2的QRS、V3 J+60的ST）是辅助，不替代系列心电图与临床判断。',

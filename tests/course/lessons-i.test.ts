@@ -827,7 +827,7 @@ describe('i6: posterior infarction on the tracings', () => {
 });
 
 describe('i7: subtle occlusion on the tracings', () => {
-  it('hook / "below the line" frame (man of 52): V2–V4 up to about 1 mm, most in V3, under the 2-mm limit, bulky T in V3, the faint mirror an inverted T in III', () => {
+  it('hook / "short of threshold" frame (man of 52): V2–V4 up to about 1 mm, most in V3, under the 2-mm limit, bulky T in V3, possibly a faint mirror: an inverted T in III', () => {
     for (const src of [blocksOf('i7', 'hook')[0].ecg, blocksOf('i7', 'film')[0].frames[1].ecg]) {
       const e = ecgOf(src);
       for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThan(0.2);
@@ -880,6 +880,8 @@ describe('i7: subtle occlusion on the tracings', () => {
     expect(near(i7TOverQrs(e, 'V2'), 1 / 3), `B V2 ${i7TOverQrs(e, 'V2')}`).toBe(true);
     expect(near(i7TOverQrs(a, 'V3'), 0.7), `A V3 ${i7TOverQrs(a, 'V3')}`).toBe(true);
     expect(near(i7TOverQrs(e, 'V3'), 0.55), `B V3 ${i7TOverQrs(e, 'V3')}`).toBe(true);
+    const gap = (l: AnyLead) => i7TOverQrs(a, l) - i7TOverQrs(e, l);
+    expect(gap('V3'), 'in V3 the gap narrows').toBeLessThan(gap('V2'));
   });
   it('serial film (same seed, hyperacute then acute): first J under 1 mm in V2–V4 with the V3 T almost as tall as the R and T inverted in III; repeat V2–V3 ≥ 2 mm, V3 about 3.5 mm, III and aVF 1–1.5 mm down, the inferior mirror deepened', () => {
     const [f1, f2] = blocksOf('i7', 'film')[1].frames;
