@@ -92,13 +92,13 @@ const lesson: Lesson = {
           label: l('二度Ⅰ型', 'Mobitz I', 'Mobitz I'),
           ecg: synth('av-block-2-mobitz1', 469),
           note: l('PR 约 150 → 235 → 280 ms 后一个 P 落空，间歇后 PR 又最短；QRS 窄。阻滞在房室结。', 'The PR goes about 150 → 235 → 280 ms, then a P drops and the PR resets shortest after the pause; narrow QRS. Block in the AV node.', 'El PR pasa de unos 150 → 235 → 280 ms, cae una P y tras la pausa el PR vuelve a ser el más corto; QRS estrecho. Bloqueo en el nodo AV.'),
-          marks: [{ auto: 'pr' }, { auto: 'blocked-p' }],
+          marks: [{ auto: 'pr', beat: 5 }, { auto: 'pr', beat: 6 }, { auto: 'pr', beat: 7 }, { auto: 'pr', beat: 8 }, { auto: 'blocked-p' }],
         },
         {
           label: l('二度Ⅱ型', 'Mobitz II', 'Mobitz II'),
           ecg: synth('av-block-2-mobitz2', 461),
           note: l('PR 恒定约 160 ms，每第 4 个 P 突然落空，前后 PR 一样；QRS 宽（右束支阻滞）。阻滞在希氏束下。', 'The PR stays at about 160 ms, every fourth P drops without warning, and the PR is the same before and after; wide QRS (RBBB). Block below the His.', 'El PR se mantiene en unos 160 ms, una de cada cuatro P cae sin aviso y el PR es igual antes y después; QRS ancho (bloqueo de rama derecha). Bloqueo infrahisiano.'),
-          marks: [{ auto: 'pr' }, { auto: 'blocked-p' }],
+          marks: [{ auto: 'pr', beat: 3 }, { auto: 'pr', beat: 4 }, { auto: 'blocked-p' }],
         },
         {
           label: l('高度 3:1', 'High-grade 3:1', 'Avanzado 3:1'),
@@ -110,13 +110,14 @@ const lesson: Lesson = {
           label: l('三度', 'Third degree', 'Tercer grado'),
           ecg: synth('av-block-3', 466),
           note: l('P 约 78 次/分、QRS 约 45 次/分，PR 毫无规律：没有一个 P 下传 = 三度（完全性）阻滞。', 'P at about 78/min, QRS at about 45/min, and the PR is random: not one P conducts = third-degree (complete) block.', 'P a unos 78 lpm, QRS a unos 45 lpm y PR aleatorio: no conduce ninguna P = bloqueo de tercer grado (completo).'),
-          marks: [{ auto: 'p' }, { auto: 'qrs' }],
+          marks: [{ auto: 'blocked-p' }, { auto: 'qrs' }],
         },
       ],
       predict: {
         question: l('Mobitz II 里，P 落空之前 PR 怎么变？', 'In Mobitz II, what does the PR do before a P drops?', 'En el Mobitz II, ¿qué hace el PR antes de que caiga una P?'),
-        options: [l('逐搏延长', 'It lengthens beat by beat', 'Se alarga latido a latido'), l('保持不变', 'It stays the same', 'Se mantiene igual'), l('逐搏缩短', 'It shortens beat by beat', 'Se acorta latido a latido')],
+        options: [l('逐搏缩短', 'It shortens beat by beat', 'Se acorta latido a latido'), l('保持不变', 'It stays the same', 'Se mantiene igual'), l('逐搏延长', 'It lengthens beat by beat', 'Se alarga latido a latido')],
         answer: 1,
+        ordered: true,
       },
       caption: l(
         '延迟 → 渐长后落空 → 突然落空 → 连续落空 → 全部不通。每一级都看两样：P:QRS 比例和 PR 的行为。',
@@ -238,7 +239,7 @@ const lesson: Lesson = {
             'Sweep the whole strip with calipers for P waves: sinus P waves fire regularly (about 78/min) with a constant PP. Two rhythms, each minding its own business.',
             'Recorre toda la tira con el compás buscando ondas P: las P sinusales disparan de forma regular (unos 78 lpm) con un PP constante. Dos ritmos, cada uno a lo suyo.',
           ),
-          marks: [{ auto: 'p' }],
+          marks: [{ auto: 'blocked-p', label: l('P', 'P', 'P') }],
           view: { layout: 'strip', lead: 'II', calipers: true },
         },
         {
@@ -278,7 +279,7 @@ const lesson: Lesson = {
           ecg: synth('av-block-3', 467, undefined, 'infra-his'),
           note: l('P 约 78 次/分走过心动周期每个时相，无一下传；逸搏约 34 次/分、宽：完全性阻滞，在希氏束以下。', 'P waves at about 78/min fall in every part of the cycle and none conducts; the escape runs at about 34/min and is wide: complete block, below the His.', 'Las P, a unos 78 lpm, caen en todas las fases del ciclo y ninguna conduce; el escape va a unos 34 lpm y es ancho: bloqueo completo infrahisiano.'),
           marks: [
-            { auto: 'p', label: l('窦性 P，与 QRS 无关', 'Sinus P, unrelated to the QRS', 'P sinusal, independiente del QRS') },
+            { auto: 'blocked-p', label: l('窦性 P，与 QRS 无关', 'Sinus P, unrelated to the QRS', 'P sinusal, independiente del QRS') },
             { auto: 'qrs', label: l('宽大室性逸搏', 'Wide ventricular escape', 'Escape ventricular ancho') },
           ],
         },
@@ -292,7 +293,7 @@ const lesson: Lesson = {
           label: l('分离，不是阻滞', 'Dissociation, not block', 'Disociación, no bloqueo'),
           ecg: synth('av-dissociation', 468),
           note: l('窦性约 60、交界区约 66：室率 ≥ 房率，有 P 提前下传（夺获）。这是抢位的房室分离，不是阻滞。', 'Sinus about 60, junction about 66: the ventricles are at least as fast as the atria, and a P conducts early (a capture). Usurping dissociation, not block.', 'Sinusal unos 60, unión unos 66: los ventrículos van al menos tan rápido como las aurículas y una P conduce precoz (captura). Disociación por usurpación, no bloqueo.'),
-          marks: [{ auto: 'p' }, { auto: 'qrs' }],
+          marks: [{ auto: 'p', beat: 4 }, { auto: 'qrs', beat: 4 }],
         },
       ],
       predict: {
@@ -301,9 +302,9 @@ const lesson: Lesson = {
         answer: 1,
       },
       caption: l(
-        '完全性阻滞要三件事：房率 > 室率，P 落在心动周期的每个时相，且没有一个 P 下传。逸搏的宽窄说出阻滞水平。',
-        'Complete block needs three things: an atrial rate above the ventricular rate, P waves falling in every part of the cycle, and not one of them conducted. The width of the escape names the level.',
-        'El bloqueo completo exige tres cosas: frecuencia auricular mayor que la ventricular, ondas P en todas las fases del ciclo y ni una P conducida. La anchura del escape dice el nivel.',
+        '有 P 波时，完全性阻滞要三件事：房率 > 室率，P 落在心动周期的每个时相，且没有一个 P 下传。房颤时，慢而完全规则的 RR 就是证据。逸搏的宽窄说出阻滞水平。',
+        'With P waves, complete block needs three things: an atrial rate above the ventricular rate, P waves in every part of the cycle, and not one conducted. In AF, a slow, perfectly regular RR is the proof. The escape width names the level.',
+        'Con ondas P, el bloqueo completo exige tres cosas: frecuencia auricular mayor que la ventricular, ondas P en todas las fases del ciclo y ni una P conducida. En la FA, la prueba es un RR lento y perfectamente regular. La anchura del escape dice el nivel.',
       ),
     },
     {
@@ -322,17 +323,17 @@ const lesson: Lesson = {
       left: {
         ecg: synth('av-block-2-mobitz1', 469),
         caption: l('PR 逐渐延长直至脱落；QRS 窄；阻滞在房室结', 'PR lengthens until a P drops; narrow QRS; block in the AV node', 'El PR se alarga hasta que cae una P; QRS estrecho; bloqueo en el nodo AV'),
-        marks: [{ auto: 'pr' }],
+        marks: [{ auto: 'pr', beat: 5 }, { auto: 'pr', beat: 6 }, { auto: 'pr', beat: 7 }],
       },
       right: {
         ecg: synth('av-block-2-mobitz2', 470),
         caption: l('PR 恒定、突然脱落；QRS 宽（右束支阻滞）；阻滞在希氏束下', 'Constant PR, sudden drop; wide QRS (RBBB); block below the His', 'PR constante, caída brusca; QRS ancho (bloqueo de rama derecha); bloqueo infrahisiano'),
-        marks: [{ auto: 'pr' }],
+        marks: [{ auto: 'pr', beat: 4 }, { auto: 'pr', beat: 5 }],
       },
       point: l(
-        '问五个问题。PR 行为：左图逐渐延长、间歇后第一个 PR 最短；右图纹丝不动。QRS：窄 vs 通常宽。水平：房室结 vs 希氏束下。运动反应：文氏型改善，Mobitz II 恶化。起搏：文氏型很少需要（仅症状性、难治性心动过缓），Mobitz II 排除可逆原因后不论症状均 I 类。**先看 PR 的行为，再写“Ⅱ型”**（复习 r3）。',
-        'Ask five questions. PR behaviour: on the left it lengthens and the first PR after the pause is the shortest; on the right it never moves. QRS: narrow vs usually wide. Level: AV node vs infra-His. Response to exercise: Wenckebach improves, Mobitz II worsens. Pacing: Wenckebach rarely needs one (only symptomatic, refractory bradycardia), Mobitz II is Class I regardless of symptoms once reversible causes are gone. **Check the PR behaviour before you write "type II"** (revision of r3).',
-        'Haz cinco preguntas. Comportamiento del PR: a la izquierda se alarga y el primer PR tras la pausa es el más corto; a la derecha no se mueve. QRS: estrecho frente a habitualmente ancho. Nivel: nodo AV frente a infrahisiano. Respuesta al ejercicio: el Wenckebach mejora, el Mobitz II empeora. Marcapasos: el Wenckebach rara vez lo necesita (solo bradicardia sintomática refractaria); el Mobitz II es clase I con o sin síntomas excluidas las causas reversibles. **Mira el comportamiento del PR antes de escribir «tipo II»** (repaso de r3).',
+        '问五个问题。PR 行为：左图逐渐延长、间歇后第一个 PR 最短；右图纹丝不动。QRS：窄 vs 通常宽。水平：房室结 vs 希氏束下。运动反应：文氏型改善，Mobitz II 恶化。起搏：文氏型很少需要（仅当症状明确归因于它时），Mobitz II 排除可逆原因后不论症状均 I 类。**先看 PR 的行为，再写“Ⅱ型”**（复习 r3）。',
+        'Ask five questions. PR behaviour: on the left it lengthens and the first PR after the pause is the shortest; on the right it never moves. QRS: narrow vs usually wide. Level: AV node vs infra-His. Response to exercise: Wenckebach improves, Mobitz II worsens. Pacing: Wenckebach rarely needs one (only when symptoms are clearly attributable to it), Mobitz II is Class I regardless of symptoms once reversible causes are gone. **Check the PR behaviour before you write "type II"** (revision of r3).',
+        'Haz cinco preguntas. Comportamiento del PR: a la izquierda se alarga y el primer PR tras la pausa es el más corto; a la derecha no se mueve. QRS: estrecho frente a habitualmente ancho. Nivel: nodo AV frente a infrahisiano. Respuesta al ejercicio: el Wenckebach mejora, el Mobitz II empeora. Marcapasos: el Wenckebach rara vez lo necesita (solo si los síntomas se le atribuyen claramente); el Mobitz II es clase I con o sin síntomas excluidas las causas reversibles. **Mira el comportamiento del PR antes de escribir «tipo II»** (repaso de r3).',
       ),
     },
     { kind: 'check', item: { family: 'av-block', seed: 4 } },
