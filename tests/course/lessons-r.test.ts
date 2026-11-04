@@ -599,13 +599,17 @@ describe('r5: premature beats on the tracings', () => {
     expect(pAmp(e, 'II', beats[i - 1])).toBeGreaterThan(0.08);
     expect(Math.abs(beats[i].qrsOff - beats[i].qrsOn - (beats[0].qrsOff - beats[0].qrsOn))).toBeLessThan(3);
     expect(beats[i + 1].qrsOn - beats[i - 1].qrsOn).toBeLessThan(2 * (beats[i - 1].qrsOn - beats[i - 2].qrsOn) - 100);
+    expect(markBeats('r5', 0, 0, 'p')).toEqual([i]);
+    expect(markBeats('r5', 0, 0, 'pr')).toEqual([i]);
   });
-  it('PVC (three-questions film frame 3): no P′, QRS about 175 ms, the R waves either side about two sinus cycles apart; V1 negative and II, III, aVF tall (the heart caption)', () => {
+  it('PVC (three-questions film frame 3): no P′, QRS about 175 ms, the R waves either side about two sinus cycles apart; V1 negative and II, III, aVF tall, no retrograde P (the heart caption)', () => {
     const e = frames('r5', 0)[2];
     expect(blocksOf('r5', 'film')[0].frames[2].ecg).toEqual(blocksOf('r5', 'heart')[0].ecg);
     const beats = e.truth!.beats;
     const i = beats.findIndex((b) => b.kind === 'ventricular');
     expect(i).toBe(5);
+    expect(markBeats('r5', 0, 2, 'qrs')).toEqual([i]);
+    expect(e.truth!.atrial.every((a) => a.kind === 'sinus'), 'this PVC does not reach the atria').toBe(true);
     expect(beats[i].pOn).toBeNull();
     expect(Math.abs(beats[i].qrsOff - beats[i].qrsOn - 175)).toBeLessThan(5);
     const pp = beats[i - 1].qrsOn - beats[i - 2].qrsOn;
@@ -616,18 +620,26 @@ describe('r5: premature beats on the tracings', () => {
       expect(qrsSpan(e, l, beats[i]).max, l).toBeGreaterThan(qrsSpan(e, l, beats[i - 1]).max);
     }
   });
-  it('PJC (three-questions film frame 2): narrow early beat, retrograde P′ just after the QRS (early ST), negative in II', () => {
+  it('PJC (three-questions film frame 2): narrow early beat, retrograde P′ just after the QRS (early ST), negative in II where the sinus beats have none', () => {
     const e = frames('r5', 0)[1];
     const t = e.truth!;
-    const j = t.beats.find((b) => b.kind === 'junctional')!;
+    const k = t.beats.findIndex((b) => b.kind === 'junctional');
+    expect(markBeats('r5', 0, 1, 'st')).toEqual([k]);
+    const j = t.beats[k];
     expect(j.qrsOff - j.qrsOn).toBeLessThan(110);
     const p = t.atrial.find((a) => a.kind === 'retrograde')!;
     expect(p.t).toBeGreaterThanOrEqual(j.qrsOff);
     expect(p.t).toBeLessThan(j.qrsOff + 40);
     const a = e.signal.leads.II;
-    const base = baselineBefore(a, e.signal.fs, j.qrsOn);
-    const v = (ms: number) => a[Math.round((ms * e.signal.fs) / 1000)] - base;
-    expect(Math.min(v(j.qrsOff + 40), v(j.qrsOff + 50))).toBeLessThan(-0.04);
+    const fs = e.signal.fs;
+    const earlySt = (b: BeatMarks) => {
+      const base = baselineBefore(a, fs, b.qrsOn);
+      return [40, 50].map((ms) => a[Math.round(((b.qrsOff + ms) * fs) / 1000)] - base);
+    };
+    expect(Math.min(...earlySt(j))).toBeLessThan(-0.04);
+    const sinus = t.beats.filter((b) => b.kind === 'sinus' && b.qrsOff + 50 < e.signal.durationMs);
+    expect(sinus.length).toBeGreaterThanOrEqual(5);
+    for (const b of sinus) expect(Math.min(...earlySt(b)), `sinus beat at ${Math.round(b.qrsOn)} ms`).toBeGreaterThanOrEqual(0);
   });
   it('blocked-PAC bigeminy (grouping film frame 1): ventricles about 46/min, atria about 95/min, every P′ blocked', () => {
     const t = frames('r5', 1)[0].truth!;
@@ -635,20 +647,36 @@ describe('r5: premature beats on the tracings', () => {
     expect(Math.abs((t.atrialRateBpm ?? 0) - 95)).toBeLessThan(1.5);
     expect(t.atrial.filter((a) => a.kind === 'ectopic').every((a) => a.conductedTo === null)).toBe(true);
   });
-  it('grouping film: bigeminy with a fixed coupling of about 480 ms; trigeminy with two alternating PVC shapes in II; a couplet', () => {
+  it('grouping film: bigeminy with a fixed coupling of about 480 ms; trigeminy with two alternating PVC shapes in II; a couplet; each mark sits on the beats its note names', () => {
     const [, big, tri, cp] = frames('r5', 1);
     const kinds = (e: Ecg) => e.truth!.beats.map((b) => (b.kind === 'ventricular' ? 'V' : 'S')).join('');
     expect(kinds(big)).toMatch(/^(VS)+V?$|^(SV)+S?$/);
     const t = big.truth!.beats;
     for (let i = 1; i < t.length; i++) if (t[i].kind === 'ventricular') expect(Math.abs(t[i].qrsOn - t[i - 1].qrsOn - 480)).toBeLessThan(5);
+    const coupling = markBeats('r5', 1, 1, 'rr');
+    expect(coupling).toHaveLength(1);
+    const [c] = coupling;
+    expect([t[c].kind, t[c + 1].kind], 'the bracket runs from a sinus beat to its PVC').toEqual(['sinus', 'ventricular']);
+    expect(Math.abs(t[c + 1].qrsOn - t[c].qrsOn - 480)).toBeLessThan(5);
     expect(kinds(tri)).toMatch(/^S*(SSV)+S*$/);
     const pv = tri.truth!.beats.filter((b) => b.kind === 'ventricular' && b.qrsOff < 9800).map((b) => qrsSpan(tri, 'II', b).max);
     expect(pv.length).toBeGreaterThanOrEqual(3);
     for (let i = 1; i < pv.length; i++) expect(Math.abs(pv[i] - pv[i - 1])).toBeGreaterThan(0.4);
     for (let i = 2; i < pv.length; i++) expect(Math.abs(pv[i] - pv[i - 2])).toBeLessThan(0.05);
+    const tb = tri.truth!.beats;
+    const shapes = markBeats('r5', 1, 2, 'qrs');
+    expect(shapes).toHaveLength(2);
+    for (const k of shapes) expect(tb[k].kind, `marked beat ${k}`).toBe('ventricular');
+    expect(shapes[1] - shapes[0], 'two consecutive PVCs').toBe(3);
+    expect(Math.abs(qrsSpan(tri, 'II', tb[shapes[0]]).max - qrsSpan(tri, 'II', tb[shapes[1]]).max), 'one tall, one short in II').toBeGreaterThan(0.4);
     expect(kinds(cp)).toContain('SVVS');
     expect(kinds(cp)).not.toContain('VVV');
     expect(cp.truth!.findings).toContain('ventricular-couplet');
+    const cb = cp.truth!.beats;
+    const pair = markBeats('r5', 1, 3, 'qrs');
+    expect(pair).toHaveLength(2);
+    expect(pair[1]).toBe(pair[0] + 1);
+    expect([cb[pair[0] - 1], cb[pair[0]], cb[pair[1]], cb[pair[1] + 1]].map((b) => b.kind), 'the marks cover the couplet').toEqual(['sinus', 'ventricular', 'ventricular', 'sinus']);
   });
   it('contrast: aberrant PAC is wide with an R′ in V1 after an early P′; the PVC pause is fully compensatory', () => {
     const c = blocksOf('r5', 'contrast')[0];
