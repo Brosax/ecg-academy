@@ -421,7 +421,15 @@ describe('h2: LVH voltage and secondary ST–T on the tracings', () => {
       for (const l of ['V1', 'V2'] as const) expect(stAt(e, l, 60), l).toBeGreaterThan(0.1);
     }
   });
-  it('contrast: Sokolow-Lyon positive on both sides; A keeps upright T in V5–V6', () => {
+  it('voltage film prediction: the normal frame has its tallest R in V5, the LVH frame in V6 (over all 12 leads)', () => {
+    const [normal, lvh] = frames('h2', 0);
+    const tallest = (e: Ecg): StdLead => [...LIMB, ...CHEST].reduce((best, l) => (qrs(e, l).max > qrs(e, best).max ? l : best));
+    expect(tallest(normal)).toBe('V5');
+    expect(tallest(lvh)).toBe('V6');
+    const p = blocksOf('h2', 'film')[0].predict!;
+    expect(p.options[p.answer].en).toBe('V6');
+  });
+  it('contrast: Sokolow-Lyon positive on both sides ("voltage criteria met too"); A keeps upright T in V5–V6', () => {
     const c = blocksOf('h2', 'contrast')[0];
     const a = ecgOf(c.left.ecg);
     expect(sokolow(a)).toBeGreaterThan(3.5);
