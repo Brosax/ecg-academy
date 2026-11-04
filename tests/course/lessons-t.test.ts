@@ -746,7 +746,7 @@ describe('t3 on the tracings', () => {
       expect(Math.abs(ffMedian(e) - 200)).toBeLessThan(5);
     }
   });
-  it('hook and worked at 2:1: the hidden F starts after the T ends and runs into the next QRS; the visible F sits on the ST segment right after the QRS, before the T peak', () => {
+  it('hook and worked at 2:1: the hidden F starts just after the T ends (within 40 ms, one small square) and runs into the next QRS; the visible F sits on the ST segment right after the QRS, before the T peak', () => {
     for (const src of [blocksOf('t3', 'hook')[0].ecg, blocksOf('t3', 'worked')[0].ecg]) {
       const t = ecgOf(src).truth!;
       const inStrip = t.atrial.filter((a) => a.t > t.beats[0].qrsOn && a.t < t.beats[t.beats.length - 1].qrsOn);
@@ -760,6 +760,7 @@ describe('t3 on the tracings', () => {
           expect(a.t, 'visible F before the T peak').toBeLessThan(prev.tPeak!);
         } else {
           expect(a.t, 'hidden F after the T end').toBeGreaterThan(prev.tOff);
+          expect(a.t - prev.tOff, 'hidden F starts just after the T ends').toBeLessThanOrEqual(40);
           expect(next.qrsOn - a.t, 'hidden F runs into the next QRS').toBeLessThan(100);
         }
       }
