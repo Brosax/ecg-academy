@@ -44,9 +44,9 @@ const electrodeCheck: Item = {
   ecg: synth('motion-artefact', 1592),
   view: { layout: '3x4+1' },
   explanation: l(
-    '右上肢（RA）电极。I（= LA − RA）和 II（= LL − RA）都乱，III（= LL − LA）没有用到 RA，所以干净；以该电极命名的 aVR 最乱。胸前导联也有一点（Wilson 中心电端里有 RA 的三分之一）。在 III 里，真正的窄 QRS 按原来的 RR 规律地走过去——这是伪差，不是室速。别电击一个在说话的人。',
-    'The right-arm (RA) electrode. Lead I (= LA − RA) and lead II (= LL − RA) are both disturbed, lead III (= LL − LA) does not use RA and stays clean, and aVR, named after that electrode, is the worst. The chest leads carry a little of it too (Wilson’s central terminal contains a third of RA). In lead III the real narrow QRS complexes march through at the same RR — this is artefact, not VT. Do not shock someone who is talking to you.',
-    'El electrodo del brazo derecho (RA). I (= LA − RA) y II (= LL − RA) están alteradas, III (= LL − LA) no usa RA y queda limpia, y aVR, que lleva el nombre de ese electrodo, es la peor. Las precordiales también llevan algo (el terminal central de Wilson contiene un tercio de RA). En III los QRS estrechos reales desfilan con el mismo RR: es artefacto, no TV. No descargues a alguien que está hablando contigo.',
+    '右上肢（RA）电极。I（= LA − RA）和 II（= LL − RA）都乱，III（= LL − LA）没有用到 RA，所以干净；以该电极命名的 aVR 和 I、II 一样乱。胸前导联也有一点（Wilson 中心电端里有 RA 的三分之一）。在 III 里，真正的窄 QRS 按原来的 RR 规律地走过去——这是伪差，不是室速。别电击一个在说话的人。',
+    'The right-arm (RA) electrode. Lead I (= LA − RA) and lead II (= LL − RA) are both disturbed, lead III (= LL − LA) does not use RA and stays clean, and aVR, named after that electrode, swings as widely as I and II. The chest leads carry a little of it too (Wilson’s central terminal contains a third of RA). In lead III the real narrow QRS complexes march through at the same RR — this is artefact, not VT. Do not shock someone who is talking to you.',
+    'El electrodo del brazo derecho (RA). I (= LA − RA) y II (= LL − RA) están alteradas, III (= LL − LA) no usa RA y queda limpia, y aVR, que lleva el nombre de ese electrodo, oscila tanto como I y II. Las precordiales también llevan algo (el terminal central de Wilson contiene un tercio de RA). En III los QRS estrechos reales desfilan con el mismo RR: es artefacto, no TV. No descargues a alguien que está hablando contigo.',
   ),
   findings: [],
   key: {
@@ -190,12 +190,12 @@ const lesson: Lesson = {
         {
           title: l('走 RR', 'March the RR', 'Recorre el RR'),
           body: l('间距恒定、逐搏都对得上（约 830 ms，72 次/分）——伪差从不打乱真实的节律。房扑的 F 波与 QRS 有固定关系，而这里的波动和 QRS 毫无关系。', 'The spacing is constant and marches through beat after beat (about 830 ms, 72/min) — artefact never disturbs the true rhythm. Flutter waves keep a fixed relation to the QRS; this ripple has no relation to it at all.', 'La separación es constante y desfila latido a latido (unos 830 ms, 72 lpm): el artefacto nunca altera el ritmo real. Las ondas F del flúter mantienen una relación fija con el QRS; este rizado no tiene ninguna.'),
-          marks: [{ auto: 'rr', lead: 'II' }],
+          marks: [{ auto: 'rr', lead: 'II', beat: 3 }],
           view: { layout: 'strip', lead: 'II', calipers: true },
         },
         {
           title: l('哪几个导联乱？', 'Which leads are noisy?', '¿Qué derivaciones tienen ruido?'),
-          body: l('回到 12 导联：II、III、aVF 乱，**I 干净**；aVR 和 aVL 只带上一半的波动。II 和 III 共同用到的电极是左下肢（LL）；aVF（以“足”命名）最乱。结论：震颤在左腿电极上。', 'Back to the 12 leads: II, III and aVF are noisy, **lead I is clean**, and aVR and aVL carry only half of the ripple. The electrode that II and III share is the left leg (LL); aVF ("foot") is the worst. Conclusion: the tremor is on the left-leg electrode.', 'Vuelve a las 12 derivaciones: II, III y aVF tienen ruido, **I está limpia** y aVR y aVL solo llevan la mitad del rizado. El electrodo que comparten II y III es el de la pierna izquierda (LL); aVF ("pie") es la peor. Conclusión: el temblor está en el electrodo de la pierna izquierda.'),
+          body: l('回到 12 导联：II、III、aVF 乱，**I 干净**；aVR 和 aVL 只带上一半的波动。II 和 III 共同用到的电极是左下肢（LL）；aVF（以“足”命名）和 II、III 一样乱。结论：震颤在左腿电极上。', 'Back to the 12 leads: II, III and aVF are noisy, **lead I is clean**, and aVR and aVL carry only half of the ripple. The electrode that II and III share is the left leg (LL); aVF ("foot") is as noisy as II and III. Conclusion: the tremor is on the left-leg electrode.', 'Vuelve a las 12 derivaciones: II, III y aVF tienen ruido, **I está limpia** y aVR y aVL solo llevan la mitad del rizado. El electrodo que comparten II y III es el de la pierna izquierda (LL); aVF ("pie") tiene tanto ruido como II y III. Conclusión: el temblor está en el electrodo de la pierna izquierda.'),
           highlightLeads: ['II', 'III', 'aVF', 'I'],
         },
         {
@@ -216,7 +216,7 @@ const lesson: Lesson = {
       right: {
         ecg: synth('atrial-fibrillation', 1585, { fCoarseness: 0.5, ventricularResponse: 110 }),
         caption: l('心房颤动（II）：不规则的 f 波，RR 绝对不规则', 'Atrial fibrillation (II): irregular f waves, an irregularly irregular RR', 'Fibrilación auricular (II): ondas f irregulares, RR irregularmente irregular'),
-        marks: [{ auto: 'rr', lead: 'II' }],
+        marks: [{ auto: 'rr', lead: 'II', beat: 7 }],
       },
       point: l(
         '两侧都“看不清 P 波”。左：基线上叠加的是规则的波动，但 QRS 一个接一个**等距**地走过去，P 波其实还在，另一个导联（I）会是干净的。右：基线本身在无规律地颤动（f 波），**RR 毫无规律**（t2）。先量 RR：规则的 RR 加上“房颤样”基线，首先想伪差。',
@@ -279,7 +279,7 @@ const lesson: Lesson = {
       kind: 'summary',
       points: [
         l('伪装成心律失常的伪差三条证据：QRS 按原 RR 走过去、有干净导联、患者状态不符。', 'Three proofs of arrhythmia-mimicking artefact: the QRS marches through at the same RR, a clean lead exists, the patient does not fit.', 'Tres pruebas del artefacto que simula arritmias: el QRS desfila con el mismo RR, hay una derivación limpia y el paciente no encaja.'),
-        l('坏电极三角：RA → I + II（aVR 最乱）；LA → I + III（aVL）；LL → II + III（aVF）。', 'The faulty-electrode triangle: RA → I + II (aVR worst); LA → I + III (aVL); LL → II + III (aVF).', 'El triángulo del electrodo defectuoso: RA → I + II (aVR la peor); LA → I + III (aVL); LL → II + III (aVF).'),
+        l('坏电极三角：RA → I + II（aVR 同样乱）；LA → I + III（aVL 同样乱）；LL → II + III（aVF 同样乱）。', 'The faulty-electrode triangle: RA → I + II (aVR just as noisy); LA → I + III (aVL just as noisy); LL → II + III (aVF just as noisy).', 'El triángulo del electrodo defectuoso: RA → I + II (aVR igual de ruidosa); LA → I + III (aVL igual); LL → II + III (aVF igual).'),
         l('交流干扰先修接触；基线漂移先修记录；修的是电极，不是整台机器的滤波。', 'AC interference: fix the contact first; wander: fix the recording first; fix the electrode, not the whole machine’s filter.', 'Interferencia de red: primero el contacto; oscilación: primero el registro; arregla el electrodo, no el filtro de toda la máquina.'),
         l('读 ST 与起搏钉必须用诊断档滤波（0.05–150 Hz）；监护档能在正常心脏上造出约 1 mm 的 ST 压低。', 'ST segments and pacing spikes need the diagnostic bandwidth (0.05–150 Hz); the monitor filter can manufacture about 1 mm of ST depression on a normal heart.', 'El ST y las espículas exigen el ancho de banda diagnóstico (0,05–150 Hz); el filtro de monitor puede fabricar alrededor de 1 mm de descenso del ST en un corazón normal.'),
       ],

@@ -105,9 +105,9 @@ const lesson: Lesson = {
         answer: 0,
       },
       caption: l(
-        '肢体导联看起来不对时，先查记录再查心脏。上肢与左下肢导线互换不影响V1–V6；胸导联也异常，就要想别的原因。',
-        'When the limb leads look wrong, check the recording before the heart. Swapping arm and left-leg cables never touches V1–V6; if the chest leads are abnormal too, think of something else.',
-        'Si las derivaciones de miembros parecen raras, revisa el registro antes que el corazón. Intercambiar los cables de brazos y pierna izquierda no toca V1–V6; si las precordiales también fallan, piensa en otra cosa.',
+        '肢体导联看起来不对时，先查记录再查心脏。上肢与左下肢导线互换不影响V1–V6，中性电极（RL）接错也只让它们稍有改变；胸导联明显异常，就要想别的原因。',
+        'When the limb leads look wrong, check the recording before the heart. Swapping arm and left-leg cables never touches V1–V6, and a misplaced neutral (RL) cable shifts them only a little; if the chest leads are clearly abnormal, think of something else.',
+        'Si las derivaciones de miembros parecen raras, revisa el registro antes que el corazón. Intercambiar los cables de brazos y pierna izquierda no toca V1–V6, y el cable neutro (PD) mal puesto solo las cambia algo; si las precordiales fallan claramente, piensa en otra cosa.',
       ),
     },
     {
@@ -168,11 +168,11 @@ const lesson: Lesson = {
         {
           title: l('aVR 不能裁决', 'aVR does not decide', 'La aVR no decide'),
           body: l(
-            'aVR 的 P 直立（aVL 倒置）——两者都符合：接反时 aVR↔aVL 互换，右位心时镜像的心房朝向 aVR。aVR 只确认“确实反了”，不能告诉你为什么。',
-            'The P is upright in aVR (inverted in aVL) — both explanations fit: with reversed cables aVR and aVL swap, and in dextrocardia the mirrored atria point towards aVR. aVR confirms that something is flipped, but not why.',
-            'La P es positiva en aVR (negativa en aVL): encaja con las dos; con los cables invertidos aVR y aVL se intercambian, y en la dextrocardia las aurículas en espejo apuntan hacia aVR. La aVR confirma que algo está invertido, pero no por qué.',
+            'aVL 的 P 明确倒置，aVR 的 P 只略高于基线——两者都符合：接反时 aVR↔aVL 互换，右位心时镜像的心房背离 aVL。这两个导联只确认“确实反了”，不能告诉你为什么。',
+            'The P is clearly inverted in aVL and only just above the line in aVR — both explanations fit: with reversed cables aVR and aVL swap, and in dextrocardia the mirrored atria point away from aVL. These two leads confirm that something is flipped, but not why.',
+            'La P es claramente negativa en aVL y apenas positiva en aVR: encaja con las dos; con los cables invertidos aVR y aVL se intercambian, y en la dextrocardia las aurículas en espejo se alejan de aVL. Estas dos derivaciones confirman que algo está invertido, pero no por qué.',
           ),
-          marks: [{ auto: 'p', lead: 'aVR' }],
+          marks: [{ auto: 'p', lead: 'aVR' }, { auto: 'p', lead: 'aVL' }],
           highlightLeads: ['aVR', 'aVL'],
         },
         {

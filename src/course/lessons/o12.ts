@@ -243,13 +243,17 @@ const lesson: Lesson = {
           label: l('房颤', 'AF', 'FA'),
           ecg: synth('atrial-fibrillation', 1627),
           note: l('房颤约100次/分：RR从约350到1100 ms不等，用平均RR算出的一个QTc并不可靠。多量几个心搏。', 'AF at about 100/min: the RR runs from about 350 to 1100 ms, so one QTc from the average RR is shaky. Measure several beats.', 'FA a unos 100 lpm: el RR va de unos 350 a 1100 ms, así que un único QTc con el RR medio es poco fiable. Mide varios latidos.'),
-          marks: [{ auto: 'rr' }],
+          marks: [
+            { auto: 'rr', lead: 'V2', beat: 12 },
+            { auto: 'rr', lead: 'V2', beat: 5 },
+          ],
         },
       ],
       predict: {
         question: l('低钾时U波很大。如果机器把QT量到U波终点，它的QT会怎样？', 'With low potassium the U wave is big. If a machine runs the QT to the end of the U, its QT will be…', 'Con potasio bajo la U es grande. Si una máquina lleva el QT hasta el final de la U, su QT será…'),
-        options: [l('太长', 'Too long', 'Demasiado largo'), l('太短', 'Too short', 'Demasiado corto'), l('正确', 'Right', 'Correcto')],
-        answer: 0,
+        options: [l('太短', 'Too short', 'Demasiado corto'), l('正确', 'Right', 'Correcto'), l('太长', 'Too long', 'Demasiado largo')],
+        answer: 2,
+        ordered: true,
       },
       caption: l(
         '机器的强项是测量：用它的PR、QRS和QT，但T波终点不清、U波显著或心律不齐时，自己再量一次。',

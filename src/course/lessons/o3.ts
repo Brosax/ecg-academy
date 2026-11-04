@@ -257,7 +257,7 @@ const lesson: Lesson = {
           label: l('二联律', 'Bigeminy', 'Bigeminismo'),
           ecg: synth('ventricular-bigeminy', 1451),
           note: l('每隔一跳就是一个提前出现的宽大室早：室早二联律，最常见的中毒节律（自律性↑）。', 'Every other beat is an early, wide PVC: ventricular bigeminy, the commonest toxic rhythm (↑automaticity).', 'Un latido sí y otro no es una EV precoz y ancha: bigeminismo ventricular, el ritmo tóxico más frecuente (↑automaticidad).'),
-          marks: [{ auto: 'rr' }],
+          marks: [{ auto: 'rr', beat: 4 }],
         },
         {
           label: l('房速伴阻滞', 'AT with block', 'TA con bloqueo'),

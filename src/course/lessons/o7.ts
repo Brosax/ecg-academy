@@ -5,7 +5,7 @@
  *
  * Tracings (checked against the model truth, tests/course/lessons-o.test.ts): `pericarditis` = sinus ≈ 96/min,
  * concave ST elevation (vs TP) ≈ 1.7 mm in II and ≈ 2–3 mm in V3–V4, ST depression only in aVR, PR depression ≈ 1 mm
- * in II and V4–V6 with PR elevation ≈ 1 mm in aVR, ST/T in V6 ≈ 0.5 (ST from the PR segment, as the ratio is defined);
+ * in II and V4–V6 with PR elevation ≈ 1 mm in aVR, ST/T in V6 ≈ 0.55 (ST from the PR segment, as the ratio is defined);
  * `early-repolarization` has no PR shift and, since the 2026-10-29 final engine fix (tall, broad lateral T), a V6 ST/T
  * ≈ 0.2: the ER contrast shows both clues — the PR segment in II and the ST/T ratio in V6.
  * The engine does not draw Spodick's sign (a downsloping TP segment): it is taught in text only.
@@ -132,9 +132,9 @@ const lesson: Lesson = {
         answer: 0,
       },
       caption: l(
-        'PR段和ST都要对着TP段量，不要对着已被拉低的PR段量。TP段逐渐下斜（Spodick征）支持心包炎。',
-        'Measure the PR and the ST against the TP segment, never against the PR, which is already pulled down. A downsloping TP (Spodick’s sign) supports pericarditis.',
-        'Mide el PR y el ST contra el segmento TP, nunca contra el PR, que ya está descendido. Un TP descendente (signo de Spodick) apoya la pericarditis.',
+        'PR段压低和ST抬高都对着TP段判断，不要对着已被拉低的PR段；只有V6的ST/T比值例外，以PR段为基线。TP段逐渐下斜（Spodick征）支持心包炎。',
+        'Judge PR depression and ST elevation against the TP segment, not against the PR, which is already pulled down; only the V6 ST/T ratio uses the PR. A downsloping TP (Spodick’s sign) supports pericarditis.',
+        'Juzga el descenso del PR y la elevación del ST contra el segmento TP, no contra el PR, que ya está descendido; solo el cociente ST/T de V6 usa el PR. Un TP descendente (signo de Spodick) apoya la pericarditis.',
       ),
     },
     {
@@ -306,7 +306,7 @@ const lesson: Lesson = {
     {
       kind: 'pitfalls',
       items: [
-        l('PR 段压低被忽略（最特异的线索）——或者以 PR 段本身当基线去量 ST。', 'Overlooking PR depression (the most specific clue) — or using the PR segment itself as the baseline for the ST.', 'No ver el descenso del PR (la pista más específica), o usar el propio PR como línea de base para medir el ST.'),
+        l('PR 段压低被忽略（最特异的线索）——或者拿已被拉低的 PR 段而不是 TP 段去判断 ST 抬高（只有 V6 的 ST/T 比值以 PR 段为基线）。', 'Overlooking PR depression (the most specific clue) — or judging ST elevation against the depressed PR segment instead of the TP (only the V6 ST/T ratio uses the PR).', 'No ver el descenso del PR (la pista más específica), o juzgar la elevación del ST contra el PR descendido en lugar del TP (solo el cociente ST/T de V6 usa el PR).'),
         l('肌钙蛋白升高就把心包炎改成心肌梗死（心肌心包炎存在）——但也别反过来：有疑问就按 STEMI 路径评估。', 'Changing pericarditis to MI just because troponin is up (myopericarditis exists) — but not the reverse either: when in doubt, assess along the STEMI pathway.', 'Cambiar la pericarditis por infarto solo porque sube la troponina (existe la miopericarditis), pero tampoco al revés: ante la duda, valora por la vía del IAMCEST.'),
         l('把年轻人的早期复极叫作心包炎（或相反）：量 V6 的 ST/T 比值，看 PR 段，问症状。', 'Calling a young person’s early repolarisation pericarditis (or the reverse): measure the ST/T ratio in V6, check the PR segment, ask about symptoms.', 'Llamar pericarditis a la repolarización precoz de un joven (o al revés): mide el cociente ST/T en V6, mira el PR y pregunta por los síntomas.'),
         l('电交替被当作伪差或体位变化。', 'Electrical alternans dismissed as artefact or posture.', 'Despachar la alternancia eléctrica como artefacto o cambio postural.'),
