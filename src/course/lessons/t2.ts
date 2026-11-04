@@ -279,9 +279,9 @@ const lesson: Lesson = {
           label: l('慢', 'Slow', 'Lenta'),
           ecg: synth('atrial-fibrillation', 625, undefined, 'slow'),
           note: l(
-            '约 45 次/分，仍绝对不齐：慢不改变诊断。没用减慢心率的药 ⇒ 房室传导本身有病。',
-            'About 45/min and still irregularly irregular: slowness does not change the diagnosis. No rate-slowing drugs → disease of the AV conduction itself.',
-            'Unos 45 lpm y sigue irregularmente irregular: la lentitud no cambia el diagnóstico. Sin fármacos frenadores → enfermedad de la propia conducción AV.',
+            '约 45 次/分，仍绝对不齐：慢不改变诊断。如果没用减慢心率的药 ⇒ 房室传导本身有病。',
+            'About 45/min and still irregularly irregular: slowness does not change the diagnosis. If no rate-slowing drugs → disease of the AV conduction itself.',
+            'Unos 45 lpm y sigue irregularmente irregular: la lentitud no cambia el diagnóstico. Si no toma fármacos frenadores → enfermedad de la propia conducción AV.',
           ),
           marks: [{ auto: 'f-waves' }, { auto: 'rr' }],
         },
