@@ -1164,6 +1164,23 @@ describe('t5 on the tracings', () => {
   });
 });
 
+/** peak-to-peak of lead II in each whole second of the record, mV */
+function p2pPerSecondII(e: Ecg): number[] {
+  const a = e.signal.leads.II;
+  const fs = e.signal.fs;
+  const out: number[] = [];
+  for (let s = 0; s + fs <= a.length; s += fs) {
+    let mx = -Infinity;
+    let mn = Infinity;
+    for (let i = s; i < s + fs; i++) {
+      mx = Math.max(mx, a[i]);
+      mn = Math.min(mn, a[i]);
+    }
+    out.push(mx - mn);
+  }
+  return out;
+}
+
 describe('t6 on the tracings', () => {
   it('hook torsades: sinus beats first, QT of the first sinus beat about 565 ms and its Bazett QTc about 570 ms; the twisting run at about 220/min; contrast left has a normal QT context', () => {
     const e = ecgOf(blocksOf('t6', 'hook')[0].ecg);
@@ -1190,9 +1207,11 @@ describe('t6 on the tracings', () => {
     expect(r0.kind).toBe('sinus');
     expect(Math.abs(r0.tOff - r0.qrsOn - 565)).toBeLessThan(5);
   });
-  it('artefact film: a title and a question that do not name the answer; sinus rhythm with regular QRS through the burst (RR about 830 ms, marked beats inside it); the burst sits at about 3–6 s in II; with the electrode still the same heart beats identically and III never changes', () => {
+  it('artefact film: a title, a question and options that do not name the answer; sinus rhythm with regular QRS through the burst (RR about 830 ms, marked beats inside it); the burst sits at about 3–6 s in II; with the electrode still the same heart beats identically and III never changes', () => {
     const film = blocksOf('t6', 'film')[1];
-    for (const s of [film.title.en, film.predict!.question.en]) expect(s).not.toMatch(/\bVT\b|artefact|artifact/i);
+    const leak = { zh: /室速|伪差|干扰/, en: /\bVT\b|artefact|artifact|noise/i, es: /\bTV\b|artefacto|ruido/i } as const;
+    for (const k of ['zh', 'en', 'es'] as const)
+      for (const s of [film.title[k], film.predict!.question[k], ...film.predict!.options.map((o) => o[k])]) expect(s, k).not.toMatch(leak[k]);
     expect(film.frames[1].ecg).toEqual(film.frames[0].ecg);
     const [noisy, , still] = frames('t6', 1);
     expect(noisy.truth!.rhythm).toBe('sinus-rhythm');
@@ -1216,21 +1235,7 @@ describe('t6 on the tracings', () => {
     expect(d('II', 6400, 10_000)).toBeLessThan(1e-6);
   });
   it('VF sweep notes: about 2 mV (20 mm) of II at 0.91–0.98 and about 1–1.3 mV at 0.5–0.6, VF throughout; the fine-VF frame about 2 mm, far smaller', () => {
-    const p2p = (e: Ecg) => {
-      const a = e.signal.leads.II;
-      const fs = e.signal.fs;
-      const out: number[] = [];
-      for (let s = 0; s + fs <= a.length; s += fs) {
-        let mx = -Infinity;
-        let mn = Infinity;
-        for (let i = s; i < s + fs; i++) {
-          mx = Math.max(mx, a[i]);
-          mn = Math.min(mn, a[i]);
-        }
-        out.push(mx - mn);
-      }
-      return median(out);
-    };
+    const p2p = (e: Ecg) => median(p2pPerSecondII(e));
     const notes = blocksOf('t6', 'live')[0].play!.notes!;
     expect(notes.map((n) => [n.min, n.max])).toEqual([[0.91, 0.98], [0.5, 0.6]]);
     for (const v of [0.91, 0.98]) {
@@ -1248,7 +1253,7 @@ describe('t6 on the tracings', () => {
     expect(Math.abs(p2p(fine) - 0.2), 'about 2 mm').toBeLessThanOrEqual(0.025);
     expect(p2p(fine)).toBeLessThan(0.3 * p2p(played('t6', 0, 0.5)));
   });
-  it('shock film: VF with no beats; ventricular flutter 300/min, cycle about 200 ms varying ≤ 30 ms; fine VF (frame 3, the prediction): small chaotic waves, not a flat line and no complexes; P waves at 52/min with no QRS', () => {
+  it('shock film: VF with no beats; ventricular flutter 300/min, cycle about 200 ms varying ≤ 30 ms; fine VF (frame 3, the prediction on a size scale): about 2 mm in II, never flat and never near 10 mm in any second, no complexes; P waves at 52/min with no QRS', () => {
     const film = blocksOf('t6', 'film')[0];
     const [vf, vfl, fine, asys] = frames('t6', 0);
     expect(vf.truth!.rhythm).toBe('ventricular-fibrillation');
@@ -1256,11 +1261,21 @@ describe('t6 on the tracings', () => {
     expect(Math.abs(vfl.truth!.hrBpm - 300)).toBeLessThanOrEqual(1);
     expect(Math.abs(median(rrs(vfl)) - 200)).toBeLessThan(5);
     expect(Math.max(...rrs(vfl)) - Math.min(...rrs(vfl))).toBeLessThanOrEqual(30);
-    expect(film.predict!.options[film.predict!.answer].en).toBe('Small, chaotic waves');
+    const pr = film.predict!;
+    expect(pr.ordered).toBe(true);
+    expect(pr.options.map((o) => o.en)).toEqual(['A flat line', 'About 2 mm', 'About 10 mm', 'About 20 mm']);
+    expect(pr.options[pr.answer].en).toBe('About 2 mm');
+    expect(pr.question.en).not.toMatch(/\d\s*mm/);
     expect(fine.truth!.rhythm).toBe('ventricular-fibrillation');
     expect(fine.truth!.beats.length, 'no complexes').toBe(0);
     const ii = fine.signal.leads.II;
     expect(Math.max(...ii) - Math.min(...ii), 'not a flat line').toBeGreaterThan(0.05);
+    const secs = p2pPerSecondII(fine);
+    expect(Math.abs(median(secs) - 0.2), 'about 2 mm').toBeLessThanOrEqual(0.025);
+    for (const [k, x] of secs.entries()) {
+      expect(x, `second ${k}: wider than the ±0.05 mV flat band`).toBeGreaterThan(0.1);
+      expect(x, `second ${k}: well short of 10 mm`).toBeLessThan(0.5);
+    }
     const a = asys.truth!;
     expect(a.rhythm).toBe('asystole');
     expect(a.beats.length).toBe(0);
