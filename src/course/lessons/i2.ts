@@ -134,7 +134,7 @@ const lesson: Lesson = {
             'Find the lead with the clearest J-point elevation among the chest leads (here the tallest is V2).',
             'Busca la derivación con mayor ascenso del punto J entre las precordiales (aquí la mayor es V2).',
           ),
-          marks: [{ auto: 'st60', lead: 'V2' }],
+          marks: [{ auto: 'j', lead: 'V2' }],
           highlightLeads: ['V1', 'V2', 'V3', 'V4'],
         },
         {
@@ -169,7 +169,7 @@ const lesson: Lesson = {
     },
     {
       kind: 'heart',
-      ecg: synth('stemi-inferior', 823),
+      ecg: synth('stemi-inferior', 821),
       emphasize: ['lv-mid-inferior', 'lv-basal-inferior'],
       caption: l(
         '同一张下壁 STEMI，换到心脏上读：播放一个心动周期，下壁节段亮起——RCA 走行的右房室沟就在这些节段旁边。II、III、aVF 从下方正对这面墙，所以损伤电流把它们的 ST 段抬起来。',
@@ -246,7 +246,7 @@ const lesson: Lesson = {
           note: l(
             'V1–V2压低、T波直立，V5–V6抬高：后壁和侧壁 → 多为LCx。后壁只给镜像：加做V7–V9。',
             'V1–V2 down with upright T waves, V5–V6 up: back and side walls → usually LCx. The back wall shows only its mirror: record V7–V9.',
-            'V1-V2 descendidas con T positivas, V5-V6 elevadas: paredes posterior y lateral → casi siempre Cx. La posterior solo da su espejo: registra V7-V9.',
+            'V1-V2 descendidas con T positivas, V5-V6 elevadas: paredes posterior y lateral → habitualmente Cx. La posterior solo da su espejo: registra V7-V9.',
           ),
           marks: [{ auto: 't', lead: 'V2' }, { auto: 'j', lead: 'V6' }],
         },
