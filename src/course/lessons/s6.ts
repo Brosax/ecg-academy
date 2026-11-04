@@ -7,7 +7,7 @@
  */
 import { l } from '../../core/l10n';
 import type { EcgSource, Item } from '../../practice/api';
-import type { DialId } from '../../synth/api';
+import { FILTER_PRESETS, type DialId } from '../../synth/api';
 import type { Lesson } from '../api';
 
 const synth = (scenario: string, seed: number, dials?: Partial<Record<DialId, number>>): EcgSource => ({
@@ -15,7 +15,8 @@ const synth = (scenario: string, seed: number, dials?: Partial<Record<DialId, nu
   req: { scenario, seed, ...(dials ? { dials } : {}) },
 });
 /** anterior ST elevation at J+60 ≈ 3 mm (V2), 4 mm (V3), 2 mm (V4), 1 mm (V1); reciprocal ≈ 1 mm depression in III / aVF */
-const ANTERIOR = synth('stemi-anterior', 602, { st: 0.3 });
+const ANTERIOR_REQ = { scenario: 'stemi-anterior', seed: 602, dials: { st: 0.3 } } as const;
+const ANTERIOR: EcgSource = { kind: 'synth', req: ANTERIOR_REQ };
 /** inferior ST elevation ≈ 2 mm (II, III, aVF; largest in III), reciprocal depression deepest in aVL */
 const INFERIOR = synth('stemi-inferior', 603, { st: 0.25 });
 
@@ -111,18 +112,9 @@ const lesson: Lesson = {
       figure: { id: 'action-potential', params: { cell: 'ventricular' } },
       ecg: synth('normal', 601, { rate: 60 }),
       caption: l(
-        'ST 段对应心室动作电位的平台期（2 相）：所有心室细胞的电位几乎相同，没有电流流动，所以 ST 段平贴基线。损伤使平台期出现电位差，ST 段就上移或下移。',
-        'The ST segment is the plateau (phase 2) of the ventricular action potential: all ventricular cells sit at nearly the same voltage, so no current flows and the ST lies flat on the baseline. Injury creates a voltage difference during the plateau, and the ST moves up or down.',
-        'El segmento ST corresponde a la meseta (fase 2) del potencial de acción ventricular: todas las células ventriculares están casi al mismo voltaje, no fluye corriente y el ST queda plano sobre la línea de base. La lesión crea una diferencia de voltaje durante la meseta y el ST se desplaza hacia arriba o hacia abajo.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('三个标志点', 'Three landmarks', 'Tres referencias'),
-      body: l(
-        '- **基线**：PR 段（P 波终点到 QRS 起点）。PR 段变形时用 TP 段；心率快时 TP 段会消失。\n- **J 点**：QRS 结束、ST 开始的点——陡峭的 QRS 斜坡突然变平的地方。\n- **ST 偏移**：J 点与基线之间的垂直距离，以 mm 计（标准增益下 1 mm = 0.1 mV）。\n指南界值都定在 J 点。很多机器（以及本应用）还显示 J 点后 60 ms（J+60）的 ST，在 J 点难以确定时很有帮助。',
-        '- **Baseline**: the PR segment (end of P to start of QRS). Use the TP segment if the PR segment is distorted; at fast rates the TP segment disappears.\n- **J point**: where the QRS ends and the ST begins, the point where the steep QRS slope suddenly flattens.\n- **ST deviation**: the vertical distance between the J point and the baseline, in mm (1 mm = 0.1 mV at standard gain).\nGuideline thresholds are set at the J point. Many machines, and this app, also show the ST 60 ms after J (J+60), which helps when the J point is hard to pin down.',
-        '- **Línea de base**: el segmento PR (del final de la P al inicio del QRS). Usa el segmento TP si el PR está alterado; con frecuencias rápidas el TP desaparece.\n- **Punto J**: donde termina el QRS y empieza el ST, el punto en que la pendiente pronunciada del QRS se aplana de golpe.\n- **Desviación del ST**: la distancia vertical entre el punto J y la línea de base, en mm (1 mm = 0,1 mV con ganancia estándar).\nLos umbrales de las guías se fijan en el punto J. Muchos equipos, y esta aplicación, muestran además el ST 60 ms después de J (J+60), útil cuando el punto J es difícil de precisar.',
+        'ST 段对应心室动作电位的平台期（2 相）：所有细胞电位几乎相同，没有电流，ST 平贴基线。损伤在平台期造成电位差，ST 就上移或下移。',
+        'The ST segment is the plateau (phase 2) of the ventricular action potential: every cell sits at about the same voltage, no current flows and the ST lies on the baseline. Injury creates a voltage difference during the plateau, and the ST moves.',
+        'El segmento ST es la meseta (fase 2) del potencial de acción ventricular: todas las células están casi al mismo voltaje, no fluye corriente y el ST queda sobre la línea de base. La lesión crea una diferencia de voltaje en la meseta y el ST se desplaza.',
       ),
     },
     {
@@ -183,6 +175,14 @@ const lesson: Lesson = {
       title: l('ST 偏移界值（新出现，在 J 点，≥ 2 个相邻导联）', 'ST thresholds (new, at the J point, in ≥ 2 contiguous leads)', 'Umbrales del ST (nuevos, en el punto J, en ≥ 2 derivaciones contiguas)'),
       items: [
         {
+          label: l('怎样测量', 'How to measure', 'Cómo medir'),
+          value: l(
+            '基线用 PR 段（变形时用 TP 段；心率快时 TP 段会消失）；在 J 点量 ST 与基线的垂直距离，标准增益下 1 mm = 0.1 mV；J 点难定时可参考 J 点后 60 ms（J+60）的读数',
+            'Baseline: the PR segment (TP if the PR is distorted; at fast rates the TP disappears). Measure the vertical distance from the baseline at the J point, 1 mm = 0.1 mV at standard gain; the reading 60 ms after J (J+60) helps when J is hard to pin down',
+            'Línea de base: el segmento PR (el TP si el PR está alterado; con frecuencias rápidas el TP desaparece). Mide la distancia vertical a la línea de base en el punto J, 1 mm = 0,1 mV con ganancia estándar; la lectura 60 ms después de J (J+60) ayuda cuando J es difícil de precisar',
+          ),
+        },
+        {
           label: l('V2–V3 抬高', 'Elevation in V2–V3', 'Elevación en V2–V3'),
           value: l('≥ 40 岁男性 ≥ 2 mm；< 40 岁男性 ≥ 2.5 mm；女性（任何年龄）≥ 1.5 mm', '≥ 2 mm in men ≥ 40 y; ≥ 2.5 mm in men < 40 y; ≥ 1.5 mm in women of any age', '≥ 2 mm en varones ≥ 40 años; ≥ 2,5 mm en varones < 40 años; ≥ 1,5 mm en mujeres de cualquier edad'),
         },
@@ -207,10 +207,25 @@ const lesson: Lesson = {
       seed: 604,
       dials: [{ id: 'st' }],
       marks: [{ auto: 'st60', lead: 'V3' }, { auto: 'st60', lead: 'III' }],
+      play: {
+        dial: 'st',
+        from: 0.22,
+        to: 0.45,
+        notes: [
+          { min: 0.22, max: 0.25, text: l('电流小：J+60 读数 V3 约 +3 mm，III 约 −1 mm。', 'Small current: on the J+60 read-out V3 is about +3 mm and III about −1 mm.', 'Corriente pequeña: en la lectura de J+60, V3 está en unos +3 mm y III en unos −1 mm.') },
+          { min: 0.26, max: 0.39, text: l('V2–V4 每升高一点，III 和 aVF 就同步压低一点。', 'Every step up in V2–V4 comes with a step down in III and aVF.', 'Cada subida en V2–V4 llega con una bajada en III y aVF.') },
+          { min: 0.4, max: 0.45, text: l('电流大：V3 约 +5–6 mm，III 约 −2 mm。一个电流，两个视角：对应性改变。', 'Big current: V3 about +5–6 mm, III about −2 mm. One current, two views: reciprocity.', 'Corriente grande: V3 en unos +5–6 mm y III en unos −2 mm. Una corriente, dos puntos de vista: reciprocidad.') },
+        ],
+      },
+      predict: {
+        question: l('加大前壁的损伤电流，III 导联的 ST 会怎样？', 'Turn up the anterior injury current. What does the ST in III do?', 'Aumenta la corriente de lesión anterior. ¿Qué hace el ST en III?'),
+        options: [l('更低：压低加深', 'Falls further', 'Baja más'), l('也抬高', 'Rises too', 'También sube'), l('保持平坦', 'Stays flat', 'Se queda plano')],
+        answer: 0,
+      },
       caption: l(
-        '加大损伤电流：V2–V4 的 ST 段升高，III 和 aVF 的 ST 段按比例下降。一个电流，两个视角：这就是对应性改变。',
-        'Increase the injury current: the ST rises in V2–V4 and falls in III and aVF by a proportional amount. One current, two views: that is reciprocity.',
-        'Aumenta la corriente de lesión: el ST sube en V2–V4 y baja en III y aVF de forma proporcional. Una corriente, dos puntos de vista: eso es la reciprocidad.',
+        '加大损伤电流：V2–V4 的 ST 升高，III 和 aVF 按比例下降。读数取 J 点后 60 ms。',
+        'Turn up the injury current: the ST rises in V2–V4 and falls in proportion in III and aVF. The read-out is taken 60 ms after J.',
+        'Aumenta la corriente de lesión: el ST sube en V2–V4 y baja en proporción en III y aVF. La lectura se toma 60 ms después de J.',
       ),
     },
     {
@@ -233,12 +248,43 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
+      kind: 'film',
       title: l('界值是提示，不是诊断', 'Thresholds flag, they do not diagnose', 'Los umbrales alertan, no diagnostican'),
-      body: l(
-        'J 点抬高超过界值是需要仔细看的理由，而不是诊断：\n- 健康年轻男性的 V2–V4 常有 1–2 mm 的凹面型 ST 抬高；\n- 左心室肥厚和左束支阻滞本身就会使 V1–V3 的 ST 抬高（继发性改变）；\n- 急性闭塞也可能低于界值（第 I7 课）。\n始终要看对应性改变、形态、与 QRS 振幅的比例，并与旧心电图比较。',
-        'A J-point elevation above the threshold is a reason to look harder, not a diagnosis:\n- healthy young men often show 1–2 mm of concave ST elevation in V2–V4;\n- LVH and LBBB raise the ST in V1–V3 by themselves (secondary change);\n- an acute occlusion can sit below the thresholds (lesson I7).\nAlways check reciprocity, shape, proportion to the QRS, and the previous ECG.',
-        'Una elevación del punto J por encima del umbral es un motivo para mirar con más atención, no un diagnóstico:\n- los varones jóvenes sanos tienen a menudo 1–2 mm de elevación cóncava del ST en V2–V4;\n- la HVI y el BRI elevan por sí mismos el ST en V1–V3 (cambio secundario);\n- una oclusión aguda puede quedar por debajo de los umbrales (lección I7).\nValora siempre la reciprocidad, la forma, la proporción con el QRS y el ECG previo.',
+      frames: [
+        {
+          label: l('损伤', 'Injury', 'Lesión'),
+          ecg: ANTERIOR,
+          note: l('J 点处 V2–V4 抬高 2–3.5 mm，III 和 aVF 压低约 1 mm：超过界值，又有对应性改变。损伤。', 'At J, V2–V4 are up 2–3.5 mm and III and aVF down about 1 mm: over the limits, with reciprocity. Injury.', 'En J, V2–V4 suben 2–3,5 mm y III y aVF bajan alrededor de 1 mm: por encima de los umbrales y con reciprocidad. Lesión.'),
+          marks: [{ auto: 'j', lead: 'V3' }, { auto: 'j', lead: 'V4' }],
+        },
+        {
+          label: l('监护滤波', 'Monitor filter', 'Filtro de monitor'),
+          ecg: { kind: 'synth', req: { ...ANTERIOR_REQ, recording: { filter: FILTER_PRESETS.monitor } } },
+          note: l('同一份心电图换成 0.5–40 Hz 监护滤波：J 点处 V4 从约 2 mm 降到约 0.6 mm，V3 从约 3.3 mm 降到约 2 mm。', 'The same ECG on a 0.5–40 Hz monitor filter: at J, V4 falls from about 2 to 0.6 mm and V3 from about 3.3 to 2 mm.', 'El mismo ECG con filtro de monitor de 0,5–40 Hz: en J, V4 baja de unos 2 a 0,6 mm y V3 de unos 3,3 a 2 mm.'),
+          marks: [{ auto: 'j', lead: 'V3' }, { auto: 'j', lead: 'V4' }],
+        },
+        {
+          label: l('左束支阻滞', 'LBBB', 'Bloqueo de rama izquierda'),
+          ecg: synth('lbbb', 608),
+          note: l('V1–V2 的 ST 抬高 2–2.5 mm，超过界值，但它跟在深而宽的 S 波后面（QRS 约 150 ms）：继发改变，不是损伤（第 I10 课）。', 'ST up 2–2.5 mm in V1–V2, over the limits, but it follows a deep, wide S (QRS about 150 ms): secondary, not injury (lesson I10).', 'ST elevado 2–2,5 mm en V1–V2, por encima de los umbrales, pero sigue a una S profunda y ancha (QRS de unos 150 ms): secundario, no lesión (lección I10).'),
+          marks: [{ auto: 'j', lead: 'V1' }, { auto: 'j', lead: 'V2' }],
+        },
+        {
+          label: l('超急性 T 波', 'Hyperacute T', 'T hiperaguda'),
+          ecg: synth('stemi-anterior-subtle', 608),
+          note: l('V2–V3 的 ST 只抬高约 1 mm，低于 52 岁男性 2 mm 的界值，但 V3 的 T 波和 R 波一样高：闭塞可以藏在界值以下（第 I7 课）。', 'ST only about 1 mm up in V2–V3, under the 2-mm limit for a man of 52, yet the T in V3 is as tall as the R: an occlusion can hide below the line (lesson I7).', 'El ST solo sube alrededor de 1 mm en V2–V3, por debajo del límite de 2 mm de un varón de 52 años, pero la T de V3 es tan alta como la R: una oclusión puede esconderse bajo el umbral (lección I7).'),
+          marks: [{ auto: 't', lead: 'V3' }, { auto: 'r', lead: 'V3' }],
+        },
+      ],
+      predict: {
+        question: l('把同一份心电图换成监护滤波（0.5–40 Hz），测到的 ST 会变吗？', 'Put the same ECG through a monitor filter (0.5–40 Hz). Can the ST you measure change?', 'Pasa el mismo ECG por un filtro de monitor (0,5–40 Hz). ¿Puede cambiar el ST que mides?'),
+        options: [l('会：滤波可以制造或掩盖 ST 偏移', 'Yes: a filter can create or hide ST shifts', 'Sí: el filtro puede crear u ocultar desviaciones del ST'), l('不会：滤波只去除噪声', 'No: a filter only removes noise', 'No: el filtro solo quita ruido')],
+        answer: 0,
+      },
+      caption: l(
+        '毫米数只是第一步。再看对应性改变、形态、与 QRS 的比例、记录方式和旧心电图。',
+        'Millimetres are only the first step. Then check reciprocity, shape, proportion to the QRS, how it was recorded and the previous ECG.',
+        'Los milímetros son solo el primer paso. Después mira la reciprocidad, la forma, la proporción con el QRS, cómo se registró y el ECG previo.',
       ),
     },
     { kind: 'check', item: { inline: baseline } },
