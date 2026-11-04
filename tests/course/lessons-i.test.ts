@@ -667,13 +667,31 @@ describe('i6: posterior infarction on the tracings', () => {
     for (const l of ['V1', 'V2'] as const) expect(stAt(e, l), l).toBeGreaterThan(0);
     for (const l of ALL) expect(stAt(e, l), l).toBeLessThan(0.1);
   });
-  it('evolved: R outgrows S in V2, upright T in V1–V2', () => {
-    const e = ecgOf(blocksOf('i6', 'ecg')[0].ecg);
+  it('evolution film (same seed): acute V1–V2 about −1.5 mm with R < S in V2; days later R outgrows S in V2, upright T in V1–V2, shallower ST, smaller lateral R', () => {
+    const evo = blocksOf('i6', 'film')[1].frames;
+    expect(new Set(evo.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req.seed : -1))).size).toBe(1);
+    const [acute, e] = evo.map((f) => ecgOf(f.ecg));
+    for (const l of ['V1', 'V2'] as const) {
+      expect(stAt(acute, l), l).toBeLessThan(-0.12);
+      expect(stAt(acute, l), l).toBeGreaterThan(-0.18);
+      expect(tw(acute, l).max, l).toBeGreaterThan(0.1);
+      expect(stAt(e, l), l).toBeGreaterThan(stAt(acute, l));
+    }
+    expect(qrs(acute, 'V2').max).toBeLessThan(-qrs(acute, 'V2').min);
+    for (const l of ['V5', 'V6'] as const) expect(qrs(e, l).max, l).toBeLessThan(qrs(acute, l).max - 0.2);
     expect(qrs(e, 'V2').max).toBeGreaterThan(-qrs(e, 'V2').min);
     for (const l of ['V1', 'V2'] as const) expect(tUpright(e, l), l).toBe(true);
   });
-  it('inferoposterior: II, III, aVF up with III > II, I and aVL depressed, V1–V3 depressed, V5–V6 not elevated (dominant RCA)', () => {
-    const e = ecgOf(blocksOf('i6', 'ecg')[1].ecg);
+  it('company film: the hook first (shown before the prediction), then the isolated frame V1–V4 down with upright T and nothing elevated', () => {
+    const iso = frame('i6', 0, 1);
+    for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(stAt(iso, l), l).toBeLessThanOrEqual(-0.05);
+    for (const l of ['V2', 'V3'] as const) expect(tUpright(iso, l), l).toBe(true);
+    expect(tw(iso, 'V1').max).toBeGreaterThan(0.1);
+    for (const l of ALL) expect(stAt(iso, l), l).toBeLessThan(0.05);
+    expect(blocksOf('i6', 'film')[0].frames[0].ecg).toEqual(blocksOf('i6', 'hook')[0].ecg);
+  });
+  it('inferoposterior frame: II, III, aVF up with III > II, I and aVL depressed, V1–V3 depressed, V5–V6 not elevated (dominant RCA)', () => {
+    const e = frame('i6', 0, 2);
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
     expect(stAt(e, 'III')).toBeGreaterThan(stAt(e, 'II'));
     for (const l of ['I', 'aVL', 'V1', 'V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThan(-0.03);
