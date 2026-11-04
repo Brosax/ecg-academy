@@ -792,15 +792,21 @@ describe('i8: Wellens, de Winter, aVR on the tracings', () => {
     for (const l of ['V2', 'V3'] as const) expect(Math.abs(stAt(e, l)), l).toBeLessThan(0.05);
     expect(qrs(e, 'V3').max).toBeGreaterThan(0.5);
   });
-  it('deeper Wellens variant: T inversion about 4 mm deep in V2–V3, reaching V1 and V4', () => {
-    const e = ecgOf(blocksOf('i8', 'ecg')[0].ecg);
-    for (const l of ['V2', 'V3'] as const) expect(tw(e, l).min, l).toBeLessThan(-0.3);
+  it('Wellens B frame: T inversion about 7 mm deep in V2–V3, reaching V1 and V4, ST flat, R preserved; type A frame = the hook', () => {
+    expect(blocksOf('i8', 'film')[0].frames[0].ecg).toEqual(blocksOf('i8', 'hook')[0].ecg);
+    const e = frame('i8', 0, 1);
+    for (const l of ['V2', 'V3'] as const) {
+      expect(tw(e, l).min, l).toBeLessThan(-0.62);
+      expect(tw(e, l).min, l).toBeGreaterThan(-0.78);
+      expect(Math.abs(stAt(e, l)), l).toBeLessThan(0.03);
+    }
+    expect(qrs(e, 'V3').max).toBeGreaterThan(0.5);
     for (const l of ['V1', 'V4'] as const) expect(tw(e, l).min, l).toBeLessThan(-0.1);
   });
-  it('de Winter: J depressed > 1 mm in V2–V4 and upsloping, tall T in V3, slight elevation in aVR', () => {
-    const e = ecgOf(blocksOf('i8', 'ecg')[1].ecg);
+  it('de Winter frame: J depressed > 2 mm in V2–V4 and upsloping, tall T in V3, slight elevation in aVR', () => {
+    const e = frame('i8', 0, 2);
     for (const l of ['V2', 'V3', 'V4'] as const) {
-      expect(stAt(e, l), l).toBeLessThan(-0.1);
+      expect(stAt(e, l), l).toBeLessThan(-0.2);
       expect(stAt(e, l, 60), l).toBeGreaterThan(stAt(e, l));
     }
     expect(tw(e, 'V3').max).toBeGreaterThan(0.5);
@@ -815,11 +821,15 @@ describe('i8: Wellens, de Winter, aVR on the tracings', () => {
     expect(stAt(e, 'aVR')).toBeGreaterThan(0.07);
     expect(stAt(e, 'V1')).toBeLessThan(0);
   });
-  it('heavier tracing: aVR about 1.2 mm and V1 about 1 mm up, depression to 2.5 mm', () => {
-    const e = ecgOf(blocksOf('i8', 'ecg')[2].ecg);
-    expect(stAt(e, 'aVR')).toBeGreaterThan(0.1);
-    expect(stAt(e, 'V1')).toBeGreaterThan(0.05);
-    expect(Math.min(...ALL.map((l) => stAt(e, l, 60)))).toBeLessThan(-0.2);
+  it('heavier frame: seven leads depressed ≥ 1 mm at J, aVR and V1 about 1 mm up, depression to about 2.5 mm', () => {
+    const e = frame('i8', 0, 3);
+    expect(ALL.filter((l) => stAt(e, l) <= -0.1).length).toBe(7);
+    for (const l of ['aVR', 'V1'] as const) {
+      expect(stAt(e, l), l).toBeGreaterThan(0.07);
+      expect(stAt(e, l), l).toBeLessThan(0.14);
+    }
+    expect(Math.min(...ALL.map((l) => stAt(e, l, 60)))).toBeLessThan(-0.22);
+    expect(Math.min(...ALL.map((l) => stAt(e, l, 60)))).toBeGreaterThan(-0.28);
   });
   it('contrast: A Wellens in V2–V3; B lateral T inversion (I, aVL, V6) with tall R', () => {
     const c = blocksOf('i8', 'contrast')[0];
