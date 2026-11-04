@@ -773,10 +773,59 @@ describe('r7: fascicular blocks on the tracings', () => {
     const p = prs(b);
     expect(Math.max(...p) - Math.min(...p)).toBeLessThan(5);
   });
-  it('IVCD: QRS about 125 ms, no R′ in V1', () => {
-    const e = ecgOf(blocksOf('r7', 'ecg')[1].ecg);
+  it('IVCD (the sweep at 124 ms): QRS about 125 ms, no R′ in V1', () => {
+    const e = played('r7', 1, 124);
     expect(Math.abs(e.truth!.qrsMs - 125)).toBeLessThan(6);
     expect(hasRPrime(e, 'V1', mid(e))).toBe(false);
+  });
+  it('LAFB sweep notes: the read-out follows the dial from −50° to −80°; I positive, rS in II, III, aVF, qR in aVL, QRS < 120 throughout; the S in II deepens', () => {
+    let s = 0;
+    for (const v of [-50, -60, -61, -80]) {
+      const e = played('r7', 0, v);
+      const b = mid(e);
+      expect(Math.abs(e.truth!.axisDeg.qrs - v), `${v}°`).toBeLessThan(1.5);
+      expect(e.truth!.qrsMs, `${v}°`).toBeLessThan(120);
+      expect(qrsSpan(e, 'I', b).max, `${v}° I`).toBeGreaterThan(-qrsSpan(e, 'I', b).min);
+      for (const l of ['II', 'III', 'aVF'] as const) expect(shape(e, l, b), `${v}° ${l}`).toBe('rs');
+      expect(shape(e, 'aVL', b), `${v}° aVL`).toBe('qr');
+      const sII = -qrsSpan(e, 'II', b).min;
+      expect(sII, `${v}° S in II`).toBeGreaterThan(s);
+      s = sII;
+    }
+  });
+  it('IVCD sweep notes: the read-out is over 110 ms from 112 to 135; V1 has no R′, I and V6 no broad S, V6 keeps a small q; never RBBB or LBBB', () => {
+    for (const v of [112, 123, 124, 135]) {
+      const e = played('r7', 1, v);
+      const b = mid(e);
+      expect(e.truth!.qrsMs, `${v} ms`).toBeGreaterThan(110);
+      expect(Math.abs(e.truth!.qrsMs - v), `${v} ms`).toBeLessThan(2);
+      expect(hasRPrime(e, 'V1', b), `${v} ms`).toBe(false);
+      for (const l of ['I', 'V6'] as const) expect(qrsSpan(e, l, b).min, `${v} ms ${l}`).toBeGreaterThan(-0.1);
+      expect(shape(e, 'V6', b).startsWith('q'), `${v} ms`).toBe(true);
+      expect(e.truth!.findings, `${v} ms`).toContain('ivcd');
+      expect(e.truth!.findings, `${v} ms`).not.toContain('rbbb');
+      expect(e.truth!.findings, `${v} ms`).not.toContain('lbbb');
+    }
+  });
+  it('bifascicular film: RBBB + LAFB with rsR′ in V1, broad S in I and V6, axis about −70°; RBBB + LPFB with a broad R in V1 (R peak > 50 ms), rS in I and aVL, qR in III, axis about +95°', () => {
+    const [laf, lpf] = frames('r7', 0);
+    expect(blocksOf('r7', 'film')[0].frames[0].ecg).toEqual(blocksOf('r7', 'heart')[1].ecg);
+    const b1 = mid(laf);
+    expect(hasRPrime(laf, 'V1', b1)).toBe(true);
+    for (const l of ['I', 'V6'] as const) expect(qrsSpan(laf, l, b1).min, l).toBeLessThan(-0.2);
+    expect(Math.abs(laf.truth!.axisDeg.qrs + 70)).toBeLessThan(5);
+    expect(laf.truth!.findings).toEqual(expect.arrayContaining(['rbbb', 'lafb']));
+    const b2 = mid(lpf);
+    expect(lpf.truth!.findings).toEqual(expect.arrayContaining(['rbbb', 'lpfb']));
+    expect(lpf.truth!.qrsMs).toBeGreaterThanOrEqual(120);
+    expect(qrsSpan(lpf, 'V1', b2).max).toBeGreaterThan(3 * Math.max(0.01, -qrsSpan(lpf, 'V1', b2).min));
+    const v1 = lpf.signal.leads.V1;
+    let k = Math.round((b2.qrsOn * lpf.signal.fs) / 1000);
+    for (let i = k; i <= Math.round((b2.qrsOff * lpf.signal.fs) / 1000); i++) if (v1[i] > v1[k]) k = i;
+    expect((k * 1000) / lpf.signal.fs - b2.qrsOn).toBeGreaterThan(50);
+    for (const l of ['I', 'aVL'] as const) expect(shape(lpf, l, b2), l).toBe('rs');
+    expect(shape(lpf, 'III', b2)).toBe('qr');
+    expect(Math.abs(lpf.truth!.axisDeg.qrs - 95)).toBeLessThan(5);
   });
 });
 
