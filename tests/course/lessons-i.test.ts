@@ -714,11 +714,16 @@ describe('i6: posterior infarction on the tracings', () => {
 });
 
 describe('i7: subtle occlusion on the tracings', () => {
-  it('hook / serial 1 (man of 52): V2–V3 under the 2-mm limit, V3 about 1 mm, bulky T in V3, faint mirror in III', () => {
+  it('hook / "below the line" frame (man of 52): V2–V4 up to about 1 mm, most in V3, under the 2-mm limit, bulky T in V3, faint mirror in III', () => {
     for (const src of [blocksOf('i7', 'hook')[0].ecg, blocksOf('i7', 'film')[0].frames[1].ecg]) {
       const e = ecgOf(src);
       for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThan(0.2);
-      expect(stAt(e, 'V3')).toBeGreaterThan(0.08);
+      expect(stAt(e, 'V3')).toBeGreaterThanOrEqual(0.075);
+      expect(stAt(e, 'V3')).toBeLessThanOrEqual(0.125);
+      for (const l of ['V2', 'V4'] as const) {
+        expect(stAt(e, l), l).toBeGreaterThan(0.05);
+        expect(stAt(e, l), l).toBeLessThan(stAt(e, 'V3'));
+      }
       expect(tw(e, 'V3').max).toBeGreaterThan(0.5 * qrs(e, 'V3').p2p);
       expect(stAt(e, 'III')).toBeLessThan(-0.02);
     }
@@ -730,9 +735,12 @@ describe('i7: subtle occlusion on the tracings', () => {
       expect(stAt(e, 'V2')).toBeLessThan(0.1);
     }
   });
-  it('contrast B (early repolarisation): V2–V3 about 1.5 mm at J+60 (slightly above A, under 2.5 mm), inferior J notches, no depression outside aVR', () => {
+  it('contrast A (occlusion) elevation at most about 1 mm (V3 the highest); B (early repolarisation): V2–V3 about 1.5 mm at J+60 (slightly above A, under 2.5 mm), inferior J notches, no depression outside aVR', () => {
     const e = ecgOf(blocksOf('i7', 'contrast')[0].right.ecg);
     const a = ecgOf(blocksOf('i7', 'contrast')[0].left.ecg);
+    expect(CHEST.reduce((m, l) => (stAt(a, l) > stAt(a, m) ? l : m))).toBe('V3');
+    expect(stAt(a, 'V3')).toBeGreaterThanOrEqual(0.075);
+    expect(stAt(a, 'V3')).toBeLessThanOrEqual(0.125);
     for (const l of ['V2', 'V3'] as const) {
       expect(stAt(e, l), l).toBeLessThan(0.25);
       expect(stAt(e, l, 60), l).toBeGreaterThan(0.13);
@@ -748,7 +756,7 @@ describe('i7: subtle occlusion on the tracings', () => {
     expect(tq(e, 'V3')).toBeLessThan(tq(a, 'V3'));
     expect(tq(e, 'V3')).toBeGreaterThan(0.75);
   });
-  it('serial film (same seed, hyperacute then acute): first J under 1 mm in V2–V4 with the V3 T almost as tall as the R and T inverted in III; repeat V2–V3 ≥ 2 mm, V3 about 3.5 mm, III and aVF about −1 mm, the inferior mirror deepened', () => {
+  it('serial film (same seed, hyperacute then acute): first J under 1 mm in V2–V4 with the V3 T almost as tall as the R and T inverted in III; repeat V2–V3 ≥ 2 mm, V3 about 3.5 mm, III and aVF 1–1.5 mm down, the inferior mirror deepened', () => {
     const [f1, f2] = blocksOf('i7', 'film')[1].frames;
     if (f1.ecg.kind !== 'synth' || f2.ecg.kind !== 'synth') throw new Error('synthetic frames');
     expect(f1.ecg.req.seed).toBe(f2.ecg.req.seed);
@@ -762,17 +770,17 @@ describe('i7: subtle occlusion on the tracings', () => {
     expect(stAt(e, 'V3')).toBeGreaterThan(0.32);
     expect(stAt(e, 'V3')).toBeLessThan(0.38);
     for (const l of ['III', 'aVF'] as const) {
-      expect(stAt(e, l), l).toBeLessThan(-0.08);
-      expect(stAt(e, l), l).toBeGreaterThan(-0.14);
+      expect(stAt(e, l), l).toBeLessThanOrEqual(-0.1);
+      expect(stAt(e, l), l).toBeGreaterThanOrEqual(-0.15);
     }
     expect(stAt(e, 'III')).toBeLessThan(stAt(first, 'III') - 0.05);
   });
-  it('T-beside-QRS film: normal V3 T under half the R; hyperkalaemia T tall but narrow (half-height width under 0.7 of the hyperacute T) with PR ≥ 200 ms and QRS 110–120 ms', () => {
+  it('T-beside-QRS film: normal V3 T under half the R; below the line V3 about 1 mm; hyperacute (seed 922) J under 1 mm in V2–V4, broad-based V3 T (half-height width ≥ 100 ms) and T inverted in III; hyperkalaemia T tall but narrow (half-height width under 0.7 of the hyperacute T) with PR ≥ 200 ms and QRS 110–120 ms', () => {
     const normal = frame('i7', 0, 0);
     expect(tw(normal, 'V3').max).toBeLessThan(0.5 * qrs(normal, 'V3').max);
     const borderline = frame('i7', 0, 1);
-    expect(stAt(borderline, 'V3')).toBeGreaterThan(0.08);
-    expect(stAt(borderline, 'V3')).toBeLessThan(0.13);
+    expect(stAt(borderline, 'V3')).toBeGreaterThanOrEqual(0.075);
+    expect(stAt(borderline, 'V3')).toBeLessThanOrEqual(0.125);
     expect(tw(borderline, 'V3').max).toBeGreaterThan(qrs(borderline, 'V3').max);
     expect(tInverted(borderline, 'III')).toBe(true);
     const halfWidth = (e: Ecg, l: AnyLead): number => {
@@ -786,6 +794,12 @@ describe('i7: subtle occlusion on the tracings', () => {
       return (n * 1000) / fs;
     };
     const [hyperacute, k] = [frame('i7', 0, 2), frame('i7', 0, 3)];
+    const hSrc = blocksOf('i7', 'film')[0].frames[2].ecg;
+    expect(hSrc.kind === 'synth' && hSrc.req.seed).toBe(922);
+    for (const l of ['V2', 'V3', 'V4'] as const) expect(stAt(hyperacute, l), l).toBeLessThan(0.1);
+    expect(tw(hyperacute, 'V3').max).toBeGreaterThan(qrs(hyperacute, 'V3').max);
+    expect(halfWidth(hyperacute, 'V3')).toBeGreaterThanOrEqual(100);
+    expect(tInverted(hyperacute, 'III')).toBe(true);
     expect(tw(k, 'V3').max).toBeGreaterThan(qrs(k, 'V3').max);
     expect(halfWidth(k, 'V3')).toBeLessThan(0.7 * halfWidth(hyperacute, 'V3'));
     expect(k.truth!.prMs!).toBeGreaterThanOrEqual(200);

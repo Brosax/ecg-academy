@@ -57,14 +57,14 @@ const lesson: Lesson = {
       kind: 'hook',
       ecg: synth('stemi-anterior-subtle', 921),
       question: l(
-        '52岁男性，胸痛30分钟。这份心电图离界值还差一点。表态：是闭塞吗？',
-        'Man, 52, chest pain for 30 minutes. This ECG falls just short of the thresholds. Commit: is this an occlusion?',
-        'Varón de 52 años, dolor torácico de 30 minutos. Este ECG se queda justo por debajo de los umbrales. Decídete: ¿es una oclusión?',
+        '52岁男性，胸痛30分钟。这份心电图没有达到界值。表态：是闭塞吗？',
+        'Man, 52, chest pain for 30 minutes. This ECG does not reach the thresholds. Commit: is this an occlusion?',
+        'Varón de 52 años, dolor torácico de 30 minutos. Este ECG no llega a los umbrales. Decídete: ¿es una oclusión?',
       ),
       reveal: l(
-        'V2–V4的J点抬高只有约1 mm（V3最高）——52岁男性在V2–V3需要 **2 mm**：毫米数不够。但看仔细：T波**宽底、粗大、对称**，相对下面的QRS来说过大，II、III、aVF还有轻微的镜像性压低。界值附近的抬高 + 不成比例的T波 + 持续疼痛 = **很可能的闭塞**：按闭塞处理，15–30分钟内复查心电图，而不是放走患者。这正是本课要练的工具箱。',
-        'The J point in V2–V4 is raised only about 1 mm (most in V3) — a 52-year-old man needs **2 mm** in V2–V3: the millimetres fall short. But look closer: the T waves are **broad-based, bulky and symmetric**, far too large for the QRS beneath them, and II, III and aVF carry a faint mirror-image depression. Borderline elevation + a disproportionate T + ongoing pain = **probable occlusion**: treat it as one, repeat the ECG in 15–30 minutes, and do not send the patient home. That is the toolkit this lesson drills.',
-        'El punto J en V2–V4 está elevado solo alrededor de 1 mm (máximo en V3) —un varón de 52 años necesita **2 mm** en V2–V3: los milímetros no llegan. Pero mira mejor: las ondas T son **anchas de base, voluminosas y simétricas**, demasiado grandes para el QRS que las sostiene, y II, III y aVF muestran un descenso especular leve. Elevación en el límite + T desproporcionada + dolor persistente = **oclusión probable**: trátala como tal, repite el ECG en 15–30 minutos y no mandes al paciente a casa. Esa es la caja de herramientas de esta lección.',
+        'V2–V4的J点抬高最多约1 mm（V3最高）——52岁男性在V2–V3需要 **2 mm**：毫米数不够。但看仔细：T波**宽底、粗大、对称**，相对下面的QRS来说过大，II、III、aVF还有轻微的镜像性压低。界值附近的抬高 + 不成比例的T波 + 持续疼痛 = **很可能的闭塞**：按闭塞处理，15–30分钟内复查心电图，而不是放走患者。这正是本课要练的工具箱。',
+        'The J point in V2–V4 is raised only up to about 1 mm (most in V3) — a 52-year-old man needs **2 mm** in V2–V3: the millimetres fall short. But look closer: the T waves are **broad-based, bulky and symmetric**, far too large for the QRS beneath them, and II, III and aVF carry a faint mirror-image depression. Borderline elevation + a disproportionate T + ongoing pain = **probable occlusion**: treat it as one, repeat the ECG in 15–30 minutes, and do not send the patient home. That is the toolkit this lesson drills.',
+        'El punto J en V2–V4 está elevado como mucho alrededor de 1 mm (máximo en V3) —un varón de 52 años necesita **2 mm** en V2–V3: los milímetros no llegan. Pero mira mejor: las ondas T son **anchas de base, voluminosas y simétricas**, demasiado grandes para el QRS que las sostiene, y II, III y aVF muestran un descenso especular leve. Elevación en el límite + T desproporcionada + dolor persistente = **oclusión probable**: trátala como tal, repite el ECG en 15–30 minutos y no mandes al paciente a casa. Esa es la caja de herramientas de esta lección.',
       ),
     },
     {
@@ -88,7 +88,7 @@ const lesson: Lesson = {
           marks: [{ auto: 'r', lead: 'V3' }, { auto: 't', lead: 'V3' }],
         },
         {
-          label: l('差一点到界值', 'Just short', 'Justo por debajo'),
+          label: l('未到界值', 'Below the line', 'Bajo el umbral'),
           ecg: synth('stemi-anterior-subtle', 926),
           note: l(
             'V3 的 J 点约 1 mm，T 波比 R 波还高，III 的 T 波倒置。毫米不够，比例却不对。',
@@ -162,7 +162,7 @@ const lesson: Lesson = {
         },
       ],
       source:
-        'Thygesen K et al. Fourth Universal Definition of Myocardial Infarction. Eur Heart J 2019;40:237-269; Byrne RA et al. 2023 ESC Guidelines for the management of acute coronary syndromes. Eur Heart J 2023;44:3720-3826; Driver BE et al. J Electrocardiol 2017;50:561-569; Smith SW et al. Am J Cardiol 2012;110:1696-1701',
+        'Thygesen K et al. Fourth Universal Definition of Myocardial Infarction. Eur Heart J 2019;40:237-269; Byrne RA et al. 2023 ESC Guidelines for the management of acute coronary syndromes. Eur Heart J 2023;44:3720-3826; Driver BE et al. J Electrocardiol 2017;50:561-569; Smith SW et al. Am J Cardiol 2012;110:1696-1701; Amsterdam EA et al. 2014 AHA/ACC Guideline for the Management of Patients With Non-ST-Elevation Acute Coronary Syndromes. J Am Coll Cardiol 2014;64:e139-e228',
     },
     {
       kind: 'worked',
@@ -254,9 +254,9 @@ const lesson: Lesson = {
           label: l('复查心电图', 'Repeat ECG', 'ECG repetido'),
           ecg: synth('stemi-evolution', 928),
           note: l(
-            '同一颗心：V2–V3 已 ≥ 2 mm（V3 约 3.5 mm），III 和 aVF 压低约 1 mm：前壁 STEMI。第一张定路径，第二张定诊断。',
-            'Same heart: V2–V3 now ≥ 2 mm (V3 about 3.5 mm), III and aVF down about 1 mm: anterior STEMI. The first tracing set the pathway; the second settled it.',
-            'El mismo corazón: V2–V3 ya ≥ 2 mm (V3 unos 3,5 mm), III y aVF descienden 1 mm: IAMCEST anterior. El primero marcó el circuito; el segundo lo zanjó.',
+            '同一颗心：V2–V3 已 ≥ 2 mm（V3 约 3.5 mm），III 和 aVF 压低 1–1.5 mm：前壁 STEMI。第一张定路径，第二张定诊断。',
+            'Same heart: V2–V3 now ≥ 2 mm (V3 about 3.5 mm), III and aVF down 1–1.5 mm: anterior STEMI. The first tracing set the pathway; the second settled it.',
+            'El mismo corazón: V2–V3 ya ≥ 2 mm (V3 unos 3,5 mm), III y aVF descienden 1–1,5 mm: IAMCEST anterior. El primero marcó el circuito; el segundo lo zanjó.',
           ),
           marks: [{ auto: 'j', lead: 'V3' }, { auto: 'j', lead: 'III' }],
         },
@@ -359,6 +359,7 @@ const lesson: Lesson = {
     'Byrne RA et al. 2023 ESC Guidelines for the management of acute coronary syndromes. Eur Heart J 2023;44:3720-3826',
     'Driver BE et al. J Electrocardiol 2017;50:561-569',
     'Smith SW et al. Am J Cardiol 2012;110:1696-1701',
+    'Amsterdam EA et al. 2014 AHA/ACC Guideline for the Management of Patients With Non-ST-Elevation Acute Coronary Syndromes. J Am Coll Cardiol 2014;64:e139-e228',
     'Castellano et al. 2004',
   ],
 };
