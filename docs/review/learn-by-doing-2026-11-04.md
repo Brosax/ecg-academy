@@ -33,10 +33,14 @@ The engine exposes few dials per scenario: of 130 scenarios, 71 offer only `rate
 | 5 | Reuse `Predict` from the scenes and `Reserve` for layout-stable notes. | One commit-before-reveal control in the app; notes keep their box size. | `src/course/blocks.tsx`. |
 | 6 | The assistant gets a film's title and caption only. | A prediction's answer is like a hook's reveal. | `src/assistant/context.ts`. |
 | 7 | s2 converted by hand as the template; the other 57 lessons go to one subagent per stage, each in its own worktree, touching only its stage's lesson files and its line of `PENDING`. | Lesson files are disjoint; the gate and stage tests check each delegate's work. | `docs/design/learn-by-doing.md`. |
+| 8 | Stage S first as a pilot; the other six stages only after its diff and tests were checked. | A flaw in the brief then costs one rerun, not seven. | The pilot needed no change to the recipe; its three lessons learned went into every later brief. |
+| 9 | Every number in a note must be proven by a truth assertion in the stage test. | The s2 note at 102–110/min was wrong by arithmetic and caught only by hand; the S5 notes said +30° while the read-out showed +50°. | `tests/course/lessons-s.test.ts`. |
+| 10 | Launch R, T, I, H, O, X before the S review returned, with the reviewer's checklist in every brief. | Writers take about 30 minutes each; a reviewer reads every stage afterwards anyway. | `brief-common.md` in the session scratchpad. |
 
 ## Units
 
 | Unit | Commit | Check | Verdict |
 |---|---|---|---|
 | Gate, criteria baseline, `live.play`, `film`, validator rules, unit tests | 555b82a | course + assistant tests: 1150 passed, 58 expected fail; typecheck clean | VERIFIED |
-| s2 | b5a8ab4 | gate, `lessons-s`, typecheck; browser: rate sweep 60 → 100 holds at 100/min with RR 611 ms and the "3 large squares" note; film steps regular → sinus arrhythmia → AF and holds | VERIFIED |
+| s2 | b5a8ab4, 46dc7fe | gate, `lessons-s`, typecheck; browser: rate sweep 60 → 100 holds at 100/min with RR 611 ms and the "3 large squares" note; film steps regular → sinus arrhythmia → AF and holds; 375 px wide: no horizontal overflow | VERIFIED |
+| s1, s3–s7 (pilot subagent) | 1a936dd … a841d25 | merged fast-forward; course + assistant tests 1173 passed, 51 expected fail; typecheck clean; browser: s4 Bazett sweep ends at 100/min with "higher than true" marked right, s6 four-frame filter film loads without placeholders | VERIFIED (content review pending) |
