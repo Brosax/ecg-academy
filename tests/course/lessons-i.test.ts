@@ -990,9 +990,12 @@ describe('i10: confounders on the tracings', () => {
       expect(tUpright(p, l), l).toBe(true);
     }
   });
-  it('LVH frame: discordant V1–V2 elevation well under 25 % of the S, lateral depression with inverted T', () => {
+  it('LVH frame: discordant V1–V2 elevation well under 25 % of the S (ST/S above −0.15), lateral depression with inverted T', () => {
     const e = frame('i10', 1, 1);
-    for (const l of ['V1', 'V2'] as const) expect(stOverS(e, l), l).toBeGreaterThan(-0.25);
+    for (const l of ['V1', 'V2'] as const) {
+      expect(stOverS(e, l), l).toBeLessThan(0);
+      expect(stOverS(e, l), l).toBeGreaterThan(-0.15);
+    }
     for (const l of ['V5', 'V6'] as const) {
       expect(stAt(e, l, 60), l).toBeLessThan(-0.05);
       expect(tInverted(e, l), l).toBe(true);
