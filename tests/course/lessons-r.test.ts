@@ -476,6 +476,9 @@ describe('r2: escape and dissociation on the tracings', () => {
     const early = r.flatMap((x, i) => (x < 0.6 * r[k] ? [i + 1] : []));
     expect(early, 'two early beats').toHaveLength(2);
     for (const i of early) expect(t.beats[i].kind, `early beat ${i}`).toBe('sinus');
+    const conducted = t.atrial.flatMap((a) => (a.conductedTo !== null ? [a.conductedTo] : []));
+    expect(conducted, 'the only P waves that conduct are those of the two early beats').toEqual(early);
+    expect(stepBeats('r2', 1, 'p'), 'the PP step boxes the conducted P waves too, not only the blocked ones').toEqual(conducted);
     const [c] = stepBeats('r2', 2, 'qrs');
     expect(early).toContain(c);
     const cap = t.beats[c];

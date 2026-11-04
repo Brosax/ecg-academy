@@ -213,7 +213,7 @@ const lesson: Lesson = {
             'Sweep the strip with calipers for P waves: they fire regularly too (60/min), but the PR is random — a P sometimes precedes the QRS, sometimes hides in it, sometimes lands on the T wave. Two clocks running independently.',
             'Recorre la tira con el compás buscando ondas P: también se disparan de forma regular (60 lpm), pero el PR no sigue ningún patrón: la P a veces precede al QRS, a veces se oculta en él y a veces cae sobre la onda T. Dos relojes que marchan por su cuenta.',
           ),
-          marks: [{ auto: 'blocked-p', label: l('P', 'P', 'P') }],
+          marks: [{ auto: 'blocked-p', label: l('P', 'P', 'P') }, { auto: 'p', beat: 5 }, { auto: 'p', beat: 10 }],
           view: { layout: 'strip', lead: 'II', calipers: true },
         },
         {
