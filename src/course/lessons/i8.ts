@@ -64,9 +64,9 @@ const lesson: Lesson = {
         'Una mujer de 62 años tuvo 30 minutos de dolor torácico esta mañana. El dolor ha desaparecido y se encuentra bien. Este es su ECG en el intervalo sin dolor: parece «casi normal». ¿Qué es lo que NO debes hacer en ningún caso?',
       ),
       reveal: l(
-        'V3 的 T 波先直立、终末倒置（双向），V2 的 T 波已经倒置——这是 **Wellens 综合征（A 型）**：左前降支近段临界狭窄。“现在不痛”不等于“低危”：**绝对不能做运动/负荷试验**（可诱发急性前壁闭塞），应安排**早期冠状动脉造影**。',
-        'The T wave in V3 starts upright and ends inverted (biphasic), and in V2 it is already inverted — this is **Wellens syndrome (type A)**: a critical proximal LAD stenosis. "Pain-free now" does not mean "low risk": **never send this patient for an exercise test** (it can precipitate an acute anterior occlusion); arrange **early coronary angiography**.',
-        'La onda T de V3 empieza positiva y termina negativa (bifásica), y en V2 ya es negativa: es el **síndrome de Wellens (tipo A)**, una estenosis crítica proximal de la descendente anterior. «Sin dolor ahora» no significa «bajo riesgo»: **no la envíes nunca a una prueba de esfuerzo** (puede desencadenar una oclusión anterior aguda); programa una **coronariografía precoz**.',
+        'V3 的 T 波先直立、终末倒置——这是 Wellens **A 型**的双向形态——V2 的 T 波已经倒置。疼痛缓解后出现这种图形，就是 **Wellens 综合征**：左前降支近段临界狭窄。“现在不痛”不等于“低危”：**绝对不能做运动/负荷试验**（可诱发急性前壁闭塞），应安排**早期冠状动脉造影**。',
+        'The T wave in V3 starts upright and ends inverted — the biphasic **type A shape** of Wellens — and in V2 it is already inverted. After the pain has settled, this is **Wellens syndrome**: a critical proximal LAD stenosis. "Pain-free now" does not mean "low risk": **never send this patient for an exercise test** (it can precipitate an acute anterior occlusion); arrange **early coronary angiography**.',
+        'La onda T de V3 empieza positiva y termina negativa —la **forma bifásica del tipo A** de Wellens— y en V2 ya es negativa. Tras ceder el dolor, es el **síndrome de Wellens**: una estenosis crítica proximal de la descendente anterior. «Sin dolor ahora» no significa «bajo riesgo»: **no la envíes nunca a una prueba de esfuerzo** (puede desencadenar una oclusión anterior aguda); programa una **coronariografía precoz**.',
       ),
     },
     {
@@ -129,7 +129,7 @@ const lesson: Lesson = {
     },
     {
       kind: 'film',
-      title: l('藏在“几乎正常”心电图后的三种图形', 'Three patterns behind an almost normal ECG', 'Tres patrones tras un ECG casi normal'),
+      title: l('三种不是经典 STEMI 的图形', 'Three patterns that are not a classic STEMI', 'Tres patrones que no son un IAMCEST clásico'),
       view: { layout: '3x4+1' },
       frames: [
         {
@@ -175,17 +175,16 @@ const lesson: Lesson = {
       ],
       predict: {
         question: l(
-          'B 型 Wellens 来自同一处左前降支狭窄。在胸前导联，倒置的 T 波会延伸到哪里？',
-          'Wellens type B comes from the same LAD stenosis. Across the chest leads, how far will the inverted T reach?',
-          'El Wellens tipo B nace de la misma estenosis de la DA. En las precordiales, ¿hasta dónde llegará la T negativa?',
+          'B 型 Wellens 来自同一处左前降支狭窄。它倒置的 T 波会落在哪一组导联？',
+          'Wellens type B comes from the same LAD stenosis. Which group of leads will carry its inverted T waves?',
+          'El Wellens tipo B nace de la misma estenosis de la DA. ¿Qué grupo de derivaciones llevará sus T negativas?',
         ),
         options: [
-          l('只在 V2–V3', 'Only V2–V3', 'Solo V2–V3'),
-          l('V1 到 V4', 'V1 to V4', 'De V1 a V4'),
-          l('V1 到 V6', 'V1 to V6', 'De V1 a V6'),
+          l('V1–V4', 'V1–V4', 'V1–V4'),
+          l('II、III、aVF', 'II, III, aVF', 'II, III, aVF'),
+          l('I、aVL、V5–V6', 'I, aVL, V5–V6', 'I, aVL, V5–V6'),
         ],
-        answer: 1,
-        ordered: true,
+        answer: 0,
       },
       caption: l(
         'Wellens 出现在疼痛缓解之后；de Winter 出现在疼痛持续时，而且图形常保持不变：等它“演变”就是等心肌坏死。',
@@ -267,16 +266,16 @@ const lesson: Lesson = {
       right: {
         ecg: synth('t-inversion-ischemic', 948),
         caption: l(
-          'B：侧壁（I、aVL、V5–V6）缺血性 T 波倒置，R 波高大——NSTE-ACS 的 T 波倒置标准，或侧壁梗死的演变/再灌注期',
-          'B: ischaemic T inversion in the lateral leads (I, aVL, V5–V6) with tall R waves — the NSTE-ACS T-inversion criterion, or the evolving / reperfused phase of a lateral infarct',
-          'B: T negativa isquémica en las laterales (I, aVL, V5–V6) con R altas: el criterio de T negativa del SCASEST, o la fase en evolución / reperfundida de un infarto lateral',
+          'B：侧壁导联 aVL、V6 的缺血性 T 波倒置，R 波为主——NSTE-ACS 的 T 波倒置标准，或侧壁梗死的演变/再灌注期',
+          'B: ischaemic T inversion in the lateral leads aVL and V6, over a dominant R — the NSTE-ACS T-inversion criterion, or the evolving / reperfused phase of a lateral infarct',
+          'B: T negativa isquémica en las laterales aVL y V6, sobre una R dominante: el criterio de T negativa del SCASEST, o la fase en evolución / reperfundida de un infarto lateral',
         ),
         marks: [{ auto: 't', lead: 'V6' }, { auto: 't', lead: 'aVL' }],
       },
       point: l(
-        '两份图都是“T 波倒置”，含义却完全不同。**A（Wellens）**：患者此刻不痛，V2–V3 深而对称/双向 T、R 保留——血管还通着但存在临界狭窄，下一步是**早造影、禁负荷**。**B**：倒置在**侧壁导联**（I、aVL、V5–V6），R 波高大：这是 NSTE-ACS 的 T 波倒置标准（> 1 mm、R 波为主），提示回旋支/对角支区域缺血，或侧壁梗死的演变/再灌注期——由胸痛、肌钙蛋白和旧图决定，按 NSTE-ACS 做危险分层。同一形态，不同的部位与故事——形态从不脱离临床单独决定去向。',
-        'Both tracings show "T inversion", but they mean different things. **A (Wellens)**: the patient is pain-free right now, deep symmetric or biphasic T in V2–V3 with preserved R — the artery is still open but critically stenosed; next step is **early angiography, no stress test**. **B**: the inversion sits in the **lateral leads** (I, aVL, V5–V6) over tall R waves: the NSTE-ACS T-inversion criterion (> 1 mm with a prominent R) — ischaemia in circumflex or diagonal territory, or the evolving / reperfused phase of a lateral infarct; pain, troponin and the old tracing decide, and it is risk-stratified on the NSTE-ACS pathway. Same shape, different territory and story — a shape never decides anything apart from its clinical context.',
-        'Ambos registros muestran «T negativa», pero significan cosas distintas. **A (Wellens)**: el paciente está sin dolor en este momento, T profunda y simétrica o bifásica en V2–V3 con R conservadas; la arteria sigue abierta pero con estenosis crítica: el paso siguiente es **coronariografía precoz, sin prueba de esfuerzo**. **B**: la inversión está en las **derivaciones laterales** (I, aVL, V5–V6) sobre R altas: el criterio de T negativa del SCASEST (> 1 mm con R dominante), isquemia en territorio de la circunfleja o de una diagonal, o la fase en evolución / reperfundida de un infarto lateral; el dolor, la troponina y el ECG previo deciden, y se estratifica el riesgo por la vía del SCASEST. Misma forma, distinto territorio y distinta historia: la morfología nunca decide sola, sin su contexto clínico.',
+        '两份图都是“T 波倒置”，含义却完全不同。**A（Wellens）**：患者此刻不痛，V2–V3 深而对称/双向 T、R 保留——血管还通着但存在临界狭窄，下一步是**早造影、禁负荷**。**B**：倒置在**侧壁导联**（aVL、V6），R 波为主：这是 NSTE-ACS 的 T 波倒置标准（> 1 mm、R 波为主），提示回旋支/对角支区域缺血，或侧壁梗死的演变/再灌注期——由胸痛、肌钙蛋白和旧图决定，按 NSTE-ACS 做危险分层。同一形态，不同的部位与故事——形态从不脱离临床单独决定去向。',
+        'Both tracings show "T inversion", but they mean different things. **A (Wellens)**: the patient is pain-free right now, deep symmetric or biphasic T in V2–V3 with preserved R — the artery is still open but critically stenosed; next step is **early angiography, no stress test**. **B**: the inversion sits in the **lateral leads** (aVL, V6) over a dominant R: the NSTE-ACS T-inversion criterion (> 1 mm with a prominent R) — ischaemia in circumflex or diagonal territory, or the evolving / reperfused phase of a lateral infarct; pain, troponin and the old tracing decide, and it is risk-stratified on the NSTE-ACS pathway. Same shape, different territory and story — a shape never decides anything apart from its clinical context.',
+        'Ambos registros muestran «T negativa», pero significan cosas distintas. **A (Wellens)**: el paciente está sin dolor en este momento, T profunda y simétrica o bifásica en V2–V3 con R conservadas; la arteria sigue abierta pero con estenosis crítica: el paso siguiente es **coronariografía precoz, sin prueba de esfuerzo**. **B**: la inversión está en las **derivaciones laterales** (aVL, V6) sobre una R dominante: el criterio de T negativa del SCASEST (> 1 mm con R dominante), isquemia en territorio de la circunfleja o de una diagonal, o la fase en evolución / reperfundida de un infarto lateral; el dolor, la troponina y el ECG previo deciden, y se estratifica el riesgo por la vía del SCASEST. Misma forma, distinto territorio y distinta historia: la morfología nunca decide sola, sin su contexto clínico.',
       ),
     },
     { kind: 'check', item: { family: 'ischemia-patterns', seed: 50 } },

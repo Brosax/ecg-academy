@@ -964,7 +964,7 @@ describe('i8: Wellens, de Winter, aVR on the tracings', () => {
     }
     expect(qrs(e, 'V3').max).toBeGreaterThan(0.5);
   });
-  it('Wellens B frame: T inversion about 7 mm deep in V2–V3 with no real upright start (T max under a tenth of the depth and under half the type A upright part), ST flat, R preserved; the inversion reaches V1 to V4 and stops there (the prediction); type A frame = the hook', () => {
+  it('Wellens B frame: T inversion about 7 mm deep in V2–V3 with no real upright start (T max under a tenth of the depth and under half the type A upright part), ST flat, R preserved; the inversion sits in V1–V4, with II, III, aVF, V5 and V6 upright and I not inverted (the prediction, unordered); type A frame = the hook', () => {
     expect(blocksOf('i8', 'film')[0].frames[0].ecg).toEqual(blocksOf('i8', 'hook')[0].ecg);
     const e = frame('i8', 0, 1);
     const typeA = frame('i8', 0, 0);
@@ -978,9 +978,13 @@ describe('i8: Wellens, de Winter, aVR on the tracings', () => {
     expect(qrs(e, 'V3').max).toBeGreaterThan(0.5);
     for (const l of ['V1', 'V4'] as const) expect(tw(e, l).min, l).toBeLessThan(-0.1);
     const p = blocksOf('i8', 'film')[0].predict!;
-    expect(p.options[p.answer].en).toBe('V1 to V4');
+    expect(p.ordered).toBeUndefined();
+    expect(p.answer).toBe(0);
+    expect(p.options[p.answer].en).toBe('V1–V4');
     for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(tInverted(e, l), l).toBe(true);
-    for (const l of ['V5', 'V6'] as const) expect(tUpright(e, l), l).toBe(true);
+    for (const l of ['II', 'III', 'aVF', 'V5', 'V6'] as const) expect(tUpright(e, l), l).toBe(true);
+    expect(tInverted(e, 'I'), 'I').toBe(false);
+    for (const l of ['V2', 'V3'] as const) expect(tw(e, 'aVL').min, `aVL shallower than ${l}`).toBeGreaterThan(tw(e, l).min);
   });
   it('de Winter frame: J depressed > 2 mm in V2–V4 and upsloping, tall T in V3, slight elevation in aVR, no chest elevation (V1–V6 below the baseline at J, J+60 and all through J → J+80 ms)', () => {
     const e = frame('i8', 0, 2);
@@ -1021,12 +1025,14 @@ describe('i8: Wellens, de Winter, aVR on the tracings', () => {
     expect(Math.min(...ALL.map((l) => stAt(e, l, 60)))).toBeLessThanOrEqual(-0.225);
     expect(Math.min(...ALL.map((l) => stAt(e, l, 60)))).toBeGreaterThanOrEqual(-0.275);
   });
-  it('contrast: A Wellens in V2–V3; B lateral T inversion (I, aVL, V5, V6) with tall R', () => {
+  it('contrast: A Wellens in V2–V3; B lateral T inversion > 1 mm in aVL and V6, each over a dominant R', () => {
     const c = blocksOf('i8', 'contrast')[0];
     expect(tw(ecgOf(c.left.ecg), 'V2').min).toBeLessThan(-0.08);
     const b = ecgOf(c.right.ecg);
-    for (const l of ['I', 'aVL', 'V5', 'V6'] as const) expect(tw(b, l).min, l).toBeLessThan(-0.1);
-    expect(tInverted(b, 'V6')).toBe(true);
+    for (const l of ['aVL', 'V6'] as const) {
+      expect(tInverted(b, l), l).toBe(true);
+      expect(qrs(b, l).max, `${l} R dominant`).toBeGreaterThan(-qrs(b, l).min);
+    }
   });
 });
 
