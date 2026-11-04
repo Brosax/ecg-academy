@@ -289,6 +289,8 @@ const sokolow = (e: Ecg) => -qrs(e, 'V1').min + Math.max(qrs(e, 'V5').max, qrs(e
 const cornell = (e: Ecg) => qrs(e, 'aVL').max - qrs(e, 'V3').min;
 const deepestS = (e: Ecg): StdLead => [...LIMB, ...CHEST].reduce((best, l) => (qrs(e, l).min < qrs(e, best).min ? l : best));
 const peguero = (e: Ecg) => -qrs(e, deepestS(e)).min - qrs(e, 'V4').min;
+/** a note's "about N mm" (mV signal at 10 mm/mV): within ±0.5 mm unless the note is coarser */
+const near = (x: number, mm: number, tolMm = 0.5) => expect(Math.abs(x * 10 - mm), `${(x * 10).toFixed(2)} mm vs about ${mm} mm`).toBeLessThanOrEqual(tolMm);
 
 describe('h1: the P wave on the tracings', () => {
   const laes = () => [blocksOf('h1', 'hook')[0].ecg, blocksOf('h1', 'worked')[0].ecg, blocksOf('h1', 'contrast')[0].right.ecg].map(ecgOf);
@@ -409,8 +411,8 @@ describe('h2: LVH voltage and secondary ST–T on the tracings', () => {
       expect(qrs(e, 'aVL').max).toBeLessThan(1.1);
     }
   });
-  it('secondary ST–T (hook, worked, ecg, contrast B): ST depression and T inversion in V5–V6, T inverted in I and aVL, mirror ST elevation in V1–V2', () => {
-    for (const src of [blocksOf('h2', 'hook')[0].ecg, blocksOf('h2', 'worked')[0].ecg, blocksOf('h2', 'ecg')[0].ecg, blocksOf('h2', 'contrast')[0].right.ecg]) {
+  it('secondary ST–T (hook, worked, film frame 3, contrast B): ST depression and T inversion in V5–V6, T inverted in I and aVL, mirror ST elevation in V1–V2', () => {
+    for (const src of [blocksOf('h2', 'hook')[0].ecg, blocksOf('h2', 'worked')[0].ecg, blocksOf('h2', 'film')[0].frames[2].ecg, blocksOf('h2', 'contrast')[0].right.ecg]) {
       const e = ecgOf(src);
       for (const l of ['I', 'aVL', 'V5', 'V6'] as const) expect(tInverted(e, l), l).toBe(true);
       for (const l of ['V5', 'V6'] as const) expect(stAt(e, l, 60), l).toBeLessThan(-0.05);
@@ -424,6 +426,37 @@ describe('h2: LVH voltage and secondary ST–T on the tracings', () => {
     expect(sokolow(a)).toBeGreaterThan(3.5);
     expect(sokolow(ecgOf(c.right.ecg))).toBeGreaterThan(3.5);
     for (const l of ['V5', 'V6'] as const) expect(tUpright(a, l), l).toBe(true);
+  });
+  it('voltage film notes: normal S V1 about 6 + R V5 about 14 ≈ 20 mm; LVH S V1 about 19 + R V6 about 18 ≈ 37 mm (> 35) with upright T in V5–V6; the ST–T frame keeps the same QRS with V6 ST about −1 mm, T about −4 mm and V1–V2 ST about +2 mm', () => {
+    const film = blocksOf('h2', 'film')[0];
+    expect(film.frames[1].ecg).toEqual(blocksOf('h2', 'heart')[0].ecg);
+    const [normal, lvh, st] = frames('h2', 0);
+    near(-qrs(normal, 'V1').min, 6);
+    near(qrs(normal, 'V5').max, 14);
+    near(sokolow(normal), 20);
+    expect(qrs(normal, 'V5').max).toBeGreaterThan(qrs(normal, 'V6').max);
+    near(-qrs(lvh, 'V1').min, 19);
+    near(qrs(lvh, 'V6').max, 18);
+    expect(qrs(lvh, 'V6').max).toBeGreaterThan(qrs(lvh, 'V5').max);
+    near(sokolow(lvh), 37);
+    expect(sokolow(lvh)).toBeGreaterThan(3.5);
+    for (const e of [normal, lvh]) for (const l of ['V5', 'V6'] as const) expect(tUpright(e, l), l).toBe(true);
+    for (const l of [...LIMB, ...CHEST]) {
+      expect(Math.abs(qrs(st, l).max - qrs(lvh, l).max), l).toBeLessThan(0.01);
+      expect(Math.abs(qrs(st, l).min - qrs(lvh, l).min), l).toBeLessThan(0.01);
+    }
+    near(stAt(st, 'V6', 60), -1);
+    near(tw(st, 'V6').min, -4);
+    for (const l of ['V1', 'V2'] as const) near(stAt(st, l, 60), 2);
+  });
+  it('vector-loop caption: the LVH loop points left and back (leftward frontal axis, positive net QRS in aVL and V5–V6, negative in V1–V2)', () => {
+    const fig = blocksOf('h2', 'figure')[0];
+    expect(fig.ecg).toEqual(blocksOf('h2', 'heart')[0].ecg);
+    const e = ecgOf(fig.ecg!);
+    expect(e.truth!.axisDeg.qrs).toBeGreaterThan(-30);
+    expect(e.truth!.axisDeg.qrs).toBeLessThan(30);
+    for (const l of ['aVL', 'V5', 'V6'] as const) expect(qrs(e, l).net, l).toBeGreaterThan(0.2);
+    for (const l of ['V1', 'V2'] as const) expect(qrs(e, l).net, l).toBeLessThan(-1);
   });
 });
 
