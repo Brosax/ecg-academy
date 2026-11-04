@@ -844,14 +844,22 @@ describe('t3 on the tracings', () => {
 });
 
 describe('t4 on the tracings', () => {
-  it('worked WPW: PR < 120 ms, QRS > 120 ms, V1 R ≥ S, delta negative in I and aVL', () => {
+  it('worked WPW: PR about 116 ms (< 120), QRS > 120 ms, V1 mainly positive with R ≥ S, delta negative in I and aVL, nearly isoelectric in V5 and negative in V6', () => {
     const e = ecgOf(blocksOf('t4', 'worked')[0].ecg);
     const t = e.truth!;
+    expect(Math.abs(t.prMs! - 116)).toBeLessThan(5);
     expect(t.prMs!).toBeLessThan(120);
     expect(t.qrsMs).toBeGreaterThan(120);
     const b = mid(e);
     for (const l of ['I', 'aVL'] as const) expect(excursion(e, l, b.qrsOn, b.qrsOn, b.qrsOn + 40), l).toBeLessThan(-0.1);
     expect(excursion(e, 'V1', b.qrsOn, b.qrsOn, b.qrsOn + 60)).toBeGreaterThan(0.3);
+    const v1 = qrsWaves(e.signal.leads.V1, e.signal.fs, b.qrsOn, b.qrsOff);
+    const r = Math.max(...v1.filter((x) => x.role === 'r').map((x) => x.mv));
+    const s = Math.min(0, ...v1.filter((x) => x.role === 's').map((x) => x.mv));
+    expect(r, 'V1 R ≥ S').toBeGreaterThanOrEqual(-s);
+    expect(v1[0].role, 'V1 starts with its R').toBe('r');
+    expect(Math.abs(excursion(e, 'V5', b.qrsOn, b.qrsOn, b.qrsOn + 30)), 'V5 delta').toBeLessThanOrEqual(0.05);
+    expect(excursion(e, 'V6', b.qrsOn, b.qrsOn, b.qrsOn + 30), 'V6 delta').toBeLessThan(-0.05);
   });
   it('WPW heart: the region at the pathway depolarises at QRS onset, at least 20 ms before any other ventricular region', () => {
     const e = ecgOf(blocksOf('t4', 'heart')[0].ecg);
@@ -886,7 +894,8 @@ describe('t4 on the tracings', () => {
       }
       return { net: mx + mn, p2p: mx - mn };
     };
-    expect(e.truth!.qrsMs).toBeGreaterThanOrEqual(120);
+    expect(e.truth!.prMs!, 'hook reveal: PR < 120 ms').toBeLessThan(120);
+    expect(e.truth!.qrsMs, 'hook reveal: QRS > 120 ms').toBeGreaterThan(120);
     expect(net('V1', b.qrsOn, b.qrsOff).net).toBeGreaterThan(0.1);
     for (const l of ['I', 'aVL'] as const) expect(excursion(e, l, b.qrsOn, b.qrsOn, b.qrsOn + 30), l).toBeLessThan(-0.1);
     for (const l of ['II', 'III', 'aVF', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6'] as const) {
@@ -898,28 +907,49 @@ describe('t4 on the tracings', () => {
     expect(net('aVF', b.qrsOn, b.qrsOff).net).toBeGreaterThan(0.3);
     expect(e.truth!.axisDeg.qrs).toBeGreaterThan(90);
   });
-  it('pathway film: sinus PR about 115 ms with QRS about 120 ms; orthodromic AVRT narrow and regular at about 190/min with the P′ after the QRS, through a concealed pathway (no WPW finding); antidromic AVRT regular, about 185/min, QRS about 155 ms; pre-excited AF about 200/min, irregular, QRS width varying with narrower beats, shortest RR about 210 ms', () => {
+  it('pathway film (12-lead sheet): four left lateral pathways; sinus PR about 115 ms with QRS about 120 ms; orthodromic AVRT narrow and regular at 190/min through a concealed pathway (no WPW finding), the P′ on the ST segment with a dip in I and aVL (where its marks sit) and no hump in II; antidromic AVRT regular, 185/min, QRS about 155 ms; pre-excited AF 200/min, irregular, QRS width varying with narrower beats, shortest RR about 210 ms (bracketed) ending on a wide beat (marked)', () => {
+    const film = blocksOf('t4', 'film')[1];
+    expect(film.view?.layout).toBe('3x4+1');
     const [sinus, ortho, anti, af] = frames('t4', 1);
+    for (const e of [sinus, ortho, anti, af]) expect(e.truth!.facts.pathway).toMatch(/^left lateral/);
     expect(Math.abs(sinus.truth!.prMs! - 115)).toBeLessThan(5);
     expect(Math.abs(sinus.truth!.qrsMs - 120)).toBeLessThan(5);
     expect(sinus.truth!.findings).toContain('wpw');
     const o = ortho.truth!;
-    expect(Math.abs(o.hrBpm - 190)).toBeLessThan(5);
+    expect(Math.abs(o.hrBpm - 190)).toBeLessThanOrEqual(1);
     expect(o.qrsMs).toBeLessThan(110);
     expect(Math.max(...rrs(ortho)) - Math.min(...rrs(ortho))).toBeLessThan(10);
-    expect(mid(ortho).pOn!).toBeGreaterThan(mid(ortho).qrsOff);
+    const ob = mid(ortho);
+    expect(ob.pOn!).toBeGreaterThan(ob.qrsOff);
+    expect(ob.pOn!).toBeLessThan(ob.tPeak!);
+    for (const l of ['I', 'aVL'] as const) expect(localPeak(ortho, l, -1, ob.pOn!, ob.tPeak! - 10), `dip in ${l}`).toBeGreaterThan(0.05);
+    expect(localPeak(ortho, 'II', 1, ob.pOn!, ob.tPeak! - 10), 'no hump in II').toBeLessThanOrEqual(0.05);
+    expect(film.frames[1].marks?.map((m) => ('auto' in m ? m.lead : null))).toEqual(['I', 'aVL']);
     expect(o.findings).not.toContain('wpw');
     const a = anti.truth!;
-    expect(Math.abs(a.hrBpm - 185)).toBeLessThan(5);
+    expect(Math.abs(a.hrBpm - 185)).toBeLessThanOrEqual(1);
     expect(Math.abs(a.qrsMs - 155)).toBeLessThan(5);
     expect(Math.max(...rrs(anti)) - Math.min(...rrs(anti))).toBeLessThan(10);
     const p = af.truth!;
-    expect(Math.abs(p.hrBpm - 200)).toBeLessThan(5);
+    expect(Math.abs(p.hrBpm - 200)).toBeLessThanOrEqual(1);
     expect(Math.abs(Math.min(...rrs(af)) - 210)).toBeLessThan(5);
     expect(Math.max(...rrs(af)) - Math.min(...rrs(af))).toBeGreaterThan(150);
     const widths = p.beats.map((x) => x.qrsOff - x.qrsOn);
     expect(Math.max(...widths)).toBeGreaterThanOrEqual(150);
     expect(widths.filter((w) => w < 110).length).toBeGreaterThanOrEqual(2);
+    const short = markBeat(film.frames[3].marks, 'rr');
+    expect(rrs(af)[short], 'the bracket is the shortest RR').toBe(Math.min(...rrs(af)));
+    expect(markBeat(film.frames[3].marks, 'qrs')).toBe(short + 1);
+    expect(widths[short + 1], 'the marked QRS is wide').toBeGreaterThanOrEqual(150);
+  });
+  it('delta contrast: both PR < 120 ms; left wide QRS (≥ 120 ms) with pre-excitation, right narrow QRS without', () => {
+    const c = blocksOf('t4', 'contrast')[0];
+    const [wpw, short] = [ecgOf(c.left.ecg).truth!, ecgOf(c.right.ecg).truth!];
+    for (const t of [wpw, short]) expect(t.prMs!).toBeLessThan(120);
+    expect(wpw.qrsMs).toBeGreaterThanOrEqual(120);
+    expect(wpw.findings).toContain('wpw');
+    expect(short.qrsMs).toBeLessThan(110);
+    expect(short.findings).not.toContain('wpw');
   });
 });
 
