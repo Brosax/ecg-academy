@@ -137,9 +137,12 @@ const lesson: Lesson = {
         from: 0,
         to: 80,
         notes: [
-          { min: 0, max: 20, text: l('**aVF**（+90°）最接近等电位：电轴与它相差 90°，靠近 I 导联（0°）。', '**aVF** (+90°) is the most equiphasic: the axis lies 90° from it, close to lead I (0°).', '**aVF** (+90°) es la más isodifásica: el eje está a 90° de ella, cerca de la derivación I (0°).') },
-          { min: 25, max: 50, text: l('现在 **III**（+120°）最接近等电位：相差 90°，电轴约 +30°。', 'Now **III** (+120°) is the most equiphasic: 90° away puts the axis around +30°.', 'Ahora **III** (+120°) es la más isodifásica: a 90° de ella, el eje está hacia +30°.') },
-          { min: 55, max: 80, text: l('现在 **aVL**（−30°）最接近等电位：电轴约 +60°。接近 +90° 时 I 导联变小。', 'Now **aVL** (−30°) is the most equiphasic: the axis is around +60°. Near +90°, lead I shrinks.', 'Ahora **aVL** (−30°) es la más isodifásica: el eje está hacia +60°. Cerca de +90°, la derivación I se hace pequeña.') },
+          { min: 0, max: 10, text: l('**aVF**（+90°）几乎等电位：电轴与它相差 90°，约 0°，正对 I 导联。', '**aVF** (+90°) is almost equiphasic: the axis is 90° from it, about 0°, along lead I.', '**aVF** (+90°) es casi isodifásica: el eje está a 90° de ella, hacia 0°, en la dirección de I.') },
+          { min: 15, max: 20, text: l('aVF 仍最接近等电位，但 R 波在长高：电轴 +15° 到 +20°。', 'aVF is still the most equiphasic, but its R is growing: +15° to +20°.', 'aVF sigue siendo la más isodifásica, pero su R crece: +15° a +20°.') },
+          { min: 25, max: 35, text: l('现在 **III**（+120°）最接近等电位：相差 90°，电轴约 +30°。', 'Now **III** (+120°) is the most equiphasic: 90° away, the axis is about +30°.', 'Ahora **III** (+120°) es la más isodifásica: a 90° de ella, el eje está hacia +30°.') },
+          { min: 40, max: 50, text: l('II（+60°）现在是最高的导联：电轴 +40° 到 +50°，正转向 II。', 'II (+60°) is now the tallest lead: the axis is +40° to +50°, swinging toward II.', 'II (+60°) es ahora la derivación más alta: el eje está entre +40° y +50°, girando hacia II.') },
+          { min: 55, max: 65, text: l('现在 **aVL**（−30°）最接近等电位：电轴约 +60°。', 'Now **aVL** (−30°) is the most equiphasic: the axis is about +60°.', 'Ahora **aVL** (−30°) es la más isodifásica: el eje está hacia +60°.') },
+          { min: 70, max: 80, text: l('I 导联已远小于 aVF：电轴 +70° 到 +80°，正接近 +90°。', 'Lead I is now well below aVF: +70° to +80°, heading for +90°.', 'La derivación I ya es mucho menor que aVF: +70° a +80°, camino de +90°.') },
         ],
       },
       predict: {

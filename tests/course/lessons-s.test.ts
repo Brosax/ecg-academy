@@ -535,15 +535,23 @@ describe('s5: axis on the tracings', () => {
     expect(pw(high, 'V1').min).toBeLessThan(-0.02);
     for (const l of [...LIMB, 'V3', 'V4', 'V5', 'V6'] as const) expect(high.signal.leads[l]).toEqual(normal.signal.leads[l]);
   });
-  it('axis sweep notes: aVF most equiphasic at 0–20°, III at 25–50°, aVL at 55–80°; lead I shrinks near +90°', () => {
-    for (const [v, lead] of [[0, 'aVF'], [20, 'aVF'], [25, 'III'], [50, 'III'], [55, 'aVL'], [80, 'aVL']] as const) {
-      const e = played('s5', 0, v);
-      expect(Math.abs(e.truth!.axisDeg.qrs - v), `${v}°`).toBeLessThan(3);
-      expect(mostEquiphasic(e), `${v}°`).toBe(lead);
+  it('axis sweep notes: aVF most equiphasic at 0–20° with its R growing at 15–20°; III at 25–35°; II the tallest at 40–50°; aVL at 55–65°; I under half of aVF at 70–80°; the read-out matches the dial', () => {
+    for (let v = 0; v <= 80; v += 5) expect(Math.abs(played('s5', 0, v).truth!.axisDeg.qrs - v), `${v}°`).toBeLessThan(3);
+    for (const [v, lead] of [[0, 'aVF'], [10, 'aVF'], [15, 'aVF'], [20, 'aVF'], [25, 'III'], [35, 'III'], [55, 'aVL'], [65, 'aVL']] as const) {
+      expect(mostEquiphasic(played('s5', 0, v)), `${v}°`).toBe(lead);
     }
-    const [at55, at80] = [played('s5', 0, 55), played('s5', 0, 80)];
-    expect(qrs(at80, 'I').net).toBeLessThan(0.5 * qrs(at55, 'I').net);
-    expect(qrs(at80, 'I').net).toBeLessThan(0.3 * qrs(at80, 'aVF').net);
+    expect(qrs(played('s5', 0, 20), 'aVF').max).toBeGreaterThan(qrs(played('s5', 0, 15), 'aVF').max);
+    for (const v of [40, 50]) {
+      const e = played('s5', 0, v);
+      for (const l of LIMB.filter((x) => x !== 'II')) {
+        expect(qrs(e, 'II').net, `${v}° vs ${l}`).toBeGreaterThan(qrs(e, l).net);
+        expect(qrs(e, 'II').max, `${v}° vs ${l}`).toBeGreaterThan(qrs(e, l).max);
+      }
+    }
+    for (const v of [70, 80]) {
+      const e = played('s5', 0, v);
+      expect(qrs(e, 'I').net, `${v}°`).toBeLessThan(0.5 * qrs(e, 'aVF').net);
+    }
   });
   it('contrast LAD vs RAD: A I+, aVF−, II− (about −60°); B I−, aVF+ (about +115°); both QRS < 120 ms', () => {
     const c = blocksOf('s5', 'contrast').find((b) => b.title.en === 'Left or right: quadrant first');
