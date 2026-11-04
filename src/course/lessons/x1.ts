@@ -6,6 +6,7 @@
  *
  * ECGs: hook and worked example are synthetic anterior STEMIs (stemi-anterior seeds 1801/1802: sinus ≈ 84/min, PR 160,
  * QRS ≈ 95, QTc (Fridericia) ≈ 410, axis ≈ +40°, ST ↑ V1–V4 with a maximum ≈ 4 mm in V3, reciprocal ↓ in II/III/aVF);
+ * the ST sweep and the heart are the worked heart (1802); the ten-line film walks the normal tracing (1803);
  * the inline report check is real PTB-XL case 4440 (F63, labels: sinus rhythm + first-degree AV block; 12SL: HR 85,
  * PR 254, QRS 94, QTcF 440, axis +2°); the real block is 1101 (normal), 13441 (complete RBBB) and 6764 (old
  * anterolateral infarction, Q waves).
@@ -24,6 +25,8 @@ const GRID = { layout: '3x4+1' } as const;
 
 /** The worked tracing, shown again on both sides of the weak/strong contrast: the difference is the report, not the ECG. */
 const WORKED = synth('stemi-anterior', 1802);
+/** The normal tracing: the ten-line film walks it, and it is the left side of the normal / first-degree contrast. */
+const NORMAL = synth('normal', 1803);
 
 /** The full report of a real ECG (PTB-XL 4440), each field picked from four values — graded field by field against the 12SL values and the labels. */
 const realReport: Item = {
@@ -95,12 +98,87 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('报告骨架', 'The report skeleton', 'El esqueleto del informe'),
-      body: l(
-        '1. **记录**：走纸、增益、伪差、导联位置（f4、o9、o10）。\n2. **心率**：心室率与心房率（不相等时分别报，s2）。\n3. **节律**：起源（窦性？）、P–QRS 关系、规则性（s3、R 阶段）。\n4. **间期**：PR、QRS（全局测量）、QT/QTc（s4）。\n5. **电轴**：分类 + 描述性度数（s5）。\n6. **形态**：P（心房）、QRS（心腔、电压、R 递增、Q 波）、T/U。\n7. **ST 段**：按导联组读抬高/压低，并找镜像改变（i1）。\n8. **发现清单**：按严重程度（危急 → 重要 → 次要 → 正常变异）。\n9. **对比**：与旧图逐项对比；没有旧图就写“无旧图”。\n10. **紧急程度与下一步**：现在处理 / 当天评估 / 常规；谁需要知道。\n前七步是**描述**（纸上有什么），第八步才是**诊断**（这意味着什么），最后两步是**决策**（现在做什么）。',
-        '1. **Recording**: speed, gain, artefact, lead placement (f4, o9, o10).\n2. **Rate**: ventricular and atrial (report both when they differ — s2).\n3. **Rhythm**: origin (sinus?), P–QRS relationship, regularity (s3, stage R).\n4. **Intervals**: PR, QRS (measured globally), QT/QTc (s4).\n5. **Axis**: category + descriptive degrees (s5).\n6. **Morphology**: P (atria), QRS (chambers, voltage, R progression, Q waves), T/U.\n7. **ST segments**: elevation/depression by lead group, and look for the reciprocal change (i1).\n8. **Findings list**: ordered critical → major → minor → normal variant.\n9. **Comparison**: item by item with old tracings; with none, write "no previous ECG".\n10. **Urgency and next action**: act now / review today / routine; who needs to know.\nSteps 1–7 are **description** (what is on the paper), step 8 is **diagnosis** (what it means), and the last two are the **decision** (what happens now).',
-        '1. **Registro**: velocidad, ganancia, artefacto y posición de derivaciones (f4, o9, o10).\n2. **Frecuencia**: ventricular y auricular (ambas si difieren: s2).\n3. **Ritmo**: origen (¿sinusal?), relación P-QRS y regularidad (s3, etapa R).\n4. **Intervalos**: PR, QRS (medición global) y QT/QTc (s4).\n5. **Eje**: categoría y grados descriptivos (s5).\n6. **Morfología**: P (aurículas), QRS (cavidades, voltaje, progresión de R, ondas Q), T/U.\n7. **Segmento ST**: elevación/descenso por grupos de derivaciones, buscando el cambio recíproco (i1).\n8. **Lista de hallazgos**: de crítico a mayor, menor y variante normal.\n9. **Comparación**: punto por punto con ECG previos; si no los hay, escribe «sin ECG previo».\n10. **Urgencia y siguiente paso**: actuar ya / revisar hoy / rutina; a quién informar.\nLos pasos 1-7 son **descripción** (qué hay en el papel), el paso 8 es **diagnóstico** (qué significa) y los dos últimos son la **decisión** (qué se hace ahora).',
+      kind: 'film',
+      title: l('正常的图也写满十行', 'A normal tracing still gets ten lines', 'Un ECG normal también lleva diez líneas'),
+      view: GRID,
+      frames: [
+        {
+          label: l('记录', 'Recording', 'Registro'),
+          ecg: NORMAL,
+          note: l(
+            '第 1 行：定标 10 mm、25 mm/s、基线干净；I 导联直立、aVR 倒置：电极接对了。',
+            'Line 1: 10 mm pulse, 25 mm/s, clean baseline; I upright and aVR negative: the cables are right.',
+            'Línea 1: pulso de 10 mm, 25 mm/s, línea de base limpia; I positiva y aVR negativa: los cables están bien.',
+          ),
+          marks: [{ kind: 'lead', lead: 'I' }, { kind: 'lead', lead: 'aVR' }],
+        },
+        {
+          label: l('心率、节律', 'Rate, rhythm', 'Frecuencia, ritmo'),
+          ecg: NORMAL,
+          note: l(
+            '第 2–3 行：RR 略多于 4 个大格，约 72 次/分；每个 QRS 前有 II 导联直立的 P：窦性心律。',
+            'Lines 2–3: RR just over 4 large squares, about 72/min; an upright P in II before every QRS: sinus rhythm.',
+            'Líneas 2–3: RR algo más de 4 cuadros grandes, unas 72 lpm; una P positiva en II antes de cada QRS: ritmo sinusal.',
+          ),
+          marks: [{ auto: 'rr' }, { auto: 'p' }],
+        },
+        {
+          label: l('间期', 'Intervals', 'Intervalos'),
+          ecg: NORMAL,
+          note: l(
+            '第 4 行：PR 160 ms，QRS 约 95 ms，QT 约 385 ms（72 次/分时）：都正常。',
+            'Line 4: PR 160 ms, QRS about 95 ms, QT about 385 ms at 72/min: all normal.',
+            'Línea 4: PR 160 ms, QRS de unos 95 ms, QT de unos 385 ms a 72 lpm: todo normal.',
+          ),
+          marks: [{ auto: 'pr' }, { auto: 'qrs' }, { auto: 'qt' }],
+        },
+        {
+          label: l('电轴', 'Axis', 'Eje'),
+          ecg: NORMAL,
+          note: l(
+            '第 5 行：I、II、aVF 的 QRS 都以正向为主：电轴在正常象限。',
+            'Line 5: the QRS is mainly positive in I, II and aVF: the axis is in the normal quadrant.',
+            'Línea 5: el QRS es predominantemente positivo en I, II y aVF: el eje está en el cuadrante normal.',
+          ),
+          marks: [{ kind: 'lead', lead: 'I' }, { kind: 'lead', lead: 'II' }, { kind: 'lead', lead: 'aVF' }],
+        },
+        {
+          label: l('形态、ST', 'Shape, ST', 'Morfología, ST'),
+          ecg: NORMAL,
+          note: l(
+            '第 6–7 行：P、QRS、T 形态正常，R 波在 V3 超过 S 波；每组导联的 ST 都在基线上。',
+            'Lines 6–7: normal P, QRS and T, the R overtakes the S at V3; the ST sits on the baseline in every lead group.',
+            'Líneas 6–7: P, QRS y T normales, la R supera a la S en V3; el ST está en la línea de base en todos los grupos.',
+          ),
+          marks: [{ auto: 'st60', lead: 'V2' }, { auto: 'st60', lead: 'III' }],
+        },
+        {
+          label: l('结论', 'Verdict', 'Conclusión'),
+          ecg: NORMAL,
+          note: l(
+            '第 8–10 行：**正常心电图**；无旧图；常规。十行都写了数字，“正常”才算结论。',
+            'Lines 8–10: **normal ECG**; no previous ECG; routine. Only once all ten lines carry their numbers is "normal" a conclusion.',
+            'Líneas 8–10: **ECG normal**; sin ECG previo; rutina. Solo cuando las diez líneas llevan su cifra, «normal» es una conclusión.',
+          ),
+        },
+      ],
+      predict: {
+        question: l(
+          '这份图最后是正常的。报告还要写几行？',
+          'This tracing turns out to be normal. How many report lines does it still need?',
+          'Este ECG resulta ser normal. ¿Cuántas líneas del informe necesita todavía?',
+        ),
+        options: [
+          l('十行都要写', 'All ten', 'Las diez'),
+          l('一行：“正常心电图”', 'One: "normal ECG"', 'Una: «ECG normal»'),
+          l('三行：心率、节律、结论', 'Three: rate, rhythm, verdict', 'Tres: frecuencia, ritmo, conclusión'),
+        ],
+        answer: 0,
+      },
+      caption: l(
+        '每一帧是报告的一行，高亮的是你在纸上看的位置。前七行描述，第八行诊断，最后两行决定下一步。',
+        'Each frame is one line of the report; the highlight is where you look on the paper. Lines 1–7 describe, line 8 diagnoses, the last two decide.',
+        'Cada fotograma es una línea del informe; lo resaltado es dónde miras en el papel. Las líneas 1-7 describen, la 8 diagnostica y las dos últimas deciden.',
       ),
     },
     {
@@ -203,12 +281,73 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'text',
-      title: l('先描述，后诊断，再说把握', 'Describe, then diagnose, then say how sure', 'Describir, diagnosticar y decir con qué seguridad'),
-      body: l(
-        '- **描述层**写纸上有什么：“V2–V4 ST 抬高 3–4 mm，III、aVF 压低 1 mm”。另一位读者可以拿分规核对它。\n- **诊断层**写这意味着什么：“急性前壁 STEMI”。它建立在描述层之上，所以描述必须先出现。\n- **把握程度**用固定的词：“符合”“可能”“考虑”——而不是“?”或“临床相关”。x4 会把这些词变成可以校准的信心数字。\n- 机器判读只是一个假设：自动判读必须由有资质的读者复核，其错误集中在节律与电极接反（o12）。**只签署你亲自核实过的那一行。**',
-        '- The **descriptive layer** says what is on the paper: "ST elevation of 3–4 mm in V2–V4, 1 mm depression in III and aVF". Another reader can check it with calipers.\n- The **diagnostic layer** says what it means: "acute anterior STEMI". It stands on the description, so the description comes first.\n- **How sure** uses fixed words — "consistent with", "probable", "possible" — never "?" or "clinical correlation advised". x4 turns these words into confidence numbers you can calibrate.\n- The machine statement is a hypothesis: the automated read must be confirmed by a qualified reader, and its errors cluster in rhythm and electrode reversals (o12). **Sign only the lines you verified yourself.**',
-        '- La **capa descriptiva** dice qué hay en el papel: «elevación del ST de 3-4 mm en V2-V4, descenso de 1 mm en III y aVF». Otro lector puede comprobarlo con el compás.\n- La **capa diagnóstica** dice qué significa: «IAMCEST anterior agudo». Se apoya en la descripción, así que la descripción va primero.\n- **La seguridad** se expresa con palabras fijas —«compatible con», «probable», «posible»—, nunca con «?» ni con «correlacionar con la clínica». En x4 esas palabras se convierten en cifras de confianza que se pueden calibrar.\n- La lectura automática es una hipótesis: debe confirmarla un lector cualificado, y sus errores se concentran en el ritmo y en las inversiones de electrodos (o12). **Firma solo las líneas que hayas comprobado tú.**',
+      kind: 'live',
+      scenario: 'stemi-anterior',
+      seed: 1802,
+      dials: [{ id: 'st' }],
+      view: GRID,
+      marks: [{ auto: 'st60', lead: 'V3' }, { auto: 'st60', lead: 'III' }],
+      play: {
+        dial: 'st',
+        from: 0.22,
+        to: 0.45,
+        notes: [
+          {
+            min: 0.22,
+            max: 0.25,
+            text: l(
+              '描述：V3 抬高约 **3 mm**，III 压低约 1 mm。诊断：急性前壁 STEMI。紧急程度：现在处理。',
+              'Description: V3 up about **3 mm**, III down about 1 mm. Diagnosis: acute anterior STEMI. Urgency: act now.',
+              'Descripción: V3 elevado unos **3 mm**, III descendido alrededor de 1 mm. Diagnóstico: IAMCEST anterior agudo. Urgencia: actuar ya.',
+            ),
+          },
+          {
+            min: 0.26,
+            max: 0.39,
+            text: l(
+              'V2–V4 一起升高，II、III、aVF 一起压低：描述那一行的毫米在变，诊断那一行不变。',
+              'V2–V4 rise as II, III and aVF fall: the millimetres in the description change, the diagnosis line does not.',
+              'V2–V4 suben mientras II, III y aVF bajan: cambian los milímetros de la descripción, no la línea del diagnóstico.',
+            ),
+          },
+          {
+            min: 0.4,
+            max: 0.45,
+            text: l(
+              '描述：V3 抬高约 **5–6 mm**，III 压低约 2 mm。诊断和第一动作都和刚才一样。',
+              'Description: V3 up about **5–6 mm**, III down about 2 mm. The same diagnosis and the same first action.',
+              'Descripción: V3 elevado unos **5–6 mm**, III descendido unos 2 mm. El mismo diagnóstico y la misma primera acción.',
+            ),
+          },
+        ],
+      },
+      predict: {
+        question: l(
+          '把损伤电流从 0.22 调到 0.45 mV，报告里哪一行会变？',
+          'Turn the injury current up from 0.22 to 0.45 mV. Which line of the report changes?',
+          'Sube la corriente de lesión de 0,22 a 0,45 mV. ¿Qué línea del informe cambia?',
+        ),
+        options: [
+          l('ST 描述里的毫米数', 'The millimetres in the ST description', 'Los milímetros de la descripción del ST'),
+          l('诊断', 'The diagnosis', 'El diagnóstico'),
+          l('紧急程度', 'The urgency', 'La urgencia'),
+        ],
+        answer: 0,
+      },
+      caption: l(
+        '描述层写纸上有什么（导联、毫米、方向），别人能用分规核对；诊断层写它意味着什么，建立在描述之上。',
+        'The descriptive layer says what is on the paper (leads, millimetres, direction) and can be checked with calipers; the diagnosis stands on it.',
+        'La capa descriptiva dice qué hay en el papel (derivaciones, milímetros, dirección) y se comprueba con el compás; el diagnóstico se apoya en ella.',
+      ),
+    },
+    {
+      kind: 'heart',
+      ecg: WORKED,
+      emphasize: ['lv-basal-anteroseptal', 'lv-mid-anteroseptal', 'lv-basal-anterior', 'lv-mid-anterior', 'lv-apical-anterior', 'lv-apical-septal'],
+      caption: l(
+        '为什么是 V1–V4？损伤在前壁，损伤电流朝向前壁导联，所以抬高；它背离 II、III、aVF，所以那里压低。',
+        'Why V1–V4? The injury is in the anterior wall: its current points toward the anterior leads, which rise, and away from II, III and aVF, which dip.',
+        '¿Por qué V1–V4? La lesión está en la cara anterior: su corriente apunta hacia las derivaciones anteriores, que suben, y se aleja de II, III y aVF, que bajan.',
       ),
     },
     {
@@ -243,7 +382,7 @@ const lesson: Lesson = {
       title: l('正常报告也是完整报告', 'A normal report is still a complete report', 'Un informe normal también es completo'),
       view: GRID,
       left: {
-        ecg: synth('normal', 1803),
+        ecg: NORMAL,
         caption: l(
           '正常：“窦性 72 次/分，PR 160、QRS 95、QTc 410 ms，电轴 +40°，形态与 ST 正常。正常心电图。常规。”',
           'Normal: "Sinus 72/min, PR 160, QRS 95, QTc 410 ms, axis +40°, morphology and ST normal. Normal ECG. Routine."',
@@ -275,6 +414,26 @@ const lesson: Lesson = {
         { label: l('描述 vs 诊断', 'Descriptive vs diagnostic', 'Descriptivo frente a diagnóstico'), value: l('"V2–V4 ST 抬高 3–4 mm"（描述）→ "前壁 STEMI"（诊断）分层出现', '"ST elevation 3–4 mm in V2–V4" (description) → "anterior STEMI" (diagnosis), in layers', '"Elevación del ST de 3-4 mm en V2-V4" (descripción) → "IAMCEST anterior" (diagnóstico), por capas') },
         { label: l('严重程度', 'Severity', 'Gravedad'), value: l('危急 → 重要 → 次要 → 正常变异，按序排列', 'Critical → major → minor → normal variant, in order', 'Crítico → mayor → menor → variante normal, en orden') },
         { label: l('结尾', 'Ending', 'Cierre'), value: l('对比旧图（或“无旧图”）+ 紧急程度（现在/当天/常规）+ 下一步', 'Comparison (or "no previous ECG") + urgency (now / today / routine) + next action', 'Comparación (o «sin ECG previo») + urgencia (ya / hoy / rutina) + siguiente paso') },
+        {
+          label: l('十步', 'The ten steps', 'Los diez pasos'),
+          value: l(
+            '记录 → 心率（心室与心房）→ 节律 → PR/QRS/QTc → 电轴 → P/QRS/T 形态 → 按导联组读 ST → 按严重程度列发现 → 对比 → 紧急程度与下一步',
+            'Recording → rate (ventricular and atrial) → rhythm → PR/QRS/QTc → axis → P/QRS/T morphology → ST by lead group → findings by severity → comparison → urgency and next action',
+            'Registro → frecuencia (ventricular y auricular) → ritmo → PR/QRS/QTc → eje → morfología de P/QRS/T → ST por grupos de derivaciones → hallazgos por gravedad → comparación → urgencia y siguiente paso',
+          ),
+        },
+        {
+          label: l('三层', 'Three layers', 'Tres capas'),
+          value: l('第 1–7 步描述（纸上有什么），第 8 步诊断（意味着什么），第 9–10 步决策（现在做什么）', 'Steps 1–7 describe (what is on the paper), step 8 diagnoses (what it means), steps 9–10 decide (what happens now)', 'Los pasos 1-7 describen (qué hay en el papel), el 8 diagnostica (qué significa) y el 9 y el 10 deciden (qué se hace ahora)'),
+        },
+        {
+          label: l('把握程度', 'How sure', 'Grado de seguridad'),
+          value: l('固定措辞：“符合”“可能”“考虑”；不用“?”，不用“请结合临床”', 'Fixed words: "consistent with", "probable", "possible"; never "?" or "clinical correlation advised"', 'Palabras fijas: «compatible con», «probable», «posible»; nunca «?» ni «correlacionar con la clínica»'),
+        },
+        {
+          label: l('机器判读', 'Machine statement', 'Lectura automática'),
+          value: l('只是假设：由有资质的读者复核，错误集中在节律与电极接反（o12）；只签你核实过的行', 'A hypothesis: a qualified reader over-reads it; its errors cluster in rhythm and electrode reversals (o12); sign only the lines you verified', 'Una hipótesis: la revisa un lector cualificado; sus errores se concentran en el ritmo y en las inversiones de electrodos (o12); firma solo las líneas comprobadas'),
+        },
       ],
       source: 'Mason JW et al. AHA/ACCF/HRS Part II: Electrocardiography diagnostic statement list. Circulation 2007;115:1325-1332; Schläpfer J, Wellens HJ. Computer-interpreted electrocardiograms. J Am Coll Cardiol 2017;70:1183-1192',
     },
