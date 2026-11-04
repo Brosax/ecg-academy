@@ -486,20 +486,71 @@ describe('h3: RVH and right-heart load on the tracings', () => {
     expect(tw(e, 'V1').min).toBeGreaterThan(-0.2);
     for (const l of ['V2', 'V3'] as const) expect(tUpright(e, l), l).toBe(true);
   });
-  it('strain variant: deep T inversion in V1–V2, only a trace in V3, inverted in III and shallow in aVF', () => {
-    const e = ecgOf(blocksOf('h3', 'ecg')[0].ecg);
+  it('strain variant (load film frame 2): deep T inversion in V1–V2, only a trace in V3, inverted in III and shallow in aVF', () => {
+    const e = frames('h3', 1)[1];
     for (const l of ['V1', 'V2'] as const) expect(tw(e, l).min, l).toBeLessThan(-0.65);
     expect(tw(e, 'V3').min).toBeGreaterThan(-0.15);
     expect(tInverted(e, 'III')).toBe(true);
     expect(tw(e, 'aVF').min).toBeLessThan(-0.05);
   });
-  it('COPD pattern: P about 3 mm in II/III/aVF, QRS axis about +95°, limb leads NOT low (II about 7 mm), R in V1 < 1 mm', () => {
-    const e = ecgOf(blocksOf('h3', 'ecg')[1].ecg);
-    for (const l of ['II', 'III', 'aVF'] as const) expect(pw(e, l).max, l).toBeGreaterThanOrEqual(0.25);
-    expect(e.truth!.axisDeg.qrs).toBeGreaterThan(85);
-    expect(e.truth!.axisDeg.qrs).toBeLessThan(110);
+  it('COPD pattern (load film frame 3): P about 3 mm in II/III/aVF, QRS axis about +95°, II just over 5 mm, R in V1 < 1 mm', () => {
+    const e = frames('h3', 1)[2];
+    for (const l of ['II', 'III', 'aVF'] as const) {
+      expect(pw(e, l).max, l).toBeGreaterThanOrEqual(0.25);
+      near(pw(e, l).max, 3);
+    }
+    expect(Math.abs(e.truth!.axisDeg.qrs - 95)).toBeLessThan(5);
     expect(qrs(e, 'II').p2p).toBeGreaterThan(0.5);
     expect(qrs(e, 'V1').max).toBeLessThan(0.1);
+    expect(qrs(e, 'V1').p2p, 'V1 barely leaves the baseline').toBeLessThan(0.2);
+    expect(qrs(e, 'V1').max, 'R/S V1 < 1').toBeLessThan(-qrs(e, 'V1').min);
+    expect(-qrs(e, 'V5').min, 'S V5 < 7 mm').toBeLessThan(0.7);
+    expect(qrs(e, 'V1').max - qrs(e, 'V5').min, 'R V1 + S V5 <= 10.5 mm').toBeLessThan(1.05);
+  });
+  it('heart: tall R in V1 over its S, deep S in V5, right axis', () => {
+    const e = ecgOf(blocksOf('h3', 'heart')[0].ecg);
+    expect(qrs(e, 'V1').max).toBeGreaterThan(-qrs(e, 'V1').min);
+    expect(-qrs(e, 'V5').min).toBeGreaterThan(0.7);
+    expect(e.truth!.axisDeg.qrs).toBeGreaterThan(90);
+  });
+  it('ladder film notes: RBBB rsR′ with R′ about 11 mm and QRS about 140 ms; WPW R just over S in V1 with PR about 115 ms; RVH (the worked tracing) QRS about 95, PR 160, axis about +120°, R V1 about 18 mm', () => {
+    expect(blocksOf('h3', 'film')[0].frames[2].ecg).toEqual(blocksOf('h3', 'worked')[0].ecg);
+    const [rbbb, wpw, rvh] = frames('h3', 0);
+    expect(hasRPrime(rbbb, 'V1')).toBe(true);
+    near(qrs(rbbb, 'V1').max, 11);
+    expect(Math.abs(rbbb.truth!.qrsMs - 140)).toBeLessThan(5);
+    expect(rbbb.truth!.findings).toContain('rbbb');
+    expect(qrs(wpw, 'V1').max).toBeGreaterThan(-qrs(wpw, 'V1').min);
+    expect(qrs(wpw, 'V1').max).toBeLessThan(-1.5 * qrs(wpw, 'V1').min);
+    expect(Math.abs(wpw.truth!.prMs! - 115)).toBeLessThan(5);
+    expect(wpw.truth!.findings).toContain('wpw');
+    expect(Math.abs(rvh.truth!.qrsMs - 95)).toBeLessThan(5);
+    expect(Math.abs(rvh.truth!.prMs! - 160)).toBeLessThan(5);
+    expect(Math.abs(rvh.truth!.axisDeg.qrs - 120)).toBeLessThan(5);
+    near(qrs(rvh, 'V1').max, 18);
+    expect(rvh.truth!.findings).not.toContain('wpw');
+  });
+  it('load film notes: RVH R V1 about 17 mm with almost no S, S V5 about 10 mm, T V1 about −1.5 mm and upright from V2; the strain frame is the same heart with V1–V2 T about −7 to −9 mm (asymmetric: slow descent), V3 about −1 mm', () => {
+    const [a, b] = blocksOf('h3', 'film')[1].frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req : null));
+    expect({ ...a, variant: 'strain' }).toEqual(b);
+    const [rvh, strain] = frames('h3', 1);
+    near(qrs(rvh, 'V1').max, 17);
+    expect(qrs(rvh, 'V1').min).toBeGreaterThan(-0.05);
+    near(-qrs(rvh, 'V5').min, 10);
+    near(tw(rvh, 'V1').min, -1.5);
+    expect(tUpright(rvh, 'V2')).toBe(true);
+    for (const l of ['V1', 'V2'] as const) {
+      expect(tw(strain, l).min, l).toBeGreaterThanOrEqual(-0.9);
+      expect(tw(strain, l).min, l).toBeLessThanOrEqual(-0.7);
+      const bt = midBeat(strain);
+      const a1 = strain.signal.leads[l];
+      const fs = strain.signal.fs;
+      let k = Math.round(((bt.j + 40) * fs) / 1000);
+      for (let i = k; i <= Math.round((bt.tOff * fs) / 1000); i++) if (a1[i] < a1[k]) k = i;
+      const nadir = (k * 1000) / fs;
+      expect(nadir - bt.j, `${l}: slow descent`).toBeGreaterThan(bt.tOff - nadir);
+    }
+    near(tw(strain, 'V3').min, -1);
   });
   it('biventricular: axis > +90°, R V1 about 11 mm, S V3 about 25 mm (Peguero about 40 mm) while Sokolow-Lyon stays about 11 mm', () => {
     const e = ecgOf(blocksOf('h3', 'contrast')[0].right.ecg);
