@@ -785,6 +785,40 @@ describe('o7: pericardium on the tracings', () => {
     expect(stAt(e, 'III', 60)).toBeGreaterThan(stAt(e, 'II', 60));
     expect(stAt(e, 'aVL', 60)).toBeLessThan(-0.05);
   });
+  it('three-questions film: normal at 96/min has PR, ST and TP level; pericarditis lifts the ST in I, II, aVF and V2–V6, drops the PR ≈ 1 mm in II and V4–V6 and lifts it ≈ 1 mm in aVR, and depresses only aVR', () => {
+    const [normal, dist, pr, recip] = frames('o7', 0);
+    expect(Math.abs(normal.truth!.hrBpm - 96)).toBeLessThan(1);
+    expect(Math.abs(prShift(normal, 'II'))).toBeLessThan(0.02);
+    for (const l of ['II', 'V4'] as const) expect(Math.abs(stTp(normal, l)), l).toBeLessThan(0.03);
+    const film = blocksOf('o7', 'film')[0];
+    expect(film.frames[2].ecg).toEqual(film.frames[1].ecg);
+    expect(film.frames[3].ecg).toEqual(film.frames[1].ecg);
+    for (const l of ['I', 'II', 'aVF', 'V2', 'V3', 'V4', 'V5', 'V6'] as const) expect(stTp(dist, l), l).toBeGreaterThan(0.05);
+    for (const l of ['II', 'V4', 'V5', 'V6'] as const) {
+      expect(prShift(pr, l), l).toBeGreaterThan(-0.125);
+      expect(prShift(pr, l), l).toBeLessThan(-0.075);
+    }
+    expect(prShift(pr, 'aVR')).toBeGreaterThan(0.075);
+    expect(prShift(pr, 'aVR')).toBeLessThan(0.125);
+    expect(stTp(recip, 'aVR')).toBeLessThan(-0.04);
+    expect(Math.abs(stTp(recip, 'aVL'))).toBeLessThan(0.05);
+    for (const l of ['I', 'II', 'III', 'aVF', 'V2', 'V3', 'V4', 'V5', 'V6'] as const) expect(stTp(recip, l), l).toBeGreaterThan(-0.03);
+  });
+  it('fluid film: tachycardia at 106/min with QRS ≈ 9 mm in II; the effusion keeps the rate, shrinks every limb QRS under 5 mm (II ≈ 4 mm) and the chest leads too; alternans flips the V3 R every beat', () => {
+    const [tachy, eff, alt] = frames('o7', 1);
+    for (const e of [tachy, eff]) expect(Math.abs(e.truth!.hrBpm - 106)).toBeLessThan(1);
+    expect(qrs(tachy, 'II').p2p).toBeGreaterThan(0.85);
+    expect(qrs(tachy, 'II').p2p).toBeLessThan(0.95);
+    for (const l of LIMB) expect(qrs(eff, l).p2p, l).toBeLessThan(0.5);
+    expect(qrs(eff, 'II').p2p).toBeGreaterThan(0.35);
+    expect(qrs(eff, 'II').p2p).toBeLessThan(0.45);
+    expect(qrs(eff, 'V3').p2p).toBeLessThan(0.6 * qrs(tachy, 'V3').p2p);
+    const r = alt.truth!.beats.map((b) => span(alt, 'V3', b.qrsOn, b.qrsOff, b).max);
+    const d = r.slice(1).map((x, i) => x - r[i]);
+    expect(d.slice(1).filter((x, i) => Math.sign(x) !== Math.sign(d[i])).length).toBeGreaterThanOrEqual(d.length - 3);
+    expect(Math.max(...rrs(alt)) - Math.min(...rrs(alt))).toBeLessThan(30);
+    expect(alt.truth!.beats.length).toBeGreaterThan(6);
+  });
   it('effusion: limb QRS < 5 mm in every limb lead, sinus tachycardia; alternans: the R in V3 alternates beat to beat', () => {
     const eff = ecgOf(sourcesWith('o7', 'pericardial-effusion')[0]);
     for (const l of LIMB) expect(qrs(eff, l).p2p, l).toBeLessThan(0.5);
