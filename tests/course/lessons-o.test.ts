@@ -1224,8 +1224,11 @@ describe('o12: what a machine can get wrong, on the tracings', () => {
     for (const l of ['I', 'aVL', 'V5', 'V6'] as const) expect(tw(nonspecific, l).max, l).toBeLessThan(0.06);
     for (const l of ['I', 'II', 'aVL', 'V5', 'V6'] as const) expect(Math.abs(stAt(nonspecific, l, 60)), l).toBeLessThan(0.05);
   });
-  it('measurement film (V2): a clear T end with QT ≈ 405 ms; low K keeps the QT ≈ 405 ms but the QU reads ≈ 565 ms; AF ≈ 100/min with RR from ≈ 350 to ≈ 1100 ms', () => {
+  it('measurement film (V2): a clear T end with QT ≈ 405 ms; low K keeps the QT ≈ 405 ms but the QU reads ≈ 565 ms (too long, the predicted answer); AF ≈ 100/min with RR from ≈ 350 to ≈ 1100 ms, both ends under an RR mark', () => {
+    const film = blocksOf('o12', 'film')[1];
+    expect(film.predict!.options[film.predict!.answer].en).toBe('Too long');
     const [clear, lowK, af] = frames('o12', 1);
+    expect(markBeats(film.frames[2].marks, 'rr').map((k) => rrs(af)[k])).toEqual([Math.min(...rrs(af)), Math.max(...rrs(af))]);
     for (const e of [clear, lowK]) expect(Math.abs(e.truth!.qtMs - 405)).toBeLessThan(5);
     expect(uw(clear, 'V2').max).toBeLessThan(0.2 * tw(clear, 'V2').max);
     expect(uw(lowK, 'V2').max).toBeGreaterThan(tw(lowK, 'V2').max);
