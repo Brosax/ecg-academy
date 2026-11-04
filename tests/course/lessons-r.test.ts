@@ -271,10 +271,21 @@ describe('r1: the sinus node on the tracings', () => {
     for (const x of r.filter((y) => y > 1.5 * pp)) expect(Math.abs(x / pp - 2)).toBeLessThan(0.06);
     expect(Math.abs(Math.max(...r) - 1580)).toBeLessThan(40);
   });
-  it('pause film: arrest is the hook tracing and type II the worked one (their numbers are asserted above)', () => {
+  it('pause film: arrest (the hook tracing) pauses about 2.85 s = about 3.3 PP; type II (the worked tracing) pauses about 1580 ms = 2 PP', () => {
     const f = blocksOf('r1', 'film')[0].frames;
     expect(f[0].ecg).toEqual(blocksOf('r1', 'hook')[0].ecg);
     expect(f[1].ecg).toEqual(blocksOf('r1', 'worked')[0].ecg);
+    const mean = (xs: number[]) => xs.reduce((s, x) => s + x, 0) / xs.length;
+    const [arrest, exit] = frames('r1', 0).map(rrs);
+    const a = Math.max(...arrest);
+    expect(Math.abs(a - 2850)).toBeLessThan(10);
+    expect(a / mean(arrest.filter((x) => x < 1000))).toBeGreaterThan(3.25);
+    expect(a / mean(arrest.filter((x) => x < 1000))).toBeLessThan(3.35);
+    const pp = mean(exit.filter((x) => x < 1000));
+    for (const x of exit.filter((y) => y > 1000)) {
+      expect(Math.abs(x - 1580)).toBeLessThan(20);
+      expect(Math.abs(x / pp - 2)).toBeLessThan(0.03);
+    }
   });
   it('type I SA block (film frame 3): in each group the PP shortens from about 920 to about 850 ms, then a pause shorter than 2 x PP', () => {
     const r = rrs(frames('r1', 0)[2]);
@@ -282,8 +293,8 @@ describe('r1: the sinus node on the tracings', () => {
     expect(Math.max(...r)).toBeGreaterThan(1.4 * Math.min(...r));
     const pauses = r.flatMap((x, i) => (x > 1.4 * Math.min(...r) ? [i] : []));
     for (const k of pauses.filter((i) => i + 2 < r.length)) {
-      expect(Math.abs(r[k + 1] - 920), `group after pause ${k}`).toBeLessThan(30);
-      expect(Math.abs(r[k + 2] - 850), `group after pause ${k}`).toBeLessThan(30);
+      expect(Math.abs(r[k + 1] - 920), `group after pause ${k}`).toBeLessThan(15);
+      expect(Math.abs(r[k + 2] - 850), `group after pause ${k}`).toBeLessThan(15);
       expect(r[k + 2]).toBeLessThan(r[k + 1]);
     }
   });
@@ -292,8 +303,7 @@ describe('r1: the sinus node on the tracings', () => {
     expect(e.truth!.rhythm).toBe('sinus-node-dysfunction');
     const r = rrs(e);
     const k = r.indexOf(Math.max(...r));
-    expect(Math.abs(r[k] - 2870)).toBeLessThan(100);
-    expect(r[k]).toBeLessThan(3000);
+    expect(Math.abs(r[k] - 2900)).toBeLessThan(50);
     expect(e.truth!.beats[k].kind).toBe('atrial');
   });
   it('rate sweep notes: 50–58 below 60 and 40–49 below 50 and 38–39 below 40 on the read-out; P and PR the same at every rate, only the RR grows', () => {
@@ -329,12 +339,38 @@ describe('r2: escape and dissociation on the tracings', () => {
     expect(e.truth!.qrsMs).toBeLessThan(110);
     for (const pr of prs(e)) expect(Math.abs(pr - 108)).toBeLessThan(15);
   });
-  it('isorhythmic dissociation: junction faster than sinus; only an occasional P conducts', () => {
-    const t = ecgOf(blocksOf('r2', 'ecg')[1].ecg).truth!;
+  it('isorhythmic dissociation (mechanism film frame 1): sinus about 70, junction about 76; only an occasional P conducts', () => {
+    const e = frames('r2', 1)[0];
+    const t = e.truth!;
     expect(t.atrialRateBpm!).toBeLessThan(t.hrBpm);
+    expect(Math.abs(t.atrialRateBpm! - 70)).toBeLessThan(2);
+    const esc = t.beats.flatMap((b, i) => (i > 0 && b.kind === 'escape-junctional' && t.beats[i - 1].kind === 'escape-junctional' ? [b.qrsOn - t.beats[i - 1].qrsOn] : []));
+    for (const rr of esc) expect(Math.abs(60000 / rr - 76)).toBeLessThan(1.5);
     const captures = t.beats.filter((b) => b.kind === 'sinus').length;
     expect(captures).toBeGreaterThanOrEqual(1);
     expect(captures).toBeLessThanOrEqual(3);
+  });
+  it('escape film: the sinus node stops and a narrow junctional escape with no P comes about 1.43 s after the last beat', () => {
+    const e = frames('r2', 0)[0];
+    const beats = e.truth!.beats;
+    const k = beats.findIndex((b) => b.kind === 'escape-junctional');
+    expect(k).toBe(5);
+    expect(beats[k].pOn).toBeNull();
+    expect(Math.abs(beats[k].qrsOn - beats[k - 1].qrsOn - 1430)).toBeLessThan(10);
+    for (const r of rrs(e).filter((_, i) => i !== k - 1 && i !== k)) expect(r).toBeLessThan(900);
+    expect(Math.abs(beats[k].qrsOff - beats[k].qrsOn - (beats[0].qrsOff - beats[0].qrsOn))).toBeLessThan(3);
+  });
+  it('escape film: P at 78/min and none conducts in both; AV-node block escapes at 45/min narrow, infra-His block at 34/min wide', () => {
+    const [, node, infra] = frames('r2', 0);
+    for (const e of [node, infra]) {
+      expect(Math.abs(e.truth!.atrialRateBpm! - 78)).toBeLessThan(1);
+      expect(e.truth!.atrial.every((a) => a.conductedTo === null)).toBe(true);
+    }
+    expect(Math.abs(node.truth!.hrBpm - 45)).toBeLessThan(1);
+    expect(node.truth!.qrsMs).toBeLessThan(110);
+    expect(Math.abs(infra.truth!.hrBpm - 34)).toBeLessThan(1);
+    expect(infra.truth!.qrsMs).toBeGreaterThanOrEqual(120);
+    expect(blocksOf('r2', 'film')[1].frames[2].ecg).toEqual(blocksOf('r2', 'film')[0].frames[1].ecg);
   });
   it('worked: sinus about 60, junction about 66, captures with the same narrow QRS', () => {
     const t = ecgOf(blocksOf('r2', 'worked')[0].ecg).truth!;
@@ -345,12 +381,24 @@ describe('r2: escape and dissociation on the tracings', () => {
     expect(cap.length).toBeGreaterThanOrEqual(1);
     for (const c of cap) expect(Math.abs(c.qrsOff - c.qrsOn - (esc[0].qrsOff - esc[0].qrsOn))).toBeLessThan(10);
   });
-  it('AIVR: sinus about 72/min, with a capture and a fusion beat', () => {
-    const t = ecgOf(blocksOf('r2', 'ecg')[2].ecg).truth!;
+  it('AIVR (mechanism film frame 2): wide QRS at about 76/min against sinus about 72/min, a narrow early capture and a fusion beat of in-between width', () => {
+    const t = frames('r2', 1)[1].truth!;
     const kinds = t.beats.map((b) => b.kind);
     expect(kinds).toContain('capture');
     expect(kinds).toContain('fusion');
-    expect(Math.abs((t.atrialRateBpm ?? 0) - 72)).toBeLessThan(3);
+    expect(Math.abs((t.atrialRateBpm ?? 0) - 72)).toBeLessThan(2);
+    const w = (b: BeatMarks) => b.qrsOff - b.qrsOn;
+    const v = t.beats.filter((b) => b.kind === 'ventricular');
+    const vrr = t.beats.flatMap((b, i) => (i > 0 && b.kind === 'ventricular' && t.beats[i - 1].kind === 'ventricular' ? [b.qrsOn - t.beats[i - 1].qrsOn] : []));
+    expect(Math.abs(60000 / (vrr.reduce((s, x) => s + x, 0) / vrr.length) - 76)).toBeLessThan(1.5);
+    for (const b of v) expect(w(b)).toBeGreaterThanOrEqual(120);
+    const ci = t.beats.findIndex((b) => b.kind === 'capture');
+    const cap = t.beats[ci];
+    const fus = t.beats.find((b) => b.kind === 'fusion')!;
+    expect(w(cap)).toBeLessThan(110);
+    expect(cap.qrsOn - t.beats[ci - 1].qrsOn).toBeLessThan(Math.min(...vrr) - 200);
+    expect(w(fus)).toBeGreaterThan(w(cap));
+    expect(w(fus)).toBeLessThan(w(v[0]));
   });
   it('contrast: junctional about 46/min narrow vs ventricular about 32/min wide', () => {
     const c = blocksOf('r2', 'contrast')[0];

@@ -71,18 +71,44 @@ const lesson: Lesson = {
       showConduction: true,
       emphasize: ['av-node', 'his'],
       caption: l(
-        '播放几个心动周期。窦房结仍在规律放电（78 次/分），但每个激动都在房室结被完全阻断；交界区的逸搏起搏点以 45 次/分接管心室，QRS 窄——因为它在束支分叉之上出口。逸搏是救援，不是敌人：没有它，心室将停搏。',
-        'Play a few beats. The sinus node still fires regularly (78/min), but every impulse is blocked completely in the AV node; a junctional escape pacemaker takes over the ventricles at 45/min with a narrow QRS, because it exits above the bundle-branch fork. The escape is a rescue, not an enemy: without it the ventricles would stand still.',
-        'Reproduce unos latidos. El nodo sinusal sigue disparando de forma regular (78 lpm), pero cada impulso se bloquea por completo en el nodo AV; un marcapasos de escape de la unión toma los ventrículos a 45 lpm con un QRS estrecho, porque sale por encima de la bifurcación del haz. El escape es un rescate, no un enemigo: sin él, los ventrículos se pararían.',
+        '窦房结（60–100）平时压住下位起搏点。这里它仍按 78 次/分放电，但每个冲动都停在房室结；交界区（35–60）以 45 次/分接管，QRS 窄。心室自身只有 20–40，QRS 宽。',
+        'The sinus node (60-100) normally keeps the lower pacemakers quiet. Here it still fires at 78/min, but every impulse stops in the AV node; the junction (35-60) takes over at 45/min with a narrow QRS. The ventricles alone manage 20-40, with a wide QRS.',
+        'El nodo sinusal (60-100) mantiene callados a los marcapasos inferiores. Aquí sigue disparando a 78 lpm, pero cada impulso se detiene en el nodo AV; la unión (35-60) toma el relevo a 45 lpm con QRS estrecho. Los ventrículos solos dan 20-40, con QRS ancho.',
       ),
     },
     {
-      kind: 'text',
-      title: l('起搏点等级，以及为什么逸搏总是迟到', 'The pacemaker hierarchy, and why escapes are always late', 'La jerarquía de marcapasos y por qué los escapes siempre son tardíos'),
-      body: l(
-        '心脏里到处都有起搏细胞，按位置排成频率等级：\n- 窦房结 60–100 次/分——最快，平时统治全局；\n- 房室交界区 35–60 次/分——窄 QRS；\n- 心室（希氏束-浦肯野系统与心肌）20–40 次/分——宽 QRS。\n上位起搏点平时超速抑制下位者；一旦上位停摆或传导中断，下位起搏点就按自己的固有频率冒出来。\n**逸搏总是迟到的**：它出现在一次长间歇或停搏**之后**，是被动接管。这与期前收缩正好相反——期前收缩**提前**出现、主动抢跑（见 r5）。看到宽大或形态异常的搏动，先问“早还是晚”，逸搏与期前收缩的鉴别就完成了一半。',
-        'Pacemaker cells sit throughout the heart, ranked by position:\n- sinus node 60-100/min — fastest, normally rules;\n- AV junction 35-60/min — narrow QRS;\n- ventricles (His-Purkinje system and muscle) 20-40/min — wide QRS.\nHigher centres normally overdrive-suppress the ones below; when a centre stops or conduction breaks, the next one down emerges at its own intrinsic rate.\n**An escape is always late**: it comes *after* a long pause, taking over passively. That is the opposite of a premature beat, which fires *early* and usurps the rhythm (r5). When you meet a wide or odd-looking beat, ask "early or late?" — half the escape-versus-extrasystole distinction is done.',
-        'Hay células marcapasos en todo el corazón, ordenadas por posición según su frecuencia:\n- nodo sinusal 60-100 lpm: el más rápido, normalmente manda;\n- unión AV 35-60 lpm: QRS estrecho;\n- ventrículos (sistema de His-Purkinje y miocardio) 20-40 lpm: QRS ancho.\nLos centros superiores suprimen a los inferiores por sobreestimulación; cuando uno se detiene o la conducción se interrumpe, el siguiente emerge a su frecuencia intrínseca.\n**Un escape siempre es tardío**: aparece *después* de una pausa larga, tomando el relevo de forma pasiva. Es justo lo contrario de la extrasístole, que aparece *precoz* y usurpa el ritmo (r5). Ante un latido ancho o de morfología rara, pregúntate «¿precoz o tardío?»: tendrás media distinción hecha entre escape y extrasístole.',
+      kind: 'film',
+      title: l('逸搏：总是迟到，宽窄说出阻滞水平', 'Escapes: always late, and the width names the level', 'Escapes: siempre tardíos, y la anchura dice el nivel'),
+      view: STRIP,
+      frames: [
+        {
+          label: l('交界性逸搏', 'Junctional escape', 'Escape de la unión'),
+          ecg: synth('sinus-pause', 429, undefined, 'escape'),
+          note: l('窦房结停了。交界区等满自己的周期（约 1.43 秒）才放电：窄 QRS，前面没有 P。逸搏总是迟到。', 'The sinus node stops. The junction waits out its own cycle (about 1.43 s) before firing: a narrow QRS with no P before it. Escapes are always late.', 'El nodo sinusal se detiene. La unión espera su propio ciclo (unos 1,43 s) antes de disparar: QRS estrecho sin P delante. Los escapes siempre llegan tarde.'),
+          marks: [{ auto: 'rr', beat: 4 }],
+        },
+        {
+          label: l('阻滞在房室结', 'Block in the AV node', 'Bloqueo en el nodo AV'),
+          ecg: synth('av-block-3', 422),
+          note: l('P 以 78 次/分规律穿行，一个也不下传。逸搏 45 次/分、QRS 窄：起搏点在束支分叉之上。', 'P waves march at 78/min and none conducts. The escape runs at 45/min with a narrow QRS: the pacemaker sits above the bundle-branch fork.', 'Las P desfilan a 78 lpm y ninguna conduce. El escape va a 45 lpm con QRS estrecho: el marcapasos está por encima de la bifurcación del haz.'),
+          marks: [{ auto: 'blocked-p' }, { auto: 'qrs' }],
+        },
+        {
+          label: l('阻滞在希氏束下', 'Block below the His', 'Bloqueo infrahisiano'),
+          ecg: synth('av-block-3', 423, undefined, 'infra-his'),
+          note: l('P 仍是 78 次/分、全部被阻断，但逸搏只有 34 次/分、QRS 宽：起搏点在心室，更慢、更不可靠。', 'The P waves still run at 78/min, all blocked, but the escape manages only 34/min with a wide QRS: a ventricular pacemaker, slower and less reliable.', 'Las P siguen a 78 lpm, todas bloqueadas, pero el escape solo da 34 lpm con QRS ancho: un marcapasos ventricular, más lento y menos fiable.'),
+          marks: [{ auto: 'blocked-p' }, { auto: 'qrs' }],
+        },
+      ],
+      predict: {
+        question: l('阻滞从房室结移到希氏束以下，逸搏会怎样？', 'If the block moves from the AV node to below the His bundle, what happens to the escape?', 'Si el bloqueo pasa del nodo AV a debajo del haz de His, ¿qué le ocurre al escape?'),
+        options: [l('更快、更窄', 'Faster and narrower', 'Más rápido y más estrecho'), l('更慢、更宽', 'Slower and wider', 'Más lento y más ancho'), l('频率和宽度都不变', 'Same rate, same width', 'Igual frecuencia e igual anchura')],
+        answer: 1,
+      },
+      caption: l(
+        '逸搏是迟到的救援：窄 → 起搏点在房室结/希氏束；宽而慢 → 在希氏束以下。永远不要抑制它。',
+        'An escape is a late rescue: narrow → the pacemaker is in the AV node or His; wide and slow → below the His. Never suppress it.',
+        'Un escape es un rescate tardío: estrecho → el marcapasos está en el nodo AV o el His; ancho y lento → por debajo del His. Nunca lo suprimas.',
       ),
     },
     {
@@ -137,43 +163,33 @@ const lesson: Lesson = {
             'Nunca suprimas un escape: trata la causa y estimula la bradicardia sintomática; el RIVA no necesita antiarrítmicos',
           ),
         },
+        {
+          label: l('房室分离', 'AV dissociation', 'Disociación AV'),
+          value: l(
+            '心房与心室各自独立活动；是描述，不是诊断。无阻滞时室率 ≥ 房率，有阻滞时房率更快',
+            'Atria and ventricles beat independently; a description, not a diagnosis. Without block the ventricular rate equals or exceeds the atrial rate; with block the atria are faster',
+            'Aurículas y ventrículos laten de forma independiente; una descripción, no un diagnóstico. Sin bloqueo, la frecuencia ventricular iguala o supera a la auricular; con bloqueo, las aurículas van más rápido',
+          ),
+        },
+        {
+          label: l('房室分离的三种机制', 'The three mechanisms of AV dissociation', 'Los tres mecanismos de la disociación AV'),
+          value: l(
+            '默认：窦房结减慢或停搏，逸搏接管；抢位：下位起搏点加速超过窦性（加速性交界性心律、AIVR、室速）；阻滞：二度或三度房室阻滞',
+            'Default: the sinus node slows or stops and an escape takes over; usurpation: a lower pacemaker speeds past the sinus rate (accelerated junctional rhythm, AIVR, VT); block: second- or third-degree AV block',
+            'Por defecto: el nodo sinusal se frena o se detiene y un escape toma el relevo; por usurpación: un marcapasos inferior supera al sinusal (ritmo de la unión acelerado, RIVA, TV); por bloqueo: bloqueo AV de segundo o tercer grado',
+          ),
+        },
+        {
+          label: l('夺获与融合波', 'Captures and fusion beats', 'Capturas y latidos de fusión'),
+          value: l(
+            '夺获：一个 P 恰好下传，QRS 提前（与室性心律竞争时更窄）；融合：两个起搏点同时除极心室，形态居中。分型：完全性、不完全性（有夺获）、等频性',
+            'Capture: a P gets through and the QRS comes early (narrower when it competes with a ventricular rhythm); fusion: both pacemakers depolarise the ventricles together, giving an intermediate shape. Types: complete, incomplete (with captures), isorhythmic',
+            'Captura: una P pasa y el QRS llega precoz (más estrecho si compite con un ritmo ventricular); fusión: ambos marcapasos despolarizan los ventrículos a la vez y dan una morfología intermedia. Tipos: completa, incompleta (con capturas), isorrítmica',
+          ),
+        },
       ],
       source:
         'Kusumoto FM et al. 2018 ACC/AHA/HRS Guideline on Bradycardia and Cardiac Conduction Delay. Circulation 2019;140:e382-e482; Al-Khatib SM et al. 2017 AHA/ACC/HRS Guideline for Management of Patients With Ventricular Arrhythmias and the Prevention of Sudden Cardiac Death. Circulation 2018;138:e272-e307; Mason JW et al. AHA/ACCF/HRS Part II: Electrocardiography diagnostic statement list. Circulation 2007;115:1325-1332',
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('av-block-3', 423, undefined, 'infra-his'),
-      view: STRIP,
-      marks: [
-        { auto: 'p', label: l('窦性 P（与 QRS 无关）', 'Sinus P (unrelated to the QRS)', 'P sinusal (independiente del QRS)') },
-        { auto: 'qrs', label: l('宽大室性逸搏', 'Wide ventricular escape', 'Escape ventricular ancho') },
-      ],
-      caption: l(
-        '同一类病，但这次阻滞在希氏束以下：逸搏来自心室（34 次/分），QRS 宽大、呈束支阻滞形，P 波仍在规则地穿行。对照上一张图——**阻滞的水平决定逸搏的形态**：窄 → 房室结/希氏束；宽 → 希氏束下。描述逸搏的宽度，就等于免费得到了一份阻滞定位。',
-        'The same disease, but now the block is below the His bundle: the escape comes from a ventricle (34/min), the QRS is wide and bundle-branch-like, and the P waves still march regularly through. Compare with the previous tracing: **the level of the block sets the shape of the escape** — narrow → AV node/His; wide → infra-His. Describing the escape QRS gives you a free localisation of the block.',
-        'La misma enfermedad, pero ahora el bloqueo está por debajo del haz de His: el escape nace en un ventrículo (34 lpm), el QRS es ancho, con morfología de bloqueo de rama, y las ondas P siguen desfilando de forma regular. Compárala con el trazado anterior: **el nivel del bloqueo determina la forma del escape**: estrecho → nodo AV/haz de His; ancho → infrahisiano. Describir la anchura del QRS de escape equivale a localizar gratis el nivel del bloqueo.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('房室分离：描述，不是诊断', 'AV dissociation: a description, not a diagnosis', 'Disociación AV: una descripción, no un diagnóstico'),
-      body: l(
-        '“房室分离”只说明**心房与心室各自独立活动**（无阻滞时室率 ≥ 房率；阻滞时房率更快）；它本身不是诊断，必须追问机制：\n- **默认**：窦房结减慢或停搏，下位逸搏接管——各种逸搏心律；\n- **抢位**：下位起搏点加速、超过窦性频率——加速性交界性心律、AIVR、室速；\n- **阻滞**：激动根本过不了房室结——二度/三度房室传导阻滞。\n留意**心室夺获**（一个窦性 P 恰好下传：QRS 提前且更窄）与**融合波**（两个起搏点同时除极心室：形态居中）。三型描述：完全性、不完全性（有夺获）、等频性（两个频率几乎相等，P 在 QRS 周围缓缓漂移）。',
-        '"AV dissociation" only states that **the atria and ventricles beat independently** (without block the ventricular rate equals or exceeds the atrial rate; with block the atria are faster); it is not a diagnosis — always ask which mechanism:\n- **default**: the sinus node slows or stops and an escape below takes over (escape rhythms);\n- **usurpation**: a subsidiary pacemaker accelerates past the sinus rate (accelerated junctional rhythm, AIVR, VT);\n- **block**: impulses cannot cross the AV node at all (second-/third-degree AV block).\nWatch for **ventricular captures** (a sinus P gets through: an earlier, narrower QRS) and **fusion beats** (both pacemakers depolarise the ventricles together: an intermediate shape). Three descriptors: complete, incomplete (with captures) and isorhythmic (rates nearly equal, the P drifting slowly around the QRS).',
-        '«Disociación AV» solo dice que **aurículas y ventrículos laten de forma independiente** (sin bloqueo, la frecuencia ventricular iguala o supera a la auricular; con bloqueo, las aurículas van más rápido); no es un diagnóstico: pregunta siempre por el mecanismo:\n- **por defecto**: el nodo sinusal se frena o se detiene y un escape inferior toma el relevo (ritmos de escape);\n- **por usurpación**: un marcapasos subsidiario se acelera por encima del sinusal (ritmo de la unión acelerado, RIVA, TV);\n- **por bloqueo**: los impulsos no cruzan el nodo AV (bloqueo AV de segundo o tercer grado).\nBusca **capturas ventriculares** (una P sinusal pasa: un QRS más precoz y más estrecho) y **latidos de fusión** (ambos marcapasos despolarizan los ventrículos a la vez: morfología intermedia). Tres descriptores: completa, incompleta (con capturas) e isorrítmica (frecuencias casi iguales, la P deslizándose lentamente alrededor del QRS).',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('accelerated-junctional-rhythm', 424, undefined, 'isorhythmic'),
-      view: STRIP,
-      marks: [{ auto: 'p' }, { auto: 'qrs' }],
-      caption: l(
-        '窦性 70 次/分，交界区 76 次/分——下位起搏点加速超过了窦性频率，把心室“抢”了过去：等频性房室分离。P 波仍规则出现，却在 QRS 前后缓缓滑动，几乎都不能下传——只有偶尔一个落在合适时机的 P 能下传（心室夺获，例如条中部提前出现的那个 QRS）。典型背景：地高辛中毒、心脏手术后早期。这是“抢位”，不是阻滞。',
-        'Sinus 70/min, junction 76/min — the subsidiary pacemaker has accelerated past the sinus rate and stolen the ventricles: isorhythmic AV dissociation. P waves keep appearing regularly but slide slowly around the QRS and almost none conducts — only the occasional P that arrives at the right moment gets through (a capture, like the early QRS in mid-strip). Classic settings: digoxin toxicity, the early period after cardiac surgery. Usurpation, not block.',
-        'Sinusal 70 lpm, unión 76 lpm: el marcapasos subsidiario se ha acelerado por encima del sinusal y ha «robado» los ventrículos: disociación AV isorrítmica. Las ondas P siguen apareciendo de forma regular, pero se deslizan lentamente alrededor del QRS y casi ninguna conduce: solo alguna P que llega en el momento oportuno pasa (una captura, como el QRS precoz de la mitad de la tira). Contexto clásico: intoxicación por digoxina, postoperatorio cardíaco inmediato. Usurpación, no bloqueo.',
-      ),
     },
     {
       kind: 'worked',
@@ -220,14 +236,38 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'ecg',
-      ecg: synth('aivr', 426),
+      kind: 'film',
+      title: l('房室分离：说出机制', 'AV dissociation: name the mechanism', 'Disociación AV: nombra el mecanismo'),
       view: STRIP,
-      marks: [{ auto: 'qrs', label: l('室性 QRS', 'Ventricular QRS', 'QRS ventricular') }],
+      frames: [
+        {
+          label: l('交界区抢位', 'Junction usurps', 'Usurpa la unión'),
+          ecg: synth('accelerated-junctional-rhythm', 424, undefined, 'isorhythmic'),
+          note: l('窦性约 70、交界区约 76：下位起搏点跑赢窦房结（抢位）。P 在 QRS 旁漂移，偶尔下传一个。见于地高辛中毒、心脏术后。', 'Sinus about 70, junction about 76: the lower pacemaker outruns the sinus node (usurpation). The P drifts around the QRS; now and then one conducts. Seen in digoxin toxicity and after cardiac surgery.', 'Sinusal unos 70, unión unos 76: el marcapasos inferior adelanta al sinusal (usurpación). La P se desliza junto al QRS y alguna conduce. Se ve en la intoxicación digitálica y tras cirugía cardíaca.'),
+          marks: [{ auto: 'p' }, { auto: 'qrs' }],
+        },
+        {
+          label: l('心室抢位（AIVR）', 'Ventricle usurps (AIVR)', 'Usurpa el ventrículo (RIVA)'),
+          ecg: synth('aivr', 426),
+          note: l('宽 QRS 约 76 次/分，略快于窦性 72：AIVR。找夺获（窄、提前）和融合波（宽度居中）。再灌注后常见，良性。', 'Wide QRS at about 76/min, just faster than sinus at 72: AIVR. Find the capture (narrow, early) and the fusion beat (in-between width). Common after reperfusion, benign.', 'QRS ancho a unos 76 lpm, algo más rápido que el sinusal de 72: RIVA. Busca la captura (estrecha, precoz) y la fusión (anchura intermedia). Frecuente tras la reperfusión, benigno.'),
+          marks: [{ auto: 'qrs', label: l('室性 QRS', 'Ventricular QRS', 'QRS ventricular') }],
+        },
+        {
+          label: l('阻滞', 'Block', 'Bloqueo'),
+          ecg: synth('av-block-3', 422),
+          note: l('这次心房更快（78 对 45）：P 过不了房室结。阻滞型分离房率 > 室率；抢位时室率 ≥ 房率。', 'This time the atria are faster (78 vs 45): the P waves cannot cross the AV node. With block the atrial rate is higher; with usurpation the ventricles match or beat it.', 'Esta vez las aurículas van más rápido (78 frente a 45): las P no cruzan el nodo AV. Con bloqueo la frecuencia auricular es mayor; con usurpación los ventrículos la igualan o la superan.'),
+          marks: [{ auto: 'blocked-p' }],
+        },
+      ],
+      predict: {
+        question: l('心房 78 次/分、心室 45 次/分，P 与 QRS 无关。是哪种机制？', 'Atria at 78/min, ventricles at 45/min, P waves unrelated to the QRS. Which mechanism?', 'Aurículas a 78 lpm, ventrículos a 45 lpm, P sin relación con el QRS. ¿Qué mecanismo?'),
+        options: [l('默认（窦房结变慢）', 'Default (the sinus node slows)', 'Por defecto (el sinusal se frena)'), l('抢位（下位起搏点加速）', 'Usurpation (a lower pacemaker speeds up)', 'Usurpación (un marcapasos inferior se acelera)'), l('阻滞', 'Block', 'Bloqueo')],
+        answer: 2,
+      },
       caption: l(
-        '再灌注（急诊 PCI 后）的常见访客：室性焦点 76 次/分，与窦性 72 次/分几乎并驾齐驱——**加速性室性自主心律（AIVR）**。找融合波（形态介于两者之间）与夺获（窄、提前）。它通常良性、自限：**不需要抗心律失常药**，也不提示再灌注失败（判断再灌注看 ST 段回落）。',
-        'A frequent visitor after reperfusion (primary PCI): a ventricular focus at 76/min racing almost level with sinus at 72/min — **accelerated idioventricular rhythm (AIVR)**. Look for fusion beats (a shape between the two) and captures (narrow, early). It is usually benign and self-limited: **no antiarrhythmic needed**, and it does not signal failed reperfusion (judge reperfusion by ST resolution).',
-        'Un visitante frecuente tras la reperfusión (ICP primaria): un foco ventricular a 76 lpm que corre casi pareja con el sinusal de 72 lpm: **ritmo idioventricular acelerado (RIVA)**. Busca latidos de fusión (morfología intermedia) y capturas (estrechos, precoces). Suele ser benigno y autolimitado: **no necesita antiarrítmicos** y no indica fracaso de la reperfusión (esta se valora por la resolución del segmento ST).',
+        '“房室分离”只是描述。比较房率和室率，再写出机制：默认、抢位还是阻滞。',
+        '"AV dissociation" is only a description. Compare the atrial and ventricular rates, then write the mechanism: default, usurpation or block.',
+        '«Disociación AV» es solo una descripción. Compara las frecuencias auricular y ventricular y escribe el mecanismo: por defecto, usurpación o bloqueo.',
       ),
     },
     {
@@ -289,6 +329,11 @@ const lesson: Lesson = {
           '因为逸搏心律“规则、看起来稳定”而漏诊完全性房室阻滞：规则的是逸搏，不是房室传导——必须先找 P 波。',
           'Missing complete AV block because the escape is regular and "looks stable": it is the escape that is regular, not AV conduction — hunt for the P waves first.',
           'No diagnosticar un bloqueo AV completo porque el escape es regular y «parece estable»: lo regular es el escape, no la conducción AV: busca primero las ondas P.',
+        ),
+        l(
+          '把再灌注后的 AIVR 当成再灌注失败：它不说明血管没开通，判断再灌注看 ST 段回落。',
+          'Reading AIVR after reperfusion as failed reperfusion: it says nothing about the artery; judge reperfusion by ST resolution.',
+          'Interpretar el RIVA tras la reperfusión como fracaso de la reperfusión: no informa sobre la arteria; la reperfusión se valora por la resolución del ST.',
         ),
       ],
     },
