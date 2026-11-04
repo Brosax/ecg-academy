@@ -312,10 +312,9 @@ const lesson: Lesson = {
         },
       ],
       predict: {
-        question: l('V1 同样是 rsR′，但全局 QRS 约 114 ms。该叫什么？', 'V1 shows the same rsR′, but the global QRS is about 114 ms. What do you call it?', 'V1 muestra la misma rsR′, pero el QRS global mide unos 114 ms. ¿Cómo lo llamas?'),
-        options: [l('正常变异', 'A normal variant', 'Una variante normal'), l('不完全性右束支阻滞', 'Incomplete RBBB', 'BRD incompleto'), l('完全性右束支阻滞', 'Complete RBBB', 'BRD completo')],
-        answer: 1,
-        ordered: true,
+        question: l('第 3 帧里有些搏动是宽的。宽搏动跟在什么之后？', 'In frame 3 some beats are wide. What do the wide beats come after?', 'En el fotograma 3 algunos latidos son anchos. ¿Qué precede a los latidos anchos?'),
+        options: [l('较短的周期', 'A shorter cycle', 'Un ciclo más corto'), l('较长的周期', 'A longer cycle', 'Un ciclo más largo'), l('没有规律', 'No pattern', 'Ningún patrón')],
+        answer: 0,
       },
       caption: l(
         '先全局量 QRS 再命名：≥120 ms 完全性，110–119 ms 不完全性。宽窄随周期变化 = 频率依赖性。',

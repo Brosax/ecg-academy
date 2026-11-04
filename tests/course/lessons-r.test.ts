@@ -9,7 +9,7 @@ import type { AutoMark, Block, Lesson, LessonMark } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
 import { REGISTERED } from '../../src/course/lessons/index';
 import { realisedDials, startDials } from '../../src/course/live';
-import { baselineBefore, isAutoMark, MIN_WAVE_MV, qrsWaves } from '../../src/course/marks';
+import { baselineBefore, isAutoMark, MIN_WAVE_MV, qrsWaves, resolveMarks } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
 import type { L10n } from '../../src/core/l10n';
@@ -476,6 +476,9 @@ describe('r2: escape and dissociation on the tracings', () => {
     const early = r.flatMap((x, i) => (x < 0.6 * r[k] ? [i + 1] : []));
     expect(early, 'two early beats').toHaveLength(2);
     for (const i of early) expect(t.beats[i].kind, `early beat ${i}`).toBe('sinus');
+    const conducted = t.atrial.flatMap((a) => (a.conductedTo !== null ? [a.conductedTo] : []));
+    expect(conducted, 'the only P waves that conduct are those of the two early beats').toEqual(early);
+    expect(stepBeats('r2', 1, 'p'), 'the PP step boxes the conducted P waves too, not only the blocked ones').toEqual(conducted);
     const [c] = stepBeats('r2', 2, 'qrs');
     expect(early).toContain(c);
     const cap = t.beats[c];
@@ -528,14 +531,14 @@ describe('r2: escape and dissociation on the tracings', () => {
 });
 
 describe('r3: first degree and Mobitz I on the tracings', () => {
-  it('worked: PR about 150 → 280, pause about 1470 ms (< 2 x PP)', () => {
+  it('worked: PR about 145 → 280, pause about 1465 ms (< 2 x PP)', () => {
     const e = ecgOf(blocksOf('r3', 'worked')[0].ecg);
     const p = prs(e);
-    expect(Math.abs(Math.min(...p) - 150)).toBeLessThan(10);
+    expect(Math.abs(Math.min(...p) - 145)).toBeLessThan(10);
     expect(Math.abs(Math.max(...p) - 280)).toBeLessThan(10);
-    expect(Math.abs(Math.max(...rrs(e)) - 1470)).toBeLessThan(40);
+    expect(Math.abs(Math.max(...rrs(e)) - 1465)).toBeLessThan(40);
   });
-  it('worked marks: one cycle PR about 150 → 235 → 275 ms, RR about 890 → 840 ms, then the pause about 1470 ms; the PRs either side of it about 275 and 150 ms', () => {
+  it('worked marks: one cycle PR about 145 → 235 → 280 ms (increments about 90, then 45); on that cycle PP about 800 and RR about 800 + 90 = 890 → 800 + 45 = 845 ms; the pause about 1600 − (90 + 45) = 1465 ms; the PRs either side of it about 280 and 145 ms', () => {
     const e = ecgOf(blocksOf('r3', 'worked')[0].ecg);
     const b = e.truth!.beats;
     const r = rrs(e);
@@ -544,17 +547,20 @@ describe('r3: first degree and Mobitz I on the tracings', () => {
     expect(cycle).toHaveLength(3);
     expect(cycle.map((i) => i - cycle[0])).toEqual([0, 1, 2]);
     expect(r[cycle[0] - 1], 'the cycle starts after a pause').toBeGreaterThan(1300);
-    [150, 235, 275].forEach((v, k) => expect(Math.abs(pr(cycle[k]) - v), `PR ${k + 1}`).toBeLessThanOrEqual(5));
+    [145, 235, 280].forEach((v, k) => expect(Math.abs(pr(cycle[k]) - v), `PR ${k + 1}`).toBeLessThanOrEqual(5));
+    expect(Math.abs(pr(cycle[1]) - pr(cycle[0]) - 90), 'first increment').toBeLessThanOrEqual(5);
+    expect(Math.abs(pr(cycle[2]) - pr(cycle[1]) - 45), 'second increment').toBeLessThanOrEqual(5);
+    for (const k of [0, 1]) expect(Math.abs((b[cycle[k + 1]].pOn ?? 0) - (b[cycle[k]].pOn ?? 0) - 800), `PP ${k + 1}`).toBeLessThanOrEqual(5);
     const rrMarks = stepBeats('r3', 2, 'rr');
-    expect(rrMarks.map((i) => i - rrMarks[0])).toEqual([0, 1]);
-    expect(r[rrMarks[0] - 1], 'the bracketed RRs open a cycle').toBeGreaterThan(1300);
-    [890, 840].forEach((v, k) => expect(Math.abs(r[rrMarks[k]] - v), `RR ${k + 1}`).toBeLessThanOrEqual(5));
+    expect(rrMarks, 'the RR brackets sit on the cycle the PR marks are on').toEqual(cycle.slice(0, 2));
+    [890, 845].forEach((v, k) => expect(Math.abs(r[rrMarks[k]] - v), `RR ${k + 1}`).toBeLessThanOrEqual(5));
     const [last, first] = stepBeats('r3', 3, 'pr');
     expect(last).toBe(cycle[2]);
     expect(first).toBe(last + 1);
-    expect(Math.abs(r[last] - 1470), 'the pause').toBeLessThanOrEqual(5);
-    expect(Math.abs(pr(last) - 275)).toBeLessThanOrEqual(5);
-    expect(Math.abs(pr(first) - 150)).toBeLessThanOrEqual(5);
+    expect(Math.abs(pr(last) - pr(first) - 135), 'total increment').toBeLessThanOrEqual(5);
+    expect(Math.abs(r[last] - 1465), 'the pause').toBeLessThanOrEqual(5);
+    expect(Math.abs(pr(last) - 280)).toBeLessThanOrEqual(5);
+    expect(Math.abs(pr(first) - 145)).toBeLessThanOrEqual(5);
   });
   it('5:4 film marks: the four PRs of one cycle, the first right after a pause', () => {
     const e = frames('r3', 0)[2];
@@ -646,16 +652,18 @@ describe('r4: Mobitz II to complete block on the tracings', () => {
     expect(sMs(right, 'V6', mid(right)), 'V6 S duration').toBeGreaterThan(40);
     for (const t of [a, b]) expect(Math.abs((t.atrialRateBpm ?? 0) / t.hrBpm - 2)).toBeLessThan(0.1);
   });
-  it('five-questions contrast: left PR lengthens over the marked cycle into the drop, narrow; right PR constant either side of the drop, wide RBBB', () => {
+  it('five-questions contrast: left PR lengthens over the marked cycle into the drop and the first PR after the pause is the shortest, narrow; right PR constant either side of the drop, wide RBBB', () => {
     const c = blocksOf('r4', 'contrast')[1];
     const left = ecgOf(c.left.ecg);
     const lb = left.truth!.beats;
     const lp = sideBeats('r4', 1, 'left', 'pr');
-    expect(lp.map((i) => i - lp[0])).toEqual([0, 1, 2]);
+    expect(lp.map((i) => i - lp[0])).toEqual([0, 1, 2, 3]);
     const lpr = lp.map((i) => lb[i].qrsOn - (lb[i].pOn ?? 0));
     expect(lpr[1]).toBeGreaterThan(lpr[0] + 50);
     expect(lpr[2]).toBeGreaterThan(lpr[1] + 20);
-    expect(rrs(left)[lp[2]], 'a P drops after the last marked PR').toBeGreaterThan(1300);
+    expect(rrs(left)[lp[2]], 'a P drops after the third marked PR').toBeGreaterThan(1300);
+    expect(lpr[3], 'the fourth mark, first after the pause, is far shorter than the last before it').toBeLessThan(lpr[2] - 100);
+    expect(lpr[3] - Math.min(...prs(left)), 'and the shortest PR on the strip').toBeLessThan(1);
     expect(left.truth!.qrsMs).toBeLessThan(110);
     const right = ecgOf(c.right.ecg);
     const rb = right.truth!.beats;
@@ -667,7 +675,7 @@ describe('r4: Mobitz II to complete block on the tracings', () => {
     expect(right.truth!.findings).toContain('rbbb');
     expect(v1Shape(right)).toMatch(/^r s r'$/);
   });
-  it('high-grade (ladder film frame 4): 3:1 — runs of two blocked P waves, atria about 96/min, ventricles about 32/min', () => {
+  it('high-grade (ladder film frame 4): 3:1 — runs of two blocked P waves (the prediction), atria about 96/min, ventricles about 32/min', () => {
     const t = frames('r4', 0)[3].truth!;
     let run = 0;
     let maxRun = 0;
@@ -676,8 +684,14 @@ describe('r4: Mobitz II to complete block on the tracings', () => {
       maxRun = Math.max(maxRun, run);
     }
     expect(maxRun).toBe(2);
-    expect(Math.abs(t.atrialRateBpm! - 96)).toBeLessThan(2);
-    expect(Math.abs(t.hrBpm - 32)).toBeLessThan(1);
+    const cond = t.atrial.flatMap((a, i) => (a.conductedTo !== null ? [i] : []));
+    for (let i = 1; i < cond.length; i++) expect(cond[i] - cond[i - 1], 'one P in three conducts').toBe(3);
+    expect(Math.abs(t.atrialRateBpm! - 96)).toBeLessThanOrEqual(1);
+    expect(Math.abs(t.hrBpm - 32)).toBeLessThanOrEqual(1);
+    const p = blocksOf('r4', 'film')[0].predict!;
+    expect(p.ordered).toBe(true);
+    expect(p.options.map((o) => o.en)).toEqual(['1', '2', '3']);
+    expect(Number(p.options[p.answer].en), 'the answer is the longest run of blocked P waves').toBe(maxRun);
   });
   it('heart: P at 75/min, PR 160 ms on every conducted beat, every fourth P blocked, RBBB', () => {
     const e = ecgOf(blocksOf('r4', 'heart')[0].ecg);
@@ -1006,11 +1020,14 @@ describe('r6: bundle branch block on the tracings', () => {
     expect(shape(b, 'V6', bb).startsWith('q')).toBe(false);
     expect(qrsSpan(b, 'V6', bb).max).toBeGreaterThan(3 * -qrsSpan(b, 'V6', bb).min);
   });
-  it('rate-dependent LBBB (width film frame 3): wide beats end shorter cycles than narrow ones and take an LBBB shape (V1 rS, no q and a late R peak in I and V6); same PR; the marks sit on a wide beat', () => {
+  it('rate-dependent LBBB (width film frame 3): wide beats end shorter cycles than narrow ones (the prediction) and take an LBBB shape (V1 rS, no q and a late R peak in I and V6); same PR; the marks sit on a wide beat', () => {
     const e = frames('r6', 0)[2];
     const beats = e.truth!.beats;
     const cyc = beats.slice(1).map((b, i) => ({ rr: b.qrsOn - beats[i].qrsOn, wide: b.aberrant }));
     expect(Math.max(...cyc.filter((c) => c.wide).map((c) => c.rr))).toBeLessThan(Math.min(...cyc.filter((c) => !c.wide).map((c) => c.rr)));
+    const guess = blocksOf('r6', 'film')[0].predict!;
+    expect(guess.ordered, 'shorter / longer / no pattern is not a scale').toBeUndefined();
+    expect(guess.options[guess.answer].en).toBe('A shorter cycle');
     const p = prs(e);
     expect(Math.max(...p) - Math.min(...p)).toBeLessThan(5);
     const wide = beats.filter((b) => b.aberrant);
@@ -1152,7 +1169,7 @@ describe('r7: fascicular blocks on the tracings', () => {
 });
 
 describe('r8: ladders on the tracings', () => {
-  /** a blocked PAC strip: the P′ is early, sits on the T of the beat before it, and the pause it leaves is shorter than 2 x PP */
+  /** a blocked PAC strip: the P′ is early, sits on the T of the beat before it, the pause it leaves is longer than one PP and shorter than 2 x PP, and the P′ resets the sinus node */
   const blockedPac = (e: Ecg, what: string) => {
     const t = e.truth!;
     const ectopic = t.atrial.filter((a) => a.kind === 'ectopic');
@@ -1167,8 +1184,14 @@ describe('r8: ladders on the tracings', () => {
     expect(p.t, `${what}: the P′ sits on the T`).toBeGreaterThan(t.beats[k].j);
     expect(p.t, `${what}: the P′ sits on the T`).toBeLessThan(t.beats[k].tOff);
     expect(rrs(e)[k], `${what}: the pause is shorter than 2 x PP`).toBeLessThan(2 * mean(pp));
+    expect(rrs(e)[k], `${what}: the pause is longer than one PP`).toBeGreaterThan(mean(pp));
+    const next = Math.min(...sinus.filter((x) => x > p.t));
+    expect(next, `${what}: the next sinus P comes well before its old slot (prev + 2 x PP)`).toBeLessThan(prev + 1.75 * mean(pp));
+    const restart = (next - p.t) / mean(pp);
+    expect(restart, `${what}: the sinus node restarts its cycle from the P′`).toBeGreaterThan(1);
+    expect(restart, `${what}: the sinus node restarts its cycle from the P′`).toBeLessThan(1.25);
   };
-  it('hook and contrast A: blocked PACs — the P′ is early, on the T, and the pause after it is shorter than 2 x PP', () => {
+  it('hook and contrast A: blocked PACs — the P′ is early, on the T, the pause after it is longer than one PP and shorter than 2 x PP, and the P′ resets the sinus node', () => {
     blockedPac(ecgOf(blocksOf('r8', 'hook')[0].ecg), 'hook');
     blockedPac(ecgOf(blocksOf('r8', 'contrast')[0].left.ecg), 'contrast A');
   });
@@ -1208,6 +1231,10 @@ describe('r8: ladders on the tracings', () => {
     const lastP = beats[rr[3]].pOn ?? 0;
     const dropped = t.atrial.find((a) => a.conductedTo === null && a.t > lastP && a.t < beats[rr[3] + 1].qrsOn);
     expect(dropped, 'one P in the cycle is not conducted').toBeDefined();
+    const blockedSeen = t.atrial.filter((a) => a.conductedTo === null && a.visible);
+    expect(blockedSeen).toContain(dropped);
+    const drawn = resolveMarks(e, blocksOf('r8', 'worked')[0].steps[1].marks, { layout: 'strip', lead: 'II' });
+    expect(drawn.length, 'step 2 draws the four conducted P waves of the cycle and every blocked P on the strip').toBe(4 + blockedSeen.length);
     const fiveP = [...rr.map((i) => beats[i].pOn ?? 0), dropped!.t];
     const gaps = fiveP.slice(1).map((x, i) => x - fiveP[i]);
     for (const x of gaps) expect(Math.abs(x / mean(gaps) - 1), 'evenly spaced').toBeLessThan(0.03);

@@ -197,9 +197,9 @@ const lesson: Lesson = {
         {
           title: l('逐搏量 PR', 'Measure the PR beat by beat', 'Mide el PR latido a latido'),
           body: l(
-            'PR 逐搏延长：约 150 → 235 → 275 ms。增量在缩小：约 85，再约 40 ms——最大的增量出现在第 2 搏。',
-            'The PR lengthens beat by beat: about 150 → 235 → 275 ms. The increments shrink: about 85, then about 40 ms — the largest increment comes on the 2nd beat.',
-            'El PR se alarga latido a latido: unos 150 → 235 → 275 ms. Los incrementos se reducen: unos 85 y luego unos 40 ms; el mayor incremento cae en el 2.º latido.',
+            'PR 逐搏延长：约 145 → 235 → 280 ms。增量在缩小：约 90，再约 45 ms——最大的增量出现在第 2 搏。',
+            'The PR lengthens beat by beat: about 145 → 235 → 280 ms. The increments shrink: about 90, then about 45 ms — the largest increment comes on the 2nd beat.',
+            'El PR se alarga latido a latido: unos 145 → 235 → 280 ms. Los incrementos se reducen: unos 90 y luego unos 45 ms; el mayor incremento cae en el 2.º latido.',
           ),
           marks: [{ auto: 'pr', beat: 4 }, { auto: 'pr', beat: 5 }, { auto: 'pr', beat: 6 }],
           view: { layout: 'strip', lead: 'II', calipers: true },
@@ -207,18 +207,18 @@ const lesson: Lesson = {
         {
           title: l('RR 逐搏缩短', 'The RR shortens beat by beat', 'El RR se acorta latido a latido'),
           body: l(
-            '每个 RR = PP + 该搏的 PR 增量。PP ≈ 800 ms，所以 RR ≈ 890 → 840 ms：因为增量在缩小，RR 在缩短——文氏周期里的“渐快”。',
-            'Each RR = PP + that beat\'s PR increment. The PP is about 800 ms, so the RR runs about 890 → 840 ms: because the increments shrink, the RR shortens — the "quickening" inside a Wenckebach cycle.',
-            'Cada RR = PP + el incremento del PR de ese latido. El PP es de unos 800 ms, así que el RR va de unos 890 → 840 ms: como los incrementos se reducen, el RR se acorta, la «aceleración» dentro del ciclo de Wenckebach.',
+            '每个 RR = PP + 该搏的 PR 增量。PP ≈ 800 ms，所以 RR ≈ 800 + 90 = 890 → 800 + 45 = 845 ms：因为增量在缩小，RR 在缩短——文氏周期里的“渐快”。',
+            'Each RR = PP + that beat\'s PR increment. The PP is about 800 ms, so the RR runs about 800 + 90 = 890 → 800 + 45 = 845 ms: because the increments shrink, the RR shortens — the "quickening" inside a Wenckebach cycle.',
+            'Cada RR = PP + el incremento del PR de ese latido. El PP es de unos 800 ms, así que el RR va de unos 800 + 90 = 890 → 800 + 45 = 845 ms: como los incrementos se reducen, el RR se acorta, la «aceleración» dentro del ciclo de Wenckebach.',
           ),
-          marks: [{ auto: 'rr', beat: 1 }, { auto: 'rr', beat: 2 }],
+          marks: [{ auto: 'rr', beat: 4 }, { auto: 'rr', beat: 5 }],
         },
         {
           title: l('间歇与最可靠的征象', 'The pause, and the most reliable sign', 'La pausa y el signo más fiable'),
           body: l(
-            '间歇 ≈ 2×PP − 总增量 ≈ 1600 − 130 = 1470 ms，**小于 2×PP**。间歇后第一个 PR（约 150 ms）明显短于间歇前最后一个 PR（约 275 ms）——这是 Mobitz I 最可靠的征象，在非典型序列中也成立。窄 QRS、P 率 < 100：**Mobitz I，房室结水平**。',
-            'The pause is about 2 x PP − total increment ≈ 1600 − 130 = 1470 ms, **shorter than 2 x PP**. And the first PR after the pause (about 150 ms) is clearly shorter than the last PR before it (about 275 ms) — the most reliable sign of Mobitz I, valid even in atypical sequences. Narrow QRS, P rate < 100: **Mobitz I at the AV-node level**.',
-            'La pausa es unos 2 x PP − incremento total ≈ 1600 − 130 = 1470 ms, **menor de 2 x PP**. Y el primer PR tras la pausa (unos 150 ms) es claramente más corto que el último PR previo (unos 275 ms): el signo más fiable del Mobitz I, válido incluso en secuencias atípicas. QRS estrecho y frecuencia de P < 100: **Mobitz I a nivel del nodo AV**.',
+            '间歇 ≈ 2×PP − 总增量 ≈ 1600 − (90 + 45) = 1465 ms，**小于 2×PP**。间歇后第一个 PR（约 145 ms）明显短于间歇前最后一个 PR（约 280 ms）——这是 Mobitz I 最可靠的征象，在非典型序列中也成立。窄 QRS、P 率 < 100：**Mobitz I，房室结水平**。',
+            'The pause is about 2 x PP − total increment ≈ 1600 − (90 + 45) = 1465 ms, **shorter than 2 x PP**. And the first PR after the pause (about 145 ms) is clearly shorter than the last PR before it (about 280 ms) — the most reliable sign of Mobitz I, valid even in atypical sequences. Narrow QRS, P rate < 100: **Mobitz I at the AV-node level**.',
+            'La pausa es unos 2 x PP − incremento total ≈ 1600 − (90 + 45) = 1465 ms, **menor de 2 x PP**. Y el primer PR tras la pausa (unos 145 ms) es claramente más corto que el último PR previo (unos 280 ms): el signo más fiable del Mobitz I, válido incluso en secuencias atípicas. QRS estrecho y frecuencia de P < 100: **Mobitz I a nivel del nodo AV**.',
           ),
           marks: [{ auto: 'blocked-p' }, { auto: 'pr', beat: 6 }, { auto: 'pr', beat: 7 }],
         },
@@ -274,9 +274,9 @@ const lesson: Lesson = {
         marks: [{ auto: 'blocked-p' }],
       },
       point: l(
-        '两侧都有一个“没有 QRS 的 P”，但机制不同。A 的 P **按时到达、形态正常**，P 率恒定（< 100 次/分）——真文氏。B 的未下传 P′ **提前**出现、形态变形、骑在前一个 T 波上——**假性房室传导阻滞**：房早来得太早，房室结还处于不应期。诊断任何二度阻滞之前：确认 P 率恒定 < 100、P 波为窦性形态，并逐个对比 T 波形状，找出藏在里面的 P′。',
-        'Both sides show "a P with no QRS", but the mechanisms differ. In A the P arrives **on time with a normal shape** and the P rate is constant (< 100/min) — true Wenckebach. In B the non-conducted P′ comes **early**, deformed, riding on the previous T wave — **pseudo-AV block**: the atrial extrasystole was so premature that the AV node was still refractory. Before diagnosing any second-degree block: confirm a constant P rate < 100 and sinus P morphology, and compare T-wave shapes one by one to find the P′ hiding inside.',
-        'Ambos lados muestran «una P sin QRS», pero los mecanismos difieren. En A la P llega **a tiempo con morfología normal** y la frecuencia de P es constante (< 100 lpm): Wenckebach verdadero. En B la P′ no conducida aparece **precoz**, deformada, cabalgando sobre la T anterior: **seudobloqueo AV**; la extrasístole auricular fue tan precoz que el nodo AV seguía en refractoriedad. Antes de diagnosticar cualquier bloqueo de segundo grado: confirma una frecuencia de P constante < 100 y morfología sinusal, y compara las ondas T una a una para encontrar la P′ escondida.',
+        '两侧都有一个“没有 QRS 的 P”，但机制不同。A 的 P **按时到达、形态正常**，P 率恒定（< 100 次/分）——真文氏。B 的未下传 P′ **提前**出现（形态可能与窦性 P 相似）、骑在前一个 T 波上——**假性房室传导阻滞**：房早来得太早，房室结还处于不应期。诊断任何二度阻滞之前：确认 P 率恒定 < 100、P 波为窦性形态，并逐个对比 T 波形状，找出藏在里面的 P′。',
+        'Both sides show "a P with no QRS", but the mechanisms differ. In A the P arrives **on time with a normal shape** and the P rate is constant (< 100/min) — true Wenckebach. In B the non-conducted P′ comes **early** (its shape may look like a sinus P), riding on the previous T wave — **pseudo-AV block**: the atrial extrasystole was so premature that the AV node was still refractory. Before diagnosing any second-degree block: confirm a constant P rate < 100 and sinus P morphology, and compare T-wave shapes one by one to find the P′ hiding inside.',
+        'Ambos lados muestran «una P sin QRS», pero los mecanismos difieren. En A la P llega **a tiempo con morfología normal** y la frecuencia de P es constante (< 100 lpm): Wenckebach verdadero. En B la P′ no conducida aparece **precoz** (su morfología puede parecerse a la de una P sinusal), cabalgando sobre la T anterior: **seudobloqueo AV**; la extrasístole auricular fue tan precoz que el nodo AV seguía en refractoriedad. Antes de diagnosticar cualquier bloqueo de segundo grado: confirma una frecuencia de P constante < 100 y morfología sinusal, y compara las ondas T una a una para encontrar la P′ escondida.',
       ),
     },
     {
@@ -310,9 +310,9 @@ const lesson: Lesson = {
           'Diagnosticar Mobitz II en cuanto cae un latido: sigue primero la tendencia del PR: alargamiento progresivo antes de la caída y primer PR más corto después = Mobitz I.',
         ),
         l(
-          '把未下传房早读成 Mobitz：假性阻滞的 P′ 提前、变形、常埋在 T 波上；真 Mobitz 的 P 按时到达、形态一致。',
-          'Reading a blocked PAC as Mobitz: in pseudo-block the P′ is early, deformed and often buried on the T wave; in true Mobitz the P is on time and identical.',
-          'Leer una extrasístole auricular bloqueada como Mobitz: en el seudobloqueo la P′ es precoz, deformada y a menudo está enterrada en la T; en el Mobitz verdadero la P llega a tiempo y es idéntica.',
+          '把未下传房早读成 Mobitz：假性阻滞的 P′ 提前（形态可能像窦性 P）、常埋在 T 波上；真 Mobitz 的 P 按时到达、形态一致。',
+          'Reading a blocked PAC as Mobitz: in pseudo-block the P′ is early (its shape may look like a sinus P) and often buried on the T wave; in true Mobitz the P is on time and identical.',
+          'Leer una extrasístole auricular bloqueada como Mobitz: en el seudobloqueo la P′ es precoz (su morfología puede parecerse a la de una P sinusal) y a menudo está enterrada en la T; en el Mobitz verdadero la P llega a tiempo y es idéntica.',
         ),
         l(
           'P 率 > 100 次/分时下“二度阻滞”：Mobitz 的定义要求 P 率恒定且 < 100——更快的心房是房性心动过速伴阻滞。',

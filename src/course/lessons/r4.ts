@@ -114,8 +114,12 @@ const lesson: Lesson = {
         },
       ],
       predict: {
-        question: l('Mobitz II 里，P 落空之前 PR 怎么变？', 'In Mobitz II, what does the PR do before a P drops?', 'En el Mobitz II, ¿qué hace el PR antes de que caiga una P?'),
-        options: [l('逐搏缩短', 'It shortens beat by beat', 'Se acorta latido a latido'), l('保持不变', 'It stays the same', 'Se mantiene igual'), l('逐搏延长', 'It lengthens beat by beat', 'Se alarga latido a latido')],
+        question: l(
+          '第 4 帧：心房约 96 次/分，心室约 32 次/分。连续有几个 P 不下传？',
+          'Frame 4: atria at about 96/min, ventricles at about 32/min. How many P waves in a row fail to conduct?',
+          'Fotograma 4: aurículas a unos 96 lpm y ventrículos a unos 32 lpm. ¿Cuántas P seguidas no conducen?',
+        ),
+        options: [l('1 个', '1', '1'), l('2 个', '2', '2'), l('3 个', '3', '3')],
         answer: 1,
         ordered: true,
       },
@@ -303,8 +307,8 @@ const lesson: Lesson = {
       },
       caption: l(
         '有 P 波时，完全性阻滞要三件事：房率 > 室率，P 落在心动周期的每个时相，且没有一个 P 下传。房颤时，慢而完全规则的 RR 就是证据。逸搏的宽窄说出阻滞水平。',
-        'With P waves, complete block needs three things: an atrial rate above the ventricular rate, P waves in every part of the cycle, and not one conducted. In AF, a slow, perfectly regular RR is the proof. The escape width names the level.',
-        'Con ondas P, el bloqueo completo exige tres cosas: frecuencia auricular mayor que la ventricular, ondas P en todas las fases del ciclo y ni una P conducida. En la FA, la prueba es un RR lento y perfectamente regular. La anchura del escape dice el nivel.',
+        'With P waves, complete block needs three things: an atrial rate above the ventricular rate, P waves in every part of the cycle, and not one conducted. In AF, a slow, perfectly regular RR is the sign. The escape width names the level.',
+        'Con ondas P, el bloqueo completo exige tres cosas: frecuencia auricular mayor que la ventricular, ondas P en todas las fases del ciclo y ni una P conducida. En la FA, la señal es un RR lento y perfectamente regular. La anchura del escape dice el nivel.',
       ),
     },
     {
@@ -323,7 +327,7 @@ const lesson: Lesson = {
       left: {
         ecg: synth('av-block-2-mobitz1', 469),
         caption: l('PR 逐渐延长直至脱落；QRS 窄；阻滞在房室结', 'PR lengthens until a P drops; narrow QRS; block in the AV node', 'El PR se alarga hasta que cae una P; QRS estrecho; bloqueo en el nodo AV'),
-        marks: [{ auto: 'pr', beat: 5 }, { auto: 'pr', beat: 6 }, { auto: 'pr', beat: 7 }],
+        marks: [{ auto: 'pr', beat: 5 }, { auto: 'pr', beat: 6 }, { auto: 'pr', beat: 7 }, { auto: 'pr', beat: 8 }],
       },
       right: {
         ecg: synth('av-block-2-mobitz2', 470),
