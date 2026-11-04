@@ -81,7 +81,8 @@ usually becomes one `film`.
   "bloqueo de rama"). Medical terms correct in all three.
 - Original wording. The Castellano et al. 2004 book is for structure and criteria only; never copy its prose.
 - A note states only what the learner can see or measure on screen: the tracing, its marks, the dial read-outs.
-  Never quote a value the screen does not show, such as a formula's result.
+  Never quote a value the screen does not show, such as a formula's result, unless the note works the arithmetic
+  from on-screen values (for example "QT 342 ms, RR 603 ms: 342 ÷ √0.603 ≈ 440").
 - Notes are written for the block's other dials at their start values; the player hides the note as soon as the
   learner moves another dial.
 - A prediction must be answerable from what the lesson has already shown. If it needs something taught later, it is
