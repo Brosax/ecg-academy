@@ -737,15 +737,15 @@ describe('s7: normal variants on the tracings', () => {
     for (const l of ['II', 'aVF'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
     expect(e.truth!.qrsMs).toBeLessThan(120);
   });
-  it('J sweep notes: under 1 mm in every lead at 0.06–0.07; about 1 mm in II at 0.08–0.10; ≥ 1 mm in II, aVF and V5 with QRS < 120 ms at 0.11–0.14', () => {
-    for (const v of [0.06, 0.07]) {
+  it('J sweep notes: under 1 mm in every lead at 0.06–0.08; at 0.09 II past 1 mm with aVF under it; the pattern (II, aVF and V5 ≥ 1 mm, QRS < 120 ms) from 0.11, where aVF crosses 1 mm', () => {
+    for (const v of [0.06, 0.08]) {
       const e = played('s7', 0, v);
       for (const l of [...LIMB, ...CHEST]) expect(Math.abs(stAt(e, l)), `${v} ${l}`).toBeLessThan(0.1);
     }
-    for (const v of [0.08, 0.1]) {
-      const j = stAt(played('s7', 0, v), 'II');
-      expect(j, `${v}`).toBeGreaterThan(0.09);
-      expect(j, `${v}`).toBeLessThan(0.13);
+    for (const v of [0.09, 0.1]) {
+      const e = played('s7', 0, v);
+      expect(stAt(e, 'II'), `${v} II`).toBeGreaterThanOrEqual(0.1);
+      expect(stAt(e, 'aVF'), `${v} aVF`).toBeLessThan(0.1);
     }
     for (const v of [0.11, 0.14]) {
       const e = played('s7', 0, v);
@@ -769,13 +769,14 @@ describe('s7: normal variants on the tracings', () => {
     expect(oldMi.truth!.findings).toContain('pathological-q');
     expect(Math.abs(lbbb.truth!.qrsMs - 150)).toBeLessThan(10);
     expect(lbbb.truth!.findings).toContain('lbbb');
-    expect(Math.abs(preExcited.truth!.prMs! - 115)).toBeLessThan(6);
+    expect(Math.abs(preExcited.truth!.prMs! - 115)).toBeLessThanOrEqual(5);
     expect(preExcited.truth!.findings).toContain('wpw');
     for (const q of [longQt.truth!.qtcBazettMs, longQt.truth!.qtcFridericiaMs]) expect(Math.abs(q - 500)).toBeLessThan(10);
   });
   it('incomplete RBBB: QRS about 118 ms (110–119) with an r′ in V1', () => {
     const e = ecgOf(blocksOf('s7', 'film')[0].frames[1].ecg);
-    expect(e.truth!.qrsMs).toBeGreaterThanOrEqual(113);
+    expect(Math.abs(e.truth!.qrsMs - 118)).toBeLessThanOrEqual(3);
+    expect(e.truth!.qrsMs).toBeGreaterThanOrEqual(110);
     expect(e.truth!.qrsMs).toBeLessThan(120);
     expect(hasRPrime(e, 'V1')).toBe(true);
   });

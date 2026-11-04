@@ -94,8 +94,16 @@ const lesson: Lesson = {
         from: 0.06,
         to: 0.14,
         notes: [
-          { min: 0.06, max: 0.07, text: l('J 点在所有导联都 < 1 mm：正常，还算不上早期复极图形。', 'J under 1 mm in every lead: normal, not yet the formal pattern.', 'J por debajo de 1 mm en todas las derivaciones: normal, todavía no es el patrón formal.') },
-          { min: 0.08, max: 0.1, text: l('II 的 J 点接近 1 mm：以 PR 段为基线测量，不要目测。', 'J close to 1 mm in II: measure from the PR segment, not by eye.', 'J cerca de 1 mm en II: mide desde el segmento PR, no a ojo.') },
+          { min: 0.06, max: 0.08, text: l('J 点在所有导联都 < 1 mm：正常，还算不上早期复极图形。', 'J under 1 mm in every lead: normal, not yet the formal pattern.', 'J por debajo de 1 mm en todas las derivaciones: normal, todavía no es el patrón formal.') },
+          {
+            min: 0.09,
+            max: 0.09,
+            text: l(
+              'II 的 J 点已过 1 mm，aVF 还没到：只有一个导联不算。以 PR 段为基线测量，不要目测。',
+              'J past 1 mm in II but not yet in aVF: one lead is not the pattern. Measure from the PR segment, not by eye.',
+              'J por encima de 1 mm en II pero aún no en aVF: una sola derivación no es el patrón. Mide desde el segmento PR, no a ojo.',
+            ),
+          },
           { min: 0.11, max: 0.14, text: l('II、aVF、V5 的 J 点 ≥ 1 mm，QRS < 120 ms：早期复极图形。无症状时仍是正常变异。', 'J ≥ 1 mm in II, aVF and V5 with a QRS < 120 ms: the early repolarisation pattern. Without symptoms it is still a normal variant.', 'J ≥ 1 mm en II, aVF y V5 con QRS < 120 ms: el patrón de repolarización precoz. Sin síntomas sigue siendo una variante normal.') },
         ],
       },
@@ -121,7 +129,11 @@ const lesson: Lesson = {
         {
           label: l('幼年型 T 波', 'Juvenile T', 'T juvenil'),
           ecg: synth('juvenile-t', 703),
-          note: l('16 岁女孩：V1–V3 的 T 波倒置，V4 起直立。16 岁以前正常；16 岁时延伸到 V3 属于临界。', 'Girl of 16: T inverted in V1–V3, upright from V4. Normal under 16; at 16, reaching V3 is borderline.', 'Chica de 16 años: T negativa en V1–V3 y positiva desde V4. Normal antes de los 16; a los 16, llegar a V3 es un hallazgo límite.'),
+          note: l(
+            '16 岁女孩：V1–V3 的 T 波倒置，V4 起直立。16 岁以前正常；从 16 岁起倒置到 V3 要再评估，运动员属异常。',
+            'Girl of 16: T inverted in V1–V3, upright from V4. Normal under 16; from 16, inversion reaching V3 needs a second look, and in an athlete it is abnormal.',
+            'Chica de 16 años: T negativa en V1–V3 y positiva desde V4. Normal antes de los 16; desde los 16, que llegue a V3 obliga a revisarlo, y en un deportista es anormal.',
+          ),
           marks: [{ auto: 't', lead: 'V2' }, { auto: 't', lead: 'V5' }],
         },
         {
@@ -166,11 +178,19 @@ const lesson: Lesson = {
           value: l('QRS < 110 ms 为正常变异；110–119 ms 为不完全性右束支阻滞', 'QRS < 110 ms: normal variant; 110–119 ms: incomplete RBBB', 'QRS < 110 ms: variante normal; 110–119 ms: bloqueo incompleto de rama derecha'),
         },
         {
+          label: l('不完全性右束支阻滞的形态', 'Incomplete RBBB: the shape', 'Bloqueo incompleto de rama derecha: la morfología'),
+          value: l(
+            'V1 呈 rSr′，I 和 V6 的 S 波顿挫；成人 QRS < 120 ms（110–119 ms）',
+            'rSr′ in V1 with a slurred S in I and V6; QRS < 120 ms in adults (110–119 ms)',
+            'rSr′ en V1 con S empastada en I y V6; QRS < 120 ms en adultos (110–119 ms)',
+          ),
+        },
+        {
           label: l('16 岁起 T 波倒置到 V3', 'T inversion reaching V3 from 16 y', 'T negativa hasta V3 desde los 16 años'),
           value: l(
-            '临界：多为持续的幼年型 T 波，通常良性；运动员、有症状或有猝死家族史时需评估',
-            'Borderline: usually a persistent juvenile pattern and benign; evaluate in an athlete, with symptoms or with a family history of sudden death',
-            'Límite: casi siempre un patrón juvenil persistente y benigno; hay que estudiarlo en deportistas, si hay síntomas o si hay antecedentes familiares de muerte súbita',
+            '持续的幼年型 T 波：非运动员多为良性，有症状或猝死家族史时需评估；运动员按 2017 国际标准属异常（黑人运动员复极图形除外）',
+            'Persistent juvenile pattern: usually benign in a non-athlete, but evaluate with symptoms or a family history of sudden death; abnormal in an athlete under the 2017 international criteria (except the Black-athlete repolarisation pattern)',
+            'Patrón juvenil persistente: suele ser benigno en un no deportista, pero hay que estudiarlo si hay síntomas o antecedentes familiares de muerte súbita; en un deportista es anormal según los criterios internacionales de 2017 (salvo el patrón de repolarización del deportista de raza negra)',
           ),
         },
         { label: l('儿童：心率', 'Children: rate', 'Niños: frecuencia'), value: l('更快：出生后数月中位数约 150 次/分，青少年约 75–80 次/分', 'Faster: median about 150/min in the first months, about 75–80/min in teenagers', 'Más rápida: mediana de unos 150 lpm en los primeros meses, unos 75–80 lpm en adolescentes') },
@@ -274,9 +294,9 @@ const lesson: Lesson = {
         marks: [{ auto: 't', lead: 'V5' }, { auto: 'st60', lead: 'V5' }],
       },
       point: l(
-        'A：T 波倒置只在右胸导联（V1–V3），V4 起直立——幼年型。16 岁以前它就是正常的；16 岁时延伸到 V3 属于临界，多为良性，但运动员或有症状时要再看一眼。B：侧壁导联 V5–V6 以及 I、aVL 的 T 波倒置伴 ST 压低，V1–V3 的 S 波很深：侧壁 T 波倒置永远不是正常变异，这里是左心室肥厚伴继发性 ST–T 改变（在年轻运动员身上要想到心肌病）。',
-        'A: T inversion only in the right chest leads (V1–V3), upright from V4: the juvenile pattern. Under 16 it is simply normal; at 16, inversion reaching V3 is borderline — mostly benign, but worth a second look in an athlete or with symptoms. B: T inversion with ST depression in the lateral leads V5–V6 and in I and aVL, with deep S waves in V1–V3. Lateral T inversion is never a normal variant: here it is LVH with secondary ST–T abnormality (in a young athlete, think of cardiomyopathy).',
-        'A: T negativa solo en las precordiales derechas (V1–V3) y positiva desde V4: patrón juvenil. Antes de los 16 años es sencillamente normal; a los 16, que llegue a V3 es un hallazgo límite, casi siempre benigno, pero conviene revisarlo en un deportista o si hay síntomas. B: T negativa con descenso del ST en las derivaciones laterales V5–V6 y en I y aVL, con ondas S profundas en V1–V3. La T negativa lateral nunca es una variante normal: aquí es una HVI con alteración secundaria del ST–T (en un deportista joven, piensa en una miocardiopatía).',
+        'A：T 波倒置只在右胸导联（V1–V3），V4 起直立——幼年型。16 岁以前它就是正常的；从 16 岁起延伸到 V3 就不再是正常的幼年型：非运动员多为良性，但运动员属异常，有症状时也要评估。B：侧壁导联 V5–V6 以及 I、aVL 的 T 波倒置伴 ST 压低，V1–V3 的 S 波很深：侧壁 T 波倒置永远不是正常变异，这里是左心室肥厚伴继发性 ST–T 改变（在年轻运动员身上要想到心肌病）。',
+        'A: T inversion only in the right chest leads (V1–V3), upright from V4: the juvenile pattern. Under 16 it is simply normal; from 16, inversion reaching V3 is no longer the normal juvenile pattern: often benign in a non-athlete, but abnormal in an athlete and worth evaluating with symptoms. B: T inversion with ST depression in the lateral leads V5–V6 and in I and aVL, with deep S waves in V1–V3. Lateral T inversion is never a normal variant: here it is LVH with secondary ST–T abnormality (in a young athlete, think of cardiomyopathy).',
+        'A: T negativa solo en las precordiales derechas (V1–V3) y positiva desde V4: patrón juvenil. Antes de los 16 años es sencillamente normal; desde los 16, que llegue a V3 ya no es el patrón juvenil normal: suele ser benigno en un no deportista, pero es anormal en un deportista y hay que estudiarlo si hay síntomas. B: T negativa con descenso del ST en las derivaciones laterales V5–V6 y en I y aVL, con ondas S profundas en V1–V3. La T negativa lateral nunca es una variante normal: aquí es una HVI con alteración secundaria del ST–T (en un deportista joven, piensa en una miocardiopatía).',
       ),
     },
     {
