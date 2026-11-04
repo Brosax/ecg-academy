@@ -12,7 +12,7 @@ import { describe, expect, it } from 'vitest';
 import type { AutoMark, Block, Lesson, LessonMark } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
 import { realisedDials, startDials } from '../../src/course/live';
-import { baselineBefore, isAutoMark, qrsWaves, resolveMarks } from '../../src/course/marks';
+import { baselineBefore, isAutoMark, leadWindows, qrsWaves, resolveMarks } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
 import type { FindingId } from '../../src/core/findings';
@@ -879,8 +879,27 @@ describe('o7: pericardium on the tracings', () => {
     const flips = d.slice(1).filter((x, i) => Math.sign(x) !== Math.sign(d[i])).length;
     expect(flips).toBeGreaterThanOrEqual(d.length - 3);
     expect(Math.max(...d.map(Math.abs))).toBeGreaterThan(0.1);
-    const step = blocksOf('o7', 'worked').find((w) => w.title.en === 'Finding electrical alternans')!.steps[1];
-    for (const m of step.marks ?? []) if ('auto' in m && m.beat !== undefined) expect(m.beat).toBeLessThan(beats.length - 1);
+  });
+  it('alternans marks (fluid film, worked): two neighbouring beats, tall then short in V3, drawn on a V3 panel of the block view at 25 and 50 mm/s', () => {
+    const film = blocksOf('o7', 'film')[1];
+    const worked = blocksOf('o7', 'worked').find((w) => w.title.en === 'Finding electrical alternans')!;
+    for (const [what, src, view, marks] of [
+      ['film', film.frames[2].ecg, film.view, film.frames[2].marks],
+      ['worked', worked.ecg, worked.steps[1].view ?? worked.view, worked.steps[1].marks],
+    ] as const) {
+      const e = ecgOf(src);
+      const [a, b] = markBeats(marks, 'r');
+      expect(b, what).toBe(a + 1);
+      const r = (k: number) => span(e, 'V3', e.truth!.beats[k].qrsOn, e.truth!.beats[k].qrsOff, e.truth!.beats[k]).max;
+      expect(r(a), what).toBeGreaterThan(2 * r(b));
+      for (const speed of [25, 50] as const) {
+        const o = { layout: view?.layout ?? '3x4+1', lead: view?.lead, speed };
+        const wins = leadWindows('V3', e.signal.durationMs, o);
+        const drawn = resolveMarks(e, marks, o);
+        expect(drawn.length, `${what} @${speed}`).toBe(2);
+        for (const m of drawn) expect(m.kind === 'wave' && wins.some(([t0, t1]) => m.t >= t0 && m.t <= t1), `${what} @${speed}`).toBe(true);
+      }
+    }
   });
 });
 

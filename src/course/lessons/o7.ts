@@ -132,9 +132,9 @@ const lesson: Lesson = {
         answer: 0,
       },
       caption: l(
-        'PR段压低和ST抬高都对着TP段判断，不要对着已被拉低的PR段；只有V6的ST/T比值例外，以PR段为基线。TP段逐渐下斜（Spodick征）支持心包炎。',
-        'Judge PR depression and ST elevation against the TP segment, not against the PR, which is already pulled down; only the V6 ST/T ratio uses the PR. A downsloping TP (Spodick’s sign) supports pericarditis.',
-        'Juzga el descenso del PR y la elevación del ST contra el segmento TP, no contra el PR, que ya está descendido; solo el cociente ST/T de V6 usa el PR. Un TP descendente (signo de Spodick) apoya la pericarditis.',
+        'PR段压低和ST抬高都对着TP段判断，不要对着已被拉低的PR段；V6的ST/T比值（下文讲解）是例外。TP段逐渐下斜（Spodick征）支持心包炎。',
+        'Judge PR depression and ST elevation against the TP segment, not against the PR, which is already pulled down; the V6 ST/T ratio (explained below) is the exception. A downsloping TP (Spodick’s sign) supports pericarditis.',
+        'Juzga el descenso del PR y la elevación del ST contra el segmento TP, no contra el PR, que ya está descendido; el cociente ST/T de V6 (se explica más abajo) es la excepción. Un TP descendente (signo de Spodick) apoya la pericarditis.',
       ),
     },
     {
@@ -230,7 +230,7 @@ const lesson: Lesson = {
     {
       kind: 'film',
       title: l('心脏周围有了液体', 'Fluid around the heart', 'Líquido alrededor del corazón'),
-      view: { layout: '3x4+1', highlightLeads: ['II', 'V3'] },
+      view: { layout: '3x4+1', lead: 'V3', highlightLeads: ['II', 'V3'] },
       frames: [
         {
           label: l('心动过速', 'Tachycardia', 'Taquicardia'),
@@ -248,7 +248,7 @@ const lesson: Lesson = {
           label: l('电交替', 'Alternans', 'Alternancia'),
           ecg: synth('electrical-alternans', 1529),
           note: l('心脏在液体里摆动：V3的R波一高一低、逐搏交替，节律仍规则。很特异，但不敏感。', 'The heart swings in the fluid: the R in V3 goes tall, short, tall, short, beat by beat, while the rhythm stays regular. Very specific, not sensitive.', 'El corazón se balancea en el líquido: la R de V3 alterna alta, baja, alta, baja, latido a latido, con el ritmo regular. Muy específica, poco sensible.'),
-          marks: [{ auto: 'r', lead: 'V3', beat: 4 }, { auto: 'r', lead: 'V3', beat: 5 }],
+          marks: [{ auto: 'r', lead: 'V3', beat: 5 }, { auto: 'r', lead: 'V3', beat: 6 }],
         },
       ],
       predict: {
@@ -266,7 +266,7 @@ const lesson: Lesson = {
       kind: 'worked',
       title: l('找到电交替', 'Finding electrical alternans', 'Encontrar la alternancia eléctrica'),
       ecg: synth('electrical-alternans', 1526),
-      view: { layout: '3x4+1', highlightLeads: ['V3', 'V4'] },
+      view: { layout: '3x4+1', lead: 'V3', highlightLeads: ['V3', 'V4'] },
       steps: [
         {
           title: l('心率与电压', 'Rate and voltage', 'Frecuencia y voltaje'),
@@ -276,7 +276,7 @@ const lesson: Lesson = {
         {
           title: l('逐搏比较 R 波', 'Compare the R waves beat by beat', 'Compara las R latido a latido'),
           body: l('在 V3–V4 里，从左到右逐个看 R 波的高度：高、低、高、低……相邻两搏的振幅交替，而节律本身是规则的。肢体导联太小，交替不明显——找 QRS 最大的导联。', 'In V3–V4, look at the height of each R from left to right: tall, short, tall, short… Neighbouring beats alternate in amplitude while the rhythm itself stays regular. The limb leads are too small to show it — look where the QRS is biggest.', 'En V3–V4 mira la altura de cada R de izquierda a derecha: alta, baja, alta, baja… Los latidos vecinos alternan en amplitud mientras el ritmo sigue siendo regular. Las derivaciones de los miembros son demasiado pequeñas para mostrarlo: busca donde el QRS es mayor.'),
-          marks: [{ auto: 'r', lead: 'V3', beat: 4 }, { auto: 'r', lead: 'V3', beat: 5 }],
+          marks: [{ auto: 'r', lead: 'V3', beat: 5 }, { auto: 'r', lead: 'V3', beat: 6 }],
           highlightLeads: ['V3', 'V4'],
         },
         {
