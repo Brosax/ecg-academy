@@ -1150,13 +1150,91 @@ describe('r7: fascicular blocks on the tracings', () => {
 });
 
 describe('r8: ladders on the tracings', () => {
-  it('5:4 Wenckebach: four conducted beats per cycle with a lengthening PR', () => {
+  /** a blocked PAC strip: the P′ is early, sits on the T of the beat before it, and the pause it leaves is shorter than 2 x PP */
+  const blockedPac = (e: Ecg, what: string) => {
+    const t = e.truth!;
+    const ectopic = t.atrial.filter((a) => a.kind === 'ectopic');
+    expect(ectopic, what).toHaveLength(1);
+    const p = ectopic[0];
+    expect(p.conductedTo, what).toBeNull();
+    const sinus = t.atrial.filter((a) => a.kind === 'sinus').map((a) => a.t);
+    const pp = sinus.slice(1).flatMap((x, i) => (sinus[i] < p.t && x > p.t ? [] : [x - sinus[i]]));
+    const prev = Math.max(...sinus.filter((x) => x < p.t));
+    expect(p.t - prev, `${what}: the P′ is early`).toBeLessThan(0.6 * mean(pp));
+    const k = t.beats.findIndex((b, i) => b.qrsOn < p.t && (t.beats[i + 1]?.qrsOn ?? Infinity) > p.t);
+    expect(p.t, `${what}: the P′ sits on the T`).toBeGreaterThan(t.beats[k].j);
+    expect(p.t, `${what}: the P′ sits on the T`).toBeLessThan(t.beats[k].tOff);
+    expect(rrs(e)[k], `${what}: the pause is shorter than 2 x PP`).toBeLessThan(2 * mean(pp));
+  };
+  it('hook and contrast A: blocked PACs — the P′ is early, on the T, and the pause after it is shorter than 2 x PP', () => {
+    blockedPac(ecgOf(blocksOf('r8', 'hook')[0].ecg), 'hook');
+    blockedPac(ecgOf(blocksOf('r8', 'contrast')[0].left.ecg), 'contrast A');
+  });
+  it('contrast B: Mobitz II — the blocked P is a sinus P on time, the pause is 2 x PP, the conducted PR constant, the QRS wide', () => {
+    const e = ecgOf(blocksOf('r8', 'contrast')[0].right.ecg);
+    const t = e.truth!;
+    const at = t.atrial.map((a) => a.t);
+    const pp = mean(at.slice(1).map((x, i) => x - at[i]));
+    const drops = t.atrial.flatMap((a, i) => (a.conductedTo === null && i > 0 && a.t < t.beats[t.beats.length - 1].qrsOn ? [i] : []));
+    expect(drops.length).toBeGreaterThanOrEqual(2);
+    for (const i of drops) {
+      expect(t.atrial[i].kind).toBe('sinus');
+      expect(Math.abs((at[i] - at[i - 1]) / pp - 1), 'the blocked P is on time').toBeLessThan(0.05);
+    }
+    for (const x of rrs(e).filter((y) => y > 1.3 * Math.min(...rrs(e)))) expect(Math.abs(x / pp - 2)).toBeLessThanOrEqual(0.05);
+    const p = prs(e);
+    expect(Math.max(...p) - Math.min(...p)).toBeLessThan(5);
+    expect(t.qrsMs).toBeGreaterThanOrEqual(120);
+  });
+  it('5:4 Wenckebach (worked): the marks follow one cycle — RRs shortening into the pause, five evenly spaced P waves (one blocked), four QRS, PRs lengthening and the shortest right after the pause; every pause is shorter than 2 x PP, with a narrow QRS', () => {
     const e = ecgOf(blocksOf('r8', 'worked')[0].ecg);
-    const beats = e.truth!.beats;
-    const k = rrs(e).findIndex((x) => x > 1200);
+    const t = e.truth!;
+    const beats = t.beats;
+    const r = rrs(e);
+    const k = r.findIndex((x) => x > 1200);
     const cycle = beats.slice(k + 1, k + 5).map((b) => b.qrsOn - (b.pOn ?? 0));
     expect(cycle.length).toBe(4);
     for (let i = 1; i < cycle.length; i++) expect(cycle[i]).toBeGreaterThan(cycle[i - 1]);
+    const rr = stepBeats('r8', 0, 'rr');
+    expect(rr.map((i) => i - rr[0])).toEqual([0, 1, 2, 3]);
+    expect(r[rr[0] - 1], 'the marked cycle starts after a pause').toBeGreaterThan(1200);
+    expect(r[rr[1]]).toBeLessThan(r[rr[0]]);
+    expect(r[rr[2]]).toBeLessThan(r[rr[1]]);
+    expect(r[rr[3]], 'the last bracket is the pause').toBeGreaterThan(1200);
+    expect(stepBeats('r8', 1, 'p')).toEqual(rr);
+    expect(stepBeats('r8', 2, 'qrs')).toEqual(rr);
+    const lastP = beats[rr[3]].pOn ?? 0;
+    const dropped = t.atrial.find((a) => a.conductedTo === null && a.t > lastP && a.t < beats[rr[3] + 1].qrsOn);
+    expect(dropped, 'one P in the cycle is not conducted').toBeDefined();
+    const fiveP = [...rr.map((i) => beats[i].pOn ?? 0), dropped!.t];
+    const gaps = fiveP.slice(1).map((x, i) => x - fiveP[i]);
+    for (const x of gaps) expect(Math.abs(x / mean(gaps) - 1), 'evenly spaced').toBeLessThan(0.03);
+    const pr = stepBeats('r8', 3, 'pr');
+    expect(pr).toEqual([...rr, rr[3] + 1]);
+    const prMs = pr.map((i) => beats[i].qrsOn - (beats[i].pOn ?? 0));
+    for (let i = 1; i < 4; i++) expect(prMs[i]).toBeGreaterThan(prMs[i - 1]);
+    expect(Math.abs(prMs[4] - prMs[0]), 'back to the steepest line').toBeLessThan(1);
+    expect(prMs[4]).toBeLessThan(Math.min(...prMs.slice(1, 4)));
+    expect(prMs[4] - Math.min(...prs(e)), 'the shortest PR on the strip').toBeLessThan(1);
+    const at = t.atrial.map((a) => a.t);
+    const ppAll = at.slice(1).map((x, i) => x - at[i]).sort((a, b) => a - b);
+    const medianPp = ppAll[Math.floor(ppAll.length / 2)];
+    const pauses = r.filter((x) => x > 1200);
+    expect(pauses.length).toBeGreaterThanOrEqual(2);
+    for (const x of pauses) expect(x).toBeLessThan(2 * medianPp);
+    expect(t.qrsMs).toBeLessThan(110);
+  });
+  it('five-lines film marks: Wenckebach PRs of one cycle about 150 → 235 → 275 ms into the drop; Mobitz II PRs either side of a drop', () => {
+    const [, m1, m2] = frames('r8', 0);
+    const b1 = m1.truth!.beats;
+    const w = markBeats('r8', 0, 1, 'pr');
+    expect(w.map((i) => i - w[0])).toEqual([0, 1, 2]);
+    expect(rrs(m1)[w[0] - 1]).toBeGreaterThan(1300);
+    expect(rrs(m1)[w[2]]).toBeGreaterThan(1300);
+    [150, 235, 275].forEach((v, k) => expect(Math.abs(b1[w[k]].qrsOn - (b1[w[k]].pOn ?? 0) - v), `PR ${k + 1}`).toBeLessThanOrEqual(5));
+    const [before, after] = markBeats('r8', 0, 2, 'pr');
+    expect(after).toBe(before + 1);
+    expect(rrs(m2)[before]).toBeGreaterThan(1.5 * Math.min(...rrs(m2)));
   });
   it('Wenckebach ladder (seed 542): every pause is shorter than 2 x PP, with a narrow QRS', () => {
     const fig = blocksOf('r8', 'figure').find((b) => b.ecg?.kind === 'synth' && b.ecg.req.scenario === 'av-block-2-mobitz1');

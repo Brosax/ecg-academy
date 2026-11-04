@@ -60,9 +60,9 @@ const lesson: Lesson = {
         'Una P′ precoz se esconde sobre la onda T y no le sigue ningún QRS. Para demostrar que esa P′ no condujo no basta con decirlo: dibújala en un diagrama en escalera. Haz tu versión en papel antes de continuar.',
       ),
       reveal: l(
-        '梯形图上，这个 P′ 在 **A 层**留下一个提前的标记，却**没有任何连线到达 V 层**——线在 AV 层中途停住：房室结尚在不应期，激动被拦下。再核对两点：这个 P′ **提前**且形态与窦性 P 不同（起源不同）；下一个窦性 P 准时到达，PP 时钟没有乱。所以这不是房室传导阻滞，而是**未下传（被拦截的）房早**——梯形图把“没有线”变成了看得见的证据。',
-        'On the ladder this P′ leaves an early mark in the **A tier** but **no line reaches the V tier** — the line stops halfway through the AV tier: the AV node was still refractory and the impulse was stopped. Check two more things: the P′ is **early** and differently shaped from the sinus P (a different origin), and the next sinus P arrives on time — the PP clock is undisturbed. So this is not AV block but a **blocked (intercepted) PAC** — the ladder turns "no line" into visible evidence.',
-        'En el diagrama, esta P′ deja una marca precoz en el **nivel A** pero **ninguna línea llega al nivel V**: la línea se detiene a mitad del nivel AV; el nodo AV seguía en periodo refractario y el impulso se detuvo. Comprueba dos cosas más: la P′ es **precoz** y de morfología distinta a la P sinusal (otro origen), y la siguiente P sinusal llega puntual: el reloj del PP no se ha alterado. No es un bloqueo AV, sino una **extrasístole auricular bloqueada (interceptada)**: el diagrama convierte la ausencia de línea en una evidencia visible.',
+        '梯形图上，这个 P′ 在 **A 层**留下一个提前的标记，却**没有任何连线到达 V 层**——线在 AV 层中途停住：房室结尚在不应期，激动被拦下。再核对两点：这个 P′ **提前**，远早于下一个窦性 P 该来的时刻；它留下的间歇短于 2 × PP——P′ 重整了窦房结。所以这不是房室传导阻滞，而是**未下传（被拦截的）房早**——梯形图把“没有线”变成了看得见的证据。',
+        'On the ladder this P′ leaves an early mark in the **A tier** but **no line reaches the V tier** — the line stops halfway through the AV tier: the AV node was still refractory and the impulse was stopped. Check two more things: the P′ is **early**, well before the next sinus P was due, and the pause it leaves is shorter than 2 × PP — the P′ reset the sinus node. So this is not AV block but a **blocked (intercepted) PAC** — the ladder turns "no line" into visible evidence.',
+        'En el diagrama, esta P′ deja una marca precoz en el **nivel A** pero **ninguna línea llega al nivel V**: la línea se detiene a mitad del nivel AV; el nodo AV seguía en periodo refractario y el impulso se detuvo. Comprueba dos cosas más: la P′ es **precoz**, muy anterior a cuando tocaba la siguiente P sinusal, y la pausa que deja es menor de 2 × PP: la P′ reinició el nodo sinusal. No es un bloqueo AV, sino una **extrasístole auricular bloqueada (interceptada)**: el diagrama convierte la ausencia de línea en una evidencia visible.',
       ),
     },
     {
@@ -136,24 +136,24 @@ const lesson: Lesson = {
           label: l('文氏：变平后停住', 'Wenckebach: flatter, then stop', 'Wenckebach: tendida y parada'),
           ecg: synth('av-block-2-mobitz1', 542),
           note: l('PR 约 150 → 235 → 275 ms 后一个 P 落空：线一条比一条平，然后一条停在 AV 层（短横杠）。', 'The PR goes about 150 → 235 → 275 ms, then a P drops: each line flatter than the last, then one stops in the AV tier (a short bar).', 'El PR pasa de unos 150 → 235 → 275 ms y cae una P: cada línea más tendida que la anterior, y luego una se detiene en el nivel AV (barra corta).'),
-          marks: [{ auto: 'pr' }, { auto: 'blocked-p' }],
+          marks: [{ auto: 'pr', beat: 4 }, { auto: 'pr', beat: 5 }, { auto: 'pr', beat: 6 }, { auto: 'blocked-p' }],
         },
         {
           label: l('Ⅱ型：斜率不变就停', 'Mobitz II: sudden stop', 'Mobitz II: parada brusca'),
           ecg: synth('av-block-2-mobitz2', 543),
           note: l('PR 恒定约 160 ms，每第 4 个 P 突然落空：线的斜率不变，却突然停在 AV 层。QRS 宽。', 'The PR stays at about 160 ms and every fourth P drops without warning: the slope never changes, yet one line stops in the AV tier. Wide QRS.', 'El PR se mantiene en unos 160 ms y una de cada cuatro P cae sin aviso: la pendiente no cambia, pero una línea se detiene en el nivel AV. QRS ancho.'),
-          marks: [{ auto: 'pr' }, { auto: 'blocked-p' }],
+          marks: [{ auto: 'pr', beat: 4 }, { auto: 'pr', beat: 5 }, { auto: 'blocked-p' }],
         },
         {
           label: l('三度：不画连线', 'Third degree: no lines', 'Tercer grado: sin líneas'),
           ecg: synth('av-block-3', 466),
           note: l('P 约 78、QRS 约 45 次/分，互不相关：A 层与 V 层各走各的，中间一条连线也不画。', 'P at about 78/min, QRS at about 45/min, unrelated: the A and V tiers run on their own; draw no line between them.', 'P a unos 78 lpm y QRS a unos 45 lpm, sin relación: los niveles A y V van por su cuenta; no dibujes ninguna línea entre ellos.'),
-          marks: [{ auto: 'p' }, { auto: 'qrs' }],
+          marks: [{ auto: 'blocked-p', label: l('P', 'P', 'P') }, { auto: 'qrs' }],
         },
         {
           label: l('逆行：向上的线', 'Retrograde: a line upward', 'Retrógrada: línea hacia arriba'),
           ecg: synth('pjc', 488),
-          note: l('提前的窄 QRS 后紧跟一个逆行 P′：激动起自交界区，向下到 V，也向上逆传到 A。把这条线向上画：这就是逆行。', 'An early narrow QRS followed at once by a retrograde P′: the impulse starts in the junction, runs down to V and back up to A. Draw that line upward: it is the retrograde one.', 'Un QRS estrecho y precoz seguido enseguida de una P′ retrógrada: el impulso nace en la unión, baja a V y sube a A. Dibuja esa línea hacia arriba: es la retrógrada.'),
+          note: l('提前的窄 QRS 后紧跟一个逆行 P′：激动起自交界区，向下到 V，也向上逆传到 A。把这条线向上画：这就是逆行。', 'An early narrow QRS followed at once by a retrograde P′: the impulse starts in the junction, runs down to V and also up to A. Draw that line upward: it is the retrograde one.', 'Un QRS estrecho y precoz seguido enseguida de una P′ retrógrada: el impulso nace en la unión, baja a V y también sube a A. Dibuja esa línea hacia arriba: es la retrógrada.'),
           marks: [{ auto: 'st', beat: 5 }],
         },
         {
@@ -167,6 +167,7 @@ const lesson: Lesson = {
         question: l('Mobitz II 的梯形图上，落空之前的连线斜率怎么变？', 'On a Mobitz II ladder, what does the line slope do before the drop?', 'En el diagrama de un Mobitz II, ¿qué hace la pendiente de la línea antes de la caída?'),
         options: [l('逐条变平', 'It flattens line by line', 'Se tiende línea a línea'), l('保持不变', 'It stays the same', 'Se mantiene igual'), l('逐条变陡', 'It steepens line by line', 'Se empina línea a línea')],
         answer: 1,
+        ordered: true,
       },
       caption: l(
         '下传、阻滞、逆行、融合、夺获：先在纸上找到每一种，量出来的才画得上去。',
@@ -207,7 +208,7 @@ const lesson: Lesson = {
             'Set the calipers on one PP and walk them along the strip: the P waves arrive on time, the sinus clock is undisturbed. Then the RR: it shortens step by step, then one long pause — numbers first, mechanism second.',
             'Ajusta el compás a un PP y recórrelo por la tira: las ondas P llegan puntuales, el reloj sinusal no se altera. Después el RR: se acorta paso a paso y luego una pausa larga; primero los números, luego el mecanismo.',
           ),
-          marks: [{ auto: 'rr' }],
+          marks: [{ auto: 'rr', beat: 3 }, { auto: 'rr', beat: 4 }, { auto: 'rr', beat: 5 }, { auto: 'rr', beat: 6 }],
           view: { layout: 'strip', lead: 'II', calipers: true },
         },
         {
@@ -217,7 +218,7 @@ const lesson: Lesson = {
             'At the onset of every P, place a mark in the A tier — including the P that will turn out not to conduct. Five P waves per cycle, five marks, evenly spaced.',
             'En el inicio de cada P, coloca una marca en el nivel A, incluida la P que acabará sin conducir. Cinco ondas P por ciclo, cinco marcas, igualmente espaciadas.',
           ),
-          marks: [{ auto: 'p' }],
+          marks: [{ auto: 'p', beat: 3 }, { auto: 'p', beat: 4 }, { auto: 'p', beat: 5 }, { auto: 'p', beat: 6 }, { auto: 'blocked-p', label: l('P', 'P', 'P') }],
         },
         {
           title: l('第三步：标记 V 层', 'Step 3: populate the V tier', 'Paso 3: llena el nivel V'),
@@ -226,7 +227,7 @@ const lesson: Lesson = {
             'At the onset of every QRS, place a mark in the V tier. Each cycle has only four QRS complexes — five marks in A against four in V: one P never arrived.',
             'En el inicio de cada QRS, coloca una marca en el nivel V. Cada ciclo solo tiene cuatro QRS: cinco marcas en A frente a cuatro en V; una P no llegó.',
           ),
-          marks: [{ auto: 'qrs' }],
+          marks: [{ auto: 'qrs', beat: 3 }, { auto: 'qrs', beat: 4 }, { auto: 'qrs', beat: 5 }, { auto: 'qrs', beat: 6 }],
         },
         {
           title: l('第四步：连线，读斜率', 'Step 4: connect and read the slopes', 'Paso 4: conecta y lee las pendientes'),
@@ -235,7 +236,7 @@ const lesson: Lesson = {
             'Draw a slanting line from each P to its QRS: each flatter than the one before (the PR lengthens), until the last P’s line stops inside the AV tier (a short bar). The first line after the pause returns to the steepest slope — the shortest PR. **The slope is the PR**: the pencil need not write numbers, the picture speaks.',
             'Traza una línea inclinada de cada P a su QRS: cada una más tendida que la anterior (el PR se alarga), hasta que la línea de la última P se detiene dentro del nivel AV (una barra corta). La primera línea tras la pausa vuelve a ser la más vertical: el PR más corto. **La pendiente es el PR**: el lápiz no necesita escribir números, el dibujo habla solo.',
           ),
-          marks: [{ auto: 'pr' }, { auto: 'blocked-p' }],
+          marks: [{ auto: 'pr', beat: 3 }, { auto: 'pr', beat: 4 }, { auto: 'pr', beat: 5 }, { auto: 'pr', beat: 6 }, { auto: 'pr', beat: 7 }, { auto: 'blocked-p' }],
         },
         {
           title: l('第五步：从图上读出诊断', 'Step 5: read the diagnosis off the ladder', 'Paso 5: lee el diagnóstico en el diagrama'),
@@ -274,9 +275,9 @@ const lesson: Lesson = {
       left: {
         ecg: synth('pac-blocked', 547),
         caption: l(
-          '未下传房早：P′ 提前、形态不同；下一个窦性 P 准时到达',
-          'Blocked PAC: the P′ is early and differently shaped; the next sinus P arrives on time',
-          'Extrasístole auricular bloqueada: la P′ es precoz y de otra morfología; la siguiente P sinusal llega puntual',
+          '未下传房早：P′ 提前，其后的间歇短于 2 × PP',
+          'Blocked PAC: the P′ is early, and the pause after it is shorter than 2 × PP',
+          'Extrasístole auricular bloqueada: la P′ es precoz y la pausa que la sigue es menor de 2 × PP',
         ),
         marks: [{ auto: 'blocked-p' }],
       },
@@ -290,9 +291,9 @@ const lesson: Lesson = {
         marks: [{ auto: 'blocked-p' }],
       },
       point: l(
-        '两张梯形图里都有一条停在 AV 层的线——但左图的标记**提前**且形态不同（异位 P′ 落在 T 波上，遇到的是生理性不应期），下一个窦性 P 准时到达；右图的标记**准时**、形态同窦性，下传搏动 PR 恒定、QRS 宽（希氏束下病变）。左图是伪阻滞，无需起搏器；右图排除可逆原因后不论症状均 I 类起搏。**先给 A 层的标记定性——提前还是准时、像谁的形态——再决定那条停住的线意味着什么。**',
-        'Both ladders contain a line that stops in the AV tier — but on the left the mark is **early** and differently shaped (an ectopic P′ landing on the T wave, met by physiologic refractoriness), and the next sinus P arrives on time; on the right the mark is **on time** and sinus-shaped, with a constant PR on conducted beats and a wide QRS (infra-His disease). The left is pseudo-block and needs no pacemaker; the right is Class I pacing regardless of symptoms once reversible causes are excluded. **Characterise the A-tier mark first — early or on time, and whose shape — then decide what the stopped line means.**',
-        'Ambos diagramas contienen una línea que se detiene en el nivel AV, pero a la izquierda la marca es **precoz** y de morfología distinta (una P′ ectópica que cae sobre la T y topa con un periodo refractario fisiológico) y la siguiente P sinusal llega puntual; a la derecha la marca es **puntual** y de morfología sinusal, con PR constante en los latidos conducidos y QRS ancho (enfermedad infrahisiana). Lo izquierdo es un pseudobloqueo y no necesita marcapasos; lo derecho es marcapasos clase I con o sin síntomas una vez excluidas las causas reversibles. **Caracteriza primero la marca del nivel A —¿precoz o puntual, y de qué morfología?— y decide después qué significa la línea detenida.**',
+        '两张梯形图里都有一条停在 AV 层的线——但左图的标记**提前**（异位 P′ 落在 T 波上，遇到的是生理性不应期），其后的间歇短于 2 × PP；右图的标记**准时**、形态同窦性，下传搏动 PR 恒定、QRS 宽（希氏束下病变）。左图是伪阻滞，无需起搏器；右图排除可逆原因后不论症状均 I 类起搏。**先给 A 层的标记定性——提前还是准时——再决定那条停住的线意味着什么。**',
+        'Both ladders contain a line that stops in the AV tier — but on the left the mark is **early** (an ectopic P′ landing on the T wave, met by physiologic refractoriness), and the pause after it is shorter than 2 × PP; on the right the mark is **on time** and sinus-shaped, with a constant PR on conducted beats and a wide QRS (infra-His disease). The left is pseudo-block and needs no pacemaker; the right is Class I pacing regardless of symptoms once reversible causes are excluded. **Characterise the A-tier mark first — early or on time — then decide what the stopped line means.**',
+        'Ambos diagramas contienen una línea que se detiene en el nivel AV, pero a la izquierda la marca es **precoz** (una P′ ectópica que cae sobre la T y topa con un periodo refractario fisiológico) y la pausa que la sigue es menor de 2 × PP; a la derecha la marca es **puntual** y de morfología sinusal, con PR constante en los latidos conducidos y QRS ancho (enfermedad infrahisiana). Lo izquierdo es un pseudobloqueo y no necesita marcapasos; lo derecho es marcapasos clase I con o sin síntomas una vez excluidas las causas reversibles. **Caracteriza primero la marca del nivel A —¿precoz o puntual?— y decide después qué significa la línea detenida.**',
       ),
     },
     { kind: 'check', item: { family: 'p-qrs', seed: 6 } },
@@ -304,7 +305,7 @@ const lesson: Lesson = {
       ids: [19164, 861, 959],
       caption: l(
         '真实病例（PTB-XL）：一份二度房室传导阻滞、一份房性期前收缩、一份三度房室传导阻滞。**先在纸上为每份画出梯形图**——标 P、标 QRS、连线、读斜率——想好你的结论，然后揭晓核对。',
-        'Real PTB-XL cases: one second-degree AV block, one PACs, one complete AV block. **Draw the ladder for each on paper first** — mark the P waves, mark the QRS complexes, connect, read the slopes — commit to your reading, then reveal and check.',
+        'Real PTB-XL cases: one second-degree AV block, one with PACs, one complete AV block. **Draw the ladder for each on paper first** — mark the P waves, mark the QRS complexes, connect, read the slopes — commit to your reading, then reveal and check.',
         'Casos reales de PTB-XL: un bloqueo AV de segundo grado, unas extrasístoles auriculares y un bloqueo AV completo. **Dibuja primero en papel el diagrama de cada uno** —marca las P, marca los QRS, conecta, lee las pendientes—, decide tu conclusión y compruébala después con la solución.',
       ),
     },
@@ -347,9 +348,9 @@ const lesson: Lesson = {
           'Tres niveles: A para las P/P′, V para los QRS, y el nivel AV lleva la línea de conexión; su pendiente es el tiempo de conducción: cuanto más tendida, más largo el PR.',
         ),
         l(
-          '停在 AV 层的线 = 阻滞：斜率先变平再停 = 文氏型；斜率不变突然停 = Mobitz II；提前而形态不同的 P′ 停住 = 未下传房早。',
-          'A line stopping in the AV tier = block: flattening slopes then a stop = Wenckebach; a sudden stop at a constant slope = Mobitz II; an early, differently shaped P′ that stops = a blocked PAC.',
-          'Una línea que se detiene en el nivel AV = bloqueo: pendientes que se tienden y luego se detienen = Wenckebach; detención brusca con pendiente constante = Mobitz II; una P′ precoz y de otra morfología que se detiene = extrasístole auricular bloqueada.',
+          '停在 AV 层的线 = 阻滞：斜率先变平再停 = 文氏型；斜率不变突然停 = Mobitz II；提前的 P′ 停住 = 未下传房早。',
+          'A line stopping in the AV tier = block: flattening slopes then a stop = Wenckebach; a sudden stop at a constant slope = Mobitz II; an early P′ that stops = a blocked PAC.',
+          'Una línea que se detiene en el nivel AV = bloqueo: pendientes que se tienden y luego se detienen = Wenckebach; detención brusca con pendiente constante = Mobitz II; una P′ precoz que se detiene = extrasístole auricular bloqueada.',
         ),
         l(
           '自下而上的线 = 逆行心房激动；两条线在 V 层相遇 = 融合；房室分离中一条完整的窦性线到达 V = 夺获。',
