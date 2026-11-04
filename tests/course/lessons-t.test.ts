@@ -454,6 +454,8 @@ describe('t2 on the tracings', () => {
     const pb = pac.truth!.beats;
     const early = pb.flatMap((b, i) => (b.kind === 'atrial' ? [i] : []));
     expect(early.length).toBe(2);
+    const pMark = film.frames[2].marks?.find((m) => 'auto' in m && m.auto === 'p');
+    expect(early, 'the P′ mark points at a PAC').toContain(pMark && 'auto' in pMark ? pMark.beat : undefined);
     const sinusRr = median(pb.slice(1).flatMap((b, i) => (b.kind === 'sinus' && pb[i].kind === 'sinus' ? [b.qrsOn - pb[i].qrsOn] : [])));
     const s = pb.find((b) => b.kind === 'sinus')!;
     expect(detrended(pac, 'II', s.pOn!, s.pOff!)).toBeGreaterThan(0.05);
