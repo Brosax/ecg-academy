@@ -15,6 +15,9 @@ lesson in stages S, R, T, I, H, O or X. `src/course/lessons/s2.ts` is the worked
 - At least 1 block that plays: a `live` block with `play`, or a `film`.
 - Every criteria item in `tests/course/fixtures/criteria-baseline.json` still exists, word for word, in its lesson.
 
+`tests/course/mark-beats.test.ts` checks that on a strip where the default beat is ambiguous (more than one beat kind,
+an aberrant beat, or RR varying by more than 15 %) every auto mark names its `beat`.
+
 The stage test (`tests/course/lessons-<stage>.test.ts`) still applies: hook first, a `worked` block before the first
 `check` or `drill`, `criteria`, `contrast`, `drill`, `real` and `pitfalls` present, `summary` last with 3–5 points,
 every live dial realised by the engine.
@@ -35,7 +38,9 @@ condition changes. Labels are 1–4 words.
 
 **`predict`** (on a `live` with `play`, or a `film`): `{ question, options, answer }`. The learner picks before the
 experiment runs; the reveal is the experiment itself. Use it when the learner can reason the answer out, not for
-trivia.
+trivia. The player shows the options in a fixed order seeded by the question (`src/course/predict.ts`), so write the
+answer wherever is natural. When the options form a scale (numbers, shorter → longer, none → all), write them in
+scale order and set `ordered: true`; they are then shown as written.
 
 **`heart`.** The 3D heart follows the ECG cursor, with optional `showConduction` and `emphasize` regions. Use it for
 mechanism: where the impulse is slow, which wall is injured, where a pathway sits.
@@ -88,9 +93,35 @@ usually becomes one `film`.
   the caption, the notes, the marks, the highlighted leads and the film's frame labels (chips show only their
   number). The block's title is the step heading and is always visible, so a title never states the answer; the
   tracing itself (frame 1 of a film, the start of a sweep) is visible too.
-- An assertion's tolerance matches the note's precision: "about 115 ms" needs ±5 ms; "2–3.5 mm" needs the value
-  inside 2–3.5. Where a note range marks the threshold of a finding, assert both sides of the boundary in every lead
-  the definition uses.
+- An assertion's tolerance matches the note's precision. This applies to every number in the lesson's text (notes,
+  frame notes, captions, worked steps, contrast points, hook reveals), not only notes:
+
+  | Text says | Assert |
+  |---|---|
+  | "about N ms" | N ± 5 ms |
+  | "about N mm" | N ± 0.25 mm, or ± 5 % of N when that is larger |
+  | "N/min" (a stated rate) | N ± 1/min |
+  | "about N°" | N ± 5° |
+  | "≈ x" (a ratio) | x ± 0.05 |
+  | "a–b" | the value inside [a, b] |
+  | "about a–b" | inside [a − tol, b + tol], tol from the rows above |
+  | "flat", "isoelectric", "on the baseline" | \|value\| ≤ 0.05 mV (`MIN_WAVE_MV`) |
+
+  A bare number without "about" gets the same tolerance, or gains "about". Where a note range marks the threshold of
+  a finding, assert both sides of the boundary in every lead the definition uses. A claim with a direction ("deeper
+  than", "below 1 mm") is asserted on both sides when the text also gives a size.
+- A shape or lead claim ("rS in V1", "inverted T in V5–V6", "mirror depression in III") is asserted on the tracing it
+  describes, in every lead it names. If it cannot be asserted, narrow the words to what is.
+- "The same heart", "the same tracing", "same voltage": only when both use the same scenario and seed with only a dial,
+  a variant or a `recording` override changed, and the quantity named is asserted equal. Otherwise say "a similar".
+- On a strip where the default beat is ambiguous (see `mark-beats.test.ts`), every auto mark names its `beat`, and the
+  stage test asserts that beat is the one the text is about (its kind, or that its RR is the pause).
+- A prediction's answer is something the tracing will show. If a criteria card, a hook reveal or an earlier block
+  already states the answer, the question is recall: change it. Assert the answer against the engine.
+- Text about a real PTB-XL case states only its labels and the PTB-XL+ / 12SL values, and the stage test checks each
+  stated value against `ptbxl-meta.json` in a claims table (see `tests/course/lessons-x.test.ts`).
+- A frozen criteria item that is wrong is reported to the coordinator, never edited and never contradicted elsewhere
+  in the lesson.
 - Do not reuse a category name that criteria already define (for example "Borderline" in the athlete criteria) for
   something else.
 - Keep the ids, seeds and order of existing `check`, `drill` and `real` blocks.
@@ -102,7 +133,7 @@ usually becomes one `film`.
 ## Check your work
 
 ```bash
-npx vitest run --maxWorkers=2 tests/course/learn-by-doing.test.ts tests/course/lessons-s.test.ts
+npx vitest run --maxWorkers=2 tests/course/learn-by-doing.test.ts tests/course/mark-beats.test.ts tests/course/predict.test.ts tests/course/lessons-s.test.ts
 ```
 
 ```bash
