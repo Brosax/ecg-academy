@@ -515,8 +515,35 @@ describe('s5: axis on the tracings', () => {
     expect(mostEquiphasic(e)).toBe('III');
     for (const l of ['I', 'II'] as const) expect(qrs(e, l).net, l).toBeGreaterThan(0.1);
   });
-  it('R-wave progression: the R overtakes the S at V3', () => {
-    expect(transition(ecgOf(blocksOf('s5', 'ecg')[0].ecg))).toBe('V3');
+  it('R-wave progression film, normal frame: rS in V1, the R overtakes the S at V3, qR in V6', () => {
+    const e = ecgOf(blocksOf('s5', 'film')[0].frames[0].ecg);
+    expect(transition(e)).toBe('V3');
+    const b = midBeat(e);
+    const roles = (l: StdLead) => qrsWaves(e.signal.leads[l], e.signal.fs, b.qrsOn, b.qrsOff).map((w) => w.role).join('');
+    expect(roles('V1')).toBe('rs');
+    expect(roles('V6').startsWith('qr')).toBe(true);
+  });
+  it('R-wave progression film: poor progression has an R of about 2 mm in V3 and its transition at V4; V1–V2 high on the same heart shrinks the r in V2 from about 3.5 to 1 mm and turns the P in V1 negative', () => {
+    const [normal, poor, high] = blocksOf('s5', 'film')[0].frames.map((f) => ecgOf(f.ecg));
+    expect(qrs(poor, 'V3').max).toBeGreaterThan(0.15);
+    expect(qrs(poor, 'V3').max).toBeLessThanOrEqual(0.25);
+    expect(transition(poor)).toBe('V4');
+    expect(Math.abs(qrs(normal, 'V2').max - 0.35)).toBeLessThan(0.05);
+    expect(Math.abs(qrs(high, 'V2').max - 0.1)).toBeLessThan(0.03);
+    expect(pw(normal, 'V1').max).toBeGreaterThan(0.005);
+    expect(pw(high, 'V1').max).toBeLessThan(0.003);
+    expect(pw(high, 'V1').min).toBeLessThan(-0.02);
+    for (const l of [...LIMB, 'V3', 'V4', 'V5', 'V6'] as const) expect(high.signal.leads[l]).toEqual(normal.signal.leads[l]);
+  });
+  it('axis sweep notes: aVF most equiphasic at 0–20°, III at 25–50°, aVL at 55–80°; lead I shrinks near +90°', () => {
+    for (const [v, lead] of [[0, 'aVF'], [20, 'aVF'], [25, 'III'], [50, 'III'], [55, 'aVL'], [80, 'aVL']] as const) {
+      const e = played('s5', 0, v);
+      expect(Math.abs(e.truth!.axisDeg.qrs - v), `${v}°`).toBeLessThan(3);
+      expect(mostEquiphasic(e), `${v}°`).toBe(lead);
+    }
+    const [at55, at80] = [played('s5', 0, 55), played('s5', 0, 80)];
+    expect(qrs(at80, 'I').net).toBeLessThan(0.5 * qrs(at55, 'I').net);
+    expect(qrs(at80, 'I').net).toBeLessThan(0.3 * qrs(at80, 'aVF').net);
   });
   it('contrast LAD vs RAD: A I+, aVF−, II− (about −60°); B I−, aVF+ (about +115°); both QRS < 120 ms', () => {
     const c = blocksOf('s5', 'contrast').find((b) => b.title.en === 'Left or right: quadrant first');

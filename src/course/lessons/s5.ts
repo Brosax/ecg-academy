@@ -15,6 +15,9 @@ const synth = (scenario: string, seed: number, dials?: Partial<Record<DialId, nu
   req: { scenario, seed, ...(dials ? { dials } : {}) },
 });
 const real = (id: number): EcgSource => ({ kind: 'real', id });
+/** the R-progression heart; the same request with V1–V2 two spaces high (the sites of `precordial-misplacement-high`) */
+const PROGRESSION = { scenario: 'normal', seed: 504 } as const;
+const V1V2_HIGH = { chest: { V1: { ics: 2, line: 'sternal', side: 'R' }, V2: { ics: 2, line: 'sternal', side: 'L' } } } as const;
 
 const lesson: Lesson = {
   id: 's5',
@@ -50,15 +53,6 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('六轴系统，一句话一个导联', 'The hexaxial wheel, one line per lead', 'El sistema hexaxial, una línea por derivación'),
-      body: l(
-        '每个肢体导联从一个角度观察额面：I 0°、II +60°、aVF +90°、III +120°、aVL −30°、aVR −150°。\n- QRS 在指向平均向量的导联上最正；\n- 在与平均向量垂直的导联上呈等电位（正负相等）。\n互相垂直的导联对：I 与 aVF、II 与 aVL、III 与 aVR。',
-        'Each limb lead views the frontal plane from one angle: I 0°, II +60°, aVF +90°, III +120°, aVL −30°, aVR −150°.\n- The QRS is most positive in the lead pointing along the mean vector;\n- it is equiphasic (as much up as down) in the lead at 90° to it.\nPerpendicular pairs: I and aVF, II and aVL, III and aVR.',
-        'Cada derivación de miembros mira el plano frontal desde un ángulo: I 0°, II +60°, aVF +90°, III +120°, aVL −30°, aVR −150°.\n- El QRS es más positivo en la derivación que apunta en la dirección del vector medio;\n- es isodifásico (tanto hacia arriba como hacia abajo) en la derivación a 90° de él.\nParejas perpendiculares: I y aVF, II y aVL, III y aVR.',
-      ),
-    },
-    {
       kind: 'figure',
       figure: { id: 'hexaxial', params: { interactive: true, showProjections: true, quadrantMode: true } },
       caption: l(
@@ -78,17 +72,33 @@ const lesson: Lesson = {
         { label: l('右上方（极度）电轴', 'Right superior (“extreme”) axis', 'Eje superior derecho (“extremo”)'), value: l('−90° 至 ±180°', '−90° to ±180°', '−90° a ±180°') },
         { label: l('不确定电轴', 'Indeterminate axis', 'Eje indeterminado'), value: l('所有肢体导联都呈等电位', 'All limb leads equiphasic', 'Todas las derivaciones de miembros isodifásicas') },
         { label: l('儿童', 'Children', 'Niños'), value: l('正常范围更偏右（新生儿可达约 +180°）：用年龄别界值', 'Normal range further right (up to about +180° in newborns): use age-specific limits', 'Rango normal más a la derecha (hasta unos +180° en el recién nacido): usa límites por edad') },
+        { label: l('肢体导联角度', 'Limb-lead angles', 'Ángulos de las derivaciones de miembros'), value: l('I 0°、II +60°、aVF +90°、III +120°、aVL −30°、aVR −150°', 'I 0°, II +60°, aVF +90°, III +120°, aVL −30°, aVR −150°', 'I 0°, II +60°, aVF +90°, III +120°, aVL −30°, aVR −150°') },
+        {
+          label: l('互相垂直的导联', 'Perpendicular pairs', 'Parejas perpendiculares'),
+          value: l(
+            'I 与 aVF、II 与 aVL、III 与 aVR。电轴与最接近等电位的导联相差 90°；指向电轴的导联 QRS 最正',
+            'I and aVF, II and aVL, III and aVR. The axis lies 90° from the most equiphasic lead; the QRS is most positive in the lead pointing along it',
+            'I y aVF, II y aVL, III y aVR. El eje está a 90° de la derivación más isodifásica; el QRS es más positivo en la derivación que apunta hacia él',
+          ),
+        },
+        {
+          label: l('象限（I 与 aVF 的 QRS 净方向）', 'Quadrant (net QRS in I and aVF)', 'Cuadrante (QRS neto en I y aVF)'),
+          value: l(
+            'I+ aVF+ 正常；I+ aVF− 看 II（II+ 正常，II− 电轴左偏）；I− aVF+ 电轴右偏；I− aVF− 右上方电轴',
+            'I+ aVF+ normal; I+ aVF− check II (II+ normal, II− left axis deviation); I− aVF+ right axis deviation; I− aVF− right superior axis',
+            'I+ aVF+ normal; I+ aVF− mira II (II+ normal, II− desviación a la izquierda); I− aVF+ desviación a la derecha; I− aVF− eje superior derecho',
+          ),
+        },
+        {
+          label: l('胸导联 R 波递增', 'Chest-lead R-wave progression', 'Progresión de la R en las precordiales'),
+          value: l(
+            'V1–V2 呈 rS → V3–V4 移行（R ≈ S）→ V5–V6 高 R，常有小的间隔 q 波；移行提前（V1–V2）或推后（V5–V6）只是描述。R 波递增不良：V3 的 R ≤ 3 mm（原因：V1–V2 电极错位、左心室肥厚、陈旧性前壁梗死、肺部疾病）',
+            'rS in V1–V2 → transition (R ≈ S) at V3–V4 → tall R in V5–V6, often with a small septal q; an early (V1–V2) or late (V5–V6) transition is a description. Poor progression: R in V3 ≤ 3 mm (causes: misplaced V1–V2, LVH, old anterior infarct, lung disease)',
+            'rS en V1–V2 → transición (R ≈ S) en V3–V4 → R alta en V5–V6, a menudo con una q septal pequeña; una transición precoz (V1–V2) o tardía (V5–V6) es una descripción. Mala progresión: R en V3 ≤ 3 mm (causas: V1–V2 mal colocadas, HVI, infarto anterior antiguo, enfermedad pulmonar)',
+          ),
+        },
       ],
       source: 'Surawicz B et al. AHA/ACCF/HRS Part III, Circulation 2009;119:e235; Mason JW et al. Part II, Circulation 2007;115:1325; Kligfield P et al. Part I, Circulation 2007;115:1306; Rijnbeek PR et al. Eur Heart J 2001;22:702',
-    },
-    {
-      kind: 'text',
-      title: l('两步法：先象限，再度数', 'Two steps: quadrant, then degrees', 'Dos pasos: cuadrante y después grados'),
-      body: l(
-        '**第一步——象限**（看 I 和 aVF 的 QRS 净方向）：\n- I 正、aVF 正：正常（0° 至 +90°）\n- I 正、aVF 负：看 II。II 正 → 正常（0° 至 −30°）；II 负 → 电轴左偏\n- I 负、aVF 正：电轴右偏\n- I 负、aVF 负：右上方（极度）电轴\n**第二步——度数**：找最接近等电位的肢体导联，电轴与它相差 90°，偏向与它垂直的那个导联呈正向的一侧。',
-        '**Step 1, quadrant** (net QRS direction in I and aVF):\n- I + and aVF +: normal (0° to +90°)\n- I + and aVF −: check II. II + → normal (0° to −30°); II − → left axis deviation\n- I − and aVF +: right axis deviation\n- I − and aVF −: right superior (extreme) axis\n**Step 2, degrees**: find the most equiphasic limb lead. The axis lies 90° away from it, on the side where the perpendicular lead is positive.',
-        '**Paso 1, cuadrante** (dirección neta del QRS en I y aVF):\n- I + y aVF +: normal (0° a +90°)\n- I + y aVF −: mira II. II + → normal (0° a −30°); II − → desviación a la izquierda\n- I − y aVF +: desviación a la derecha\n- I − y aVF −: eje superior derecho (extremo)\n**Paso 2, grados**: busca la derivación de miembros más isodifásica. El eje está a 90° de ella, hacia el lado en que la derivación perpendicular es positiva.',
-      ),
     },
     {
       kind: 'worked',
@@ -121,11 +131,26 @@ const lesson: Lesson = {
       scenario: 'normal',
       seed: 502,
       dials: [{ id: 'axis' }],
-      view: { layout: '6x2', highlightLeads: ['I', 'II', 'aVF', 'aVL'] },
+      view: { layout: '6x2', highlightLeads: ['I', 'II', 'III', 'aVF', 'aVL'] },
+      play: {
+        dial: 'axis',
+        from: 0,
+        to: 80,
+        notes: [
+          { min: 0, max: 20, text: l('**aVF**（+90°）最接近等电位：电轴与它相差 90°，靠近 I 导联（0°）。', '**aVF** (+90°) is the most equiphasic: the axis lies 90° from it, close to lead I (0°).', '**aVF** (+90°) es la más isodifásica: el eje está a 90° de ella, cerca de la derivación I (0°).') },
+          { min: 25, max: 50, text: l('现在 **III**（+120°）最接近等电位：相差 90°，电轴约 +30°。', 'Now **III** (+120°) is the most equiphasic: 90° away puts the axis around +30°.', 'Ahora **III** (+120°) es la más isodifásica: a 90° de ella, el eje está hacia +30°.') },
+          { min: 55, max: 80, text: l('现在 **aVL**（−30°）最接近等电位：电轴约 +60°。接近 +90° 时 I 导联变小。', 'Now **aVL** (−30°) is the most equiphasic: the axis is around +60°. Near +90°, lead I shrinks.', 'Ahora **aVL** (−30°) es la más isodifásica: el eje está hacia +60°. Cerca de +90°, la derivación I se hace pequeña.') },
+        ],
+      },
+      predict: {
+        question: l('把电轴从 0° 转到 +80°。转到 +60° 左右时，哪个肢体导联最接近等电位？', 'Turn the axis from 0° to +80°. Near +60°, which limb lead goes equiphasic?', 'Gira el eje de 0° a +80°. Hacia +60°, ¿qué derivación de miembros se vuelve isodifásica?'),
+        options: [l('aVL', 'aVL', 'aVL'), l('III', 'III', 'III'), l('aVF', 'aVF', 'aVF')],
+        answer: 0,
+      },
       caption: l(
-        '把电轴从 0° 转到 +80°。0° 时 aVF 接近等电位，+60° 左右是 aVL，越接近 +90° I 导联越小。等电位的导联总是与电轴相差 90°。',
-        'Turn the axis from 0° to +80°. At 0° aVF is nearly equiphasic; around +60° it is aVL; and as you approach +90°, lead I shrinks. The equiphasic lead always sits 90° from the axis.',
-        'Gira el eje de 0° a +80°. A 0° aVF es casi isodifásica; hacia +60° lo es aVL; y al acercarte a +90° la derivación I se hace pequeña. La derivación isodifásica siempre está a 90° del eje.',
+        '等电位的导联总是与电轴相差 90°。看它从 aVF 换到 III，再换到 aVL。',
+        'The equiphasic lead always sits 90° from the axis. Watch it move from aVF to III to aVL.',
+        'La derivación isodifásica siempre está a 90° del eje. Mira cómo pasa de aVF a III y después a aVL.',
       ),
     },
     {
@@ -178,29 +203,44 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
+      kind: 'film',
       title: l('胸导联：R 波递增', 'Chest leads: R-wave progression', 'Precordiales: progresión de la onda R'),
-      body: l(
-        '从 V1 到 V6，QRS 按可预测的方式变化：\n- V1–V2：小 r、深 S（rS）\n- V3–V4：R ≈ S——**移行区**\n- V5–V6：高 R，S 小或无，常有小的间隔 q 波（qRs）\n移行区提前（V1–V2）或推后（V5–V6）只是描述，不是诊断。R 波递增不良（V3 的 R ≤ 3 mm）原因很多——V1–V2 电极放置错误、左心室肥厚、陈旧性前壁梗死、肺部疾病——下结论前先检查电极位置。',
-        'From V1 to V6 the QRS changes in a predictable way:\n- V1–V2: small r, deep S (rS)\n- V3–V4: R ≈ S, the **transition**\n- V5–V6: tall R, small or no S, often a small septal q (qRs)\nAn early transition (V1–V2) or a late one (V5–V6) is a description, not a diagnosis. Poor R-wave progression (R in V3 ≤ 3 mm) has many causes (misplaced V1–V2, LVH, an old anterior infarct, lung disease), so check the electrode placement before you read anything into it.',
-        'De V1 a V6 el QRS cambia de forma predecible:\n- V1–V2: r pequeña y S profunda (rS)\n- V3–V4: R ≈ S, la **transición**\n- V5–V6: R alta, S pequeña o ausente, a menudo una q septal pequeña (qRs)\nUna transición precoz (V1–V2) o tardía (V5–V6) es una descripción, no un diagnóstico. La mala progresión de la R (R en V3 ≤ 3 mm) tiene muchas causas (V1–V2 mal colocadas, HVI, un infarto anterior antiguo, enfermedad pulmonar), así que comprueba la colocación de los electrodos antes de interpretarla.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('normal', 504),
       view: { layout: '6x2' },
-      marks: [
-        { auto: 'r', lead: 'V1' },
-        { auto: 's', lead: 'V1' },
-        { auto: 'r', lead: 'V4' },
-        { auto: 's', lead: 'V4' },
-        { auto: 'r', lead: 'V6' },
+      frames: [
+        {
+          label: l('正常', 'Normal', 'Normal'),
+          ecg: { kind: 'synth', req: PROGRESSION },
+          note: l('V1 呈 rS，R 波在 V3 超过 S 波（移行区），V6 呈 qR：正常递增。', 'rS in V1, the R overtakes the S at V3 (the transition), qR in V6: normal progression.', 'rS en V1, la R supera a la S en V3 (la transición), qR en V6: progresión normal.'),
+          marks: [
+            { auto: 'r', lead: 'V1' },
+            { auto: 's', lead: 'V1' },
+            { auto: 'r', lead: 'V3' },
+            { auto: 's', lead: 'V3' },
+            { auto: 'r', lead: 'V6' },
+          ],
+        },
+        {
+          label: l('R 波递增不良', 'Poor R progression', 'Mala progresión de R'),
+          ecg: synth('poor-r-progression', 504),
+          note: l('V3 的 R 波只有约 2 mm（≤ 3 mm），移行区推到 V4：R 波递增不良。这是描述，原因很多。', 'The R in V3 is only about 2 mm (≤ 3 mm) and the transition moves to V4: poor R-wave progression, a description with many causes.', 'La R en V3 mide solo unos 2 mm (≤ 3 mm) y la transición pasa a V4: mala progresión de la R, una descripción con muchas causas.'),
+          marks: [{ auto: 'r', lead: 'V3' }],
+        },
+        {
+          label: l('V1–V2 贴高了', 'V1–V2 too high', 'V1–V2 demasiado altas'),
+          ecg: { kind: 'synth', req: { ...PROGRESSION, recording: { placement: V1V2_HIGH } } },
+          note: l('同一颗心脏，V1–V2 贴在第 2 肋间：V2 的 r 波从约 3.5 mm 降到约 1 mm，V1 的 P 波变成倒置。先查电极位置。', 'Same heart, V1–V2 in the 2nd intercostal space: the r in V2 drops from about 3.5 to 1 mm and the P in V1 turns negative. Check placement first.', 'Mismo corazón, V1–V2 en el 2.º espacio intercostal: la r de V2 baja de unos 3,5 a 1 mm y la P de V1 se hace negativa. Comprueba antes la colocación.'),
+          marks: [{ auto: 'r', lead: 'V2' }],
+        },
       ],
+      predict: {
+        question: l('V1–V2 贴高了两个肋间（第 2 肋间）。它们的 r 波会怎样？', 'V1–V2 are stuck two spaces too high (2nd intercostal space). What happens to their r waves?', 'V1–V2 se colocan dos espacios demasiado altas (2.º espacio intercostal). ¿Qué les pasa a sus ondas r?'),
+        options: [l('变小', 'They shrink', 'Se hacen más pequeñas'), l('变高', 'They grow', 'Crecen'), l('不变', 'Nothing', 'Nada')],
+        answer: 0,
+      },
       caption: l(
-        '正常递增：V1 呈 rS，R 波在 V3 附近超过 S 波，V6 呈 qR/qRs。',
-        'Normal progression: rS in V1, the R overtakes the S around V3, qR or qRs in V6.',
-        'Progresión normal: rS en V1, la R supera a la S hacia V3, qR o qRs en V6.',
+        '移行区提前或推后只是描述，不是诊断。判断 R 波递增不良之前，先查 V1–V3 的电极位置。',
+        'An early or late transition is a description, not a diagnosis. Before calling poor R-wave progression, check where V1–V3 sit.',
+        'Una transición precoz o tardía es una descripción, no un diagnóstico. Antes de hablar de mala progresión de la R, comprueba dónde están V1–V3.',
       ),
     },
     {
