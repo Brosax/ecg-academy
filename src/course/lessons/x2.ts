@@ -99,9 +99,9 @@ const lesson: Lesson = {
     {
       kind: 'text',
       body: l(
-        '今天的门诊流有 14 份真实心电图：**5 份正常、4 份次要、4 份重要、1 份现在处理**；真实门诊里正常的只会更多。其余多是常见发现：窦性心动过缓、早搏、一度房室阻滞、束支阻滞。最常见的错误是过度诊断，代价是不必要的转诊、检查和焦虑。每一份都走完 x1 的十步：这就是筛子。',
-        'Today\'s stream holds 14 real ECGs: **5 normal, 4 minor, 4 major, 1 act now**; a real clinic has even more normals. The rest are mostly common findings: sinus bradycardia, extrasystoles, first-degree AV block, bundle branch block. The commonest error is over-calling, and it costs needless referrals, tests and anxiety. Every one gets the ten steps from x1: that is the sieve.',
-        'La serie de hoy tiene 14 ECG reales: **5 normales, 4 menores, 4 mayores y 1 de actuar ya**; una consulta real tiene aún más normales. El resto son sobre todo hallazgos frecuentes: bradicardia sinusal, extrasístoles, bloqueo AV de primer grado, bloqueo de rama. El error más frecuente es sobrediagnosticar, y cuesta derivaciones, pruebas y ansiedad innecesarias. Cada uno recibe los diez pasos de x1: ese es el tamiz.',
+        '今天的门诊流有 14 份真实心电图：**5 份正常**（含一份窦缓、一份窦性心律不齐）、**4 份小发现**（右束支阻滞、一度房室阻滞、两份房早）、**4 份显著发现**（两份房扑/房颤、陈旧性下壁心梗、左心室肥厚电压）、**1 份现在处理**；真实门诊里正常的只会更多。最常见的错误是过度诊断，代价是不必要的转诊、检查和焦虑。每一份都走完 x1 的十步：这就是筛子。',
+        'Today\'s stream holds 14 real ECGs: **5 normal** (one sinus bradycardia, one sinus arrhythmia), **4 with a small finding** (RBBB, first-degree AV block, two with PACs), **4 with a significant finding** (two atrial flutter or AF, an old inferior MI, LVH voltage) and **1 act now**; a real clinic has even more normals. The commonest error is over-calling, and it costs needless referrals, tests and anxiety. Every one gets the ten steps from x1: that is the sieve.',
+        'La serie de hoy tiene 14 ECG reales: **5 normales** (una bradicardia sinusal y una arritmia sinusal), **4 con un hallazgo menor** (bloqueo de rama derecha, bloqueo AV de primer grado, dos con extrasístoles auriculares), **4 con un hallazgo relevante** (dos aleteos o FA, un IAM inferior antiguo, voltaje de HVI) y **1 de actuar ya**; una consulta real tiene aún más normales. El error más frecuente es sobrediagnosticar, y cuesta derivaciones, pruebas y ansiedad innecesarias. Cada uno recibe los diez pasos de x1: ese es el tamiz.',
       ),
     },
     {
@@ -150,7 +150,7 @@ const lesson: Lesson = {
     },
     {
       kind: 'film',
-      title: l('第 2 份：一条右束支，其余九行照读', 'Tracing 2: one right bundle, nine more lines', 'ECG 2: una rama derecha y nueve líneas más'),
+      title: l('第 2 份：宽 QRS 改变了什么？', 'Tracing 2: what does a wide QRS change?', 'ECG 2: ¿qué cambia un QRS ancho?'),
       view: GRID,
       frames: [
         {
@@ -286,7 +286,7 @@ const lesson: Lesson = {
     },
     {
       kind: 'film',
-      title: l('第 8 份：先写电压，再写它对这个人的意义', 'Tracing 8: state the voltage, then what it means in him', 'ECG 8: di el voltaje y luego qué significa en él'),
+      title: l('第 8 份：胸前导联很高，报告怎么写？', 'Tracing 8: very tall chest leads, how should the report read?', 'ECG 8: precordiales muy altas, ¿cómo se informa?'),
       view: GRID,
       frames: [
         {
@@ -305,7 +305,7 @@ const lesson: Lesson = {
           note: l(
             '看 I、aVL、V5、V6：没有 ST–T 改变的标注。写“符合左心室肥厚的电压标准”；年轻男性或运动员的孤立电压常属正常（h9）。',
             'Look at I, aVL, V5, V6: no ST–T change is labelled. Write "voltage criteria for LVH"; isolated voltage in a young man or an athlete is often normal (h9).',
-            'Mira I, aVL, V5 y V6: no hay ST–T etiquetado. Escribe «criterios de voltaje de HVI»; el voltaje aislado en un joven o un deportista suele ser normal (h9).',
+            'Mira I, aVL, V5 y V6: no hay alteración del ST–T etiquetada. Escribe «criterios de voltaje de HVI»; el voltaje aislado en un joven o un deportista suele ser normal (h9).',
           ),
           marks: [{ kind: 'lead', lead: 'I' }, { kind: 'lead', lead: 'aVL' }, { kind: 'lead', lead: 'V5' }, { kind: 'lead', lead: 'V6' }],
         },
@@ -354,16 +354,16 @@ const lesson: Lesson = {
     { kind: 'drill', families: ['spot-real', 'findings-real'], count: 10, passScore: 0.8 },
     {
       kind: 'film',
-      title: l('房扑：心室率 = 300 ÷ 下传比例', 'Flutter: ventricular rate = 300 ÷ the conduction ratio', 'Aleteo: frecuencia ventricular = 300 ÷ la conducción'),
+      title: l('房扑：一个折返环，三种下传比例', 'Flutter: one circuit, three conduction ratios', 'Aleteo: un circuito, tres grados de conducción'),
       view: STRIP,
       frames: [
         {
           label: l('2:1', '2:1', '2:1'),
           ecg: FLUTTER(2),
           note: l(
-            '规则窄 QRS，约 150 次/分：每两个 F 波下传一个，另一个埋在 T 波里。',
-            'Regular and narrow at about 150/min: one F wave in two conducts, the other is buried in the T wave.',
-            'Regular y estrecho a unas 150 lpm: conduce una onda F de cada dos; la otra queda enterrada en la onda T.',
+            '规则窄 QRS，约 150 次/分：每两个 F 波下传一个，另一个落在 QRS 上，被它盖住。',
+            'Regular and narrow at about 150/min: one F wave in two conducts, the other lands on the QRS and is lost in it.',
+            'Regular y estrecho a unas 150 lpm: conduce una onda F de cada dos; la otra cae sobre el QRS y queda oculta.',
           ),
           marks: [{ auto: 'f-waves' }],
         },
@@ -402,18 +402,18 @@ const lesson: Lesson = {
         answer: 0,
       },
       caption: l(
-        '下一份真实图里有一份快而规则的。约 150 次/分的规则窄 QRS 心动过速，先在 II、III、aVF 找锯齿波。',
-        'The next real set holds a fast, regular one. A regular narrow tachycardia near 150/min: hunt the sawtooth in II, III and aVF first.',
-        'El siguiente grupo real tiene uno rápido y regular. Ante una taquicardia regular estrecha cerca de 150 lpm, busca primero el diente de sierra en II, III y aVF.',
+        '房扑的心房率约 300 次/分：心室率 = 300 ÷ 下传比例。约 150 次/分的规则窄 QRS 心动过速，先在 II、III、aVF 找锯齿波。',
+        'Flutter\'s atrial rate is about 300/min: ventricular rate = 300 ÷ the conduction ratio. A regular narrow tachycardia near 150/min: hunt the sawtooth in II, III and aVF first.',
+        'La frecuencia auricular del aleteo ronda las 300 lpm: frecuencia ventricular = 300 ÷ el grado de conducción. Ante una taquicardia regular estrecha cerca de 150 lpm, busca primero el diente de sierra en II, III y aVF.',
       ),
     },
     {
       kind: 'real',
       ids: [2739, 2466, 17835],
       caption: l(
-        '门诊堆里剩下的三份：89 岁男性、73 岁女性、76 岁男性。每份先按十步想好完整报告——快而规则的那份，先在 II/III/aVF 找锯齿波并数出心房率；另外两份，找一找提前且形态不同的 P 波，并量一量 PR。想好再揭晓。',
-        'The last three in the clinic pile: an 89-year-old man, a 73-year-old woman, a 76-year-old man. Work out the full ten-step report on each first — in the fast, regular one, hunt the sawtooth in II/III/aVF and count the atrial rate; in the other two, look for an early P wave of a different shape, and measure the PR. Reveal only once you have committed.',
-        'Los tres últimos de la pila de consulta: varón de 89 años, mujer de 73 y varón de 76. Elabora primero el informe completo de diez pasos de cada uno: en el rápido y regular, busca el diente de sierra en II/III/aVF y cuenta la frecuencia auricular; en los otros dos, busca una P precoz de morfología distinta y mide el PR. Mira la solución solo cuando te hayas comprometido.',
+        '门诊堆里剩下的三份：89 岁男性、73 岁女性、76 岁男性。每份先按十步想好完整报告——快的那份，先在 II/III/aVF 找锯齿波并数出心房率；另外两份，找一找提前且形态不同的 P 波，并量一量 PR。想好再揭晓。',
+        'The last three in the clinic pile: an 89-year-old man, a 73-year-old woman, a 76-year-old man. Work out the full ten-step report on each first — in the fast one, hunt the sawtooth in II/III/aVF and count the atrial rate; in the other two, look for an early P wave of a different shape, and measure the PR. Reveal only once you have committed.',
+        'Los tres últimos de la pila de consulta: varón de 89 años, mujer de 73 y varón de 76. Elabora primero el informe completo de diez pasos de cada uno: en el rápido, busca el diente de sierra en II/III/aVF y cuenta la frecuencia auricular; en los otros dos, busca una P precoz de morfología distinta y mide el PR. Mira la solución solo cuando te hayas comprometido.',
       ),
     },
     {

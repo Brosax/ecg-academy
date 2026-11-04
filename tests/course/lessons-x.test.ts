@@ -4,6 +4,8 @@
  * cases, summary), every family check generates, every synthetic ECG can be generated and shows what the text says,
  * and every real PTB-XL case is described as its labels and 12SL reference measurements say.
  */
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import type { Block, Lesson } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
@@ -13,11 +15,12 @@ import { baselineBefore, qrsWaves } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
 import { FINDINGS, type FindingId } from '../../src/core/findings';
+import { axisFromNets, limbNetAreas, qrsWindows } from '../../src/figures/math/axis';
 import type { L10n } from '../../src/core/l10n';
 import type { StdLead } from '../../src/core/leads';
 import type { EcgSource, Item } from '../../src/practice/api';
 import { generateItem } from '../../src/practice';
-import { CONFIDENCE_EXPECTED, LEITNER_DAYS, REVIEW_PASS } from '../../src/practice/core/mastery';
+import { CONFIDENCE_EXPECTED, criticalStatus, LEITNER_DAYS, REVIEW_PASS } from '../../src/practice/core/mastery';
 import { getCase } from '../../src/real/library';
 import { generate, scenarios, type SynthRequest } from '../../src/synth';
 
@@ -432,7 +435,7 @@ describe('x2: the synthetic frames', () => {
       expect(tInverted(e, l), l).toBe(true);
     }
   });
-  it('flutter film: one circuit (same seed), atrial rate about 300 with F waves about 200 ms apart; 2:1 ≈ 150/min with every non-conducted F wave hidden, 3:1 ≈ 100/min and 4:1 ≈ 75/min with F waves visible between the complexes', () => {
+  it('flutter film: one circuit (same seed), atrial rate about 300 with F waves about 200 ms apart, narrow QRS; 2:1 ≈ 150/min with every non-conducted F wave landing on a QRS and hidden, 3:1 ≈ 100/min and 4:1 ≈ 75/min with F waves visible between the complexes', () => {
     const film = blocksOf('x2', 'film')[2];
     const reqs = film.frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req : null));
     for (const r of reqs) expect({ ...r, dials: undefined }).toEqual({ ...reqs[0], dials: undefined });
@@ -445,11 +448,16 @@ describe('x2: the synthetic frames', () => {
       for (const g of gaps) expect(Math.abs(g - 200), `frame ${k}`).toBeLessThan(10);
       expect(Math.abs(t.hrBpm - [150, 100, 75][k]), `frame ${k}`).toBeLessThan(3);
       expect(t.regular, `frame ${k}`).toBe(true);
+      expect(t.qrsMs, `frame ${k}`).toBeLessThan(120);
     });
     const [two, three, four] = es;
     const blocked = (e: Ecg) => e.truth!.atrial.filter((a) => a.conductedTo === null);
     expect(blocked(two).length).toBeGreaterThan(5);
-    for (const a of blocked(two)) expect(a.visible, `2:1 F at ${a.t}`).toBe(false);
+    const lastQrs = two.truth!.beats[two.truth!.beats.length - 1].qrsOn;
+    for (const a of blocked(two)) {
+      expect(a.visible, `2:1 F at ${a.t}`).toBe(false);
+      if (a.t < lastQrs) expect(two.truth!.beats.some((b) => a.t > b.qrsOn - 100 && a.t < b.qrsOn), `2:1 F at ${a.t} runs into a QRS`).toBe(true);
+    }
     for (const e of [three, four]) expect(blocked(e).filter((a) => a.visible).length).toBeGreaterThan(5);
   });
 });
@@ -472,14 +480,14 @@ describe('x3: triage tracings', () => {
     expect(Math.abs(t.hrBpm - 92)).toBeLessThan(2);
     expect(t.qrsMs).toBeLessThan(110);
     for (const l of ['V2', 'V3', 'V4'] as const) {
-      expect(stAt(e, l, 60), l).toBeGreaterThan(0.22);
-      expect(stAt(e, l, 60), l).toBeLessThan(0.48);
+      expect(stAt(e, l, 60), l).toBeGreaterThanOrEqual(0.245);
+      expect(stAt(e, l, 60), l).toBeLessThan(0.455);
     }
     expect(stAt(e, 'V3', 60)).toBeGreaterThan(Math.max(stAt(e, 'V2', 60), stAt(e, 'V4', 60)));
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l, 60), l).toBeLessThan(-0.05);
     expect(t.findings).not.toContain('hyperkalemia');
   });
-  it('T-and-device film, hyperkalaemia: no visible P in II, QRS about 170 ms, T in V3–V5 well above the T in II', () => {
+  it('T-and-device film, hyperkalaemia: no visible P in II, QRS about 170 ms, tall T in V3–V5 (well above the T in II)', () => {
     const e = ecgOf(blocksOf('x3', 'film')[1].frames[0].ecg);
     const t = e.truth!;
     expect(t.findings).toContain('hyperkalemia');
@@ -489,14 +497,14 @@ describe('x3: triage tracings', () => {
     for (const l of ['V3', 'V4'] as const) expect(tw(e, l).max, l).toBeGreaterThan(2 * tw(e, 'II').max);
     expect(tw(e, 'V5').max).toBeGreaterThan(1.5 * tw(e, 'II').max);
   });
-  it('T-and-device film, digoxin effect: PR about 190 ms (upper normal), QTc not long, ST sagging below the baseline in V4–V6', () => {
+  it('T-and-device film, digoxin effect: PR about 190 ms (upper normal), QTc not long, a visible ST sag (≥ 0.5 mm below the baseline) in V4–V6', () => {
     const e = ecgOf(blocksOf('x3', 'film')[1].frames[1].ecg);
     const t = e.truth!;
     expect(t.findings).toContain('digoxin-effect');
     expect(Math.abs(t.prMs! - 190)).toBeLessThan(5);
     expect(t.prMs!).toBeLessThanOrEqual(200);
     expect(t.qtcFridericiaMs).toBeLessThan(420);
-    for (const l of ['V4', 'V5', 'V6'] as const) expect(stAt(e, l, 60), l).toBeLessThan(-0.02);
+    for (const l of ['V4', 'V5', 'V6'] as const) expect(stAt(e, l, 60), l).toBeLessThanOrEqual(-0.05);
   });
   it('T-and-device film, loss of capture: paced beats one stimulus interval apart, and gaps where a stimulus captured nothing', () => {
     const e = ecgOf(blocksOf('x3', 'film')[1].frames[2].ecg);
@@ -563,7 +571,7 @@ describe('x4: calibration tracings', () => {
     expect(r.findings).toContain('lafb');
     expect(Math.abs(r.axisDeg.qrs + 75)).toBeLessThan(5);
   });
-  it('statements film: one sinus tachycardia in every frame; a P upright in II before every QRS; RR about 12 small squares (about 480 ms) on every beat, about 125/min, regular', () => {
+  it('statements film: one sinus tachycardia in every frame; a P upright in II before every QRS; RR about 12 small squares (470–490 ms) on every beat, about 125/min, regular', () => {
     const film = blocksOf('x4', 'film')[1];
     for (const f of film.frames) expect(f.ecg).toEqual(film.frames[0].ecg);
     const e = ecgOf(film.frames[0].ecg);
@@ -574,12 +582,19 @@ describe('x4: calibration tracings', () => {
     expect(t.beats.every((b) => b.pOn !== null)).toBe(true);
     expect(pw(e, 'II').max).toBeGreaterThan(0.05);
     for (const rr of rrs(e)) {
-      expect(Math.abs(rr - 480)).toBeLessThan(20);
+      expect(rr).toBeGreaterThanOrEqual(470);
+      expect(rr).toBeLessThanOrEqual(490);
       expect(Math.abs(rr / 40 - 12)).toBeLessThan(0.5);
     }
   });
-  it('axis calculator: the autopsy tracing', () => {
-    expect(blocksOf('x4', 'figure')[0].ecg).toEqual(blocksOf('x4', 'worked')[0].ecg);
+  it('axis calculator: the autopsy tracing; the wheel, fed the net QRS areas of I and aVF the way the figure reads them, lands at about −60°', () => {
+    const src = blocksOf('x4', 'figure')[0].ecg!;
+    expect(src).toEqual(blocksOf('x4', 'worked')[0].ecg);
+    const sig = ecgOf(src).signal;
+    const windows = qrsWindows(ecgOf(src).truth!.beats, []).filter(([a, b]) => a >= 40 && b <= sig.durationMs - 10);
+    const nets = limbNetAreas(sig, windows);
+    const wheel = axisFromNets(nets.I, nets.aVF);
+    expect(Math.abs(wheel.deg! + 60)).toBeLessThan(5);
   });
   it('error-type film: QT about 510 ms and longer than half the RR; the autopsy tracing (I up, II/III/aVF down, qR in aVL); complete block with P waves running on and a wide escape about 34/min', () => {
     const film = blocksOf('x4', 'film')[0];
@@ -600,6 +615,17 @@ describe('x4: calibration tracings', () => {
     expect(CONFIDENCE_EXPECTED).toEqual({ 1: 0.4, 2: 0.7, 3: 0.95 });
     expect(REVIEW_PASS).toBe(0.8);
     expect([...LEITNER_DAYS]).toEqual([1, 2, 4, 8, 16]);
+  });
+  it('Progress-page card: the overconfidence warning needs at least five "Sure" answers under 80 %; a critical finding is secured only after at least 3 attempts with the last five all ≥ 80 % and no missed-critical flag', () => {
+    const page = readFileSync(fileURLToPath(new URL('../../src/practice/ui/ProgressPage.tsx', import.meta.url)), 'utf8');
+    expect(page).toMatch(/sure\.n >= 5 && sure\.accuracy !== null && sure\.accuracy < 0\.8 && <p class="pr-warn">\{tp\('overconfident'\)\}/);
+    const pass = { score: 0.8, missedCritical: false };
+    const fail = { score: 0.7, missedCritical: false };
+    expect(criticalStatus([pass, pass])).toBe('learning');
+    expect(criticalStatus([pass, pass, pass])).toBe('secured');
+    expect(criticalStatus([fail, pass, pass, pass, pass, pass])).toBe('secured');
+    expect(criticalStatus([pass, fail, pass, pass, pass, pass])).toBe('learning');
+    expect(criticalStatus([pass, pass, { score: 1, missedCritical: true }])).toBe('learning');
   });
 });
 
@@ -689,6 +715,28 @@ describe('stage X real cases: the text agrees with the labels and the 12SL refer
       else tally.minor++;
     }
     expect(tally).toEqual({ normal: 5, minor: 4, major: 4, critical: 1 });
+  });
+
+  it('x2 stream text names each group: normals with one sinus bradycardia and one sinus arrhythmia; small = RBBB, first-degree AV block, two PACs; significant = two flutter/AF, old inferior MI, LVH; the fast one of the last three is the flutter', () => {
+    const group = (id: number) => {
+      const f = getCase(id)!.findings;
+      if (f.includes('normal-ecg')) return 'normal';
+      if (f.some((x) => FINDINGS[x].severity === 'critical')) return 'critical';
+      return f.some((x) => FINDINGS[x].severity === 'major') ? 'major' : 'minor';
+    };
+    const ids = realIds(lessonById('x2'));
+    const inGroup = (g: string) => ids.filter((id) => group(id) === g).sort((a, b) => a - b);
+    const labelled = (g: string, f: FindingId) => inGroup(g).filter((id) => getCase(id)!.findings.includes(f)).length;
+    expect(labelled('normal', 'sinus-bradycardia')).toBe(1);
+    expect(labelled('normal', 'sinus-arrhythmia')).toBe(1);
+    expect(inGroup('minor')).toEqual([2466, 6282, 6727, 17835]);
+    expect([labelled('minor', 'rbbb'), labelled('minor', 'av-block-1'), labelled('minor', 'pac')]).toEqual([1, 1, 2]);
+    expect(inGroup('major')).toEqual([2627, 2739, 18776, 19170]);
+    expect(inGroup('major').filter((id) => getCase(id)!.findings.some((f) => f === 'atrial-flutter' || f === 'atrial-fibrillation'))).toEqual([2739, 19170]);
+    expect([labelled('major', 'old-mi-inferior'), labelled('major', 'lvh')]).toEqual([1, 1]);
+    const last = blocksOf('x2', 'real')[2].ids;
+    expect(last.filter((id) => getCase(id)!.ref.hrBpm! > 100)).toEqual([2739]);
+    expect(getCase(2739)!.findings).toContain('atrial-flutter');
   });
 
   it('inline triage items: "act now" exactly when the case carries a critical label (the triage drill\'s rule)', () => {
