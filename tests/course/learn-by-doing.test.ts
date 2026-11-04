@@ -20,7 +20,7 @@ const PENDING: ReadonlySet<string> = new Set(
     'i1 i2 i3 i4 i5 i6 i7 i8 i9 i10 i11',
     'h1 h2 h3 h4 h5 h6 h7 h8 h9',
     'o1 o2 o3 o4 o5 o6 o7 o8 o9 o10 o11 o12',
-    'x3 x4',
+    'x4',
   ].flatMap((s) => s.split(' ')),
 );
 const MEDIA: ReadonlySet<Block['kind']> = new Set(['live', 'heart', 'figure', 'film']);

@@ -450,7 +450,7 @@ describe('x2: the synthetic frames', () => {
 });
 
 describe('x3: triage tracings', () => {
-  it('hook and contrast: infra-His complete AV block, escape ≈ 34/min with QRS ≈ 150 ms, P waves ≈ 78/min', () => {
+  it('hook, contrast and the block frame of the triage film: infra-His complete AV block, escape about 34/min with QRS about 150 ms, P waves about 78/min', () => {
     for (const src of [blocksOf('x3', 'hook')[0].ecg, blocksOf('x3', 'contrast')[0].right.ecg]) {
       const t = ecgOf(src).truth!;
       expect(t.findings).toContain('av-block-3');
@@ -459,6 +459,7 @@ describe('x3: triage tracings', () => {
       expect(t.qrsMs).toBeGreaterThanOrEqual(140);
       expect(t.qrsMs).toBeLessThan(160);
     }
+    expect(Math.abs(ecgOf(blocksOf('x3', 'hook')[0].ecg).truth!.qrsMs - 150)).toBeLessThan(5);
   });
   it('worked: 92/min, narrow QRS, ST ↑ ≈ 2.5–4.5 mm V2–V4 (highest V3), reciprocal ↓ II/III/aVF, no tall tented T', () => {
     const e = ecgOf(blocksOf('x3', 'worked')[0].ecg);
@@ -473,24 +474,70 @@ describe('x3: triage tracings', () => {
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l, 60), l).toBeLessThan(-0.05);
     expect(t.findings).not.toContain('hyperkalemia');
   });
-  it('hyperkalaemia: no visible P in II, QRS ≈ 170 ms, T in V3–V5 well above the T in II', () => {
-    const e = ecgOf(blocksOf('x3', 'ecg')[0].ecg);
+  it('T-and-device film, hyperkalaemia: no visible P in II, QRS about 170 ms, T in V3–V5 well above the T in II', () => {
+    const e = ecgOf(blocksOf('x3', 'film')[1].frames[0].ecg);
     const t = e.truth!;
     expect(t.findings).toContain('hyperkalemia');
-    expect(Math.abs(t.qrsMs - 170)).toBeLessThan(10);
+    expect(Math.abs(t.qrsMs - 170)).toBeLessThan(5);
     const b = midBeat(e);
     expect(span(e, 'II', b.qrsOn - 200, b.qrsOn - 20, b).max).toBeLessThan(0.05);
     for (const l of ['V3', 'V4'] as const) expect(tw(e, l).max, l).toBeGreaterThan(2 * tw(e, 'II').max);
     expect(tw(e, 'V5').max).toBeGreaterThan(1.5 * tw(e, 'II').max);
   });
-  it('digoxin effect: PR ≈ 190 ms (upper normal), QTc not long, ST sagging below the baseline in V4–V6', () => {
-    const e = ecgOf(blocksOf('x3', 'ecg')[1].ecg);
+  it('T-and-device film, digoxin effect: PR about 190 ms (upper normal), QTc not long, ST sagging below the baseline in V4–V6', () => {
+    const e = ecgOf(blocksOf('x3', 'film')[1].frames[1].ecg);
     const t = e.truth!;
     expect(t.findings).toContain('digoxin-effect');
-    expect(Math.abs(t.prMs! - 190)).toBeLessThan(10);
+    expect(Math.abs(t.prMs! - 190)).toBeLessThan(5);
     expect(t.prMs!).toBeLessThanOrEqual(200);
     expect(t.qtcFridericiaMs).toBeLessThan(420);
     for (const l of ['V4', 'V5', 'V6'] as const) expect(stAt(e, l, 60), l).toBeLessThan(-0.02);
+  });
+  it('T-and-device film, loss of capture: paced beats one stimulus interval apart, and gaps where a stimulus captured nothing', () => {
+    const e = ecgOf(blocksOf('x3', 'film')[1].frames[2].ecg);
+    const t = e.truth!;
+    expect(t.findings).toContain('pacing-failure-capture');
+    const beats = t.beats;
+    const paced = beats.filter((b) => b.kind === 'paced-ventricular');
+    expect(paced.length).toBeGreaterThanOrEqual(3);
+    const pacedGaps = paced.slice(1).map((b, i) => b.qrsOn - paced[i].qrsOn);
+    const interval = Math.min(...pacedGaps);
+    expect(Math.abs(interval - 1000)).toBeLessThan(5);
+    expect(pacedGaps.some((g) => g > 1.5 * interval)).toBe(true);
+    const fs = e.signal.fs;
+    const ii = e.signal.leads.II;
+    const slope = (t0: number, t1: number) => {
+      let m = 0;
+      for (let i = Math.round((t0 * fs) / 1000); i < Math.round((t1 * fs) / 1000); i++) m = Math.max(m, Math.abs(ii[i + 1] - ii[i]));
+      return m;
+    };
+    const missed = paced.slice(1).flatMap((b, i) => (b.qrsOn - paced[i].qrsOn > 1.5 * interval ? [paced[i].qrsOn + interval] : []));
+    for (const at of missed) {
+      expect(beats.some((b) => Math.abs(b.qrsOn - at) < 60), `no QRS at ${at}`).toBe(false);
+      expect(slope(at - 15, at + 15), `spike at ${at}`).toBeGreaterThan(5 * slope(at + 60, at + 160));
+    }
+  });
+  it('triage film: VF has no QRS; the occlusion is the worked STEMI; rapid AF irregularly irregular at about 140/min with no P; complete block is the hook (P about 78, escape about 34); the normal frame has nothing to catch', () => {
+    const film = blocksOf('x3', 'film')[0];
+    const [vf, , af, , normal] = frames('x3', 0);
+    expect(vf.truth!.rhythm).toBe('ventricular-fibrillation');
+    expect(vf.truth!.beats.length).toBe(0);
+    expect(film.frames[1].ecg).toEqual(blocksOf('x3', 'worked')[0].ecg);
+    expect(film.frames[3].ecg).toEqual(blocksOf('x3', 'hook')[0].ecg);
+    expect(af.truth!.rhythm).toBe('atrial-fibrillation');
+    expect(Math.abs(af.truth!.hrBpm - 140)).toBeLessThan(5);
+    expect(af.truth!.beats.every((b) => b.pOn === null)).toBe(true);
+    expect(Math.max(...rrs(af)) - Math.min(...rrs(af))).toBeGreaterThan(200);
+    const n = normal.truth!;
+    expect(n.findings).toContain('normal-ecg');
+    expect(n.hrBpm).toBeGreaterThan(60);
+    expect(n.hrBpm).toBeLessThan(100);
+    expect(n.qrsMs).toBeLessThan(110);
+    expect(n.qtcFridericiaMs).toBeLessThan(450);
+    for (const l of [...LIMB, ...CHEST]) expect(Math.abs(stAt(normal, l, 60)), l).toBeLessThan(0.05);
+  });
+  it('heart: the hook tracing', () => {
+    expect(blocksOf('x3', 'heart')[0].ecg).toEqual(blocksOf('x3', 'hook')[0].ecg);
   });
 });
 
