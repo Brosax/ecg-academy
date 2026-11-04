@@ -5,7 +5,8 @@
  * comparison per the Schläpfer/Wellens bullet of docs/curriculum/criteria.md; ST thresholds per UDMI (Thygesen 2018).
  *
  * ECGs: hook and worked example are synthetic anterior STEMIs (stemi-anterior seeds 1801/1802: sinus ≈ 84/min, PR 160,
- * QRS ≈ 95, QTc (Fridericia) ≈ 410, axis ≈ +40°, ST ↑ V1–V4 with a maximum ≈ 4 mm in V3, reciprocal ↓ in II/III/aVF);
+ * QRS ≈ 95, QTc (Fridericia) ≈ 410, axis ≈ +40°, ST ↑ V1–V4 with a maximum ≈ 4 mm in V3, reciprocal ↓ in II/III/aVF,
+ * V1 and III ≈ 1.3 mm); reperfusion timing per Byrne 2023 (ESC ACS);
  * the ST sweep and the heart are the worked heart (1802); the ten-line film walks the normal tracing (1803);
  * the inline report check is real PTB-XL case 4440 (F63, labels: sinus rhythm + first-degree AV block; 12SL: HR 85,
  * PR 254, QRS 94, QTcF 440, axis +2°); the real block is 1101 (normal), 13441 (complete RBBB) and 6764 (old
@@ -44,9 +45,9 @@ const realReport: Item = {
   ecg: real(4440),
   view: { layout: '3x4+1', calipers: true },
   explanation: l(
-    '参考报告（12SL 测量 + 心脏科医师标注）：记录清晰，25 mm/s、10 mm/mV。窦性心律约 85 次/分，规则；每个 P 后都跟着 QRS。**PR 约 254 ms（>200 ms）**，固定不变；QRS 约 94 ms；QTc（Fridericia）约 440 ms，女性正常；电轴约 +2°（I 正、aVF 近等电位），正常。P、QRS、T 形态无特殊，无病理性 Q，无 ST 偏移。发现：**一度房室传导阻滞**（minor）。无旧图可比。紧急程度：常规——复核用药（β 受体阻滞剂、非二氢吡啶类钙拮抗剂、地高辛）。如果你把 PR 量成 200 左右：分规要从 P 波起点量到 QRS 起点，在 P 最清楚的导联（II）上量。',
-    'Reference report (12SL measurements + the cardiologists\' labels): clean recording, 25 mm/s, 10 mm/mV. Sinus rhythm at about 85/min, regular; every P is followed by a QRS. **PR about 254 ms (> 200 ms)** and constant; QRS about 94 ms; QTc (Fridericia) about 440 ms, normal for a woman; axis about +2° (I positive, aVF near equiphasic), normal. P, QRS and T unremarkable, no pathological Q, no ST deviation. Findings: **first-degree AV block** (minor). No previous ECG to compare. Urgency: routine — review the drug list (beta-blockers, non-dihydropyridine calcium-channel blockers, digoxin). If you measured the PR at about 200: run the calipers from the start of the P to the start of the QRS, in the lead where the P is clearest (II).',
-    'Informe de referencia (mediciones 12SL + etiquetas de los cardiólogos): registro limpio, 25 mm/s, 10 mm/mV. Ritmo sinusal a unas 85 lpm, regular; cada P va seguida de un QRS. **PR de unos 254 ms (> 200 ms)** y constante; QRS de unos 94 ms; QTc (Fridericia) de unos 440 ms, normal en una mujer; eje de unos +2° (I positiva, aVF casi isodifásica), normal. P, QRS y T sin particularidades, sin Q patológicas ni desviación del ST. Hallazgos: **bloqueo AV de primer grado** (menor). Sin ECG previo para comparar. Urgencia: rutina; revisar la medicación (betabloqueantes, antagonistas del calcio no dihidropiridínicos, digoxina). Si mediste el PR en torno a 200: lleva el compás desde el inicio de la P hasta el inicio del QRS, en la derivación donde la P se vea mejor (II).',
+    '参考报告（12SL 测量 + 心脏科医师标注）：25 mm/s、10 mm/mV。窦性心律约 85 次/分；每个 P 后都跟着 QRS。**PR 约 254 ms（>200 ms）**，固定不变；QRS 约 94 ms；QTc（Fridericia）约 440 ms，女性正常；电轴约 +2°（I 正、aVF 近等电位），正常。P、QRS、T 形态无特殊，无病理性 Q，无 ST 偏移。发现：**一度房室传导阻滞**（minor）。无旧图可比。紧急程度：常规——复核用药（β 受体阻滞剂、非二氢吡啶类钙拮抗剂、地高辛）。如果你把 PR 量成 200 左右：分规要从 P 波起点量到 QRS 起点，在 P 最清楚的导联（II）上量。',
+    'Reference report (12SL measurements + the cardiologists\' labels): 25 mm/s, 10 mm/mV. Sinus rhythm at about 85/min; every P is followed by a QRS. **PR about 254 ms (> 200 ms)** and constant; QRS about 94 ms; QTc (Fridericia) about 440 ms, normal for a woman; axis about +2° (I positive, aVF near equiphasic), normal. P, QRS and T unremarkable, no pathological Q, no ST deviation. Findings: **first-degree AV block** (minor). No previous ECG to compare. Urgency: routine — review the drug list (beta-blockers, non-dihydropyridine calcium-channel blockers, digoxin). If you measured the PR at about 200: run the calipers from the start of the P to the start of the QRS, in the lead where the P is clearest (II).',
+    'Informe de referencia (mediciones 12SL + etiquetas de los cardiólogos): 25 mm/s, 10 mm/mV. Ritmo sinusal a unas 85 lpm; cada P va seguida de un QRS. **PR de unos 254 ms (> 200 ms)** y constante; QRS de unos 94 ms; QTc (Fridericia) de unos 440 ms, normal en una mujer; eje de unos +2° (I positiva, aVF casi isodifásica), normal. P, QRS y T sin particularidades, sin Q patológicas ni desviación del ST. Hallazgos: **bloqueo AV de primer grado** (menor). Sin ECG previo para comparar. Urgencia: rutina; revisar la medicación (betabloqueantes, antagonistas del calcio no dihidropiridínicos, digoxina). Si mediste el PR en torno a 200: lleva el compás desde el inicio de la P hasta el inicio del QRS, en la derivación donde la P se vea mejor (II).',
   ),
   findings: ['av-block-1'],
   key: {
@@ -176,9 +177,9 @@ const lesson: Lesson = {
         answer: 0,
       },
       caption: l(
-        '每一帧是报告的一行，高亮的是你在纸上看的位置。前七行描述，第八行诊断，最后两行决定下一步。',
-        'Each frame is one line of the report; the highlight is where you look on the paper. Lines 1–7 describe, line 8 diagnoses, the last two decide.',
-        'Cada fotograma es una línea del informe; lo resaltado es dónde miras en el papel. Las líneas 1-7 describen, la 8 diagnostica y las dos últimas deciden.',
+        '每一帧填写它标出的那几行，高亮的是你在纸上看的位置。前七行描述，第八行诊断，最后两行决定下一步。',
+        'Each frame fills in the report lines it names; the highlight is where you look on the paper. Lines 1–7 describe, line 8 diagnoses, the last two decide.',
+        'Cada fotograma rellena las líneas del informe que nombra; lo resaltado es dónde miras en el papel. Las líneas 1-7 describen, la 8 diagnostica y las dos últimas deciden.',
       ),
     },
     {
@@ -236,9 +237,9 @@ const lesson: Lesson = {
         {
           title: l('6 · 形态', '6 · Morphology', '6 · Morfología'),
           body: l(
-            '"P 波正常。V1–V2 呈 rS，移行在 V3，R 波递增正常，电压正常，**无病理性 Q 波**。T 波在 ST 抬高的导联直立。"无 Q 波这一句很重要：它提示心肌还没坏死——还有可挽救的心肌。',
-            '"Normal P waves. rS in V1–V2, transition at V3, normal R progression, normal voltage, **no pathological Q waves**. T upright in the leads with ST elevation." The "no Q" line matters: no necrosis yet — there is myocardium left to save.',
-            '«Ondas P normales. rS en V1-V2, transición en V3, progresión de R normal, voltaje normal, **sin ondas Q patológicas**. T positiva en las derivaciones con elevación del ST». La línea «sin Q» importa: todavía no hay necrosis y queda miocardio que salvar.',
+            '"P 波正常。V1–V2 呈 rS，移行在 V3，R 波递增正常，电压正常，**无病理性 Q 波**。T 波在 ST 抬高的导联直立。"无 Q 波这一句很重要：还没有 Q 波，可能还在早期，还有可挽救的心肌。',
+            '"Normal P waves. rS in V1–V2, transition at V3, normal R progression, normal voltage, **no pathological Q waves**. T upright in the leads with ST elevation." The "no Q" line matters — no Q waves yet: probably early, there is myocardium to save.',
+            '«Ondas P normales. rS en V1-V2, transición en V3, progresión de R normal, voltaje normal, **sin ondas Q patológicas**. T positiva en las derivaciones con elevación del ST». La línea «sin Q» importa: aún no hay ondas Q; probablemente es precoz y queda miocardio que salvar.',
           ),
           marks: [{ auto: 'r', lead: 'V3' }],
           highlightLeads: ['V1', 'V2', 'V3'],
@@ -246,9 +247,9 @@ const lesson: Lesson = {
         {
           title: l('7 · ST 段：按导联组', '7 · ST segments, group by group', '7 · Segmento ST, grupo a grupo'),
           body: l(
-            '"前壁组：V2 约 3 mm、V3 约 4 mm、V4 约 2 mm 抬高（J 点后 60 ms），V1 约 1 mm——V2–V3 超过任何性别与年龄的阈值。下壁组：II、III、aVF **镜像压低**（III 约 1 mm）。侧壁组：I、aVL、V5 < 1 mm，V6 等电位。"三组都读，镜像改变才会被看到。',
-            '"Anterior group: ST elevation of about 3 mm in V2, 4 mm in V3 and 2 mm in V4 (at J + 60 ms), about 1 mm in V1 — V2–V3 are above the threshold for any sex and age. Inferior group: **reciprocal depression** in II, III and aVF (about 1 mm in III). Lateral group: I, aVL and V5 < 1 mm, V6 isoelectric." Read all three groups — that is how the reciprocal change gets seen.',
-            '«Grupo anterior: elevación del ST de unos 3 mm en V2, 4 mm en V3 y 2 mm en V4 (a J + 60 ms), y de 1 mm en V1; V2-V3 superan el umbral para cualquier sexo y edad. Grupo inferior: **descenso recíproco** en II, III y aVF (de 1 mm en III). Grupo lateral: I, aVL y V5 < 1 mm, V6 isoeléctrica». Hay que leer los tres grupos: así se ve el cambio recíproco.',
+            '"前壁组：V2 约 3 mm、V3 约 4 mm、V4 约 2 mm 抬高（J 点后 60 ms），V1 约 1.5 mm——V2–V3 超过任何性别与年龄的阈值。下壁组：II、III、aVF **镜像压低**（III 约 1.5 mm）。侧壁组：I、aVL、V5 < 1 mm，V6 等电位。"三组都读，镜像改变才会被看到。',
+            '"Anterior group: ST elevation of about 3 mm in V2, 4 mm in V3 and 2 mm in V4 (at J + 60 ms), about 1.5 mm in V1 — V2–V3 are above the threshold for any sex and age. Inferior group: **reciprocal depression** in II, III and aVF (about 1.5 mm in III). Lateral group: I, aVL and V5 < 1 mm, V6 isoelectric." Read all three groups — that is how the reciprocal change gets seen.',
+            '«Grupo anterior: elevación del ST de unos 3 mm en V2, 4 mm en V3 y 2 mm en V4 (a J + 60 ms), y de unos 1,5 mm en V1; V2-V3 superan el umbral para cualquier sexo y edad. Grupo inferior: **descenso recíproco** en II, III y aVF (de unos 1,5 mm en III). Grupo lateral: I, aVL y V5 < 1 mm, V6 isoeléctrica». Hay que leer los tres grupos: así se ve el cambio recíproco.',
           ),
           marks: [{ auto: 'st60', lead: 'V3' }, { auto: 'st60', lead: 'III' }],
           highlightLeads: ['V1', 'V2', 'V3', 'V4', 'II', 'III', 'aVF'],
@@ -272,9 +273,9 @@ const lesson: Lesson = {
         {
           title: l('10 · 紧急程度与下一步', '10 · Urgency and next action', '10 · Urgencia y siguiente paso'),
           body: l(
-            '"**现在处理**：启动再灌注流程（导管室），立即通知上级医师；若有延误，15–30 分钟复查心电图。"——一句话，一个箱子，一个动作，一个收信人。',
-            '"**Act now**: activate the reperfusion pathway (cath lab) and tell the senior at once; if there is any delay, repeat the ECG in 15–30 min." — one sentence, one bin, one action, one person to tell.',
-            '«**Actuar ya**: activar el circuito de reperfusión (laboratorio de hemodinámica) y avisar al responsable de inmediato; si hay retraso, repetir el ECG en 15-30 min»: una frase, una categoría, una acción, una persona a quien avisar.',
+            '"**现在处理**：启动再灌注并立即通知上级医师——诊断后 120 分钟内能开始直接 PCI 就做直接 PCI，否则 10 分钟内溶栓（ESC 2023）。"一个箱子，一个动作，一个收信人。',
+            '"**Act now**: activate reperfusion and tell the senior at once — primary PCI if it can start within 120 min of the diagnosis, otherwise fibrinolysis within 10 min (ESC 2023)." One bin, one action, one person to tell.',
+            '«**Actuar ya**: activar la reperfusión y avisar al responsable de inmediato; ICP primaria si puede empezar en los 120 min siguientes al diagnóstico y, si no, fibrinólisis en los 10 min siguientes (ESC 2023)». Una categoría, una acción, una persona a quien avisar.',
           ),
           highlightLeads: ['V2', 'V3', 'V4'],
         },
@@ -475,6 +476,7 @@ const lesson: Lesson = {
     'Schläpfer J, Wellens HJ. Computer-interpreted electrocardiograms. J Am Coll Cardiol 2017;70:1183-1192',
     'Kligfield P et al. AHA/ACCF/HRS Part I: The electrocardiogram and its technology. Circulation 2007;115:1306-1324',
     'Thygesen K et al. Fourth universal definition of myocardial infarction (2018). Eur Heart J 2019;40:237-269',
+    'Byrne RA et al. 2023 ESC Guidelines for the management of acute coronary syndromes. Eur Heart J 2023;44:3720-3826',
     'Castellano et al. 2004',
   ],
 };
