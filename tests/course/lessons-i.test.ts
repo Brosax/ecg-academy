@@ -12,7 +12,7 @@ import { liveValidateDeps } from '../../src/course/deps';
 import { REGISTERED } from '../../src/course/lessons/index';
 import { realisedDials, startDials } from '../../src/course/live';
 import { formatIssues, validateLesson } from '../../src/course/validate';
-import { baselineBefore, qrsWaves } from '../../src/course/marks';
+import { baselineBefore, MIN_WAVE_MV, qrsWaves } from '../../src/course/marks';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
 import type { L10n } from '../../src/core/l10n';
 import type { StdLead } from '../../src/core/leads';
@@ -1037,17 +1037,34 @@ describe('i8: Wellens, de Winter, aVR on the tracings', () => {
 });
 
 describe('i9: evolution, Q waves and aneurysm on the tracings', () => {
-  it('timeline film (one seed): hyperacute (V2 ST < 1 mm, T taller than R) → acute (V2 about 3 mm, III down, R and no Q) → evolving (V2 starts with a Q, T inverted, ST still up about 1 mm) → old (QS V1–V3, ST back), as in the hook (with upright T in V2–V3)', () => {
+  it('timeline film (one seed): hyperacute (V2 ST < 1 mm, T taller than R) → acute (V2 nearly 3 mm, III down, R and no Q) → evolving (V2 starts with a Q, the R gone, T inverted, ST still up about 1 mm) → old (QS V1–V3, ST back), as in the hook (with upright T in V2–V3)', () => {
     const film = blocksOf('i9', 'film')[0];
     expect(new Set(film.frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req.seed : -1))).size).toBe(1);
     const [p1, p2, p3, p4] = film.frames.map((f) => ecgOf(f.ecg));
     expect(tw(p1, 'V2').max).toBeGreaterThan(qrs(p1, 'V2').max);
-    expect(stAt(p2, 'V2')).toBeGreaterThanOrEqual(0.275);
-    expect(stAt(p2, 'V2')).toBeLessThanOrEqual(0.325);
+    expect(stAt(p2, 'V2'), 'nearly 3 mm').toBeGreaterThanOrEqual(0.25);
+    expect(stAt(p2, 'V2'), 'nearly 3 mm').toBeLessThan(0.3);
     expect(stAt(p2, 'III')).toBeLessThan(-0.05);
     // hours: the R still there, no Q; about a day: V2 starts with a Q, the R gone (the prediction), the T inverted
     expect(shape(p2, 'V2'), 'hours: V2 starts with an R').toMatch(/^r/i);
     expect(shape(p3, 'V2'), 'about a day: V2 starts with a Q').toMatch(/^q/i);
+    /** the highest point of the V2 QRS before its deepest point: the initial R, if there is one */
+    const rBeforeNadir = (e: Ecg): number => {
+      const b = midBeat(e);
+      const a = sig(e, 'V2');
+      const fs = e.signal.fs;
+      const base = baselineBefore(a, fs, b.qrsOn);
+      const i0 = Math.round((b.qrsOn * fs) / 1000);
+      const i1 = Math.round((b.qrsOff * fs) / 1000);
+      let nadir = i0;
+      for (let i = i0; i <= i1; i++) if (a[i] < a[nadir]) nadir = i;
+      let max = -Infinity;
+      for (let i = i0; i <= nadir; i++) max = Math.max(max, a[i] - base);
+      return max;
+    };
+    expect(rBeforeNadir(p2), 'hours: an R before the S').toBeGreaterThanOrEqual(0.1);
+    expect(rBeforeNadir(p3), 'about a day: no R before the Q').toBeLessThanOrEqual(MIN_WAVE_MV);
+    expect(qrs(p3, 'V2').max, 'about a day: nothing in the QRS rises above the J point').toBeLessThanOrEqual(stAt(p3, 'V2') + 0.01);
     const p = film.predict!;
     expect(p.options[p.answer].en).toBe('With a Q: the R is gone');
     expect(tInverted(p3, 'V2')).toBe(true);
