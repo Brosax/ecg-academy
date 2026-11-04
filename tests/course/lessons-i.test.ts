@@ -896,7 +896,8 @@ describe('i9: evolution, Q waves and aneurysm on the tracings', () => {
     expect(stAt(p2, 'V2')).toBeGreaterThanOrEqual(0.2);
     expect(qDurMs(p3, 'V2')).toBeGreaterThanOrEqual(20);
     expect(tw(p3, 'V2').min).toBeLessThan(-0.1);
-    expect(stAt(p3, 'V2')).toBeGreaterThan(0.05);
+    expect(stAt(p3, 'V2')).toBeGreaterThanOrEqual(0.075);
+    expect(stAt(p3, 'V2')).toBeLessThanOrEqual(0.125);
     const old = ecgOf(blocksOf('i9', 'hook')[0].ecg);
     for (const l of ['V2', 'V3'] as const) {
       expect(qrs(old, l).max, l).toBeLessThan(0.05);
