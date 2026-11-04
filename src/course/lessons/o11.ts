@@ -141,7 +141,7 @@ const lesson: Lesson = {
         {
           label: l('双极导线', 'Bipolar lead', 'Electrodo bipolar'),
           ecg: synth('paced-vvi', 1602, undefined, 'bipolar'),
-          note: l('双极导线：起搏钉缩到约五分之一。看不到钉不等于没起搏：规则的类左束支阻滞宽QRS是线索，再看电轴向上、频率正好在下限、底下是房颤或已知有起搏器。', 'A bipolar lead: the spike shrinks to about a fifth. No visible spike does not mean no pacing: a regular, wide, LBBB-like QRS is a clue; add a superior axis, a rate exactly at the lower rate, AF underneath or a known device.', 'Electrodo bipolar: la espícula se reduce a una quinta parte. No ver espícula no es no estimular: un QRS ancho, regular y tipo bloqueo de rama izquierda es una pista; súmale eje superior, frecuencia justo en la mínima, FA de fondo o un dispositivo conocido.'),
+          note: l('双极导线：起搏钉缩到约五分之一。没有钉不等于没起搏：看规则的类左束支阻滞宽QRS、电轴向上、频率等于程控下限（常为60或70次/分）、底下房颤或已知起搏器。', 'A bipolar lead: the spike shrinks to about a fifth. No visible spike does not mean no pacing: a regular, wide, LBBB-like QRS is a clue; add a superior axis, a rate exactly at the programmed lower rate (often 60 or 70/min), AF underneath or a known device.', 'Electrodo bipolar: la espícula se reduce a una quinta parte. No ver espícula no es no estimular: un QRS ancho, regular y tipo bloqueo de rama izquierda es una pista; súmale eje superior, una frecuencia igual a la frecuencia límite inferior programada (a menudo 60 o 70 lpm), FA de fondo o un dispositivo conocido.'),
           marks: [{ auto: 'pacing-spike' }],
         },
         {
@@ -226,12 +226,12 @@ const lesson: Lesson = {
       left: {
         ecg: synth('pacing-failure-capture', 1606),
         caption: l('失夺获：钉后**空无一物**（不在不应期），交界性逸搏约 36 次/分在兜底', 'Failure to capture: **nothing** follows the spike (outside the refractory period); a junctional escape near 36/min holds the line', 'Fallo de captura: tras la espícula **no sigue nada** (fuera del periodo refractario); un escape de la unión a unas 36 lpm mantiene el tipo'),
-        marks: [{ auto: 'pacing-spike', beat: 4 }],
+        marks: [{ auto: 'pacing-spike' }, { auto: 'rr', beat: 4 }],
       },
       right: {
         ecg: synth('pacing-undersensing', 1607),
         caption: l('感知不足：自身 QRS 之后**仍然发钉**，计时器没有重置——设备“看不见”心室', 'Undersensing: spikes are delivered **after intrinsic QRS complexes** and the timer does not reset — the device does not "see" the ventricle', 'Infradetección: las espículas se emiten **tras los QRS propios** y el temporizador no se reinicia: el dispositivo no «ve» el ventrículo'),
-        marks: [{ auto: 'pacing-spike', beat: 10 }, { auto: 'qrs', beat: 8 }],
+        marks: [{ auto: 'pacing-spike' }, { auto: 'qrs', beat: 8 }],
       },
       point: l(
         '同一个动作——跟着钉往后看。钉后**没有** P/QRS（且不在不应期）= **失夺获**：查阈值与导线，也查血钾、药物和电池。钉落在**自身 QRS 之后**、间期不重置 = **感知不足**：查感知灵敏度；磁铁或非同步模式也会这样发钉，先问清病史。还有一个交叉细节：感知不足时落在自身 QRS 不应期里的钉不夺获，**不算**失夺获。',
@@ -254,13 +254,13 @@ const lesson: Lesson = {
           label: l('不夺获', 'No capture', 'Sin captura'),
           ecg: synth('pacing-failure-capture', 1611),
           note: l('每第三个起搏钉后面什么都没有：起搏不夺获。约36次/分的交界性逸搏补上空档。', 'Every third spike has nothing after it: failure to capture. A junctional escape at about 36/min fills the gap.', 'Cada tercera espícula no va seguida de nada: fallo de captura. Un escape de la unión a unos 36 lpm rellena el hueco.'),
-          marks: [{ auto: 'pacing-spike', beat: 4 }, { auto: 'rr', beat: 4 }],
+          marks: [{ auto: 'pacing-spike' }, { auto: 'rr', beat: 4 }],
         },
         {
           label: l('感知不足', 'Undersensing', 'Infradetección'),
           ecg: synth('pacing-undersensing', 1612),
           note: l('起搏钉紧跟在患者自己的QRS之后，计时也不重置：起搏器没“看见”心室——感知不足。', 'Spikes land right after the patient’s own QRS and the timer does not reset: the device does not see the ventricle. Undersensing.', 'Las espículas caen justo tras el QRS propio y el temporizador no se reinicia: el dispositivo no ve el ventrículo. Infradetección.'),
-          marks: [{ auto: 'pacing-spike', beat: 5 }],
+          marks: [{ auto: 'pacing-spike' }, { auto: 'qrs', beat: 9 }],
         },
         {
           label: l('感知过度', 'Oversensing', 'Sobredetección'),
@@ -290,9 +290,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [3990, 14963, 144],
       caption: l(
-        '三份真实起搏心电图。先对每一份跑一遍三项检查——夺获（钉后有无 P/QRS）、感知（有无碰撞、有无超过下限频率间期的长间歇）、频率（钉到钉等于多少）——先想好结论，再揭晓。真实图上的钉样信号常常小得几乎看不见：认不出钉时，类 LBBB 的宽 QRS 加规整的 RR 是起搏的线索，再看电轴是否偏上、频率是否正好等于下限频率、底下是否房颤、是否已知植入了起搏器。',
-        'Three real paced ECGs. Run the three-function check on each — capture (a P/QRS after every spike?), sensing (any collisions? any pause beyond the lower-rate interval?), rate (what is spike-to-spike?) — commit to your answers, then reveal. On real tracings the spike is often nearly invisible: when you cannot find one, an LBBB-like wide QRS with a regular RR is a clue to pacing; add a superior axis, a rate exactly at the lower rate, AF underneath or a known device.',
-        'Tres ECG reales con marcapasos. Aplica a cada uno la comprobación de tres funciones —captura (¿P/QRS tras cada espícula?), detección (¿choques? ¿alguna pausa más allá del intervalo de la frecuencia límite inferior?) y frecuencia (¿cuánto hay de espícula a espícula?)—, decide tus conclusiones y después mira la solución. En los trazados reales la espícula suele ser casi invisible: cuando no la encuentres, un QRS ancho tipo BRI con RR regular es una pista de estimulación; súmale el eje superior, una frecuencia igual a la frecuencia límite inferior, una FA de fondo o un dispositivo conocido.',
+        '三份真实起搏心电图。先对每一份跑一遍三项检查——夺获（钉后有无 P/QRS）、感知（有无碰撞、有无超过下限频率间期的长间歇）、频率（钉到钉等于多少）——先想好结论，再揭晓。真实图上的钉样信号常常小得几乎看不见：认不出钉时，类 LBBB 的宽 QRS 加规整的 RR 是起搏的线索，再看电轴是否偏上、频率是否正好等于程控的下限频率（常为 60 或 70 次/分）、底下是否房颤、是否已知植入了起搏器。',
+        'Three real paced ECGs. Run the three-function check on each — capture (a P/QRS after every spike?), sensing (any collisions? any pause beyond the lower-rate interval?), rate (what is spike-to-spike?) — commit to your answers, then reveal. On real tracings the spike is often nearly invisible: when you cannot find one, an LBBB-like wide QRS with a regular RR is a clue to pacing; add a superior axis, a rate exactly at the programmed lower rate (often 60 or 70/min), AF underneath or a known device.',
+        'Tres ECG reales con marcapasos. Aplica a cada uno la comprobación de tres funciones —captura (¿P/QRS tras cada espícula?), detección (¿choques? ¿alguna pausa más allá del intervalo de la frecuencia límite inferior?) y frecuencia (¿cuánto hay de espícula a espícula?)—, decide tus conclusiones y después mira la solución. En los trazados reales la espícula suele ser casi invisible: cuando no la encuentres, un QRS ancho tipo BRI con RR regular es una pista de estimulación; súmale el eje superior, una frecuencia igual a la frecuencia límite inferior programada (a menudo 60 o 70 lpm), una FA de fondo o un dispositivo conocido.',
       ),
     },
     {

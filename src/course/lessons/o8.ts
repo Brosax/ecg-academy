@@ -178,9 +178,9 @@ const lesson: Lesson = {
       showConduction: true,
       emphasize: ['rv-apical'],
       caption: l(
-        '从右室心尖起搏：激动从右下向上扩布，QRS宽，在III、aVF和V1为负。起搏几周后复极随之重塑，自身QRS恢复后T波仍会沿着那个方向一段时间。',
-        'Paced from the RV apex, the wave runs up from the bottom right: the QRS is wide and negative in III, aVF and V1. After weeks of this, repolarisation remodels, and the T keeps that direction for a while once the own QRS returns.',
-        'Estimulado desde el ápex del VD, el frente sube desde abajo a la derecha: QRS ancho y negativo en III, aVF y V1. Tras semanas así la repolarización se remodela y la T conserva esa dirección un tiempo cuando vuelve el QRS propio.',
+        '从右室心尖起搏：激动从右下向上扩布，QRS宽，在III、aVF和V1为负。起搏几周后，复极随之重塑。',
+        'Paced from the RV apex, the wave runs up from the bottom right: the QRS is wide and negative in III, aVF and V1. After weeks of this, repolarisation remodels.',
+        'Estimulado desde el ápex del VD, el frente sube desde abajo a la derecha: QRS ancho y negativo en III, aVF y V1. Tras semanas así, la repolarización se remodela.',
       ),
     },
     {
@@ -217,9 +217,9 @@ const lesson: Lesson = {
         answer: 0,
       },
       caption: l(
-        '起搏、间歇性左束支阻滞或预激之后，正常QRS的T波会“记住”异常QRS的方向。三项Shvilkin征都满足时，倾向心脏记忆。',
-        'After pacing, intermittent LBBB or pre-excitation, the T of the normal QRS “remembers” the abnormal QRS direction. When all three Shvilkin signs are met, think memory.',
-        'Tras la estimulación, un bloqueo de rama izquierda intermitente o la preexcitación, la T del QRS normal «recuerda» la dirección del QRS anómalo. Si se cumplen los tres criterios de Shvilkin, piensa en memoria.',
+        '自身QRS恢复后，T波仍会沿着起搏QRS的方向一段时间。起搏、间歇性左束支阻滞或预激之后，正常QRS的T波都会“记住”异常QRS的方向。三项Shvilkin征都满足时，倾向心脏记忆。',
+        'Once the own QRS returns, the T keeps the paced QRS direction for a while. After pacing, intermittent LBBB or pre-excitation, the T of the normal QRS “remembers” the abnormal QRS direction. When all three Shvilkin signs are met, think memory.',
+        'Cuando vuelve el QRS propio, la T conserva un tiempo la dirección del QRS estimulado. Tras la estimulación, un bloqueo de rama izquierda intermitente o la preexcitación, la T del QRS normal «recuerda» la dirección del QRS anómalo. Si se cumplen los tres criterios de Shvilkin, piensa en memoria.',
       ),
     },
     {

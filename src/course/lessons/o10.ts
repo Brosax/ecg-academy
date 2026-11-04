@@ -189,8 +189,8 @@ const lesson: Lesson = {
         },
         {
           title: l('走 RR', 'March the RR', 'Recorre el RR'),
-          body: l('间距恒定、逐搏都对得上（约 830 ms，72 次/分）——伪差从不打乱真实的节律。房扑的 F 波与 QRS 有固定关系，而这里的波动和 QRS 毫无关系。', 'The spacing is constant and marches through beat after beat (about 830 ms, 72/min) — artefact never disturbs the true rhythm. Flutter waves keep a fixed relation to the QRS; this ripple has no relation to it at all.', 'La separación es constante y desfila latido a latido (unos 830 ms, 72 lpm): el artefacto nunca altera el ritmo real. Las ondas F del flúter mantienen una relación fija con el QRS; este rizado no tiene ninguna.'),
-          marks: [{ auto: 'rr', lead: 'II', beat: 3 }],
+          body: l('间距恒定、逐搏都对得上（约 832 ms，72 次/分）——伪差从不打乱真实的节律。房扑的 F 波与 QRS 有固定关系，而这里的波动和 QRS 毫无关系。', 'The spacing is constant and marches through beat after beat (about 832 ms, 72/min) — artefact never disturbs the true rhythm. Flutter waves keep a fixed relation to the QRS; this ripple has no relation to it at all.', 'La separación es constante y desfila latido a latido (unos 832 ms, 72 lpm): el artefacto nunca altera el ritmo real. Las ondas F del flúter mantienen una relación fija con el QRS; este rizado no tiene ninguna.'),
+          marks: [{ auto: 'rr', lead: 'II', beat: 1 }],
           view: { layout: 'strip', lead: 'II', calipers: true },
         },
         {
@@ -216,7 +216,7 @@ const lesson: Lesson = {
       right: {
         ecg: synth('atrial-fibrillation', 1585, { fCoarseness: 0.5, ventricularResponse: 110 }),
         caption: l('心房颤动（II）：不规则的 f 波，RR 绝对不规则', 'Atrial fibrillation (II): irregular f waves, an irregularly irregular RR', 'Fibrilación auricular (II): ondas f irregulares, RR irregularmente irregular'),
-        marks: [{ auto: 'rr', lead: 'II', beat: 7 }],
+        marks: [{ auto: 'rr', lead: 'II', beat: 6 }, { auto: 'rr', lead: 'II', beat: 7 }],
       },
       point: l(
         '两侧都“看不清 P 波”。左：基线上叠加的是规则的波动，但 QRS 一个接一个**等距**地走过去，P 波其实还在，另一个导联（I）会是干净的。右：基线本身在无规律地颤动（f 波），**RR 毫无规律**（t2）。先量 RR：规则的 RR 加上“房颤样”基线，首先想伪差。',
