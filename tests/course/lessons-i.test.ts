@@ -733,20 +733,28 @@ describe('i5: lateral STEMI on the tracings', () => {
 });
 
 describe('i6: posterior infarction on the tracings', () => {
-  it('hook / worked: V1–V2 depressed about 1.5 mm, about 1 mm in V3, gone by V4; V5–V6 elevated ≥ 1 mm, I/aVL slightly (< 1 mm); inferior leads not elevated; V8 ≥ 0.5 mm', () => {
+  it('hook / worked: V1–V2 depressed about 1.5 mm, about 1 mm in V3, gone by V4; V5–V6 elevated about 1–1.5 mm, I/aVL slightly (< 1 mm); inferior leads not elevated and III a mirror; V8 ≥ 0.5 mm', () => {
     for (const src of [blocksOf('i6', 'hook')[0].ecg, blocksOf('i6', 'worked')[0].ecg]) {
       const e = ecgOf(src);
-      for (const l of ['V1', 'V2'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.12);
+      for (const l of ['V1', 'V2'] as const) {
+        expect(stAt(e, l), l).toBeLessThanOrEqual(-0.125);
+        expect(stAt(e, l), l).toBeGreaterThanOrEqual(-0.175);
+        expect(Math.abs(stAt(e, l, 60) - stAt(e, l)), `${l} horizontal`).toBeLessThan(0.03);
+      }
       expect(stAt(e, 'V3')).toBeLessThanOrEqual(-0.075);
       expect(stAt(e, 'V3')).toBeGreaterThanOrEqual(-0.125);
       expect(stAt(e, 'V3')).toBeGreaterThan(Math.min(stAt(e, 'V1'), stAt(e, 'V2')));
       expect(Math.abs(stAt(e, 'V4'))).toBeLessThan(0.03);
-      for (const l of ['V5', 'V6'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
+      for (const l of ['V5', 'V6'] as const) {
+        expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
+        expect(stAt(e, l), l).toBeLessThanOrEqual(0.175);
+      }
       for (const l of ['I', 'aVL'] as const) {
         expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.05);
         expect(stAt(e, l), l).toBeLessThan(0.1);
       }
       for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l), l).toBeLessThan(0.1);
+      expect(stAt(e, 'III'), 'III a mirror').toBeLessThanOrEqual(-0.05);
       expect(tw(e, 'V2').max, 'terminal T in V2 ends upright').toBeGreaterThan(0.05);
       // 2026-10-29 B11: the mirror T rises out of the depressed ST and ends upright in V1–V3 (T peak > 1 mm), in V2–V3
       // higher than the depth of the ST depression
@@ -754,6 +762,16 @@ describe('i6: posterior infarction on the tracings', () => {
       for (const l of ['V2', 'V3'] as const) expect(tw(e, l).max, `upright T ${l}`).toBeGreaterThan(-tw(e, l).min);
     }
     expect(stAt(ecgOf(blocksOf('i6', 'worked')[0].ecg), 'V8')).toBeGreaterThanOrEqual(0.05);
+  });
+  it('contrast A (posterolateral): depression deepest in V1–V2 and horizontal there, gone by V4, I, aVL and V5–V6 elevated', () => {
+    const e = ecgOf(blocksOf('i6', 'contrast')[0].left.ecg);
+    expect(['V1', 'V2']).toContain(ALL.reduce((m, l) => (stAt(e, l) < stAt(e, m) ? l : m)));
+    for (const l of ['V1', 'V2'] as const) {
+      expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
+      expect(Math.abs(stAt(e, l, 60) - stAt(e, l)), `${l} horizontal`).toBeLessThan(0.03);
+    }
+    expect(Math.abs(stAt(e, 'V4'))).toBeLessThan(0.03);
+    for (const l of ['I', 'aVL', 'V5', 'V6'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.05);
   });
   it('contrast B (subendocardial): depression in V4–V6 and I/aVL, V1–V2 not depressed, nothing elevated ≥ 1 mm', () => {
     const e = ecgOf(blocksOf('i6', 'contrast')[0].right.ecg);
@@ -788,8 +806,15 @@ describe('i6: posterior infarction on the tracings', () => {
     const e = frame('i6', 0, 2);
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
     expect(stAt(e, 'III')).toBeGreaterThan(stAt(e, 'II'));
-    for (const l of ['I', 'aVL', 'V1', 'V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThan(-0.03);
+    for (const l of ['I', 'aVL', 'V1', 'V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
     for (const l of ['V5', 'V6'] as const) expect(stAt(e, l), l).toBeLessThan(0.05);
+  });
+  it('company film prediction: aVL, up on the opening tracing, falls below the baseline when the inferior wall joins instead', () => {
+    const film = blocksOf('i6', 'film')[0];
+    const p = film.predict!;
+    expect(p.options[p.answer].en).toMatch(/^Fall below/);
+    expect(stAt(frame('i6', 0, 0), 'aVL')).toBeGreaterThanOrEqual(0.05);
+    expect(stAt(frame('i6', 0, 2), 'aVL')).toBeLessThanOrEqual(-0.05);
   });
 });
 

@@ -69,9 +69,9 @@ const lesson: Lesson = {
       ecg: synth('stemi-posterior', 901),
       view: { layout: '3x4+1', highlightLeads: ['V1', 'V2', 'V3'] },
       question: l(
-        '胸痛 40 分钟。先只看 V1–V3：V1–V2 呈水平型 ST 压低（V2 的 T 波直立），向 V3 逐渐消失。这是“前壁心内膜下缺血”吗？想好你的判读和下一步，再看其余导联。',
-        '40 minutes of chest pain. Look at V1–V3 first: V1–V2 show horizontal ST depression (upright T in V2) that fades by V3. Is this "anterior subendocardial ischaemia"? Commit to a reading and a next step, then look at the other leads.',
-        '40 minutos de dolor torácico. Mira primero V1–V3: V1–V2 muestran descenso horizontal del ST (T positiva en V2) que se desvanece en V3. ¿Es «isquemia subendocárdica anterior»? Decide tu interpretación y el paso siguiente, y después mira el resto de derivaciones.',
+        '胸痛 40 分钟。先只看 V1–V3：V1–V2 呈水平型 ST 压低（V2 的 T 波直立），V3 较浅，到 V4 消失。这是“前壁心内膜下缺血”吗？想好你的判读和下一步，再看其余导联。',
+        '40 minutes of chest pain. Look at V1–V3 first: V1–V2 show horizontal ST depression (upright T in V2), smaller in V3 and gone by V4. Is this "anterior subendocardial ischaemia"? Commit to a reading and a next step, then look at the other leads.',
+        '40 minutos de dolor torácico. Mira primero V1–V3: V1–V2 muestran descenso horizontal del ST (T positiva en V2), menor en V3 y ausente en V4. ¿Es «isquemia subendocárdica anterior»? Decide tu interpretación y el paso siguiente, y después mira el resto de derivaciones.',
       ),
       reveal: l(
         '不是。V1–V3 从**前方**看心脏；受伤的是**后壁**，V1–V3 记录到的正是它的**镜像**：水平型 ST 压低、直立的 T 波（以后还会出现增高的 R 波）。这份图上 I、aVL、V5–V6 也抬高——后侧壁 STEMI，罪犯血管多为 LCx。但用手遮住侧壁导联：剩下的 V1–V2 压低，就是孤立性后壁闭塞在 12 导联上**唯一**的样子——这是 STEMI 等危症：加做 V7–V9、按 STEMI 处理，而不是“缺血”。',
@@ -169,8 +169,8 @@ const lesson: Lesson = {
           title: l('扫一遍其余导联', 'Sweep the remaining leads', 'Recorre el resto de derivaciones'),
           body: l(
             '再扫其余导联：V5、V6 抬高约 1–1.5 mm，I、aVL 也轻度抬高（不到 1 mm）——侧壁也受累，这是**后侧壁** STEMI。II、III、aVF 不抬高（III 是镜像），所以不是下后壁。现在用手遮住侧壁导联：剩下的只有 V1–V2 的压低。LCx 的后壁供区“电安静”，孤立性后壁闭塞就是这个样子——直接征象可以少到零。',
-            'Now sweep the rest: V5 and V6 are elevated by about 1–1.5 mm, and I and aVL slightly (just under 1 mm) — the lateral wall is involved too: a **posterolateral** STEMI. II, III and aVF are not elevated (III is a mirror), so it is not inferoposterior. Now cover the lateral leads with your hand: only the V1–V2 depression is left. The posterior territory of the LCx is electrically quiet, and that is exactly what an isolated posterior occlusion looks like — the direct signs can be zero.',
-            'Recorre ahora el resto: V5 y V6 están elevadas unos 1–1,5 mm, e I y aVL algo menos (justo por debajo de 1 mm); la pared lateral también está afectada: un IAMCEST **posterolateral**. II, III y aVF no se elevan (III es espejo), así que no es inferoposterior. Tapa ahora con la mano las laterales: solo queda el descenso en V1–V2. El territorio posterior de la Cx es «eléctricamente silente», y así es exactamente una oclusión posterior aislada: los signos directos pueden ser cero.',
+            'Now sweep the rest: V5 and V6 are elevated by about 1–1.5 mm, and I and aVL slightly (under 1 mm) — the lateral wall is involved too: a **posterolateral** STEMI. II, III and aVF are not elevated (III is a mirror), so it is not inferoposterior. Now cover the lateral leads with your hand: only the V1–V2 depression is left. The posterior territory of the LCx is electrically quiet, and that is exactly what an isolated posterior occlusion looks like — the direct signs can be zero.',
+            'Recorre ahora el resto: V5 y V6 están elevadas unos 1–1,5 mm, e I y aVL ligeramente (por debajo de 1 mm); la pared lateral también está afectada: un IAMCEST **posterolateral**. II, III y aVF no se elevan (III es espejo), así que no es inferoposterior. Tapa ahora con la mano las laterales: solo queda el descenso en V1–V2. El territorio posterior de la Cx es «eléctricamente silente», y así es exactamente una oclusión posterior aislada: los signos directos pueden ser cero.',
           ),
           highlightLeads: ['I', 'aVL', 'V5', 'V6', 'II', 'III', 'aVF'],
         },
@@ -206,7 +206,7 @@ const lesson: Lesson = {
           note: l(
             '开头那份图：V1–V2 压低、T 波直立，再加 I、aVL、V5–V6 抬高：后侧壁，多为 LCx。',
             'The opening tracing: V1–V2 down with upright T waves, plus I, aVL and V5–V6 up: posterolateral, usually the LCx.',
-            'El trazado inicial: V1–V2 descendidas con T positivas, más I, aVL y V5–V6 elevadas: posterolateral, casi siempre la Cx.',
+            'El trazado inicial: V1–V2 descendidas con T positivas, más I, aVL y V5–V6 elevadas: posterolateral, habitualmente la Cx.',
           ),
           marks: [{ auto: 'j', lead: 'V2' }, { auto: 'j', lead: 'V6' }],
         },
@@ -233,16 +233,17 @@ const lesson: Lesson = {
       ],
       predict: {
         question: l(
-          '用手遮住开头那份图的侧壁导联，12 导联上还剩下什么？',
-          'Cover the lateral leads of the opening tracing. What is left on the 12 leads?',
-          'Tapa las derivaciones laterales del trazado inicial. ¿Qué queda en las 12 derivaciones?',
+          '第三份图里，后壁带上的不是侧壁，而是下壁（优势型 RCA）。aVL 的 ST 会怎样？',
+          'In the third tracing the back wall brings the inferior wall (a dominant RCA) instead of the lateral wall. What will the ST in aVL do?',
+          'En el tercer trazado la pared posterior arrastra la pared inferior (CD dominante) en lugar de la lateral. ¿Qué hará el ST en aVL?',
         ),
         options: [
-          l('只有胸前导联的压低', 'Only the chest-lead depression', 'Solo el descenso en las precordiales'),
-          l('下壁导联抬高', 'Inferior elevation', 'Elevación inferior'),
-          l('什么都没有', 'Nothing', 'Nada'),
+          l('高于基线，和开头那份图一样', 'Rise above the baseline, as on the opening tracing', 'Subir sobre la línea de base, como en el trazado inicial'),
+          l('留在基线上', 'Stay on the baseline', 'Quedarse en la línea de base'),
+          l('低于基线', 'Fall below the baseline', 'Caer bajo la línea de base'),
         ],
-        answer: 0,
+        answer: 2,
+        ordered: true,
       },
       caption: l(
         '后壁梗死很少真正孤立：常带上侧壁（LCx）或下壁（RCA）。三种情况都按 STEMI 处理。',
@@ -268,14 +269,14 @@ const lesson: Lesson = {
         caption: l(
           'B：压低在 V4–V6 与 I、aVL，V1–V2 不受累，没有任何导联抬高——心内膜下缺血',
           'B: depression in V4–V6 and I, aVL, with V1–V2 spared and no lead elevated — subendocardial ischaemia',
-          'B: descenso difuso, que alcanza V4–V6 y las laterales, T plana o bifásica, sin R dominante: isquemia subendocárdica',
+          'B: descenso en V4–V6 y en I, aVL, con V1–V2 respetadas y ninguna derivación elevada: isquemia subendocárdica',
         ),
         marks: [{ auto: 'st', lead: 'V5' }],
       },
       point: l(
-        '两份图都有胸前 ST 压低，但分布决定去向。A 的压低在**右胸导联（V1–V2）最深**、水平型，到 V4 已消失，而面对侧壁的导联抬高——后侧壁闭塞的镜像：加做 V7–V9 并按 STEMI 处理。B 的压低在**左胸导联 V4–V6**（以及 I、aVL），V1–V2 不受累，也没有任何导联抬高——心内膜下（NSTE）缺血，走另一条路径。压低越靠右胸、T 越直立、R 越高，越像后壁。',
-        'Both tracings show precordial ST depression, but the distribution decides where they go. In A the depression is **deepest in the right chest leads (V1–V2)**, horizontal and gone by V4, while the leads facing the lateral wall are elevated — the mirror of a posterolateral occlusion: record V7–V9 and manage as a STEMI. In B the depression sits in the **left chest leads V4–V6** (and I, aVL), V1–V2 are spared and no lead is elevated — subendocardial (NSTE) ischaemia on a different pathway. The more right-precordial the depression, the more upright the T and the taller the R, the more it looks posterior.',
-        'Ambos registros muestran descenso del ST precordial, pero la distribución decide el camino. En A el descenso es **máximo en las precordiales derechas (V1–V2)**, horizontal y desaparece en V4, mientras las derivaciones que miran a la pared lateral están elevadas: la imagen especular de una oclusión posterolateral; registra V7–V9 y trátalo como IAMCEST. En B el descenso está en las **precordiales izquierdas V4–V6** (y en I, aVL), V1–V2 se respetan y ninguna derivación se eleva: isquemia subendocárdica (SCASEST), otra vía. Cuanto más derecho-precordial sea el descenso, más positiva la T y más alta la R, más posterior parece.',
+        '两份图都有胸前 ST 压低，但分布决定去向。A 的压低在**右胸导联（V1–V2）最深**、水平型，到 V4 已消失，而面对侧壁的导联抬高——后侧壁闭塞的镜像：加做 V7–V9 并按 STEMI 处理。B 的压低在**左胸导联 V4–V6**（以及 I、aVL），V1–V2 不受累，也没有任何导联抬高——心内膜下（NSTE）缺血，走另一条路径。压低以 V1–V4 为主而不在 V5–V6、T 直立、R 高，就更像后壁。',
+        'Both tracings show precordial ST depression, but the distribution decides where they go. In A the depression is **deepest in the right chest leads (V1–V2)**, horizontal and gone by V4, while the leads facing the lateral wall are elevated — the mirror of a posterolateral occlusion: record V7–V9 and manage as a STEMI. In B the depression sits in the **left chest leads V4–V6** (and I, aVL), V1–V2 are spared and no lead is elevated — subendocardial (NSTE) ischaemia on a different pathway. Depression maximal in V1–V4 rather than V5–V6, with an upright T and a tall R, looks posterior.',
+        'Ambos registros muestran descenso del ST precordial, pero la distribución decide el camino. En A el descenso es **máximo en las precordiales derechas (V1–V2)**, horizontal y desaparece en V4, mientras las derivaciones que miran a la pared lateral están elevadas: la imagen especular de una oclusión posterolateral; registra V7–V9 y trátalo como IAMCEST. En B el descenso está en las **precordiales izquierdas V4–V6** (y en I, aVL), V1–V2 se respetan y ninguna derivación se eleva: isquemia subendocárdica (SCASEST), otra vía. Un descenso máximo en V1–V4 y no en V5–V6, con T positiva y R alta, apunta a la pared posterior.',
       ),
     },
     {
