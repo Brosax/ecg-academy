@@ -8,6 +8,7 @@ import { describe, expect, it } from 'vitest';
 import type { Block, Lesson } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
 import { REGISTERED } from '../../src/course/lessons/index';
+import { realisedDials, startDials } from '../../src/course/live';
 import { baselineBefore, qrsWaves } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
@@ -16,8 +17,9 @@ import type { L10n } from '../../src/core/l10n';
 import type { StdLead } from '../../src/core/leads';
 import type { EcgSource, Item } from '../../src/practice/api';
 import { generateItem } from '../../src/practice';
+import { CONFIDENCE_EXPECTED, LEITNER_DAYS, REVIEW_PASS } from '../../src/practice/core/mastery';
 import { getCase } from '../../src/real/library';
-import { generate, type SynthRequest } from '../../src/synth';
+import { generate, scenarios, type SynthRequest } from '../../src/synth';
 
 const IDS = ['x1', 'x2', 'x3', 'x4'] as const;
 
@@ -26,7 +28,7 @@ const lessons: readonly Lesson[] = IDS.flatMap((id) => {
   return m?.lesson ? [m.lesson] : [];
 });
 
-/** Every ECG source a lesson shows (hook, ecg, figure, heart, worked, contrast, inline items, real blocks). */
+/** Every ECG source a lesson shows (hook, ecg, figure, heart, worked, contrast, film frames, live start, inline items, real blocks). */
 function sourcesOf(lesson: Lesson): { readonly path: string; readonly src: EcgSource }[] {
   const out: { path: string; src: EcgSource }[] = [];
   lesson.blocks.forEach((b: Block, i) => {
@@ -43,6 +45,12 @@ function sourcesOf(lesson: Lesson): { readonly path: string; readonly src: EcgSo
         break;
       case 'contrast':
         out.push({ path: `${p}.left`, src: b.left.ecg }, { path: `${p}.right`, src: b.right.ecg });
+        break;
+      case 'film':
+        b.frames.forEach((f, k) => out.push({ path: `${p}.frames[${k}]`, src: f.ecg }));
+        break;
+      case 'live':
+        out.push({ path: p, src: { kind: 'synth', req: { scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed } } });
         break;
       case 'check':
         if ('inline' in b.item) {
@@ -61,6 +69,27 @@ function sourcesOf(lesson: Lesson): { readonly path: string; readonly src: EcgSo
 }
 
 const realIds = (lesson: Lesson): number[] => [...new Set(sourcesOf(lesson).flatMap(({ src }) => (src.kind === 'real' ? [src.id] : [])))];
+
+/** Live blocks whose dials the engine does not realise for their scenario (the player would hide the slider). */
+function unrealisedLiveDials(lesson: Lesson): string[] {
+  const out: string[] = [];
+  lesson.blocks.forEach((b, i) => {
+    if (b.kind !== 'live') return;
+    const sc = scenarios().find((s) => s.id === b.scenario);
+    if (!sc) {
+      out.push(`blocks[${i}]: unknown scenario "${b.scenario}"`);
+      return;
+    }
+    const ids = b.dials.map((d) => d.id);
+    const applied = generate({ scenario: b.scenario, variant: b.variant, seed: b.seed, dials: startDials(sc, b.variant, ids) }).applied;
+    const realised = realisedDials(ids, applied);
+    for (const id of ids) if (!realised.includes(id)) out.push(`blocks[${i}].dials: "${id}" is not realised for "${b.scenario}"`);
+  });
+  return out;
+}
+
+/** Arrest rhythms (VF and the like) have no beats to measure: their scenario says so. */
+const intervalsMeasurable = (req: SynthRequest): boolean => scenarios().find((s) => s.id === req.scenario)?.intervals !== 'not-applicable';
 
 describe('stage X lessons', () => {
   it('all four lesson files exist and export their lesson', () => {
@@ -98,13 +127,18 @@ describe('stage X lessons', () => {
         expect(words).toBeGreaterThanOrEqual(1300);
       });
 
+      it('every live-block dial is realised by the engine', () => {
+        expect(unrealisedLiveDials(lesson)).toEqual([]);
+      });
+
       it('every synthetic ECG it shows can be generated', () => {
         const failures: string[] = [];
         for (const { path, src } of sourcesOf(lesson)) {
           if (src.kind !== 'synth') continue;
           try {
             const r = generate(src.req);
-            if (!r.ecg.truth || r.ecg.truth.beats.length === 0) failures.push(`${path}: no beats`);
+            if (!r.ecg.truth) failures.push(`${path}: no truth`);
+            else if (intervalsMeasurable(src.req) && r.ecg.truth.beats.length === 0) failures.push(`${path}: no beats`);
           } catch (e) {
             failures.push(`${path}: ${String(e)}`);
           }
@@ -234,6 +268,20 @@ const shape = (e: Ecg, l: StdLead): string => {
   const bt = midBeat(e);
   return qrsWaves(e.signal.leads[l], e.signal.fs, bt.qrsOn, bt.qrsOff).map((w) => w.role).join('');
 };
+const LIMB: readonly StdLead[] = ['I', 'II', 'III', 'aVR', 'aVL', 'aVF'];
+const pw = (ecg: Ecg, lead: StdLead, b = midBeat(ecg)) => span(ecg, lead, b.pOn ?? b.qrsOn - 150, b.pOff ?? b.qrsOn - 60, b);
+const tInverted = (ecg: Ecg, lead: StdLead) => tw(ecg, lead).min < -0.1 && -tw(ecg, lead).min > tw(ecg, lead).max;
+const meanRr = (e: Ecg) => rrs(e).reduce((s, x) => s + x, 0) / rrs(e).length;
+/** what a playing live block shows with its played dial at `v` (its other dials at their start values) */
+function played(id: string, i: number, v: number): Ecg {
+  const b = blocksOf(id, 'live')[i];
+  if (!b.play) throw new Error(`${id}: live block ${i} does not play`);
+  const sc = scenarios().find((s) => s.id === b.scenario);
+  if (!sc) throw new Error(`unknown scenario ${b.scenario}`);
+  const dials = { ...startDials(sc, b.variant, b.dials.map((d) => d.id), b.play), [b.play.dial]: v };
+  return ecgOf({ scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed, dials });
+}
+const frames = (id: string, k: number): Ecg[] => blocksOf(id, 'film')[k].frames.map((f) => ecgOf(f.ecg));
 
 /** The anterior STEMI of x1 (hook and worked) as the text reads it, step by step. */
 function expectX1Stemi(e: Ecg): void {
@@ -281,6 +329,55 @@ describe('x1: the structured report on the tracings', () => {
     expectX1Stemi(ecgOf(blocksOf('x1', 'hook')[0].ecg));
     expectX1Stemi(ecgOf(blocksOf('x1', 'worked')[0].ecg));
   });
+  it('ten-line film: every frame is the normal tracing of the contrast; I upright and aVR negative; RR just over 4 large squares at about 72/min with an upright P in II; PR 160, QRS about 95, QT about 385; I, II, aVF positive; transition at V3; ST on the baseline everywhere', () => {
+    const film = blocksOf('x1', 'film')[0];
+    for (const f of film.frames) expect(f.ecg).toEqual(blocksOf('x1', 'contrast')[1].left.ecg);
+    const e = ecgOf(film.frames[0].ecg);
+    const t = e.truth!;
+    for (const part of [pw, qrs]) {
+      expect(part(e, 'I').net).toBeGreaterThan(0.03);
+      expect(part(e, 'aVR').net).toBeLessThan(-0.03);
+    }
+    expect(meanRr(e) / 200).toBeGreaterThan(4);
+    expect(meanRr(e) / 200).toBeLessThan(4.4);
+    expect(Math.abs(t.hrBpm - 72)).toBeLessThan(2);
+    expect(t.rhythm).toBe('sinus-rhythm');
+    expect(pw(e, 'II').max).toBeGreaterThan(0.05);
+    expect(Math.abs(t.prMs! - 160)).toBeLessThan(5);
+    expect(Math.abs(t.qrsMs - 95)).toBeLessThan(5);
+    expect(Math.abs(t.qtMs - 385)).toBeLessThan(5);
+    expect(t.qtcBazettMs).toBeLessThan(450);
+    for (const l of ['I', 'II', 'aVF'] as const) expect(qrs(e, l).net, l).toBeGreaterThan(0.1);
+    expect(transition(e)).toBe('V3');
+    for (const l of [...LIMB, ...CHEST]) expect(Math.abs(stAt(e, l, 60)), l).toBeLessThan(0.05);
+    for (const l of ['I', 'II', 'V3', 'V4', 'V5', 'V6'] as const) expect(tUpright(e, l), l).toBe(true);
+    expect(t.findings).toContain('normal-ecg');
+  });
+  it('ST sweep notes: the worked heart; V3 about +3 mm and III about −1 mm at 0.22–0.25; V2–V4 rise as II, III and aVF fall across 0.26–0.39; V3 about +5–6 mm and III about −2 mm at 0.40–0.45; acute anterior STEMI throughout', () => {
+    const b = blocksOf('x1', 'live')[0];
+    expect({ kind: 'synth', req: { scenario: b.scenario, seed: b.seed } }).toEqual(blocksOf('x1', 'worked')[0].ecg);
+    for (const v of [0.22, 0.25]) {
+      const e = played('x1', 0, v);
+      expect(stAt(e, 'V3', 60), `${v}`).toBeGreaterThan(0.25);
+      expect(stAt(e, 'V3', 60), `${v}`).toBeLessThan(0.35);
+      expect(stAt(e, 'III', 60), `${v}`).toBeGreaterThan(-0.125);
+      expect(stAt(e, 'III', 60), `${v}`).toBeLessThan(-0.085);
+    }
+    const [lo, hi] = [played('x1', 0, 0.26), played('x1', 0, 0.39)];
+    for (const l of ['V2', 'V3', 'V4'] as const) expect(stAt(hi, l, 60), l).toBeGreaterThan(stAt(lo, l, 60) + 0.05);
+    for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(hi, l, 60), l).toBeLessThan(stAt(lo, l, 60) - 0.02);
+    for (const v of [0.4, 0.45]) {
+      const e = played('x1', 0, v);
+      expect(stAt(e, 'V3', 60), `${v}`).toBeGreaterThanOrEqual(0.5);
+      expect(stAt(e, 'V3', 60), `${v}`).toBeLessThanOrEqual(0.6);
+      expect(stAt(e, 'III', 60), `${v}`).toBeGreaterThan(-0.225);
+      expect(stAt(e, 'III', 60), `${v}`).toBeLessThan(-0.175);
+    }
+    for (const v of [0.22, 0.3, 0.45]) expect(played('x1', 0, v).truth!.findings, `${v}`).toContain('stemi-anterior');
+  });
+  it('heart: the worked tracing', () => {
+    expect(blocksOf('x1', 'heart')[0].ecg).toEqual(blocksOf('x1', 'worked')[0].ecg);
+  });
   it('weak vs strong report: the same tracing on both sides, and it is the worked one', () => {
     const c = blocksOf('x1', 'contrast')[0];
     expect(c.left.ecg).toEqual(c.right.ecg);
@@ -317,8 +414,44 @@ describe('x1: the structured report on the tracings', () => {
   });
 });
 
+describe('x2: the synthetic frames', () => {
+  it('real films: tracing 2 is 6282 in every frame; tracing 8 is 18776 then lvh-strain', () => {
+    const [t2, t8] = blocksOf('x2', 'film');
+    for (const f of t2.frames) expect(f.ecg).toEqual({ kind: 'real', id: 6282 });
+    expect(t8.frames.map((f) => (f.ecg.kind === 'real' ? f.ecg.id : f.ecg.req.scenario))).toEqual([18776, 18776, 'lvh-strain']);
+  });
+  it('voltage with secondary ST–T: S in V1 + the larger R of V5/V6 > 35 mm, ST depressed and T inverted in V5–V6', () => {
+    const e = ecgOf(blocksOf('x2', 'film')[1].frames[2].ecg);
+    expect(-qrs(e, 'V1').min + Math.max(qrs(e, 'V5').max, qrs(e, 'V6').max)).toBeGreaterThan(3.5);
+    for (const l of ['V5', 'V6'] as const) {
+      expect(stAt(e, l, 60), l).toBeLessThan(-0.05);
+      expect(tInverted(e, l), l).toBe(true);
+    }
+  });
+  it('flutter film: one circuit (same seed), atrial rate about 300 with F waves about 200 ms apart; 2:1 ≈ 150/min with every non-conducted F wave hidden, 3:1 ≈ 100/min and 4:1 ≈ 75/min with F waves visible between the complexes', () => {
+    const film = blocksOf('x2', 'film')[2];
+    const reqs = film.frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req : null));
+    for (const r of reqs) expect({ ...r, dials: undefined }).toEqual({ ...reqs[0], dials: undefined });
+    const es = frames('x2', 2);
+    es.forEach((e, k) => {
+      const t = e.truth!;
+      expect(t.rhythm).toBe('atrial-flutter');
+      expect(Math.abs(t.atrialRateBpm! - 300), `frame ${k}`).toBeLessThan(5);
+      const gaps = t.atrial.slice(1).map((a, i) => a.t - t.atrial[i].t);
+      for (const g of gaps) expect(Math.abs(g - 200), `frame ${k}`).toBeLessThan(10);
+      expect(Math.abs(t.hrBpm - [150, 100, 75][k]), `frame ${k}`).toBeLessThan(3);
+      expect(t.regular, `frame ${k}`).toBe(true);
+    });
+    const [two, three, four] = es;
+    const blocked = (e: Ecg) => e.truth!.atrial.filter((a) => a.conductedTo === null);
+    expect(blocked(two).length).toBeGreaterThan(5);
+    for (const a of blocked(two)) expect(a.visible, `2:1 F at ${a.t}`).toBe(false);
+    for (const e of [three, four]) expect(blocked(e).filter((a) => a.visible).length).toBeGreaterThan(5);
+  });
+});
+
 describe('x3: triage tracings', () => {
-  it('hook and contrast: infra-His complete AV block, escape ≈ 34/min with QRS ≈ 150 ms, P waves ≈ 78/min', () => {
+  it('hook, contrast and the block frame of the triage film: infra-His complete AV block, escape about 34/min with QRS about 150 ms, P waves about 78/min', () => {
     for (const src of [blocksOf('x3', 'hook')[0].ecg, blocksOf('x3', 'contrast')[0].right.ecg]) {
       const t = ecgOf(src).truth!;
       expect(t.findings).toContain('av-block-3');
@@ -327,6 +460,7 @@ describe('x3: triage tracings', () => {
       expect(t.qrsMs).toBeGreaterThanOrEqual(140);
       expect(t.qrsMs).toBeLessThan(160);
     }
+    expect(Math.abs(ecgOf(blocksOf('x3', 'hook')[0].ecg).truth!.qrsMs - 150)).toBeLessThan(5);
   });
   it('worked: 92/min, narrow QRS, ST ↑ ≈ 2.5–4.5 mm V2–V4 (highest V3), reciprocal ↓ II/III/aVF, no tall tented T', () => {
     const e = ecgOf(blocksOf('x3', 'worked')[0].ecg);
@@ -341,24 +475,70 @@ describe('x3: triage tracings', () => {
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l, 60), l).toBeLessThan(-0.05);
     expect(t.findings).not.toContain('hyperkalemia');
   });
-  it('hyperkalaemia: no visible P in II, QRS ≈ 170 ms, T in V3–V5 well above the T in II', () => {
-    const e = ecgOf(blocksOf('x3', 'ecg')[0].ecg);
+  it('T-and-device film, hyperkalaemia: no visible P in II, QRS about 170 ms, T in V3–V5 well above the T in II', () => {
+    const e = ecgOf(blocksOf('x3', 'film')[1].frames[0].ecg);
     const t = e.truth!;
     expect(t.findings).toContain('hyperkalemia');
-    expect(Math.abs(t.qrsMs - 170)).toBeLessThan(10);
+    expect(Math.abs(t.qrsMs - 170)).toBeLessThan(5);
     const b = midBeat(e);
     expect(span(e, 'II', b.qrsOn - 200, b.qrsOn - 20, b).max).toBeLessThan(0.05);
     for (const l of ['V3', 'V4'] as const) expect(tw(e, l).max, l).toBeGreaterThan(2 * tw(e, 'II').max);
     expect(tw(e, 'V5').max).toBeGreaterThan(1.5 * tw(e, 'II').max);
   });
-  it('digoxin effect: PR ≈ 190 ms (upper normal), QTc not long, ST sagging below the baseline in V4–V6', () => {
-    const e = ecgOf(blocksOf('x3', 'ecg')[1].ecg);
+  it('T-and-device film, digoxin effect: PR about 190 ms (upper normal), QTc not long, ST sagging below the baseline in V4–V6', () => {
+    const e = ecgOf(blocksOf('x3', 'film')[1].frames[1].ecg);
     const t = e.truth!;
     expect(t.findings).toContain('digoxin-effect');
-    expect(Math.abs(t.prMs! - 190)).toBeLessThan(10);
+    expect(Math.abs(t.prMs! - 190)).toBeLessThan(5);
     expect(t.prMs!).toBeLessThanOrEqual(200);
     expect(t.qtcFridericiaMs).toBeLessThan(420);
     for (const l of ['V4', 'V5', 'V6'] as const) expect(stAt(e, l, 60), l).toBeLessThan(-0.02);
+  });
+  it('T-and-device film, loss of capture: paced beats one stimulus interval apart, and gaps where a stimulus captured nothing', () => {
+    const e = ecgOf(blocksOf('x3', 'film')[1].frames[2].ecg);
+    const t = e.truth!;
+    expect(t.findings).toContain('pacing-failure-capture');
+    const beats = t.beats;
+    const paced = beats.filter((b) => b.kind === 'paced-ventricular');
+    expect(paced.length).toBeGreaterThanOrEqual(3);
+    const pacedGaps = paced.slice(1).map((b, i) => b.qrsOn - paced[i].qrsOn);
+    const interval = Math.min(...pacedGaps);
+    expect(Math.abs(interval - 1000)).toBeLessThan(5);
+    expect(pacedGaps.some((g) => g > 1.5 * interval)).toBe(true);
+    const fs = e.signal.fs;
+    const ii = e.signal.leads.II;
+    const slope = (t0: number, t1: number) => {
+      let m = 0;
+      for (let i = Math.round((t0 * fs) / 1000); i < Math.round((t1 * fs) / 1000); i++) m = Math.max(m, Math.abs(ii[i + 1] - ii[i]));
+      return m;
+    };
+    const missed = paced.slice(1).flatMap((b, i) => (b.qrsOn - paced[i].qrsOn > 1.5 * interval ? [paced[i].qrsOn + interval] : []));
+    for (const at of missed) {
+      expect(beats.some((b) => Math.abs(b.qrsOn - at) < 60), `no QRS at ${at}`).toBe(false);
+      expect(slope(at - 15, at + 15), `spike at ${at}`).toBeGreaterThan(5 * slope(at + 60, at + 160));
+    }
+  });
+  it('triage film: VF has no QRS; the occlusion is the worked STEMI; rapid AF irregularly irregular at about 140/min with no P; complete block is the hook (P about 78, escape about 34); the normal frame has nothing to catch', () => {
+    const film = blocksOf('x3', 'film')[0];
+    const [vf, , af, , normal] = frames('x3', 0);
+    expect(vf.truth!.rhythm).toBe('ventricular-fibrillation');
+    expect(vf.truth!.beats.length).toBe(0);
+    expect(film.frames[1].ecg).toEqual(blocksOf('x3', 'worked')[0].ecg);
+    expect(film.frames[3].ecg).toEqual(blocksOf('x3', 'hook')[0].ecg);
+    expect(af.truth!.rhythm).toBe('atrial-fibrillation');
+    expect(Math.abs(af.truth!.hrBpm - 140)).toBeLessThan(5);
+    expect(af.truth!.beats.every((b) => b.pOn === null)).toBe(true);
+    expect(Math.max(...rrs(af)) - Math.min(...rrs(af))).toBeGreaterThan(200);
+    const n = normal.truth!;
+    expect(n.findings).toContain('normal-ecg');
+    expect(n.hrBpm).toBeGreaterThan(60);
+    expect(n.hrBpm).toBeLessThan(100);
+    expect(n.qrsMs).toBeLessThan(110);
+    expect(n.qtcFridericiaMs).toBeLessThan(450);
+    for (const l of [...LIMB, ...CHEST]) expect(Math.abs(stAt(normal, l, 60)), l).toBeLessThan(0.05);
+  });
+  it('heart: the hook tracing', () => {
+    expect(blocksOf('x3', 'heart')[0].ecg).toEqual(blocksOf('x3', 'hook')[0].ecg);
   });
 });
 
@@ -379,11 +559,43 @@ describe('x4: calibration tracings', () => {
     expect(r.findings).toContain('lafb');
     expect(Math.abs(r.axisDeg.qrs + 75)).toBeLessThan(5);
   });
-  it('sinus tachycardia ≈ 125/min, regular', () => {
-    const t = ecgOf(blocksOf('x4', 'ecg')[0].ecg).truth!;
+  it('statements film: one sinus tachycardia in every frame; a P upright in II before every QRS; RR about 12 small squares (about 480 ms) on every beat, about 125/min, regular', () => {
+    const film = blocksOf('x4', 'film')[1];
+    for (const f of film.frames) expect(f.ecg).toEqual(film.frames[0].ecg);
+    const e = ecgOf(film.frames[0].ecg);
+    const t = e.truth!;
     expect(t.rhythm).toBe('sinus-tachycardia');
     expect(Math.abs(t.hrBpm - 125)).toBeLessThan(3);
     expect(t.regular).toBe(true);
+    expect(t.beats.every((b) => b.pOn !== null)).toBe(true);
+    expect(pw(e, 'II').max).toBeGreaterThan(0.05);
+    for (const rr of rrs(e)) {
+      expect(Math.abs(rr - 480)).toBeLessThan(20);
+      expect(Math.abs(rr / 40 - 12)).toBeLessThan(0.5);
+    }
+  });
+  it('axis calculator: the autopsy tracing', () => {
+    expect(blocksOf('x4', 'figure')[0].ecg).toEqual(blocksOf('x4', 'worked')[0].ecg);
+  });
+  it('error-type film: QT about 510 ms and longer than half the RR; the autopsy tracing (I up, II/III/aVF down, qR in aVL); complete block with P waves running on and a wide escape about 34/min', () => {
+    const film = blocksOf('x4', 'film')[0];
+    const [longQt, misnamed, block] = frames('x4', 0);
+    expect(Math.abs(longQt.truth!.qtMs - 510)).toBeLessThan(5);
+    expect(longQt.truth!.qtMs).toBeGreaterThan(meanRr(longQt) / 2);
+    expect(longQt.truth!.findings).toContain('long-qt');
+    expect(film.frames[1].ecg).toEqual(blocksOf('x4', 'worked')[0].ecg);
+    expect(qrs(misnamed, 'I').net).toBeGreaterThan(0.1);
+    for (const l of ['II', 'III', 'aVF'] as const) expect(qrs(misnamed, l).net, l).toBeLessThan(-0.2);
+    const b = block.truth!;
+    expect(b.findings).toContain('av-block-3');
+    expect(b.atrial.every((a) => a.conductedTo === null)).toBe(true);
+    expect(Math.abs(b.hrBpm - 34)).toBeLessThan(2);
+    expect(b.qrsMs).toBeGreaterThanOrEqual(120);
+  });
+  it('Progress-page card: the numbers are the app\'s own (ideal 40/70/95 %, review pass 80 %, Leitner 1–16 days)', () => {
+    expect(CONFIDENCE_EXPECTED).toEqual({ 1: 0.4, 2: 0.7, 3: 0.95 });
+    expect(REVIEW_PASS).toBe(0.8);
+    expect([...LEITNER_DAYS]).toEqual([1, 2, 4, 8, 16]);
   });
 });
 
@@ -411,13 +623,13 @@ const CLAIMS: readonly RealClaim[] = [
   { id: 6764, sex: 'M', age: 64, has: ['pathological-q', 'old-mi-anterior', 'old-mi-lateral'] },
   // x2
   { id: 19170, sex: 'M', age: 73, has: ['atrial-fibrillation', 'atrial-flutter'], hr: [105, 118], qrs: [110, 120], axis: [-20, -8] },
-  { id: 6282, sex: 'M', age: 42, has: ['sinus-rhythm', 'rbbb'], hr: [72, 80], pr: [125, 140], qrs: [145, 160] },
+  { id: 6282, sex: 'M', age: 42, has: ['sinus-rhythm', 'rbbb'], not: ['pathological-q', 'old-mi-anterior', 'old-mi-inferior', 'old-mi-lateral', 'stemi-anterior', 'stemi-inferior', 'stemi-lateral'], hr: [73, 79], pr: [130, 138], qrs: [149, 159] },
   { id: 6271, sex: 'F', age: 60, has: ['normal-ecg'] },
   { id: 2320, sex: 'M', age: 64, has: ['normal-ecg'] },
   { id: 11459, sex: 'F', age: 18, has: ['normal-ecg'] },
   { id: 2627, sex: 'M', age: 45, has: ['sinus-arrhythmia', 'pathological-q', 'old-mi-inferior'], not: ['stemi-inferior'], hr: [75, 85], pr: [135, 150], qrs: [80, 95], axis: [-10, 5] },
   { id: 12899, sex: 'F', age: 67, has: ['stemi-inferior'] },
-  { id: 18776, sex: 'M', age: 35, has: ['lvh'], hr: [50, 56], qrs: [95, 105] },
+  { id: 18776, sex: 'M', age: 35, has: ['lvh', 'sinus-rhythm'], not: ['lvh-strain', 'secondary-st-t', 'nonspecific-st-t', 't-inversion-ischemic', 'st-depression-ischemic', 'pathological-q'], hr: [50, 56], qrs: [95, 105] },
   { id: 2594, sex: 'F', age: 58, has: ['normal-ecg', 'sinus-bradycardia'] },
   { id: 14874, sex: 'M', age: 47, has: ['normal-ecg', 'sinus-arrhythmia'] },
   { id: 6727, sex: 'F', age: 28, has: ['av-block-1'] },
