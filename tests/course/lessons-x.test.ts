@@ -463,10 +463,10 @@ describe('x2: the synthetic frames', () => {
     es.forEach((e, k) => {
       const t = e.truth!;
       expect(t.rhythm).toBe('atrial-flutter');
-      expect(Math.abs(t.atrialRateBpm! - 300), `frame ${k}`).toBeLessThan(5);
+      expect(Math.abs(t.atrialRateBpm! - 300), `frame ${k}`).toBeLessThanOrEqual(1);
       const gaps = t.atrial.slice(1).map((a, i) => a.t - t.atrial[i].t);
-      for (const g of gaps) expect(Math.abs(g - 200), `frame ${k}`).toBeLessThan(10);
-      expect(Math.abs(t.hrBpm - [150, 100, 75][k]), `frame ${k}`).toBeLessThan(3);
+      for (const g of gaps) expect(Math.abs(g - 200), `frame ${k}`).toBeLessThanOrEqual(5);
+      expect(Math.abs(t.hrBpm - [150, 100, 75][k]), `frame ${k}`).toBeLessThanOrEqual(1);
       expect(t.regular, `frame ${k}`).toBe(true);
       expect(t.qrsMs, `frame ${k}`).toBeLessThan(120);
     });
@@ -665,6 +665,8 @@ interface RealClaim {
   readonly pr?: readonly [number, number];
   readonly qrs?: readonly [number, number];
   readonly axis?: readonly [number, number];
+  /** PTB-XL infarction stadium the text names */
+  readonly stadium?: string;
 }
 
 const CLAIMS: readonly RealClaim[] = [
@@ -674,14 +676,14 @@ const CLAIMS: readonly RealClaim[] = [
   { id: 13441, sex: 'F', age: 81, has: ['rbbb'] },
   { id: 6764, sex: 'M', age: 64, has: ['pathological-q', 'old-mi-anterior', 'old-mi-lateral'] },
   // x2
-  { id: 19170, sex: 'M', age: 73, has: ['atrial-fibrillation', 'atrial-flutter'], hr: [105, 118], qrs: [110, 120], axis: [-20, -8] },
-  { id: 6282, sex: 'M', age: 42, has: ['sinus-rhythm', 'rbbb'], not: ['pathological-q', 'old-mi-anterior', 'old-mi-inferior', 'old-mi-lateral', 'stemi-anterior', 'stemi-inferior', 'stemi-lateral'], hr: [73, 79], pr: [130, 138], qrs: [149, 159] },
+  { id: 19170, sex: 'M', age: 73, has: ['atrial-fibrillation', 'atrial-flutter'], hr: [109, 111], qrs: [111, 121], axis: [-19, -9] },
+  { id: 6282, sex: 'M', age: 42, has: ['sinus-rhythm', 'rbbb'], not: ['pathological-q', 'old-mi-anterior', 'old-mi-inferior', 'old-mi-lateral', 'stemi-anterior', 'stemi-inferior', 'stemi-lateral'], hr: [75, 77], pr: [129, 139], qrs: [149, 159] },
   { id: 6271, sex: 'F', age: 60, has: ['normal-ecg'] },
   { id: 2320, sex: 'M', age: 64, has: ['normal-ecg'] },
   { id: 11459, sex: 'F', age: 18, has: ['normal-ecg'] },
-  { id: 2627, sex: 'M', age: 45, has: ['sinus-arrhythmia', 'pathological-q', 'old-mi-inferior'], not: ['stemi-inferior'], hr: [75, 85], pr: [135, 150], qrs: [80, 95], axis: [-10, 5] },
-  { id: 12899, sex: 'F', age: 67, has: ['stemi-inferior'] },
-  { id: 18776, sex: 'M', age: 35, has: ['lvh', 'sinus-rhythm'], not: ['lvh-strain', 'secondary-st-t', 'nonspecific-st-t', 't-inversion-ischemic', 'st-depression-ischemic', 'pathological-q'], hr: [50, 56], qrs: [95, 105] },
+  { id: 2627, sex: 'M', age: 45, has: ['sinus-arrhythmia', 'pathological-q', 'old-mi-inferior'], not: ['stemi-inferior', 'nonspecific-st-t', 't-inversion-ischemic', 'st-depression-ischemic', 'secondary-st-t'], stadium: 'Stadium III', hr: [79, 81], pr: [139, 149], qrs: [83, 93], axis: [-5, 5] },
+  { id: 12899, sex: 'F', age: 67, has: ['stemi-inferior', 'nonspecific-st-t'], stadium: 'Stadium I' },
+  { id: 18776, sex: 'M', age: 35, has: ['lvh', 'sinus-rhythm'], not: ['lvh-strain', 'secondary-st-t', 'nonspecific-st-t', 't-inversion-ischemic', 'st-depression-ischemic', 'pathological-q'], hr: [52, 54], qrs: [95, 105] },
   { id: 2594, sex: 'F', age: 58, has: ['normal-ecg', 'sinus-bradycardia'] },
   { id: 14874, sex: 'M', age: 47, has: ['normal-ecg', 'sinus-arrhythmia'] },
   { id: 6727, sex: 'F', age: 28, has: ['av-block-1'] },
@@ -724,8 +726,14 @@ describe('stage X real cases: the text agrees with the labels and the 12SL refer
       within(k.ref.prMs, c.pr, 'PR');
       within(k.ref.qrsMs, c.qrs, 'QRS');
       within(k.ref.qrsAxisDeg, c.axis, 'axis');
+      if (c.stadium) expect(k.infarctionStadium, `${c.id} stadium`).toBe(c.stadium);
     });
   }
+
+  it('x2 tracing 1 (19170): the 12SL finds no P wave (no PR, no P axis, no P duration)', () => {
+    const r = getCase(19170)!.ref;
+    expect([r.prMs, r.pAxisDeg, r.pDurMs]).toEqual([null, null, null]);
+  });
 
   it('x2 stream is prevalence-weighted as its text says: 5 normal, 4 minor, 4 major, 1 act-now (14 tracings)', () => {
     const tally = { normal: 0, minor: 0, major: 0, critical: 0 };
@@ -739,7 +747,10 @@ describe('stage X real cases: the text agrees with the labels and the 12SL refer
     expect(tally).toEqual({ normal: 5, minor: 4, major: 4, critical: 1 });
   });
 
-  it('x2 stream text names each group: normals with one sinus bradycardia and one sinus arrhythmia; small = RBBB, first-degree AV block, two PACs; significant = two flutter/AF, old inferior MI, LVH; the fast one of the last three is the flutter', () => {
+  it('x2 stream text names each group: normals with one sinus bradycardia and one sinus arrhythmia; small = RBBB, first-degree AV block, two PACs, one of which hides more (a non-specific ST–T label and a 12SL PR over 200 ms); significant = two flutter/AF, old inferior MI, LVH; the fast one of the last three is the flutter', () => {
+    const pacs = [2466, 17835].map((id) => getCase(id)!);
+    expect(pacs.map((c) => c.findings.filter((f) => f !== 'sinus-rhythm'))).toEqual([['pac', 'nonspecific-st-t'], ['pac']]);
+    expect(pacs.map((c) => c.ref.prMs! > 200)).toEqual([true, false]);
     const group = (id: number) => {
       const f = getCase(id)!.findings;
       if (f.includes('normal-ecg')) return 'normal';
