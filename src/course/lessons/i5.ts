@@ -54,20 +54,20 @@ const lesson: Lesson = {
       ecg: synth('stemi-high-lateral', 881),
       view: { layout: '3x4+1' },
       question: l(
-        '胸痛 40 分钟。I 和 aVL 的 ST 抬高不过 1–2 mm，V1–V2 抬高约 1.5 mm（V3 约 1 mm，V4 不到 1 mm），V5–V6 平坦，III 压低约 3 mm：这是“小区域”，还是一次即将被漏掉的闭塞？想好你的判断和罪犯血管。',
-        'Chest pain for 40 minutes. The ST elevation in I and aVL is only 1–2 mm, V1–V2 rise by about 1.5 mm (V3 about 1 mm, V4 under 1 mm), V5–V6 are flat, and III is depressed by about 3 mm: a tiny territory, or an occlusion about to be missed? Commit to a reading and a culprit artery.',
-        'Dolor torácico de 40 minutos. La elevación del ST en I y aVL es de apenas 1-2 mm, V1-V2 suben unos 1,5 mm (V3 alrededor de 1 mm, V4 menos de 1 mm), V5-V6 están planas y III desciende unos 3 mm: ¿un territorio diminuto o una oclusión a punto de pasarse por alto? Decide tu lectura y la arteria responsable.',
+        '胸痛 40 分钟。I 和 aVL 的 ST 抬高只有约 1–2 mm，V1–V2 抬高约 1.5 mm（V3 约 1 mm，V4–V6 不到 1 mm），III 压低约 3 mm：这是“小区域”，还是一次即将被漏掉的闭塞？想好你的判断和罪犯血管。',
+        'Chest pain for 40 minutes. The ST elevation in I and aVL is only about 1–2 mm, V1–V2 rise by about 1.5 mm (V3 about 1 mm, V4–V6 under 1 mm), and III is depressed by about 3 mm: a tiny territory, or an occlusion about to be missed? Commit to a reading and a culprit artery.',
+        'Dolor torácico de 40 minutos. La elevación del ST en I y aVL es de apenas unos 1-2 mm, V1-V2 suben unos 1,5 mm (V3 alrededor de 1 mm, V4-V6 menos de 1 mm) y III desciende unos 3 mm: ¿un territorio diminuto o una oclusión a punto de pasarse por alto? Decide tu lectura y la arteria responsable.',
       ),
       reveal: l(
-        '这是**高侧壁 STEMI**：I、aVL 直接面向侧壁的上部。I、aVL 的阈值只有 **1 mm**（V2–V3 那套 2/2.5/1.5 mm 的性别年龄规则在这里不适用），所以振幅小绝不等于危险小。再看 III（± II、aVF）：那里约 3 mm 的 ST **压低**正是这股损伤电流的镜像——它支持闭塞，而不是另一个诊断。V2 也抬高（与 V1 相当），往 V3–V4 逐渐减小，V5–V6 平坦：罪犯血管是**第一对角支（D1，发自 LAD）**——这正是下文的“南非国旗”征；若 V2 不抬高，近段 LCx/钝缘支也有可能。',
-        'This is a **high lateral STEMI**: I and aVL face the upper part of the lateral wall. The threshold in I and aVL is only **1 mm** (the 2/2.5/1.5 mm sex-and-age rules of V2–V3 do not apply here), so a small amplitude never means a small risk. Now look at III (± II, aVF): the ST **depression** of about 3 mm there is the mirror of the same injury current — it supports the occlusion, it is not a second diagnosis. V2 is elevated too (as much as V1), fading through V3–V4, while V5–V6 stay flat: the culprit is the **first diagonal branch (D1, from the LAD)** — the "South African flag" you will meet below; without V2, a proximal LCx / obtuse marginal would remain possible.',
-        'Es un **IAMCEST lateral alto**: I y aVL miran a la parte alta de la pared lateral. El umbral en I y aVL es de solo **1 mm** (las reglas de 2/2,5/1,5 mm por sexo y edad de V2-V3 no se aplican aquí), de modo que una amplitud pequeña nunca significa un riesgo pequeño. Mira ahora III (± II, aVF): el **descenso** del ST de unos 3 mm ahí es la imagen especular de la misma corriente de lesión; apoya la oclusión, no es un segundo diagnóstico. V2 también se eleva (tanto como V1) y la elevación se va apagando en V3-V4, mientras V5-V6 siguen planas: la arteria responsable es la **primera diagonal (D1, de la DA)**, la «bandera sudafricana» que verás más abajo; sin V2, seguiría siendo posible una Cx proximal / marginal obtusa.',
+        '这是**高侧壁 STEMI**：I、aVL 直接面向侧壁的上部。I、aVL 的阈值只有 **1 mm**（V2–V3 那套 2/2.5/1.5 mm 的性别年龄规则在这里不适用），所以振幅小绝不等于危险小。再看 III（± II、aVF）：那里约 3 mm 的 ST **压低**正是这股损伤电流的镜像——它支持闭塞，而不是另一个诊断。V2 也抬高（与 V1 相当），再向 V6 逐渐减小（V4–V6 不到 1 mm）：罪犯血管是**第一对角支（D1，发自 LAD）**——这正是下文的“南非国旗”征；若 V2 不抬高，近段 LCx/钝缘支也有可能。',
+        'This is a **high lateral STEMI**: I and aVL face the upper part of the lateral wall. The threshold in I and aVL is only **1 mm** (the 2/2.5/1.5 mm sex-and-age rules of V2–V3 do not apply here), so a small amplitude never means a small risk. Now look at III (± II, aVF): the ST **depression** of about 3 mm there is the mirror of the same injury current — it supports the occlusion, it is not a second diagnosis. V2 is elevated too (as much as V1), and the elevation fades towards V6 (V4–V6 under 1 mm): the culprit is the **first diagonal branch (D1, from the LAD)** — the "South African flag" you will meet below; without V2, a proximal LCx / obtuse marginal would remain possible.',
+        'Es un **IAMCEST lateral alto**: I y aVL miran a la parte alta de la pared lateral. El umbral en I y aVL es de solo **1 mm** (las reglas de 2/2,5/1,5 mm por sexo y edad de V2-V3 no se aplican aquí), de modo que una amplitud pequeña nunca significa un riesgo pequeño. Mira ahora III (± II, aVF): el **descenso** del ST de unos 3 mm ahí es la imagen especular de la misma corriente de lesión; apoya la oclusión, no es un segundo diagnóstico. V2 también se eleva (tanto como V1) y la elevación se va apagando hacia V6 (V4-V6 por debajo de 1 mm): la arteria responsable es la **primera diagonal (D1, de la DA)**, la «bandera sudafricana» que verás más abajo; sin V2, seguiría siendo posible una Cx proximal / marginal obtusa.',
       ),
     },
     {
       kind: 'heart',
       ecg: synth('stemi-lateral', 882),
-      emphasize: ['lv-basal-anterolateral', 'lv-mid-anterolateral', 'lv-apical-lateral', 'lv-mid-inferolateral', 'lv-basal-inferolateral'],
+      emphasize: ['lv-basal-anterolateral', 'lv-mid-anterolateral', 'lv-apical-lateral'],
       caption: l(
         '播放一个心动周期：侧壁节段亮起，回旋支绕过它们。V5–V6 从左侧、I 和 aVL 从左上方看这面墙；方向相反的 aVR、V1–V2 和 III 被**压低**。',
         'Play one beat: the lateral segments light up, with the LCx running around them. V5–V6 face this wall from the left, I and aVL from the upper left; aVR, V1–V2 and III look away and are **depressed**.',
@@ -92,7 +92,7 @@ const lesson: Lesson = {
             text: l(
               'J点：aVL 已过 1 mm，I 还不到；III 压低得比 aVL 抬高得还深。镜像比主犯更显眼。',
               'At J: aVL over 1 mm, I not yet; III is already deeper than aVL is high. The mirror is louder than the culprit.',
-              'En J: aVL por encima de 1 mm, I todavía no; III ya baja más de lo que sube aVL. El espejo grita más que la culpable.',
+              'En J: aVL por encima de 1 mm, I todavía no; III ya baja más de lo que sube aVL. El espejo grita más que la derivación culpable.',
             ),
           },
           {
@@ -214,9 +214,9 @@ const lesson: Lesson = {
       left: {
         ecg: synth('stemi-high-lateral', 884),
         caption: l(
-          'A：I、aVL 抬高并带上 V2，V5–V6 平坦，III 镜像最深（约 3 mm）→ D1',
-          'A: I and aVL elevated together with V2, V5–V6 flat, deepest mirror in III (about 3 mm) → D1',
-          'A: I y aVL elevadas junto con V2, V5-V6 planas, espejo más profundo en III (unos 3 mm) → D1',
+          'A：I、aVL 抬高并带上 V2，V4–V6 不到 1 mm，III 镜像最深（约 3 mm）→ D1',
+          'A: I and aVL elevated together with V2, V4–V6 under 1 mm, deepest mirror in III (about 3 mm) → D1',
+          'A: I y aVL elevadas junto con V2, V4-V6 por debajo de 1 mm, espejo más profundo en III (unos 3 mm) → D1',
         ),
         marks: [
           { auto: 'st', lead: 'aVL' },
@@ -232,9 +232,9 @@ const lesson: Lesson = {
         ],
       },
       point: l(
-        '同一面侧壁，两套导联：A 的损伤位置**更高**（D1 供血的高前壁/高侧壁），所以朝左上看的 I、aVL 抬高（并带上 V2），V5–V6 平坦，III 导联镜像压低最深（约 3 mm，II、aVF 也压低）；B 的损伤**更低更靠后**（钝缘支区域），V5、V6 抬高最明显（约 2 mm），I/aVL 只有约 1 mm，III 的压低变浅（约 1 mm，II 不受累），镜像还延伸到 V1–V2。两幅图侧壁导联的抬高都只有 1–2.5 mm——在 I/aVL，**1 mm 就够**。读图时永远同时问两件事：哪几个导联在抬高？它们连成的是哪一侧、哪一层的侧壁？',
-        'One lateral wall, two sets of leads: the injury in A sits **higher** (the high anterior / high lateral wall fed by D1), so I and aVL, which look up and left, elevate (together with V2), V5–V6 stay flat and lead III shows the deepest mirror (about 3 mm, with II and aVF); in B the injury is **lower and more posterior** (obtuse marginal territory), V5 and V6 elevate most (about 2 mm), I/aVL reach only about 1 mm, the depression in III is shallower (about 1 mm, II spared) and the mirror extends to V1–V2. Both tracings elevate the lateral leads by only 1–2.5 mm — in I and aVL, **1 mm is enough**. Always ask two things at once: which leads are elevated, and which side and level of the lateral wall do they string together?',
-        'Una misma pared lateral, dos juegos de derivaciones: la lesión de A está **más alta** (la pared anterior alta / lateral alta irrigada por D1), así que I y aVL, que miran hacia arriba a la izquierda, se elevan (junto con V2), V5-V6 quedan planas y la III muestra el espejo más profundo (unos 3 mm, con II y aVF); en B la lesión está **más abajo y más atrás** (territorio de la marginal obtusa), V5 y V6 se elevan más (unos 2 mm), I/aVL solo rondan 1 mm, el descenso de III es menor (alrededor de 1 mm, II respetada) y el espejo se extiende a V1-V2. Ambos trazados elevan las derivaciones laterales solo 1-2,5 mm: en I y aVL, **con 1 mm basta**. Pregúntate siempre dos cosas a la vez: ¿qué derivaciones se elevan y qué lado y nivel de la pared lateral unen?',
+        '同一面侧壁，两套导联：A 的损伤位置**更高**（D1 供血的高前壁/高侧壁），所以朝左上看的 I、aVL 抬高（并带上 V2），V4–V6 不到 1 mm，III 导联镜像压低最深（约 3 mm，II、aVF 也压低）；B 的损伤**更低更靠后**（钝缘支区域），V5、V6 抬高最明显（约 1.5–2 mm），I/aVL 只有约 1 mm，III 的压低变浅（约 1 mm，II 不受累），镜像还延伸到 V1–V2。两幅图侧壁导联的抬高都只有 1–2.5 mm——在 I/aVL，**1 mm 就够**。读图时永远同时问两件事：哪几个导联在抬高？它们连成的是哪一侧、哪一层的侧壁？',
+        'One lateral wall, two sets of leads: the injury in A sits **higher** (the high anterior / high lateral wall fed by D1), so I and aVL, which look up and left, elevate (together with V2), V4–V6 stay under 1 mm and lead III shows the deepest mirror (about 3 mm, with II and aVF); in B the injury is **lower and more posterior** (obtuse marginal territory), V5 and V6 elevate most (about 1.5–2 mm), I/aVL reach only about 1 mm, the depression in III is shallower (about 1 mm, II spared) and the mirror extends to V1–V2. Both tracings elevate the lateral leads by only 1–2.5 mm — in I and aVL, **1 mm is enough**. Always ask two things at once: which leads are elevated, and which side and level of the lateral wall do they string together?',
+        'Una misma pared lateral, dos juegos de derivaciones: la lesión de A está **más alta** (la pared anterior alta / lateral alta irrigada por D1), así que I y aVL, que miran hacia arriba a la izquierda, se elevan (junto con V2), V4-V6 quedan por debajo de 1 mm y la III muestra el espejo más profundo (unos 3 mm, con II y aVF); en B la lesión está **más abajo y más atrás** (territorio de la marginal obtusa), V5 y V6 se elevan más (unos 1,5-2 mm), I/aVL solo rondan 1 mm, el descenso de III es menor (alrededor de 1 mm, II respetada) y el espejo se extiende a V1-V2. Ambos trazados elevan las derivaciones laterales solo 1-2,5 mm: en I y aVL, **con 1 mm basta**. Pregúntate siempre dos cosas a la vez: ¿qué derivaciones se elevan y qué lado y nivel de la pared lateral unen?',
       ),
     },
     {
@@ -246,9 +246,9 @@ const lesson: Lesson = {
           label: l('南非国旗', 'South African flag', 'Bandera sudafricana'),
           ecg: synth('stemi-high-lateral', 886),
           note: l(
-            '三道条纹：I、aVL 抬高，III 压低，V2 抬高与 V1 相当。V3 较小，V4 不到 1 mm，V5–V6 平坦 → D1。',
-            'Three stripes: I and aVL up, III down, V2 up as much as V1. V3 smaller, V4 under 1 mm, V5–V6 flat → D1.',
-            'Tres franjas: I y aVL arriba, III abajo, V2 tan elevada como V1. V3 menor, V4 por debajo de 1 mm, V5–V6 planas → D1.',
+            '三道条纹：I、aVL 抬高，III 压低，V2 抬高与 V1 相当。V3 较小，V4–V6 不到 1 mm → D1。',
+            'Three stripes: I and aVL up, III down, V2 up as much as V1. V3 smaller, V4–V6 under 1 mm → D1.',
+            'Tres franjas: I y aVL arriba, III abajo, V2 tan elevada como V1. V3 menor, V4–V6 por debajo de 1 mm → D1.',
           ),
           marks: [{ auto: 'j', lead: 'aVL' }, { auto: 'j', lead: 'III' }, { auto: 'j', lead: 'V2' }],
         },
@@ -288,7 +288,7 @@ const lesson: Lesson = {
       ids: [4712, 18198, 15755],
       caption: l(
         '三份真实的侧壁梗死，都不是急性 STEMI：63 岁男性（侧壁，时期不明）、62 岁男性（前间壁 + 侧壁，数据库分期 II，演变中）、68 岁男性（下侧壁，时期不明）。没有急性 ST 抬高可供决策，就练习定位它们留下的痕迹：I、aVL、V5–V6 的 Q 波或 R 波变小（侧壁的 Q 波最难看出），第二份 V2–V4 的 QS 与深倒 T 波，第三份再加上下壁导联。为每份定下“区域 + 最可能的血管”，再揭晓。',
-        'Three real lateral infarcts, none of them an acute STEMI: a man of 63 (lateral, age unknown), a man of 62 (anteroseptal + lateral, database stage II, evolving) and a man of 68 (inferolateral, age unknown). With no acute ST elevation to act on, practise localising what they leave behind: Q waves or shrunken R waves in I, aVL and V5–V6 (lateral Q waves are the hardest to see), the QS waves and deep T inversion in V2–V4 of the second, and the inferior leads as well in the third. Decide "territory + most likely artery" for each, then reveal.',
+        'Three real lateral infarcts, none of them an acute STEMI: a man of 63 (lateral, infarct of unknown age), a man of 62 (anteroseptal + lateral, database stage II, evolving) and a man of 68 (inferolateral, infarct of unknown age). With no acute ST elevation to act on, practise localising what they leave behind: Q waves or shrunken R waves in I, aVL and V5–V6 (lateral Q waves are the hardest to see), the QS waves and deep T inversion in V2–V4 of the second, and the inferior leads as well in the third. Decide "territory + most likely artery" for each, then reveal.',
         'Tres infartos laterales reales, ninguno un IAMCEST agudo: un varón de 63 años (lateral, antigüedad desconocida), uno de 62 (anteroseptal + lateral, estadio II de la base de datos, en evolución) y uno de 68 (inferolateral, antigüedad desconocida). Sin elevación aguda del ST sobre la que decidir, practica localizar la huella que dejan: ondas Q o R reducidas en I, aVL y V5-V6 (las Q laterales son las más difíciles de ver), las QS y la T negativa profunda en V2-V4 del segundo, y además las inferiores en el tercero. Decide «territorio + arteria más probable» en cada uno y después mira la solución.',
       ),
     },
@@ -321,9 +321,9 @@ const lesson: Lesson = {
           'Partir un IAMCEST anterolateral en «anterior + lateral» como dos infartos pequeños: V3-V6 + I/aVL es una oclusión, un diagnóstico y una vía de reperfusión.',
         ),
         l(
-          '因为“只有两个导联”而把侧壁 STEMI 降级为“待观察”：I、aVL 的闭塞同样在杀人，导联数量不代表危险大小。',
-          'Downgrading a lateral STEMI to "wait and see" because "it is only two leads": an occlusion behind I and aVL kills just the same — the number of leads says nothing about the size of the risk.',
-          'Rebajar un IAMCEST lateral a «esperar y ver» porque «son solo dos derivaciones»: la oclusión detrás de I y aVL mata igual; el número de derivaciones no dice nada del tamaño del riesgo.',
+          '因为“只有两个导联”而把侧壁 STEMI 降级为“待观察”：I、aVL 的闭塞同样在杀人——导联少不等于危险小。',
+          'Downgrading a lateral STEMI to "wait and see" because "it is only two leads": an occlusion behind I and aVL kills just the same — few leads does not mean a small risk.',
+          'Rebajar un IAMCEST lateral a «esperar y ver» porque «son solo dos derivaciones»: la oclusión detrás de I y aVL mata igual; pocas derivaciones no significan poco riesgo.',
         ),
       ],
     },
