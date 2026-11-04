@@ -713,6 +713,33 @@ describe('o5: hypothermia on the tracings', () => {
   });
 });
 
+describe('o6: pulmonary embolism on the tracings', () => {
+  const strain = (e: Ecg, at: string) => {
+    expect(roles(e, 'I').endsWith('s'), `${at}: S in I`).toBe(true);
+    expect(roles(e, 'III').startsWith('q'), `${at}: Q in III`).toBe(true);
+    for (const l of ['III', 'V1', 'V2'] as const) expect(tInverted(e, l), `${at}: T in ${l}`).toBe(true);
+  };
+  it('every PE tracing (hook, heart, film, worked, contrast): S in I, Q and inverted T in III, T inverted in V1–V2', () => {
+    for (const { path, src } of sourcesOf(byId('o6'))) if (src.kind === 'synth' && src.req.scenario === 'pulmonary-embolism') strain(ecgOf(src), path);
+  });
+  it('rate sweep: the strain signs at both ends, 100 and 115/min', () => {
+    for (const v of [100, 115]) {
+      const e = played('o6', 0, v);
+      expect(Math.abs(e.truth!.hrBpm - v), `${v}`).toBeLessThan(1.5);
+      strain(e, `${v}/min`);
+    }
+  });
+  it('film: at ≈ 108/min tachycardia alone has I all R, no Q in III and an upright T in V2; the strained heart adds S1Q3T3, T inversion in V1–V2 and a qR in V1', () => {
+    const [tachy, pe] = frames('o6', 0);
+    for (const e of [tachy, pe]) expect(Math.abs(e.truth!.hrBpm - 108)).toBeLessThan(1.5);
+    expect(roles(tachy, 'I')).toBe('r');
+    expect(roles(tachy, 'III').startsWith('q')).toBe(false);
+    expect(tUpright(tachy, 'V2')).toBe(true);
+    strain(pe, 'film');
+    expect(roles(pe, 'V1').startsWith('qr')).toBe(true);
+  });
+});
+
 describe('o7: pericardium on the tracings', () => {
   it('every pericarditis tracing: ST up in II and V4, down in aVR, flat in aVL; PR depressed in II and V5, elevated in aVR (vs TP)', () => {
     for (const src of sourcesWith('o7', 'pericarditis')) {
