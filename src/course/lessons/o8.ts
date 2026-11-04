@@ -7,7 +7,7 @@
  * Tracings (checked against the model truth, tests/course/lessons-o.test.ts): `cerebral-t` = QTcF ≈ 560 ms with deep,
  * wide inversion deepest in V3–V5 (≈ 11–14 mm) and also in I, II, aVF; `cardiac-memory` = T inverted in III, aVF and
  * V1–V3 (deepest V1–V2 ≈ 7 mm) with upright T in I and aVL (all three Shvilkin signs); `wellens` type A = biphasic T
- * in V2–V3 with a normal QT; `apical-hcm` = giant T inversion in V4–V5 (≈ 10–13 mm) with deep S in V1–V3 and tall R
+ * in V2–V3 with a normal QT; `apical-hcm` = giant T inversion in V4–V5 (≈ 18–20 mm) with deep S in V1–V3 and tall R
  * in V5–V6. The `takotsubo` late variant is not used (its T inversion is too shallow, reported).
  */
 import { l } from '../../core/l10n';
@@ -45,7 +45,7 @@ const memoryCheck: Item = {
     options: [
       { id: 'memory', label: l('心脏记忆（起搏后 T 波倒置）', 'Cardiac memory (post-pacing T inversion)', 'Memoria cardiaca (inversión de la T tras la estimulación)') },
       { id: 'lad', label: l('前降支缺血，需紧急造影', 'LAD ischaemia needing urgent angiography', 'Isquemia de la DA que necesita coronariografía urgente') },
-      { id: 'pe', label: l('急性肺栓塞', 'Acute pulmonary embolism', 'Tromboembolismo pulmonar agudo') },
+      { id: 'pe', label: l('急性肺栓塞', 'Acute pulmonary embolism', 'Tromboembolia pulmonar aguda') },
       { id: 'cerebral', label: l('脑源性 T 波', 'Cerebral T waves', 'Ondas T cerebrales') },
     ],
     correct: 'memory',
@@ -203,14 +203,14 @@ const lesson: Lesson = {
         {
           label: l('Shvilkin检查', 'Shvilkin check', 'Criterios de Shvilkin'),
           ecg: synth('cardiac-memory', 1542),
-          note: l('aVL的T直立 ✓，I的T直立 ✓；胸导最深倒置（V1约7 mm）深于III（约4 mm）✓。是记忆，不是前降支缺血。', 'T upright in aVL ✓ and in I ✓; the deepest precordial inversion (about 7 mm in V1) is deeper than in III (about 4 mm) ✓. Memory, not LAD ischaemia.', 'T positiva en aVL ✓ y en I ✓; la inversión precordial más profunda (unos 7 mm en V1) supera a la de III (unos 4 mm) ✓. Memoria, no isquemia de la DA.'),
+          note: l('aVL的T直立 ✓，I的T直立 ✓；胸导最深倒置（V1约7.5 mm）深于III（约4 mm）✓。是记忆，不是前降支缺血。', 'T upright in aVL ✓ and in I ✓; the deepest precordial inversion (about 7.5 mm in V1) is deeper than in III (about 4 mm) ✓. Memory, not LAD ischaemia.', 'T positiva en aVL ✓ y en I ✓; la inversión precordial más profunda (unos 7,5 mm en V1) supera a la de III (unos 4 mm) ✓. Memoria, no isquemia de la DA.'),
           marks: [{ auto: 't', lead: 'aVL' }, { auto: 't', lead: 'I' }, { auto: 't', lead: 'III' }, { auto: 't', lead: 'V1' }],
         },
       ],
       predict: {
         question: l('右室起搏几周后恢复自身QRS。T波会在哪里倒置？', 'After weeks of RV pacing the own QRS returns. Where will the T be inverted?', 'Tras semanas de estimulación del VD vuelve el QRS propio. ¿Dónde estará invertida la T?'),
         options: [
-          l('III、aVF和V1–V2：起搏QRS为负的导联', 'III, aVF and V1–V2: where the paced QRS was negative', 'III, aVF y V1–V2: donde el QRS estimulado era negativo'),
+          l('III、aVF和V1–V2', 'III, aVF and V1–V2', 'III, aVF y V1–V2'),
           l('I和aVL', 'I and aVL', 'I y aVL'),
           l('哪里都不倒置', 'Nowhere', 'En ninguna'),
         ],
@@ -248,7 +248,7 @@ const lesson: Lesson = {
       view: { layout: '3x4+1', highlightLeads: ['V2', 'V3', 'V4', 'V5'] },
       left: {
         ecg: synth('apical-hcm', 1546),
-        caption: l('心尖肥厚型心肌病：V4–V5 倒置约 10–13 mm，V1–V3 深 S、V5–V6 高 R，无胸痛', 'Apical HCM: inversion about 10–13 mm in V4–V5, deep S in V1–V3 and tall R in V5–V6, no chest pain', 'MCH apical: inversión de unos 10–13 mm en V4–V5, S profundas en V1–V3 y R altas en V5–V6, sin dolor torácico'),
+        caption: l('心尖肥厚型心肌病：V4–V5 倒置约 18–20 mm，V1–V3 深 S、V5–V6 高 R，无胸痛', 'Apical HCM: inversion about 18–20 mm in V4–V5, deep S in V1–V3 and tall R in V5–V6, no chest pain', 'MCH apical: inversión de unos 18–20 mm en V4–V5, S profundas en V1–V3 y R altas en V5–V6, sin dolor torácico'),
         marks: [{ auto: 't', lead: 'V4' }],
       },
       right: {
