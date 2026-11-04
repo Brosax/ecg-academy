@@ -201,7 +201,7 @@ const lesson: Lesson = {
             'The PR lengthens beat by beat: about 150 → 235 → 275 ms. The increments shrink: about 85, then about 40 ms — the largest increment comes on the 2nd beat.',
             'El PR se alarga latido a latido: unos 150 → 235 → 275 ms. Los incrementos se reducen: unos 85 y luego unos 40 ms; el mayor incremento cae en el 2.º latido.',
           ),
-          marks: [{ auto: 'pr' }],
+          marks: [{ auto: 'pr', beat: 4 }, { auto: 'pr', beat: 5 }, { auto: 'pr', beat: 6 }],
           view: { layout: 'strip', lead: 'II', calipers: true },
         },
         {
@@ -211,7 +211,7 @@ const lesson: Lesson = {
             'Each RR = PP + that beat\'s PR increment. The PP is about 800 ms, so the RR runs about 885 → 840 ms: because the increments shrink, the RR shortens — the "quickening" inside a Wenckebach cycle.',
             'Cada RR = PP + el incremento del PR de ese latido. El PP es de unos 800 ms, así que el RR va de unos 885 → 840 ms: como los incrementos se reducen, el RR se acorta, la «aceleración» dentro del ciclo de Wenckebach.',
           ),
-          marks: [{ auto: 'rr' }],
+          marks: [{ auto: 'rr', beat: 1 }, { auto: 'rr', beat: 2 }],
         },
         {
           title: l('间歇与最可靠的征象', 'The pause, and the most reliable sign', 'La pausa y el signo más fiable'),
@@ -220,7 +220,7 @@ const lesson: Lesson = {
             'The pause is about 2 x PP − total increment ≈ 1600 − 130 = 1470 ms, **shorter than 2 x PP**. And the first PR after the pause (about 150 ms) is clearly shorter than the last PR before it (about 275 ms) — the most reliable sign of Mobitz I, valid even in atypical sequences. Narrow QRS, P rate < 100: **Mobitz I at the AV-node level**.',
             'La pausa es unos 2 x PP − incremento total ≈ 1600 − 130 = 1470 ms, **menor de 2 x PP**. Y el primer PR tras la pausa (unos 150 ms) es claramente más corto que el último PR previo (unos 275 ms): el signo más fiable del Mobitz I, válido incluso en secuencias atípicas. QRS estrecho y frecuencia de P < 100: **Mobitz I a nivel del nodo AV**.',
           ),
-          marks: [{ auto: 'blocked-p' }, { auto: 'pr' }],
+          marks: [{ auto: 'blocked-p' }, { auto: 'pr', beat: 6 }, { auto: 'pr', beat: 7 }],
         },
       ],
     },
@@ -245,7 +245,7 @@ const lesson: Lesson = {
           label: l('5:4 文氏', '5:4 Wenckebach', 'Wenckebach 5:4'),
           ecg: synth('av-block-2-mobitz1', 446, undefined, '5to4'),
           note: l('4 个 PR 逐渐延长（约 150 → 230 → 265 → 285 ms），每步加得更少，RR 随之缩短。间歇后第一个 PR 最短。', 'Four PRs lengthen (about 150 → 230 → 265 → 285 ms), each step smaller, so the RR shortens. The first PR after the pause is the shortest.', 'Cuatro PR se alargan (unos 150 → 230 → 265 → 285 ms), cada paso menor, y el RR se acorta. El primer PR tras la pausa es el más corto.'),
-          marks: [{ auto: 'pr' }, { auto: 'blocked-p' }],
+          marks: [{ auto: 'pr', beat: 3 }, { auto: 'pr', beat: 4 }, { auto: 'pr', beat: 5 }, { auto: 'pr', beat: 6 }, { auto: 'blocked-p' }],
         },
       ],
       predict: {

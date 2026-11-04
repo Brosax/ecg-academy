@@ -511,6 +511,35 @@ describe('r3: first degree and Mobitz I on the tracings', () => {
     expect(Math.abs(Math.max(...p) - 280)).toBeLessThan(10);
     expect(Math.abs(Math.max(...rrs(e)) - 1470)).toBeLessThan(40);
   });
+  it('worked marks: one cycle PR about 150 → 235 → 275 ms, RR about 885 → 840 ms, then the pause about 1470 ms; the PRs either side of it about 275 and 150 ms', () => {
+    const e = ecgOf(blocksOf('r3', 'worked')[0].ecg);
+    const b = e.truth!.beats;
+    const r = rrs(e);
+    const pr = (i: number) => b[i].qrsOn - (b[i].pOn ?? 0);
+    const cycle = stepBeats('r3', 1, 'pr');
+    expect(cycle).toHaveLength(3);
+    expect(cycle.map((i) => i - cycle[0])).toEqual([0, 1, 2]);
+    expect(r[cycle[0] - 1], 'the cycle starts after a pause').toBeGreaterThan(1300);
+    [150, 235, 275].forEach((v, k) => expect(Math.abs(pr(cycle[k]) - v), `PR ${k + 1}`).toBeLessThanOrEqual(5));
+    const rrMarks = stepBeats('r3', 2, 'rr');
+    expect(rrMarks.map((i) => i - rrMarks[0])).toEqual([0, 1]);
+    expect(r[rrMarks[0] - 1], 'the bracketed RRs open a cycle').toBeGreaterThan(1300);
+    [885, 840].forEach((v, k) => expect(Math.abs(r[rrMarks[k]] - v), `RR ${k + 1}`).toBeLessThanOrEqual(5));
+    const [last, first] = stepBeats('r3', 3, 'pr');
+    expect(last).toBe(cycle[2]);
+    expect(first).toBe(last + 1);
+    expect(Math.abs(r[last] - 1470), 'the pause').toBeLessThanOrEqual(5);
+    expect(Math.abs(pr(last) - 275)).toBeLessThanOrEqual(5);
+    expect(Math.abs(pr(first) - 150)).toBeLessThanOrEqual(5);
+  });
+  it('5:4 film marks: the four PRs of one cycle, the first right after a pause', () => {
+    const e = frames('r3', 0)[2];
+    const b = e.truth!.beats;
+    const marked = markBeats('r3', 0, 2, 'pr');
+    expect(marked.map((i) => i - marked[0])).toEqual([0, 1, 2, 3]);
+    expect(rrs(e)[marked[0] - 1]).toBeGreaterThan(1300);
+    [150, 230, 265, 285].forEach((v, k) => expect(Math.abs(b[marked[k]].qrsOn - (b[marked[k]].pOn ?? 0) - v), `PR ${k + 1}`).toBeLessThanOrEqual(5));
+  });
   it('3:2 cycles (PR film frame 2): two of every three P conduct, PR about 150 → 260 ms', () => {
     const e = frames('r3', 0)[1];
     const p = prs(e);
