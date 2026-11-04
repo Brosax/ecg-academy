@@ -47,6 +47,9 @@ function sourcesOf(lesson: Lesson): { readonly path: string; readonly src: EcgSo
       case 'contrast':
         out.push({ path: `${p}.left`, src: b.left.ecg }, { path: `${p}.right`, src: b.right.ecg });
         break;
+      case 'film':
+        b.frames.forEach((f, k) => out.push({ path: `${p}.frames[${k}]`, src: f.ecg }));
+        break;
       case 'check':
         if ('inline' in b.item) {
           out.push({ path: `${p}.item`, src: b.item.inline.ecg });
@@ -243,8 +246,19 @@ function ecgOf(src: EcgSource | SynthRequest): Ecg {
   }
   return e;
 }
+/** what a playing live block shows with its played dial at `v` (its other dials at their start values) */
+function played(id: string, i: number, v: number): Ecg {
+  const b = blocksOf(id, 'live')[i];
+  if (!b.play) throw new Error(`${id}: live block ${i} does not play`);
+  const sc = scenarios().find((s) => s.id === b.scenario);
+  if (!sc) throw new Error(`unknown scenario ${b.scenario}`);
+  const dials = { ...startDials(sc, b.variant, b.dials.map((d) => d.id), b.play), [b.play.dial]: v };
+  return ecgOf({ scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed, dials });
+}
+/** the ECG a film frame shows */
+const frame = (id: string, film: number, k: number): Ecg => ecgOf(blocksOf(id, 'film')[film].frames[k].ecg);
 
-type AnyLead = StdLead | 'V3R' | 'V4R' | 'V7' | 'V8' | 'V9';
+type AnyLead =StdLead | 'V3R' | 'V4R' | 'V7' | 'V8' | 'V9';
 const CHEST: readonly StdLead[] = ['V1', 'V2', 'V3', 'V4', 'V5', 'V6'];
 const ALL: readonly StdLead[] = ['I', 'II', 'III', 'aVR', 'aVL', 'aVF', ...CHEST];
 const sig = (ecg: Ecg, lead: AnyLead): Float32Array => {
@@ -318,13 +332,53 @@ describe('i1: measuring ST on the tracings', () => {
     for (const l of ['V2', 'V3', 'V4', 'V5', 'V6'] as const) expect(stAt(e, l), l).toBeGreaterThan(0.08);
     for (const l of ALL.filter((x) => x !== 'aVR')) expect(stAt(e, l), l).toBeGreaterThan(-0.05);
   });
-  it('NSTE-ACS tracing (woman of 67): horizontal depression ≥ 0.5 mm in V4–V6, no lead elevated ≥ 1 mm', () => {
-    const e = ecgOf(blocksOf('i1', 'ecg')[0].ecg);
+  it('NSTE-ACS frame (woman of 67): horizontal depression of about 1 mm in V4–V6, no lead elevated ≥ 1 mm', () => {
+    const e = frame('i1', 0, 0);
+    expect(e.truth!.findings).toContain('st-depression-ischemic');
     for (const l of ['V4', 'V5', 'V6'] as const) {
-      expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
+      expect(stAt(e, l), l).toBeLessThanOrEqual(-0.075);
+      expect(stAt(e, l), l).toBeGreaterThan(-0.13);
       expect(Math.abs(stAt(e, l, 60) - stAt(e, l)), `${l} horizontal`).toBeLessThan(0.03);
     }
     for (const l of ALL) expect(stAt(e, l), l).toBeLessThan(0.1);
+  });
+  it('depression film: mirror III/aVF about −1 mm under V2–V4 elevation; high lateral II/III/aVF deeply down with I/aVL up; posterior V1–V3 about −1.5 mm with upright T and nothing elevated', () => {
+    const mirror = frame('i1', 0, 1);
+    for (const l of ['III', 'aVF'] as const) {
+      expect(stAt(mirror, l), l).toBeLessThan(-0.08);
+      expect(stAt(mirror, l), l).toBeGreaterThan(-0.14);
+    }
+    for (const l of ['V2', 'V3', 'V4'] as const) expect(stAt(mirror, l), l).toBeGreaterThanOrEqual(0.15);
+    const hl = frame('i1', 0, 2);
+    for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(hl, l), l).toBeLessThan(-0.15);
+    for (const l of ['I', 'aVL'] as const) expect(stAt(hl, l), l).toBeGreaterThanOrEqual(0.1);
+    const post = frame('i1', 0, 3);
+    for (const l of ['V1', 'V2', 'V3'] as const) {
+      expect(stAt(post, l), l).toBeLessThan(-0.12);
+      expect(stAt(post, l), l).toBeGreaterThan(-0.19);
+      expect(tw(post, l).max, `upright T ${l}`).toBeGreaterThan(0.1);
+    }
+    for (const l of ['V2', 'V3'] as const) expect(tUpright(post, l), `upright T ${l}`).toBe(true);
+    for (const l of ALL) expect(stAt(post, l), l).toBeLessThan(0.05);
+  });
+  it('injury sweep notes (J point): V3 about 2.5 mm and V4 about 1.5 mm at 0.22–0.24 (both over their 2 and 1 mm limits); V2–V4 rise as III and aVF fall across 0.25–0.36; V3 4–5 mm with III 1.5–2 mm down at 0.37–0.45', () => {
+    for (const v of [0.22, 0.24]) {
+      const e = played('i1', 0, v);
+      expect(stAt(e, 'V3'), `${v} V3`).toBeGreaterThanOrEqual(0.24);
+      expect(stAt(e, 'V3'), `${v} V3`).toBeLessThan(0.28);
+      expect(stAt(e, 'V4'), `${v} V4`).toBeGreaterThanOrEqual(0.13);
+      expect(stAt(e, 'V4'), `${v} V4`).toBeLessThan(0.17);
+    }
+    const [lo, hi] = [played('i1', 0, 0.25), played('i1', 0, 0.36)];
+    for (const l of ['V2', 'V3', 'V4'] as const) expect(stAt(hi, l), l).toBeGreaterThan(stAt(lo, l) + 0.05);
+    for (const l of ['III', 'aVF'] as const) expect(stAt(hi, l), l).toBeLessThan(stAt(lo, l) - 0.02);
+    for (const v of [0.37, 0.45]) {
+      const e = played('i1', 0, v);
+      expect(stAt(e, 'V3'), `${v} V3`).toBeGreaterThanOrEqual(0.4);
+      expect(stAt(e, 'V3'), `${v} V3`).toBeLessThan(0.505);
+      expect(stAt(e, 'III'), `${v} III`).toBeLessThanOrEqual(-0.145);
+      expect(stAt(e, 'III'), `${v} III`).toBeGreaterThanOrEqual(-0.2);
+    }
   });
 });
 

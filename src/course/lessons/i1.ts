@@ -69,22 +69,13 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('测量纪律（回顾S6）', 'Measurement discipline (recap of S6)', 'Disciplina de medición (repaso de S6)'),
-      body: l(
-        '界值只有在测量方法正确时才有意义：\n- **基线**：PR段；PR段变形时用TP段。\n- **J点**：QRS陡峭斜坡转为ST段之处；UDMI阈值定在J点。\n- **导联**：在**抬高最明显**的导联里测量（其他导联只用来确认相邻关系）。\n- **单位**：mm（标准增益下1 mm = 0.1 mV）。机器和本应用还给出J+60读数，在J点难定时很有用。\n量出数字之后，还要过三关：性别年龄网格、相邻导联、新出现。',
-        'Thresholds only mean something when the measurement is disciplined:\n- **Baseline**: the PR segment; the TP segment if the PR is distorted.\n- **J point**: where the steep QRS slope turns into the ST; the UDMI thresholds are set at J.\n- **Lead**: measure in the lead with the **greatest elevation** (the others only confirm contiguity).\n- **Units**: mm (1 mm = 0.1 mV at standard gain). Machines and this app also give a J+60 read-out, useful when J is hard to pin down.\nAfter the number come three gates: the sex/age grid, contiguity, and newness.',
-        'Los umbrales solo significan algo si la medición es disciplinada:\n- **Línea de base**: el segmento PR; el segmento TP si el PR está alterado.\n- **Punto J**: donde la pendiente pronunciada del QRS se convierte en ST; los umbrales de la UDMI se fijan en J.\n- **Derivación**: mide en la derivación con **mayor elevación** (las demás solo confirman la contigüidad).\n- **Unidades**: mm (1 mm = 0,1 mV con ganancia estándar). Los equipos y esta aplicación dan también la lectura de J+60, útil cuando J es difícil de precisar.\nTras el número llegan tres filtros: la rejilla sexo/edad, la contigüidad y la novedad.',
-      ),
-    },
-    {
       kind: 'heart',
       ecg: synth('stemi-anterior', 802, { st: 0.3 }),
       emphasize: ['lv-mid-anteroseptal', 'lv-mid-anterior', 'lv-apical-anterior', 'lv-apical-septal', 'lv-apex'],
       caption: l(
-        '播放一个心动周期。发亮的节段由左前降支供血，正对着 **V2–V4**——相邻导联之所以相邻，是因为它们看的是相邻的心肌。损伤电流是一个矢量：指向V2–V4，同时也必然背向 II、III、aVF，于是在那些导联里“倒映”为ST压低：这就是对应性改变。',
-        'Play one beat. The lit segments are supplied by the left anterior descending artery and face **V2–V4** — contiguous leads are contiguous because they look at neighbouring myocardium. The injury current is one vector: it points towards V2–V4 and therefore points away from II, III and aVF, where it is "reflected" as ST depression: that is reciprocity.',
-        'Reproduce un latido. Los segmentos iluminados dependen de la descendente anterior y miran hacia **V2–V4**: las derivaciones contiguas son contiguas porque ven miocardio vecino. La corriente de lesión es un vector: apunta hacia V2–V4 y, por tanto, se aleja de II, III y aVF, donde se "refleja" como descenso del ST: eso es el cambio recíproco.',
+        '播放一个心动周期。发亮的节段由左前降支供血，正对 **V2–V4**：相邻导联看的是相邻的心肌。同一个损伤矢量背向 II、III、aVF，在那里表现为ST压低：对应性改变。',
+        'Play one beat. The lit segments, fed by the left anterior descending artery, face **V2–V4**: contiguous leads look at neighbouring muscle. The same injury vector points away from II, III and aVF, where it shows as ST depression: reciprocity.',
+        'Reproduce un latido. Los segmentos iluminados, irrigados por la descendente anterior, miran hacia **V2–V4**: las derivaciones contiguas ven músculo vecino. El mismo vector de lesión se aleja de II, III y aVF, donde aparece como descenso del ST: el cambio recíproco.',
       ),
     },
     {
@@ -134,6 +125,14 @@ const lesson: Lesson = {
         {
           label: l('适用条件', 'Conditions', 'Condiciones'),
           value: l('无左心室肥厚或左束支阻滞（第I10课另有一套标准）', 'No LVH or LBBB (a separate rulebook applies — lesson I10)', 'Sin HVI ni bloqueo de rama izquierda (otro manual se aplica: lección I10)'),
+        },
+        {
+          label: l('急性胸痛时的心电图', 'ECG in acute chest pain', 'ECG en el dolor torácico agudo'),
+          value: l(
+            '首次医疗接触后 ≤ 10分钟记录；不能确定而疼痛持续时每15–30分钟复查，症状变化时随时复查',
+            'Within 10 min of first medical contact; repeat every 15–30 min while non-diagnostic with ongoing pain, and whenever symptoms change',
+            'En los primeros 10 min desde el primer contacto médico; repetir cada 15–30 min si no es diagnóstico y el dolor persiste, y siempre que cambien los síntomas',
+          ),
         },
       ],
       source:
@@ -191,11 +190,54 @@ const lesson: Lesson = {
       scenario: 'stemi-anterior',
       seed: 804,
       dials: [{ id: 'st' }],
-      marks: [{ auto: 'st60', lead: 'V3' }, { auto: 'st60', lead: 'III' }],
+      marks: [{ auto: 'j', lead: 'V3' }, { auto: 'j', lead: 'V4' }, { auto: 'j', lead: 'III' }],
+      play: {
+        dial: 'st',
+        from: 0.22,
+        to: 0.45,
+        notes: [
+          {
+            min: 0.22,
+            max: 0.24,
+            text: l(
+              'J点：V3约2.5 mm、V4约1.5 mm，相邻两个导联都过了各自的界值（2 mm、1 mm）：已是STEMI。',
+              'At J: V3 about 2.5 mm, V4 about 1.5 mm. Two contiguous leads over their limits (2 and 1 mm): already a STEMI.',
+              'En J: V3 unos 2,5 mm, V4 unos 1,5 mm. Dos derivaciones contiguas por encima de su límite (2 y 1 mm): ya es un IAMCEST.',
+            ),
+          },
+          {
+            min: 0.25,
+            max: 0.36,
+            text: l(
+              'V2–V4一起升高，III和aVF一起加深压低：同一个损伤矢量，从两侧看。',
+              'V2–V4 climb together while III and aVF sink deeper: one injury vector, seen from both sides.',
+              'V2–V4 suben juntas mientras III y aVF bajan más: un vector de lesión visto desde ambos lados.',
+            ),
+          },
+          {
+            min: 0.37,
+            max: 0.45,
+            text: l(
+              'J点：V3约4–5 mm，III压低约1.5–2 mm。损伤越大图形越大，结论不变。',
+              'At J: V3 about 4–5 mm, III about 1.5–2 mm down. More injury makes it bigger; the verdict stays the same.',
+              'En J: V3 unos 4–5 mm, III unos 1,5–2 mm por debajo. Más lesión lo agranda; el veredicto no cambia.',
+            ),
+          },
+        ],
+      },
+      predict: {
+        question: l(
+          '开始时损伤电流最小。对这位58岁男性，V3和V4已经达到STEMI标准了吗？',
+          'The tracing starts at the weakest injury current. In this man of 58, do V3 and V4 already meet the STEMI rule?',
+          'El trazado empieza con la corriente de lesión mínima. En este varón de 58 años, ¿cumplen ya V3 y V4 la regla del IAMCEST?',
+        ),
+        options: [l('达到：两个都过了界值', 'Yes: both are over their limits', 'Sí: ambas superan su límite'), l('不达到：只有V3过界', 'No: only V3 is over', 'No: solo V3 lo supera'), l('不达到：两个都不过界', 'No: neither is over', 'No: ninguna lo supera')],
+        answer: 0,
+      },
       caption: l(
-        '上下调动损伤电流：V3的读数升降，III按比例反向移动——一个矢量，两种投影。注意两件事：抬高和压低永远成对出现；即使把读数调到刚过界值，要回答的问题也不变——多大、哪些相邻导联、有没有镜像、是不是新出现。',
-        'Move the injury current up and down: the reading in V3 rises and falls while III moves the opposite way in proportion — one vector, two projections. Notice two things: elevation and depression always travel as a pair; and even with the reading just above the threshold, the questions do not change — how much, in which contiguous leads, is there a mirror, is it new.',
-        'Sube y baja la corriente de lesión: la lectura en V3 asciende y desciende mientras III se mueve en sentido contrario y en proporción: un vector, dos proyecciones. Fíjate en dos cosas: la elevación y el descenso siempre van emparejados; y aunque la lectura quede justo por encima del umbral, las preguntas no cambian: cuánto, en qué derivaciones contiguas, hay imagen en espejo, es nuevo.',
+        '拖动损伤电流。每个导联都以PR段为零线、在 **J点** 读数（1 mm = 0.1 mV）：V2–V4一起升高，II、III、aVF一起压低。',
+        'Drag the injury current. Read every lead at its **J point** against the PR baseline (1 mm = 0.1 mV): V2–V4 rise together while II, III and aVF sink.',
+        'Mueve la corriente de lesión. Lee cada derivación en su **punto J** respecto a la línea del PR (1 mm = 0,1 mV): V2–V4 suben juntas mientras II, III y aVF bajan.',
       ),
     },
     {
@@ -218,22 +260,54 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('st-depression-ischemic', 807),
-      marks: [{ auto: 'st60', lead: 'V5' }, { auto: 'st60', lead: 'V6' }],
+      kind: 'film',
+      title: l('ST压低：缺血还是镜像？', 'ST depression: ischaemia or a mirror?', 'Descenso del ST: ¿isquemia o espejo?'),
+      frames: [
+        {
+          label: l('心内膜下缺血', 'Subendocardial ischaemia', 'Isquemia subendocárdica'),
+          ecg: synth('st-depression-ischemic', 807),
+          note: l(
+            '67岁女性：V4–V6水平型压低约1 mm，没有导联抬高 ≥ 1 mm。相邻2个导联 ≥ 0.5 mm就是NSTE-ACS的缺血界值。',
+            'Woman, 67: flat depression of about 1 mm in V4–V6, nothing up ≥ 1 mm. ≥ 0.5 mm in 2 contiguous leads is the NSTE-ACS ischaemia line.',
+            'Mujer de 67 años: descenso horizontal de unos 1 mm en V4–V6, nada elevado ≥ 1 mm. ≥ 0,5 mm en 2 contiguas es el umbral de isquemia del SCASEST.',
+          ),
+          marks: [{ auto: 'st60', lead: 'V5' }, { auto: 'st60', lead: 'V6' }],
+        },
+        {
+          label: l('镜像', 'Mirror', 'Espejo'),
+          ecg: synth('stemi-anterior', 806, { st: 0.3 }),
+          note: l(
+            'III和aVF压低约1 mm，是V2–V4抬高的镜像。先找有没有抬高，再把压低称为缺血。',
+            'III and aVF down about 1 mm: the mirror of V2–V4 up. Look for elevation before you call depression ischaemia.',
+            'III y aVF descienden unos 1 mm: el espejo de V2–V4 elevadas. Busca la elevación antes de llamar isquemia al descenso.',
+          ),
+          marks: [{ auto: 'j', lead: 'III' }, { auto: 'j', lead: 'aVF' }, { auto: 'j', lead: 'V3' }],
+        },
+        {
+          label: l('高侧壁', 'High lateral', 'Lateral alta'),
+          ecg: synth('stemi-high-lateral', 808),
+          note: l(
+            'II、III、aVF明显压低，而I和aVL抬高：下壁压低可能是高侧壁闭塞的镜像（第I5课）。',
+            'II, III and aVF deeply down while I and aVL are up: inferior depression can mirror a high-lateral occlusion (lesson I5).',
+            'II, III y aVF muy descendidas mientras I y aVL están elevadas: el descenso inferior puede ser el espejo de una oclusión lateral alta (lección I5).',
+          ),
+          marks: [{ auto: 'j', lead: 'III' }, { auto: 'j', lead: 'aVL' }],
+        },
+        {
+          label: l('后壁', 'Posterior', 'Posterior'),
+          ecg: { kind: 'synth', req: { scenario: 'stemi-posterior', variant: 'isolated', seed: 809 } },
+          note: l(
+            'V1–V3压低约1.5 mm，T波直立，没有导联抬高：这是从前面看到的后壁闭塞。加做V7–V9（第I6课）。',
+            'V1–V3 down about 1.5 mm with upright T waves and nothing up: a back-wall occlusion seen from the front. Record V7–V9 (lesson I6).',
+            'V1–V3 descienden unos 1,5 mm con T positivas y nada elevado: una oclusión de la pared posterior vista desde delante. Registra V7–V9 (lección I6).',
+          ),
+          marks: [{ auto: 't', lead: 'V2' }],
+        },
+      ],
       caption: l(
-        '67岁女性，胸痛：V4–V6水平型ST压低约1 mm——侧壁相邻组里 ≥ 2个导联 ≥ 0.5 mm，这是 **NSTE-ACS的缺血阈值**（下斜型同样算，上斜型不算）。T波倒置 > 1 mm伴R波为主是同一条界的另一半。要点：压低本身不定位于透壁梗死——它是心内膜下缺血，或者是某处抬高的镜像。孤立的下壁压低要想到侧壁闭塞，V1–V3的孤立压低要想到后壁（第I5、I6课）。',
-        'Woman, 67, chest pain: horizontal ST depression of about 1 mm in V4–V6 — ≥ 0.5 mm in ≥ 2 leads of the lateral contiguous group: the **NSTE-ACS ischaemia threshold** (downsloping counts too; upsloping does not). T inversion > 1 mm with a prominent R is the other half of the same rule. The point: depression by itself does not localise a transmural infarct — it is subendocardial ischaemia, or the mirror of an elevation somewhere else. Isolated inferior depression suggests a lateral occlusion, and isolated V1–V3 depression a posterior one (lessons I5 and I6).',
-        'Mujer de 67 años, dolor torácico: descenso horizontal del ST de unos 1 mm en V4–V6 — ≥ 0,5 mm en ≥ 2 derivaciones del grupo contiguo lateral: el **umbral de isquemia del SCASEST** (el descendente también cuenta; el ascendente, no). La T negativa > 1 mm con R dominante es la otra mitad de la misma regla. La idea clave: el descenso por sí solo no localiza un infarto transmural; es isquemia subendocárdica o el espejo de una elevación en otro lugar. Un descenso inferior aislado sugiere oclusión lateral, y un descenso aislado en V1–V3, oclusión posterior (lecciones I5 e I6).',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('急性胸痛的心电图流程', 'The ECG workflow in acute chest pain', 'El flujo del ECG en el dolor torácico agudo'),
-      body: l(
-        '- 首次医疗接触后 **10分钟内**记录12导联心电图。\n- 图形不能确定而疼痛持续或怀疑仍高时，**每15–30分钟复查**，症状变化时随时复查。\n- **找旧图对比**：“新出现”是标准的一部分——基线就有的抬高不是新发。\n- 超急性T波可能早于ST抬高出现（第I7课）。\n- **正常心电图绝不排除ACS**：超过三分之一的NSTE-ACS入院时心电图正常。ECG决定去向，肌钙蛋白决定诊断，两者互不替代。',
-        '- Record a 12-lead ECG within **10 minutes** of first medical contact.\n- If it is non-diagnostic and pain persists or suspicion stays high, **repeat every 15–30 minutes**, and with any change in symptoms.\n- **Fetch the old tracing**: "new" is part of the criterion — elevation already present on the baseline is not new.\n- Hyperacute T waves can precede ST elevation (lesson I7).\n- **A normal ECG never rules out ACS**: more than a third of NSTE-ACS present with a normal ECG. The ECG decides the pathway, troponin the diagnosis; neither replaces the other.',
-        '- Registra un ECG de 12 derivaciones en los primeros **10 minutos** desde el contacto médico inicial.\n- Si no es concluyente y el dolor persiste o la sospecha sigue siendo alta, **repite cada 15–30 minutos**, y ante cualquier cambio de síntomas.\n- **Busca el ECG antiguo**: "nuevo" es parte del criterio; una elevación ya presente en la línea de base no es nueva.\n- Las ondas T hiperagudas pueden preceder a la elevación del ST (lección I7).\n- **Un ECG normal nunca excluye un SCA**: más de un tercio de los SCASEST se presentan con un ECG normal. El ECG decide el circuito, la troponina el diagnóstico; ninguno sustituye al otro.',
+        'ST压低本身不能定位梗死：它是心内膜下缺血，或是别处抬高的镜像。先找抬高，再下结论。',
+        'ST depression does not localise an infarct by itself: it is subendocardial ischaemia, or the mirror of elevation elsewhere. Find the elevation first.',
+        'El descenso del ST no localiza un infarto por sí solo: es isquemia subendocárdica o el espejo de una elevación en otro lugar. Busca primero la elevación.',
       ),
     },
     { kind: 'check', item: { family: 'max-st', seed: 12 } },
@@ -276,6 +350,16 @@ const lesson: Lesson = {
           '有左心室肥厚或左束支阻滞时照套这些阈值，忘了标准的前提条件（第I10课）。',
           'Applying these thresholds despite LVH or LBBB, forgetting the small print of the criteria (lesson I10).',
           'Aplicar estos umbrales pese a HVI o bloqueo de rama izquierda, olvidando la letra pequeña de los criterios (lección I10).',
+        ),
+        l(
+          '把上斜型ST压低算进NSTE-ACS的界值：只有水平型或下斜型才算。',
+          'Counting upsloping ST depression towards the NSTE-ACS threshold: only horizontal or downsloping depression counts.',
+          'Contar el descenso ascendente del ST para el umbral del SCASEST: solo cuenta el descenso horizontal o descendente.',
+        ),
+        l(
+          '等到ST抬高才行动：超急性T波可能先出现（第I7课）。',
+          'Waiting for ST elevation before acting: hyperacute T waves can come first (lesson I7).',
+          'Esperar a la elevación del ST para actuar: las ondas T hiperagudas pueden aparecer antes (lección I7).',
         ),
         l(
           '心电图正常就排除ACS：超过三分之一的NSTE-ACS入院时心电图正常。',
