@@ -764,6 +764,10 @@ describe('stage X real cases: the text agrees with the labels and the 12SL refer
     });
   }
 
+  it('x2 tracing 7 (12899): its ST-depression label is STD_, the non-specific statement', () => {
+    expect(Object.keys(getCase(12899)!.codes)).toContain('STD_');
+  });
+
   it('x2 tracing 1 (19170): the 12SL finds no P wave (no PR, no P axis, no P duration)', () => {
     const r = getCase(19170)!.ref;
     expect([r.prMs, r.pAxisDeg, r.pDurMs]).toEqual([null, null, null]);

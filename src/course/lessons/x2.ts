@@ -9,7 +9,7 @@
  *              ischaemic ST–T labels, 12SL PR 224 ms), 17835 (M76, PAC)
  *   major 4  · 19170 (M73, AF/flutter labels, ≈ 111/min), 2627 (M45, old inferior MI), 18776 (M35, LVH label),
  *              2739 (M89, atrial flutter ≈ 147/min)
- *   act now 1 · 12899 (F67, inferior MI in infarction stadium I = acute inferior STEMI, plus an ST-depression label)
+ *   act now 1 · 12899 (F67, inferior MI in infarction stadium I = acute inferior STEMI, plus a non-specific ST-depression label, STD_)
  * Films on real tracings point at leads with 'lead' marks only and claim only labels and 12SL values; the synthetic
  * frames (lvh-strain 1851, atrial-flutter 1850 at 2:1 → 4:1) carry AutoMarks.
  */
@@ -47,9 +47,9 @@ const hiddenStemi: Item = {
   ecg: real(12899),
   view: GRID,
   explanation: l(
-    '**现在处理。** 心脏科医师标注：**下壁心梗，梗死分期 I（急性期）**，同时标注了 ST 压低——**急性下壁 STEMI**。在图上自己核对：判据是 II、III、aVF 中两个相邻导联 ST 抬高 ≥1 mm，常伴 I/aVL 镜像压低。空白的申请单不改变心电图：立即找到患者、问症状、启动再灌注流程，并加做右胸导联（V4R）找右心室受累。门诊流最危险的时刻，正是一连串不急的图之后。',
-    '**Act now.** The cardiologists labelled an **inferior MI, infarction stadium I (acute)**, with ST depression labelled as well: an **acute inferior STEMI**. Check it on the tracing: the criterion is ST elevation ≥ 1 mm in two contiguous leads of II, III and aVF, often with reciprocal depression in I/aVL. An empty request slip does not change the tracing: find the patient now, ask about symptoms, activate the reperfusion pathway, and record right-sided leads (V4R) to look for RV involvement. The most dangerous moment in a clinic stream is right after a run of tracings that needed nothing urgent.',
-    '**Actuar ya.** Los cardiólogos etiquetaron un **IAM inferior en estadio I (agudo)**, también con descenso del ST: un **IAMCEST inferior agudo**. Compruébalo en el trazado: el criterio es una elevación del ST ≥ 1 mm en dos derivaciones contiguas de II, III y aVF, a menudo con descenso recíproco en I/aVL. Una petición sin datos no cambia el ECG: localiza ya al paciente, pregunta por los síntomas, activa el circuito de reperfusión y registra derivaciones derechas (V4R) para buscar afectación del VD. El momento más peligroso de una serie de consulta es justo después de una racha de ECG sin urgencia.',
+    '**现在处理。** 心脏科医师标注：**下壁心梗，梗死分期 I（急性期）**，另有一条非特异性 ST 压低标注——**急性下壁 STEMI**。II、III、aVF 请自己对照判据核对：两个相邻导联 ST 抬高 ≥1 mm，常伴 I/aVL 镜像压低。空白的申请单不改变心电图：立即找到患者、问症状、启动再灌注流程，并加做右胸导联（V4R）找右心室受累。门诊流最危险的时刻，正是一连串不急的图之后。',
+    '**Act now.** The cardiologists labelled an **inferior MI, infarction stadium I (acute)**, plus a non-specific ST-depression label: an **acute inferior STEMI**. Check II, III and aVF against the criterion yourself: ST elevation ≥ 1 mm in two contiguous leads, often with reciprocal depression in I/aVL. An empty request slip does not change the tracing: find the patient now, ask about symptoms, activate the reperfusion pathway, and record right-sided leads (V4R) to look for RV involvement. The most dangerous moment in a clinic stream is right after a run of tracings that needed nothing urgent.',
+    '**Actuar ya.** Los cardiólogos etiquetaron un **IAM inferior en estadio I (agudo)**, además de una etiqueta de descenso inespecífico del ST: un **IAMCEST inferior agudo**. Comprueba tú II, III y aVF con el criterio: elevación del ST ≥ 1 mm en dos derivaciones contiguas, a menudo con descenso recíproco en I/aVL. Una petición sin datos no cambia el ECG: localiza ya al paciente, pregunta por los síntomas, activa el circuito de reperfusión y registra derivaciones derechas (V4R) para buscar afectación del VD. El momento más peligroso de una serie de consulta es justo después de una racha de ECG sin urgencia.',
   ),
   findings: ['stemi-inferior'],
   key: {
@@ -100,9 +100,9 @@ const lesson: Lesson = {
     {
       kind: 'text',
       body: l(
-        '今天的门诊流有 14 份真实心电图：**5 份正常**（窦缓、窦性心律不齐各一）、**4 份小发现**（右束支阻滞、一度房室阻滞、两份房早，其一另有发现）、**4 份标注为显著**（两份房扑/房颤、陈旧性下壁心梗、左心室肥厚电压：第 8 份问它对他意味着什么）、**1 份现在处理**；真实门诊正常的更多。最常见的错误是过度诊断，代价是多余的转诊、检查和焦虑。每一份都走完 x1 的十步：这就是筛子。',
-        'Today\'s stream holds 14 real ECGs: **5 normal** (one sinus bradycardia, one sinus arrhythmia), **4 with a small finding** (RBBB, first-degree AV block, two with PACs, one of which hides more), **4 labelled significant** (two atrial flutter or AF, an old inferior MI, LVH voltage: tracing 8 asks what it means in him) and **1 act now**; a real clinic has even more normals. The commonest error is over-calling, and it costs needless referrals, tests and anxiety. Every one gets the ten steps from x1: that is the sieve.',
-        'La serie de hoy tiene 14 ECG reales: **5 normales** (una bradicardia sinusal y una arritmia sinusal), **4 con un hallazgo menor** (bloqueo de rama derecha, bloqueo AV de primer grado, dos con extrasístoles auriculares, una de ellas con algo más), **4 etiquetados como relevantes** (dos aleteos o FA, un IAM inferior antiguo, voltaje de HVI: el ECG 8 pregunta qué significa en él) y **1 de actuar ya**; una consulta real tiene aún más normales. El error más frecuente es sobrediagnosticar, y cuesta derivaciones, pruebas y ansiedad innecesarias. Cada uno recibe los diez pasos de x1: ese es el tamiz.',
+        '今天的门诊流有 14 份真实心电图：**5 份正常**（窦缓、窦性心律不齐各一）、**4 份小发现**（右束支阻滞、一度房室阻滞、两份房早，其一另有发现）、**4 份评为显著**（两份房扑/房颤、陈旧性下壁心梗、左心室肥厚电压：第 8 份问它对他意味着什么）、**1 份现在处理**；真实门诊正常的更多。最常见的错误是过度诊断，代价是多余的转诊、检查和焦虑。每一份都走完 x1 的十步：这就是筛子。',
+        'Today\'s stream holds 14 real ECGs: **5 normal** (one sinus bradycardia, one sinus arrhythmia), **4 with a small finding** (RBBB, first-degree AV block, two with PACs, one of which hides more), **4 graded significant** (two atrial flutter or AF, an old inferior MI, LVH voltage: tracing 8 asks what it means in him) and **1 act now**; a real clinic has even more normals. The commonest error is over-calling, and it costs needless referrals, tests and anxiety. Every one gets the ten steps from x1: that is the sieve.',
+        'La serie de hoy tiene 14 ECG reales: **5 normales** (una bradicardia sinusal y una arritmia sinusal), **4 con un hallazgo menor** (bloqueo de rama derecha, bloqueo AV de primer grado, dos con extrasístoles auriculares, una de ellas con algo más), **4 clasificados como relevantes** (dos aleteos o FA, un IAM inferior antiguo, voltaje de HVI: el ECG 8 pregunta qué significa en él) y **1 de actuar ya**; una consulta real tiene aún más normales. El error más frecuente es sobrediagnosticar, y cuesta derivaciones, pruebas y ansiedad innecesarias. Cada uno recibe los diez pasos de x1: ese es el tamiz.',
       ),
     },
     {
@@ -178,9 +178,9 @@ const lesson: Lesson = {
           label: l('其余几行', 'The other lines', 'Las demás líneas'),
           ecg: real(6282),
           note: l(
-            '右束支阻滞不改变 QRS 起始部，Q 波照样能读；这份没有梗死标注。次要：调旧图看是否新发。',
-            'RBBB leaves the start of the QRS alone, so Q waves stay readable; no infarct is labelled here. Minor: is it new? Compare with an old ECG.',
-            'El bloqueo de rama derecha no cambia el inicio del QRS, así que las Q siguen legibles; aquí no hay infarto etiquetado. Menor: ¿es nuevo? Compara con un ECG previo.',
+            '右束支阻滞不改变 QRS 起始部，Q 波照样能读；这份没有梗死标注。次要（无症状时）：调旧图看是否新发。',
+            'RBBB leaves the start of the QRS alone, so Q waves stay readable; no infarct is labelled here. Minor (no symptoms): is it new? Compare with an old ECG.',
+            'El bloqueo de rama derecha no cambia el inicio del QRS, así que las Q siguen legibles; aquí no hay infarto etiquetado. Menor (sin síntomas): ¿es nuevo? Compara con un ECG previo.',
           ),
           marks: [{ kind: 'lead', lead: 'II' }, { kind: 'lead', lead: 'III' }, { kind: 'lead', lead: 'aVF' }, { kind: 'lead', lead: 'V2' }],
         },
@@ -277,12 +277,12 @@ const lesson: Lesson = {
       },
       right: {
         ecg: real(12899),
-        caption: l('第 7 份（67 岁女性）：标注为急性下壁心梗（I 期），伴 ST 压低——急性 STEMI，现在处理', 'Tracing 7 (woman, 67): labelled an acute inferior MI (stadium I) with ST depression — acute STEMI, act now', 'ECG 7 (mujer, 67 años): etiquetado como IAM inferior agudo (estadio I) con descenso del ST; IAMCEST agudo, actuar ya'),
+        caption: l('第 7 份（67 岁女性）：标注为急性下壁心梗（I 期），另有非特异性 ST 压低标注——急性 STEMI，现在处理', 'Tracing 7 (woman, 67): labelled an acute inferior MI (stadium I), plus a non-specific ST-depression label — acute STEMI, act now', 'ECG 7 (mujer, 67 años): etiquetado como IAM inferior agudo (estadio I), más una etiqueta de descenso inespecífico del ST; IAMCEST agudo, actuar ya'),
       },
       point: l(
-        '两份图都是“下壁”，决定紧迫度的却是 **ST 段**，不是 Q 波，也不是申请单。左边：Q 波，梗死被分期为陈旧，没有 ST 标注——常规处理，查二级预防。右边：分期为急性的下壁心梗，也标注了 ST 压低——自己在 II、III、aVF 找 ST 抬高，再找压低：正在发生的事，每一分钟都在丢心肌。门诊流里，前一份的平静不能让你在后一份的 ST 上偷懒。',
-        'Both tracings are "inferior", yet the urgency is set by the **ST segment** — not by the Q waves and not by the request slip. Left: Q waves, an infarct the cardiologists staged as old, no ST statement — routine, check secondary prevention. Right: an inferior MI staged as acute, with ST depression labelled too — find the ST elevation in II, III and aVF and the depression yourself: something happening now, with myocardium lost every minute. In a clinic stream, the calm of the last tracing must not make you skip the ST of the next one.',
-        'Los dos ECG son «inferiores», pero la urgencia la fija el **segmento ST**, no las ondas Q ni la petición. Izquierda: ondas Q, un infarto que los cardiólogos clasificaron como antiguo y ninguna etiqueta del ST: rutina y revisar la prevención secundaria. Derecha: un IAM inferior clasificado como agudo, también con descenso del ST etiquetado; busca tú la elevación del ST en II, III y aVF y el descenso: algo que está ocurriendo ahora, con miocardio perdido cada minuto. En una serie de consulta, la calma del ECG anterior no puede hacer que te saltes el ST del siguiente.',
+        '两份图都是“下壁”，决定紧迫度的却是 **ST 段**，不是 Q 波，也不是申请单。左边：Q 波，梗死被分期为陈旧，没有 ST 标注——常规处理，查二级预防。右边：分期为急性的下壁心梗——正在发生的事，每一分钟都在丢心肌；另有一条非特异性 ST 压低标注，II、III、aVF 请自己对照判据核对。门诊流里，前一份的平静不能让你在后一份的 ST 上偷懒。',
+        'Both tracings are "inferior", yet the urgency is set by the **ST segment** — not by the Q waves and not by the request slip. Left: Q waves, an infarct the cardiologists staged as old, no ST statement — routine, check secondary prevention. Right: an inferior MI staged as acute, something happening now with myocardium lost every minute, plus a non-specific ST-depression label; check II, III and aVF against the criterion yourself. In a clinic stream, the calm of the last tracing must not make you skip the ST of the next one.',
+        'Los dos ECG son «inferiores», pero la urgencia la fija el **segmento ST**, no las ondas Q ni la petición. Izquierda: ondas Q, un infarto que los cardiólogos clasificaron como antiguo y ninguna etiqueta del ST: rutina y revisar la prevención secundaria. Derecha: un IAM inferior clasificado como agudo, algo que está ocurriendo ahora con miocardio perdido cada minuto, más una etiqueta de descenso inespecífico del ST; comprueba tú II, III y aVF con el criterio. En una serie de consulta, la calma del ECG anterior no puede hacer que te saltes el ST del siguiente.',
       ),
     },
     {
