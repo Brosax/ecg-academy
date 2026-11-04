@@ -743,7 +743,7 @@ describe('o6: pulmonary embolism on the tracings', () => {
 });
 
 describe('o7: pericardium on the tracings', () => {
-  it('every pericarditis tracing: ST up in II and V4, down in aVR, flat in aVL; PR depressed in II and V5, elevated in aVR (vs TP)', () => {
+  it('every pericarditis tracing: ST up in II and V4, down only in aVR, flat in aVL; PR depressed in II and V5, elevated in aVR (vs TP)', () => {
     for (const src of sourcesWith('o7', 'pericarditis')) {
       const e = ecgOf(src);
       // worked caption: ST about 1.5–2 mm in II and 2–3 mm in V3–V4 above TP, larger than the PR depression in II
@@ -756,6 +756,7 @@ describe('o7: pericardium on the tracings', () => {
       }
       expect(stTp(e, 'aVR')).toBeLessThan(-0.04);
       expect(Math.abs(stTp(e, 'aVL'))).toBeLessThan(0.05);
+      for (const l of ['I', 'II', 'III', 'aVF', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6'] as const) expect(stTp(e, l), l).toBeGreaterThan(-0.03);
       for (const l of ['II', 'V5'] as const) expect(prShift(e, l), l).toBeLessThan(-0.03);
       expect(prShift(e, 'aVR')).toBeGreaterThan(0.03);
     }
@@ -804,7 +805,7 @@ describe('o7: pericardium on the tracings', () => {
     expect(prShift(pr, 'aVR')).toBeLessThan(0.125);
     expect(stTp(recip, 'aVR')).toBeLessThan(-0.04);
     expect(Math.abs(stTp(recip, 'aVL'))).toBeLessThan(0.05);
-    for (const l of ['I', 'II', 'III', 'aVF', 'V2', 'V3', 'V4', 'V5', 'V6'] as const) expect(stTp(recip, l), l).toBeGreaterThan(-0.03);
+    for (const l of ['I', 'II', 'III', 'aVF', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6'] as const) expect(stTp(recip, l), l).toBeGreaterThan(-0.03);
   });
   it('fluid film: tachycardia at 106/min with QRS ≈ 9 mm in II; the effusion keeps the rate, shrinks every limb QRS under 5 mm (II ≈ 4 mm) and the chest leads too; alternans flips the V3 R every beat', () => {
     const [tachy, eff, alt] = frames('o7', 1);
