@@ -20,7 +20,7 @@ import { Heart3D } from '../heart3d';
 import { lt } from '../i18n';
 import { tc } from '../i18n/common';
 import { tco } from '../i18n/course';
-import type { DrillRunnerProps, Item } from '../practice/api';
+import type { DrillRunnerProps, Item, ItemView } from '../practice/api';
 import type { DialId, DialRange, SynthResult } from '../synth';
 import { Badge, Button, Feedback, Icon, LinkButton } from '../ui';
 import type { AutoMark, Block, Lesson, LessonMark, Prediction } from './api';
@@ -296,6 +296,9 @@ function usePlayhead(count: number, stepMs: number, onFrame?: (i: number) => voi
   return { frame, playing, played, play, stop, seek };
 }
 
+/** The view without its highlighted leads: before a prediction is revealed nothing on the tracing may point at the answer. */
+const unmarked = (v: ItemView | undefined): ItemView | undefined => (v?.highlightLeads ? { ...v, highlightLeads: undefined } : v);
+
 /** Commit-before-reveal for an experiment: picking an option and pressing Reveal plays it. */
 function PredictGate(props: { readonly predict: Prediction; readonly playing: boolean; readonly onReveal: () => void }) {
   const p = props.predict;
@@ -405,7 +408,7 @@ function LiveBlock(props: { readonly block: BlockOf<'live'> }) {
   return (
     <figure class="crs-fig crs-live">
       {state.status === 'ready' ? (
-        <EcgDisplay ecg={state.res.ecg} view={b.view} marks={b.marks} />
+        <EcgDisplay ecg={state.res.ecg} view={revealed ? b.view : unmarked(b.view)} marks={revealed ? b.marks : undefined} />
       ) : (
         <EcgPlaceholder layout={b.view?.layout} status={state.status} />
       )}
@@ -426,7 +429,7 @@ function LiveBlock(props: { readonly block: BlockOf<'live'> }) {
               {head.played ? tco('liveReplay') : tco('livePlay')}
             </Button>
           )}
-          <NoteBox notes={(play?.notes ?? []).map((n) => n.text)} current={note?.text} />
+          <NoteBox notes={(play?.notes ?? []).map((n) => n.text)} current={revealed ? note?.text : undefined} />
         </div>
       )}
       {sc && values && active.length > 0 && (
@@ -510,7 +513,7 @@ function FilmBlock(props: { readonly block: BlockOf<'film'> }) {
               onClick={() => head.seek(i)}
             >
               <span class="crs-film__n tabular">{i + 1}</span>
-              {lt(fr.label)}
+              <Reserve reserve={[lt(fr.label)]}>{revealed ? lt(fr.label) : ''}</Reserve>
             </button>
           ))}
         </div>
@@ -521,7 +524,7 @@ function FilmBlock(props: { readonly block: BlockOf<'film'> }) {
         )}
         <NoteBox notes={b.frames.map((x) => x.note)} current={revealed ? f.note : undefined} />
       </div>
-      <EcgPanel source={f.ecg} view={b.view} marks={f.marks} />
+      <EcgPanel source={f.ecg} view={revealed ? b.view : unmarked(b.view)} marks={revealed ? f.marks : undefined} />
       <Caption text={b.caption} hidden={!revealed} />
     </figure>
   );

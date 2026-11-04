@@ -84,8 +84,10 @@ usually becomes one `film`.
   learner moves another dial.
 - A prediction must be answerable from what the lesson has already shown. If it needs something taught later, it is
   a quiz: move the block or change the question.
-- Nothing on screen before the reveal may give the answer away. The block's title is the step heading and is always
-  visible, so a title never states the answer. The caption stays hidden until the learner has predicted.
+- Nothing on screen before the reveal may give the answer away. Until the learner has predicted, the player hides
+  the caption, the notes, the marks, the highlighted leads and the film's frame labels (chips show only their
+  number). The block's title is the step heading and is always visible, so a title never states the answer; the
+  tracing itself (frame 1 of a film, the start of a sweep) is visible too.
 - An assertion's tolerance matches the note's precision: "about 115 ms" needs ±5 ms; "2–3.5 mm" needs the value
   inside 2–3.5. Where a note range marks the threshold of a finding, assert both sides of the boundary in every lead
   the definition uses.
