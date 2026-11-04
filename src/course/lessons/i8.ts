@@ -64,14 +64,14 @@ const lesson: Lesson = {
         'Una mujer de 62 años tuvo 30 minutos de dolor torácico esta mañana. El dolor ha desaparecido y se encuentra bien. Este es su ECG en el intervalo sin dolor: parece «casi normal». ¿Qué es lo que NO debes hacer en ningún caso?',
       ),
       reveal: l(
-        'V2–V3 的 T 波先直立、终末倒置（双向）——这是 **Wellens 综合征（A 型）**：左前降支近段临界狭窄。“现在不痛”不等于“低危”：**绝对不能做运动/负荷试验**（可诱发急性前壁闭塞），应安排**早期冠状动脉造影**。',
-        'The T waves in V2–V3 start upright and end inverted (biphasic) — this is **Wellens syndrome (type A)**: a critical proximal LAD stenosis. "Pain-free now" does not mean "low risk": **never send this patient for an exercise test** (it can precipitate an acute anterior occlusion); arrange **early coronary angiography**.',
-        'Las ondas T de V2–V3 empiezan positivas y terminan negativas (bifásicas): es el **síndrome de Wellens (tipo A)**, una estenosis crítica proximal de la descendente anterior. «Sin dolor ahora» no significa «bajo riesgo»: **no la envíes nunca a una prueba de esfuerzo** (puede desencadenar una oclusión anterior aguda); programa una **coronariografía precoz**.',
+        'V3 的 T 波先直立、终末倒置（双向），V2 的 T 波已经倒置——这是 **Wellens 综合征（A 型）**：左前降支近段临界狭窄。“现在不痛”不等于“低危”：**绝对不能做运动/负荷试验**（可诱发急性前壁闭塞），应安排**早期冠状动脉造影**。',
+        'The T wave in V3 starts upright and ends inverted (biphasic), and in V2 it is already inverted — this is **Wellens syndrome (type A)**: a critical proximal LAD stenosis. "Pain-free now" does not mean "low risk": **never send this patient for an exercise test** (it can precipitate an acute anterior occlusion); arrange **early coronary angiography**.',
+        'La onda T de V3 empieza positiva y termina negativa (bifásica), y en V2 ya es negativa: es el **síndrome de Wellens (tipo A)**, una estenosis crítica proximal de la descendente anterior. «Sin dolor ahora» no significa «bajo riesgo»: **no la envíes nunca a una prueba de esfuerzo** (puede desencadenar una oclusión anterior aguda); programa una **coronariografía precoz**.',
       ),
     },
     {
       kind: 'heart',
-      ecg: synth('wellens', 942),
+      ecg: synth('wellens', 941),
       emphasize: ['lv-mid-anteroseptal', 'lv-mid-anterior', 'lv-apical-anterior', 'lv-apical-septal', 'lv-apex'],
       caption: l(
         '在心脏上读同一份图：**左前降支中远段供区**（前室间隔与前壁、延伸到心尖）亮起——狭窄很重，但此刻血管没有完全闭塞；缺血发作过后复极化仍被拉长，T 波变形，而 R 波保留、不出现 Q 波。',
@@ -129,18 +129,18 @@ const lesson: Lesson = {
     },
     {
       kind: 'film',
-      title: l('三种没有 ST 抬高的图形', 'Three patterns without ST elevation', 'Tres patrones sin elevación del ST'),
+      title: l('藏在“几乎正常”心电图后的三种图形', 'Three patterns behind an almost normal ECG', 'Tres patrones tras un ECG casi normal'),
       view: { layout: '3x4+1' },
       frames: [
         {
           label: l('Wellens A 型', 'Wellens type A', 'Wellens tipo A'),
           ecg: synth('wellens', 941),
           note: l(
-            '开头那份图：V2–V3 的 T 波先直立后倒置，ST 平，R 波保留，没有 Q 波。左前降支近段临界狭窄：不做负荷试验。',
-            'The opening tracing: T in V2–V3 up then down, ST flat, R preserved, no Q. Critical proximal LAD: no stress test.',
-            'El trazado inicial: T en V2–V3 primero positiva y luego negativa, ST plano, R conservada, sin Q. DA proximal crítica: sin prueba de esfuerzo.',
+            '开头那份图：V3 的 T 波先直立后倒置，V2 的已倒置；ST 平，R 波保留，没有 Q 波。左前降支近段临界狭窄：不做负荷试验。',
+            'The opening tracing: T in V3 up then down, in V2 already inverted; ST flat, R preserved, no Q. Critical proximal LAD: no stress test.',
+            'El trazado inicial: T en V3 primero positiva y luego negativa, en V2 ya negativa; ST plano, R conservada, sin Q. DA proximal crítica: sin prueba de esfuerzo.',
           ),
-          marks: [{ auto: 't', lead: 'V2' }],
+          marks: [{ auto: 't', lead: 'V3' }],
         },
         {
           label: l('Wellens B 型', 'Wellens type B', 'Wellens tipo B'),
@@ -175,16 +175,17 @@ const lesson: Lesson = {
       ],
       predict: {
         question: l(
-          'B 型 Wellens 来自同一处狭窄。V2–V3 会出现什么？',
-          'Wellens type B comes from the same stenosis. What will V2–V3 show?',
-          'El Wellens tipo B nace de la misma estenosis. ¿Qué mostrarán V2–V3?',
+          'B 型 Wellens 来自同一处左前降支狭窄。在胸前导联，倒置的 T 波会延伸到哪里？',
+          'Wellens type B comes from the same LAD stenosis. Across the chest leads, how far will the inverted T reach?',
+          'El Wellens tipo B nace de la misma estenosis de la DA. En las precordiales, ¿hasta dónde llegará la T negativa?',
         ),
         options: [
-          l('深倒的 T 波，ST 平', 'Deep T inversion, flat ST', 'T negativa profunda, ST plano'),
-          l('ST 段抬高', 'ST elevation', 'Elevación del ST'),
-          l('Q 波，R 波消失', 'Q waves, the R lost', 'Ondas Q, sin R'),
+          l('只在 V2–V3', 'Only V2–V3', 'Solo V2–V3'),
+          l('V1 到 V4', 'V1 to V4', 'De V1 a V4'),
+          l('V1 到 V6', 'V1 to V6', 'De V1 a V6'),
         ],
-        answer: 0,
+        answer: 1,
+        ordered: true,
       },
       caption: l(
         'Wellens 出现在疼痛缓解之后；de Winter 出现在疼痛持续时，而且图形常保持不变：等它“演变”就是等心肌坏死。',
@@ -210,9 +211,9 @@ const lesson: Lesson = {
         {
           title: l('逐导联数 ST 压低', 'Count the ST depression lead by lead', 'Cuenta el descenso del ST derivación por derivación'),
           body: l(
-            'II、III、aVF 与 V2–V5——7 个导联压低 ≥1 mm（I、V6 较浅）。“数数”本身就是诊断动作：达到 **≥6 个导联**就不再是区域性缺血。',
-            'II, III, aVF and V2–V5 — seven leads depressed ≥1 mm (I and V6 less). Counting is itself a diagnostic act: once **≥6 leads** are involved it is no longer regional ischaemia.',
-            'II, III, aVF y V2–V5: siete derivaciones con descenso ≥1 mm (I y V6, menos). Contar ya es un acto diagnóstico: con **≥6 derivaciones** deja de ser isquemia regional.',
+            'II、III、aVF 与 V2–V5——7 个导联压低 ≥1 mm（V6 较浅，I 几乎不压低）。“数数”本身就是诊断动作：达到 **≥6 个导联**就不再是区域性缺血。',
+            'II, III, aVF and V2–V5 — seven leads depressed ≥1 mm (V6 less, I barely). Counting is itself a diagnostic act: once **≥6 leads** are involved it is no longer regional ischaemia.',
+            'II, III, aVF y V2–V5: siete derivaciones con descenso ≥1 mm (V6, menos; I, apenas). Contar ya es un acto diagnóstico: con **≥6 derivaciones** deja de ser isquemia regional.',
           ),
           marks: [
             { auto: 'j', lead: 'V5' },
@@ -302,7 +303,7 @@ const lesson: Lesson = {
         l(
           'de Winter T波被报告为“非特异性 ST-T 改变”：上斜型压低 + 高大对称 T 是 STEMI 等危症，直接进导管室。',
           'The de Winter pattern reported as "nonspecific ST-T changes": upsloping depression + tall symmetric T is a STEMI equivalent — straight to the cath lab.',
-          'El patrón de De Winter reportado como «cambios inespecíficos del ST-T»: el descenso ascendente con T altas y simétricas es un equivalente de IAMCEST, directamente a sala de hemodinámica.',
+          'El patrón de De Winter informado como «cambios inespecíficos del ST-T»: el descenso ascendente con T altas y simétricas es un equivalente de IAMCEST, directamente a sala de hemodinámica.',
         ),
         l(
           '读图时跳过 aVR：它缩在角落，却是广泛压低时唯一抬高的导联——每份缺血心电图都要专门看它一眼。',
