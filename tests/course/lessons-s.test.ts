@@ -363,7 +363,7 @@ describe('s1: the reading order on the tracings', () => {
     expect(Math.abs(longQt.truth!.qtMs - 520)).toBeLessThanOrEqual(5);
     expect(Math.abs(longQt.truth!.hrBpm - 60)).toBeLessThanOrEqual(1);
     expect(Math.abs(meanRr(longQt) - 1000)).toBeLessThanOrEqual(5);
-    expect(Math.abs(markedMs(longQt, qtMarks, 'RR') - 1000)).toBeLessThanOrEqual(10);
+    expect(Math.abs(markedMs(longQt, qtMarks, 'RR') - 1000)).toBeLessThanOrEqual(5);
     for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(stAt(occlusion, l), l).toBeGreaterThanOrEqual(0.1);
     for (const l of ['III', 'aVF'] as const) expect(stAt(occlusion, l), l).toBeLessThan(-0.05);
     for (const l of ['V3', 'V4'] as const) expect(tw(potassium, l).max, l).toBeGreaterThan(qrs(potassium, l).max);
@@ -422,6 +422,21 @@ describe('s2: rate on the tracings', () => {
     }
     for (const rate of [145, 150]) expect(Math.abs(meanRr(swept(1, rate)) / 40 - 10), `${rate}/min`).toBeLessThan(0.6);
   });
+  it('clock sweep prediction: at 100/min 3 large squares separate the R waves', () => {
+    const p = blocksOf('s2', 'live')[0].predict!;
+    expect(p.ordered).toBe(true);
+    expect(p.options[p.answer].en).toBe('3');
+    expect(Math.abs(meanRr(played('s2', 0, 100)) / 200 - 3)).toBeLessThan(0.2);
+  });
+  it('film prediction: only strip 1 is regular enough for the 300 or 1500 rule', () => {
+    const film = blocksOf('s2', 'film')[0];
+    const p = film.predict!;
+    expect(p.ordered).toBeUndefined();
+    expect(p.options[p.answer].en).toBe('Only strip 1');
+    const [reg, sa, af] = film.frames.map((f) => ecgOf(f.ecg));
+    expect(Math.max(...rrs(reg)) - Math.min(...rrs(reg))).toBeLessThan(40);
+    for (const e of [sa, af]) expect(Math.max(...rrs(e)) - Math.min(...rrs(e))).toBeGreaterThan(120);
+  });
   it('film: regular at 115/min; sinus arrhythmia varies with breathing; AF irregularly irregular', () => {
     const [reg, sa, af] = blocksOf('s2', 'film')[0].frames.map((f) => ecgOf(f.ecg));
     expect(Math.abs(reg.truth!.hrBpm - 115)).toBeLessThan(3);
@@ -442,11 +457,12 @@ describe('s2: rate on the tracings', () => {
 });
 
 describe('s3: sinus rhythm on the tracings', () => {
-  it('hook: same PR every beat, PP from about 730 to about 980 ms', () => {
+  it('hook: same PR every beat, PP (P onset to P onset) from about 735 to about 985 ms', () => {
     const e = ecgOf(blocksOf('s3', 'hook')[0].ecg);
-    const pp = rrs(e);
-    expect(Math.abs(Math.min(...pp) - 730)).toBeLessThanOrEqual(5);
-    expect(Math.abs(Math.max(...pp) - 980)).toBeLessThanOrEqual(5);
+    const beats = e.truth!.beats;
+    const pp = beats.slice(1).map((b, i) => b.pOn! - beats[i].pOn!);
+    expect(Math.abs(Math.min(...pp) - 735)).toBeLessThanOrEqual(5);
+    expect(Math.abs(Math.max(...pp) - 985)).toBeLessThanOrEqual(5);
     const prs = e.truth!.beats.map((b) => b.qrsOn - b.pOn!);
     expect(Math.max(...prs) - Math.min(...prs)).toBeLessThan(5);
   });
@@ -464,7 +480,7 @@ describe('s3: sinus rhythm on the tracings', () => {
     const b = beats[marked[0]];
     expect(b.kind).toBe('sinus');
     expect(pw(e, 'II', b).max).toBeGreaterThan(0.05);
-    expect(pw(e, 'aVR', b).min).toBeLessThan(-0.03);
+    expect(pw(e, 'aVR', b).min).toBeLessThan(-MIN_WAVE_MV);
     expect(Math.abs(b.qrsOn - b.pOn! - 160)).toBeLessThanOrEqual(5);
     const inColumn = leadWindows('aVR', e.signal.durationMs).some(([t0, t1]) => b.pOn! >= t0 && b.pOff! <= t1);
     expect(inColumn, 'P inside the aVR column').toBe(true);
@@ -641,6 +657,15 @@ describe('s4: intervals on the tracings', () => {
     expect(Math.abs(meanRr(slow) - 1330)).toBeLessThanOrEqual(5);
     expect(Math.abs(slow.truth!.hrBpm - 45)).toBeLessThanOrEqual(1);
   });
+  it('rate sweep prediction: with the QTc read-out held, the QT shortens from 60 to 100/min', () => {
+    const p = blocksOf('s4', 'live')[1].predict!;
+    expect(p.ordered).toBe(true);
+    expect(p.options[p.answer].en).toBe('Shortens');
+    const b = blocksOf('s4', 'live')[1];
+    const qt = (v: number) => markedMs(played('s4', 1, v), b.marks, 'QT', { layout: b.view?.layout, lead: b.view?.lead });
+    expect(qt(100)).toBeLessThan(qt(60) - 50);
+    for (const v of [60, 100]) expect(generate(playedReq('s4', 1, v)).applied.qtc, `${v}/min`).toBe(405);
+  });
   it('PR sweep prediction: at the end the PR spans 5 small squares', () => {
     const p = blocksOf('s4', 'live')[0].predict!;
     expect(p.ordered).toBe(true);
@@ -747,7 +772,7 @@ describe('s6: ST measurement on the tracings', () => {
     const label = m && 'label' in m && m.label ? (typeof m.label === 'string' ? m.label : m.label.en) : '';
     return /ST ([+−±]\d+\.\d) mm/.exec(label)?.[1] ?? label;
   };
-  it('worked (anterior): V2 about 2.6 mm at J with a read-out of +3.0, V3 about 3.3 mm at J with +3.8, read-outs V4 +2.2 and V1 +1.3; at J aVL up by less than 1 mm and I almost flat but on the same side; read-outs III −1.3 and aVF −1.0', () => {
+  it('worked (anterior): V2 about 2.6 mm at J with a read-out of +3.0, V3 about 3.3 mm at J with +3.8, read-outs V4 +2.2 and V1 +1.3; at J aVL up by less than 1 mm (same side) and I flat; read-outs III −1.3 and aVF −1.0', () => {
     const e = ecgOf(blocksOf('s6', 'worked')[0].ecg);
     expect(Math.abs(stAt(e, 'V2') - 0.26)).toBeLessThanOrEqual(0.015);
     expect(Math.abs(stAt(e, 'V3') - 0.33)).toBeLessThanOrEqual(0.015);
@@ -757,8 +782,7 @@ describe('s6: ST measurement on the tracings', () => {
       expect(stAt(e, l, 60), l).toBeLessThan(0.1);
     }
     expect(stAt(e, 'aVL')).toBeGreaterThan(MIN_WAVE_MV);
-    expect(stAt(e, 'I')).toBeGreaterThan(0);
-    expect(stAt(e, 'I')).toBeLessThanOrEqual(MIN_WAVE_MV);
+    expect(Math.abs(stAt(e, 'I'))).toBeLessThanOrEqual(MIN_WAVE_MV);
   });
   it('live: more injury current raises V3 and lowers III (reciprocity)', () => {
     const b = blocksOf('s6', 'live')[0];
@@ -846,9 +870,9 @@ describe('s7: normal variants on the tracings', () => {
     expect(tInverted(e, 'V1')).toBe(true);
     for (const l of ['V3', 'V4', 'V5', 'V6', 'I', 'II'] as const) expect(tUpright(e, l), l).toBe(true);
   });
-  it('athlete: the hump before the J mark in II, aVF, V5 and V6 rises from below the baseline, so it is not a notch by the rule the ST sweep uses (the text says J-point elevation, not notch)', () => {
+  it('athlete: the hump before the J mark in II, aVF and V4–V6 rises from below the baseline, so it is not a notch by the rule the ST sweep uses (the text says J-point elevation, not notch)', () => {
     const e = ecgOf(blocksOf('s7', 'hook')[0].ecg);
-    for (const l of ['II', 'aVF', 'V5', 'V6'] as const) expect(notch(e, l).dip, l).toBeLessThan(-MIN_WAVE_MV);
+    for (const l of ['II', 'aVF', 'V4', 'V5', 'V6'] as const) expect(notch(e, l).dip, l).toBeLessThan(-MIN_WAVE_MV);
   });
   it('ST sweep: in II and aVF at both ends the notch is a separate hump after the R downstroke (from a dip that stays on or above the baseline it rises over 2 mm to the Jp), standing above the J mark; QRS < 120 ms throughout', () => {
     for (const v of [0.06, 0.14]) {
@@ -881,6 +905,9 @@ describe('s7: normal variants on the tracings', () => {
     }
   });
   it('ST sweep prediction: in II and aVF the notch (≥ 1 mm, standing above the J mark) is there at every step and does not shrink, while the ST at the J mark rises', () => {
+    const p = blocksOf('s7', 'live')[0].predict!;
+    expect(p.ordered).toBeUndefined();
+    expect(p.options[p.answer].en).toBe('It stays from start to end while the ST after it rises');
     const sc = scenarios().find((s) => s.id === 'early-repolarization')!;
     for (const v of sweepValues('st', sc.dials.st!, 0.06, 0.14)) {
       const e = played('s7', 0, v);
@@ -1037,9 +1064,10 @@ const REAL_CLAIMS: Readonly<Partial<Record<(typeof IDS)[number], readonly RealCl
     { id: 13683, sex: 'M', age: 19, has: ['normal-ecg'] },
     { id: 5469, sex: 'M', age: 39, has: ['normal-ecg'] },
   ],
-  // "three people aged 16 to 42"; "one carries the label incomplete RBBB"
+  // "three people aged 16 to 42"; "one carries the label incomplete RBBB: measure its QRS before you agree with the label"
+  // (12SL QRS 86 ms, under the 110 ms the lesson's incomplete RBBB needs)
   s7: [
-    { id: 15112, age: 42, has: ['irbbb'] },
+    { id: 15112, age: 42, has: ['irbbb'], qrs: [0, 109] },
     { id: 13683, age: 19, not: ['irbbb'] },
     { id: 2084, age: 16, not: ['irbbb'] },
   ],

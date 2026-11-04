@@ -72,9 +72,9 @@ const lesson: Lesson = {
         'Los intervalos RR de esta tira varían. ¿Es anormal el ritmo? Decide qué pondrías en el informe.',
       ),
       reveal: l(
-        '每个 QRS 前都是**同样的直立 P 波、同样的 PR**。只有 PP 间期在平滑地变长、变短（这里约 730–980 ms）：**窦性心律不齐**，通常与呼吸有关——这是正常现象，年轻人尤其常见。',
-        'Every QRS is preceded by **the same upright P wave at the same PR**. Only the PP interval changes, lengthening and shortening smoothly (here from about 730 to 980 ms): **sinus arrhythmia**, usually respiratory. It is a normal finding, especially in young people.',
-        'Cada QRS va precedido de **la misma onda P positiva con el mismo PR**. Solo cambia el intervalo PP, que se alarga y se acorta de forma gradual (aquí de unos 730 a 980 ms): **arritmia sinusal**, habitualmente respiratoria. Es un hallazgo normal, sobre todo en jóvenes.',
+        '每个 QRS 前都是**同样的直立 P 波、同样的 PR**。只有 PP 间期在平滑地变长、变短（这里约 735–985 ms）：**窦性心律不齐**，通常与呼吸有关——这是正常现象，年轻人尤其常见。',
+        'Every QRS is preceded by **the same upright P wave at the same PR**. Only the PP interval changes, lengthening and shortening smoothly (here from about 735 to 985 ms): **sinus arrhythmia**, usually respiratory. It is a normal finding, especially in young people.',
+        'Cada QRS va precedido de **la misma onda P positiva con el mismo PR**. Solo cambia el intervalo PP, que se alarga y se acorta de forma gradual (aquí de unos 735 a 985 ms): **arritmia sinusal**, habitualmente respiratoria. Es un hallazgo normal, sobre todo en jóvenes.',
       ),
     },
     {

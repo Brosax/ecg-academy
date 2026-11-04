@@ -210,12 +210,13 @@ const lesson: Lesson = {
       },
       predict: {
         question: l(
-          'QTc 读数停在 Fridericia 值不变。把心率从 60 提到 100 次/分，Bazett 公式算出的 QTc 会怎样？',
-          'The QTc read-out stays at the Fridericia value. Raise the rate from 60 to 100/min: what does Bazett’s QTc do?',
-          'La lectura del QTc se queda en el valor de Fridericia. Sube la frecuencia de 60 a 100 lpm: ¿qué hace el QTc de Bazett?',
+          'QTc 读数停在 Fridericia 值不变。把心率从 60 提到 100 次/分，QT 会怎样？',
+          'The QTc read-out stays at the Fridericia value. Raise the rate from 60 to 100/min: what does the QT do?',
+          'La lectura del QTc se queda en el valor de Fridericia. Sube la frecuencia de 60 a 100 lpm: ¿qué hace el QT?',
         ),
-        options: [l('升到读数之上', 'Climbs above the read-out', 'Sube por encima de la lectura'), l('保持不变', 'Stays the same', 'No cambia'), l('降到读数之下', 'Falls below it', 'Baja por debajo')],
+        options: [l('变短', 'Shortens', 'Se acorta'), l('不变', 'Stays the same', 'No cambia'), l('变长', 'Lengthens', 'Se alarga')],
         answer: 0,
+        ordered: true,
       },
       caption: l(
         '提高心率：标出的 QT 变短，QTc 读数不动。把标出的 QT 分别除以 √RR 和 ∛RR（RR 以秒计）：一个跟得上读数，一个往上走。',

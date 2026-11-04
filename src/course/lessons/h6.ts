@@ -173,9 +173,9 @@ const lesson: Lesson = {
       ],
       predict: {
         question: l(
-          '第 1 帧 V1–V3 的 T 倒置。读它的 QRS：有多宽？之后有什么？',
-          'Frame 1 inverts the T in V1–V3. Read its QRS: how wide is it, and what follows it?',
-          'El fotograma 1 invierte la T en V1-V3. Lee su QRS: ¿qué anchura tiene y qué lo sigue?',
+          '第 1 帧 V1–V3 的 T 波倒置。它的 QRS 有多宽？QRS 终点和 T 波之间有什么？',
+          'In frame 1 the T is inverted in V1–V3. How wide is its QRS, and what lies between the QRS end and the T?',
+          'En el fotograma 1 la T está invertida en V1-V3. ¿Qué anchura tiene su QRS y qué hay entre el final del QRS y la T?',
         ),
         options: [
           l('<120 ms，之后什么也没有', 'Under 120 ms, nothing after it', 'Menos de 120 ms, nada después'),
@@ -207,8 +207,8 @@ const lesson: Lesson = {
         {
           title: l('第二步：QRS 宽不宽？', 'Step 2: is the QRS wide?', 'Paso 2: ¿el QRS es ancho?'),
           body: l(
-            '完全性右束支阻滞的继发性T波倒置一定伴随 ≥120 ms 的宽 QRS 和 rSR′ 形态；ARVC 的标准明确要求**不伴完全性右束支阻滞**。本图 QRS 不宽——T波倒置不是束支阻滞的继发改变。',
-            'The secondary T inversion of complete RBBB always rides on a wide QRS ≥120 ms with an rSR′ shape; the ARVC criterion explicitly requires the **absence of complete RBBB**. Here the QRS is not wide — the T inversion is not secondary to a block.',
+            '完全性右束支阻滞的继发性T波倒置一定伴随 ≥120 ms 的宽 QRS 和 rsR′ 形态；ARVC 的标准明确要求**不伴完全性右束支阻滞**。本图 QRS 不宽——T波倒置不是束支阻滞的继发改变。',
+            'The secondary T inversion of complete RBBB always rides on a wide QRS ≥120 ms with an rsR′ shape; the ARVC criterion explicitly requires the **absence of complete RBBB**. Here the QRS is not wide — the T inversion is not secondary to a block.',
             'La inversión secundaria de la T de la BRD completa siempre cabalga sobre un QRS ancho ≥120 ms con morfología rsR′; el criterio de la MAVD exige expresamente la **ausencia de BRD completa**. Aquí el QRS no es ancho: la inversión de la T no es secundaria a un bloqueo.',
           ),
           marks: [{ auto: 'qrs', lead: 'V1' }],
@@ -347,8 +347,8 @@ const lesson: Lesson = {
           'La onda épsilon = una pequeña deflexión terminal tras el final del QRS en V1-V3 (mayor en los criterios del Grupo de Trabajo 2010, reducida a menor en Padua 2020); tiempo de activación terminal ≥55 ms: hay que buscar ambos de forma activa.',
         ),
         l(
-          '三种T波倒置一条线：看年龄（幼年型仅 <16 岁）和 QRS（右束支阻滞的继发性T波倒置必有宽 QRS/rSR′）；R′ 在 QRS 之内，ε波在 QRS 之外。',
-          'Three T inversions, one line: check the age (juvenile only under 16) and the QRS (secondary T inversion of RBBB always has a wide QRS/rSR′); the R′ lives inside the QRS, the epsilon wave outside it.',
+          '三种T波倒置一条线：看年龄（幼年型仅 <16 岁）和 QRS（右束支阻滞的继发性T波倒置必有宽 QRS/rsR′）；R′ 在 QRS 之内，ε波在 QRS 之外。',
+          'Three T inversions, one line: check the age (juvenile only under 16) and the QRS (secondary T inversion of RBBB always has a wide QRS/rsR′); the R′ lives inside the QRS, the epsilon wave outside it.',
           'Tres inversiones de la T en una línea: comprueba la edad (juvenil solo por debajo de 16) y el QRS (la inversión secundaria de la BRD siempre tiene QRS ancho/rsR′); la R′ vive dentro del QRS y la épsilon, fuera.',
         ),
         l(
