@@ -115,6 +115,8 @@ commits a read before any machine statement is shown; confidence is collected fo
 ## 4. Lesson anatomy
 
 A lesson is data (`src/course/lessons/<id>.ts`), rendered by one player. Text lives inline as `{ zh, en, es }`.
+Since 2026-11-04 the concept part is taught by doing: `live` blocks with `play` (a dial sweep with notes and an
+optional prediction) and `film` blocks (engine states in turn), not prose; see `docs/design/learn-by-doing.md`.
 
 ```
 hook          an ECG + a question ("What is wrong here?") — attempt before teaching
