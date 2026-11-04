@@ -326,7 +326,7 @@ function prSegment(ecg: Ecg, lead: AnyLead, b = midBeat(ecg)): number {
 }
 
 describe('i1: measuring ST on the tracings', () => {
-  it('hook / worked (man of 58): J point ≥ 2 mm in V2–V3, highest in V3, ≥ 1 mm in V4, V1 about 1 mm, mirror about −1 mm in III and aVF', () => {
+  it('hook / worked (man of 58): J point about 2–3.5 mm in V2–V4, highest in V3 (worked: V2 about 2.5, V3 3–3.5, V4 about 2, J+60 read-out about 4), V1 about 1 mm, mirror about −1 mm in III and aVF', () => {
     for (const src of [blocksOf('i1', 'hook')[0].ecg, blocksOf('i1', 'worked')[0].ecg]) {
       const e = ecgOf(src);
       for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.2);
@@ -339,14 +339,35 @@ describe('i1: measuring ST on the tracings', () => {
         expect(stAt(e, l), l).toBeGreaterThanOrEqual(-0.125);
       }
       expect(stAt(e, 'V3')).toBeLessThan(0.4);
+      for (const l of ['V2', 'V3', 'V4'] as const) {
+        expect(stAt(e, l), `${l} about 2–3.5 mm`).toBeGreaterThanOrEqual(0.175);
+        expect(stAt(e, l), `${l} about 2–3.5 mm`).toBeLessThanOrEqual(0.375);
+      }
     }
+    const w = ecgOf(blocksOf('i1', 'worked')[0].ecg);
+    expect(stAt(w, 'V2'), 'V2 about 2.5 mm').toBeGreaterThanOrEqual(0.225);
+    expect(stAt(w, 'V2'), 'V2 about 2.5 mm').toBeLessThanOrEqual(0.275);
+    expect(stAt(w, 'V3'), 'V3 3–3.5 mm').toBeGreaterThanOrEqual(0.3);
+    expect(stAt(w, 'V3'), 'V3 3–3.5 mm').toBeLessThanOrEqual(0.35);
+    expect(stAt(w, 'V4'), 'V4 about 2 mm').toBeGreaterThanOrEqual(0.175);
+    expect(stAt(w, 'V4'), 'V4 about 2 mm').toBeLessThanOrEqual(0.225);
+    expect(w.truth!.stMv.V3, 'the st60 read-out on V3, about 4 mm').toBeGreaterThanOrEqual(0.375);
+    expect(w.truth!.stMv.V3, 'the st60 read-out on V3, about 4 mm').toBeLessThanOrEqual(0.425);
+  });
+  it('heart block: the lit segments are the injured LAD segments, basal ones included', () => {
+    const h = blocksOf('i1', 'heart')[0];
+    const req = h.ecg.kind === 'synth' ? h.ecg.req : null;
+    const sc = scenarios().find((s) => s.id === req?.scenario);
+    const injured = sc!.source.injury!.flatMap((x) => (typeof x.where === 'string' ? [] : [...x.where]));
+    expect([...(h.emphasize ?? [])].sort()).toEqual([...new Set(injured)].sort());
   });
   it('contrast A (early repolarisation, man of 24): V3 below 2.5 mm, II/aVF J about 1.5 mm, V2–V6 elevated, no reciprocal depression ≥ 0.5 mm except aVR', () => {
     const e = ecgOf(blocksOf('i1', 'contrast')[0].left.ecg);
     expect(stAt(e, 'V3')).toBeLessThan(0.25);
+    expect(e.truth!.stMv.V3, 'V3 J+60 read-out').toBeLessThan(0.25);
     for (const l of ['II', 'aVF'] as const) {
-      expect(stAt(e, l), l).toBeGreaterThan(0.12);
-      expect(stAt(e, l), l).toBeLessThan(0.18);
+      expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.125);
+      expect(stAt(e, l), l).toBeLessThanOrEqual(0.175);
     }
     for (const l of ['V2', 'V3', 'V4', 'V5', 'V6'] as const) expect(stAt(e, l), l).toBeGreaterThan(0.08);
     for (const l of ALL.filter((x) => x !== 'aVR')) expect(stAt(e, l), l).toBeGreaterThan(-0.05);
@@ -358,6 +379,10 @@ describe('i1: measuring ST on the tracings', () => {
       expect(stAt(e, l), l).toBeLessThanOrEqual(-0.075);
       expect(stAt(e, l), l).toBeGreaterThanOrEqual(-0.125);
       expect(Math.abs(stAt(e, l, 60) - stAt(e, l)), `${l} horizontal`).toBeLessThan(0.03);
+    }
+    for (const l of ['V5', 'V6'] as const) {
+      expect(e.truth!.stMv[l], `${l} J+60 read-out`).toBeLessThanOrEqual(-0.075);
+      expect(e.truth!.stMv[l], `${l} J+60 read-out`).toBeGreaterThanOrEqual(-0.125);
     }
     for (const l of ALL) expect(stAt(e, l), l).toBeLessThan(0.1);
   });
@@ -373,8 +398,8 @@ describe('i1: measuring ST on the tracings', () => {
     for (const l of ['I', 'aVL'] as const) expect(stAt(hl, l), l).toBeGreaterThanOrEqual(0.1);
     const post = frame('i1', 0, 3);
     for (const l of ['V1', 'V2', 'V3'] as const) {
-      expect(stAt(post, l), l).toBeLessThan(-0.12);
-      expect(stAt(post, l), l).toBeGreaterThan(-0.19);
+      expect(stAt(post, l), l).toBeLessThanOrEqual(-0.125);
+      expect(stAt(post, l), l).toBeGreaterThanOrEqual(-0.175);
       expect(tw(post, l).max, `upright T ${l}`).toBeGreaterThan(0.1);
     }
     for (const l of ['V2', 'V3'] as const) expect(tUpright(post, l), `upright T ${l}`).toBe(true);
@@ -390,7 +415,7 @@ describe('i1: measuring ST on the tracings', () => {
     }
     const [lo, hi] = [played('i1', 0, 0.25), played('i1', 0, 0.36)];
     for (const l of ['V2', 'V3', 'V4'] as const) expect(stAt(hi, l), l).toBeGreaterThan(stAt(lo, l) + 0.05);
-    for (const l of ['III', 'aVF'] as const) expect(stAt(hi, l), l).toBeLessThan(stAt(lo, l) - 0.02);
+    for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(hi, l), l).toBeLessThan(stAt(lo, l) - 0.02);
     for (const v of [0.37, 0.45]) {
       const e = played('i1', 0, v);
       expect(stAt(e, 'V3'), `${v} V3`).toBeGreaterThanOrEqual(0.4);
