@@ -314,7 +314,7 @@ function diastolicP2p(e: Ecg, lead: StdLead): number {
 const median = (xs: readonly number[]): number => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)];
 
 describe('t1 on the tracings', () => {
-  it('worked AVRT: ~190/min, retrograde P′ ~115 ms after QRS onset, negative in I and aVL, positive in III and aVF', () => {
+  it('worked AVRT: ~190/min, retrograde P′ ~115 ms after QRS onset, negative in I and aVL, positive in III and aVF; in II it rides on the T upstroke with no hump of its own', () => {
     const e = ecgOf(blocksOf('t1', 'worked')[0].ecg);
     expect(Math.abs(e.truth!.hrBpm - 190)).toBeLessThan(5);
     const b = mid(e);
@@ -325,6 +325,11 @@ describe('t1 on the tracings', () => {
     expect(w('aVL')).toBeLessThan(-0.04);
     expect(w('III')).toBeGreaterThan(0.05);
     expect(w('aVF')).toBeGreaterThan(0.05);
+    expect(b.tPeak).not.toBeNull();
+    expect(b.pOn!).toBeGreaterThan(b.j);
+    expect(b.pOn!).toBeLessThan(b.tPeak!);
+    expect(at(e, 'II', b.tPeak!) - at(e, 'II', b.pOn!)).toBeGreaterThan(0.15);
+    for (let t = b.pOn!; t + 2 <= b.tPeak! - 10; t += 2) expect(at(e, 'II', t + 2), `II at P′ + ${Math.round(t - b.pOn!)} ms`).toBeGreaterThan(at(e, 'II', t) - 0.002);
   });
   it('hook AVNRT: pseudo-S in II right after the QRS', () => {
     const e = ecgOf(blocksOf('t1', 'hook')[0].ecg);
@@ -333,11 +338,12 @@ describe('t1 on the tracings', () => {
   });
   it('AVNRT in V1: the S upstroke ends in a small terminal positive wave (pseudo-r′, about half a millimetre, under 1 mm)', () => {
     const e = ecgOf(blocksOf('t1', 'ecg').find((x) => x.view?.layout === 'strip' && x.view.lead === 'V1')!.ecg);
-    const b = mid(e);
-    expect(excursion(e, 'V1', b.qrsOn, b.qrsOn + 30, b.qrsOn + 70)).toBeLessThan(-0.4);
-    const r = excursion(e, 'V1', b.qrsOn, b.qrsOff - 5, b.qrsOff + 20);
-    expect(r).toBeGreaterThan(0.035);
-    expect(r).toBeLessThan(0.1);
+    for (const b of e.truth!.beats.slice(1, -1)) {
+      expect(excursion(e, 'V1', b.qrsOn, b.qrsOn + 30, b.qrsOn + 70), `beat at ${Math.round(b.qrsOn)} ms`).toBeLessThan(-0.4);
+      const r = excursion(e, 'V1', b.qrsOn, b.qrsOff - 5, b.qrsOff + 20);
+      expect(r, `beat at ${Math.round(b.qrsOn)} ms`).toBeGreaterThan(0.04);
+      expect(r, `beat at ${Math.round(b.qrsOn)} ms`).toBeLessThan(0.06);
+    }
   });
   it('P′ film: sinus P upright in II with PR about 150 ms and RP > PR; AVNRT P′ starts inside the QRS with a pseudo-S in II; AVRT P′ after the QRS in II, RP about 115 ms and < P′R; AT P′ about 180/min, QRS about 90/min, each blocked P′ on the ST–T of the beat before', () => {
     const [sinus, avnrt, avrt, at21] = frames('t1', 0);
