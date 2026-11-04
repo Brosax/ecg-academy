@@ -94,32 +94,43 @@ const lesson: Lesson = {
         from: 0.06,
         to: 0.14,
         notes: [
-          { min: 0.06, max: 0.08, text: l('J 点在所有导联都 < 1 mm：正常，还算不上早期复极图形。', 'J under 1 mm in every lead: normal, not yet the formal pattern.', 'J por debajo de 1 mm en todas las derivaciones: normal, todavía no es el patrón formal.') },
           {
-            min: 0.09,
-            max: 0.09,
+            min: 0.06,
+            max: 0.08,
             text: l(
-              'II 的 J 点已过 1 mm，aVF 还没到：只有一个导联不算。以 PR 段为基线测量，不要目测。',
-              'J past 1 mm in II but not yet in aVF: one lead is not the pattern. Measure from the PR segment, not by eye.',
-              'J por encima de 1 mm en II pero aún no en aVF: una sola derivación no es el patrón. Mide desde el segmento PR, no a ojo.',
+              'J 标记前的**切迹**：II 约 3.5 mm、aVF 约 3 mm，QRS < 120 ms：图形已经在了。之后的 ST 还 < 1 mm。',
+              'The **notch** just before the J mark: about 3.5 mm in II, 3 mm in aVF, QRS < 120 ms. The pattern is already there; the ST after it is under 1 mm.',
+              'La **muesca** justo antes de la marca J: unos 3,5 mm en II y 3 mm en aVF, QRS < 120 ms. El patrón ya está; el ST que sigue está por debajo de 1 mm.',
             ),
           },
-          { min: 0.11, max: 0.14, text: l('II、aVF、V5 的 J 点 ≥ 1 mm，QRS < 120 ms：早期复极图形。无症状时仍是正常变异。', 'J ≥ 1 mm in II, aVF and V5 with a QRS < 120 ms: the early repolarisation pattern. Without symptoms it is still a normal variant.', 'J ≥ 1 mm en II, aVF y V5 con QRS < 120 ms: el patrón de repolarización precoz. Sin síntomas sigue siendo una variante normal.') },
+          {
+            min: 0.09,
+            max: 0.14,
+            text: l(
+              'II 在 J 标记处的 ST 也到了 1 mm，切迹仍约 3.5–4 mm。决定图形的是切迹，不是 ST。',
+              'The ST at the J mark in II now reaches 1 mm too; the notch is still about 3.5–4 mm. The notch decides the pattern, not the ST.',
+              'El ST en la marca J de II llega ahora también a 1 mm; la muesca sigue en unos 3,5–4 mm. Lo que define el patrón es la muesca, no el ST.',
+            ),
+          },
         ],
       },
       predict: {
-        question: l('一步步抬高 J 点。什么时候才算“早期复极图形”？', 'Raise the J point step by step. When does it become the early repolarisation pattern?', 'Sube el punto J poco a poco. ¿Cuándo pasa a ser el patrón de repolarización precoz?'),
+        question: l(
+          '一步步抬高切迹之后的 ST。早期复极图形从什么时候开始？',
+          'Raise the ST after the notch step by step. From when is this the early repolarisation pattern?',
+          'Sube poco a poco el ST que sigue a la muesca. ¿Desde cuándo es el patrón de repolarización precoz?',
+        ),
         options: [
-          l('≥ 2 个相邻下壁或侧壁导联达到 1 mm', 'When ≥ 2 contiguous inferior or lateral leads reach 1 mm', 'Cuando ≥ 2 derivaciones contiguas inferiores o laterales llegan a 1 mm'),
-          l('任何一个导联出现 ST 抬高', 'As soon as any lead shows ST elevation', 'En cuanto alguna derivación muestra elevación del ST'),
+          l('一开始就是：II 和 aVF 的切迹已 ≥ 1 mm', 'From the start: the notch is already ≥ 1 mm in II and aVF', 'Desde el principio: la muesca ya mide ≥ 1 mm en II y aVF'),
+          l('等 J 标记处的 ST 在两个导联达到 1 mm', 'Once the ST at the J mark reaches 1 mm in two leads', 'Cuando el ST en la marca J llegue a 1 mm en dos derivaciones'),
           l('只有出现症状时', 'Only once there are symptoms', 'Solo cuando hay síntomas'),
         ],
         answer: 0,
       },
       caption: l(
-        '慢慢抬高 J 点。早期复极图形看的是 J 点切迹或顿挫的高度和分布，不要求 ST 抬高。',
-        'Raise the J point step by step. The early repolarisation pattern is about the height and spread of the J notch or slur; ST elevation is not required.',
-        'Sube el punto J poco a poco. El patrón de repolarización precoz depende de la altura y la extensión de la muesca o el empastamiento J; no exige elevación del ST.',
+        '早期复极图形看 QRS 末端切迹或顿挫的峰高（≥ 2 个相邻下壁或侧壁导联 ≥ 1 mm），不要求 ST 抬高。',
+        'The early repolarisation pattern is the peak of the notch or slur at the end of the QRS (≥ 1 mm in ≥ 2 contiguous inferior or lateral leads); ST elevation is not required.',
+        'El patrón de repolarización precoz es el pico de la muesca o el empastamiento al final del QRS (≥ 1 mm en ≥ 2 derivaciones contiguas inferiores o laterales); no exige elevación del ST.',
       ),
     },
     {
