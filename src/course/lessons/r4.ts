@@ -301,9 +301,9 @@ const lesson: Lesson = {
         answer: 1,
       },
       caption: l(
-        '完全性阻滞要两件事：房率 > 室率，且没有一个 P 下传。逸搏的宽窄说出阻滞水平。',
-        'Complete block needs two things: an atrial rate above the ventricular rate, and not one conducted P. The width of the escape names the level.',
-        'El bloqueo completo exige dos cosas: frecuencia auricular mayor que la ventricular y ni una P conducida. La anchura del escape dice el nivel.',
+        '完全性阻滞要三件事：房率 > 室率，P 落在心动周期的每个时相，且没有一个 P 下传。逸搏的宽窄说出阻滞水平。',
+        'Complete block needs three things: an atrial rate above the ventricular rate, P waves falling in every part of the cycle, and not one of them conducted. The width of the escape names the level.',
+        'El bloqueo completo exige tres cosas: frecuencia auricular mayor que la ventricular, ondas P en todas las fases del ciclo y ni una P conducida. La anchura del escape dice el nivel.',
       ),
     },
     {
