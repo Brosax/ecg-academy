@@ -467,6 +467,49 @@ describe('o1: potassium on the tracings', () => {
   });
 });
 
+/** when the T rises past 15 % of its peak after the J point (ms): where the ST ends */
+function tStart(ecg: Ecg, lead: StdLead, b = midBeat(ecg)): number {
+  const base = baselineBefore(ecg.signal.leads[lead], ecg.signal.fs, b.qrsOn);
+  const t = tw(ecg, lead, b);
+  const peak = t.max >= -t.min ? t.max : t.min;
+  for (let x = b.j + 10; x < b.tOff; x += 2) if ((sample(ecg, lead, x) - base) / peak > 0.15) return x;
+  return b.tOff;
+}
+const stLength = (ecg: Ecg, lead: StdLead) => tStart(ecg, lead) - midBeat(ecg).j;
+const tWidth = (ecg: Ecg, lead: StdLead) => midBeat(ecg).tOff - tStart(ecg, lead);
+
+describe('o2: calcium on the tracings', () => {
+  it('calcium film (II, 75/min): QT ≈ 380 / 470 / 310 ms; low Ca stretches the ST with a T no wider; high Ca removes the ST with the T width unchanged', () => {
+    const [normal, low, high] = frames('o2', 0);
+    for (const e of [normal, low, high]) expect(Math.abs(e.truth!.hrBpm - 75)).toBeLessThan(1);
+    expect(Math.abs(normal.truth!.qtMs - 380)).toBeLessThan(5);
+    expect(Math.abs(low.truth!.qtMs - 470)).toBeLessThan(5);
+    expect(Math.abs(high.truth!.qtMs - 310)).toBeLessThan(5);
+    expect(stLength(low, 'II')).toBeGreaterThan(2 * stLength(normal, 'II'));
+    expect(tWidth(low, 'II')).toBeLessThanOrEqual(tWidth(normal, 'II'));
+    expect(stLength(high, 'II')).toBeLessThan(0.5 * stLength(normal, 'II'));
+    expect(Math.abs(tWidth(high, 'II') - tWidth(normal, 'II'))).toBeLessThan(15);
+  });
+  it('which-part film (V5): low Ca long by its ST; drug long QT ≈ 480 ms by a low, wide T; high Ca without ST; digoxin shorter QT with a scooped ST below the line, a low T and PR ≈ 190 ms', () => {
+    const normal = frames('o2', 0)[0];
+    const [low, drug, high, dig] = frames('o2', 1);
+    expect(low.truth!.qtMs).toBeGreaterThan(normal.truth!.qtMs + 60);
+    expect(stLength(low, 'V5')).toBeGreaterThan(2 * stLength(normal, 'V5'));
+    expect(tWidth(low, 'V5')).toBeLessThanOrEqual(tWidth(normal, 'V5'));
+    expect(Math.abs(drug.truth!.qtMs - 480)).toBeLessThan(5);
+    expect(tWidth(drug, 'V5')).toBeGreaterThan(1.1 * tWidth(normal, 'V5'));
+    expect(tWidth(drug, 'V5')).toBeGreaterThan(tWidth(low, 'V5') + 50);
+    expect(tw(drug, 'V5').max).toBeLessThan(0.5 * tw(normal, 'V5').max);
+    expect(high.truth!.qtMs).toBeLessThan(normal.truth!.qtMs - 50);
+    expect(stLength(high, 'V5')).toBeLessThan(40);
+    expect(dig.truth!.qtMs).toBeLessThan(normal.truth!.qtMs);
+    expect(stAt(dig, 'V5', 60)).toBeLessThan(-0.05);
+    expect(stAt(dig, 'V5', 60)).toBeLessThan(stAt(dig, 'V5'));
+    expect(tw(dig, 'V5').max).toBeLessThan(0.5 * tw(normal, 'V5').max);
+    expect(Math.abs(dig.truth!.prMs! - 190)).toBeLessThan(5);
+  });
+});
+
 describe('o3: digoxin on the tracings', () => {
   it('digoxin effect: shallow ST sag in V5–V6 (deeper at J+60 than at J, under 1.2 mm), QTcF < 410 ms, PR ≈ 190 ms', () => {
     for (const src of sourcesWith('o3', 'digoxin-effect')) {
