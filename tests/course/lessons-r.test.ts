@@ -780,6 +780,8 @@ describe('r5: premature beats on the tracings', () => {
     expect(markBeats('r5', 0, 1, 'st')).toEqual([k]);
     const j = t.beats[k];
     expect(j.qrsOff - j.qrsOn).toBeLessThan(110);
+    const r = rrs(e);
+    expect(r[k - 1], 'the PJC comes early').toBeLessThan(0.8 * r[k - 2]);
     const p = t.atrial.find((a) => a.kind === 'retrograde')!;
     expect(p.t).toBeGreaterThanOrEqual(j.qrsOff);
     expect(p.t).toBeLessThan(j.qrsOff + 40);
@@ -794,10 +796,34 @@ describe('r5: premature beats on the tracings', () => {
     expect(sinus.length).toBeGreaterThanOrEqual(5);
     for (const b of sinus) expect(Math.min(...earlySt(b)), `sinus beat at ${Math.round(b.qrsOn)} ms`).toBeGreaterThanOrEqual(0);
   });
+  it('worked: the bracket is the pause; the marked T carries the blocked P′, about 365 ms after the last sinus P (basic PP about 830 ms); step 4 marks one PP, then the early P′', () => {
+    const e = ecgOf(blocksOf('r5', 'worked')[0].ecg);
+    const t = e.truth!;
+    const b = t.beats;
+    const r = rrs(e);
+    const [k] = stepBeats('r5', 0, 'rr');
+    expect(r[k]).toBe(Math.max(...r));
+    expect(r[k]).toBeGreaterThan(1.3 * Math.min(...r));
+    expect(stepBeats('r5', 1, 't')).toEqual([k]);
+    const ectopic = t.atrial.filter((a) => a.kind === 'ectopic');
+    expect(ectopic).toHaveLength(1);
+    const p = ectopic[0];
+    expect(p.conductedTo).toBeNull();
+    expect(p.t, 'the P′ sits on the T of the marked beat').toBeGreaterThan(b[k].j);
+    expect(p.t).toBeLessThan(b[k].tOff);
+    const sinus = t.atrial.filter((a) => a.kind === 'sinus').map((a) => a.t);
+    const prev = Math.max(...sinus.filter((x) => x < p.t));
+    expect(Math.abs(prev - (b[k].pOn ?? 0))).toBeLessThan(1);
+    expect(Math.abs(p.t - prev - 365)).toBeLessThanOrEqual(5);
+    const basic = sinus.slice(1).flatMap((x, i) => (sinus[i] < p.t && x > p.t ? [] : [x - sinus[i]]));
+    expect(Math.abs(mean(basic) - 830)).toBeLessThanOrEqual(5);
+    expect(stepBeats('r5', 3, 'p')).toEqual([k - 1, k]);
+    expect(p.t - (b[k].pOn ?? 0), 'the P′ is early against the marked PP').toBeLessThan(0.5 * ((b[k].pOn ?? 0) - (b[k - 1].pOn ?? 0)));
+  });
   it('blocked-PAC bigeminy (grouping film frame 1): ventricles about 46/min, atria about 95/min, every P′ blocked', () => {
     const t = frames('r5', 1)[0].truth!;
-    expect(Math.abs(t.hrBpm - 46)).toBeLessThan(1);
-    expect(Math.abs((t.atrialRateBpm ?? 0) - 95)).toBeLessThan(1.5);
+    expect(Math.abs(t.hrBpm - 46)).toBeLessThanOrEqual(1);
+    expect(Math.abs((t.atrialRateBpm ?? 0) - 95)).toBeLessThanOrEqual(1);
     expect(t.atrial.filter((a) => a.kind === 'ectopic').every((a) => a.conductedTo === null)).toBe(true);
   });
   it('grouping film: bigeminy with a fixed coupling of about 480 ms; trigeminy with two alternating PVC shapes in II; a couplet; each mark sits on the beats its note names', () => {
@@ -831,17 +857,29 @@ describe('r5: premature beats on the tracings', () => {
     expect(pair[1]).toBe(pair[0] + 1);
     expect([cb[pair[0] - 1], cb[pair[0]], cb[pair[1]], cb[pair[1] + 1]].map((b) => b.kind), 'the marks cover the couplet').toEqual(['sinus', 'ventricular', 'ventricular', 'sinus']);
   });
-  it('contrast: aberrant PAC is wide with an R′ in V1 after an early P′; the PVC pause is fully compensatory', () => {
+  it('contrast: the marked P′ is early and starts the wide RBBB-shaped QRS (R′ in V1), with a less-than-compensatory pause; the marked PVC has no P′, the sinus P buried in its QRS, a fully compensatory pause, an RV outflow-tract origin', () => {
     const c = blocksOf('r5', 'contrast')[0];
     const a = ecgOf(c.left.ecg);
-    const ab = a.truth!.beats.find((b) => b.aberrant)!;
+    const ba = a.truth!.beats;
+    const k = ba.findIndex((b) => b.aberrant);
+    expect(sideBeats('r5', 0, 'left', 'p')).toEqual([k]);
+    const ab = ba[k];
+    expect(ab.kind).toBe('atrial');
     expect(ab.qrsOff - ab.qrsOn).toBeGreaterThanOrEqual(120);
     expect(ab.pOn).not.toBeNull();
     expect(hasRPrime(a, 'V1', ab)).toBe(true);
-    const beats = ecgOf(c.right.ecg).truth!.beats;
+    const ppA = (ba[k - 1].pOn ?? 0) - (ba[k - 2].pOn ?? 0);
+    expect((ab.pOn ?? 0) - (ba[k - 1].pOn ?? 0), 'the P′ is early').toBeLessThan(0.8 * ppA);
+    expect(ba[k + 1].qrsOn - ba[k - 1].qrsOn, 'less than compensatory').toBeLessThan(2 * (ba[k - 1].qrsOn - ba[k - 2].qrsOn) - 100);
+    const right = ecgOf(c.right.ecg);
+    const beats = right.truth!.beats;
     const i = beats.findIndex((b) => b.kind === 'ventricular');
+    expect(sideBeats('r5', 0, 'right', 'qrs')).toEqual([i]);
+    expect(beats[i].pOn).toBeNull();
+    expect(right.truth!.atrial.some((x) => x.kind === 'sinus' && !x.visible && x.t >= beats[i].qrsOn && x.t <= beats[i].qrsOff), 'the sinus P is buried in the PVC').toBe(true);
     const pp = beats[i - 1].qrsOn - beats[i - 2].qrsOn;
     expect(Math.abs(beats[i + 1].qrsOn - beats[i - 1].qrsOn - 2 * pp)).toBeLessThan(60);
+    expect(right.truth!.facts.origin).toBe('right ventricular outflow tract');
   });
 });
 
