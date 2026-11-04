@@ -988,7 +988,17 @@ describe('o11: pacing on the tracings', () => {
   /** the paced QRS without its spike */
   const body = (e: Ecg, l: StdLead, b = midBeat(e)) => span(e, l, b.qrsOn + 10, b.qrsOff, b);
   const paced = (e: Ecg) => e.truth!.beats.filter((b) => b.kind === 'paced-ventricular');
-  it('mode film: AAI 70/min with a P after each atrial stimulus and a narrow own QRS; VVI 60/min, QRS ≈ 160 ms negative in II, III, aVF and QS in V1 over AF; bipolar spike about a fifth; DDD AP–VP 64/min with both stimuli; AS–VP tracks sinus P waves with ventricular spikes only; CRT QRS ≈ 135 ms with lead I negative', () => {
+  /** stimulus times (ms): only a unipolar spike jumps more than 1 mV between two samples of lead II */
+  const stimuli = (e: Ecg): number[] => {
+    const a = e.signal.leads.II;
+    const t: number[] = [];
+    for (let i = 1; i < a.length; i++) {
+      const ms = (i * 1000) / e.signal.fs;
+      if (Math.abs(a[i] - a[i - 1]) > 1 && (t.length === 0 || ms - t[t.length - 1] > 30)) t.push(ms);
+    }
+    return t;
+  };
+  it('mode film: AAI 70/min with a P after each atrial stimulus and a narrow own QRS; VVI 60/min, QRS ≈ 160 ms negative in II, III, aVF and QS in V1 over AF; bipolar spike about a fifth; DDD AP–VP 64/min with both stimuli; AS–VP tracks sinus P waves with ventricular spikes only; CRT QRS ≈ 135 ms with lead I and V1 negative', () => {
     const [aai, vvi, bipolar, apvp, asvp, crt] = frames('o11', 0);
     expect(Math.abs(aai.truth!.hrBpm - 70)).toBeLessThan(1);
     expect(Math.abs(aai.truth!.qrsMs - 95)).toBeLessThan(5);
@@ -1017,12 +1027,18 @@ describe('o11: pacing on the tracings', () => {
     expect(body(crt, 'I').max).toBeLessThan(0.05);
     expect(body(crt, 'I').min).toBeLessThan(-0.3);
     expect(body(vvi, 'I').max).toBeGreaterThan(0.3);
+    // the pitfall: V1 is negative here although both leads capture
+    expect(body(crt, 'V1').max).toBeLessThan(0.05);
+    expect(body(crt, 'V1').min).toBeLessThan(-0.5);
   });
-  it('function film: working VVI 1000 ms spike to spike; every third stimulus uncaptured with a ≈ 36/min junctional escape; undersensing spikes after own QRS; an oversensing pause ≈ 2.6 s without spike or QRS', () => {
+  it('function film: working VVI 1000 ms spike to spike; every third spike in the strip has no QRS after it, with a ≈ 36/min junctional escape; undersensing spikes after own QRS; an oversensing pause ≈ 2.6 s without spike or QRS', () => {
     const [ok, noCapture, under, over] = frames('o11', 1);
     for (const r of rrs(ok)) expect(Math.abs(r - 1000)).toBeLessThan(5);
     expect(paced(ok).length).toBe(ok.truth!.beats.length);
     expect(noCapture.truth!.findings).toContain('pacing-failure-capture');
+    const followed = stimuli(noCapture).map((t) => noCapture.truth!.beats.some((b) => b.qrsOn >= t - 5 && b.qrsOn < t + 300));
+    expect(followed.length).toBeGreaterThanOrEqual(6);
+    expect(followed).toEqual(followed.map((_, i) => i % 3 !== 2));
     const long = rrs(noCapture).filter((r) => r > 1200);
     expect(long.length).toBeGreaterThanOrEqual(2);
     for (const r of long) expect(Math.abs(60000 / r - 36)).toBeLessThan(2);
