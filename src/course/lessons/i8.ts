@@ -168,17 +168,21 @@ const lesson: Lesson = {
           note: l(
             '7 个导联压低 ≥ 1 mm（最深约 2.5 mm），aVR 和 V1 抬高约 1 mm：弥漫性心内膜下缺血，左主干或三支病变可能更大。',
             'Seven leads down ≥ 1 mm (deepest about 2.5 mm), aVR and V1 up about 1 mm: diffuse subendocardial ischaemia; left main or three-vessel disease more likely.',
-            'Siete derivaciones con descenso ≥ 1 mm (máximo unos 2,5 mm), aVR y V1 elevadas 1 mm: isquemia subendocárdica difusa; más probable el tronco común o tres vasos.',
+            'Siete derivaciones con descenso ≥ 1 mm (máximo unos 2,5 mm), aVR y V1 elevadas alrededor de 1 mm: isquemia subendocárdica difusa; más probable el tronco común o tres vasos.',
           ),
           marks: [{ auto: 'j', lead: 'aVR' }, { auto: 'st60', lead: 'V4' }],
         },
       ],
       predict: {
-        question: l('这几种图形里，哪一种可以安排负荷试验？', 'Which of these patterns can go for a stress test?', '¿Cuál de estos patrones puede ir a una prueba de esfuerzo?'),
+        question: l(
+          'B 型 Wellens 来自同一处狭窄。V2–V3 会出现什么？',
+          'Wellens type B comes from the same stenosis. What will V2–V3 show?',
+          'El Wellens tipo B nace de la misma estenosis. ¿Qué mostrarán V2–V3?',
+        ),
         options: [
-          l('一种都不行', 'None of them', 'Ninguno'),
-          l('Wellens，因为现在不痛', 'Wellens, since the pain has gone', 'Wellens, porque ya no duele'),
-          l('aVR 抬高，只要血压稳定', 'aVR elevation, if the blood pressure is stable', 'La elevación en aVR, si la tensión es estable'),
+          l('深倒的 T 波，ST 平', 'Deep T inversion, flat ST', 'T negativa profunda, ST plano'),
+          l('ST 段抬高', 'ST elevation', 'Elevación del ST'),
+          l('Q 波，R 波消失', 'Q waves, the R lost', 'Ondas Q, sin R'),
         ],
         answer: 0,
       },

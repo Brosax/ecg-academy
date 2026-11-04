@@ -136,7 +136,7 @@ const lesson: Lesson = {
         },
       ],
       source:
-        'Thygesen K et al. Fourth Universal Definition of Myocardial Infarction. Eur Heart J 2019;40:237-269; Byrne RA et al. 2023 ESC Guidelines for the management of acute coronary syndromes. Eur Heart J 2023;44:3720-3826',
+        'Thygesen K et al. Fourth Universal Definition of Myocardial Infarction. Eur Heart J 2019;40:237-269; Byrne RA et al. 2023 ESC Guidelines for the management of acute coronary syndromes. Eur Heart J 2023;44:3720-3826; Amsterdam EA et al. 2014 AHA/ACC Guideline for the Management of Patients With Non-ST-Elevation Acute Coronary Syndromes. J Am Coll Cardiol 2014;64:e139-e228',
     },
     {
       kind: 'worked',
@@ -148,7 +148,7 @@ const lesson: Lesson = {
           body: l(
             '扫过V1–V6再扫肢体导联：V1约1 mm，V2约3 mm，**V3最高**，V4约2 mm。就在V3测。',
             'Sweep V1–V6, then the limb leads: about 1 mm in V1, 3 mm in V2, highest in **V3**, about 2 mm in V4. Measure in V3.',
-            'Recorre V1–V6 y luego las derivaciones de las extremidades: unos 1 mm en V1, 3 mm en V2, la máxima en **V3**, unos 2 mm en V4. Mide en V3.',
+            'Recorre V1–V6 y luego las derivaciones de las extremidades: alrededor de 1 mm en V1, 3 mm en V2, la máxima en **V3**, unos 2 mm en V4. Mide en V3.',
           ),
           marks: [{ auto: 'st', lead: 'V3' }],
           highlightLeads: ['V2', 'V3', 'V4'],
@@ -178,7 +178,7 @@ const lesson: Lesson = {
           body: l(
             'V2（约3 mm）和V4（约2 mm，界值1 mm）与V3同属前壁相邻组：**新出现、≥ 2个相邻导联、超过界值**——前壁STEMI。再看对侧：III和aVF压低约1 mm，同一个损伤矢量的背面。对应性改变支持急性闭塞而不是变异。下一步不是肌钙蛋白，而是再灌注。',
             'V2 (about 3 mm) and V4 (about 2 mm; limit 1 mm) share the anterior contiguous group with V3: **new, ≥ 2 contiguous leads, above threshold** — an anterior STEMI. Now the opposite side: III and aVF are depressed by about 1 mm, the back of the same injury vector. Reciprocity argues for acute occlusion, not a variant. The next step is reperfusion, not troponin.',
-            'V2 (unos 3 mm) y V4 (unos 2 mm; límite 1 mm) comparten con V3 el grupo contiguo anterior: **nuevo, ≥ 2 derivaciones contiguas, por encima del umbral**: IAMCEST anterior. Mira ahora el lado opuesto: III y aVF descienden unos 1 mm, el reverso del mismo vector de lesión. La reciprocidad apoya la oclusión aguda, no una variante. El siguiente paso es la reperfusión, no la troponina.',
+            'V2 (unos 3 mm) y V4 (unos 2 mm; límite 1 mm) comparten con V3 el grupo contiguo anterior: **nuevo, ≥ 2 derivaciones contiguas, por encima del umbral**: IAMCEST anterior. Mira ahora el lado opuesto: III y aVF descienden alrededor de 1 mm, el reverso del mismo vector de lesión. La reciprocidad apoya la oclusión aguda, no una variante. El siguiente paso es la reperfusión, no la troponina.',
           ),
           marks: [{ auto: 'st60', lead: 'V2' }, { auto: 'st60', lead: 'V4' }, { auto: 'st60', lead: 'III' }, { auto: 'st60', lead: 'aVF' }],
           highlightLeads: ['V2', 'V3', 'V4', 'III', 'aVF'],
@@ -269,7 +269,7 @@ const lesson: Lesson = {
           note: l(
             '67岁女性：V4–V6水平型压低约1 mm，没有导联抬高 ≥ 1 mm。相邻2个导联 ≥ 0.5 mm就是NSTE-ACS的缺血界值。',
             'Woman, 67: flat depression of about 1 mm in V4–V6, nothing up ≥ 1 mm. ≥ 0.5 mm in 2 contiguous leads is the NSTE-ACS ischaemia line.',
-            'Mujer de 67 años: descenso horizontal de unos 1 mm en V4–V6, nada elevado ≥ 1 mm. ≥ 0,5 mm en 2 contiguas es el umbral de isquemia del SCASEST.',
+            'Mujer de 67 años: descenso horizontal de alrededor de 1 mm en V4–V6, nada elevado ≥ 1 mm. ≥ 0,5 mm en 2 contiguas es el umbral de isquemia del SCASEST.',
           ),
           marks: [{ auto: 'st60', lead: 'V5' }, { auto: 'st60', lead: 'V6' }],
         },
@@ -279,7 +279,7 @@ const lesson: Lesson = {
           note: l(
             'III和aVF压低约1 mm，是V2–V4抬高的镜像。先找有没有抬高，再把压低称为缺血。',
             'III and aVF down about 1 mm: the mirror of V2–V4 up. Look for elevation before you call depression ischaemia.',
-            'III y aVF descienden unos 1 mm: el espejo de V2–V4 elevadas. Busca la elevación antes de llamar isquemia al descenso.',
+            'III y aVF descienden alrededor de 1 mm: el espejo de V2–V4 elevadas. Busca la elevación antes de llamar isquemia al descenso.',
           ),
           marks: [{ auto: 'j', lead: 'III' }, { auto: 'j', lead: 'aVF' }, { auto: 'j', lead: 'V3' }],
         },
@@ -398,6 +398,8 @@ const lesson: Lesson = {
     'Thygesen K et al. Fourth Universal Definition of Myocardial Infarction. Eur Heart J 2019;40:237-269',
     'Byrne RA et al. 2023 ESC Guidelines for the management of acute coronary syndromes. Eur Heart J 2023;44:3720-3826',
     'Wagner GS et al. AHA/ACCF/HRS Part VI: Acute ischemia/infarction. Circulation 2009;119:e262-e270',
+    'Amsterdam EA et al. 2014 AHA/ACC Guideline for the Management of Patients With Non-ST-Elevation Acute Coronary Syndromes. J Am Coll Cardiol 2014;64:e139-e228',
+    'Gulati M et al. 2021 AHA/ACC/ASE/CHEST/SAEM/SCCT/SCMR Guideline for the Evaluation and Diagnosis of Chest Pain. Circulation 2021;144:e368-e454',
     'Castellano et al. 2004',
   ],
 };

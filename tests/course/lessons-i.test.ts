@@ -310,15 +310,34 @@ const shape = (e: Ecg, l: AnyLead): string => {
 };
 /** T amplitude over QRS amplitude (Klein / Smith T/QRS for aneurysm vs acute STEMI) */
 const tOverQrs = (e: Ecg, l: AnyLead): number => Math.max(tw(e, l).max, -tw(e, l).min) / qrs(e, l).p2p;
+/** mean PR segment (P end → QRS onset) against the TP stretch just before the P wave (mV) */
+function prSegment(ecg: Ecg, lead: AnyLead, b = midBeat(ecg)): number {
+  const a = sig(ecg, lead);
+  const fs = ecg.signal.fs;
+  if (b.pOn === null || b.pOff === null) throw new Error('no P wave');
+  const mean = (t0: number, t1: number): number => {
+    const i0 = Math.round((t0 * fs) / 1000);
+    const i1 = Math.round((t1 * fs) / 1000);
+    let s = 0;
+    for (let i = i0; i <= i1; i++) s += a[i];
+    return s / (i1 - i0 + 1);
+  };
+  return mean(b.pOff + 5, b.qrsOn - 5) - mean(b.pOn - 50, b.pOn - 10);
+}
 
 describe('i1: measuring ST on the tracings', () => {
-  it('hook / worked (man of 58): J point ≥ 2 mm in V2–V3, highest in V3, ≥ 1 mm in V4, mirror ≤ −0.5 mm in III and aVF', () => {
+  it('hook / worked (man of 58): J point ≥ 2 mm in V2–V3, highest in V3, ≥ 1 mm in V4, V1 about 1 mm, mirror about −1 mm in III and aVF', () => {
     for (const src of [blocksOf('i1', 'hook')[0].ecg, blocksOf('i1', 'worked')[0].ecg]) {
       const e = ecgOf(src);
       for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.2);
       expect(stAt(e, 'V4')).toBeGreaterThanOrEqual(0.1);
       expect(CHEST.reduce((m, l) => (stAt(e, l) > stAt(e, m) ? l : m))).toBe('V3');
-      for (const l of ['III', 'aVF'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
+      expect(stAt(e, 'V1')).toBeGreaterThanOrEqual(0.075);
+      expect(stAt(e, 'V1')).toBeLessThanOrEqual(0.125);
+      for (const l of ['III', 'aVF'] as const) {
+        expect(stAt(e, l), l).toBeLessThanOrEqual(-0.075);
+        expect(stAt(e, l), l).toBeGreaterThanOrEqual(-0.125);
+      }
       expect(stAt(e, 'V3')).toBeLessThan(0.4);
     }
   });
@@ -337,7 +356,7 @@ describe('i1: measuring ST on the tracings', () => {
     expect(e.truth!.findings).toContain('st-depression-ischemic');
     for (const l of ['V4', 'V5', 'V6'] as const) {
       expect(stAt(e, l), l).toBeLessThanOrEqual(-0.075);
-      expect(stAt(e, l), l).toBeGreaterThan(-0.13);
+      expect(stAt(e, l), l).toBeGreaterThanOrEqual(-0.125);
       expect(Math.abs(stAt(e, l, 60) - stAt(e, l)), `${l} horizontal`).toBeLessThan(0.03);
     }
     for (const l of ALL) expect(stAt(e, l), l).toBeLessThan(0.1);
@@ -345,8 +364,8 @@ describe('i1: measuring ST on the tracings', () => {
   it('depression film: mirror III/aVF about −1 mm under V2–V4 elevation; high lateral II/III/aVF deeply down with I/aVL up; posterior V1–V3 about −1.5 mm with upright T and nothing elevated', () => {
     const mirror = frame('i1', 0, 1);
     for (const l of ['III', 'aVF'] as const) {
-      expect(stAt(mirror, l), l).toBeLessThan(-0.08);
-      expect(stAt(mirror, l), l).toBeGreaterThan(-0.14);
+      expect(stAt(mirror, l), l).toBeLessThanOrEqual(-0.075);
+      expect(stAt(mirror, l), l).toBeGreaterThanOrEqual(-0.125);
     }
     for (const l of ['V2', 'V3', 'V4'] as const) expect(stAt(mirror, l), l).toBeGreaterThanOrEqual(0.15);
     const hl = frame('i1', 0, 2);
@@ -408,7 +427,7 @@ describe('i2: territories on the tracings', () => {
     const e = frame('i2', 1, 1);
     expect(stAt(e, 'V4R')).toBeGreaterThan(0.1);
     expect(stAt(e, 'V1')).toBeGreaterThanOrEqual(0.1);
-    expect(stAt(e, 'V1')).toBeLessThan(0.14);
+    expect(stAt(e, 'V1')).toBeLessThanOrEqual(0.125);
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
   });
   it('posterolateral frame: V1–V2 depressed ≥ 0.5 mm ending in upright T waves (V1–V3), V5/V6 elevated ≥ 1 mm, I/aVL slightly up (< 1 mm); V8 ≥ 0.5 mm', () => {
@@ -438,8 +457,8 @@ describe('i2: territories on the tracings', () => {
     expect(stAt(lat, 'III')).toBeLessThan(-0.05);
     const rv = frame('i2', 0, 4);
     expect(rv.truth!.findings).toContain('rv-infarction');
-    expect(stAt(rv, 'V1')).toBeGreaterThanOrEqual(0.08);
-    expect(stAt(rv, 'V1')).toBeLessThan(0.14);
+    expect(stAt(rv, 'V1')).toBeGreaterThanOrEqual(0.075);
+    expect(stAt(rv, 'V1')).toBeLessThanOrEqual(0.125);
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(rv, l), l).toBeGreaterThanOrEqual(0.1);
   });
 });
@@ -482,7 +501,7 @@ describe('i3: anterior occlusion on the tracings', () => {
     }
     expect(tInverted(e, 'III')).toBe(true);
   });
-  it('family film: anteroseptal V1–V3 up with V2 highest, V4 < 1 mm, V5–V6/I/aVL flat; anterior V1–V4 up with V3 highest and an inferior mirror; anterolateral = the hook', () => {
+  it('family film: anteroseptal V1–V3 up with V2 highest, V4 < 1 mm, V5–V6/I/aVL flat; anteroseptal V1–V4 up with V3 highest and an inferior mirror; anterolateral = the hook', () => {
     const as = frame('i3', 0, 1);
     for (const l of ['V1', 'V2', 'V3'] as const) expect(stAt(as, l), l).toBeGreaterThanOrEqual(0.1);
     expect(CHEST.reduce((m, l) => (stAt(as, l) > stAt(as, m) ? l : m))).toBe('V2');
@@ -530,8 +549,8 @@ describe('i4: inferior and RV infarction on the tracings', () => {
     for (const l of ['V5', 'V6'] as const) expect(stAt(lcx, l), l).toBeGreaterThan(0.05);
     expect(stAt(lcx, 'aVL')).toBeLessThan(-0.05);
     const rv = frame('i4', 0, 2);
-    expect(stAt(rv, 'V1')).toBeGreaterThanOrEqual(0.08);
-    expect(stAt(rv, 'V1')).toBeLessThan(0.14);
+    expect(stAt(rv, 'V1')).toBeGreaterThanOrEqual(0.075);
+    expect(stAt(rv, 'V1')).toBeLessThanOrEqual(0.125);
     expect(stAt(rv, 'III')).toBeGreaterThan(stAt(rv, 'II'));
   });
   it('injury sweep notes: III above II and aVL below the baseline at every value; I and aVL deeper at 0.40 than at 0.25', () => {
@@ -567,7 +586,8 @@ describe('i5: lateral STEMI on the tracings', () => {
         expect(stAt(e, l), l).toBeLessThan(0.18);
       }
       expect(stAt(e, 'V3')).toBeLessThan(stAt(e, 'V2'));
-      expect(stAt(e, 'V3')).toBeGreaterThan(0.07);
+      expect(stAt(e, 'V3')).toBeGreaterThanOrEqual(0.075);
+      expect(stAt(e, 'V3')).toBeLessThanOrEqual(0.125);
       expect(stAt(e, 'V4')).toBeLessThan(0.1);
       for (const l of ['V5', 'V6'] as const) expect(Math.abs(stAt(e, l)), l).toBeLessThan(0.06);
       expect(stAt(e, 'III')).toBeLessThanOrEqual(-0.27);
@@ -581,22 +601,28 @@ describe('i5: lateral STEMI on the tracings', () => {
       for (const l of ['V5', 'V6'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.15);
       for (const l of ['I', 'aVL'] as const) {
         expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
+        expect(stAt(e, l), l).toBeLessThanOrEqual(0.125);
         expect(stAt(e, l), l).toBeLessThan(stAt(e, 'V5'));
       }
       expect(stAt(e, 'III')).toBeLessThanOrEqual(-0.1);
-      expect(stAt(e, 'III')).toBeGreaterThan(-0.15);
+      expect(stAt(e, 'III')).toBeGreaterThanOrEqual(-0.125);
       expect(Math.abs(stAt(e, 'II'))).toBeLessThan(0.03);
       for (const l of ['V1', 'V2', 'aVR'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
       for (const l of ['V1', 'V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThan(0.01);
     }
   });
-  it('injury sweep notes (J point): aVL ≥ 1 mm with I under 1 mm at 0.15–0.21; I and aVL both ≥ 1 mm at 0.22–0.28; III deeper than aVL is high at every value', () => {
+  it('injury sweep notes (J point): aVL ≥ 1 mm with I under 1 mm at 0.15–0.21; I and aVL both ≥ 1 mm at 0.22–0.28 with III the biggest deflection of all twelve leads; III deeper than aVL is high at every value', () => {
     for (const v of [0.15, 0.21]) {
       const e = played('i5', 0, v);
       expect(stAt(e, 'aVL'), `${v} aVL`).toBeGreaterThanOrEqual(0.1);
       expect(stAt(e, 'I'), `${v} I`).toBeLessThan(0.1);
     }
-    for (const v of [0.22, 0.28]) for (const l of ['I', 'aVL'] as const) expect(stAt(played('i5', 0, v), l), `${v} ${l}`).toBeGreaterThanOrEqual(0.1);
+    for (const v of [0.22, 0.28]) {
+      const e = played('i5', 0, v);
+      for (const l of ['I', 'aVL'] as const) expect(stAt(e, l), `${v} ${l}`).toBeGreaterThanOrEqual(0.1);
+      const others = ALL.filter((l) => l !== 'III').map((l) => Math.abs(stAt(e, l)));
+      expect(-stAt(e, 'III'), `${v}: III the biggest deflection`).toBeGreaterThan(Math.max(...others));
+    }
     for (const v of [0.15, 0.21, 0.22, 0.28]) {
       const e = played('i5', 0, v);
       expect(-stAt(e, 'III'), `${v}`).toBeGreaterThan(stAt(e, 'aVL'));
@@ -612,11 +638,11 @@ describe('i5: lateral STEMI on the tracings', () => {
       expect(stAt(e, l), l).toBeLessThanOrEqual(0.2);
     }
     for (const l of ['I', 'aVL'] as const) {
-      expect(stAt(e, l), l).toBeGreaterThan(0.08);
-      expect(stAt(e, l), l).toBeLessThan(0.14);
+      expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.075);
+      expect(stAt(e, l), l).toBeLessThanOrEqual(0.125);
     }
-    expect(stAt(e, 'III')).toBeLessThan(-0.08);
-    expect(stAt(e, 'III')).toBeGreaterThan(-0.14);
+    expect(stAt(e, 'III')).toBeLessThanOrEqual(-0.075);
+    expect(stAt(e, 'III')).toBeGreaterThanOrEqual(-0.125);
     expect(Math.abs(stAt(e, 'II'))).toBeLessThan(0.03);
     for (const l of ['V1', 'V2'] as const) expect(stAt(e, l), l).toBeLessThan(-0.05);
   });
@@ -627,7 +653,8 @@ describe('i5: lateral STEMI on the tracings', () => {
     expect(stAt(e, 'V2')).toBeGreaterThan(0.12);
     expect(stAt(e, 'V2')).toBeGreaterThanOrEqual(stAt(e, 'V1') - 0.02);
     expect(stAt(e, 'V3')).toBeLessThan(stAt(e, 'V2'));
-    expect(stAt(e, 'V3')).toBeGreaterThan(0.07);
+    expect(stAt(e, 'V3')).toBeGreaterThanOrEqual(0.075);
+    expect(stAt(e, 'V3')).toBeLessThanOrEqual(0.125);
     expect(stAt(e, 'V4')).toBeLessThan(0.1);
     for (const l of ['V5', 'V6'] as const) expect(Math.abs(stAt(e, l)), l).toBeLessThan(0.06);
   });
@@ -644,7 +671,8 @@ describe('i6: posterior infarction on the tracings', () => {
     for (const src of [blocksOf('i6', 'hook')[0].ecg, blocksOf('i6', 'worked')[0].ecg]) {
       const e = ecgOf(src);
       for (const l of ['V1', 'V2'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.12);
-      expect(stAt(e, 'V3')).toBeLessThan(-0.07);
+      expect(stAt(e, 'V3')).toBeLessThanOrEqual(-0.075);
+      expect(stAt(e, 'V3')).toBeGreaterThanOrEqual(-0.125);
       expect(stAt(e, 'V3')).toBeGreaterThan(Math.min(stAt(e, 'V1'), stAt(e, 'V2')));
       expect(Math.abs(stAt(e, 'V4'))).toBeLessThan(0.03);
       for (const l of ['V5', 'V6'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
@@ -700,11 +728,16 @@ describe('i6: posterior infarction on the tracings', () => {
 });
 
 describe('i7: subtle occlusion on the tracings', () => {
-  it('hook / serial 1 (man of 52): V2–V3 under the 2-mm limit, V3 about 1 mm, bulky T in V3, faint mirror in III', () => {
+  it('hook / "below the line" frame (man of 52): V2–V4 up to about 1 mm, most in V3, under the 2-mm limit, bulky T in V3, faint mirror in III', () => {
     for (const src of [blocksOf('i7', 'hook')[0].ecg, blocksOf('i7', 'film')[0].frames[1].ecg]) {
       const e = ecgOf(src);
       for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThan(0.2);
-      expect(stAt(e, 'V3')).toBeGreaterThan(0.08);
+      expect(stAt(e, 'V3')).toBeGreaterThanOrEqual(0.075);
+      expect(stAt(e, 'V3')).toBeLessThanOrEqual(0.125);
+      for (const l of ['V2', 'V4'] as const) {
+        expect(stAt(e, l), l).toBeGreaterThan(0.05);
+        expect(stAt(e, l), l).toBeLessThan(stAt(e, 'V3'));
+      }
       expect(tw(e, 'V3').max).toBeGreaterThan(0.5 * qrs(e, 'V3').p2p);
       expect(stAt(e, 'III')).toBeLessThan(-0.02);
     }
@@ -716,9 +749,12 @@ describe('i7: subtle occlusion on the tracings', () => {
       expect(stAt(e, 'V2')).toBeLessThan(0.1);
     }
   });
-  it('contrast B (early repolarisation): V2–V3 about 1.5 mm at J+60 (slightly above A, under 2.5 mm), inferior J notches, no depression outside aVR', () => {
+  it('contrast A (occlusion) elevation at most about 1 mm (V3 the highest); B (early repolarisation): V2–V3 about 1.5 mm at J+60 (slightly above A, under 2.5 mm), inferior J notches, no depression outside aVR', () => {
     const e = ecgOf(blocksOf('i7', 'contrast')[0].right.ecg);
     const a = ecgOf(blocksOf('i7', 'contrast')[0].left.ecg);
+    expect(CHEST.reduce((m, l) => (stAt(a, l) > stAt(a, m) ? l : m))).toBe('V3');
+    expect(stAt(a, 'V3')).toBeGreaterThanOrEqual(0.075);
+    expect(stAt(a, 'V3')).toBeLessThanOrEqual(0.125);
     for (const l of ['V2', 'V3'] as const) {
       expect(stAt(e, l), l).toBeLessThan(0.25);
       expect(stAt(e, l, 60), l).toBeGreaterThan(0.13);
@@ -734,7 +770,7 @@ describe('i7: subtle occlusion on the tracings', () => {
     expect(tq(e, 'V3')).toBeLessThan(tq(a, 'V3'));
     expect(tq(e, 'V3')).toBeGreaterThan(0.75);
   });
-  it('serial film (same seed, hyperacute then acute): first J under 1 mm in V2–V4 with the V3 T almost as tall as the R and T inverted in III; repeat V2–V3 ≥ 2 mm, V3 about 3.5 mm, III and aVF about −1 mm, the inferior mirror deepened', () => {
+  it('serial film (same seed, hyperacute then acute): first J under 1 mm in V2–V4 with the V3 T almost as tall as the R and T inverted in III; repeat V2–V3 ≥ 2 mm, V3 about 3.5 mm, III and aVF 1–1.5 mm down, the inferior mirror deepened', () => {
     const [f1, f2] = blocksOf('i7', 'film')[1].frames;
     if (f1.ecg.kind !== 'synth' || f2.ecg.kind !== 'synth') throw new Error('synthetic frames');
     expect(f1.ecg.req.seed).toBe(f2.ecg.req.seed);
@@ -748,17 +784,17 @@ describe('i7: subtle occlusion on the tracings', () => {
     expect(stAt(e, 'V3')).toBeGreaterThan(0.32);
     expect(stAt(e, 'V3')).toBeLessThan(0.38);
     for (const l of ['III', 'aVF'] as const) {
-      expect(stAt(e, l), l).toBeLessThan(-0.08);
-      expect(stAt(e, l), l).toBeGreaterThan(-0.14);
+      expect(stAt(e, l), l).toBeLessThanOrEqual(-0.1);
+      expect(stAt(e, l), l).toBeGreaterThanOrEqual(-0.15);
     }
     expect(stAt(e, 'III')).toBeLessThan(stAt(first, 'III') - 0.05);
   });
-  it('T-beside-QRS film: normal V3 T under half the R; hyperkalaemia T tall but narrow (half-height width under 0.7 of the hyperacute T) with PR ≥ 200 ms and QRS 110–120 ms', () => {
+  it('T-beside-QRS film: normal V3 T under half the R; below the line V3 about 1 mm; hyperacute (seed 922) J under 1 mm in V2–V4, broad-based V3 T (half-height width ≥ 100 ms) and T inverted in III; hyperkalaemia T tall but narrow (half-height width under 0.7 of the hyperacute T) with PR ≥ 200 ms and QRS 110–120 ms', () => {
     const normal = frame('i7', 0, 0);
     expect(tw(normal, 'V3').max).toBeLessThan(0.5 * qrs(normal, 'V3').max);
     const borderline = frame('i7', 0, 1);
-    expect(stAt(borderline, 'V3')).toBeGreaterThan(0.08);
-    expect(stAt(borderline, 'V3')).toBeLessThan(0.13);
+    expect(stAt(borderline, 'V3')).toBeGreaterThanOrEqual(0.075);
+    expect(stAt(borderline, 'V3')).toBeLessThanOrEqual(0.125);
     expect(tw(borderline, 'V3').max).toBeGreaterThan(qrs(borderline, 'V3').max);
     expect(tInverted(borderline, 'III')).toBe(true);
     const halfWidth = (e: Ecg, l: AnyLead): number => {
@@ -772,6 +808,12 @@ describe('i7: subtle occlusion on the tracings', () => {
       return (n * 1000) / fs;
     };
     const [hyperacute, k] = [frame('i7', 0, 2), frame('i7', 0, 3)];
+    const hSrc = blocksOf('i7', 'film')[0].frames[2].ecg;
+    expect(hSrc.kind === 'synth' && hSrc.req.seed).toBe(922);
+    for (const l of ['V2', 'V3', 'V4'] as const) expect(stAt(hyperacute, l), l).toBeLessThan(0.1);
+    expect(tw(hyperacute, 'V3').max).toBeGreaterThan(qrs(hyperacute, 'V3').max);
+    expect(halfWidth(hyperacute, 'V3')).toBeGreaterThanOrEqual(100);
+    expect(tInverted(hyperacute, 'III')).toBe(true);
     expect(tw(k, 'V3').max).toBeGreaterThan(qrs(k, 'V3').max);
     expect(halfWidth(k, 'V3')).toBeLessThan(0.7 * halfWidth(hyperacute, 'V3'));
     expect(k.truth!.prMs!).toBeGreaterThanOrEqual(200);
@@ -792,41 +834,50 @@ describe('i8: Wellens, de Winter, aVR on the tracings', () => {
     for (const l of ['V2', 'V3'] as const) expect(Math.abs(stAt(e, l)), l).toBeLessThan(0.05);
     expect(qrs(e, 'V3').max).toBeGreaterThan(0.5);
   });
-  it('Wellens B frame: T inversion about 7 mm deep in V2–V3, reaching V1 and V4, ST flat, R preserved; type A frame = the hook', () => {
+  it('Wellens B frame: T inversion about 7 mm deep in V2–V3 with no real upright start (T max under a tenth of the depth and under half the type A upright part), reaching V1 and V4, ST flat, R preserved; type A frame = the hook', () => {
     expect(blocksOf('i8', 'film')[0].frames[0].ecg).toEqual(blocksOf('i8', 'hook')[0].ecg);
     const e = frame('i8', 0, 1);
+    const typeA = frame('i8', 0, 0);
     for (const l of ['V2', 'V3'] as const) {
       expect(tw(e, l).min, l).toBeLessThan(-0.62);
       expect(tw(e, l).min, l).toBeGreaterThan(-0.78);
       expect(Math.abs(stAt(e, l)), l).toBeLessThan(0.03);
+      expect(tw(e, l).max, `${l} upright start`).toBeLessThan(0.1 * -tw(e, l).min);
+      expect(tw(e, l).max, `${l} upright start against type A`).toBeLessThan(0.5 * tw(typeA, l).max);
     }
     expect(qrs(e, 'V3').max).toBeGreaterThan(0.5);
     for (const l of ['V1', 'V4'] as const) expect(tw(e, l).min, l).toBeLessThan(-0.1);
   });
-  it('de Winter frame: J depressed > 2 mm in V2–V4 and upsloping, tall T in V3, slight elevation in aVR', () => {
+  it('de Winter frame: J depressed > 2 mm in V2–V4 and upsloping, tall T in V3, slight elevation in aVR, no chest elevation (V1–V6 below the baseline at J, J+60 and all through J → J+80 ms)', () => {
     const e = frame('i8', 0, 2);
+    const b = midBeat(e);
     for (const l of ['V2', 'V3', 'V4'] as const) {
       expect(stAt(e, l), l).toBeLessThan(-0.2);
       expect(stAt(e, l, 60), l).toBeGreaterThan(stAt(e, l));
     }
     expect(tw(e, 'V3').max).toBeGreaterThan(0.5);
     expect(stAt(e, 'aVR')).toBeGreaterThan(0.05);
-    for (const l of CHEST) expect(stAt(e, l), l).toBeLessThan(0.05);
+    for (const l of CHEST) {
+      expect(stAt(e, l), l).toBeLessThan(0.05);
+      expect(stAt(e, l, 60), `${l} J+60`).toBeLessThan(0.05);
+      expect(span(e, l, b.j, b.j + 80, b).max, `${l} J → J+80`).toBeLessThan(0.05);
+    }
   });
   it('aVR + diffuse depression: ≥ 6 leads depressed ≥ 1 mm at J (II, III, aVF, V2–V5), aVR about 1 mm up, V1 depressed', () => {
     const e = ecgOf(blocksOf('i8', 'worked')[0].ecg);
     const depressed = ALL.filter((l) => stAt(e, l) <= -0.1);
     expect(depressed.length).toBeGreaterThanOrEqual(6);
     for (const l of ['II', 'III', 'aVF', 'V2', 'V3', 'V4', 'V5'] as const) expect(depressed, l).toContain(l);
-    expect(stAt(e, 'aVR')).toBeGreaterThan(0.07);
+    expect(stAt(e, 'aVR')).toBeGreaterThanOrEqual(0.075);
+    expect(stAt(e, 'aVR')).toBeLessThanOrEqual(0.125);
     expect(stAt(e, 'V1')).toBeLessThan(0);
   });
   it('heavier frame: seven leads depressed ≥ 1 mm at J, aVR and V1 about 1 mm up, depression to about 2.5 mm', () => {
     const e = frame('i8', 0, 3);
     expect(ALL.filter((l) => stAt(e, l) <= -0.1).length).toBe(7);
     for (const l of ['aVR', 'V1'] as const) {
-      expect(stAt(e, l), l).toBeGreaterThan(0.07);
-      expect(stAt(e, l), l).toBeLessThan(0.14);
+      expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.075);
+      expect(stAt(e, l), l).toBeLessThanOrEqual(0.125);
     }
     expect(Math.min(...ALL.map((l) => stAt(e, l, 60)))).toBeLessThan(-0.22);
     expect(Math.min(...ALL.map((l) => stAt(e, l, 60)))).toBeGreaterThan(-0.28);
@@ -859,7 +910,8 @@ describe('i9: evolution, Q waves and aneurysm on the tracings', () => {
     expect(stAt(p2, 'V2')).toBeGreaterThanOrEqual(0.2);
     expect(qDurMs(p3, 'V2')).toBeGreaterThanOrEqual(20);
     expect(tw(p3, 'V2').min).toBeLessThan(-0.1);
-    expect(stAt(p3, 'V2')).toBeGreaterThan(0.05);
+    expect(stAt(p3, 'V2')).toBeGreaterThanOrEqual(0.075);
+    expect(stAt(p3, 'V2')).toBeLessThanOrEqual(0.125);
     const old = ecgOf(blocksOf('i9', 'hook')[0].ecg);
     for (const l of ['V2', 'V3'] as const) {
       expect(qrs(old, l).max, l).toBeLessThan(0.05);
@@ -952,9 +1004,12 @@ describe('i10: confounders on the tracings', () => {
       expect(tUpright(p, l), l).toBe(true);
     }
   });
-  it('LVH frame: discordant V1–V2 elevation well under 25 % of the S, lateral depression with inverted T', () => {
+  it('LVH frame: discordant V1–V2 elevation well under 25 % of the S (ST/S above −0.15), lateral depression with inverted T', () => {
     const e = frame('i10', 1, 1);
-    for (const l of ['V1', 'V2'] as const) expect(stOverS(e, l), l).toBeGreaterThan(-0.25);
+    for (const l of ['V1', 'V2'] as const) {
+      expect(stOverS(e, l), l).toBeLessThan(0);
+      expect(stOverS(e, l), l).toBeGreaterThan(-0.15);
+    }
     for (const l of ['V5', 'V6'] as const) {
       expect(stAt(e, l, 60), l).toBeLessThan(-0.05);
       expect(tInverted(e, l), l).toBe(true);
@@ -973,12 +1028,14 @@ describe('i11: mimics on the tracings', () => {
     expect(stAt(e, 'aVR')).toBeLessThan(-0.05);
     for (const l of ALL.filter((x) => x !== 'aVR')) expect(stAt(e, l), l).toBeGreaterThan(-0.05);
   });
-  it('pericarditis (hook, contrast A): widespread elevation incl. II and V2–V6, aVR depressed, no other lead depressed', () => {
+  it('pericarditis (hook, contrast A): widespread elevation incl. II and V2–V6, aVR depressed, no other lead depressed; PR segment down in II and V4–V6, up in aVR', () => {
     for (const src of [blocksOf('i11', 'hook')[0].ecg, blocksOf('i11', 'contrast')[0].left.ecg]) {
       const e = ecgOf(src);
       for (const l of ['II', 'aVF', 'V2', 'V3', 'V4', 'V5', 'V6'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
       expect(stAt(e, 'aVR')).toBeLessThan(-0.05);
       for (const l of ALL.filter((x) => x !== 'aVR')) expect(stAt(e, l), l).toBeGreaterThan(-0.02);
+      for (const l of ['II', 'V4', 'V5', 'V6'] as const) expect(prSegment(e, l), `PR ${l}`).toBeLessThan(-0.05);
+      expect(prSegment(e, 'aVR'), 'PR aVR').toBeGreaterThan(0.05);
     }
   });
   it('contrast B (anterior STEMI): V1–V4 elevated, reciprocal depression in II, III, aVF', () => {
@@ -986,11 +1043,15 @@ describe('i11: mimics on the tracings', () => {
     for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l), l).toBeLessThan(-0.05);
   });
-  it('takotsubo: V3–V6 elevated, V1 not, aVR depressed, inferior leads nearly isoelectric; late: QTc (Fridericia) about 505 ms with T inverted in V4–V6', () => {
+  it('takotsubo: V3–V6 elevated, V1 not, aVR depressed, I, aVL and II slightly up (under 1 mm), III and aVF nearly isoelectric; late: QTc (Fridericia) about 505 ms with T inverted in V4–V6', () => {
     const e = ecgOf(blocksOf('i11', 'worked')[0].ecg);
     for (const l of ['V3', 'V4', 'V5', 'V6'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
     expect(stAt(e, 'V1')).toBeLessThan(0.05);
     expect(stAt(e, 'aVR')).toBeLessThan(-0.03);
+    for (const l of ['I', 'aVL', 'II'] as const) {
+      expect(stAt(e, l), l).toBeGreaterThan(0.03);
+      expect(stAt(e, l), l).toBeLessThan(0.1);
+    }
     for (const l of ['III', 'aVF'] as const) expect(Math.abs(stAt(e, l)), l).toBeLessThan(0.05);
     const late = frame('i11', 0, 1);
     expect(Math.abs(late.truth!.qtcFridericiaMs - 505)).toBeLessThan(20);
@@ -1028,8 +1089,9 @@ describe('i11: mimics on the tracings', () => {
     }
     expect(Math.abs(stAt(e, 'V3'))).toBeLessThan(0.05);
   });
-  it('hyperkalaemia: tall T in V3–V5 (taller than the R in V4), PR ≥ 200 ms, QRS 110–120 ms; severe: no P wave, QRS > 150 ms', () => {
+  it('hyperkalaemia: tall T in V3–V5 (taller than the R in V4) and no ST elevation at J in any lead (so the mimic film does not call its frames ST elevations), PR ≥ 200 ms, QRS 110–120 ms; severe: no P wave, QRS > 150 ms', () => {
     const e = frame('i11', 1, 3);
+    for (const l of ALL) expect(stAt(e, l), l).toBeLessThan(0.05);
     expect(tw(e, 'V4').max).toBeGreaterThan(qrs(e, 'V4').max);
     expect(e.truth!.prMs!).toBeGreaterThanOrEqual(200);
     expect(e.truth!.qrsMs).toBeGreaterThanOrEqual(110);
@@ -1038,7 +1100,7 @@ describe('i11: mimics on the tracings', () => {
     expect(s.truth!.prMs).toBeNull();
     expect(s.truth!.qrsMs).toBeGreaterThan(150);
   });
-  it('aneurysm: ST elevation over QS in V2–V3 with T/QRS < 0.36 in V1–V4', () => {
+  it('aneurysm: ST elevation over wide Q waves (≥ 40 ms) in V2–V3 with T/QRS < 0.36 in V1–V4', () => {
     const e = frame('i11', 1, 5);
     for (const l of ['V2', 'V3'] as const) {
       expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);

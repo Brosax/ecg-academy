@@ -112,9 +112,9 @@ const lesson: Lesson = {
         answer: 0,
       },
       caption: l(
-        '开头那份图，加一个损伤电流旋钮。在 I 和 aVL，**1 mm 就够**；III 的镜像总是动得更多。',
-        'The opening tracing with an injury dial. In I and aVL **1 mm is enough**; the mirror in III always moves more.',
-        'El trazado inicial con un mando de lesión. En I y aVL **basta con 1 mm**; el espejo de III siempre se mueve más.',
+        '开头那份图，加一个损伤电流旋钮。在 I 和 aVL，**1 mm 就够**；在这份图上，III 的镜像动得更多。',
+        'The opening tracing with an injury dial. In I and aVL **1 mm is enough**; on this tracing the mirror in III moves more.',
+        'El trazado inicial con un mando de lesión. En I y aVL **basta con 1 mm**; en este trazado el espejo de III se mueve más.',
       ),
     },
     {
@@ -234,7 +234,7 @@ const lesson: Lesson = {
       point: l(
         '同一面侧壁，两套导联：A 的损伤位置**更高**（D1 供血的高前壁/高侧壁），所以朝左上看的 I、aVL 抬高（并带上 V2），V5–V6 平坦，III 导联镜像压低最深（约 3 mm，II、aVF 也压低）；B 的损伤**更低更靠后**（钝缘支区域），V5、V6 抬高最明显（约 2 mm），I/aVL 只有约 1 mm，III 的压低变浅（约 1 mm，II 不受累），镜像还延伸到 V1–V2。两幅图侧壁导联的抬高都只有 1–2.5 mm——在 I/aVL，**1 mm 就够**。读图时永远同时问两件事：哪几个导联在抬高？它们连成的是哪一侧、哪一层的侧壁？',
         'One lateral wall, two sets of leads: the injury in A sits **higher** (the high anterior / high lateral wall fed by D1), so I and aVL, which look up and left, elevate (together with V2), V5–V6 stay flat and lead III shows the deepest mirror (about 3 mm, with II and aVF); in B the injury is **lower and more posterior** (obtuse marginal territory), V5 and V6 elevate most (about 2 mm), I/aVL reach only about 1 mm, the depression in III is shallower (about 1 mm, II spared) and the mirror extends to V1–V2. Both tracings elevate the lateral leads by only 1–2.5 mm — in I and aVL, **1 mm is enough**. Always ask two things at once: which leads are elevated, and which side and level of the lateral wall do they string together?',
-        'Una misma pared lateral, dos juegos de derivaciones: la lesión de A está **más alta** (la pared anterior alta / lateral alta irrigada por D1), así que I y aVL, que miran hacia arriba a la izquierda, se elevan (junto con V2), V5-V6 quedan planas y la III muestra el espejo más profundo (unos 3 mm, con II y aVF); en B la lesión está **más abajo y más atrás** (territorio de la marginal obtusa), V5 y V6 se elevan más (unos 2 mm), I/aVL llegan solo a 1 mm, el descenso de III es menor (alrededor de 1 mm, II respetada) y el espejo se extiende a V1-V2. Ambos trazados elevan las derivaciones laterales solo 1-2,5 mm: en I y aVL, **con 1 mm basta**. Pregúntate siempre dos cosas a la vez: ¿qué derivaciones se elevan y qué lado y nivel de la pared lateral unen?',
+        'Una misma pared lateral, dos juegos de derivaciones: la lesión de A está **más alta** (la pared anterior alta / lateral alta irrigada por D1), así que I y aVL, que miran hacia arriba a la izquierda, se elevan (junto con V2), V5-V6 quedan planas y la III muestra el espejo más profundo (unos 3 mm, con II y aVF); en B la lesión está **más abajo y más atrás** (territorio de la marginal obtusa), V5 y V6 se elevan más (unos 2 mm), I/aVL solo rondan 1 mm, el descenso de III es menor (alrededor de 1 mm, II respetada) y el espejo se extiende a V1-V2. Ambos trazados elevan las derivaciones laterales solo 1-2,5 mm: en I y aVL, **con 1 mm basta**. Pregúntate siempre dos cosas a la vez: ¿qué derivaciones se elevan y qué lado y nivel de la pared lateral unen?',
       ),
     },
     {
@@ -258,7 +258,7 @@ const lesson: Lesson = {
           note: l(
             'V5–V6 抬高最多（1.5–2 mm），I、aVL 约 1 mm；III 约 1 mm 压低而 II 不受累，V1–V2 也压低 → LCx / 钝缘支。',
             'V5–V6 up most (1.5–2 mm), I and aVL about 1 mm; III about 1 mm down with II spared, V1–V2 down too → LCx / obtuse marginal.',
-            'V5–V6 las más elevadas (1,5–2 mm), I y aVL alrededor de 1 mm; III baja 1 mm con II respetada, y V1–V2 también bajan → Cx / marginal obtusa.',
+            'V5–V6 las más elevadas (1,5–2 mm), I y aVL alrededor de 1 mm; III baja alrededor de 1 mm con II respetada, y V1–V2 también bajan → Cx / marginal obtusa.',
           ),
           marks: [{ auto: 'j', lead: 'V6' }, { auto: 'j', lead: 'III' }],
         },

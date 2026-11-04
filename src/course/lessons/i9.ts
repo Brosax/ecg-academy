@@ -107,7 +107,7 @@ const lesson: Lesson = {
           label: l('数周后', 'Weeks later', 'Semanas después'),
           ecg: synth('stemi-evolution', 964, undefined, 'old'),
           note: l(
-            '数周后：V1–V3 呈 QS，ST 回到基线，和开头那份图一样。Q 波通常终身保留。',
+            '数周后：V1–V3 呈 QS，ST 回到基线，和开头那份图相似。Q 波通常终身保留。',
             'Weeks later: QS in V1–V3, ST back on the baseline, like the opening tracing. The Q usually stays for life.',
             'Semanas después: QS en V1–V3, ST de vuelta a la línea de base, como el trazado inicial. La Q suele quedarse de por vida.',
           ),
