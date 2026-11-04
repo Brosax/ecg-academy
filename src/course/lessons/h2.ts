@@ -190,7 +190,7 @@ const lesson: Lesson = {
           note: l(
             'QRS 与上一帧相同。V6 的 ST 压低约 1 mm、T 倒置约 4 mm，与高 R 方向相反；V1–V2 镜像 ST 抬高约 2 mm。',
             'The QRS is the same as in the last frame. In V6 the ST drops about 1 mm and the T inverts about 4 mm, against the tall R; V1–V2 mirror it with about 2 mm of ST elevation.',
-            'El QRS es el mismo del fotograma anterior. En V6 el ST baja unos 1 mm y la T se invierte unos 4 mm, en contra de la R alta; V1-V2 lo reflejan con unos 2 mm de elevación del ST.',
+            'El QRS es el mismo del fotograma anterior. En V6 el ST baja alrededor de 1 mm y la T se invierte unos 4 mm, en contra de la R alta; V1-V2 lo reflejan con unos 2 mm de elevación del ST.',
           ),
           marks: [{ auto: 'st', lead: 'V6' }, { auto: 't', lead: 'V6' }, { auto: 'st', lead: 'V1' }],
         },
