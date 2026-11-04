@@ -650,13 +650,37 @@ describe('h5: HCM on the tracings', () => {
     expect(pw(e, 'V1').min).toBeGreaterThan(-0.05);
     expect(qrs(e, 'V1').max).toBeGreaterThan(0.6);
   });
-  it('repolarisation variant: lateral ST depression and T inversion (V5–V6, I, aVL)', () => {
-    const e = ecgOf(blocksOf('h5', 'ecg')[0].ecg);
+  it('repolarisation variant (film frame 2): lateral ST depression and T inversion (V5–V6, I, aVL)', () => {
+    const e = frames('h5', 0)[1];
     for (const l of ['I', 'aVL', 'V5', 'V6'] as const) expect(tInverted(e, l), l).toBe(true);
     for (const l of ['V5', 'V6'] as const) expect(stAt(e, l, 60), l).toBeLessThan(-0.05);
   });
-  it('apical: giant T inversion deepest in V4 (about 20 mm) and V5 (about 18 mm), about 10 mm in V3 and V6, shallow in V2, inverted in I, II, aVL; tall R in V5', () => {
-    const e = ecgOf(blocksOf('h5', 'ecg')[1].ecg);
+  it('film notes: septal HCM q about 3.5 mm in aVL and V6 (narrow), S V1 about 17 + R V6 about 23 mm, T upright in V5–V6; the repolarisation frame is the same heart and QRS with V5–V6 ST about −1 mm; apical V4 T about −20, V5 about −18 mm after an R V5 of about 15 mm', () => {
+    const [a, b] = blocksOf('h5', 'film')[0].frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req : null));
+    expect({ ...a, variant: 'repolarization' }).toEqual(b);
+    const [septal, repol, apical] = frames('h5', 0);
+    for (const l of ['aVL', 'V6'] as const) {
+      near(initialQ(septal, l).depth, 3.5);
+      expect(initialQ(septal, l).atMs, l).toBeLessThan(20);
+    }
+    near(-qrs(septal, 'V1').min, 17);
+    near(qrs(septal, 'V6').max, 23);
+    for (const l of ['V5', 'V6'] as const) expect(tUpright(septal, l), l).toBe(true);
+    for (const l of [...LIMB, ...CHEST]) expect(Math.abs(qrs(repol, l).p2p - qrs(septal, l).p2p), l).toBeLessThan(0.01);
+    for (const l of ['V5', 'V6'] as const) near(stAt(repol, l, 60), -1);
+    near(tw(apical, 'V4').min, -20);
+    near(tw(apical, 'V5').min, -18);
+    near(qrs(apical, 'V5').max, 15);
+    expect(blocksOf('h5', 'heart')[1].ecg).toEqual(blocksOf('h5', 'film')[0].frames[2].ecg);
+  });
+  it('heart (septal): the P is normal (< 120 ms, no V1 terminal negativity)', () => {
+    const e = ecgOf(blocksOf('h5', 'heart')[0].ecg);
+    const b = midBeat(e);
+    expect(b.pOff! - b.pOn!).toBeLessThan(120);
+    expect(pw(e, 'V1').min).toBeGreaterThan(-0.05);
+  });
+  it('apical (film frame 3): giant T inversion deepest in V4 (about 20 mm) and V5 (about 18 mm), about 10 mm in V3 and V6, shallow in V2, inverted in I, II, aVL; tall R in V5', () => {
+    const e = frames('h5', 0)[2];
     expect(tw(e, 'V4').min).toBeLessThanOrEqual(-1.7);
     expect(tw(e, 'V5').min).toBeLessThan(-1.5);
     for (const l of ['V3', 'V6'] as const) {
