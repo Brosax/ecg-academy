@@ -197,16 +197,13 @@ const lesson: Lesson = {
       ],
       predict: {
         question: l(
-          '左心室壁增厚。V6 的 R 波和 V1 的 S 波会怎样？',
-          'The LV wall thickens. What happens to the R in V6 and the S in V1?',
-          'La pared del VI se engrosa. ¿Qué les pasa a la R de V6 y a la S de V1?',
+          '正常心电图上 V5 的 R 最高。左心室壁增厚后，哪个导联的 R 最高？',
+          'On the normal tracing V5 has the tallest R. Once the LV wall thickens, which lead has the tallest R?',
+          'En el trazado normal la R más alta está en V5. Cuando la pared del VI se engrosa, ¿qué derivación tiene la R más alta?',
         ),
-        options: [
-          l('R 变高，S 变深', 'R taller, S deeper', 'R más alta, S más profunda'),
-          l('R 变高，S 变浅', 'R taller, S shallower', 'R más alta, S menos profunda'),
-          l('两者都变小', 'Both smaller', 'Las dos más pequeñas'),
-        ],
-        answer: 0,
+        options: [l('V4', 'V4', 'V4'), l('V5', 'V5', 'V5'), l('V6', 'V6', 'V6')],
+        answer: 2,
+        ordered: true,
       },
       caption: l(
         '电压标准量的是 QRS。继发性 ST-T 跟着 QRS 走、与主波相反，本身不代表缺血。报告：“左心室肥厚伴继发性ST-T改变”。',
@@ -283,7 +280,11 @@ const lesson: Lesson = {
       },
       right: {
         ecg: synth('lvh-strain', 1226, { rate: 84 }),
-        caption: l('左心室肥厚伴继发性ST-T改变：同样的电压，加上反向的 ST-T', 'LVH with secondary ST–T abnormality: same voltage, plus the reversed ST–T', 'HVI con alteración secundaria del ST-T: el mismo voltaje, más el ST-T invertido'),
+        caption: l(
+          '左心室肥厚伴继发性ST-T改变：同样达到电压标准，加上反向的 ST-T',
+          'LVH with secondary ST–T abnormality: voltage criteria met too, plus the reversed ST–T',
+          'HVI con alteración secundaria del ST-T: también cumple los criterios de voltaje, más el ST-T invertido',
+        ),
         marks: [{ auto: 'st', lead: 'V5' }, { auto: 't', lead: 'V5' }],
       },
       point: l(

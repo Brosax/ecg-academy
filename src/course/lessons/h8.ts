@@ -233,8 +233,9 @@ const lesson: Lesson = {
           'Move V1–V2 one space up, closer to the RV outflow tract. What happens to the coved ST?',
           'Sube V1-V2 un espacio, más cerca del tracto de salida del VD. ¿Qué le pasa al ST en cúpula?',
         ),
-        options: [l('变高', 'It grows', 'Crece'), l('变低', 'It shrinks', 'Disminuye'), l('不变', 'No change', 'No cambia')],
-        answer: 0,
+        options: [l('变低', 'It shrinks', 'Disminuye'), l('不变', 'No change', 'No cambia'), l('变高', 'It grows', 'Crece')],
+        answer: 2,
+        ordered: true,
       },
       caption: l(
         '怀疑 Brugada 时把 V1–V2 记在第 2–3 肋间；2 型马鞍型本身不诊断，要在高位导联、发热时或监护下药物激发中去找 1 型。',
@@ -390,6 +391,7 @@ const lesson: Lesson = {
           l('不会，一直远低于它', 'No, it stays well under', 'No, se queda muy por debajo'),
         ],
         answer: 2,
+        ordered: true,
       },
       caption: l(
         '移动滑杆，整个图形一起变大变小。无症状者无论滑到哪里都是良性；单凭心电图永远不能把良性图形变成综合征。',

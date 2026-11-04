@@ -266,7 +266,7 @@ const lesson: Lesson = {
           note: l(
             '同一颗心脏，加上继发性 ST-T：V1–V2 的 T 深而不对称地倒置（约 7–9 mm），V3 只剩约 1 mm，III 也倒置。',
             'Same heart, now with a secondary ST–T: deep, asymmetric T inversion in V1–V2 (about 7–9 mm), only about 1 mm left in V3, inverted in III too.',
-            'Mismo corazón, ahora con ST-T secundario: T negativa profunda y asimétrica en V1-V2 (unos 7-9 mm), solo 1 mm en V3 y también negativa en III.',
+            'Mismo corazón, ahora con ST-T secundario: T negativa profunda y asimétrica en V1-V2 (unos 7-9 mm), solo alrededor de 1 mm en V3 y también negativa en III.',
           ),
           marks: [{ auto: 't', lead: 'V1' }, { auto: 't', lead: 'V2' }, { auto: 't', lead: 'III' }],
         },
@@ -299,16 +299,16 @@ const lesson: Lesson = {
       right: {
         ecg: synth('biventricular-hypertrophy', 1247, { rate: 76 }),
         caption: l(
-          '双心室肥厚：LVH 电压（V3 深 S 约 25 mm，Peguero-Lo Presti 约 40 mm）叠加电轴右偏（约 +97°）与 V1 高 R（约 11 mm）；Sokolow-Lyon 却只有约 11 mm',
-          'Biventricular hypertrophy: LVH voltage (a deep S of about 25 mm in V3; Peguero-Lo Presti about 40 mm) plus a right axis (about +97°) and a tall R in V1 (about 11 mm); yet Sokolow-Lyon is only about 11 mm',
-          'Hipertrofia biventricular: voltaje de HVI (S profunda de unos 25 mm en V3; Peguero-Lo Presti de unos 40 mm) más eje derecho (unos +97°) y R alta en V1 (unos 11 mm); y, sin embargo, el Sokolow-Lyon solo suma unos 11 mm',
+          '双心室肥厚：LVH 电压（V3 深 S 约 33 mm，Peguero-Lo Presti 约 52 mm）叠加电轴右偏（约 +96°）与 V1 高 R（约 10 mm）；Sokolow-Lyon 却只有约 14 mm',
+          'Biventricular hypertrophy: LVH voltage (a deep S of about 33 mm in V3; Peguero-Lo Presti about 52 mm) plus a right axis (about +96°) and a tall R in V1 (about 10 mm); yet Sokolow-Lyon is only about 14 mm',
+          'Hipertrofia biventricular: voltaje de HVI (S profunda de unos 33 mm en V3; Peguero-Lo Presti de unos 52 mm) más eje derecho (unos +96°) y R alta en V1 (unos 10 mm); y, sin embargo, el Sokolow-Lyon solo suma unos 14 mm',
         ),
         marks: [{ auto: 'r', lead: 'V1' }, { auto: 's', lead: 'V3' }],
       },
       point: l(
-        '右心室肥厚是"右侧赢"；双心室肥厚是"两边都在用力，互相抵消"——本图里左心室的力量没有写成 V5–V6 的高 R，而是写成 V3 的巨大 S（V3 的 RS 约 35 mm），右心室则把电轴拉向右、把 V1 的 R 抬起来；只看 Sokolow-Lyon 就会漏掉左侧。所以双心室肥厚常被漏诊：**满足左心室肥厚电压而电轴却右偏（>+90°）**，或 LVH 伴 V1–V2 高 R / V5–V6 深 S，就应怀疑；V2–V4 出现 R+S ≥50–60 mm 的大双向 RS（Katz-Wachtel，主要见于儿童先心病）、或左心房异常合并右心室肥厚征象，同样提示。哪一侧的电压都不再"纯粹"时，写下双心室肥厚并让超声作证。',
-        'RVH is "the right side wins"; biventricular hypertrophy is "both sides pushing, cancelling each other" — here the LV force is written not as a tall R in V5–V6 but as a huge S in V3 (an RS of about 35 mm), while the RV drags the axis rightward and lifts the R in V1; read Sokolow-Lyon alone and you miss the left side. That is why BVH is so often missed: suspect it when **LVH voltage comes with a rightward axis (>+90°)**, or LVH with a tall R in V1–V2 / a deep S in V5–V6; a large biphasic RS in V2–V4 with R+S ≥50–60 mm (Katz-Wachtel, mainly children with congenital disease), or LA abnormality with RVH signs, points the same way. When neither side\'s voltage looks "pure" any more, write biventricular hypertrophy and let echo confirm.',
-        'La HVD es «gana el lado derecho»; la hipertrofia biventricular es «los dos lados empujan y se anulan»: aquí la fuerza del VI no se escribe como una R alta en V5-V6, sino como una S enorme en V3 (una RS de unos 35 mm), mientras el VD arrastra el eje a la derecha y levanta la R de V1; quien mire solo el Sokolow-Lyon pierde el lado izquierdo. Por eso la HVB pasa tan desapercibida: sospecha cuando **al voltaje de HVI se suma un eje derecho (>+90°)**, o la HVI viene con R alta en V1-V2 / S profunda en V5-V6; una RS bifásica grande en V2-V4 con R+S ≥50-60 mm (Katz-Wachtel, sobre todo en cardiopatía congénita infantil) o una anomalía auricular izquierda con signos de HVD apuntan igual. Cuando el voltaje de ningún lado luce ya «puro», escribe hipertrofia biventricular y que el ecocardiograma lo confirme.',
+        '右心室肥厚是"右侧赢"；双心室肥厚是"两边都在用力，互相抵消"——本图里左心室的力量没有写成 V5–V6 的高 R，而是写成 V3 的巨大 S（V3 的 RS 约 43 mm），右心室则把电轴拉向右、把 V1 的 R 抬起来；只看 Sokolow-Lyon 就会漏掉左侧。所以双心室肥厚常被漏诊：**满足左心室肥厚电压而电轴却右偏（>+90°）**，或 LVH 伴 V1–V2 高 R / V5–V6 深 S，就应怀疑；V2–V4 出现 R+S ≥50–60 mm 的大双向 RS（Katz-Wachtel，主要见于儿童先心病）、或左心房异常合并右心室肥厚征象，同样提示。哪一侧的电压都不再"纯粹"时，写下双心室肥厚并让超声作证。',
+        'RVH is "the right side wins"; biventricular hypertrophy is "both sides pushing, cancelling each other" — here the LV force is written not as a tall R in V5–V6 but as a huge S in V3 (an RS of about 43 mm), while the RV drags the axis rightward and lifts the R in V1; read Sokolow-Lyon alone and you miss the left side. That is why BVH is so often missed: suspect it when **LVH voltage comes with a rightward axis (>+90°)**, or LVH with a tall R in V1–V2 / a deep S in V5–V6; a large biphasic RS in V2–V4 with R+S ≥50–60 mm (Katz-Wachtel, mainly children with congenital disease), or LA abnormality with RVH signs, points the same way. When neither side\'s voltage looks "pure" any more, write biventricular hypertrophy and let echo confirm.',
+        'La HVD es «gana el lado derecho»; la hipertrofia biventricular es «los dos lados empujan y se anulan»: aquí la fuerza del VI no se escribe como una R alta en V5-V6, sino como una S enorme en V3 (una RS de unos 43 mm), mientras el VD arrastra el eje a la derecha y levanta la R de V1; quien mire solo el Sokolow-Lyon pierde el lado izquierdo. Por eso la HVB pasa tan desapercibida: sospecha cuando **al voltaje de HVI se suma un eje derecho (>+90°)**, o la HVI viene con R alta en V1-V2 / S profunda en V5-V6; una RS bifásica grande en V2-V4 con R+S ≥50-60 mm (Katz-Wachtel, sobre todo en cardiopatía congénita infantil) o una anomalía auricular izquierda con signos de HVD apuntan igual. Cuando el voltaje de ningún lado luce ya «puro», escribe hipertrofia biventricular y que el ecocardiograma lo confirme.',
       ),
     },
     { kind: 'check', item: { family: 'chambers', seed: 7 } },

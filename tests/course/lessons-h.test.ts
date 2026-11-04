@@ -421,7 +421,15 @@ describe('h2: LVH voltage and secondary ST–T on the tracings', () => {
       for (const l of ['V1', 'V2'] as const) expect(stAt(e, l, 60), l).toBeGreaterThan(0.1);
     }
   });
-  it('contrast: Sokolow-Lyon positive on both sides; A keeps upright T in V5–V6', () => {
+  it('voltage film prediction: the normal frame has its tallest R in V5, the LVH frame in V6 (over all 12 leads)', () => {
+    const [normal, lvh] = frames('h2', 0);
+    const tallest = (e: Ecg): StdLead => [...LIMB, ...CHEST].reduce((best, l) => (qrs(e, l).max > qrs(e, best).max ? l : best));
+    expect(tallest(normal)).toBe('V5');
+    expect(tallest(lvh)).toBe('V6');
+    const p = blocksOf('h2', 'film')[0].predict!;
+    expect(p.options[p.answer].en).toBe('V6');
+  });
+  it('contrast: Sokolow-Lyon positive on both sides ("voltage criteria met too"); A keeps upright T in V5–V6', () => {
     const c = blocksOf('h2', 'contrast')[0];
     const a = ecgOf(c.left.ecg);
     expect(sokolow(a)).toBeGreaterThan(3.5);
@@ -481,11 +489,11 @@ describe('h3: RVH and right-heart load on the tracings', () => {
       for (const l of ['V5', 'V6'] as const) expect(qrs(e, l).max / -qrs(e, l).min, l).toBeLessThan(1);
     }
   });
-  it('worked: T shallowly inverted in V1 only, upright from V2', () => {
+  it('worked: T shallowly inverted in V1 only, upright from V2 (V2–V6)', () => {
     const e = ecgOf(blocksOf('h3', 'worked')[0].ecg);
     expect(tInverted(e, 'V1')).toBe(true);
     expect(tw(e, 'V1').min).toBeGreaterThan(-0.2);
-    for (const l of ['V2', 'V3'] as const) expect(tUpright(e, l), l).toBe(true);
+    for (const l of ['V2', 'V3', 'V4', 'V5', 'V6'] as const) expect(tUpright(e, l), l).toBe(true);
   });
   it('strain variant (load film frame 2): deep T inversion in V1–V2, only a trace in V3, inverted in III and shallow in aVF', () => {
     const e = frames('h3', 1)[1];
@@ -536,7 +544,7 @@ describe('h3: RVH and right-heart load on the tracings', () => {
     near(qrs(rvh, 'V1').max, 18);
     expect(rvh.truth!.findings).not.toContain('wpw');
   });
-  it('load film notes: RVH R V1 about 17 mm with almost no S, S V5 about 10 mm, T V1 about −1.5 mm and upright from V2; the strain frame is the same heart with V1–V2 T about −7 to −9 mm (asymmetric: slow descent), V3 about −1 mm', () => {
+  it('load film notes: RVH R V1 about 17 mm with almost no S, S V5 about 10 mm, T V1 about −1.5 mm and upright from V2 (V2–V6); the strain frame is the same heart with V1–V2 T about −7 to −9 mm (asymmetric: slow descent), V3 about −1 mm', () => {
     const [a, b] = blocksOf('h3', 'film')[1].frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req : null));
     expect({ ...a, variant: 'strain' }).toEqual(b);
     const [rvh, strain] = frames('h3', 1);
@@ -544,7 +552,7 @@ describe('h3: RVH and right-heart load on the tracings', () => {
     expect(qrs(rvh, 'V1').min).toBeGreaterThan(-0.05);
     near(-qrs(rvh, 'V5').min, 10);
     near(tw(rvh, 'V1').min, -1.5);
-    expect(tUpright(rvh, 'V2')).toBe(true);
+    for (const l of ['V2', 'V3', 'V4', 'V5', 'V6'] as const) expect(tUpright(rvh, l), l).toBe(true);
     for (const l of ['V1', 'V2'] as const) {
       expect(tw(strain, l).min, l).toBeGreaterThanOrEqual(-0.9);
       expect(tw(strain, l).min, l).toBeLessThanOrEqual(-0.7);
@@ -558,13 +566,18 @@ describe('h3: RVH and right-heart load on the tracings', () => {
     }
     near(tw(strain, 'V3').min, -1);
   });
-  it('biventricular: axis > +90°, R V1 about 11 mm, S V3 about 25 mm (Peguero about 40 mm) while Sokolow-Lyon stays about 11 mm', () => {
+  it('biventricular (contrast B caption and point): axis about +96° (> +90°), R V1 about 10 mm, S V3 about 33 mm (the deepest S) with an RS about 43 mm, Peguero about 52 mm (≥ 28) while Sokolow-Lyon is about 14 mm (< 35)', () => {
     const e = ecgOf(blocksOf('h3', 'contrast')[0].right.ecg);
     expect(e.truth!.axisDeg.qrs).toBeGreaterThan(90);
-    expect(qrs(e, 'V1').max).toBeGreaterThan(0.9);
-    expect(-qrs(e, 'V3').min).toBeGreaterThan(2.2);
-    expect(peguero(e)).toBeGreaterThan(2.8);
-    expect(sokolow(e)).toBeLessThan(1.5);
+    expect(Math.abs(e.truth!.axisDeg.qrs - 96)).toBeLessThanOrEqual(5);
+    near(qrs(e, 'V1').max, 10);
+    near(-qrs(e, 'V3').min, 33);
+    expect(deepestS(e)).toBe('V3');
+    near(qrs(e, 'V3').p2p, 43);
+    near(peguero(e), 52);
+    expect(peguero(e)).toBeGreaterThanOrEqual(2.8);
+    near(sokolow(e), 14);
+    expect(sokolow(e)).toBeLessThan(3.5);
   });
 });
 
@@ -734,10 +747,18 @@ describe('h6: ARVC on the tracings', () => {
       expect(e.truth!.findings).toContain('epsilon-wave');
     }
   });
-  it('contrast B (iRBBB): r′ in V1, QRS < 120 ms', () => {
-    const e = ecgOf(blocksOf('h6', 'contrast')[0].right.ecg);
-    expect(hasRPrime(e, 'V1')).toBe(true);
+  it('contrast B (iRBBB): rSR′ in V1 (the R′ taller than the S), QRS < 120 ms; contrast A (ARVC): at most a small terminal r′ (< 2 mm) in V1', () => {
+    const c = blocksOf('h6', 'contrast')[0];
+    const e = ecgOf(c.right.ecg);
+    expect(waves(e, 'V1').map((w) => w.label)).toEqual(['r', 'S', 'R′']);
     expect(e.truth!.qrsMs).toBeLessThan(120);
+    expect(c.right.ecg).toEqual(blocksOf('h6', 'film')[1].frames[1].ecg);
+    const a = waves(ecgOf(c.left.ecg), 'V1');
+    for (const w of a.filter((x) => x.role === 'r' && x.label.includes('′'))) expect(w.mv, w.label).toBeLessThan(0.2);
+  });
+  it('heart: highlights the RV outflow tract and basal free wall the caption names, not the apex', () => {
+    const h = blocksOf('h6', 'heart')[0];
+    expect([...(h.emphasize ?? [])].sort()).toEqual(['rv-basal', 'rv-outflow']);
   });
   it('T-inversion film notes: juvenile T inverted V1–V3 with QRS about 95 ms and no epsilon; RBBB QRS about 140 ms with rsR′ and inverted T in V1; ARVC QRS about 115 ms with T about −7 mm in V1–V2 and inverted in V3', () => {
     const [juvenile, rbbb, arvc] = frames('h6', 0);
@@ -752,10 +773,10 @@ describe('h6: ARVC on the tracings', () => {
     for (const l of ['V1', 'V2'] as const) near(tw(arvc, l).min, -7);
     expect(tInverted(arvc, 'V3')).toBe(true);
   });
-  /** V1 after the QRS bracket: the largest deflection between QRS end + 5 and + 60 ms, its delay, and the level at + 10 ms */
-  function afterQrs(e: Ecg) {
+  /** a lead after the QRS bracket: the largest deflection between QRS end + 5 and + 60 ms, its delay, and the level at + 10 ms */
+  function afterQrs(e: Ecg, lead: StdLead = 'V1') {
     const b = midBeat(e);
-    const a = e.signal.leads.V1;
+    const a = e.signal.leads[lead];
     const fs = e.signal.fs;
     const base = baselineBefore(a, fs, b.qrsOn);
     const v = (ms: number) => a[Math.round(((b.qrsOff + ms) * fs) / 1000)] - base;
@@ -763,6 +784,15 @@ describe('h6: ARVC on the tracings', () => {
     for (let ms = 5; ms <= 60; ms++) if (Math.abs(v(ms)) > Math.abs(v(at))) at = ms;
     return { peak: v(at), atMs: at, at10: v(10) };
   }
+  it('T-inversion film prediction: frame 1 (juvenile) has a QRS under 120 ms and a flat baseline after it in V1–V3; the other options belong to frames 2 (QRS ≥ 120 ms) and 3 (a blip after the QRS)', () => {
+    const [juvenile, rbbb, arvc] = frames('h6', 0);
+    expect(juvenile.truth!.qrsMs).toBeLessThan(120);
+    for (const l of ['V1', 'V2', 'V3'] as const) expect(Math.abs(afterQrs(juvenile, l).peak), l).toBeLessThanOrEqual(0.05);
+    expect(rbbb.truth!.qrsMs).toBeGreaterThanOrEqual(120);
+    expect(arvc.truth!.qrsMs).toBeLessThan(120);
+    expect(afterQrs(arvc).peak).toBeGreaterThan(0.05);
+    expect(blocksOf('h6', 'film')[0].predict!.answer).toBe(0);
+  });
   it('epsilon film notes and prediction: ARVC (the strip shown first) has a blip of about 0.7 mm (under 1 mm) about 30 ms after the QRS bracket, back on the baseline in between; iRBBB has an R′ of about 7 mm inside a QRS of about 115 ms and nothing after it', () => {
     expect(blocksOf('h6', 'film')[1].frames[0].ecg).toEqual(blocksOf('h6', 'film')[0].frames[2].ecg);
     const [arvc, irbbb] = frames('h6', 1);
@@ -879,7 +909,9 @@ describe('h7: QT on the tracings', () => {
     for (let ms = bd.tOff + 10; ms <= bd.tOff + 150; ms += 2) u = Math.max(u, vd(ms));
     expect(u, 'U after the T end').toBeGreaterThan(0.1);
   });
-  it('QTc sweep notes (Fridericia read-out at the start rate of 64/min): 490–495 prolonged but not past 500 with the QT over half the RR; 500–560 past 500', () => {
+  it('QTc sweep notes (Fridericia read-out at the start rate of 64/min): 490–495 prolonged but not past 500 with the QT over half the RR; 501–560 past 500', () => {
+    const notes = blocksOf('h7', 'live')[0].play!.notes!;
+    expect(notes.map((n) => [n.min, n.max])).toEqual([[490, 495], [501, 560]]);
     for (const q of [490, 495]) {
       const t = played('h7', 0, q).truth!;
       expect(Math.abs(t.qtcFridericiaMs - q), `${q}`).toBeLessThan(3);
@@ -887,12 +919,22 @@ describe('h7: QT on the tracings', () => {
       expect(t.qtcFridericiaMs, `${q}`).toBeLessThan(500);
       expect(t.qtMs, `${q}: QT over half the RR`).toBeGreaterThan(30000 / t.hrBpm);
     }
-    for (const q of [500, 505, 560]) {
+    for (const q of [501, 505, 560]) {
       const t = played('h7', 0, q).truth!;
       expect(Math.abs(t.qtcFridericiaMs - q), `${q}`).toBeLessThan(3);
       expect(t.qtcFridericiaMs, `${q}`).toBeGreaterThan(500);
     }
     expect(Math.abs(played('h7', 0, 490).truth!.hrBpm - 64)).toBeLessThan(1);
+  });
+  it('QTc sweep prediction: at a fixed 64/min the T end (the QT mark) moves about 70 ms later from 490 to 560, with the RR unchanged', () => {
+    const [lo, hi] = [played('h7', 0, 490), played('h7', 0, 560)];
+    expect(Math.abs(hi.truth!.hrBpm - lo.truth!.hrBpm), 'the rate stays').toBeLessThan(0.1);
+    expect(Math.abs(hi.truth!.hrBpm - 64)).toBeLessThan(1);
+    const qt = (e: Ecg) => midBeat(e).tOff - midBeat(e).qrsOn;
+    expect(Math.abs(qt(hi) - qt(lo) - 70), `${(qt(hi) - qt(lo)).toFixed(1)} ms`).toBeLessThanOrEqual(5);
+    expect(Math.abs(hi.truth!.qtMs - lo.truth!.qtMs - 70)).toBeLessThanOrEqual(5);
+    const p = blocksOf('h7', 'live')[0].predict!;
+    expect(p.options[p.answer].en).toBe('About 70 ms later');
   });
   it('live caption and Bazett pitfall: at one Fridericia QTc the QT shortens as the rate rises (50 → 80/min); Bazett reads under Fridericia at 50/min and over it at 80/min', () => {
     const b = blocksOf('h7', 'live')[0];
@@ -964,7 +1006,10 @@ describe('h8: Brugada and early repolarisation on the tracings', () => {
       expect(stAt(high, l), l).toBeGreaterThanOrEqual(0.5);
       expect(stAt(high, l), l).toBeLessThanOrEqual(0.7);
       expect(tw(high, l).min, l).toBeLessThan(tw(std, l).min);
+      expect(stAt(high, l), `${l}: prediction, the coved ST grows one space up`).toBeGreaterThan(stAt(std, l));
     }
+    const p = blocksOf('h8', 'film')[0].predict!;
+    expect(p.options[p.answer].en).toBe('It grows');
     for (const l of [...LIMB, 'V3', 'V4', 'V5', 'V6'] as const) {
       expect(low.signal.leads[l], l).toEqual(std.signal.leads[l]);
       expect(high.signal.leads[l], l).toEqual(std.signal.leads[l]);
@@ -1037,6 +1082,13 @@ describe('h9: the athlete ECG on the tracings', () => {
     expect(Math.abs(first.truth!.hrBpm - t.hrBpm), 'the rate stays').toBeLessThan(0.5);
     for (const bt of first.truth!.beats) expect(bt.pOn, 'a P before every QRS').not.toBeNull();
   });
+  it('rate sweep prediction: as the sinus rate falls from 58 to 40/min the PR stays the same', () => {
+    const [hi, lo] = [played('h9', 0, 58), played('h9', 0, 40)];
+    expect(hi.truth!.hrBpm - lo.truth!.hrBpm).toBeGreaterThan(15);
+    expect(Math.abs(hi.truth!.prMs! - lo.truth!.prMs!)).toBeLessThan(2);
+    const p = blocksOf('h9', 'live')[0].predict!;
+    expect(p.options[p.answer].en).toBe('It stays the same');
+  });
   it('rate sweep notes: sinus with a P before every QRS and the PR fixed at 160 ms at 40–58/min, always above 30/min', () => {
     for (const v of [40, 49, 50, 58]) {
       const e = played('h9', 0, v);
@@ -1050,12 +1102,14 @@ describe('h9: the athlete ECG on the tracings', () => {
       }
     }
   });
-  it('contrast: A has upright lateral T; B (HCM) lateral T inversion >= 1 mm with ST depression >= 0.5 mm', () => {
+  it('contrast: Sokolow-Lyon met on both sides; A has upright lateral T with the ST above the baseline; B (HCM) lateral T inversion >= 1 mm with ST depression >= 0.5 mm', () => {
     const c = blocksOf('h9', 'contrast')[0];
     const a = ecgOf(c.left.ecg);
     const b = ecgOf(c.right.ecg);
+    for (const e of [a, b]) expect(sokolow(e)).toBeGreaterThanOrEqual(3.5);
     for (const l of ['V5', 'V6'] as const) {
       expect(tUpright(a, l), l).toBe(true);
+      for (const ms of [0, 60]) expect(stAt(a, l, ms), `${l} J+${ms}: elevated, never depressed`).toBeGreaterThan(0.05);
       expect(tInverted(b, l), l).toBe(true);
       expect(stAt(b, l, 60), l).toBeLessThanOrEqual(-0.05);
     }
