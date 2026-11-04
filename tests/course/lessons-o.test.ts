@@ -984,25 +984,52 @@ describe('o10: artefacts and filters on the tracings', () => {
       expect(Math.max(...rrs(e)) - Math.min(...rrs(e))).toBeLessThan(60);
     }
   });
-  it('EMG on LA: I, III, aVL noisy, II clean', () => {
-    const e = ecgOf(sourcesWith('o10', 'muscle-tremor')[0]);
-    for (const l of ['I', 'III', 'aVL'] as const) expect(hfNoise(e, l), l).toBeGreaterThan(3 * hfNoise(e, 'II'));
+  /** the recording fault alone: the faulty frame minus the clean frame of the same heart */
+  const fault = (e: Ecg, clean: Ecg, l: StdLead) => e.signal.leads[l].map((x, i) => x - clean.signal.leads[l][i]);
+  /** local maxima of a signal within [t0, t1) ms */
+  const peaks = (x: Float32Array, fs: number, t0: number, t1: number) => {
+    let n = 0;
+    for (let i = Math.round((t0 * fs) / 1000) + 1; i < Math.round((t1 * fs) / 1000) - 1; i++) if (x[i] > x[i - 1] && x[i] >= x[i + 1] && x[i] > 0) n++;
+    return n;
+  };
+  it('atlas film: one heart at 72/min; EMG on LA (I, III, aVL noisy, II clean); a 5-Hz tremor on LL (II, III, aVF; I clean; RR unchanged); wander drifting most in the chest; 50-Hz mains ≈ 10 peaks per 200 ms; RA motion for ≈ 3.5 s in I, II, aVR with III quiet', () => {
+    const [clean, emg, tremor, wander, mains, motion] = frames('o10', 0);
+    for (const e of [emg, tremor, wander, mains, motion]) expect(e.truth!.beats).toEqual(clean.truth!.beats);
+    expect(Math.abs(clean.truth!.hrBpm - 72)).toBeLessThan(1);
+    for (const l of ['I', 'III', 'aVL'] as const) expect(hfNoise(emg, l), l).toBeGreaterThan(3 * hfNoise(emg, 'II'));
+    for (const l of ['II', 'III', 'aVF'] as const) expect(hfNoise(tremor, l), l).toBeGreaterThan(3 * hfNoise(tremor, 'I'));
+    const t = fault(tremor, clean, 'II');
+    expect(peaks(t, tremor.signal.fs, 2000, 4000)).toBeGreaterThanOrEqual(9);
+    expect(peaks(t, tremor.signal.fs, 2000, 4000)).toBeLessThanOrEqual(11);
+    const drift = (l: StdLead) => Math.max(...fault(wander, clean, l)) - Math.min(...fault(wander, clean, l));
+    for (const v of ['V3', 'V4'] as const) for (const limb of ['I', 'II', 'III'] as const) expect(drift(v), `${v} vs ${limb}`).toBeGreaterThan(drift(limb));
+    const hum = (l: StdLead) => fault(mains, clean, l);
+    const busiest = (['I', 'II', 'III'] as const).reduce((a, b) => (Math.max(...hum(b)) > Math.max(...hum(a)) ? b : a));
+    for (const t0 of [1000, 3000, 5000]) {
+      const n = peaks(hum(busiest), mains.signal.fs, t0, t0 + 200);
+      expect(n, `${t0}`).toBeGreaterThanOrEqual(9);
+      expect(n, `${t0}`).toBeLessThanOrEqual(11);
+    }
+    const quiet = excursion(motion, 'III', 2600, 6200);
+    for (const l of ['I', 'II', 'aVR'] as const) {
+      expect(excursion(motion, l, 2600, 6200), l).toBeGreaterThan(3 * quiet);
+      expect(excursion(motion, l, 2600, 6200), l).toBeGreaterThan(3 * excursion(motion, l, 200, 2400));
+    }
   });
-  it('motion on RA (both tracings): I, II, aVR swing widely between 2.6 and 6.2 s, III stays quiet', () => {
-    for (const src of sourcesWith('o10', 'motion-artefact')) {
-      const e = ecgOf(src);
+  it('motion on RA (film frame and inline check): I, II, aVR swing widely between 2.6 and 6.2 s, III stays quiet', () => {
+    for (const e of [frames('o10', 0)[5], ecgOf(inlineItem('o10', 'o10:which-electrode').ecg)]) {
       const quiet = excursion(e, 'III', 2600, 6200);
       for (const l of ['I', 'II', 'aVR'] as const) expect(excursion(e, l, 2600, 6200), l).toBeGreaterThan(3 * quiet);
     }
   });
-  it('one heart, two filters: diagnostic J in V5 on the baseline; monitor J in V4–V6 about 1 mm low', () => {
-    const c = contrastTitled('o10', 'One normal heart, two filters');
-    const diag = ecgOf(c.left.ecg);
-    const mon = ecgOf(c.right.ecg);
-    expect(Math.abs(stAt(diag, 'V5'))).toBeLessThan(0.03);
+  it('filter film: one heart; diagnostic J in V4–V6 on the baseline; monitor J in V4–V6 about 1 mm low; zero-phase 0.67 Hz J back on the baseline', () => {
+    const [diag, mon, zero] = frames('o10', 1);
+    for (const e of [mon, zero]) expect(e.truth!.beats).toEqual(diag.truth!.beats);
     for (const l of ['V4', 'V5', 'V6'] as const) {
-      expect(stAt(mon, l), l).toBeLessThan(-0.06);
-      expect(stAt(mon, l), l).toBeGreaterThan(-0.16);
+      expect(Math.abs(stAt(diag, l)), l).toBeLessThan(0.03);
+      expect(stAt(mon, l), l).toBeLessThan(-0.075);
+      expect(stAt(mon, l), l).toBeGreaterThan(-0.125);
+      expect(Math.abs(stAt(zero, l)), l).toBeLessThan(0.03);
     }
   });
 });
