@@ -17,6 +17,7 @@ import type { L10n } from '../../src/core/l10n';
 import type { StdLead } from '../../src/core/leads';
 import type { EcgSource, Item } from '../../src/practice/api';
 import { generateItem } from '../../src/practice';
+import { CONFIDENCE_EXPECTED, LEITNER_DAYS, REVIEW_PASS } from '../../src/practice/core/mastery';
 import { getCase } from '../../src/real/library';
 import { generate, scenarios, type SynthRequest } from '../../src/synth';
 
@@ -558,11 +559,43 @@ describe('x4: calibration tracings', () => {
     expect(r.findings).toContain('lafb');
     expect(Math.abs(r.axisDeg.qrs + 75)).toBeLessThan(5);
   });
-  it('sinus tachycardia ≈ 125/min, regular', () => {
-    const t = ecgOf(blocksOf('x4', 'ecg')[0].ecg).truth!;
+  it('statements film: one sinus tachycardia in every frame; a P upright in II before every QRS; RR about 12 small squares (about 480 ms) on every beat, about 125/min, regular', () => {
+    const film = blocksOf('x4', 'film')[1];
+    for (const f of film.frames) expect(f.ecg).toEqual(film.frames[0].ecg);
+    const e = ecgOf(film.frames[0].ecg);
+    const t = e.truth!;
     expect(t.rhythm).toBe('sinus-tachycardia');
     expect(Math.abs(t.hrBpm - 125)).toBeLessThan(3);
     expect(t.regular).toBe(true);
+    expect(t.beats.every((b) => b.pOn !== null)).toBe(true);
+    expect(pw(e, 'II').max).toBeGreaterThan(0.05);
+    for (const rr of rrs(e)) {
+      expect(Math.abs(rr - 480)).toBeLessThan(20);
+      expect(Math.abs(rr / 40 - 12)).toBeLessThan(0.5);
+    }
+  });
+  it('axis calculator: the autopsy tracing', () => {
+    expect(blocksOf('x4', 'figure')[0].ecg).toEqual(blocksOf('x4', 'worked')[0].ecg);
+  });
+  it('error-type film: QT about 510 ms and longer than half the RR; the autopsy tracing (I up, II/III/aVF down, qR in aVL); complete block with P waves running on and a wide escape about 34/min', () => {
+    const film = blocksOf('x4', 'film')[0];
+    const [longQt, misnamed, block] = frames('x4', 0);
+    expect(Math.abs(longQt.truth!.qtMs - 510)).toBeLessThan(5);
+    expect(longQt.truth!.qtMs).toBeGreaterThan(meanRr(longQt) / 2);
+    expect(longQt.truth!.findings).toContain('long-qt');
+    expect(film.frames[1].ecg).toEqual(blocksOf('x4', 'worked')[0].ecg);
+    expect(qrs(misnamed, 'I').net).toBeGreaterThan(0.1);
+    for (const l of ['II', 'III', 'aVF'] as const) expect(qrs(misnamed, l).net, l).toBeLessThan(-0.2);
+    const b = block.truth!;
+    expect(b.findings).toContain('av-block-3');
+    expect(b.atrial.every((a) => a.conductedTo === null)).toBe(true);
+    expect(Math.abs(b.hrBpm - 34)).toBeLessThan(2);
+    expect(b.qrsMs).toBeGreaterThanOrEqual(120);
+  });
+  it('Progress-page card: the numbers are the app\'s own (ideal 40/70/95 %, review pass 80 %, Leitner 1–16 days)', () => {
+    expect(CONFIDENCE_EXPECTED).toEqual({ 1: 0.4, 2: 0.7, 3: 0.95 });
+    expect(REVIEW_PASS).toBe(0.8);
+    expect([...LEITNER_DAYS]).toEqual([1, 2, 4, 8, 16]);
   });
 });
 

@@ -24,6 +24,11 @@ const real = (id: number): EcgSource => ({ kind: 'real', id });
 const STRIP = { layout: 'strip', lead: 'II' } as const;
 const GRID = { layout: '3x4+1' } as const;
 
+/** The autopsy tracing (LAFB, −60°): the worked example, the axis calculator and the "misnamed" frame. */
+const AUTOPSY = synth('lafb', 1861, { axis: -60 });
+/** One sinus tachycardia, read statement by statement. */
+const FAST = synth('sinus-tachycardia', 1864, { rate: 125 });
+
 /** Which statement on a borderline real tracing has earned a 3? (PTB-XL 10730: label LAFB, 12SL axis −39°.) */
 const borderlineAxis: Item = {
   id: 'x4:sure-statement-10730',
@@ -91,15 +96,6 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('三级信心，各自意味着什么', 'The three levels and what each should mean', 'Los tres niveles y qué significa cada uno'),
-      body: l(
-        '信心不是一个笼统的感觉，而是**行动阈值**：\n- **3 · 敢独立行动**：不看其他材料，我就在这份报告上签字，并按它行动。3 只留给“错了我会惊讶”的答案。\n- **2 · 核对后行动**：方向有了，但落笔之前要对照旧图、自己复测，或请第二位读者看一眼。\n- **1 · 需要求助**：这份图超出我今天的水平——把**问题具体化**（“电轴我不会分型”），然后上交，而不是笼统地说“不太确定”。\n信心是对**自己准确率的预测**，不是对努力的奖励。长期看：标 3 的答案几乎都该对；标 1 的答案常错——这没有关系，只要它们真的被核对或上交了。',
-        'Confidence is not a vague feeling — it is an **action threshold**:\n- **3 · would act alone**: with no further material I would sign this report and act on it. Reserve 3 for answers whose being wrong would surprise you.\n- **2 · would act after a check**: I have the direction, but before committing I would compare with old tracings, re-measure myself, or have a second reader glance at it.\n- **1 · would ask**: this tracing is beyond me today — name the **specific** problem ("I cannot categorise this axis") and hand it over, rather than a vague "not sure".\nConfidence is a **prediction about your own accuracy**, not a reward for effort. Over time: answers marked 3 should nearly all be right; answers marked 1 will often be wrong — that is fine, provided they really do get checked or escalated.',
-        'La confianza no es una sensación vaga: es un **umbral de actuación**:\n- **3 · actuaría solo**: sin más material, firmaría este informe y actuaría en consecuencia. Reserva el 3 para las respuestas cuyo error te sorprendería.\n- **2 · actuaría tras una comprobación**: tengo la orientación, pero antes de firmar compararía con ECG previos, volvería a medir yo mismo o pediría una segunda opinión.\n- **1 · pediría ayuda**: este ECG está hoy por encima de mi nivel — formula el **problema concreto** («no sé clasificar este eje») y pásalo, en lugar de un vago «no estoy seguro».\nLa confianza es una **predicción sobre la propia precisión**, no una recompensa al esfuerzo. Con el tiempo: las respuestas marcadas con 3 deberían ser casi todas correctas; las marcadas con 1 serán a menudo erróneas — y no pasa nada, siempre que de verdad se comprueben o se escalen.',
-      ),
-    },
-    {
       kind: 'criteria',
       title: l('信心校准卡', 'The confidence-calibration card', 'La tarjeta de calibración de la confianza'),
       items: [
@@ -127,23 +123,22 @@ const lesson: Lesson = {
           label: l('错误三型', 'The three error types', 'Los tres tipos de error'),
           value: l('没看见 / 看见了但命名错 / 命名对了但紧急度错', 'Didn\'t see / saw but misnamed / named it but wrong urgency', 'No visto / visto pero mal nombrado / bien nombrado pero con urgencia equivocada'),
         },
+        {
+          label: l('台账的一行', 'One ledger line', 'Una línea del registro'),
+          value: l(
+            '日期 · 哪份图 · 漏了什么 · 当时的信心 · 类型；错 + 3 是危险组合，错 + 1 是正常学习',
+            'Date · which tracing · what was missed · confidence at the time · type; wrong + 3 is the dangerous pair, wrong + 1 is normal learning',
+            'Fecha · qué ECG · qué se perdió · confianza de entonces · tipo; error + 3 es la pareja peligrosa, error + 1 es aprendizaje normal',
+          ),
+        },
       ],
       source:
         'Mason JW et al. AHA/ACCF/HRS Part II: Electrocardiography diagnostic statement list. Circulation 2007;115:1325-1332; Schläpfer J, Wellens HJ. Computer-interpreted electrocardiograms. J Am Coll Cardiol 2017;70:1183-1192',
     },
     {
-      kind: 'text',
-      title: l('过度自信致命，自信不足淹没系统', 'Over-confidence kills; under-confidence floods the system', 'El exceso de confianza mata; el defecto ahoga el sistema'),
-      body: l(
-        '- **过度自信在关键发现上致命**：漏掉进行中的闭塞还标 3，就是最坏格子——没有复核，因为你自己就是签署人。机器会推你一把：自动判读必须始终由有资质的读者复核，其错误集中在节律（伪差被判为房颤、起搏节律），也不能可靠识别电极接反——**照签机器报告，等于把自动化偏差写进病历**。\n- **自信不足同样有代价**：每份图都“不确定，请上级看”，第二位读者就成了瓶颈，紧急度信息消失，真正的“现在处理”淹没在噪声里。\n- 校准的正中位置是：**有把握处给 3，没把握处给 1，并且不确定要说得具体**——“电轴我不确定”可以训练，“我什么都不太确定”不能。',
-        '- **Over-confidence kills at critical findings**: a missed ongoing occlusion rated 3 is the worst cell — there is no check, because you were the signer. The machine gives you a push: the automated statement must always be confirmed by a qualified reader; its errors cluster in rhythm (artefact called AF, pacemaker rhythms) and it does not recognise electrode reversals reliably — **signing the machine\'s statement unread writes automation bias straight into the record**.\n- **Under-confidence has a price too**: if every tracing is "not sure, someone senior please", the second reader becomes the bottleneck, urgency information disappears, and the genuine act-now cases drown in the noise.\n- The calibrated middle: **3 where you are sure, 1 where you are not — and the uncertainty must be specific**. "I\'m unsure about the axis" can be trained; "I\'m unsure about everything" cannot.',
-        '- **El exceso de confianza mata en los hallazgos críticos**: una oclusión en curso pasada por alto y puntuada con 3 es la casilla peor — no hay revisión posible, porque el que firmaba eras tú. La máquina empuja en esa dirección: la interpretación automática debe confirmarla siempre un lector cualificado; sus errores se concentran en el ritmo (artefacto llamado FA, ritmos con marcapasos) y no reconoce con fiabilidad las inversiones de electrodos — **firmar el informe de la máquina sin revisarlo es escribir el sesgo de automatización en la historia clínica**.\n- **El defecto de confianza también cuesta**: si cada ECG es un «no estoy seguro, que lo vea alguien superior», el segundo lector se convierte en el cuello de botella, la información de urgencia desaparece y los verdaderos casos de actuar ya se ahogan en el ruido.\n- El punto medio calibrado: **3 donde estás seguro, 1 donde no lo estás, y la incertidumbre debe ser concreta**. «No estoy seguro del eje» se puede entrenar; «no estoy seguro de nada» no.',
-      ),
-    },
-    {
       kind: 'worked',
       title: l('错误尸检：−60° 的电轴被叫成“正常变异”', 'Error autopsy: an axis of −60° called a "normal variant"', 'Autopsia del error: un eje de −60° llamado «variante normal»'),
-      ecg: synth('lafb', 1861, { axis: -60 }),
+      ecg: AUTOPSY,
       view: GRID,
       steps: [
         {
@@ -184,6 +179,16 @@ const lesson: Lesson = {
       ],
     },
     {
+      kind: 'figure',
+      figure: { id: 'axis-calculator' },
+      ecg: AUTOPSY,
+      caption: l(
+        '亲手量尸检那份图：把 I 和 aVF 的 QRS 净值放到轮上。−60° 落在 −45° 至 −90° 之间。量过的“3”才算数。',
+        'Measure the autopsy tracing yourself: put the net QRS of I and aVF on the wheel. −60° lands between −45° and −90°. A 3 counts only once you have measured.',
+        'Mide tú el ECG de la autopsia: lleva el QRS neto de I y aVF a la rueda. −60° cae entre −45° y −90°. Un 3 solo cuenta cuando has medido.',
+      ),
+    },
+    {
       kind: 'criteria',
       title: l('尸检用的判据：左前分支阻滞', 'The criteria the autopsy runs on: left anterior fascicular block', 'Los criterios de la autopsia: bloqueo fascicular anterior izquierdo'),
       items: [
@@ -202,22 +207,86 @@ const lesson: Lesson = {
       source: 'Surawicz B et al. AHA/ACCF/HRS Part III: Intraventricular conduction disturbances. Circulation 2009;119:e235-e240',
     },
     {
-      kind: 'text',
-      title: l('个人错误台账', 'The personal error ledger', 'El registro personal de errores'),
-      body: l(
-        '校准的修复工具是一个本子，不是一种心情。每次失误记**一行**：日期、哪份图、漏了什么、当时的信心、**类型**。\n- 类型决定处方：没看见 → 流程（固定顺序、十秒流程）；命名错 → 知识（对应的判据卡）；紧急度错 → 分诊（x3 的箱子）。\n- 本课程的间隔复习按**发现**和**家族**出卡——把弱项家族重新练起来，而不是笼统地“多读图”。\n- 信心一栏是校准数据：错 + 3 是危险组合（你不知道自己不知道），错 + 1 是正常学习。**“下次小心”不是计划；再训练弱项家族才是。**',
-        'The repair tool for calibration is a notebook, not a mood. One **line** per miss: date, which tracing, what was missed, the confidence at the time, the **type**.\n- The type sets the prescription: didn\'t see → process (the fixed order, the ten-second routine); misnamed → knowledge (the matching criteria card); wrong urgency → triage (the bins from x3).\n- Spaced review in this course deals cards **by finding and by family** — put the weak family back into rotation instead of a vague "read more ECGs".\n- The confidence column is your calibration data: wrong + 3 is the dangerous combination (you did not know that you did not know); wrong + 1 is normal learning. **"Being careful next time" is not a plan; retraining the weak family is.**',
-        'La herramienta para reparar la calibración es una libreta, no un estado de ánimo. Una **línea** por cada fallo: fecha, qué ECG, qué se perdió, la confianza de aquel momento y el **tipo**.\n- El tipo fija la receta: no visto → proceso (el orden fijo, la rutina de diez segundos); mal nombrado → conocimiento (la tarjeta de criterios correspondiente); urgencia equivocada → triaje (las categorías de x3).\n- La repetición espaciada de este curso reparte tarjetas **por hallazgo y por familia**: vuelve a rotar la familia débil en lugar de un vago «leer más ECG».\n- La columna de confianza son tus datos de calibración: error + 3 es la combinación peligrosa (no sabías que no sabías); error + 1 es aprendizaje normal. **«La próxima vez, más cuidado» no es un plan; reentrenar la familia débil sí lo es.**',
+      kind: 'film',
+      title: l('三种失误，三张处方', 'Three kinds of miss, three prescriptions', 'Tres tipos de fallo, tres recetas'),
+      view: GRID,
+      frames: [
+        {
+          label: l('没看见', 'Didn\'t see', 'No visto'),
+          ecg: synth('long-qt', 1865, { qtc: 520 }),
+          note: l(
+            '报完节律就停笔，QT 从没量：约 510 ms，超过 RR 的一半。**没看见** → 重练固定顺序（x1）。',
+            'Rhythm named, pen down, QT never measured: about 510 ms, more than half the RR. **Didn\'t see** → retrain the fixed order (x1).',
+            'Ritmo nombrado, boli abajo, QT sin medir: unos 510 ms, más de la mitad del RR. **No visto** → reentrena el orden fijo (x1).',
+          ),
+          marks: [{ auto: 'qt' }, { auto: 'rr' }],
+        },
+        {
+          label: l('命名错', 'Misnamed', 'Mal nombrado'),
+          ecg: AUTOPSY,
+          note: l(
+            'I 正向，II、III、aVF 深负向，aVL 呈 qR：左前分支阻滞，却写成“正常变异”。**命名错** → 回到判据卡。',
+            'I up, II, III and aVF deeply down, qR in aVL: LAFB, written up as "normal variant". **Misnamed** → back to the criteria card.',
+            'I positiva, II, III y aVF muy negativas, qR en aVL: BFAI, informado como «variante normal». **Mal nombrado** → vuelve a la tarjeta de criterios.',
+          ),
+          marks: [{ auto: 'qrs', lead: 'aVL', label: l('aVL 呈 qR', 'qR in aVL', 'qR en aVL') }],
+        },
+        {
+          label: l('紧急度错', 'Wrong urgency', 'Urgencia equivocada'),
+          ecg: synth('av-block-3', 1866, undefined, 'infra-his'),
+          note: l(
+            'P 波自走，宽逸搏约 34 次/分：三度阻滞命名对了，却归到“常规”。**紧急度错** → 重练 x3 的箱子。',
+            'P waves march on, a wide escape at about 34/min: complete block named right, then filed as "routine". **Wrong urgency** → retrain the bins from x3.',
+            'Las P van a su ritmo, escape ancho a unas 34 lpm: bloqueo completo bien nombrado y archivado como «rutina». **Urgencia equivocada** → reentrena las categorías de x3.',
+          ),
+          marks: [{ auto: 'qrs' }],
+        },
+      ],
+      predict: {
+        question: l(
+          '读者看到 I 正向、II、III、aVF 负向，写了“正常变异”。这是哪一型？',
+          'A reader saw I up and II, III and aVF down, and wrote "normal variant". Which type of miss is that?',
+          'Un lector vio I positiva y II, III y aVF negativas, y escribió «variante normal». ¿Qué tipo de fallo es?',
+        ),
+        options: [l('没看见', 'Didn\'t see', 'No visto'), l('命名错', 'Misnamed', 'Mal nombrado'), l('紧急度错', 'Wrong urgency', 'Urgencia equivocada')],
+        answer: 1,
+      },
+      caption: l(
+        '类型决定处方：没看见→流程，命名错→知识，紧急度错→分诊。“下次小心”不是处方；再训练那个家族才是。',
+        'The type sets the prescription: didn\'t see → process, misnamed → knowledge, wrong urgency → triage. "Be careful next time" is not one; retraining that family is.',
+        'El tipo fija la receta: no visto → proceso, mal nombrado → conocimiento, urgencia equivocada → triaje. «Más cuidado» no es una receta; reentrenar esa familia sí.',
       ),
     },
     {
-      kind: 'text',
+      kind: 'criteria',
       title: l('你自己的数据：进度页', 'Your own data: the Progress page', 'Tus propios datos: la página de Progreso'),
-      body: l(
-        '台账的一半已经由本应用替你记下。每道题都会记录：得分、日期、训练的发现、你选的信心，以及是否**漏掉了危急表现**。\n- **哪里会问信心**：只在考试里。课程里的检测题和各种训练（课内的小训练与练习页的训练）都不问——在那里，每答一题之前先在心里给自己的信心打分（1–3）。\n- **信心校准图**：每个信心档一根柱子（你的实际正确率）和一条横线（理想值：猜测约 40%、比较确定约 70%、非常确定约 95%）。“非常确定”的柱子低于横线 = 过度自信；当你已有至少 5 次“非常确定”且正确率低于 80%，页面会直接提醒你。“猜的”柱子远高于 40% = 自信不足。\n- **危急表现追踪**：每个“不能漏诊”的表现，要至少练过 3 次、最近 5 次都 ≥80% 且没有漏诊标记，才算“已掌握”。漏掉危急表现的那一次（报告、找发现、闭塞判断、分诊题）会打上标记。\n- **复习队列**：任何一题低于 80%，它训练的发现（或家族）就进入第 1 盒，第二天到期；按时答对一次升一盒（1、2、4、8、16 天）。这就是“再训练弱项家族”的自动版。\n- 两张图要**一起读**：应用不会替你画出“漏诊 + 非常确定”那一格。看哪些危急表现还停在“学习中”，同时你的“非常确定”柱子偏低——那一行，就写进你的台账。',
-        'Half of the ledger is already being kept for you by the app. Every answered item records the score, the date, the findings it trains, the confidence you chose, and whether you **missed a critical finding**.\n- **Where confidence is asked**: only in the exam. Lesson checks and drills (the short ones inside lessons and those on the Practice page) do not ask — there, rate your confidence (1–3) in your head before every answer.\n- **The calibration chart**: one bar per confidence level (your actual accuracy) and one line (the ideal: about 40 % for "Guess", 70 % for "Fairly sure", 95 % for "Sure"). A "Sure" bar below its line means overconfidence; once you have at least five "Sure" answers with accuracy under 80 %, the page warns you outright. A "Guess" bar far above 40 % means underconfidence.\n- **The critical-findings tracker**: each can\'t-miss finding counts as "Secured" only after at least 3 attempts with the last five all ≥ 80 % and no missed-critical flag. The attempt where a critical finding was missed (report, findings, occlusion or triage items) carries the flag.\n- **The review queue**: any item under 80 % puts the finding it trains (or its family) into box 1, due the next day; each on-time pass moves it up a box (1, 2, 4, 8, 16 days). That is "retrain the weak family" done automatically.\n- Read the two panels **together**: the app does not draw the "missed critical + Sure" cell for you. Look for critical findings still marked "Learning" while your "Sure" bar sits low — that line goes into your ledger.',
-        'La mitad del registro ya te la lleva la aplicación. Cada ejercicio contestado guarda la puntuación, la fecha, los hallazgos que entrena, la confianza elegida y si **se omitió un hallazgo crítico**.\n- **Dónde se pide la confianza**: solo en el examen. Las comprobaciones de las lecciones y los entrenamientos (los cortos dentro de las lecciones y los de la página de Práctica) no la piden: ahí, puntúa mentalmente tu confianza (1-3) antes de cada respuesta.\n- **El gráfico de calibración**: una barra por nivel de confianza (tu acierto real) y una línea (el ideal: en torno al 40 % para «Lo adivino», 70 % para «Bastante seguro» y 95 % para «Seguro»). Una barra de «Seguro» por debajo de su línea es exceso de confianza; en cuanto tengas al menos cinco respuestas «Seguro» con un acierto inferior al 80 %, la página te avisa directamente. Una barra de «Lo adivino» muy por encima del 40 % es defecto de confianza.\n- **El seguimiento de hallazgos críticos**: cada hallazgo que no se puede pasar por alto solo cuenta como «Dominado» tras al menos 3 intentos, con los cinco últimos ≥ 80 % y sin marca de omisión crítica. El intento en que se omitió un hallazgo crítico (ejercicios de informe, hallazgos, oclusión o triaje) lleva la marca.\n- **La cola de repaso**: cualquier ejercicio por debajo del 80 % pone el hallazgo que entrena (o su familia) en la caja 1, para el día siguiente; cada acierto a tiempo lo sube una caja (1, 2, 4, 8, 16 días). Es el «reentrenar la familia débil» hecho de forma automática.\n- Lee los dos paneles **juntos**: la aplicación no dibuja por ti la casilla «crítico omitido + Seguro». Busca los hallazgos críticos que siguen en «Aprendiendo» mientras tu barra de «Seguro» está baja: esa línea va a tu registro.',
-      ),
+      items: [
+        {
+          label: l('哪里问信心', 'Where confidence is asked', 'Dónde se pide la confianza'),
+          value: l('只在考试；课内检测题和训练都不问，在心里给自己打 1–3', 'Only in the exam; lesson checks and drills do not ask, so rate yourself 1–3 in your head', 'Solo en el examen; las comprobaciones y los entrenamientos no la piden: puntúate 1-3 mentalmente'),
+        },
+        {
+          label: l('信心校准图', 'The calibration chart', 'El gráfico de calibración'),
+          value: l(
+            '每档一根柱（你的正确率）对一条线（理想：猜的约 40%、比较确定约 70%、非常确定约 95%）；≥ 5 次“非常确定”且正确率 < 80% 会提醒你过度自信',
+            'One bar per level (your accuracy) against a line (the ideal: about 40 % Guess, 70 % Fairly sure, 95 % Sure); at least five "Sure" answers under 80 % triggers the overconfidence warning',
+            'Una barra por nivel (tu acierto) frente a una línea (el ideal: en torno al 40 % Lo adivino, 70 % Bastante seguro, 95 % Seguro); al menos cinco «Seguro» con menos del 80 % activan el aviso de exceso de confianza',
+          ),
+        },
+        {
+          label: l('危急表现追踪', 'The critical-findings tracker', 'El seguimiento de hallazgos críticos'),
+          value: l('至少练 3 次、最近 5 次都 ≥ 80%、没有漏诊标记，才算“已掌握”', '"Secured" only after at least 3 attempts, the last five all ≥ 80 % and no missed-critical flag', '«Dominado» solo tras al menos 3 intentos, los cinco últimos ≥ 80 % y sin marca de omisión crítica'),
+        },
+        {
+          label: l('复习队列', 'The review queue', 'La cola de repaso'),
+          value: l('任何一题 < 80%：它训练的发现（或家族）进第 1 盒，第二天到期；按时答对升一盒（1、2、4、8、16 天）', 'Any item under 80 % puts the finding it trains (or its family) in box 1, due the next day; each on-time pass moves it up a box (1, 2, 4, 8, 16 days)', 'Cualquier ejercicio por debajo del 80 % pone su hallazgo (o su familia) en la caja 1, para el día siguiente; cada acierto a tiempo lo sube una caja (1, 2, 4, 8, 16 días)'),
+        },
+        {
+          label: l('两张图一起读', 'Read both panels together', 'Lee los dos paneles juntos'),
+          value: l('应用不画“漏诊 + 非常确定”那一格：仍在“学习中”的危急表现 + 偏低的“非常确定”柱，就是要记进台账的那一行', 'The app does not draw the "missed critical + Sure" cell: a critical finding still "Learning" while your "Sure" bar sits low is the line for your ledger', 'La aplicación no dibuja la casilla «crítico omitido + Seguro»: un hallazgo crítico aún en «Aprendiendo» con la barra de «Seguro» baja es la línea para tu registro'),
+        },
+      ],
+      source: 'ECG Academy, Progress page (how this app records and schedules your answers)',
     },
     {
       kind: 'contrast',
@@ -238,14 +307,49 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('sinus-tachycardia', 1864, { rate: 125 }),
+      kind: 'film',
+      title: l('信心挂在每一句上', 'Confidence goes on each statement', 'La confianza va en cada afirmación'),
       view: STRIP,
-      marks: [{ auto: 'p' }, { auto: 'rr' }],
+      frames: [
+        {
+          label: l('节律', 'Rhythm', 'Ritmo'),
+          ecg: FAST,
+          note: l(
+            '每个 QRS 前都有 P，II 导联直立：“窦性心动过速”是你看得见的，可以给 3。',
+            'A P before every QRS, upright in II: "sinus tachycardia" is something you can see, so it can be a 3.',
+            'Una P antes de cada QRS, positiva en II: «taquicardia sinusal» es algo que ves, así que puede ser un 3.',
+          ),
+          marks: [{ auto: 'p' }],
+        },
+        {
+          label: l('心率', 'Rate', 'Frecuencia'),
+          ecg: FAST,
+          note: l(
+            'RR 约 12 个小格（约 480 ms），每拍一样：“约 125 次/分，规则”是量出来的，可以给 3。',
+            'RR about 12 small squares (about 480 ms), the same every beat: "about 125/min, regular" is measured, so it can be a 3.',
+            'RR de unos 12 cuadros pequeños (unos 480 ms), igual en cada latido: «unas 125 lpm, regular» está medido, así que puede ser un 3.',
+          ),
+          marks: [{ auto: 'rr' }],
+        },
+        {
+          label: l('原因', 'Cause', 'Causa'),
+          ecg: FAST,
+          note: l(
+            '“为什么快？”原因在患者身上，不在纸上：见到患者之前最多给 2。',
+            '"Why is it fast?" The cause lives in the patient, not on the paper: at most a 2 until you see the patient.',
+            '«¿Por qué es rápida?» La causa está en el paciente, no en el papel: como mucho un 2 hasta que veas al paciente.',
+          ),
+        },
+      ],
+      predict: {
+        question: l('这份报告里，哪部分可以给 3？', 'Which part of this report can carry a 3?', '¿Qué parte de este informe puede llevar un 3?'),
+        options: [l('节律和心率', 'The rhythm and the rate', 'El ritmo y la frecuencia'), l('心动过速的原因', 'The cause of the tachycardia', 'La causa de la taquicardia'), l('两者都可以', 'Both', 'Las dos')],
+        answer: 0,
+      },
       caption: l(
-        '信心挂在**陈述**上，不挂在整份图上。“窦性心动过速，约 125 次/分，规则”可以是 3；“**为什么**快”从单份图上最多是 2——原因在患者身上，不在纸上。下面真实病例 4078（69 岁女性，约 107 次/分，夹有房性早搏）正是这个形状：节律本身可以放心命名，而“为什么”在你见到患者之前只配 1–2。会拆分信心的读者，报告既敢写又不过度。接下来的检测题、小训练与真实病例都不会问信心档（只有考试的作答会进入你的校准图）；请在心里自己给信心打分——**每答一题都有意识地选一个信心档**，这个习惯就是本课的全部。',
-        'Confidence attaches to **statements**, not to whole tracings. "Sinus tachycardia, about 125/min, regular" can be a 3; "**why** it is fast" is at best a 2 from a single tracing — the cause lives in the patient, not on the paper. Real case 4078 below (a 69-year-old woman, about 107/min with PACs) is exactly this shape: the rhythm itself can be named with confidence, while the "why" earns a 1–2 until you see the patient. A reader who splits confidence this way writes reports that are both bold and honest. The checks, the short drill and the real cases that follow do not ask for a confidence level (only exam answers go into your calibration chart); rate it yourself, in your head — **choose a level deliberately on every single answer**: that habit is the whole lesson.',
-        'La confianza se asigna a **afirmaciones**, no a ECG enteros. «Taquicardia sinusal, unas 125 lpm, regular» puede ser un 3; «**por qué** es rápida» es como mucho un 2 desde un solo ECG: la causa está en el paciente, no en el papel. El caso real 4078 de abajo (mujer de 69 años, unas 107 lpm con extrasístoles auriculares) tiene exactamente esta forma: al ritmo se le puede dar nombre con confianza, mientras que el «por qué» merece un 1-2 hasta que veas al paciente. Quien divide así la confianza escribe informes a la vez valientes y honestos. Las comprobaciones, el entrenamiento corto y los casos reales que siguen no te piden un nivel de confianza (solo las respuestas del examen entran en tu gráfico de calibración); puntúalo tú mentalmente: **elige un nivel de forma deliberada en cada respuesta**; ese hábito es toda la lección.',
+        '信心挂在陈述上，不挂在整份图上。后面的检测题、训练和真实病例都不问信心：每答一题，在心里选一个 1–3。',
+        'Confidence attaches to statements, not to whole tracings. The checks, drill and real cases that follow do not ask: choose a 1–3 in your head on every answer.',
+        'La confianza se asigna a afirmaciones, no a ECG enteros. Las comprobaciones, el entrenamiento y los casos reales que siguen no la piden: elige mentalmente un 1-3 en cada respuesta.',
       ),
     },
     { kind: 'check', item: { inline: borderlineAxis } },
@@ -256,15 +360,25 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [4078, 17892, 18373],
       caption: l(
-        '三份真实心电图：69 岁女性、63 岁女性、79 岁女性各一份——加上开头的 16 岁女孩（2084）和电轴 −40° 的那位 80 岁女性（10730），你的五行校准数据就齐了。**每份先想好报告，再在心里给每一句单独打信心 1–3，然后才揭晓**。第三份请特别量一量电轴，并和 10730 比较：哪一份达到了左前分支阻滞的标准？揭晓后对照命中与失误，把每一处失误按类型记下（没看见 / 命名错 / 紧急度错）：那几行就是你台账的开头，也是这门课留给你的家庭作业。',
-        'Three real ECGs — a 69-year-old woman, a 63-year-old woman and a 79-year-old woman; with the 16-year-old girl from the hook (2084) and the 80-year-old woman with the −40° axis (10730), that makes five rows of calibration data. **Work out the report on each, rate your confidence 1–3 on every statement in your head, and only then reveal.** In the third, measure the axis with particular care and compare it with 10730: which of the two meets the criteria for left anterior fascicular block? Afterwards compare hits and misses, and log every miss by type (didn\'t see / misnamed / wrong urgency): those lines are the start of your ledger, and this course\'s homework.',
-        'Tres ECG reales —una mujer de 69 años, una de 63 y una de 79—; con la chica de 16 años del inicio (2084) y la mujer de 80 años con el eje a −40° (10730) suman cinco filas de datos de calibración. **Elabora el informe de cada uno, puntúa mentalmente tu confianza 1-3 en cada afirmación y solo entonces mira la solución.** En el tercero, mide el eje con especial cuidado y compáralo con el 10730: ¿cuál de los dos cumple los criterios de bloqueo fascicular anterior izquierdo? Después compara aciertos y fallos y anota cada fallo por tipo (no visto / mal nombrado / urgencia equivocada): esas líneas son el comienzo de tu registro y la tarea pendiente que te deja este curso.',
+        '三份真实心电图：69 岁、63 岁、79 岁女性。每份先想好报告，在心里给每一句打 1–3，再揭晓。第三份量电轴，和 10730 比：哪一份够左前分支阻滞？失误按类型记进台账：这就是这门课的家庭作业。',
+        'Three real ECGs: women of 69, 63 and 79. Work out the report, rate every statement 1–3 in your head, then reveal. In the third, measure the axis and compare it with 10730: which one meets the LAFB criteria? Log every miss by type: that is this course\'s homework.',
+        'Tres ECG reales: mujeres de 69, 63 y 79 años. Elabora el informe, puntúa mentalmente cada afirmación de 1 a 3 y luego mira. En el tercero, mide el eje y compáralo con el 10730: ¿cuál cumple los criterios de BFAI? Anota cada fallo por tipo: esa es la tarea que te deja el curso.',
       ),
     },
     {
       kind: 'pitfalls',
       items: [
         l('信心 3 当默认值：3 只留给“错了我会惊讶”的答案——一律标 3 等于没有校准。', 'Confidence 3 as the default: 3 is for answers whose being wrong would surprise you — a flat 3 is no calibration at all.', 'La confianza 3 como valor por defecto: el 3 es para las respuestas cuyo error te sorprendería; un 3 uniforme no es calibración.'),
+        l(
+          '自信不足：每份图都“不确定，请上级看”——第二位读者成了瓶颈，真正的“现在处理”淹没在噪声里。不确定要说具体：“电轴我不确定”可以训练。',
+          'Under-confidence: every tracing "not sure, someone senior please" — the second reader becomes the bottleneck and the real act-now cases drown in the noise. Make the doubt specific: "unsure about the axis" can be trained.',
+          'Defecto de confianza: cada ECG es un «no estoy seguro, que lo vea alguien superior»; el segundo lector se convierte en el cuello de botella y los verdaderos casos de actuar ya se ahogan en el ruido. Concreta la duda: «no estoy seguro del eje» se puede entrenar.',
+        ),
+        l(
+          '照签机器报告：自动化偏差把机器的错误（集中在节律，也认不出电极接反）以你的信心 3 写进病历。',
+          'Signing the machine statement unread: automation bias writes its errors (clustered in rhythm, blind to electrode reversals) into the record under your confidence 3.',
+          'Firmar la lectura automática sin revisarla: el sesgo de automatización escribe sus errores (concentrados en el ritmo, ciegos a las inversiones de electrodos) en la historia con tu confianza 3.',
+        ),
         l('错误台账从未开始：失误只留在记忆里，四周后同样的错误再来一遍。', 'The ledger never started: the misses stay in memory, and four weeks later the same error repeats.', 'El registro nunca se empieza: los fallos quedan en la memoria y un mes después el mismo error se repite.'),
         l('失误记录不标类型：“读错了一张图”开不出处方——没看见、命名错、紧急度错的训练完全不同。', 'Misses logged without a type: "misread one tracing" supports no prescription — didn\'t-see, misnamed and wrong-urgency train completely differently.', 'Fallos anotados sin tipo: «leí mal un ECG» no permite receta — no visto, mal nombrado y urgencia equivocada se entrenan de forma muy distinta.'),
         l('校准只测一次：信心会漂移（疲劳、连错、连胜之后），隔一段时间要重新对表。', 'Calibration measured once: confidence drifts (fatigue, after a run of errors or of wins) — re-check the table from time to time.', 'Calibrar una sola vez: la confianza deriva (cansancio, tras una racha de errores o de aciertos); vuelve a comprobar la tabla de vez en cuando.'),
