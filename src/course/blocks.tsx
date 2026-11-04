@@ -41,6 +41,7 @@ import { DIAL_META, dialStep, liveNote, pickDials, realisedDials, startDials, sw
 import { defaultBeat } from './marks';
 import { labLinks } from './lab';
 import { Markup } from './LessonText';
+import { optionOrder } from './predict';
 import { reviewKeys } from './stages';
 
 type BlockOf<K extends Block['kind']> = Extract<Block, { readonly kind: K }>;
@@ -305,7 +306,7 @@ function PredictGate(props: { readonly predict: Prediction; readonly playing: bo
   return (
     <Predict
       question={lt(p.question)}
-      options={p.options.map((o, i) => ({ id: String(i), label: lt(o) }))}
+      options={optionOrder(p).map((i) => ({ id: String(i), label: lt(p.options[i]) }))}
       correct={String(p.answer)}
       playing={props.playing}
       onReveal={props.onReveal}

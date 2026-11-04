@@ -55,6 +55,9 @@ export interface Prediction {
   readonly options: readonly L10n[];
   /** index into options */
   readonly answer: number;
+  /** the options form a scale (numbers, less → more) and are shown as written; otherwise the player shows them in a
+   * fixed order seeded by the question (live.ts optionOrder), so the answer's position gives nothing away */
+  readonly ordered?: boolean;
 }
 
 /** What the tracing shows while the played dial is inside [min, max]. */
