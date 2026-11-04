@@ -674,8 +674,9 @@ describe('o5: hypothermia on the tracings', () => {
       expect(e.truth!.findings).toContain('osborn-waves');
     }
   });
-  it('the J-wave differentials: early repolarisation has a normal QT and J ≈ 1.5 mm in II; hypercalcaemia (J-wave film) has a QTcF < 350 ms', () => {
+  it('the J-wave differentials: early repolarisation at ≈ 62/min has a normal QT and J ≈ 1.5 mm in II; hypercalcaemia (J-wave film) has a QTcF < 350 ms', () => {
     const er = ecgOf(contrastTitled('o5', 'Osborn waves or early repolarisation?').right.ecg);
+    expect(Math.abs(er.truth!.hrBpm - 62)).toBeLessThan(1);
     expect(er.truth!.qtcFridericiaMs).toBeLessThan(440);
     expect(stAt(er, 'II')).toBeGreaterThan(0.12);
     expect(stAt(er, 'II')).toBeLessThan(0.19);
@@ -690,6 +691,7 @@ describe('o5: hypothermia on the tracings', () => {
       expect(e.truth!.findings).not.toContain('osborn-waves');
     }
     expect(Math.abs(normal.truth!.qtMs - 380)).toBeLessThan(5);
+    expect(Math.abs(normal.truth!.hrBpm - 75)).toBeLessThan(1);
     expect(Math.abs(brady.truth!.hrBpm - 46)).toBeLessThan(1);
     expect(Math.abs(brady.truth!.qtMs - 445)).toBeLessThan(5);
     expect(Math.abs(cold.truth!.hrBpm - 46)).toBeLessThan(1);
@@ -709,7 +711,7 @@ describe('o5: hypothermia on the tracings', () => {
     }
     expect(stAt(stemi, 'aVL', 60)).toBeLessThan(-0.1);
   });
-  it('shivering film: the same cold heart with EMG on LA has I, III and aVL noisy and II clean; slow AF ≈ 55/min and irregular', () => {
+  it('shivering film: the same cold heart with EMG on LA has I, III and aVL noisy and II clean; slow AF ≈ 55/min and irregular, the RR mark on its longest interval', () => {
     const [still, shiver, af] = frames('o5', 2);
     expect(shiver.truth!.beats).toEqual(still.truth!.beats);
     for (const l of ['I', 'III', 'aVL'] as const) {
@@ -719,6 +721,9 @@ describe('o5: hypothermia on the tracings', () => {
     expect(af.truth!.rhythm).toBe('atrial-fibrillation');
     expect(Math.abs(af.truth!.hrBpm - 55)).toBeLessThan(5);
     expect(Math.max(...rrs(af)) - Math.min(...rrs(af))).toBeGreaterThan(150);
+    const [k] = markBeats(blocksOf('o5', 'film')[2].frames[2].marks, 'rr');
+    expect(af.truth!.beats[k].kind).toBe('atrial');
+    expect(rrs(af)[k]).toBe(Math.max(...rrs(af)));
   });
 });
 

@@ -238,7 +238,7 @@ const lesson: Lesson = {
           label: l('缓慢房颤', 'Slow AF', 'FA lenta'),
           ecg: synth('atrial-fibrillation', 1489, { fCoarseness: 0.4 }, 'slow'),
           note: l('没有P波，RR绝对不规则，约55次/分：缓慢房颤，中度低温时常见，复温后多自行转复。', 'No P waves, an irregularly irregular RR at about 55/min: slow AF, common in moderate hypothermia, usually gone after rewarming.', 'Sin P, RR irregularmente irregular a unos 55 lpm: FA lenta, frecuente en la hipotermia moderada; suele ceder al recalentar.'),
-          marks: [{ auto: 'rr', lead: 'II' }],
+          marks: [{ auto: 'rr', lead: 'II', beat: 5 }],
         },
       ],
       caption: l(
