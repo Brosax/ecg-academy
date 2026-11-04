@@ -548,13 +548,28 @@ describe('t1 on the tracings', () => {
   });
 });
 
+/** the beat an auto mark of this kind names (its `beat`), for marks the text pins to one beat */
+function markBeat(marks: readonly unknown[] | undefined, kind: string, lead?: string): number {
+  const m = (marks ?? []).find((x): x is { auto: string; beat?: number; lead?: string } => typeof x === 'object' && x !== null && (x as { auto?: unknown }).auto === kind && (lead === undefined || (x as { lead?: string }).lead === lead));
+  if (m?.beat === undefined) throw new Error(`no ${kind} mark with a beat`);
+  return m.beat;
+}
+
 describe('t2 on the tracings', () => {
-  it('worked flutter with variable block: F–F 200 ms, every RR near 3, 4 or 5 F–F (no 2:1)', () => {
-    const e = ecgOf(blocksOf('t2', 'worked')[0].ecg);
+  it('worked flutter with variable block: F–F 200 ms, every RR near 3, 4 or 5 F–F (no 2:1); step 1 brackets the shortest RR (3 F–F), step 2 an RR of 5 F–F, step 4 the 3 F–F one again', () => {
+    const w = blocksOf('t2', 'worked')[0];
+    const e = ecgOf(w.ecg);
     expect(e.truth!.atrialRateBpm).toBe(300);
     const ratios = rrs(e).map((rr) => Math.round(rr / 200));
     for (const r of ratios) expect([3, 4, 5]).toContain(r);
     expect(new Set(ratios).size).toBeGreaterThanOrEqual(2);
+    const rr = rrs(e);
+    const [s1, s2, s4] = [0, 1, 3].map((k) => markBeat(w.steps[k].marks, 'rr'));
+    expect(rr[s1]).toBe(Math.min(...rr));
+    expect(Math.round(rr[s1] / 200)).toBe(3);
+    expect(Math.round(rr[s2] / 200)).toBe(5);
+    expect(Math.abs(rr[s2] / 200 - 5)).toBeLessThan(0.2);
+    expect(s4).toBe(s1);
   });
   it('laddergram: the worked flutter tracing, an F every 200 ms, every 3rd, 4th or 5th F conducted', () => {
     const fig = blocksOf('t2', 'figure').find((b) => b.figure.id === 'laddergram')!;
@@ -599,6 +614,51 @@ describe('t2 on the tracings', () => {
     expect(Math.max(...coupling) - Math.min(...coupling)).toBeLessThan(10);
     const after = bb.flatMap((b, i) => (b.kind === 'ventricular' && i + 1 < bb.length ? [bb[i + 1].qrsOn - b.qrsOn] : []));
     expect(Math.min(...after)).toBeGreaterThan(2 * Math.max(...coupling));
+    // the marks sit on the beats the notes are about
+    const afRr = markBeat(film.frames[0].marks, 'rr');
+    expect(af.truth!.beats[afRr].kind).toBe(af.truth!.beats[0].kind);
+    expect(rrs(af)[afRr], 'AF: the bracket shows the longest RR').toBe(Math.max(...rrs(af)));
+    const flRr = rrs(frames('t2', 0)[1])[markBeat(film.frames[1].marks, 'rr')];
+    expect(Math.round(flRr / 200), 'flutter: the bracket spans 5 F–F').toBe(5);
+    expect(Math.abs(flRr / 200 - 5)).toBeLessThan(0.2);
+    for (const k of ['p', 'rr']) expect(sb[markBeat(film.frames[3].marks, k)].kind, `sinus arrhythmia ${k}`).toBe('sinus');
+    const bq = bb[markBeat(film.frames[4].marks, 'qrs')];
+    expect(bq.kind, 'bigeminy: the QRS mark is on the early wide beat').toBe('ventricular');
+    expect(bq.pOn).toBeNull();
+    expect(bq.qrsOff - bq.qrsOn).toBeGreaterThanOrEqual(120);
+  });
+  it('MAT contrast: atrial rate > 100/min; the three marked P′ waves stand clear of the T, differ in shape in II (> 0.5 mm apart) and in PR; PP varies; the baseline between P′ waves is flat wherever a P′ stands clear of the T', () => {
+    const c = blocksOf('t2', 'contrast')[0];
+    const e = ecgOf(c.left.ecg);
+    const t = e.truth!;
+    expect(t.rhythm).toBe('mat');
+    expect(t.atrialRateBpm!).toBeGreaterThan(100);
+    const marked = (c.left.marks ?? []).map((m) => ('auto' in m && m.auto === 'p' ? m.beat! : -1));
+    expect(marked.length).toBe(3);
+    const wave = (i: number) => {
+      const b = t.beats[i];
+      const base = at(e, 'II', b.pOn! - 4);
+      const out: number[] = [];
+      for (let s = 0; s <= 120; s += 2) out.push(at(e, 'II', b.pOn! + s) - base);
+      return out;
+    };
+    for (const i of marked) expect(t.beats[i].pOn!, `beat ${i} clear of the T`).toBeGreaterThan(t.beats[i - 1].tOff);
+    for (let x = 0; x < marked.length; x++)
+      for (let y = x + 1; y < marked.length; y++) {
+        const [a, b] = [wave(marked[x]), wave(marked[y])];
+        expect(Math.max(...a.map((v, k) => Math.abs(v - b[k]))), `P′ ${marked[x]} vs ${marked[y]}`).toBeGreaterThan(0.05);
+        const pr = (i: number) => t.beats[i].qrsOn - t.beats[i].pOn!;
+        expect(Math.abs(pr(marked[x]) - pr(marked[y])), `PR ${marked[x]} vs ${marked[y]}`).toBeGreaterThan(15);
+      }
+    expect(Math.max(...rrs(e)) - Math.min(...rrs(e))).toBeGreaterThan(100);
+    let clear = 0;
+    t.beats.forEach((b, i) => {
+      if (i === 0 || b.pOn! - t.beats[i - 1].tOff < 20) return;
+      clear++;
+      const base = baselineBefore(e.signal.leads.II, e.signal.fs, b.qrsOn);
+      for (let s = t.beats[i - 1].tOff + 10; s <= b.pOn! - 10; s += 2) expect(Math.abs(at(e, 'II', s) - base), `TP before beat ${i}`).toBeLessThanOrEqual(0.05);
+    });
+    expect(clear).toBeGreaterThanOrEqual(8);
   });
   it('f-wave sweep notes: V1 f waves over 1 mm at 0.7–0.9 and under 1 mm at 0.2–0.45; the RR identical at every setting', () => {
     for (const v of [0.7, 0.9]) expect(diastolicP2p(played('t2', 0, v), 'V1'), `${v}`).toBeGreaterThan(0.1);
@@ -607,25 +667,33 @@ describe('t2 on the tracings', () => {
     for (const v of [0.2, 0.46, 0.69]) expect(rrs(played('t2', 0, v)), `${v}`).toEqual(ref);
     expect(played('t2', 0, 0.2).truth!.rhythm).toBe('atrial-fibrillation');
   });
-  it('rate film: about 130/min irregular; about 45/min irregular; about 45/min regular escape with f waves and complete AV block; pre-excited AF about 190/min, wide QRS varying beat to beat, shortest RR about 225 ms', () => {
+  it('rate film: about 133/min irregular; about 45/min irregular; about 44/min regular escape with f waves and complete AV block; pre-excited AF about 190/min, wide QRS varying beat to beat, shortest RR about 225 ms (bracketed, with a wide QRS marked after it)', () => {
+    const film = blocksOf('t2', 'film')[1];
     const [untreated, slow, regular, pre] = frames('t2', 1);
-    expect(Math.abs(untreated.truth!.hrBpm - 130)).toBeLessThanOrEqual(5);
+    expect(Math.abs(untreated.truth!.hrBpm - 133)).toBeLessThanOrEqual(1);
     expect(Math.max(...rrs(untreated)) - Math.min(...rrs(untreated))).toBeGreaterThan(300);
-    expect(Math.abs(slow.truth!.hrBpm - 45)).toBeLessThanOrEqual(3);
+    expect(rrs(untreated)[markBeat(film.frames[0].marks, 'rr')]).toBe(Math.max(...rrs(untreated)));
+    expect(Math.abs(slow.truth!.hrBpm - 45)).toBeLessThanOrEqual(1);
     expect(Math.max(...rrs(slow)) - Math.min(...rrs(slow))).toBeGreaterThan(300);
+    expect(rrs(slow)[markBeat(film.frames[1].marks, 'rr')]).toBe(Math.max(...rrs(slow)));
     const r = regular.truth!;
-    expect(Math.abs(r.hrBpm - 45)).toBeLessThanOrEqual(3);
+    expect(Math.abs(r.hrBpm - 44)).toBeLessThanOrEqual(1);
     expect(Math.max(...rrs(regular)) - Math.min(...rrs(regular))).toBeLessThan(10);
     expect(r.findings).toContain('av-block-3');
     expect(r.beats.every((b) => b.kind.startsWith('escape'))).toBe(true);
     expect(diastolicP2p(regular, 'V1')).toBeGreaterThan(0.05);
     const p = pre.truth!;
-    expect(Math.abs(p.hrBpm - 190)).toBeLessThanOrEqual(5);
+    expect(Math.abs(p.hrBpm - 190)).toBeLessThanOrEqual(1);
     expect(Math.abs(Math.min(...rrs(pre)) - 225)).toBeLessThan(5);
     const widths = p.beats.map((b) => b.qrsOff - b.qrsOn);
     expect(Math.max(...widths)).toBeGreaterThanOrEqual(140);
     expect(Math.max(...widths) - Math.min(...widths)).toBeGreaterThan(30);
     expect(p.findings).toContain('wpw');
+    const short = markBeat(film.frames[3].marks, 'rr');
+    expect(rrs(pre)[short], 'the bracket is the shortest RR').toBe(Math.min(...rrs(pre)));
+    expect(markBeat(film.frames[3].marks, 'qrs'), 'the QRS mark is the beat that ends it').toBe(short + 1);
+    expect(widths[short + 1]).toBeGreaterThanOrEqual(140);
+    expect(widths[short], 'the shortest RR runs between two wide beats').toBeGreaterThanOrEqual(140);
   });
 });
 

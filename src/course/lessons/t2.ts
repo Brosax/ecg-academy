@@ -79,7 +79,7 @@ const lesson: Lesson = {
           label: l('房颤', 'AF', 'FA'),
           ecg: synth('atrial-fibrillation', 621, { fCoarseness: 0.55, ventricularResponse: 120 }),
           note: l('没有重复的 P，只有 f 波；RR 长短不一，找不到任何模式 ⇒ 房颤。', 'No repeating P, only f waves; the RR vary with no pattern at all → AF.', 'Ninguna P que se repita, solo ondas f; el RR varía sin patrón alguno → FA.'),
-          marks: [{ auto: 'f-waves' }, { auto: 'rr' }],
+          marks: [{ auto: 'f-waves' }, { auto: 'rr', beat: 3 }],
         },
         {
           label: l('房扑不等比', 'Flutter, variable', 'Flutter variable'),
@@ -89,7 +89,7 @@ const lesson: Lesson = {
             'Sawtooth F waves; every RR is a whole multiple of the F–F (about 200 ms) → flutter with variable block, not AF.',
             'Ondas F en diente de sierra; cada RR es un múltiplo entero del F–F (unos 200 ms) → flutter con conducción variable, no FA.',
           ),
-          marks: [{ auto: 'f-waves' }, { auto: 'rr' }],
+          marks: [{ auto: 'f-waves' }, { auto: 'rr', beat: 7 }],
         },
         {
           label: l('房早', 'PACs', 'Extrasístoles auriculares'),
@@ -109,7 +109,7 @@ const lesson: Lesson = {
             'The same P and the same PR; the PP lengthens and shortens in waves with breathing, and nothing comes early → sinus arrhythmia.',
             'La misma P y el mismo PR; el PP se alarga y se acorta en oleadas con la respiración y nada llega antes de tiempo → arritmia sinusal.',
           ),
-          marks: [{ auto: 'p' }, { auto: 'rr' }],
+          marks: [{ auto: 'p', beat: 3 }, { auto: 'rr', beat: 3 }],
         },
         {
           label: l('室性二联律', 'Bigeminy', 'Bigeminismo'),
@@ -119,7 +119,7 @@ const lesson: Lesson = {
             'One sinus beat, then an early wide QRS with no P before it; the long–short pair repeats: regularly irregular → ventricular bigeminy.',
             'Un latido sinusal y después un QRS ancho precoz sin P delante; el par largo-corto se repite: regularmente irregular → bigeminismo ventricular.',
           ),
-          marks: [{ auto: 'qrs' }],
+          marks: [{ auto: 'qrs', beat: 6 }],
         },
       ],
       predict: {
@@ -272,8 +272,8 @@ const lesson: Lesson = {
         {
           label: l('未治疗', 'Untreated', 'Sin tratamiento'),
           ecg: synth('atrial-fibrillation', 621, { fCoarseness: 0.55, ventricularResponse: 120 }),
-          note: l('约 130 次/分，绝对不齐：落在未治疗房颤常见的 100–180 次/分之内。', 'About 130/min and irregularly irregular: inside the usual untreated window of 100–180/min.', 'Unos 130 lpm e irregularmente irregular: dentro de la ventana habitual sin tratamiento, 100–180 lpm.'),
-          marks: [{ auto: 'rr' }],
+          note: l('约 133 次/分，绝对不齐：落在未治疗房颤常见的 100–180 次/分之内。', 'About 133/min and irregularly irregular: inside the usual untreated window of 100–180/min.', 'Unos 133 lpm e irregularmente irregular: dentro de la ventana habitual sin tratamiento, 100–180 lpm.'),
+          marks: [{ auto: 'rr', beat: 3 }],
         },
         {
           label: l('慢', 'Slow', 'Lenta'),
@@ -283,15 +283,15 @@ const lesson: Lesson = {
             'About 45/min and still irregularly irregular: slowness does not change the diagnosis. If no rate-slowing drugs → disease of the AV conduction itself.',
             'Unos 45 lpm y sigue irregularmente irregular: la lentitud no cambia el diagnóstico. Si no toma fármacos frenadores → enfermedad de la propia conducción AV.',
           ),
-          marks: [{ auto: 'f-waves' }, { auto: 'rr' }],
+          marks: [{ auto: 'f-waves' }, { auto: 'rr', beat: 4 }],
         },
         {
           label: l('慢而规则', 'Slow and regular', 'Lenta y regular'),
           ecg: synth('af-regularised', 632),
           note: l(
-            '约 45 次/分而且**规则**：f 波还在，心室却由逸搏驱动 ⇒ 完全房室阻滞，绝不是“控制良好”。',
-            'About 45/min and **regular**: the f waves go on, but an escape rhythm drives the ventricles → complete AV block, never "well controlled".',
-            'Unos 45 lpm y **regular**: las ondas f siguen, pero un ritmo de escape manda en los ventrículos → bloqueo AV completo, nunca «bien controlada».',
+            '约 44 次/分而且**规则**：f 波还在，心室却由逸搏驱动 ⇒ 完全房室阻滞，绝不是“控制良好”。',
+            'About 44/min and **regular**: the f waves go on, but an escape rhythm drives the ventricles → complete AV block, never "well controlled".',
+            'Unos 44 lpm y **regular**: las ondas f siguen, pero un ritmo de escape manda en los ventrículos → bloqueo AV completo, nunca «bien controlada».',
           ),
           marks: [{ auto: 'f-waves' }, { auto: 'rr' }],
         },
@@ -303,14 +303,14 @@ const lesson: Lesson = {
             'About 190/min, irregular, with wide QRS complexes that change beat to beat; shortest RR about 225 ms → pre-excited AF: no AV-nodal blockers.',
             'Unos 190 lpm, irregular, con QRS anchos que cambian de un latido a otro; RR más corto de unos 225 ms → FA preexcitada: nada de bloqueadores del nodo AV.',
           ),
-          marks: [{ auto: 'qrs' }],
+          marks: [{ auto: 'qrs', beat: 24 }, { auto: 'rr', beat: 23 }],
         },
       ],
       predict: {
         question: l(
-          '房颤患者 f 波仍在，心室率约 45 次/分，RR 却突然完全规则了。这说明什么？',
-          'A patient in AF still has f waves, the rate is about 45/min, and the RR has suddenly become perfectly regular. What does that mean?',
-          'Un paciente en FA sigue con ondas f, la frecuencia ronda 45 lpm y el RR se ha vuelto de repente totalmente regular. ¿Qué significa?',
+          '房颤患者 f 波仍在，心室率约 44 次/分，RR 却突然完全规则了。这说明什么？',
+          'A patient in AF still has f waves, the rate is about 44/min, and the RR has suddenly become perfectly regular. What does that mean?',
+          'Un paciente en FA sigue con ondas f, la frecuencia ronda 44 lpm y el RR se ha vuelto de repente totalmente regular. ¿Qué significa?',
         ),
         options: [
           l('心室率控制得很好', 'Rate control is excellent', 'El control de la frecuencia es excelente'),
@@ -333,7 +333,7 @@ const lesson: Lesson = {
             'At first glance this also passes for "irregularly irregular". Set your calipers to the shortest RR and walk down the strip, measuring every interval.',
             'A primera vista también pasa por «irregularmente irregular». Ajusta el compás al RR más corto y recorre la tira midiendo cada intervalo.',
           ),
-          marks: [{ auto: 'rr' }],
+          marks: [{ auto: 'rr', beat: 4 }],
           view: { layout: 'strip', lead: 'II', calipers: true },
         },
         {
@@ -343,7 +343,7 @@ const lesson: Lesson = {
             'Every RR is (± a little jitter) a whole-number multiple of one short interval — that interval is the F–F (about 200 ms, an atrial rate near 300/min). True AF has no such common denominator.',
             'Cada RR es (± una pequeña oscilación) múltiplo entero de un intervalo corto: ese intervalo es el F–F (unos 200 ms, frecuencia auricular cercana a 300 lpm). La FA verdadera no tiene ese común denominador.',
           ),
-          marks: [{ auto: 'rr' }],
+          marks: [{ auto: 'rr', beat: 7 }],
         },
         {
           title: l('第三步：找到F波', 'Step 3: find the F waves', 'Paso 3: encuentra las ondas F'),
@@ -361,7 +361,7 @@ const lesson: Lesson = {
             'Flutter with variable AV block — not AF. Flutter gets its own lesson (t3); the lesson here is: **find the pattern inside the irregularity before you sign the report**.',
             'Flutter con conducción AV variable — no FA. El flutter tiene su propia lección (t3); lo que cuenta aquí: **encuentra el patrón dentro de la irregularidad antes de firmar el informe**.',
           ),
-          marks: [{ auto: 'rr' }],
+          marks: [{ auto: 'rr', beat: 4 }],
         },
       ],
     },
@@ -382,7 +382,11 @@ const lesson: Lesson = {
       left: {
         ecg: synth('mat', 623),
         caption: l('74岁，慢阻肺急性加重', '74 years, acutely decompensated COPD', '74 años, EPOC descompensada'),
-        marks: [{ auto: 'p' }, { auto: 'p', beat: 3, label: l('另一种P′形态', 'another P′ shape', 'otra morfología de P′') }],
+        marks: [
+          { auto: 'p', beat: 4, label: l('P′', 'P′', 'P′') },
+          { auto: 'p', beat: 3, label: l('另一种P′形态', 'another P′ shape', 'otra morfología de P′') },
+          { auto: 'p', beat: 13, label: l('第三种P′形态', 'a third P′ shape', 'una tercera morfología de P′') },
+        ],
       },
       right: {
         ecg: synth('atrial-fibrillation', 624),
@@ -427,14 +431,14 @@ const lesson: Lesson = {
           '«Irregular significa FA»: el flutter con conducción variable pasa desapercibido; recorre el RR con el compás y los múltiplos se delatan solos.',
         ),
         l(
-          '房颤心室率慢而规则被写成“控制良好”：这是完全房室阻滞伴逸搏（地高辛中毒经典），下一步是评估起搏。',
-          'AF with a slow, regular rate reported as "well controlled": that is complete AV block with an escape (digoxin toxicity classic); the next step is a pacing evaluation.',
-          'Una FA lenta y regular informada como «bien controlada»: es un bloqueo AV completo con escape (clásico de intoxicación digoxínica); el siguiente paso es valorar un marcapasos.',
+          '房颤心室率慢而规则被写成“控制良好”：这是完全房室阻滞伴逸搏（地高辛中毒经典）——停用地高辛和其他减慢心率的药物，查血钾和地高辛浓度，再评估起搏。',
+          'AF with a slow, regular rate reported as "well controlled": that is complete AV block with an escape (digoxin toxicity classic); stop digoxin and other rate-slowing drugs, check K⁺ and the digoxin level, then assess for pacing.',
+          'Una FA lenta y regular informada como «bien controlada»: es un bloqueo AV completo con escape (clásico de intoxicación digoxínica); suspende la digoxina y los demás fármacos frenadores, mide el K⁺ y la digoxinemia, y después valora un marcapasos.',
         ),
         l(
           '伪差伪装成房颤：颤抖或松动的电极让基线毛糙——检查“f波”和RR的变化是否在每个导联一致出现。',
           'Artefact masquerading as AF: tremor or a loose electrode roughens the baseline — check that the "f waves" and the RR variation appear consistently in every lead.',
-          'Artefactos disfrazados de FA: el temblor o un electrodo suelto descuelgan la línea de base; comprueba que las «ondas f» y la variación del RR aparezcan de forma coherente en todas las derivaciones.',
+          'Artefactos disfrazados de FA: el temblor o un electrodo suelto ensucian la línea de base; comprueba que las «ondas f» y la variación del RR aparezcan de forma coherente en todas las derivaciones.',
         ),
         l(
           '很早的房早落在 T 波上未下传，节律看起来像窦性心动过缓：去 T 波里找 P′。',
