@@ -914,29 +914,46 @@ describe('i10: confounders on the tracings', () => {
     }
     for (const l of ['V5', 'V6'] as const) expect(stAt(e, l), l).toBeLessThan(0);
   });
-  it('criterion 1: concordant elevation ≥ 1 mm in V5–V6 over positive QRS', () => {
-    const e = ecgOf(blocksOf('i10', 'ecg')[0].ecg);
+  it('criterion 1 frame: concordant elevation 1.5–2 mm in V5–V6 over positive QRS', () => {
+    const e = frame('i10', 0, 1);
+    for (const l of ['V5', 'V6'] as const) {
+      expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.145);
+      expect(stAt(e, l), l).toBeLessThanOrEqual(0.2);
+    }
     for (const l of ['V5', 'V6'] as const) {
       expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
       expect(qrs(e, l).net, l).toBeGreaterThan(0);
     }
   });
-  it('criterion 2: concordant depression ≥ 1 mm in V2–V3 (V1 about 0.5 mm) over negative QRS; no concordant elevation anywhere', () => {
-    const e = ecgOf(blocksOf('i10', 'ecg')[1].ecg);
+  it('criterion 2 frame: concordant depression ≥ 1 mm in V2–V3 (V3 about 2.5 mm, V1 about 0.5 mm) over negative QRS; no concordant elevation anywhere', () => {
+    const e = frame('i10', 0, 2);
+    expect(stAt(e, 'V3')).toBeLessThan(-0.22);
+    expect(stAt(e, 'V3')).toBeGreaterThan(-0.3);
     for (const l of ['V1', 'V2', 'V3'] as const) expect(qrs(e, l).net, l).toBeLessThan(0);
     for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.1);
     expect(stAt(e, 'V1')).toBeLessThan(-0.03);
     expect(stAt(e, 'V1')).toBeGreaterThan(-0.1);
     for (const l of ALL) if (qrs(e, l).net > 0) expect(stAt(e, l), `${l}: concordant elevation`).toBeLessThan(0.1);
   });
-  it('RBBB: rsR′ in V1, T inverted in V1–V2, upright in V3–V6', () => {
-    const e = ecgOf(blocksOf('i10', 'ecg')[3].ecg);
+  it('RBBB frame: rsR′ in V1, T inverted in V1–V2, upright in V3–V6', () => {
+    const e = frame('i10', 1, 0);
     expect(shape(e, 'V1')).toMatch(/R′/);
     for (const l of ['V1', 'V2'] as const) expect(tInverted(e, l), l).toBe(true);
     for (const l of ['V3', 'V4', 'V5', 'V6'] as const) expect(tUpright(e, l), l).toBe(true);
   });
-  it('LVH: discordant V1–V2 elevation well under 25 % of the S, lateral depression with inverted T', () => {
-    const e = ecgOf(blocksOf('i10', 'ecg')[4].ecg);
+  it('Smith frame = the hook; paced frame: QRS about 160 ms, QS in II, III, aVF and V1 with the T opposite (upright)', () => {
+    expect(blocksOf('i10', 'film')[0].frames[0].ecg).toEqual(blocksOf('i10', 'hook')[0].ecg);
+    const p = frame('i10', 0, 3);
+    expect(p.truth!.rhythm).toBe('paced-rhythm');
+    expect(Math.abs(p.truth!.qrsMs - 160)).toBeLessThan(5);
+    for (const l of ['II', 'III', 'aVF', 'V1'] as const) {
+      expect(qrs(p, l).max, l).toBeLessThan(0.02);
+      expect(qrs(p, l).min, l).toBeLessThan(-1);
+      expect(tUpright(p, l), l).toBe(true);
+    }
+  });
+  it('LVH frame: discordant V1–V2 elevation well under 25 % of the S, lateral depression with inverted T', () => {
+    const e = frame('i10', 1, 1);
     for (const l of ['V1', 'V2'] as const) expect(stOverS(e, l), l).toBeGreaterThan(-0.25);
     for (const l of ['V5', 'V6'] as const) {
       expect(stAt(e, l, 60), l).toBeLessThan(-0.05);

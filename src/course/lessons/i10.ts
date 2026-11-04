@@ -75,18 +75,9 @@ const lesson: Lesson = {
       showConduction: true,
       emphasize: ['lbb'],
       caption: l(
-        '播放一个心动周期：左束支被阻断（传导系统中亮起的部分），室间隔从右向左除极，激动在心肌内缓慢扩布——QRS 增宽，V1 深 S、侧壁宽钝 R 波。ST 段与 T 波是继发改变，与 QRS 主波反向是这张底图的“标配”。先认识它，才能在它之上认出真正的损伤电流。',
-        'Play one beat: the left bundle is blocked (lit in the conduction system), the septum activates right-to-left and the impulse crawls through working muscle — the QRS widens, V1 shows a deep S and the lateral leads a broad, slurred R. The ST segment and T wave are secondary changes, discordant to the QRS by design in this baseline. Know it first; only then can you recognise a true injury current on top of it.',
-        'Reproduce un latido: la rama izquierda está bloqueada (la parte iluminada del sistema de conducción), el tabique se despolariza de derecha a izquierda y el impulso avanza despacio por el miocardio: el QRS se ensancha, V1 muestra una S profunda y las laterales una R ancha y empastada. El ST y la T son cambios secundarios, discordantes al QRS por diseño en este trazado base. Conócelo primero; solo entonces podrás reconocer encima una corriente de lesión verdadera.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('为什么这张图不能“照常读”', 'Why this tracing cannot be read the usual way', 'Por qué este registro no se puede leer como siempre'),
-      body: l(
-        '- 左束支传导阻滞（LBBB）与心室起搏同时改写**除极与复极**：除极顺序变了，ST 段与 T 波作为继发改变跟着 QRS 主波**反向**移动——V1–V3 的深 S 对应抬高，侧壁大 R 对应压低。这是阻滞在说话，不是缺血。\n- 因此常规 STEMI 毫米阈值在这里**不可用**：既会漏诊（真抬高被当作继发），也会误诊（继发抬高被判为梗死）。\n- 判读工具换成 **Sgarbossa 标准（Smith 改良）**：找“同向”改变（方向错得离谱）与“过度不一致”（比例错得离谱）。Barcelona 标准是同一思路的另一套工具。\n- 症状优先于波形：**束支阻滞或起搏心律的患者，只要缺血症状持续，就按 STEMI 管理**（ESC 2023）——心电图标准只用来把可能性推得更高，从不用来排除。',
-        '- Left bundle branch block (LBBB) and ventricular pacing rewrite **depolarisation and repolarisation together**: the activation sequence changes, and the ST segment and T wave, as secondary changes, swing **opposite** the main QRS deflection — a deep S in V1–V3 comes with elevation, a tall lateral R with depression. That is the block speaking, not ischaemia.\n- The standard STEMI millimetre thresholds are therefore **unusable**: they miss real infarcts (dismissed as secondary) and invent false ones (secondary elevation called a STEMI).\n- The reading tool becomes the **(Smith-modified) Sgarbossa criteria**: hunt for *concordant* changes (wrong direction) and *excessively discordant* ones (wrong proportion). The Barcelona criteria are an alternative set built on the same idea.\n- Symptoms outrank waveform: **a patient with a bundle branch block or a paced rhythm and ongoing ischaemic symptoms is managed as STEMI** (ESC 2023) — the ECG criteria only push the probability higher; they never rule out.',
-        '- El bloqueo de rama izquierda (BRI) y la estimulación ventricular reescriben **a la vez la despolarización y la repolarización**: cambia la secuencia de activación y el ST y la T, como cambios secundarios, se desvían **en sentido opuesto** a la deflexión principal del QRS; una S profunda en V1–V3 se acompaña de elevación y una R lateral alta, de descenso. Eso habla del bloqueo, no de isquemia.\n- Los umbrales milimétricos habituales del IAMCEST son por tanto **inaplicables**: pasan por alto infartos reales (tachados de secundarios) e inventan otros falsos (elevación secundaria llamada IAMCEST).\n- La herramienta de lectura pasa a ser los **criterios de Sgarbossa (modificados por Smith)**: buscar cambios *concordantes* (dirección equivocada) y *excesivamente discordantes* (proporción equivocada). Los criterios de Barcelona son una alternativa con la misma idea.\n- Los síntomas mandan sobre la morfología: **un paciente con bloqueo de rama o ritmo estimulado y síntomas isquémicos persistentes se maneja como IAMCEST** (ESC 2023); los criterios electrocardiográficos solo elevan aún más la probabilidad, nunca la descartan.',
+        '播放一个心动周期：左束支被阻断，室间隔从右向左除极，激动在心肌内缓慢扩布：QRS 增宽，V1 深 S，侧壁宽钝 R 波。ST-T 与 QRS 主波反向，是这张底图的常态。',
+        'Play one beat: the left bundle is blocked, the septum activates right to left and the impulse crawls through the muscle: a wide QRS, a deep S in V1, a broad slurred R laterally. ST–T opposite the QRS is normal for this baseline.',
+        'Reproduce un latido: la rama izquierda está bloqueada, el tabique se activa de derecha a izquierda y el impulso avanza despacio por el músculo: QRS ancho, S profunda en V1, R ancha y empastada en las laterales. El ST–T opuesto al QRS es lo normal en este trazado.',
       ),
     },
     {
@@ -206,45 +197,64 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'ecg',
-      ecg: synth('sgarbossa', 984),
-      view: { layout: '3x4+1', highlightLeads: ['V5', 'V6'] },
-      marks: [
-        { auto: 'qrs', lead: 'V6' },
-        { auto: 'st', lead: 'V6' },
-      ],
-      caption: l(
-        '标准 1 的样子：V5–V6 的 QRS 主波向上（宽大 R 波），ST 却同向抬高 ≥1 mm——侧壁的损伤电流把 LBBB“应有”的继发性压低顶成了抬高。这是三条中最有力的一条（原评分 5 分），见到即可启动再灌注。',
-        'What criterion 1 looks like: in V5–V6 the QRS is positive (broad R waves) and the ST is elevated ≥1 mm in the same direction — a lateral injury current has flipped the LBBB\'s "expected" secondary depression into elevation. This is the strongest of the three (5 points in the original score); seeing it is enough to activate reperfusion.',
-        'Así se ve el criterio 1: en V5–V6 el QRS es positivo (R anchas) y el ST se eleva ≥1 mm en la misma dirección; una corriente de lesión lateral ha invertido en elevación el descenso secundario «esperado» del BRI. Es el más potente de los tres (5 puntos en la puntuación original), y verlo basta para activar la reperfusión.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('sgarbossa', 985, undefined, 'concordant-depression'),
-      view: { layout: '3x4+1', highlightLeads: ['V1', 'V2', 'V3'] },
-      marks: [
-        { auto: 'st', lead: 'V2' },
-        { auto: 'st', lead: 'V3' },
-      ],
-      caption: l(
-        '标准 2 的样子：V1–V3 的 QRS 主波向下，LBBB 本该给出“继发性抬高”，这里 V2 与 V3 却压低约 1.5–2.5 mm（同向压低 ≥1 mm；V1 约 0.5 mm）——后壁损伤电流的镜像（原评分 3 分）。QRS 向上的导联没有同向抬高（标准 1 阴性）：这份图单独展示标准 2，仅凭它就足以判为 LBBB 之上的后壁闭塞。',
-        'What criterion 2 looks like: in V1–V3 the QRS is negative and LBBB should give "secondary elevation", yet V2 and V3 are depressed by about 1.5–2.5 mm (concordant depression ≥1 mm; V1 about 0.5 mm) — the mirror of a posterior injury current (3 points in the original score). No lead with a positive QRS shows concordant elevation (criterion 1 negative): this tracing isolates criterion 2, which on its own is enough to call a posterior occlusion on top of the LBBB.',
-        'Así se ve el criterio 2: en V1–V3 el QRS es negativo y el BRI debería dar «elevación secundaria», pero V2 y V3 descienden unos 1,5-2,5 mm (descenso concordante ≥1 mm; V1 unos 0,5 mm): el espejo de una corriente de lesión posterior (3 puntos en la puntuación original). Ninguna derivación con QRS positivo muestra elevación concordante (criterio 1 negativo): este trazado aísla el criterio 2, que por sí solo basta para diagnosticar una oclusión posterior sobre el BRI.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('paced-ddd', 986),
+      kind: 'film',
+      title: l('LBBB 与起搏心律：标准一条一条看', 'LBBB and pacing: the criteria one at a time', 'BRI y marcapasos: los criterios uno a uno'),
       view: { layout: '3x4+1' },
-      marks: [
-        { auto: 'pacing-spike' },
-        { auto: 'qrs', lead: 'V1' },
+      frames: [
+        {
+          label: l('Smith 比值', 'Smith ratio', 'Cociente de Smith'),
+          ecg: synth('sgarbossa', 981, undefined, 'smith'),
+          note: l(
+            '开头那份图：V1–V3 的 ST 与 QRS 反向，但抬高超过 S 波深度的四分之一：ST/S ≤ −0.25，阳性。',
+            'The opening tracing: in V1–V3 the ST is opposite the QRS but rises more than a quarter of the S depth: ST/S ≤ −0.25, positive.',
+            'El trazado inicial: en V1–V3 el ST va contra el QRS pero sube más de una cuarta parte de la S: ST/S ≤ −0,25, positivo.',
+          ),
+          marks: [{ auto: 's', lead: 'V3' }, { auto: 'j', lead: 'V3' }],
+        },
+        {
+          label: l('标准 1', 'Criterion 1', 'Criterio 1'),
+          ecg: synth('sgarbossa', 984),
+          note: l(
+            'V5–V6：R 波高大，ST 也向上抬高 1.5–2 mm：同向抬高，三条中最有力的一条。',
+            'V5–V6: tall R waves and the ST up as well, 1.5–2 mm: concordant elevation, the strongest of the three.',
+            'V5–V6: R altas y el ST también elevado, 1,5–2 mm: elevación concordante, el más potente de los tres.',
+          ),
+          marks: [{ auto: 'j', lead: 'V5' }, { auto: 'j', lead: 'V6' }],
+        },
+        {
+          label: l('标准 2', 'Criterion 2', 'Criterio 2'),
+          ecg: synth('sgarbossa', 985, undefined, 'concordant-depression'),
+          note: l(
+            'V2–V3：QRS 向下，ST 也向下压低超过 1 mm（V3 约 2.5 mm）：V1–V3 同向压低，后壁损伤的镜像。',
+            'V2–V3: the QRS points down and the ST goes down too, more than 1 mm (V3 about 2.5 mm): concordant depression in V1–V3, the mirror of posterior injury.',
+            'V2–V3: el QRS apunta abajo y el ST también baja más de 1 mm (V3 unos 2,5 mm): descenso concordante en V1–V3, el espejo de una lesión posterior.',
+          ),
+          marks: [{ auto: 'j', lead: 'V2' }, { auto: 'j', lead: 'V3' }],
+        },
+        {
+          label: l('心室起搏', 'Ventricular pacing', 'Marcapasos ventricular'),
+          ecg: synth('paced-ddd', 986),
+          note: l(
+            '钉样信号后接宽 QRS（约 160 ms）：II、III、aVF 和 V1 呈 QS，T 波与 QRS 反向。“电学 LBBB”：用同样的规则读。',
+            'A spike, then a wide QRS (about 160 ms): QS in II, III, aVF and V1, the T opposite the QRS. An "electrical LBBB": read it with the same rules.',
+            'Una espícula y después un QRS ancho (unos 160 ms): QS en II, III, aVF y V1, la T opuesta al QRS. Un «BRI eléctrico»: léelo con las mismas reglas.',
+          ),
+          marks: [{ auto: 'pacing-spike' }, { auto: 'qrs', lead: 'V1' }],
+        },
       ],
+      predict: {
+        question: l('LBBB 时，哪一种 ST 改变从来不是“预期”的？', 'In LBBB, which ST change is never expected?', 'En el BRI, ¿qué cambio del ST nunca es esperable?'),
+        options: [
+          l('QRS 向上的导联 ST 抬高', 'ST elevation in a lead whose QRS points up', 'Elevación del ST en una derivación con QRS positivo'),
+          l('V1–V3 深 S 波上的 ST 轻度抬高', 'Slight ST elevation over the deep S in V1–V3', 'Leve elevación del ST sobre la S profunda de V1–V3'),
+          l('V5–V6 的 ST 压低', 'ST depression in V5–V6', 'Descenso del ST en V5–V6'),
+        ],
+        answer: 0,
+      },
       caption: l(
-        '心室起搏（DDD，房室顺序起搏）：钉样信号后紧跟宽大 QRS——右室心尖起搏产生“电学 LBBB”（胸前导联 QRS 以负向为主、电轴偏左上）。ST-T 同样与 QRS 反向，同样不能按普通阈值读：用 Sgarbossa 型标准判读（起搏心律中同向压低还可计入 V4–V6）。缺血症状持续时直接按 STEMI 处理。',
-        'Ventricular pacing (DDD, atrio-ventricular sequential): each spike is followed by a wide QRS — right ventricular apical pacing creates an "electronic LBBB" (predominantly negative precordial QRS, superior-leftward axis). The ST-T is again discordant to the QRS and again cannot be read with the usual thresholds: apply the Sgarbossa-type rules (in paced rhythm concordant depression may also count in V4–V6). With ongoing ischaemic symptoms, straight to the STEMI pathway.',
-        'Estimulación ventricular (DDD, secuencial auriculoventricular): cada espícula va seguida de un QRS ancho; la estimulación del ápex del ventrículo derecho crea un «BRI electrónico» (QRS precordial predominantemente negativo, eje superior-izquierdo). El ST-T vuelve a ser discordante al QRS y vuelve a no poder leerse con los umbrales habituales: aplica las reglas tipo Sgarbossa (en ritmo estimulado el descenso concordante también puede contar en V4–V6). Con síntomas isquémicos persistentes, directamente a la vía del IAMCEST.',
+        '任何一条阳性 + 缺血症状 ⇒ 按 STEMI 处理。三条全阴性而症状持续，同样按 STEMI 管理（ESC 2023）。',
+        'Any criterion positive + ischaemic symptoms ⇒ manage as a STEMI. All three negative with symptoms still going on: manage as a STEMI all the same (ESC 2023).',
+        'Cualquier criterio positivo + síntomas isquémicos ⇒ tratar como IAMCEST. Los tres negativos con síntomas persistentes: también como IAMCEST (ESC 2023).',
       ),
     },
     {
@@ -276,32 +286,35 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('rbbb', 989),
-      view: { layout: '3x4+1', highlightLeads: ['V1', 'V2', 'V3'] },
-      marks: [
-        { auto: 'qrs', lead: 'V1' },
-        { auto: 't', lead: 'V1' },
-      ],
-      caption: l(
-        '右束支传导阻滞：V1 呈 rsR\u2032、QRS 增宽，但左心室除极顺序未变——ST 抬高不被掩盖，标准 STEMI 阈值照常适用。V1–V2 的 T 波倒置（可伴轻度 ST 压低）多为右室延迟复极的继发改变（rsR\u2032 之后本该如此），不要判为缺血。真正要警惕的是新发（或推测新发）RBBB + 缺血症状：常意味着闭塞的动脉（TIMI 0–2 级血流）与大范围梗死——高危，考虑即刻造影。',
-        'Right bundle branch block: rsR\u2032 in V1 with a wide QRS, but LV activation is unchanged — ST elevation is not hidden and the standard STEMI thresholds apply as usual. The T inversion in V1–V2 (with or without slight ST depression) is mostly secondary to delayed right ventricular repolarisation (expected after an rsR\u2032), not ischaemia. What demands respect is a new (or presumed-new) RBBB with ischaemic symptoms: it often means an occluded artery (TIMI 0–2 flow) and a large infarct — high risk, consider immediate angiography.',
-        'Bloqueo de rama derecha: rsR\u2032 en V1 con QRS ancho, pero la activación del ventrículo izquierdo no cambia; la elevación del ST no queda oculta y se aplican sin más los umbrales estándar de IAMCEST. La T negativa en V1–V2 (con o sin un leve descenso del ST) es en su mayoría secundaria a la repolarización ventricular derecha retardada (lo esperado tras una rsR\u2032), no isquemia. Lo que hay que respetar es un BRD nuevo (o presumiblemente nuevo) con síntomas isquémicos: suele significar una arteria ocluida (flujo TIMI 0–2) y un infarto extenso; alto riesgo, valora la coronariografía inmediata.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('lvh-strain', 990),
+      kind: 'film',
+      title: l('另两张宽或高的 QRS：RBBB 与 LVH', 'Two more wide or tall QRS: RBBB and LVH', 'Otros dos QRS anchos o altos: BRD e HVI'),
       view: { layout: '3x4+1', highlightLeads: ['V1', 'V2', 'V3', 'V5', 'V6'] },
-      marks: [
-        { auto: 's', lead: 'V2' },
-        { auto: 'st', lead: 'V2' },
-        { auto: 'st', lead: 'V5' },
+      frames: [
+        {
+          label: l('右束支阻滞', 'RBBB', 'BRD'),
+          ecg: synth('rbbb', 989),
+          note: l(
+            'V1 呈 rsR′，QRS 增宽；T 波在 V1–V2 倒置、V3 起直立：rsR′ 之后的预期改变。左心室除极不变，STEMI 阈值照常使用。',
+            'rsR′ in V1 and a wide QRS; T inverted in V1–V2 and upright from V3: expected after an rsR′. The LV depolarises normally, so the usual STEMI thresholds apply.',
+            'rsR′ en V1 y QRS ancho; T negativa en V1–V2 y positiva desde V3: lo esperable tras un rsR′. El VI se despolariza con normalidad: valen los umbrales habituales del IAMCEST.',
+          ),
+          marks: [{ auto: 'qrs', lead: 'V1' }, { auto: 't', lead: 'V1' }],
+        },
+        {
+          label: l('左心室肥厚', 'LVH', 'HVI'),
+          ecg: synth('lvh-strain', 990),
+          note: l(
+            'V1–V2 深 S 波上的抬高远不到 S 深度的四分之一；V5–V6 压低、T 倒置：继发改变，不是闭塞。',
+            'The elevation over the deep S in V1–V2 is well under a quarter of the S depth; V5–V6 are down with inverted T waves: secondary change, not an occlusion.',
+            'La elevación sobre la S profunda de V1–V2 queda muy por debajo de una cuarta parte de la S; V5–V6 descendidas con T negativas: cambio secundario, no oclusión.',
+          ),
+          marks: [{ auto: 's', lead: 'V2' }, { auto: 'j', lead: 'V2' }, { auto: 't', lead: 'V5' }],
+        },
       ],
       caption: l(
-        '左心室肥厚伴继发性 ST-T 改变：V1–V3 的深 S 波带着“预期内”的不一致性 ST 抬高与直立 T 波，侧壁 V5–V6 则压低、T 倒置——这是最常见的假“前壁 STEMI”之一，不是闭塞。何时升级怀疑叠加梗死：ST 抬高 ≥ S 波深度的 25 %、形态凸面向上、或较既往为新发（V1–V4）。还是那句话：用比例，不用眼睛。',
-        'Left ventricular hypertrophy with secondary ST-T (strain): the deep S waves in V1–V3 carry "expected" discordant ST elevation and upright T waves, while V5–V6 show depression and inverted T — one of the commonest fake "anterior STEMIs", not an occlusion. Escalate towards a superimposed infarct when the ST elevation is ≥25 % of the S depth, convex, or new compared with a previous tracing (V1–V4). Same rule as ever: use proportion, not the eye.',
-        'Hipertrofia ventricular izquierda con ST-T secundario («sobrecarga»): las S profundas de V1–V3 llevan una elevación discordante del ST «esperada» con T positiva, mientras V5–V6 muestran descenso y T negativa; es uno de los falsos «IAMCEST anteriores» más frecuentes, no una oclusión. Escala hacia un infarto sobreañadido cuando la elevación del ST sea ≥25 % de la profundidad de la S, convexa o nueva respecto a un trazado previo (V1–V4). La misma regla de siempre: proporción, no el ojo.',
+        '新发 RBBB + 缺血症状常意味着大血管闭塞。LVH 的抬高达到 S 波的 25 %、变成凸面或为新发时，才怀疑叠加梗死。',
+        'A new RBBB with ischaemic symptoms often means a large occluded artery. In LVH, suspect an added infarct only when the elevation reaches 25 % of the S, turns convex or is new.',
+        'Un BRD nuevo con síntomas isquémicos suele indicar una gran arteria ocluida. En la HVI, sospecha un infarto añadido solo si la elevación llega al 25 % de la S, se vuelve convexa o es nueva.',
       ),
     },
     { kind: 'check', item: { family: 'occlusion', seed: 63 } },
