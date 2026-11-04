@@ -917,6 +917,65 @@ describe('o8: deep T inversion on the tracings', () => {
   });
 });
 
+describe('o9: placement errors on the tracings', () => {
+  /** lead `la` of `a` equals `sign` × lead `lb` of `b`, sample by sample */
+  const sameLead = (a: Ecg, la: StdLead, b: Ecg, lb: StdLead, sign = 1) => {
+    const x = a.signal.leads[la];
+    const y = b.signal.leads[lb];
+    let worst = 0;
+    for (let i = 0; i < x.length; i++) worst = Math.max(worst, Math.abs(x[i] - sign * y[i]));
+    return worst < 0.002;
+  };
+  const pAmp = (e: Ecg, l: StdLead) => span(e, l, midBeat(e).pOn!, midBeat(e).pOff!, midBeat(e));
+  it('limb film: one heart; LA/RA inverts I and swaps II↔III and aVR↔aVL; LA/LL swaps I↔II and aVL↔aVF and inverts III with a bigger P in I; RA/LL inverts I, II, III and swaps aVR↔aVF; LA/RL flattens III and makes I = II; V1–V6 untouched', () => {
+    const [ok, laRa, laLl, raLl, laRl] = frames('o9', 0);
+    for (const e of [laRa, laLl, raLl, laRl]) expect(e.truth!.beats).toEqual(ok.truth!.beats);
+    expect(pAmp(ok, 'II').max).toBeGreaterThan(Math.max(...(['I', 'III', 'aVL', 'aVF'] as const).map((l) => pAmp(ok, l).max)));
+    expect(qrs(ok, 'aVR').max).toBeLessThan(0.06);
+    expect(tInverted(ok, 'aVR')).toBe(true);
+    for (const l of ['I', 'II'] as const) expect(tUpright(ok, l), l).toBe(true);
+    expect(sameLead(laRa, 'I', ok, 'I', -1)).toBe(true);
+    expect(sameLead(laRa, 'II', ok, 'III')).toBe(true);
+    expect(sameLead(laRa, 'III', ok, 'II')).toBe(true);
+    expect(sameLead(laRa, 'aVR', ok, 'aVL')).toBe(true);
+    expect(sameLead(laRa, 'aVL', ok, 'aVR')).toBe(true);
+    expect(sameLead(laRa, 'aVF', ok, 'aVF')).toBe(true);
+    for (const l of ['V1', 'V2', 'V3', 'V4', 'V5', 'V6'] as const) for (const e of [laRa, laLl, raLl]) expect(sameLead(e, l, ok, l), l).toBe(true);
+    const chestShift = Math.max(...(['V1', 'V2', 'V3', 'V4', 'V5', 'V6'] as const).map((l) => Math.abs(qrs(laRl, l).p2p / qrs(ok, l).p2p - 1)));
+    expect(chestShift).toBeGreaterThan(0.05);
+    expect(chestShift).toBeLessThan(0.25);
+    expect(sameLead(laLl, 'I', ok, 'II')).toBe(true);
+    expect(sameLead(laLl, 'II', ok, 'I')).toBe(true);
+    expect(sameLead(laLl, 'III', ok, 'III', -1)).toBe(true);
+    expect(sameLead(laLl, 'aVR', ok, 'aVR')).toBe(true);
+    expect(sameLead(laLl, 'aVL', ok, 'aVF')).toBe(true);
+    expect(sameLead(laLl, 'aVF', ok, 'aVL')).toBe(true);
+    expect(pAmp(laLl, 'I').max).toBeGreaterThan(pAmp(laLl, 'II').max);
+    expect(sameLead(raLl, 'I', ok, 'III', -1)).toBe(true);
+    expect(sameLead(raLl, 'II', ok, 'II', -1)).toBe(true);
+    expect(sameLead(raLl, 'III', ok, 'I', -1)).toBe(true);
+    expect(sameLead(raLl, 'aVR', ok, 'aVF')).toBe(true);
+    expect(sameLead(raLl, 'aVF', ok, 'aVR')).toBe(true);
+    expect(qrs(laRl, 'III').p2p).toBeLessThan(0.02);
+    expect(sameLead(laRl, 'I', laRl, 'II')).toBe(true);
+  });
+  it('chest film: one heart; R ≈ 1, 5, 12, 14 mm in V1–V4 with an up-down P in V1; V2/V3 swapped puts ≈ 12 mm in V2 and ≈ 5 mm in V3; V1–V2 high turns the V1 P negative and shrinks the V2 r from ≈ 5 to ≈ 2 mm', () => {
+    const [ok, swap, high] = frames('o9', 1);
+    for (const e of [swap, high]) expect(e.truth!.beats).toEqual(ok.truth!.beats);
+    const r = (e: Ecg, l: StdLead) => qrs(e, l).max;
+    [0.1, 0.5, 1.2, 1.4].forEach((mv, k) => expect(Math.abs(r(ok, CHEST4[k]) - mv), CHEST4[k]).toBeLessThan(0.05));
+    expect(pAmp(ok, 'V1').max).toBeGreaterThan(0.01);
+    expect(pAmp(ok, 'V1').min).toBeLessThan(-0.01);
+    expect(Math.abs(r(swap, 'V2') - 1.2)).toBeLessThan(0.05);
+    expect(Math.abs(r(swap, 'V3') - 0.5)).toBeLessThan(0.05);
+    expect(r(swap, 'V4')).toBeGreaterThan(r(swap, 'V3') + 0.5);
+    expect(pAmp(high, 'V1').max).toBeLessThan(0.005);
+    expect(pAmp(high, 'V1').min).toBeLessThan(-0.02);
+    expect(Math.abs(r(high, 'V2') - 0.2)).toBeLessThan(0.05);
+  });
+});
+const CHEST4: readonly StdLead[] = ['V1', 'V2', 'V3', 'V4'];
+
 describe('o10: artefacts and filters on the tracings', () => {
   it('Parkinsonian tremor (LL): II, III, aVF noisy, I clean', () => {
     for (const src of sourcesWith('o10', 'muscle-tremor-parkinsonian')) {
