@@ -76,18 +76,9 @@ const lesson: Lesson = {
       showConduction: true,
       emphasize: ['sa-node', 'av-node', 'rv-mid', 'lv-mid-anterolateral', 'lv-mid-inferolateral'],
       caption: l(
-        '训练重塑的是整个心脏，而不只是心电图。播放一个心动周期：增厚的心室壁（左心室更甚）把 QRS 电压推高——**孤立的电压标准**由此而来；高迷走张力让窦房结放慢（窦性心动过缓、窦性心律不齐）、让房室结迟疑（一度房室传导阻滞、文氏现象），运动时迷走张力一撤退，它们随之消失。电极之下全是生理。',
-        'Training remodels the whole heart, not just the ECG. Play one beat: thicker ventricular walls (the LV above all) push the QRS voltage up — that is where **isolated voltage criteria** come from; high vagal tone slows the sinus node (sinus bradycardia, sinus arrhythmia) and holds the AV node back (first-degree block, Wenckebach), and all of it vanishes as vagal tone withdraws with exercise. Under the electrodes, this is all physiology.',
-        'El entrenamiento remodela todo el corazón, no solo el ECG. Reproduce un latido: unas paredes ventriculares más gruesas (sobre todo el VI) elevan el voltaje del QRS — de ahí los **criterios de voltaje aislados** —; el tono vagal alto frena el nodo sinusal (bradicardia y arritmia sinusal) y retarda el nodo AV (bloqueo de primer grado, Wenckebach), y todo desaparece cuando el tono vagal se retira con el ejercicio. Bajo los electrodos, esto es fisiología.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('三个桶：国际标准怎么分档', 'Three bins: how the international criteria sort', 'Tres grupos: cómo clasifican los criterios internacionales'),
-      body: l(
-        '2017 国际标准（Sharma/Drezner）把运动员心电图的**每一个**发现分进三个桶，每档的行动不同：\n- **训练相关（正常）**——生理适应，不需要任何检查：窦性心动过缓 ≥30 次/分、窦性心律不齐、房性或交界性逸搏心律、一度房室传导阻滞（PR <400 ms）、运动后消失的 Mobitz I、不完全性右束支阻滞、**孤立的** QRS 电压标准（左心室或右心室肥厚）、早期复极/ST 段抬高、<16 岁的幼年型 T 波（V1–V3 倒置）、黑人运动员 V1–V4 的 J 点抬高 + 凸面向上 ST + T 波倒置。\n- **边界**——单项不定性，**≥2 项**才需要检查：电轴左偏（−30° 至 −90°）、电轴右偏（>120°）、左/右心房异常、完全性右束支阻滞。\n- **异常**——提示基础心脏病，需要评估：≥2 个相邻导联（aVR、III、V1 除外）T 波倒置 ≥1 mm、ST 段压低 ≥0.5 mm、病理性 Q 波、完全性左束支阻滞、QRS ≥140 ms、ε 波、预激、QTc ≥470 ms（男）/≥480 ms（女）、Brugada 1 型、心率 <30 次/分、PR ≥400 ms、Mobitz II 或三度房室传导阻滞、每份图 ≥2 个室性期前收缩、房性快速性心律失常。\n注意：这套分档只适用于**经过训练的人**；同一份图放在久坐患者身上要按常规标准重新读。',
-        'The 2017 international criteria (Sharma/Drezner) sort **every** finding on an athlete ECG into one of three bins, each with its own action:\n- **Training-related (normal)** — physiological adaptation, no work-up at all: sinus bradycardia >=30/min, sinus arrhythmia, ectopic atrial or junctional escape rhythm, first-degree AV block (PR <400 ms), Mobitz I that resolves with exercise, incomplete RBBB, **isolated** QRS voltage criteria for LVH or RVH, early repolarisation/ST elevation, juvenile T inversion in V1-V3 under 16 y, and the Black-athlete V1-V4 pattern of J-point elevation with convex ST and T inversion.\n- **Borderline** — neutral alone, work-up only when **two or more** combine: left axis deviation (-30° to -90°), right axis deviation (>120°), LA or RA abnormality, complete RBBB.\n- **Abnormal** — suggests underlying heart disease and needs evaluation: T inversion >=1 mm in >=2 contiguous leads outside aVR, III and V1; ST depression >=0.5 mm; pathological Q waves; complete LBBB; QRS >=140 ms; epsilon waves; pre-excitation; QTc >=470 ms (men) / >=480 ms (women); Brugada type 1; rate <30/min; PR >=400 ms; Mobitz II or third-degree AV block; >=2 PVCs per tracing; atrial tachyarrhythmias.\nNote: this grid applies to **trained people**; the same tracing in a sedentary patient is read by ordinary criteria.',
-        'Los criterios internacionales de 2017 (Sharma/Drezner) clasifican **cada** hallazgo del ECG de un deportista en uno de tres grupos, cada uno con su acción:\n- **Relacionado con el entrenamiento (normal)**: adaptación fisiológica, sin ningún estudio: bradicardia sinusal >=30 lpm, arritmia sinusal, ritmo de escape auricular o de la unión, bloqueo AV de primer grado (PR <400 ms), Mobitz I que desaparece con el ejercicio, bloqueo incompleto de rama derecha, criterios de voltaje **aislados** de HVI o HVD, repolarización precoz/elevación del ST, inversión T juvenil en V1-V3 antes de los 16 años y el patrón V1-V4 del deportista de raza negra con elevación del punto J, ST convexo e inversión de la T.\n- **Límite**: neutro por sí solo, estudio solo si se combinan **dos o más**: desviación izquierda del eje (-30° a -90°), desviación derecha (>120°), anomalía auricular izquierda o derecha, bloqueo completo de rama derecha.\n- **Anormal**: sugiere cardiopatía y requiere evaluación: inversión de T >=1 mm en >=2 derivaciones contiguas fuera de aVR, III y V1; descenso del ST >=0,5 mm; ondas Q patológicas; bloqueo completo de rama izquierda; QRS >=140 ms; ondas épsilon; preexcitación; QTc >=470 ms (varones) / >=480 ms (mujeres); Brugada tipo 1; frecuencia <30 lpm; PR >=400 ms; Mobitz II o bloqueo AV de tercer grado; >=2 extrasístoles ventriculares por registro; taquiarritmias auriculares.\nOjo: esta clasificación solo se aplica a **personas entrenadas**; la misma tira en un paciente sedentario se lee con los criterios ordinarios.',
+        '训练重塑整个心脏。播放一个心动周期：增厚的心室壁推高 QRS 电压（孤立的电压标准）；高迷走张力让窦房结变慢、房室结迟疑，运动时迷走撤退，这些随之消失。',
+        'Training remodels the whole heart. Play one beat: thicker ventricular walls push the QRS voltage up (isolated voltage criteria); high vagal tone slows the sinus node and holds the AV node back, and both lift as vagal tone withdraws with exercise.',
+        'El entrenamiento remodela todo el corazón. Reproduce un latido: unas paredes ventriculares más gruesas elevan el voltaje del QRS (criterios de voltaje aislados); el tono vagal alto frena el nodo sinusal y retarda el nodo AV, y ambos efectos ceden cuando el tono vagal se retira con el ejercicio.',
       ),
     },
     {
@@ -203,10 +194,40 @@ const lesson: Lesson = {
       dials: [{ id: 'rate', label: l('心率', 'Heart rate', 'Frecuencia cardíaca') }],
       view: STRIP_II,
       marks: [{ auto: 'p' }, { auto: 'rr' }],
+      play: {
+        dial: 'rate',
+        from: 58,
+        to: 40,
+        notes: [
+          {
+            min: 50,
+            max: 58,
+            text: l(
+              '每个 QRS 前都有 P 波，PR 一直是 160 ms：只有 PP 在拉长。窦性心动过缓。',
+              'A P before every QRS and the PR fixed at 160 ms: only the PP lengthens. Sinus bradycardia.',
+              'Una P antes de cada QRS y el PR fijo en 160 ms: solo se alarga el PP. Bradicardia sinusal.',
+            ),
+          },
+          {
+            min: 40,
+            max: 49,
+            text: l(
+              '降到 40–49 次/分仍是窦性、PR 不变，离 <30 次/分的异常线还很远：训练相关。',
+              'Down at 40–49/min it is still sinus with the same PR, far above the abnormal line of <30/min: training-related.',
+              'A 40-49 lpm sigue siendo sinusal con el mismo PR, muy por encima de la línea anormal de <30 lpm: relacionado con el entrenamiento.',
+            ),
+          },
+        ],
+      },
+      predict: {
+        question: l('心率从 58 降到 40 次/分。40 次/分落在哪一档？', 'The rate falls from 58 to 40/min. Which bin does 40/min fall in?', 'La frecuencia baja de 58 a 40 lpm. ¿En qué grupo cae 40 lpm?'),
+        options: [l('训练相关', 'Training-related', 'Relacionado con el entrenamiento'), l('边界', 'Borderline', 'Límite'), l('异常', 'Abnormal', 'Anormal')],
+        answer: 0,
+      },
       caption: l(
-        '把滑杆从 58 拉到 40：P 波与 QRS 的关系不变，只有 PP 在拉长。训练能把窦房结带去的地方离异常线还很远——那条线在 <30 次/分。心动过缓本身不产生症状；有症状才需要评估，起搏决定从来不由数字单独作出。',
-        'Slide the rate from 58 down to 40: the P-to-QRS relationship never changes, only the PP lengthens. Training takes the sinus node nowhere near the abnormal line — that sits below 30/min. Bradycardia by itself produces no symptoms; evaluation follows symptoms, and a pacing decision is never made from a number alone.',
-        'Desliza la frecuencia de 58 a 40: la relación P-QRS no cambia, solo se alarga el PP. El entrenamiento lleva al nodo sinusal muy lejos de la línea anormal, que está por debajo de 30 lpm. La bradicardia por sí sola no da síntomas; la evaluación sigue a los síntomas, y la decisión de marcapasos nunca se toma solo con un número.',
+        '心动过缓本身不产生症状；有症状才需要评估，起搏决定从不由数字单独作出。',
+        'Bradycardia by itself produces no symptoms; evaluation follows symptoms, and a pacing decision is never made from a number alone.',
+        'La bradicardia por sí sola no da síntomas; la evaluación sigue a los síntomas, y la decisión de marcapasos nunca se toma solo con un número.',
       ),
     },
     {
@@ -238,23 +259,40 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('athlete', 1364, undefined, 'first-degree'),
+      kind: 'film',
+      title: l('迷走张力与房室结', 'Vagal tone and the AV node', 'El tono vagal y el nodo AV'),
       view: STRIP_II,
-      marks: [{ auto: 'pr', lead: 'II' }],
+      frames: [
+        {
+          label: l('PR 正常', 'Normal PR', 'PR normal'),
+          ecg: synth('athlete', 1364),
+          note: l(
+            '约 48 次/分，PR 160 ms：房室传导正常。',
+            'About 48/min with a PR of 160 ms: normal AV conduction.',
+            'Unos 48 lpm con un PR de 160 ms: conducción AV normal.',
+          ),
+          marks: [{ auto: 'pr', lead: 'II' }],
+        },
+        {
+          label: l('一度阻滞', 'First-degree block', 'Bloqueo de primer grado'),
+          ecg: synth('athlete', 1364, undefined, 'first-degree'),
+          note: l(
+            '同一颗心脏，PR 约 220 ms：一度房室传导阻滞。到 399 ms 都算训练相关；≥400 ms（儿童和青少年 ≥300 ms）为异常。',
+            'Same heart, PR about 220 ms: first-degree AV block. Up to 399 ms it is training-related; ≥400 ms (≥300 ms in children and adolescents) is abnormal.',
+            'Mismo corazón, PR de unos 220 ms: bloqueo AV de primer grado. Hasta 399 ms es relacionado con el entrenamiento; ≥400 ms (≥300 ms en niños y adolescentes) es anormal.',
+          ),
+          marks: [{ auto: 'pr', lead: 'II' }],
+        },
+      ],
+      predict: {
+        question: l('这位成年运动员的 PR 变成多少才进入异常档？', 'At what PR would this adult athlete move into the abnormal bin?', '¿Con qué PR pasaría este deportista adulto al grupo anormal?'),
+        options: [l('220 ms', '220 ms', '220 ms'), l('320 ms', '320 ms', '320 ms'), l('400 ms', '400 ms', '400 ms')],
+        answer: 2,
+      },
       caption: l(
-        '同一颗运动员心脏，PR 约 220 ms：一度房室传导阻滞。200–399 ms 全程都在训练相关档（迷走张力作用于房室结）；越线的是 PR ≥400 ms，以及 Mobitz II 和三度阻滞。儿童与青少年的线更低：≥300 ms。白天的 Mobitz I 若运动中不消失，同样需要评估。',
-        'The same athlete heart with a PR of about 220 ms: first-degree AV block. The whole 200-399 ms range stays in the training-related bin (vagal tone at the AV node); the line is crossed at PR >=400 ms, and by Mobitz II and third-degree block. In children and adolescents the line is lower: >=300 ms. A daytime Mobitz I that fails to disappear with exercise also needs evaluation.',
-        'El mismo corazón de deportista con un PR de unos 220 ms: bloqueo AV de primer grado. Todo el rango de 200-399 ms permanece en el grupo relacionado con el entrenamiento (tono vagal sobre el nodo AV); la línea se cruza con un PR >=400 ms, y con el Mobitz II y el bloqueo de tercer grado. En niños y adolescentes la línea es más baja: >=300 ms. Un Mobitz I diurno que no desaparece con el ejercicio también requiere evaluación.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('在异常线上方：合法的 T 波倒置', 'Above the abnormal line: legitimate T inversion', 'Por encima de la línea anormal: inversiones de T legítimas'),
-      body: l(
-        'T 波倒置是运动员心电图里最贵的一个发现——在把它叫异常之前，先过三个例外：\n- **幼年型 T 波**：<16 岁运动员 V1–V3 的 T 波倒置是正常延续（见 s7）。\n- **黑人运动员变异**：V1–V4 的 J 点抬高 + 凸面向上 ST + 继之 T 波倒置——被接受的正常变异，不是缺血。\n- **仅 V3 的双向 T 波**（先正后负）也被接受。\n例外之外、aVR/III/V1 之外，≥2 个相邻导联 T 波倒置 ≥1 mm 就是异常，要做超声心动图并进一步评估。\n另一处易混的边界：**孤立的短 PR**（无 δ 波）在无症状运动员不是预激，不需检查；预激 = PR <120 ms + δ 波 + QRS 增宽，属于异常档。',
-        'T inversion is the most expensive finding on an athlete ECG — before labelling it abnormal, pass it through three exceptions:\n- **Juvenile T pattern**: T inversion in V1-V3 is a normal continuation in athletes under 16 y (see s7).\n- **The Black-athlete variant**: J-point elevation + convex ST in V1-V4 followed by T inversion — an accepted normal variant, not ischaemia.\n- **A biphasic T confined to V3** (positive then negative) is also accepted.\nBeyond these exceptions, outside aVR/III/V1, T inversion >=1 mm in >=2 contiguous leads is abnormal and earns an echocardiogram with further work-up.\nOne more border worth knowing: an **isolated short PR** (no delta wave) in an asymptomatic athlete is not pre-excitation and needs nothing; pre-excitation = PR <120 ms + a delta wave + a wide QRS, and it belongs to the abnormal bin.',
-        'La inversión de la T es el hallazgo más caro del ECG de un deportista: antes de etiquetarla de anormal, pásala por tres excepciones:\n- **Patrón T juvenil**: la inversión de T en V1-V3 es una continuación normal en deportistas menores de 16 años (ver s7).\n- **La variante del deportista de raza negra**: elevación del punto J + ST convexo en V1-V4 seguidos de inversión de T: una variante normal aceptada, no isquemia.\n- **La T bifásica limitada a V3** (positiva y luego negativa) también se acepta.\nFuera de estas excepciones, fuera de aVR/III/V1, la inversión de T >=1 mm en >=2 derivaciones contiguas es anormal y exige ecocardiograma con más estudio.\nOtra frontera que conviene conocer: un **PR corto aislado** (sin onda delta) en un deportista asintomático no es preexcitación y no exige nada; preexcitación = PR <120 ms + onda delta + QRS ancho, y pertenece al grupo anormal.',
+        '一度阻滞和运动后消失的 Mobitz I 都是训练相关；运动中不消失的 Mobitz I 要评估，Mobitz II 和三度阻滞是异常。',
+        'First-degree block and a Mobitz I that vanishes with exercise are training-related; a Mobitz I that persists on exercise needs evaluation, and Mobitz II and third-degree block are abnormal.',
+        'El bloqueo de primer grado y el Mobitz I que desaparece con el ejercicio son relacionados con el entrenamiento; un Mobitz I que persiste con el esfuerzo requiere evaluación, y el Mobitz II y el bloqueo de tercer grado son anormales.',
       ),
     },
     { kind: 'check', item: { family: 'substrates', seed: 7 } },

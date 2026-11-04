@@ -959,8 +959,29 @@ describe('h9: the athlete ECG on the tracings', () => {
       for (const l of ['V3', 'V4', 'V5', 'V6', 'I', 'II'] as const) expect(tUpright(e, l), l).toBe(true);
     }
   });
-  it('first-degree variant: PR about 220 ms', () => {
-    expect(Math.abs(ecgOf(blocksOf('h9', 'ecg')[0].ecg).truth!.prMs! - 220)).toBeLessThan(10);
+  it('first-degree variant (PR film frame 2): PR about 220 ms', () => {
+    expect(Math.abs(frames('h9', 0)[1].truth!.prMs! - 220)).toBeLessThan(10);
+    expect(Math.abs(frames('h9', 0)[1].truth!.prMs! - 220)).toBeLessThan(5);
+  });
+  it('PR film notes: about 48/min with a PR of 160 ms; the first-degree frame is the same heart', () => {
+    const [a, b] = blocksOf('h9', 'film')[0].frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req : null));
+    expect({ ...a, variant: 'first-degree' }).toEqual(b);
+    const t = frames('h9', 0)[0].truth!;
+    expect(Math.abs(t.hrBpm - 48)).toBeLessThan(3);
+    expect(Math.abs(t.prMs! - 160)).toBeLessThan(5);
+  });
+  it('rate sweep notes: sinus with a P before every QRS and the PR fixed at 160 ms at 40–58/min, always above 30/min', () => {
+    for (const v of [40, 49, 50, 58]) {
+      const e = played('h9', 0, v);
+      const t = e.truth!;
+      expect(t.rhythm, `${v}/min`).toMatch(/^sinus/);
+      expect(Math.abs(t.hrBpm - v), `${v}/min`).toBeLessThan(2);
+      expect(t.hrBpm, `${v}/min`).toBeGreaterThanOrEqual(30);
+      for (const b of t.beats) {
+        expect(b.pOn, `${v}/min: P before every QRS`).not.toBeNull();
+        expect(Math.abs(b.qrsOn - b.pOn! - 160), `${v}/min PR`).toBeLessThan(2);
+      }
+    }
   });
   it('contrast: A has upright lateral T; B (HCM) lateral T inversion >= 1 mm with ST depression >= 0.5 mm', () => {
     const c = blocksOf('h9', 'contrast')[0];
