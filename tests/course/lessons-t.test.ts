@@ -954,15 +954,43 @@ describe('t4 on the tracings', () => {
 });
 
 describe('t5 on the tracings', () => {
-  it('worked VT: ~125/min, QRS ≥ 150 ms, superior (northwest) axis, AV dissociation with visible sinus P at ~75/min', () => {
+  it('hook VT: wide and regular at 150/min', () => {
+    const e = ecgOf(blocksOf('t5', 'hook')[0].ecg);
+    expect(Math.abs(e.truth!.hrBpm - 150)).toBeLessThanOrEqual(1);
+    expect(e.truth!.qrsMs).toBeGreaterThanOrEqual(120);
+    expect(Math.max(...rrs(e)) - Math.min(...rrs(e))).toBeLessThan(10);
+  });
+  it('worked VT: QRS about 160 ms, RR about 480 ms (125/min), AV dissociation with visible sinus P at 75/min, axis about −100° with I, II and aVF mainly negative, V1 positive, aVR starting with a dominant R; V1–V4 RS, V5–V6 QS, R onset to S nadir about 135 ms in V1–V3 (the longest)', () => {
     const e = ecgOf(blocksOf('t5', 'worked')[0].ecg);
     const t = e.truth!;
-    expect(Math.abs(t.hrBpm - 125)).toBeLessThan(4);
-    expect(Math.abs(t.atrialRateBpm! - 75)).toBeLessThan(4);
-    expect(t.qrsMs).toBeGreaterThanOrEqual(150);
-    expect(t.axisDeg.qrs).toBeLessThan(-90);
+    expect(Math.abs(t.hrBpm - 125)).toBeLessThanOrEqual(1);
+    expect(Math.abs(median(rrs(e)) - 480)).toBeLessThan(5);
+    expect(Math.abs(t.atrialRateBpm! - 75)).toBeLessThanOrEqual(1);
+    expect(Math.abs(t.qrsMs - 160)).toBeLessThan(5);
+    expect(Math.abs(t.axisDeg.qrs - -100)).toBeLessThan(5);
     expect(t.findings).toContain('av-dissociation');
     expect(t.atrial.filter((a) => a.conductedTo === null && a.visible).length).toBeGreaterThanOrEqual(3);
+    const b = mid(e);
+    const waves = (l: StdLead) => qrsWaves(e.signal.leads[l], e.signal.fs, b.qrsOn, b.qrsOff);
+    const netOf = (l: StdLead) => waves(l).reduce((s, w) => s + w.mv, 0);
+    for (const l of ['I', 'II', 'aVF'] as const) expect(netOf(l), `${l} mainly negative`).toBeLessThan(-0.1);
+    expect(netOf('V1'), 'V1 positive').toBeGreaterThan(0.1);
+    const avr = waves('aVR');
+    expect(avr[0].role, 'aVR starts with an R').toBe('r');
+    expect(Math.abs(avr[0].mv), 'aVR initial R dominant').toBe(Math.max(...avr.map((w) => Math.abs(w.mv))));
+    const rsMs = (l: StdLead) => {
+      const w = waves(l);
+      const r = w.findIndex((x) => x.role === 'r');
+      const s = w.findIndex((x, k) => k > r && x.role === 's');
+      return r >= 0 && s > r ? w[s].t - b.qrsOn : null;
+    };
+    for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(rsMs(l), `${l} has an RS`).not.toBeNull();
+    for (const l of ['V5', 'V6'] as const) expect(waves(l).map((w) => w.label), l).toEqual(['QS']);
+    for (const l of ['V1', 'V2', 'V3'] as const) {
+      expect(waves(l)[0].role, `${l} starts with its R`).toBe('r');
+      expect(Math.abs(rsMs(l)! - 135), `${l} R onset to S nadir`).toBeLessThan(5);
+      expect(rsMs(l)!, `${l} longer than V4`).toBeGreaterThan(rsMs('V4')!);
+    }
   });
   it('capture film: one strip in every frame; sinus P at about 68/min dissociated; narrow upright captures at beats 7 and 22, early for the VT but on time for their sinus P; a fusion beat of about 115 ms at beat 9, between the capture and the VT widths', () => {
     const film = blocksOf('t5', 'film')[0];
@@ -970,7 +998,7 @@ describe('t5 on the tracings', () => {
     const e = ecgOf(film.frames[0].ecg);
     const t = e.truth!;
     const beats = t.beats;
-    expect(Math.abs(t.atrialRateBpm! - 68)).toBeLessThan(3);
+    expect(Math.abs(t.atrialRateBpm! - 68)).toBeLessThanOrEqual(1);
     expect(t.findings).toContain('av-dissociation');
     expect(beats[7].kind).toBe('capture');
     expect(beats[9].kind).toBe('fusion');
@@ -1035,7 +1063,7 @@ describe('t5 on the tracings', () => {
       expect(flat(e), `${v}`).toBeGreaterThan(75);
       expect(flat(e), `${v}`).toBeLessThan(100);
       expect(visibleP(e), `${v}`).toBeGreaterThanOrEqual(3);
-      expect(Math.abs(e.truth!.atrialRateBpm! - 80), `${v}`).toBeLessThan(3);
+      expect(Math.abs(e.truth!.atrialRateBpm! - 80), `${v}`).toBeLessThanOrEqual(1);
     }
     for (let v = 189; v <= 200; v++) {
       const e = played('t5', 0, v);
@@ -1063,6 +1091,7 @@ describe('t5 on the tracings', () => {
     expect(v6.map((x) => x.role)).toEqual(['q', 'r', 's']);
     expect(v6[1].mv / Math.abs(v6[2].mv), 'V6 R/S').toBeGreaterThan(1);
     expect(Math.abs(Math.min(...rrs(pre)) - 235)).toBeLessThan(5);
+    expect(rrs(pre)[markBeat(blocksOf('t5', 'film')[1].frames[1].marks, 'rr')], 'the bracket is the shortest RR').toBe(Math.min(...rrs(pre)));
     expect(Math.max(...rrs(pre)) - Math.min(...rrs(pre))).toBeGreaterThan(150);
     const widths = pre.truth!.beats.map((x) => x.qrsOff - x.qrsOn);
     expect(Math.max(...widths)).toBeGreaterThanOrEqual(140);
@@ -1096,7 +1125,7 @@ describe('t5 on the tracings', () => {
       expect(net(avrt, l), `AVRT ${l}`).toBeGreaterThan(0.1);
     }
     const vf = ecgOf(blocksOf('t5', 'ecg').find((b) => b.ecg.kind === 'synth' && b.ecg.req.scenario === 'ventricular-flutter')!.ecg);
-    expect(Math.abs(vf.truth!.hrBpm - 300)).toBeLessThan(5);
+    expect(Math.abs(vf.truth!.hrBpm - 300)).toBeLessThanOrEqual(1);
     expect(Math.abs(median(rrs(vf)) - 200)).toBeLessThan(5);
   });
 });
