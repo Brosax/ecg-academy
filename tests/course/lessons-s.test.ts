@@ -673,14 +673,12 @@ describe('s5: axis on the tracings', () => {
   });
   it('R-wave progression film: poor progression has an R of about 2 mm in V3 (transition at V4); V1–V2 high on the same heart shrinks the r in V2 from about 3.5 to 1 mm, halves the r in V1 and turns the P in V1 negative', () => {
     const [normal, poor, high] = blocksOf('s5', 'film')[0].frames.map((f) => ecgOf(f.ecg));
-    expect(qrs(poor, 'V3').max).toBeGreaterThan(0.15);
-    expect(qrs(poor, 'V3').max).toBeLessThanOrEqual(0.25);
+    expect(Math.abs(qrs(poor, 'V3').max - 0.2)).toBeLessThanOrEqual(0.025);
     expect(transition(poor)).toBe('V4');
-    expect(Math.abs(qrs(normal, 'V2').max - 0.35)).toBeLessThan(0.05);
-    expect(Math.abs(qrs(high, 'V2').max - 0.1)).toBeLessThan(0.03);
+    expect(Math.abs(qrs(normal, 'V2').max - 0.35)).toBeLessThanOrEqual(0.025);
+    expect(Math.abs(qrs(high, 'V2').max - 0.1)).toBeLessThanOrEqual(0.025);
     const v1 = qrs(high, 'V1').max / qrs(normal, 'V1').max;
-    expect(v1).toBeGreaterThan(0.4);
-    expect(v1).toBeLessThan(0.6);
+    expect(Math.abs(v1 - 0.5)).toBeLessThanOrEqual(0.05);
     expect(pw(normal, 'V1').max).toBeGreaterThan(0.005);
     expect(pw(high, 'V1').max).toBeLessThan(0.003);
     expect(pw(high, 'V1').min).toBeLessThan(-0.02);
@@ -949,6 +947,7 @@ interface RealClaim {
   readonly not?: readonly FindingId[];
   readonly hr?: readonly [number, number];
   readonly pr?: readonly [number, number];
+  readonly qrs?: readonly [number, number];
   readonly axis?: readonly [number, number];
   readonly qtcF?: readonly [number, number];
 }
@@ -969,6 +968,15 @@ const REAL_CLAIMS: Readonly<Partial<Record<(typeof IDS)[number], readonly RealCl
     { id: 1101, not: ['long-qt'] },
     { id: 5199, not: ['long-qt'], pr: [200, 200] },
     { id: 11916, sex: 'F', has: ['long-qt'], hr: [94, 96], qtcF: [0, 459] },
+  ],
+  // hook and contrast: "the machine measured about −20°", "man, 69"; "woman, 79", "about −55°", narrow QRS, LAFB;
+  // real block: "one 18-year-old woman is labelled left posterior fascicular block", "an axis near +100°"
+  s5: [
+    { id: 2686, sex: 'M', age: 69, has: ['normal-ecg'], axis: [-25, -15] },
+    { id: 18373, sex: 'F', age: 79, has: ['lafb'], axis: [-60, -50], qrs: [0, 119] },
+    { id: 13683 },
+    { id: 7419, sex: 'F', age: 18, has: ['lpfb'], axis: [95, 105] },
+    { id: 9188 },
   ],
 };
 
@@ -999,6 +1007,7 @@ describe('stage S real cases: the text agrees with the labels and the 12SL refer
         };
         within(k!.ref.hrBpm, c.hr, 'HR');
         within(k!.ref.prMs, c.pr, 'PR');
+        within(k!.ref.qrsMs, c.qrs, 'QRS');
         within(k!.ref.qrsAxisDeg, c.axis, 'axis');
         within(k!.ref.qtcFridericiaMs, c.qtcF, 'QTc (Fridericia)');
       });
