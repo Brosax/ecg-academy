@@ -432,7 +432,7 @@ describe('x2: the synthetic frames', () => {
       expect(tInverted(e, l), l).toBe(true);
     }
   });
-  it('flutter film: one circuit (same seed), atrial rate about 300 with F waves about 200 ms apart; 2:1 ≈ 150/min with every non-conducted F wave hidden, 3:1 ≈ 100/min and 4:1 ≈ 75/min with F waves visible between the complexes', () => {
+  it('flutter film: one circuit (same seed), atrial rate about 300 with F waves about 200 ms apart, narrow QRS; 2:1 ≈ 150/min with every non-conducted F wave landing on a QRS and hidden, 3:1 ≈ 100/min and 4:1 ≈ 75/min with F waves visible between the complexes', () => {
     const film = blocksOf('x2', 'film')[2];
     const reqs = film.frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req : null));
     for (const r of reqs) expect({ ...r, dials: undefined }).toEqual({ ...reqs[0], dials: undefined });
@@ -445,11 +445,16 @@ describe('x2: the synthetic frames', () => {
       for (const g of gaps) expect(Math.abs(g - 200), `frame ${k}`).toBeLessThan(10);
       expect(Math.abs(t.hrBpm - [150, 100, 75][k]), `frame ${k}`).toBeLessThan(3);
       expect(t.regular, `frame ${k}`).toBe(true);
+      expect(t.qrsMs, `frame ${k}`).toBeLessThan(120);
     });
     const [two, three, four] = es;
     const blocked = (e: Ecg) => e.truth!.atrial.filter((a) => a.conductedTo === null);
     expect(blocked(two).length).toBeGreaterThan(5);
-    for (const a of blocked(two)) expect(a.visible, `2:1 F at ${a.t}`).toBe(false);
+    const lastQrs = two.truth!.beats[two.truth!.beats.length - 1].qrsOn;
+    for (const a of blocked(two)) {
+      expect(a.visible, `2:1 F at ${a.t}`).toBe(false);
+      if (a.t < lastQrs) expect(two.truth!.beats.some((b) => a.t > b.qrsOn - 100 && a.t < b.qrsOn), `2:1 F at ${a.t} runs into a QRS`).toBe(true);
+    }
     for (const e of [three, four]) expect(blocked(e).filter((a) => a.visible).length).toBeGreaterThan(5);
   });
 });
@@ -689,6 +694,28 @@ describe('stage X real cases: the text agrees with the labels and the 12SL refer
       else tally.minor++;
     }
     expect(tally).toEqual({ normal: 5, minor: 4, major: 4, critical: 1 });
+  });
+
+  it('x2 stream text names each group: normals with one sinus bradycardia and one sinus arrhythmia; small = RBBB, first-degree AV block, two PACs; significant = two flutter/AF, old inferior MI, LVH; the fast one of the last three is the flutter', () => {
+    const group = (id: number) => {
+      const f = getCase(id)!.findings;
+      if (f.includes('normal-ecg')) return 'normal';
+      if (f.some((x) => FINDINGS[x].severity === 'critical')) return 'critical';
+      return f.some((x) => FINDINGS[x].severity === 'major') ? 'major' : 'minor';
+    };
+    const ids = realIds(lessonById('x2'));
+    const inGroup = (g: string) => ids.filter((id) => group(id) === g).sort((a, b) => a - b);
+    const labelled = (g: string, f: FindingId) => inGroup(g).filter((id) => getCase(id)!.findings.includes(f)).length;
+    expect(labelled('normal', 'sinus-bradycardia')).toBe(1);
+    expect(labelled('normal', 'sinus-arrhythmia')).toBe(1);
+    expect(inGroup('minor')).toEqual([2466, 6282, 6727, 17835]);
+    expect([labelled('minor', 'rbbb'), labelled('minor', 'av-block-1'), labelled('minor', 'pac')]).toEqual([1, 1, 2]);
+    expect(inGroup('major')).toEqual([2627, 2739, 18776, 19170]);
+    expect(inGroup('major').filter((id) => getCase(id)!.findings.some((f) => f === 'atrial-flutter' || f === 'atrial-fibrillation'))).toEqual([2739, 19170]);
+    expect([labelled('major', 'old-mi-inferior'), labelled('major', 'lvh')]).toEqual([1, 1]);
+    const last = blocksOf('x2', 'real')[2].ids;
+    expect(last.filter((id) => getCase(id)!.ref.hrBpm! > 100)).toEqual([2739]);
+    expect(getCase(2739)!.findings).toContain('atrial-flutter');
   });
 
   it('inline triage items: "act now" exactly when the case carries a critical label (the triage drill\'s rule)', () => {
