@@ -793,11 +793,74 @@ describe('t6 on the tracings', () => {
     expect(left.rhythm).toBe('vt-polymorphic');
     expect(left.findings).not.toContain('long-qt');
   });
-  it('the artefact strip is sinus rhythm with regular QRS through the burst', () => {
-    const blk = blocksOf('t6', 'ecg').find((b) => b.ecg.kind === 'synth' && b.ecg.req.scenario === 'motion-artefact')!;
-    const e = ecgOf(blk.ecg);
-    expect(e.truth!.rhythm).toBe('sinus-rhythm');
-    for (const rr of rrs(e)) expect(Math.abs(rr - 830)).toBeLessThan(60);
+  it('artefact film: sinus rhythm with regular QRS through the burst (RR about 830 ms, marked beats inside it); the burst sits at about 3–6 s in II; with the electrode still the same heart beats identically and III never changes', () => {
+    const film = blocksOf('t6', 'film')[1];
+    expect(film.frames[1].ecg).toEqual(film.frames[0].ecg);
+    const [noisy, , still] = frames('t6', 1);
+    expect(noisy.truth!.rhythm).toBe('sinus-rhythm');
+    for (const rr of rrs(noisy)) expect(Math.abs(rr - 830)).toBeLessThan(60);
+    const meanRr = rrs(noisy).reduce((s, x) => s + x, 0) / rrs(noisy).length;
+    expect(Math.abs(meanRr - 830)).toBeLessThan(10);
+    for (const i of [4, 5]) {
+      expect(noisy.truth!.beats[i].qrsOn, `beat ${i}`).toBeGreaterThan(2600);
+      expect(noisy.truth!.beats[i].qrsOn, `beat ${i}`).toBeLessThan(6200);
+    }
+    expect(still.truth!.beats.map((b) => b.qrsOn)).toEqual(noisy.truth!.beats.map((b) => b.qrsOn));
+    const fs = noisy.signal.fs;
+    const d = (l: StdLead, t0: number, t1: number) => {
+      let m = 0;
+      for (let i = Math.round((t0 * fs) / 1000); i < Math.round((t1 * fs) / 1000); i++) m = Math.max(m, Math.abs(noisy.signal.leads[l][i] - still.signal.leads[l][i]));
+      return m;
+    };
+    expect(d('III', 0, 10_000)).toBeLessThan(1e-6);
+    expect(d('II', 2600, 6200)).toBeGreaterThan(0.2);
+    expect(d('II', 0, 2500)).toBeLessThan(1e-6);
+    expect(d('II', 6400, 10_000)).toBeLessThan(1e-6);
+  });
+  it('VF sweep notes: about 2 mV of II at 0.9–1 and about 1–1.3 mV at 0.5–0.6, VF throughout; the fine-VF frame is far smaller', () => {
+    const p2p = (e: Ecg) => {
+      const a = e.signal.leads.II;
+      const fs = e.signal.fs;
+      const out: number[] = [];
+      for (let s = 0; s + fs <= a.length; s += fs) {
+        let mx = -Infinity;
+        let mn = Infinity;
+        for (let i = s; i < s + fs; i++) {
+          mx = Math.max(mx, a[i]);
+          mn = Math.min(mn, a[i]);
+        }
+        out.push(mx - mn);
+      }
+      return median(out);
+    };
+    for (const v of [0.9, 1]) {
+      const e = played('t6', 0, v);
+      expect(Math.abs(p2p(e) - 2), `${v}`).toBeLessThan(0.15);
+      expect(e.truth!.rhythm).toBe('ventricular-fibrillation');
+    }
+    for (const v of [0.5, 0.6]) {
+      const e = played('t6', 0, v);
+      expect(p2p(e), `${v}`).toBeGreaterThan(1);
+      expect(p2p(e), `${v}`).toBeLessThan(1.3);
+      expect(e.truth!.rhythm).toBe('ventricular-fibrillation');
+    }
+    const fine = frames('t6', 0)[2];
+    expect(Math.abs(p2p(fine) - 0.2)).toBeLessThan(0.05);
+    expect(p2p(fine)).toBeLessThan(0.3 * p2p(played('t6', 0, 0.5)));
+  });
+  it('shock film: VF with no beats; ventricular flutter about 300/min, cycle about 200 ms varying ≤ 30 ms; fine VF; P waves at about 52/min with no QRS', () => {
+    const [vf, vfl, fine, asys] = frames('t6', 0);
+    expect(vf.truth!.rhythm).toBe('ventricular-fibrillation');
+    expect(vf.truth!.beats.length).toBe(0);
+    expect(Math.abs(vfl.truth!.hrBpm - 300)).toBeLessThan(5);
+    expect(Math.abs(median(rrs(vfl)) - 200)).toBeLessThan(5);
+    expect(Math.max(...rrs(vfl)) - Math.min(...rrs(vfl))).toBeLessThanOrEqual(30);
+    expect(fine.truth!.rhythm).toBe('ventricular-fibrillation');
+    const a = asys.truth!;
+    expect(a.rhythm).toBe('asystole');
+    expect(a.beats.length).toBe(0);
+    expect(Math.abs(a.atrialRateBpm! - 52)).toBeLessThan(3);
+    expect(a.atrial.every((x) => x.conductedTo === null)).toBe(true);
   });
 });
 
