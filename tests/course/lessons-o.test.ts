@@ -541,6 +541,47 @@ describe('o3: digoxin on the tracings', () => {
     expect(Math.abs(chb.truth!.hrBpm - 45)).toBeLessThan(3);
     expect(Math.max(...rrs(chb)) - Math.min(...rrs(chb))).toBeLessThan(30);
   });
+  it('effect film (V5, 68/min): before, a level ST, PR 160, QT ≈ 390; on digoxin, J ≈ 0.7 mm low, ≈ 1 mm at J+60, a low T, QT ≈ 350, PR 190', () => {
+    const [before, dig] = frames('o3', 0);
+    expect(Math.abs(before.truth!.prMs! - 160)).toBeLessThan(3);
+    expect(Math.abs(before.truth!.qtMs - 390)).toBeLessThan(5);
+    expect(Math.abs(stAt(before, 'V5'))).toBeLessThan(0.02);
+    expect(tUpright(before, 'V5')).toBe(true);
+    expect(stAt(dig, 'V5')).toBeGreaterThan(-0.08);
+    expect(stAt(dig, 'V5')).toBeLessThan(-0.06);
+    expect(stAt(dig, 'V5', 60)).toBeGreaterThan(-0.11);
+    expect(stAt(dig, 'V5', 60)).toBeLessThan(-0.09);
+    expect(tw(dig, 'V5').max).toBeLessThan(0.5 * tw(before, 'V5').max);
+    expect(Math.abs(dig.truth!.qtMs - 350)).toBeLessThan(5);
+    expect(Math.abs(dig.truth!.prMs! - 190)).toBeLessThan(3);
+  });
+  it('toxicity film (II): bigeminy with early wide PVCs; AT 180/min with 2:1 block and the blocked P′ in the T upslope; junctional ≈ 80/min without P; complete block ≈ 45/min; regularised AF ≈ 45/min, perfectly regular', () => {
+    const [big, at, ajr, chb, regAf] = frames('o3', 1);
+    const kinds = big.truth!.beats.map((b) => b.kind);
+    kinds.forEach((k, i) => expect(k).toBe(kinds[0] === 'sinus' ? (i % 2 ? 'ventricular' : 'sinus') : i % 2 ? 'sinus' : 'ventricular'));
+    const width = (b: BeatMarks) => b.qrsOff - b.qrsOn;
+    const pvcs = big.truth!.beats.filter((b) => b.kind === 'ventricular');
+    const sinus = big.truth!.beats.filter((b) => b.kind === 'sinus');
+    for (const p of pvcs) expect(width(p)).toBeGreaterThanOrEqual(120);
+    expect(width(pvcs[0])).toBeGreaterThan(width(sinus[0]) + 30);
+    const r = rrs(big);
+    expect(Math.min(...r)).toBeLessThan(0.6 * Math.max(...r));
+    expect(Math.abs(at.truth!.atrialRateBpm! - 180)).toBeLessThan(5);
+    expect(Math.abs(at.truth!.hrBpm - 90)).toBeLessThan(5);
+    const b = midBeat(at);
+    const blocked = at.truth!.atrial.filter((a) => a.conductedTo === null && a.t > b.qrsOn && a.t < b.tOff + 60);
+    expect(blocked.length).toBe(1);
+    expect(blocked[0].t).toBeGreaterThan(b.j);
+    expect(blocked[0].t).toBeLessThan(b.tPeak!);
+    expect(ajr.truth!.prMs).toBeNull();
+    expect(Math.abs(ajr.truth!.hrBpm - 80)).toBeLessThan(5);
+    expect(Math.max(...rrs(ajr)) - Math.min(...rrs(ajr))).toBeLessThan(30);
+    expect(Math.abs(chb.truth!.hrBpm - 45)).toBeLessThan(5);
+    expect(regAf.truth!.rhythm).toBe('atrial-fibrillation');
+    expect(regAf.truth!.findings).toContain('av-block-3');
+    expect(Math.abs(regAf.truth!.hrBpm - 45)).toBeLessThan(5);
+    expect(Math.max(...rrs(regAf)) - Math.min(...rrs(regAf))).toBeLessThan(10);
+  });
   it('bigeminy check: every other beat is a PVC', () => {
     const e = ecgOf(inlineItem('o3', 'o3:bigeminy-on-digoxin').ecg);
     expect(e.truth!.findings).toContain('ventricular-bigeminy');
