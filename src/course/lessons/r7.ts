@@ -120,9 +120,9 @@ const lesson: Lesson = {
         {
           title: l('哪些没变；下结论', 'What stays intact; state the conclusion', 'Qué queda intacto; formula la conclusión'),
           body: l(
-            '初始间隔除极保留：V1 仍有小 r，V5–V6 的间隔 q 还在——这正是与 LBBB 的分界（r6）。胸前导联大致正常，继发性 T 改变轻微。结论：窦性心律，左前分支阻滞。附带一句：LAFB 本身抬高 aVL 的 R——别再拿 R aVL ≥11 mm 去判左室肥厚。',
-            'Initial septal activation survives: V1 keeps its small r and V5–V6 keep the septal q — exactly the dividing line from LBBB (r6). The precordial leads are nearly normal and the secondary T changes are slight. Statement: sinus rhythm, left anterior fascicular block. One caveat: LAFB itself raises R in aVL — do not apply R aVL >=11 mm as an LVH criterion here.',
-            'La activación septal inicial se conserva: V1 mantiene su r pequeña y V5–V6 la q septal — justo la línea divisoria con el BRI (r6). Las precordiales son casi normales y los cambios secundarios de la T, leves. Conclusión: ritmo sinusal, bloqueo fascicular anterior izquierdo. Una advertencia: el propio BFAI eleva la R de aVL; no apliques aquí R aVL >=11 mm como criterio de HVI.',
+            '初始间隔除极保留：V1 仍有小 r，V6 的间隔 q 还在——这正是与 LBBB 的分界（r6）。胸前导联大致正常，继发性 T 改变轻微。结论：窦性心律，左前分支阻滞。附带一句：LAFB 本身抬高 aVL 的 R——别再拿 R aVL ≥11 mm 去判左室肥厚。',
+            'Initial septal activation survives: V1 keeps its small r and V6 keeps the septal q — exactly the dividing line from LBBB (r6). The precordial leads are nearly normal and the secondary T changes are slight. Statement: sinus rhythm, left anterior fascicular block. One caveat: LAFB itself raises R in aVL — do not apply R aVL >=11 mm as an LVH criterion here.',
+            'La activación septal inicial se conserva: V1 mantiene su r pequeña y V6 la q septal — justo la línea divisoria con el BRI (r6). Las precordiales son casi normales y los cambios secundarios de la T, leves. Conclusión: ritmo sinusal, bloqueo fascicular anterior izquierdo. Una advertencia: el propio BFAI eleva la R de aVL; no apliques aquí R aVL >=11 mm como criterio de HVI.',
           ),
           marks: [{ auto: 'q', lead: 'V6' }],
           highlightLeads: ['V1', 'V6'],
@@ -308,12 +308,12 @@ const lesson: Lesson = {
           'B: RBBB + LAFB + Mobitz II (infra-His) — true three-fascicle disease',
           'B: BRD + BFAI + Mobitz II (infrahisiano): verdadera enfermedad de los tres fascículos',
         ),
-        marks: [{ auto: 'pr' }, { auto: 'blocked-p' }],
+        marks: [{ auto: 'pr', beat: 4 }, { auto: 'pr', beat: 5 }, { auto: 'blocked-p' }],
       },
       point: l(
-        '两份都是 RBBB + LAFB（V1 rsR′、I/V6 宽 S、电轴左偏），PR 都长。A 只是叠了一度房室传导阻滞——PR 延长几乎总在房室结，进展为完全阻滞的风险与单纯双分支阻滞相近：**按组成部分描述**，别用“三分支阻滞”。B 里一个按时到达的 P 突然不下传，而下传搏动的 PR 始终恒定——剩下的后分支间歇性失灵：这才是三支都有病的心电图证据，加上二度Ⅱ型本身就是 I 类起搏指征（r4）。交替性束支阻滞（同一份或连续心电图上 RBBB 与 LBBB 交替，或 RBBB+LAFB 与 RBBB+LPFB 交替）是另一种——同样 I 类，即使无症状。',
-        'Both are RBBB + LAFB (rsR′ in V1, broad S in I/V6, left axis) with a long PR. A merely adds first-degree AV block — the PR delay is almost always in the AV node, and progression to complete block carries about the same risk as bifascicular block alone: **describe the components** and skip “trifascicular block”. In B an on-time P suddenly fails to conduct while the conducted PR stays constant — the surviving posterior fascicle is failing intermittently: this is ECG evidence of disease in all three fascicles, and Mobitz II on its own is already a Class I pacing indication (r4). Alternating BBB (RBBB and LBBB alternating on the same or successive ECGs, or RBBB+LAFB alternating with RBBB+LPFB) is the other kind — also Class I, even without symptoms.',
-        'Ambos son BRD + BFAI (rsR′ en V1, S ancha en I/V6, eje izquierdo) con PR largo. A solo añade un bloqueo AV de primer grado: el alargamiento del PR está casi siempre en el nodo AV y la progresión a bloqueo completo tiene un riesgo parecido al del bloqueo bifascicular aislado; **describe los componentes** y evita «bloqueo trifascicular». En B una P que llega a su hora deja de conducir de golpe mientras el PR de las conducidas no cambia: el fascículo posterior que quedaba falla de forma intermitente. Esto sí es prueba electrocardiográfica de enfermedad de los tres fascículos, y el propio Mobitz II ya es indicación de estimulación clase I (r4). El bloqueo de rama alternante (BRD y BRI alternando en el mismo ECG o en ECG sucesivos, o BRD+BFAI alternando con BRD+BFPI) es la otra forma: también clase I, aun sin síntomas.',
+        '两份都是 RBBB + LAFB（V1 rsR′、I/V6 宽 S、电轴左偏），PR 都长。A 只是叠了一度房室传导阻滞——PR 延长通常在房室结，进展为完全阻滞的风险与单纯双分支阻滞相近：**按组成部分描述**，别用“三分支阻滞”。B 里一个按时到达的 P 突然不下传，而下传搏动的 PR 始终恒定——剩下的后分支间歇性失灵：这才是三支都有病的心电图证据，加上二度Ⅱ型本身就是 I 类起搏指征（r4）。交替性束支阻滞（同一份或连续心电图上 RBBB 与 LBBB 交替，或 RBBB+LAFB 与 RBBB+LPFB 交替）是另一种——同样 I 类，即使无症状。',
+        'Both are RBBB + LAFB (rsR′ in V1, broad S in I/V6, left axis) with a long PR. A merely adds first-degree AV block — the PR delay is usually in the AV node, and progression to complete block carries about the same risk as bifascicular block alone: **describe the components** and skip “trifascicular block”. In B an on-time P suddenly fails to conduct while the conducted PR stays constant — the surviving posterior fascicle is failing intermittently: this is ECG evidence of disease in all three fascicles, and Mobitz II on its own is already a Class I pacing indication (r4). Alternating BBB (RBBB and LBBB alternating on the same or successive ECGs, or RBBB+LAFB alternating with RBBB+LPFB) is the other kind — also Class I, even without symptoms.',
+        'Ambos son BRD + BFAI (rsR′ en V1, S ancha en I/V6, eje izquierdo) con PR largo. A solo añade un bloqueo AV de primer grado: el alargamiento del PR suele estar en el nodo AV y la progresión a bloqueo completo tiene un riesgo parecido al del bloqueo bifascicular aislado; **describe los componentes** y evita «bloqueo trifascicular». En B una P que llega a su hora deja de conducir de golpe mientras el PR de las conducidas no cambia: el fascículo posterior que quedaba falla de forma intermitente. Esto sí es prueba electrocardiográfica de enfermedad de los tres fascículos, y el propio Mobitz II ya es indicación de estimulación clase I (r4). El bloqueo de rama alternante (BRD y BRI alternando en el mismo ECG o en ECG sucesivos, o BRD+BFAI alternando con BRD+BFPI) es la otra forma: también clase I, aun sin síntomas.',
       ),
     },
     {
@@ -407,9 +407,9 @@ const lesson: Lesson = {
       kind: 'summary',
       points: [
         l(
-          'LAFB：电轴 −45°…−90°、aVL 呈 qR、aVL R 波峰时间 ≥45 ms、QRS <120 ms——窄 QRS 的诊断，由电轴决定。间隔除极保留（V5–V6 仍有 q），是与 LBBB 的分界。',
-          'LAFB: axis −45° to −90°, qR in aVL, R-peak time in aVL >=45 ms, QRS <120 ms — a narrow-QRS diagnosis where the axis does the work. Septal activation is preserved (V5–V6 keep their q), the dividing line from LBBB.',
-          'BFAI: eje de −45° a −90°, qR en aVL, tiempo hasta la cima de la R en aVL >=45 ms y QRS <120 ms: un diagnóstico de QRS estrecho donde el eje manda. La activación septal se conserva (V5–V6 mantienen la q), la frontera con el BRI.',
+          'LAFB：电轴 −45°…−90°、aVL 呈 qR、aVL R 波峰时间 ≥45 ms、QRS <120 ms——窄 QRS 的诊断，由电轴决定。间隔除极保留（V1 仍有 r，V6 仍有 q），是与 LBBB 的分界。',
+          'LAFB: axis −45° to −90°, qR in aVL, R-peak time in aVL >=45 ms, QRS <120 ms — a narrow-QRS diagnosis where the axis does the work. Septal activation is preserved (V1 keeps its r, V6 its q), the dividing line from LBBB.',
+          'BFAI: eje de −45° a −90°, qR en aVL, tiempo hasta la cima de la R en aVL >=45 ms y QRS <120 ms: un diagnóstico de QRS estrecho donde el eje manda. La activación septal se conserva (V1 mantiene la r y V6 la q), la frontera con el BRI.',
         ),
         l(
           'LPFB 是镜像（电轴 +90°…+180°、I/aVL rS、III/aVF qR）但更是排除性诊断：右室肥厚、侧壁心梗、垂直心/瘦长、肺栓塞、肺气肿、导联接反，先一个个排掉。',

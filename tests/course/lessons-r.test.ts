@@ -1039,32 +1039,53 @@ describe('r6: bundle branch block on the tracings', () => {
 });
 
 describe('r7: fascicular blocks on the tracings', () => {
-  it('LAFB: axis about −60°, QRS < 120, qR in aVL, rS in II/III/aVF', () => {
+  it('LAFB (worked): axis about −60°, QRS < 120, qR in aVL with an R-peak time ≥ 45 ms, rS in II/III/aVF; V1 keeps a small r and V6 a septal q', () => {
     const e = ecgOf(blocksOf('r7', 'worked')[0].ecg);
     const b = mid(e);
-    expect(Math.abs(e.truth!.axisDeg.qrs + 60)).toBeLessThan(8);
+    expect(Math.abs(e.truth!.axisDeg.qrs + 60)).toBeLessThanOrEqual(5);
     expect(e.truth!.qrsMs).toBeLessThan(120);
     expect(shape(e, 'aVL', b)).toBe('qr');
+    expect(rPeakMs(e, 'aVL', b), 'aVL R-peak time').toBeGreaterThanOrEqual(45);
     for (const l of ['II', 'III', 'aVF'] as const) expect(shape(e, l, b), l).toBe('rs');
+    expect(shape(e, 'V1', b)).toBe('rs');
+    expect(shape(e, 'V6', b).startsWith('q'), 'V6 septal q').toBe(true);
   });
-  it('LPFB: axis between +90 and +180, rS in I', () => {
-    const e = ecgOf(blocksOf('r7', 'contrast')[0].right.ecg);
-    expect(e.truth!.axisDeg.qrs).toBeGreaterThan(90);
-    expect(shape(e, 'I', mid(e))).toBe('rs');
+  it('mirror contrast: A (LAFB) qR in I and aVL, rS in II, III, aVF, axis −45° to −90°; B (LPFB) rS in I and aVL, qR in III and aVF, axis +90° to +180°; both QRS < 120', () => {
+    const c = blocksOf('r7', 'contrast')[0];
+    const a = ecgOf(c.left.ecg);
+    const ab = mid(a);
+    for (const l of ['I', 'aVL'] as const) expect(shape(a, l, ab), `A ${l}`).toBe('qr');
+    for (const l of ['II', 'III', 'aVF'] as const) expect(shape(a, l, ab), `A ${l}`).toBe('rs');
+    expect(a.truth!.axisDeg.qrs).toBeLessThanOrEqual(-45);
+    expect(a.truth!.axisDeg.qrs).toBeGreaterThanOrEqual(-90);
+    const b = ecgOf(c.right.ecg);
+    const bb = mid(b);
+    for (const l of ['I', 'aVL'] as const) expect(shape(b, l, bb), `B ${l}`).toBe('rs');
+    for (const l of ['III', 'aVF'] as const) expect(shape(b, l, bb), `B ${l}`).toBe('qr');
+    expect(b.truth!.axisDeg.qrs).toBeGreaterThanOrEqual(90);
+    expect(b.truth!.axisDeg.qrs).toBeLessThanOrEqual(180);
+    for (const e of [a, b]) expect(e.truth!.qrsMs).toBeLessThan(120);
   });
-  it('long PR vs Mobitz II: both RBBB + LAFB with PR about 260; only B drops P waves, at a constant PR', () => {
+  it('long PR vs Mobitz II: both RBBB + LAFB (rsR′ in V1, broad S in I and V6, axis −45° to −90°) with PR about 260; only B drops P waves, at a constant PR either side of the drop', () => {
     const c = blocksOf('r7', 'contrast')[1];
     const a = ecgOf(c.left.ecg);
     const b = ecgOf(c.right.ecg);
     for (const e of [a, b]) {
-      expect(Math.abs(e.truth!.prMs! - 260)).toBeLessThan(10);
+      expect(Math.abs(e.truth!.prMs! - 260)).toBeLessThanOrEqual(5);
       expect(e.truth!.findings).toEqual(expect.arrayContaining(['rbbb', 'lafb']));
+      expect(hasRPrime(e, 'V1', mid(e))).toBe(true);
+      for (const l of ['I', 'V6'] as const) expect(sMs(e, l, mid(e)), `${l} S duration`).toBeGreaterThan(40);
+      expect(e.truth!.axisDeg.qrs).toBeLessThanOrEqual(-45);
+      expect(e.truth!.axisDeg.qrs).toBeGreaterThanOrEqual(-90);
     }
     const inStrip = (e: Ecg) => blocked(e).filter((x) => x.t < e.truth!.beats[e.truth!.beats.length - 1].qrsOn);
     expect(inStrip(a).length).toBe(0);
     expect(inStrip(b).length).toBeGreaterThanOrEqual(2);
     const p = prs(b);
     expect(Math.max(...p) - Math.min(...p)).toBeLessThan(5);
+    const [before, after] = sideBeats('r7', 1, 'right', 'pr');
+    expect(after).toBe(before + 1);
+    expect(rrs(b)[before], 'the marked PRs straddle a drop').toBeGreaterThan(1.5 * Math.min(...rrs(b)));
   });
   it('IVCD (the sweep at 124 ms): QRS about 125 ms, no R′ in V1', () => {
     const e = played('r7', 1, 124);
