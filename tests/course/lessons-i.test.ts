@@ -701,7 +701,7 @@ describe('i6: posterior infarction on the tracings', () => {
 
 describe('i7: subtle occlusion on the tracings', () => {
   it('hook / serial 1 (man of 52): V2–V3 under the 2-mm limit, V3 about 1 mm, bulky T in V3, faint mirror in III', () => {
-    for (const src of [blocksOf('i7', 'hook')[0].ecg, blocksOf('i7', 'ecg')[1].ecg]) {
+    for (const src of [blocksOf('i7', 'hook')[0].ecg, blocksOf('i7', 'film')[0].frames[1].ecg]) {
       const e = ecgOf(src);
       for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThan(0.2);
       expect(stAt(e, 'V3')).toBeGreaterThan(0.08);
@@ -710,7 +710,7 @@ describe('i7: subtle occlusion on the tracings', () => {
     }
   });
   it('hyperacute T: in V3 the T is taller than the R; the J point in V2 under 1 mm', () => {
-    for (const src of [blocksOf('i7', 'ecg')[0].ecg, blocksOf('i7', 'worked')[0].ecg]) {
+    for (const src of [blocksOf('i7', 'film')[0].frames[2].ecg, blocksOf('i7', 'worked')[0].ecg]) {
       const e = ecgOf(src);
       expect(tw(e, 'V3').max).toBeGreaterThan(qrs(e, 'V3').max);
       expect(stAt(e, 'V2')).toBeLessThan(0.1);
@@ -734,10 +734,50 @@ describe('i7: subtle occlusion on the tracings', () => {
     expect(tq(e, 'V3')).toBeLessThan(tq(a, 'V3'));
     expect(tq(e, 'V3')).toBeGreaterThan(0.75);
   });
-  it('serial 2: V2–V3 ≥ 2 mm and the inferior mirror deepened', () => {
-    const e = ecgOf(blocksOf('i7', 'ecg')[2].ecg);
+  it('serial film (same seed, hyperacute then acute): first J under 1 mm in V2–V4 with the V3 T almost as tall as the R and T inverted in III; repeat V2–V3 ≥ 2 mm, V3 about 3.5 mm, III and aVF about −1 mm, the inferior mirror deepened', () => {
+    const [f1, f2] = blocksOf('i7', 'film')[1].frames;
+    if (f1.ecg.kind !== 'synth' || f2.ecg.kind !== 'synth') throw new Error('synthetic frames');
+    expect(f1.ecg.req.seed).toBe(f2.ecg.req.seed);
+    expect(f1.ecg.req.scenario).toBe(f2.ecg.req.scenario);
+    const [first, e] = [ecgOf(f1.ecg), ecgOf(f2.ecg)];
+    for (const l of ['V2', 'V3', 'V4'] as const) expect(stAt(first, l), l).toBeLessThan(0.1);
+    expect(tw(first, 'V3').max).toBeGreaterThan(0.8 * qrs(first, 'V3').max);
+    expect(tw(first, 'V3').max).toBeLessThanOrEqual(qrs(first, 'V3').max);
+    expect(tInverted(first, 'III')).toBe(true);
     for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.2);
-    expect(stAt(e, 'III')).toBeLessThan(stAt(ecgOf(blocksOf('i7', 'ecg')[1].ecg), 'III'));
+    expect(stAt(e, 'V3')).toBeGreaterThan(0.32);
+    expect(stAt(e, 'V3')).toBeLessThan(0.38);
+    for (const l of ['III', 'aVF'] as const) {
+      expect(stAt(e, l), l).toBeLessThan(-0.08);
+      expect(stAt(e, l), l).toBeGreaterThan(-0.14);
+    }
+    expect(stAt(e, 'III')).toBeLessThan(stAt(first, 'III') - 0.05);
+  });
+  it('T-beside-QRS film: normal V3 T under half the R; hyperkalaemia T tall but narrow (half-height width under 0.7 of the hyperacute T) with PR ≥ 200 ms and QRS 110–120 ms', () => {
+    const normal = frame('i7', 0, 0);
+    expect(tw(normal, 'V3').max).toBeLessThan(0.5 * qrs(normal, 'V3').max);
+    const borderline = frame('i7', 0, 1);
+    expect(stAt(borderline, 'V3')).toBeGreaterThan(0.08);
+    expect(stAt(borderline, 'V3')).toBeLessThan(0.13);
+    expect(tw(borderline, 'V3').max).toBeGreaterThan(qrs(borderline, 'V3').max);
+    expect(tInverted(borderline, 'III')).toBe(true);
+    const halfWidth = (e: Ecg, l: AnyLead): number => {
+      const b = midBeat(e);
+      const a = sig(e, l);
+      const fs = e.signal.fs;
+      const base = baselineBefore(a, fs, b.qrsOn);
+      const peak = tw(e, l).max;
+      let n = 0;
+      for (let i = Math.round(((b.j + 40) * fs) / 1000); i <= Math.round((b.tOff * fs) / 1000); i++) if (a[i] - base > peak / 2) n++;
+      return (n * 1000) / fs;
+    };
+    const [hyperacute, k] = [frame('i7', 0, 2), frame('i7', 0, 3)];
+    expect(tw(k, 'V3').max).toBeGreaterThan(qrs(k, 'V3').max);
+    expect(halfWidth(k, 'V3')).toBeLessThan(0.7 * halfWidth(hyperacute, 'V3'));
+    expect(k.truth!.prMs!).toBeGreaterThanOrEqual(200);
+    expect(k.truth!.qrsMs).toBeGreaterThanOrEqual(110);
+    expect(k.truth!.qrsMs).toBeLessThan(120);
+    expect(hyperacute.truth!.qrsMs).toBeLessThan(100);
   });
 });
 

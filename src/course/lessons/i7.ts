@@ -68,31 +68,60 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('超急性期T波：最早的征象', 'Hyperacute T waves: the earliest sign', 'Ondas T hiperagudas: el primer signo'),
-      body: l(
-        '冠状动脉完全闭塞后**数分钟**，心电图可以先于任何ST抬高出现变化：T波变成**宽底、粗大、对称**的形态，且**相对QRS过大**，出现在 **≥2个相邻导联**。这就是超急性期T波——不只是“高尖T波”的另一个说法：\n- 形态：宽底、两支对称、振幅大；\n- 比例：与下面的QRS相比过大（正常T波要小得多）；\n- 分布：缺血区域的≥2个相邻导联（前壁闭塞时V2–V4最明显）；\n- 时间：最早出现的征象，随时间演变为ST抬高。\n见到它：复查心电图、对比旧图——而不是等它“长成”STEMI。',
-        'Within **minutes** of a total coronary occlusion the ECG can change before any ST elevation appears: the T waves become **broad-based, bulky and symmetric** and **large relative to the QRS**, in **≥2 contiguous leads**. These are hyperacute T waves — not just another word for "peaked T":\n- shape: broad-based, symmetric limbs, high amplitude;\n- proportion: too large for the QRS beneath (a normal T is far smaller);\n- distribution: ≥2 contiguous leads of the ischaemic territory (V2–V4 most obviously in anterior occlusion);\n- timing: the earliest sign, evolving into ST elevation with time.\nWhen you see them: repeat the ECG and compare with old tracings — do not wait for the pattern to "grow into" a STEMI.',
-        'En cuestión de **minutos** tras una oclusión coronaria total el ECG puede cambiar antes de que aparezca cualquier elevación del ST: las ondas T se vuelven **anchas de base, voluminosas y simétricas** y **grandes respecto al QRS**, en **≥2 derivaciones contiguas**. Son ondas T hiperagudas —no es solo otra forma de decir "T picudas":\n- forma: base ancha, ramas simétricas, gran amplitud;\n- proporción: demasiado grande para el QRS que la sostiene (una T normal es mucho menor);\n- distribución: ≥2 derivaciones contiguas del territorio isquémico (V2–V4 sobre todo en la oclusión anterior);\n- cronología: el signo más precoz, que evoluciona hacia la elevación del ST.\nSi las ves: repite el ECG y compara con trazados previos; no esperes a que el patrón "crezca" hasta un IAMCEST.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('hyperacute-t', 922),
-      marks: [{ auto: 'qrs', lead: 'V3' }, { auto: 't', lead: 'V3' }, { auto: 't', lead: 'V2' }],
+      kind: 'heart',
+      ecg: synth('stemi-anterior-subtle', 921),
+      emphasize: ['lv-mid-anteroseptal', 'lv-mid-anterior', 'lv-apical-anterior', 'lv-apical-septal', 'lv-apex'],
       caption: l(
-        '55岁男性，胸痛20分钟。在V3把QRS和T波放在一起看：T波约14 mm，比R波还高，几乎与整个QRS一样大——**不成比例**。这不是高钾血症那种**窄而尖**的T波（那种要查血钾、看QRS是否增宽）；它宽、对称、粗大，而QRS宽度正常。ST段本身几乎还在基线（V2约0.5 mm）。超急性期T波 + 疼痛不缓解 = 复查心电图，15分钟见分晓。',
-        'Man, 55, chest pain for 20 minutes. In V3 put the QRS and the T side by side: the T (about 14 mm) is taller than the R and nearly as large as the whole QRS — **disproportionate**. This is not the **narrow, tented** T of hyperkalaemia (that one asks for a potassium level and a look at the QRS width); it is broad, symmetric and bulky, and the QRS is of normal width. The ST segment itself is almost at baseline (about 0.5 mm in V2). Hyperacute T waves + unrelenting pain = repeat the ECG; 15 minutes will tell.',
-        'Varón de 55 años, dolor torácico de 20 minutos. En V3 pon juntos el QRS y la onda T: la T (unos 14 mm) es más alta que la R y casi tan grande como todo el QRS: **desproporcionada**. No es la T **estrecha y en tienda de campaña** de la hiperpotasemia (esa pide una potasemia y una mirada al ancho del QRS); es ancha, simétrica y voluminosa, y el QRS tiene una anchura normal. El segmento ST está casi en la línea de base (unos 0,5 mm en V2). T hiperagudas + dolor persistente = repite el ECG; 15 minutos lo aclararán.',
+        '播放开头那份图的一个心动周期：毫米数还不够，LAD 供血的前壁已经在受伤。亮起的节段正对 V2–V4，那里的 T 波粗大。',
+        'Play one beat of the opening tracing: the millimetres fall short, yet the LAD wall is already injured. The lit segments face V2–V4, where the T waves are bulky.',
+        'Reproduce un latido del trazado inicial: los milímetros no llegan, pero la pared de la DA ya está lesionada. Los segmentos iluminados miran a V2–V4, donde las T son voluminosas.',
       ),
     },
     {
-      kind: 'text',
-      title: l('比例原则与QRS终末部变形', 'Proportionality and terminal QRS distortion', 'Proporcionalidad y distorsión terminal del QRS'),
-      body: l(
-        '孤立地看一个波什么都证明不了；**比例**才是隐匿性闭塞判读的核心：\n- **T/QRS比例**：T波振幅应与QRS大致成比例。一个高大的T骑在矮小的QRS上，即使ST抬高只有1 mm也不对劲——尤其在V2–V4。\n- **QRS终末部变形**：V2–V3本来应有S波末端的J波（或清晰的S波转折）。急性透壁缺血会“吃掉”这个J波，让QRS直接冲进ST段。本应有J波的地方J波消失，就是终末部变形的信号。\n这两条加上对应性压低与临床背景，把“够不够毫米”变成“像不像闭塞”。',
-        'A single wave in isolation proves nothing; **proportion** is the heart of the subtle-occlusion read:\n- **T/QRS proportionality**: the T amplitude should scale with the QRS. A tall T riding a small QRS is wrong even when the ST elevation is only 1 mm — above all in V2–V4.\n- **Terminal QRS distortion**: V2–V3 normally show a J wave (or a crisp S-wave turn) at the end of the QRS. Acute transmural ischaemia "eats" that J wave, and the QRS runs straight into the ST segment. A missing J wave where one should be is the tell.\nThese two, added to reciprocal depression and the clinical story, turn "does it make the millimetres" into "does it behave like an occlusion".',
-        'Una onda aislada no prueba nada; la **proporción** es el núcleo de la lectura de la oclusión sutil:\n- **Proporcionalidad T/QRS**: la amplitud de la T debe guardar proporción con el QRS. Una T alta sobre un QRS pequeño está mal aunque la elevación del ST sea de 1 mm, sobre todo en V2–V4.\n- **Distorsión terminal del QRS**: en V2–V3 debe haber una onda J (o un giro nítido de la S) al final del QRS. La isquemia transmural aguda "se come" esa onda J y el QRS entra directamente en el segmento ST. Una onda J ausente donde debería estar es la pista.\nEstas dos, sumadas al descenso recíproco y a la clínica, convierten "¿alcanza los milímetros?" en "¿se comporta como una oclusión?".',
+      kind: 'film',
+      title: l('把 T 波和它的 QRS 放在一起看', 'Read the T beside its QRS', 'Lee la T junto a su QRS'),
+      frames: [
+        {
+          label: l('正常', 'Normal', 'Normal'),
+          ecg: synth('normal', 929),
+          note: l('正常：V3 的 T 波不到 R 波高度的一半。', 'Normal: in V3 the T is less than half the height of the R.', 'Normal: en V3 la T no llega a la mitad de la altura de la R.'),
+          marks: [{ auto: 'r', lead: 'V3' }, { auto: 't', lead: 'V3' }],
+        },
+        {
+          label: l('差一点到界值', 'Just short', 'Justo por debajo'),
+          ecg: synth('stemi-anterior-subtle', 926),
+          note: l(
+            'V3 的 J 点约 1 mm，T 波比 R 波还高，III 的 T 波倒置。毫米不够，比例却不对。',
+            'J in V3 about 1 mm, the T taller than the R, T inverted in III. Short of the millimetres, out of proportion.',
+            'J en V3 de alrededor de 1 mm, T más alta que la R, T negativa en III. Faltan milímetros, sobra proporción.',
+          ),
+          marks: [{ auto: 'j', lead: 'V3' }, { auto: 't', lead: 'V3' }, { auto: 't', lead: 'III' }],
+        },
+        {
+          label: l('超急性期T波', 'Hyperacute T', 'T hiperaguda'),
+          ecg: synth('hyperacute-t', 922),
+          note: l(
+            'J 点不到 1 mm，V3 的 T 波却比 R 波高、底部宽；III 的 T 波倒置。T 波先到，ST 抬高后来。',
+            'J under 1 mm, yet the T in V3 is taller than the R and broad-based; T inverted in III. The T arrives first, the ST later.',
+            'J por debajo de 1 mm, pero la T de V3 es más alta que la R y de base ancha; T negativa en III. La T llega primero, el ST después.',
+          ),
+          marks: [{ auto: 'qrs', lead: 'V3' }, { auto: 't', lead: 'V3' }],
+        },
+        {
+          label: l('高钾血症', 'Hyperkalaemia', 'Hiperpotasemia'),
+          ecg: synth('hyperkalemia', 930),
+          note: l(
+            '也很高，但窄而尖、底部窄；PR 和 QRS 都变长。这时要查血钾，而不是叫它超急性期T波。',
+            'Tall too, but narrow-based and tented, with a longer PR and a wider QRS. Check the potassium; do not call it hyperacute.',
+            'También alta, pero estrecha y picuda, con un PR más largo y un QRS más ancho. Pide la potasemia; no la llames hiperaguda.',
+          ),
+          marks: [{ auto: 'pr', lead: 'II' }, { auto: 'qrs', lead: 'V3' }, { auto: 't', lead: 'V3' }],
+        },
+      ],
+      caption: l(
+        '单看一个波什么也证明不了：看 T 和下面的 QRS 成不成比例，再看 T 的形状。',
+        'One wave alone proves nothing: check whether the T fits the QRS beneath it, then look at its shape.',
+        'Una onda aislada no prueba nada: mira si la T guarda proporción con su QRS y después su forma.',
       ),
     },
     {
@@ -122,6 +151,14 @@ const lesson: Lesson = {
         {
           label: l('立即侵入性策略', 'Immediate invasive strategy', 'Estrategia invasiva inmediata'),
           value: l('NSTE-ACS伴难治性疼痛、血流动力学不稳定、危及生命的心律失常或动态心电图改变：<2小时', 'NSTE-ACS with refractory pain, haemodynamic instability, life-threatening arrhythmia or dynamic ECG changes: <2 h', 'SCASEST con dolor refractario, inestabilidad hemodinámica, arritmia que amenaza la vida o cambios dinámicos del ECG: <2 h'),
+        },
+        {
+          label: l('不达STEMI标准的闭塞', 'Occlusion without STEMI criteria', 'Oclusión sin criterios de IAMCEST'),
+          value: l(
+            '超急性期T波；de Winter T波（第I8课）；V1–V3孤立性ST压低（后壁，第I6课）；细微的对应性改变。回旋支闭塞最常被漏掉',
+            'Hyperacute T waves; de Winter T waves (lesson I8); isolated V1–V3 ST depression (posterior, lesson I6); subtle reciprocal change. Circumflex occlusions are missed most often',
+            'Ondas T hiperagudas; ondas T de De Winter (lección I8); descenso aislado del ST en V1–V3 (posterior, lección I6); cambios recíprocos sutiles. Las oclusiones de la circunfleja son las que más se pasan por alto',
+          ),
         },
       ],
       source:
@@ -200,32 +237,47 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('stemi-anterior-subtle', 926),
-      marks: [{ auto: 'j', lead: 'V3' }, { auto: 'st60', lead: 'V3' }],
+      kind: 'film',
+      title: l('系列心电图：同一颗心，复查一次', 'Serial ECGs: the same heart, recorded again', 'ECG seriados: el mismo corazón, registrado de nuevo'),
+      frames: [
+        {
+          label: l('首份心电图', 'First ECG', 'Primer ECG'),
+          ecg: { kind: 'synth', req: { scenario: 'stemi-evolution', variant: 'hyperacute', seed: 928 } },
+          note: l(
+            'V2–V4 的 J 点不到 1 mm，但 V3 的 T 波几乎和 R 波一样高，III 的 T 波倒置。没过任何界值：15–30 分钟内复查。',
+            'J under 1 mm in V2–V4, but the T in V3 is almost as tall as the R and T is inverted in III. No threshold met: repeat in 15–30 min.',
+            'J por debajo de 1 mm en V2–V4, pero la T de V3 es casi tan alta como la R y la T de III es negativa. Ningún umbral: repite en 15–30 min.',
+          ),
+          marks: [{ auto: 'j', lead: 'V3' }, { auto: 't', lead: 'V3' }, { auto: 't', lead: 'III' }],
+        },
+        {
+          label: l('复查心电图', 'Repeat ECG', 'ECG repetido'),
+          ecg: synth('stemi-evolution', 928),
+          note: l(
+            '同一颗心：V2–V3 已 ≥ 2 mm（V3 约 3.5 mm），III 和 aVF 压低约 1 mm：前壁 STEMI。第一张定路径，第二张定诊断。',
+            'Same heart: V2–V3 now ≥ 2 mm (V3 about 3.5 mm), III and aVF down about 1 mm: anterior STEMI. The first tracing set the pathway; the second settled it.',
+            'El mismo corazón: V2–V3 ya ≥ 2 mm (V3 unos 3,5 mm), III y aVF descienden 1 mm: IAMCEST anterior. El primero marcó el circuito; el segundo lo zanjó.',
+          ),
+          marks: [{ auto: 'j', lead: 'V3' }, { auto: 'j', lead: 'III' }],
+        },
+      ],
+      predict: {
+        question: l(
+          '首份心电图只有超急性期 T 波，疼痛还在。复查的心电图最可能出现什么？',
+          'The first ECG shows only hyperacute T waves and the pain goes on. What will the repeat ECG most likely show?',
+          'El primer ECG solo muestra T hiperagudas y el dolor sigue. ¿Qué mostrará con más probabilidad el ECG repetido?',
+        ),
+        options: [
+          l('V2–V3 的 ST 抬高越过界值', 'ST elevation in V2–V3 past the threshold', 'Elevación del ST en V2–V3 por encima del umbral'),
+          l('恢复正常', 'A normal ECG', 'Un ECG normal'),
+          l('只剩下 Q 波', 'Only Q waves', 'Solo ondas Q'),
+        ],
+        answer: 0,
+      },
       caption: l(
-        '**系列心电图之一（t = 0）**：界值附近——V3的J点约1 mm（J+60约1.5 mm）、T波粗大、下壁轻度镜像压低。单独看它可以争论一整晚。于是流程接管：首份图已在首次医疗接触 **10分钟内**记录；这张图不能确定而疼痛还在，**15–30分钟内复查**，症状变化时随时复查，同时**找旧图**对比。',
-        '**Serial ECG, one of two (t = 0)**: borderline — about 1 mm at the J point in V3 (about 1.5 mm at J+60), bulky T waves, faint inferior mirror depression. On its own it could be argued over all night. So the workflow takes over: the first ECG landed within **10 minutes** of first medical contact; this one is non-diagnostic and the pain persists, so **repeat within 15–30 minutes** and with any change in symptoms, while **fetching the old tracing** for comparison.',
-        '**ECG seriado, primero de dos (t = 0)**: en el límite —alrededor de 1 mm en el punto J de V3 (unos 1,5 mm en J+60), T voluminosas, leve descenso especular inferior. Por sí solo se puede discutir toda la noche. Entonces toma el mando el protocolo: el primer ECG se registró en los primeros **10 minutos** desde el contacto médico inicial; este no es concluyente y el dolor persiste, así que **repite en 15–30 minutos** y ante cualquier cambio de síntomas, mientras **buscas el ECG antiguo** para comparar.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('stemi-anterior', 927, { st: 0.3 }),
-      marks: [{ auto: 'j', lead: 'V3' }, { auto: 'st60', lead: 'V3' }, { auto: 'st60', lead: 'III' }],
-      caption: l(
-        '**系列心电图之二（t = 25分钟）**：同一个故事继续——V2–V4抬高约2–3 mm（V3最高），超过52岁男性的2 mm界值，下壁镜像压低加深。疑问结束：前壁STEMI，进导管室。这就是系列心电图的全部意义：**第一张图定路径，第二张图定诊断**——25分钟前还“差毫米”的图，此刻已经长大。',
-        '**Serial ECG, two of two (t = 25 min)**: the same story continues — V2–V4 are now elevated by about 2–3 mm (most in V3), past the 2-mm limit for a 52-year-old man, and the inferior mirror depression has deepened. The argument is over: anterior STEMI, to the cath lab. That is the whole point of serial ECGs: **the first tracing sets the pathway, the second settles the diagnosis** — the tracing that lacked millimetres 25 minutes earlier has grown up.',
-        '**ECG seriado, segundo de dos (t = 25 min)**: la misma historia continúa —V2–V4 elevados ya unos 2–3 mm (máximo en V3), por encima del límite de 2 mm de un varón de 52 años, y el descenso especular inferior se ha profundizado. La discusión terminó: IAMCEST anterior, al laboratorio de hemodinámica. Esa es toda la razón de ser del ECG seriado: **el primer trazado marca el circuito, el segundo zanja el diagnóstico**; al que le faltaban milímetros hace 25 minutos, ya le han crecido.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('不达STEMI标准的急性闭塞', 'Acute coronary occlusion without STEMI criteria', 'Oclusión coronaria aguda sin criterios de IAMCEST'),
-      body: l(
-        '毫米标准会漏掉**相当一部分**急性闭塞——回旋支尤其常见，它在12导联上常常“沉默”。要保持警觉的模式：\n- 超急性期T波；\n- de Winter T波（第I8课）；\n- V1–V3孤立的ST压低（后壁，第I6课）；\n- 细微的对应性改变。\n管理原则来自NSTE-ACS一侧：**难治性疼痛、血流动力学不稳定、危及生命的心律失常或动态心电图改变 ⇒ 立即侵入性策略（<2小时）**。反过来同样成立：**正常心电图绝不排除ACS**——超过三分之一的NSTE-ACS入院时心电图正常。心电图决定路径，肌钙蛋白决定诊断。',
-        'The millimetre criteria miss a **sizeable minority** of acute occlusions — circumflex occlusions above all, which are often silent on the 12 leads. Patterns to stay alert for:\n- hyperacute T waves;\n- de Winter T waves (lesson I8);\n- isolated V1–V3 ST depression (posterior, lesson I6);\n- subtle reciprocal changes.\nThe management rule comes from the NSTE-ACS side: **refractory pain, haemodynamic instability, life-threatening arrhythmia or dynamic ECG changes ⇒ immediate invasive strategy (<2 h)**. And the mirror image holds too: **a normal ECG never rules out ACS** — more than a third of NSTE-ACS present with one. The ECG decides the pathway; troponin decides the diagnosis.',
-        'Los criterios en milímetros se dejan fuera una **minoría nada despreciable** de oclusiones agudas —sobre todo las de la circunfleja, a menudo mudas en las 12 derivaciones. Patrones que deben alertarte:\n- ondas T hiperagudas;\n- ondas T de De Winter (lección I8);\n- descenso aislado del ST en V1–V3 (posterior, lección I6);\n- cambios recíprocos sutiles.\nLa regla de manejo viene del lado del SCASEST: **dolor refractario, inestabilidad hemodinámica, arritmia que amenaza la vida o cambios dinámicos del ECG ⇒ estrategia invasiva inmediata (<2 h)**. Y al revés igual: **un ECG normal nunca excluye un SCA**; más de un tercio de los SCASEST se presentan con uno. El ECG decide el circuito; la troponina, el diagnóstico.',
+        '首份图在首次医疗接触 10 分钟内记录；不能确定而疼痛持续时，15–30 分钟内复查，症状变化时随时复查。',
+        'The first ECG within 10 min of first medical contact; if it is non-diagnostic and the pain persists, repeat within 15–30 min and whenever symptoms change.',
+        'El primer ECG en los 10 min desde el contacto médico inicial; si no es diagnóstico y el dolor persiste, repite en 15–30 min y siempre que cambien los síntomas.',
       ),
     },
     { kind: 'check', item: { family: 'occlusion', seed: 23 } },
