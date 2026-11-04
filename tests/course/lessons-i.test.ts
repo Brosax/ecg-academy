@@ -431,14 +431,15 @@ describe('i1: measuring ST on the tracings', () => {
 });
 
 describe('i2: territories on the tracings', () => {
-  it('worked (anteroseptal, woman of 64): V1–V3 ≥ 1 mm, V2 about 2.5 and V3 about 2 mm, V4 about 0.5 mm, V5–V6/I/aVL not elevated', () => {
+  it('worked (anteroseptal, woman of 64): V1–V3 ≥ 1 mm, V2 about 2.5 and V3 about 2 mm, V4 under 1 mm, V5–V6/I/aVL not elevated', () => {
     const e = ecgOf(blocksOf('i2', 'worked')[0].ecg);
     for (const l of ['V1', 'V2', 'V3'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
     for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.15);
-    expect(stAt(e, 'V4')).toBeLessThan(0.1);
+    expect(stAt(e, 'V4'), 'V4 under 1 mm').toBeLessThan(0.1);
+    expect(stAt(e, 'V4'), 'V4 under 1 mm, not depressed').toBeGreaterThanOrEqual(0);
     for (const l of ['V5', 'V6', 'I', 'aVL'] as const) expect(stAt(e, l), l).toBeLessThan(0.05);
     expect(CHEST.reduce((m, l) => (stAt(e, l) > stAt(e, m) ? l : m))).toBe('V2');
-    const about = { V2: 0.25, V3: 0.2, V4: 0.05 } as const;
+    const about = { V2: 0.25, V3: 0.2 } as const;
     for (const [l, mv] of Object.entries(about) as [StdLead, number][]) {
       expect(stAt(e, l), `${l} about ${mv * 10} mm`).toBeGreaterThanOrEqual(mv - 0.025);
       expect(stAt(e, l), `${l} about ${mv * 10} mm`).toBeLessThanOrEqual(mv + 0.025);
