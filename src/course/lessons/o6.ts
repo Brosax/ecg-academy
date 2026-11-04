@@ -19,11 +19,11 @@ const lesson: Lesson = {
   id: 'o6',
   stage: 'O',
   order: 6,
-  title: l('肺栓塞', 'Pulmonary embolism', 'Tromboembolia pulmonar'),
+  title: l('肺栓塞', 'Pulmonary embolism', 'Tromboembolismo pulmonar'),
   summary: l(
     '肺栓塞的心电图既不能确诊也不能排除：窦性心动过速最常见，右心室负荷征象（V1–V4 T 波倒置、S1Q3T3、新发右束支传导阻滞、V1 呈 QR 型、电轴右偏、aVR/V1 ST 段抬高）提示病情更重；确诊靠临床评分、D-二聚体与 CT 肺动脉造影。',
     'The ECG neither rules pulmonary embolism in nor out: sinus tachycardia is the commonest finding, and RV-strain signs (T inversion in V1–V4, S1Q3T3, a new RBBB, QR in V1, right axis, ST elevation in aVR/V1) mark a more severe patient; confirmation comes from a clinical score, D-dimer and CT pulmonary angiography.',
-    'El ECG ni confirma ni excluye la tromboembolia pulmonar: la taquicardia sinusal es el hallazgo más frecuente y los signos de sobrecarga del VD (T invertida en V1–V4, S1Q3T3, BRD de novo, QR en V1, eje derecho y elevación del ST en aVR/V1) marcan un paciente más grave; la confirmación llega con la puntuación clínica, el dímero D y la angio-TC pulmonar.',
+    'El ECG ni confirma ni excluye el tromboembolismo pulmonar: la taquicardia sinusal es el hallazgo más frecuente y los signos de sobrecarga del VD (T invertida en V1–V4, S1Q3T3, BRD de novo, QR en V1, eje derecho y elevación del ST en aVR/V1) marcan un paciente más grave; la confirmación llega con la puntuación clínica, el dímero D y la angio-TC pulmonar.',
   ),
   objectives: [
     l(
@@ -63,7 +63,7 @@ const lesson: Lesson = {
       reveal: l(
         '**这条记录上没有任何表现能确诊肺栓塞**——窦性心动过速（这里约 106 次/分）是肺栓塞最常见的心电图异常，但它什么也证明不了。右心室负荷的征象（V1–V4 T 波倒置、S1Q3T3、新发右束支传导阻滞、V1 呈 QR 型、电轴右偏、aVR/V1 ST 段抬高）提高怀疑程度并标记严重度。心电图既不能确诊也不能排除肺栓塞——它的任务是排除其他诊断并评估严重度。',
         '**Nothing on this tracing confirms a pulmonary embolism** — sinus tachycardia (about 106/min here) is the commonest ECG abnormality in PE, and it proves nothing. Signs of RV strain (T inversion in V1–V4, S1Q3T3, a new right bundle-branch block, QR in V1, right axis, ST elevation in aVR/V1) raise suspicion and mark severity. The ECG can neither rule PE in nor out — its job is to exclude other diagnoses and to grade severity.',
-        '**Nada en este trazado confirma una tromboembolia pulmonar**: la taquicardia sinusal (aquí unas 106 lpm) es la alteración electrocardiográfica más frecuente del TEP y no demuestra nada. Los signos de sobrecarga del VD (inversión de la T en V1–V4, S1Q3T3, bloqueo de rama derecha de novo, QR en V1, eje derecho y elevación del ST en aVR/V1) aumentan la sospecha y marcan la gravedad. El ECG ni confirma ni excluye el TEP: su tarea es descartar otros diagnósticos y valorar la gravedad.',
+        '**Nada en este trazado confirma un tromboembolismo pulmonar**: la taquicardia sinusal (aquí unas 106 lpm) es la alteración electrocardiográfica más frecuente del TEP y no demuestra nada. Los signos de sobrecarga del VD (inversión de la T en V1–V4, S1Q3T3, bloqueo de rama derecha de novo, QR en V1, eje derecho y elevación del ST en aVR/V1) aumentan la sospecha y marcan la gravedad. El ECG ni confirma ni excluye el TEP: su tarea es descartar otros diagnósticos y valorar la gravedad.',
       ),
     },
     {
@@ -107,7 +107,7 @@ const lesson: Lesson = {
     },
     {
       kind: 'criteria',
-      title: l('肺栓塞：右心室负荷清单', 'Pulmonary embolism: the RV-strain list', 'Tromboembolia pulmonar: la lista de sobrecarga del VD'),
+      title: l('肺栓塞：右心室负荷清单', 'Pulmonary embolism: the RV-strain list', 'Tromboembolismo pulmonar: la lista de sobrecarga del VD'),
       items: [
         {
           label: l('最常见的异常', 'Commonest abnormality', 'Alteración más frecuente'),
@@ -264,7 +264,7 @@ const lesson: Lesson = {
       caption: l(
         'PTB-XL 没有肺栓塞标签，所以这里放的是这一课的两块“拼图”。第一份：窦性心动过速约 130 次/分——肺栓塞最常见的心电图异常，但单独出现时什么也证明不了。第二份标注为右心室肥厚：V1 高 R、V1–V4 T 波倒置——慢性右心压力负荷带来的是电压。先自己读：哪一份有右室“电压”，哪一份只有心率？再揭晓标签。',
         'PTB-XL carries no pulmonary-embolism label, so here are the two halves of this lesson’s puzzle. The first: sinus tachycardia at about 130/min — the commonest ECG abnormality in PE, and on its own proof of nothing. The second is labelled right ventricular hypertrophy: a tall R in V1 with T inversion in V1–V4 — a chronic RV pressure load brings voltage. Read them yourself first: which one has RV voltage, which one only has a rate? Then reveal the labels.',
-        'PTB-XL no tiene etiquetas de tromboembolia pulmonar, así que aquí van las dos piezas del rompecabezas de esta lección. La primera: taquicardia sinusal a unos 130 lpm, la alteración electrocardiográfica más frecuente del TEP y, por sí sola, prueba de nada. La segunda está etiquetada como hipertrofia ventricular derecha: R alta en V1 con T negativas en V1–V4; la sobrecarga crónica de presión del VD aporta voltaje. Léelas tú primero: ¿cuál tiene voltaje del VD y cuál solo frecuencia? Después mira las etiquetas.',
+        'PTB-XL no tiene etiquetas de tromboembolismo pulmonar, así que aquí van las dos piezas del rompecabezas de esta lección. La primera: taquicardia sinusal a unos 130 lpm, la alteración electrocardiográfica más frecuente del TEP y, por sí sola, prueba de nada. La segunda está etiquetada como hipertrofia ventricular derecha: R alta en V1 con T negativas en V1–V4; la sobrecarga crónica de presión del VD aporta voltaje. Léelas tú primero: ¿cuál tiene voltaje del VD y cuál solo frecuencia? Después mira las etiquetas.',
       ),
     },
     {

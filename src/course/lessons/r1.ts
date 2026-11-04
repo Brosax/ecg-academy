@@ -264,7 +264,7 @@ const lesson: Lesson = {
       caption: l(
         '130 次/分：每个 QRS 前仍是同一个窦性 P，PR 固定。>100 只是描述，接着找原因：发热、疼痛、失血、缺氧、贫血、甲亢、肺栓塞、焦虑、药物。',
         '130/min: the same sinus P still precedes every QRS, at a fixed PR. >100 is only a description; now find the cause: fever, pain, bleeding, hypoxia, anaemia, hyperthyroidism, pulmonary embolism, anxiety, drugs.',
-        '130 lpm: la misma P sinusal sigue precediendo a cada QRS, con PR fijo. >100 es solo una descripción; ahora busca la causa: fiebre, dolor, sangrado, hipoxia, anemia, hipertiroidismo, tromboembolia pulmonar, ansiedad, fármacos.',
+        '130 lpm: la misma P sinusal sigue precediendo a cada QRS, con PR fijo. >100 es solo una descripción; ahora busca la causa: fiebre, dolor, sangrado, hipoxia, anemia, hipertiroidismo, tromboembolismo pulmonar, ansiedad, fármacos.',
       ),
     },
     { kind: 'check', item: { family: 'sinus', seed: 17 } },

@@ -15,6 +15,8 @@ import type { EcgSource, ItemView } from '../../src/practice/api';
 import { generate, scenarios, type SynthRequest } from '../../src/synth';
 
 const GATED = ['S', 'R', 'T', 'I', 'H', 'O', 'X'] as const;
+/** every stage, Foundations included, must draw the marks it places */
+const DRAWN = ['F', ...GATED] as const;
 /** kinds that mark every matching wave on the strip, not one beat */
 const STRIP_WIDE: ReadonlySet<AutoMark['auto']> = new Set(['f-waves', 'blocked-p', 'pacing-spike']);
 const RR_SPREAD = 1.15;
@@ -125,6 +127,9 @@ for (const stage of GATED) {
       });
     }
   });
+}
+
+for (const stage of DRAWN) {
   describe(`stage ${stage}: every mark draws on a lead the block shows`, () => {
     for (const lesson of lessons.filter((l) => l.stage === stage)) {
       it(lesson.id, () => {

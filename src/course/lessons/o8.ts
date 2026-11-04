@@ -45,7 +45,7 @@ const memoryCheck: Item = {
     options: [
       { id: 'memory', label: l('心脏记忆（起搏后 T 波倒置）', 'Cardiac memory (post-pacing T inversion)', 'Memoria cardiaca (inversión de la T tras la estimulación)') },
       { id: 'lad', label: l('前降支缺血，需紧急造影', 'LAD ischaemia needing urgent angiography', 'Isquemia de la DA que necesita coronariografía urgente') },
-      { id: 'pe', label: l('急性肺栓塞', 'Acute pulmonary embolism', 'Tromboembolia pulmonar aguda') },
+      { id: 'pe', label: l('急性肺栓塞', 'Acute pulmonary embolism', 'Tromboembolismo pulmonar agudo') },
       { id: 'cerebral', label: l('脑源性 T 波', 'Cerebral T waves', 'Ondas T cerebrales') },
     ],
     correct: 'memory',

@@ -400,7 +400,7 @@ const lesson: Lesson = {
       point: l(
         '两条都是长 RP（RP > PR），**P′ 的方向和形态**定诊断：II、III、aVF 深倒 ⇒ 逆行或低位起源（非典型 AVNRT、PJRT、低位房速）；直立、窦性形态 ⇒ 窦性心动过速，接着要问“为什么”（发热、疼痛、出血、缺氧、甲亢、肺栓塞……）。',
         'Both have a long RP (RP > PR); **the P′ polarity and shape** decide: deeply negative in II, III and aVF -> retrograde or low origin (atypical AVNRT, PJRT, low AT); upright and sinus-shaped -> sinus tachycardia, and then ask why (fever, pain, bleeding, hypoxia, hyperthyroidism, pulmonary embolism...).',
-        'Las dos tienen RP largo (RP > PR); **la polaridad y la forma de la P′** deciden: profundamente negativa en II, III y aVF -> origen retrógrado o bajo (TRIN atípica, PJRT, TA baja); positiva y de morfología sinusal -> taquicardia sinusal, y después pregúntate por qué (fiebre, dolor, sangrado, hipoxia, hipertiroidismo, tromboembolia pulmonar...).',
+        'Las dos tienen RP largo (RP > PR); **la polaridad y la forma de la P′** deciden: profundamente negativa en II, III y aVF -> origen retrógrado o bajo (TRIN atípica, PJRT, TA baja); positiva y de morfología sinusal -> taquicardia sinusal, y después pregúntate por qué (fiebre, dolor, sangrado, hipoxia, hipertiroidismo, tromboembolismo pulmonar...).',
       ),
     },
     { kind: 'check', item: { family: 'narrow-tachy', seed: 7 } },

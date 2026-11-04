@@ -131,7 +131,7 @@ const lesson: Lesson = {
           value: l(
             'VF/无脉性室速的背景常是冠脉闭塞：ST 段抬高或其他冠脉闭塞等同表现（i8、i10）都去导管室；复律成功不等于 4 H/4 T 结束（高钾、低氧、肺栓塞、出血逐项排除）；12 导联还可能显示长 QT、预激或 Brugada 图形；不再固定要求 32–36 °C',
             'The background of VF/pulseless VT is often a coronary occlusion: ST elevation or another occlusion-MI equivalent (i8, i10) goes to the cath lab; a successful shock does not close the 4 Hs and 4 Ts (rule out hyperkalaemia, hypoxia, pulmonary embolism and bleeding one by one); the 12-lead may also show a long QT, pre-excitation or a Brugada pattern; a fixed 32-36 °C target is no longer required',
-            'El sustrato de la FV/TV sin pulso suele ser una oclusión coronaria: la elevación del ST u otro equivalente de oclusión coronaria (i8, i10) va a la sala de hemodinámica; una descarga eficaz no cierra las 4 H y 4 T (descarta una a una hiperpotasemia, hipoxia, tromboembolia pulmonar y hemorragia); el ECG de 12 derivaciones también puede mostrar un QT largo, una preexcitación o un patrón de Brugada; ya no se exige un objetivo fijo de 32-36 °C',
+            'El sustrato de la FV/TV sin pulso suele ser una oclusión coronaria: la elevación del ST u otro equivalente de oclusión coronaria (i8, i10) va a la sala de hemodinámica; una descarga eficaz no cierra las 4 H y 4 T (descarta una a una hiperpotasemia, hipoxia, tromboembolismo pulmonar y hemorragia); el ECG de 12 derivaciones también puede mostrar un QT largo, una preexcitación o un patrón de Brugada; ya no se exige un objetivo fijo de 32-36 °C',
           ),
         },
       ],
