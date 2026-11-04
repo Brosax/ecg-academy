@@ -326,9 +326,10 @@ function prSegment(ecg: Ecg, lead: AnyLead, b = midBeat(ecg)): number {
 }
 
 describe('i1: measuring ST on the tracings', () => {
-  it('hook / worked (man of 58): J point about 2–3.5 mm in V2–V4, highest in V3 (worked: V2 about 2.5, V3 3–3.5, V4 about 2, J+60 read-out about 4), V1 about 1 mm, mirror about −1 mm in III and aVF', () => {
+  it('hook / worked (man of 58): J point about 2–3.5 mm in V2–V4, highest in V3 (worked: V2 about 2.5, V3 3–3.5, V4 about 2, J+60 read-out about 4), V1 about 1 mm, mirror about −1 mm in III and aVF, II depressed too', () => {
     for (const src of [blocksOf('i1', 'hook')[0].ecg, blocksOf('i1', 'worked')[0].ecg]) {
       const e = ecgOf(src);
+      expect(stAt(e, 'II'), 'II in the mirror').toBeLessThanOrEqual(-0.05);
       for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.2);
       expect(stAt(e, 'V4')).toBeGreaterThanOrEqual(0.1);
       expect(CHEST.reduce((m, l) => (stAt(e, l) > stAt(e, m) ? l : m))).toBe('V3');
@@ -354,12 +355,15 @@ describe('i1: measuring ST on the tracings', () => {
     expect(w.truth!.stMv.V3, 'the st60 read-out on V3, about 4 mm').toBeGreaterThanOrEqual(0.375);
     expect(w.truth!.stMv.V3, 'the st60 read-out on V3, about 4 mm').toBeLessThanOrEqual(0.425);
   });
-  it('heart block: the lit segments are the injured LAD segments, basal ones included', () => {
+  it('heart block: the lit segments are the injured LAD segments, basal ones included; on its tracing V2–V4 are up and II, III and aVF depressed', () => {
     const h = blocksOf('i1', 'heart')[0];
     const req = h.ecg.kind === 'synth' ? h.ecg.req : null;
     const sc = scenarios().find((s) => s.id === req?.scenario);
     const injured = sc!.source.injury!.flatMap((x) => (typeof x.where === 'string' ? [] : [...x.where]));
     expect([...(h.emphasize ?? [])].sort()).toEqual([...new Set(injured)].sort());
+    const e = ecgOf(h.ecg);
+    for (const l of ['V2', 'V3', 'V4'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
+    for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
   });
   it('contrast A (early repolarisation, man of 24): V3 below 2.5 mm, II/aVF J about 1.5 mm, V2–V6 elevated, no reciprocal depression ≥ 0.5 mm except aVR', () => {
     const e = ecgOf(blocksOf('i1', 'contrast')[0].left.ecg);
