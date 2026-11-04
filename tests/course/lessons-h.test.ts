@@ -962,7 +962,7 @@ describe('h8: Brugada and early repolarisation on the tracings', () => {
       near(stAt(std, l), 3.5);
       near(tw(std, l).min, -4);
       expect(stAt(high, l), l).toBeGreaterThanOrEqual(0.5);
-      expect(stAt(high, l), l).toBeLessThanOrEqual(0.72);
+      expect(stAt(high, l), l).toBeLessThanOrEqual(0.7);
       expect(tw(high, l).min, l).toBeLessThan(tw(std, l).min);
     }
     for (const l of [...LIMB, 'V3', 'V4', 'V5', 'V6'] as const) {
@@ -978,6 +978,8 @@ describe('h8: Brugada and early repolarisation on the tracings', () => {
       expect(tUpright(e, 'V2'), `${v}`).toBe(true);
       expect(stAt(e, 'V2', 60), `${v}: not coved`).toBeGreaterThanOrEqual(stAt(e, 'V2') - 0.005);
     }
+    const top = played('h8', 0, 0.14);
+    for (const ms of [0, 60]) expect(stAt(top, 'V2', ms), `prediction: at the top of the dial V2 at J+${ms} stays well under 2.5 mm`).toBeLessThan(0.15);
   });
   it('pitfall: in early repolarisation the V6 ST/T ratio stays under 0.25 (J-wave film frame 2)', () => {
     const e = frames('h8', 1)[1];
