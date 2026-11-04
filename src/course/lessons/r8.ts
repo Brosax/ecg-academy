@@ -66,15 +66,6 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('三层、五种线条：梯形图的语法', 'Three tiers, five kinds of line: the grammar of a ladder', 'Tres niveles y cinco tipos de línea: la gramática del diagrama'),
-      body: l(
-        'Lewis 梯形图用三条横线分出两层间隙：\n- **A 层**（上线之上）标每个心房事件——P、P′ 或扑动/颤动波，放在它的起始时间上；\n- **V 层**（下线之下）标每个心室事件——QRS 的起始；\n- **AV 层**（两线之间）承载连线：**连线的斜率就是传导时间**——越平（越水平）PR 越长，越陡 PR 越短。\n五种基本线条：\n- **下传**：一条线从 A 层斜行到 V 层，斜率 = PR；\n- **阻滞**：线在 AV 层中途停住（短横杠）——一个未下传的 P；\n- **逆行**：线从下方**向上**画——交界区或室性激动逆传并除极心房（逆行 P′）；\n- **融合**：两条线（如窦性 + 室性）在 V 层相遇；\n- **夺获**：房室分离中，一条完整的窦性线穿过 AV 层到达 V（一个由窦性 P 下传、提前出现的 QRS；与室性心律竞争时它还会更窄）。\n一条规则高于一切：**先测量，后落笔**——每个标记都放在分规量出的时间上，而不是记忆放的位置。',
-        'A Lewis ladder uses three horizontal lines to make two gaps:\n- the **A tier** (above the top line) marks every atrial event — P, P′ or flutter/fibrillation waves — placed at its onset time;\n- the **V tier** (below the bottom line) marks every ventricular event — the QRS onset;\n- the **AV tier** (in between) carries the connecting line: **the slope of that line IS the conduction time** — the flatter it lies, the longer the PR; the steeper, the shorter.\nFive basic lines:\n- **conducted**: a line runs slantwise from A down to V; its slope is the PR;\n- **blocked**: the line stops part-way across the AV tier (a short bar) — a non-conducted P;\n- **retrograde**: the line is drawn **upward** from below — a junctional or ventricular impulse activating the atria backwards (retrograde P′);\n- **fusion**: two lines (e.g. sinus + ventricular) meet on the V tier;\n- **capture**: during AV dissociation, one full sinus line crosses the AV tier and reaches V (an earlier QRS conducted from a sinus P; narrower too when the competing rhythm is ventricular).\nOne rule outranks the rest: **measure first, draw second** — every mark goes where the calipers say, not where memory puts it.',
-        'El diagrama en escalera de Lewis usa tres líneas horizontales para crear dos espacios:\n- el **nivel A** (sobre la línea superior) marca cada evento auricular —P, P′ u ondas de aleteo/fibrilación— colocado en su tiempo de inicio;\n- el **nivel V** (bajo la línea inferior) marca cada evento ventricular —el inicio del QRS—;\n- el **nivel AV** (en medio) lleva la línea de conexión: **la pendiente de esa línea ES el tiempo de conducción**: cuanto más tendida, más largo el PR; cuanto más vertical, más corto.\nCinco líneas básicas:\n- **conducida**: una línea baja en diagonal de A a V; su pendiente es el PR;\n- **bloqueada**: la línea se detiene a mitad del nivel AV (una barra corta): una P no conducida;\n- **retrógrada**: la línea se dibuja **hacia arriba** desde abajo: un impulso de la unión o ventricular que activa las aurículas al revés (P′ retrógrada);\n- **fusión**: dos líneas (p. ej. sinusal + ventricular) se encuentran en el nivel V;\n- **captura**: durante una disociación AV, una línea sinusal completa cruza el nivel AV y llega a V (un QRS más precoz conducido desde una P sinusal; además más estrecho cuando compite con un ritmo ventricular).\nUna regla está por encima de las demás: **medir primero, dibujar después**: cada marca va donde señala el compás, no donde la pone la memoria.',
-      ),
-    },
-    {
       kind: 'criteria',
       title: l('梯形图作图规则卡', 'Ladder construction rules card', 'Tarjeta de reglas para dibujar el diagrama'),
       items: [
@@ -131,13 +122,66 @@ const lesson: Lesson = {
         "Surawicz B, Knilans TK. Chou's Electrocardiography in Clinical Practice, 6th ed. 2008; Mason JW et al. AHA/ACCF/HRS Part II: Electrocardiography diagnostic statement list. Circulation 2007;115:1325-1332",
     },
     {
+      kind: 'film',
+      title: l('五种线条：先在节律条上找到它们', 'Five kinds of line: find them on the strip first', 'Cinco tipos de línea: encuéntralos antes en la tira'),
+      view: STRIP,
+      frames: [
+        {
+          label: l('一度：线全到 V', 'First degree: every line', 'Primer grado: todas llegan'),
+          ecg: synth('av-block-1', 442),
+          note: l('每个 P 都下传，PR 约 280 ms、每搏相同：每条线都画到 V 层，斜率一样，而且偏平（PR 长）。', 'Every P conducts with the same PR of about 280 ms: every line reaches the V tier at the same slope, a flat one (a long PR).', 'Cada P conduce con el mismo PR de unos 280 ms: todas las líneas llegan al nivel V con la misma pendiente, tendida (PR largo).'),
+          marks: [{ auto: 'pr' }],
+        },
+        {
+          label: l('文氏：变平后停住', 'Wenckebach: flatter, then stop', 'Wenckebach: tendida y parada'),
+          ecg: synth('av-block-2-mobitz1', 542),
+          note: l('PR 约 150 → 235 → 275 ms 后一个 P 落空：线一条比一条平，然后一条停在 AV 层（短横杠）。', 'The PR goes about 150 → 235 → 275 ms, then a P drops: each line flatter than the last, then one stops in the AV tier (a short bar).', 'El PR pasa de unos 150 → 235 → 275 ms y cae una P: cada línea más tendida que la anterior, y luego una se detiene en el nivel AV (barra corta).'),
+          marks: [{ auto: 'pr' }, { auto: 'blocked-p' }],
+        },
+        {
+          label: l('Ⅱ型：斜率不变就停', 'Mobitz II: sudden stop', 'Mobitz II: parada brusca'),
+          ecg: synth('av-block-2-mobitz2', 543),
+          note: l('PR 恒定约 160 ms，每第 4 个 P 突然落空：线的斜率不变，却突然停在 AV 层。QRS 宽。', 'The PR stays at about 160 ms and every fourth P drops without warning: the slope never changes, yet one line stops in the AV tier. Wide QRS.', 'El PR se mantiene en unos 160 ms y una de cada cuatro P cae sin aviso: la pendiente no cambia, pero una línea se detiene en el nivel AV. QRS ancho.'),
+          marks: [{ auto: 'pr' }, { auto: 'blocked-p' }],
+        },
+        {
+          label: l('三度：不画连线', 'Third degree: no lines', 'Tercer grado: sin líneas'),
+          ecg: synth('av-block-3', 466),
+          note: l('P 约 78、QRS 约 45 次/分，互不相关：A 层与 V 层各走各的，中间一条连线也不画。', 'P at about 78/min, QRS at about 45/min, unrelated: the A and V tiers run on their own, and no line joins them.', 'P a unos 78 lpm y QRS a unos 45 lpm, sin relación: los niveles A y V van por su cuenta y ninguna línea los une.'),
+          marks: [{ auto: 'p' }, { auto: 'qrs' }],
+        },
+        {
+          label: l('逆行：向上的线', 'Retrograde: a line upward', 'Retrógrada: línea hacia arriba'),
+          ecg: synth('pjc', 488),
+          note: l('提前的窄 QRS 后紧跟一个逆行 P′：激动起自交界区，向下到 V，也向上逆传到 A。那条向上的线就是逆行。', 'An early narrow QRS followed at once by a retrograde P′: the impulse starts in the junction, runs down to V and back up to A. The upward line is the retrograde one.', 'Un QRS estrecho y precoz seguido enseguida de una P′ retrógrada: el impulso nace en la unión, baja a V y sube a A. La línea que sube es la retrógrada.'),
+          marks: [{ auto: 'st', beat: 5 }],
+        },
+        {
+          label: l('夺获与融合', 'Capture and fusion', 'Captura y fusión'),
+          ecg: synth('aivr', 426),
+          note: l('宽的心室灶与窦性 P 竞争。夺获：一条完整的窦性线到达 V，QRS 窄；融合：窦性线与心室激动在 V 层相遇。', 'A wide ventricular focus competes with the sinus P waves. Capture: one full sinus line reaches V and the QRS is narrow; fusion: a sinus line and the ventricular impulse meet on V.', 'Un foco ventricular ancho compite con las P sinusales. Captura: una línea sinusal completa llega a V y el QRS es estrecho; fusión: una línea sinusal y el impulso ventricular se encuentran en V.'),
+          marks: [{ auto: 'qrs', beat: 5 }, { auto: 'qrs', beat: 6 }],
+        },
+      ],
+      predict: {
+        question: l('Mobitz II 的梯形图上，落空之前的连线斜率怎么变？', 'On a Mobitz II ladder, what does the line slope do before the drop?', 'En el diagrama de un Mobitz II, ¿qué hace la pendiente de la línea antes de la caída?'),
+        options: [l('逐条变平', 'It flattens line by line', 'Se tiende línea a línea'), l('保持不变', 'It stays the same', 'Se mantiene igual'), l('逐条变陡', 'It steepens line by line', 'Se empina línea a línea')],
+        answer: 1,
+      },
+      caption: l(
+        '下传、阻滞、逆行、融合、夺获：先在纸上找到每一种，量出来的才画得上去。',
+        'Conducted, blocked, retrograde, fusion, capture: find each one on the paper first; only what you measured goes on the ladder.',
+        'Conducida, bloqueada, retrógrada, fusión, captura: encuentra cada una primero en el papel; solo lo que mides va al diagrama.',
+      ),
+    },
+    {
       kind: 'figure',
       figure: { id: 'laddergram', params: { maxBeats: 12 } },
       ecg: synth('av-block-2-mobitz1', 542),
       caption: l(
-        '文氏型的梯形图：AV 层的连线**逐搏变平**（每个 PR 比上一个长，增量却越来越小），然后一条线在 AV 层停住——那个 P 未下传。间歇后第一条线最陡（PR 最短），且间歇 < 2×PP；最可靠的征象正是**间歇后第一条线比间歇前最后一条更陡**。QRS 窄：阻滞在房室结。跟着光标走一遍，读每条线上标注的 PR。',
-        'The Wenckebach ladder: the AV-tier line **flattens beat by beat** (each PR longer than the last, the increments shrinking), then one line stops inside the AV tier — that P is not conducted. The first line after the pause is the steepest (the shortest PR), the pause is < 2×PP, and the most reliable sign is precisely that **the first line after the pause is steeper than the last one before it**. The QRS is narrow: the block is in the AV node. Follow the cursor and read the PR printed on each line.',
-        'El diagrama del Wenckebach: la línea del nivel AV **se tiende latido a latido** (cada PR más largo que el anterior, con incrementos cada vez menores) y luego una línea se detiene dentro del nivel AV: esa P no conduce. La primera línea tras la pausa es la más vertical (el PR más corto), la pausa dura < 2×PP, y el signo más fiable es justamente que **la primera línea tras la pausa es más vertical que la última anterior**. El QRS es estrecho: el bloqueo está en el nodo AV. Sigue el cursor y lee el PR impreso en cada línea.',
+        '文氏型：AV 层的线逐搏变平，然后一条停住。间歇后第一条线比间歇前最后一条更陡（PR 最短），间歇 < 2×PP。QRS 窄：房室结。读每条线上的 PR。',
+        'Wenckebach: the AV-tier line flattens beat by beat, then one stops. The first line after the pause is steeper than the last one before it (the shortest PR), and the pause is < 2×PP. Narrow QRS: AV node. Read the PR on each line.',
+        'Wenckebach: la línea del nivel AV se tiende latido a latido y luego una se detiene. La primera tras la pausa es más vertical que la última anterior (el PR más corto) y la pausa es < 2×PP. QRS estrecho: nodo AV. Lee el PR de cada línea.',
       ),
     },
     {
@@ -145,9 +189,9 @@ const lesson: Lesson = {
       figure: { id: 'laddergram', params: { maxBeats: 12 } },
       ecg: synth('av-block-2-mobitz2', 543),
       caption: l(
-        'Mobitz II 的梯形图：每条下传的线**斜率完全相同**（PR 恒定），然后一条线在 AV 层中途停住——没有预告。QRS 宽（右束支阻滞形）：阻滞在希氏束以下，传导“全或无”。对比上一张图：**先读斜率的行为，再读停住的线**——先变平后停止 = Ⅰ 型；斜率不变而突然停止 = Ⅱ 型。这份图上没有文氏行为的任何痕迹。',
-        'The Mobitz II ladder: every conducted line has **exactly the same slope** (a constant PR), then one line stops part-way across the AV tier — no warning. The QRS is wide (RBBB-shaped): the block is below the His bundle, conducting all-or-none. Compare with the ladder above: **read the slope behaviour first, the stopped line second** — flattening then a stop = type I; a sudden stop at an unchanged slope = type II. There is no trace of Wenckebach behaviour on this ladder.',
-        'El diagrama del Mobitz II: todas las líneas conducidas tienen **exactamente la misma pendiente** (PR constante) y, de pronto, una línea se detiene a mitad del nivel AV, sin aviso. El QRS es ancho (morfología de bloqueo de rama derecha): el bloqueo está por debajo del haz de His, que conduce a todo o nada. Compáralo con el diagrama anterior: **lee primero el comportamiento de la pendiente y después la línea detenida**: se tiende y luego se detiene = tipo I; detención brusca con pendiente invariable = tipo II. En este diagrama no hay ni rastro de comportamiento Wenckebach.',
+        'Mobitz II：每条下传的线斜率相同（PR 恒定），然后一条突然停住。QRS 宽：希氏束以下。先读斜率的行为，再读停住的线。',
+        'Mobitz II: every conducted line has the same slope (a constant PR), then one stops without warning. Wide QRS: below the His. Read the slope behaviour first, the stopped line second.',
+        'Mobitz II: todas las líneas conducidas tienen la misma pendiente (PR constante) y de pronto una se detiene. QRS ancho: por debajo del His. Lee primero la pendiente y después la línea detenida.',
       ),
     },
     {
@@ -208,9 +252,9 @@ const lesson: Lesson = {
       figure: { id: 'laddergram', params: { maxBeats: 12 } },
       ecg: synth('av-dissociation', 545),
       caption: l(
-        '房室分离的梯形图：**两列独立的列车**——A 层的窦性 P（60 次/分）按自己的时刻表前进，V 层的交界区激动（66 次/分）另开一列，彼此没有连线。当一个窦性 P 恰好赶上房室结可兴奋的窗口，一条完整的线穿过 AV 层到达 V——**夺获搏动**（提前出现的 QRS；此处交界性搏动本来就窄，所以形态不变）。分离只是描述，不是诊断；这里没有阻滞，只是下位起搏点更快。',
-        'The AV dissociation ladder: **two independent trains** — the sinus P waves in the A tier (60/min) run on their own timetable while the junctional beats in the V tier (66/min) run another, with no lines joining them. When a sinus P happens to catch the AV node in an excitable window, one full line crosses the AV tier and reaches V — a **capture beat** (an earlier QRS; the junctional beats are already narrow here, so its shape does not change). Dissociation is a description, not a diagnosis; there is no block here, the subsidiary pacemaker is simply faster.',
-        'El diagrama de la disociación AV: **dos trenes independientes**: las P sinusales del nivel A (60 lpm) corren con su propio horario mientras los latidos de la unión del nivel V (66 lpm) tiran de otro, sin líneas que los unan. Cuando una P sinusal coincide con una ventana excitable del nodo AV, una línea completa cruza el nivel AV y llega a V: un **latido de captura** (un QRS más precoz; aquí los latidos de la unión ya son estrechos, así que su morfología no cambia). La disociación es una descripción, no un diagnóstico; aquí no hay bloqueo: el marcapasos subsidiario es simplemente más rápido.',
+        '房室分离：A 层窦性 P（60 次/分）与 V 层交界区（66 次/分）是两列独立的列车。只有夺获搏动才有一条完整的线。这里没有阻滞，只是下位起搏点更快。',
+        'AV dissociation: sinus P waves in the A tier (60/min) and junctional beats in the V tier (66/min) are two independent trains. Only a capture earns a full line. No block here; the lower pacemaker is simply faster.',
+        'Disociación AV: las P sinusales del nivel A (60 lpm) y los latidos de la unión del nivel V (66 lpm) son dos trenes independientes. Solo la captura tiene una línea completa. Aquí no hay bloqueo: el marcapasos inferior simplemente va más rápido.',
       ),
     },
     {
@@ -218,9 +262,9 @@ const lesson: Lesson = {
       figure: { id: 'laddergram', params: { maxBeats: 12 } },
       ecg: synth('ventricular-bigeminy', 546),
       caption: l(
-        '室早二联律的梯形图：V 层每隔一个搏动就有一个**起自 V 层自身的标记**（点 = 异位起源），它前面没有任何来自 A 层的连线；窦性 P 照常在 A 层按时出现（藏在宽大 QRS/T 里）。量一量：每个室早后的长间歇恰好让下一个窦性 P 准时到达——**完全代偿间歇**，PP 时钟从未被重置。梯形图把“室早不打扰窦房结”画成了几何。',
-        'The bigeminal-PVC ladder: every other mark in the V tier **originates in the V tier itself** (a dot = an ectopic origin), with no line reaching it from A; the sinus P waves keep appearing on time in the A tier (buried in the wide QRS/T). Measure it: the long pause after each PVC lets the next sinus P arrive exactly on schedule — a **fully compensatory pause**; the PP clock was never reset. The ladder turns "a PVC does not disturb the sinus node" into geometry.',
-        'El diagrama del bigeminismo ventricular: una de cada dos marcas del nivel V **nace en el propio nivel V** (un punto = un origen ectópico), sin línea alguna que llegue desde A; las P sinusales siguen apareciendo puntualmente en el nivel A (enterradas en el QRS/T ancho). Mídelo: la pausa larga tras cada extrasístole deja que la siguiente P sinusal llegue exactamente a su hora: una **pausa compensatoria completa**; el reloj del PP no se ha reiniciado. El diagrama convierte «la extrasístole ventricular no molesta al nodo sinusal» en geometría.',
+        '室早二联律：每隔一个 V 层标记起自 V 层本身（点），前面没有来自 A 的线；A 层的窦性 P 照常准时（藏在宽 QRS/T 里），间歇完全代偿。',
+        'Ventricular bigeminy: every other V-tier mark starts in the V tier itself (a dot) with no line from A; the sinus P waves keep their time in the A tier (hidden in the wide QRS/T), so the pause is fully compensatory.',
+        'Bigeminismo ventricular: una de cada dos marcas del nivel V nace en el propio nivel V (un punto), sin línea desde A; las P sinusales siguen puntuales en el nivel A (ocultas en el QRS/T ancho) y la pausa es compensatoria completa.',
       ),
     },
     {

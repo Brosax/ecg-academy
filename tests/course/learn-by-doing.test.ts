@@ -15,7 +15,6 @@ const LIMITS = { textZh: 200, captionZh: 120, noteZh: 80, media: 3, playing: 1 }
 const GATED = ['S', 'R', 'T', 'I', 'H', 'O', 'X'] as const;
 const PENDING: ReadonlySet<string> = new Set(
   [
-    'r1 r2 r3 r4 r5 r6 r7 r8',
     't1 t2 t3 t4 t5 t6 t7',
     'i1 i2 i3 i4 i5 i6 i7 i8 i9 i10 i11',
     'h1 h2 h3 h4 h5 h6 h7 h8 h9',

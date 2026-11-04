@@ -76,9 +76,9 @@ const lesson: Lesson = {
       showConduction: true,
       emphasize: ['lbb', 'laf', 'lpf'],
       caption: l(
-        '三个分支就是后面所有命名的骨架：希氏束分为右束支和左束支，左束支随即展开成**前（上）分支**和**后（下）分支**。前分支细长、单支血供（前降支间隔支）——所以 LAFB 常见，孤立出现时多为良性退行性改变；后分支粗短、双重血供——单独的 LPFB 罕见，一旦要诊断，先想想别的病是不是更像。“右束支 + 左前 + 左后”，就是“双分支/三分支”语言里的那三支。',
-        'Three fascicles are the skeleton of every name that follows: the His bundle splits into the right bundle branch and the left, and the left immediately fans into an **anterior (superior)** and a **posterior (inferior)** fascicle. The anterior one is long and slim with a single blood supply (LAD septal perforators) — which is why LAFB is common and, when isolated, usually a benign degenerative finding; the posterior one is thick and short with a dual supply — isolated LPFB is rare, and before calling it, ask whether something else fits better. Right bundle + anterior + posterior: those are the three fascicles of the “bi-/trifascicular” language.',
-        'Los tres fascículos son el esqueleto de todos los nombres que siguen: el haz de His se divide en rama derecha e izquierda, y la izquierda se abre enseguida en un fascículo **anterior (superior)** y otro **posterior (inferior)**. El anterior es largo y fino, con un solo aporte sanguíneo (perforantes septales de la descendente anterior): por eso el BFAI es frecuente y, cuando está aislado, suele ser un hallazgo degenerativo benigno; el posterior es grueso y corto, con doble riego: el BFPI aislado es raro y, antes de diagnosticarlo, pregúntate si otra enfermedad encaja mejor. Rama derecha + anterior + posterior: esos son los tres fascículos del lenguaje “bi-/trifascicular”.',
+        '希氏束分成右束支和左束支，左束支再分为前（上）、后（下）分支。前分支细长、单一血供，所以 LAFB 常见；后分支粗短、双重血供，单独 LPFB 罕见。',
+        'The His bundle splits into the right and left bundles, and the left fans into an anterior (superior) and a posterior (inferior) fascicle. The anterior one is long, slim and singly supplied, so LAFB is common; the posterior one is short, thick and doubly supplied, so isolated LPFB is rare.',
+        'El haz de His se divide en rama derecha e izquierda, y la izquierda en un fascículo anterior (superior) y otro posterior (inferior). El anterior es largo, fino y con un solo riego, por eso el BFAI es frecuente; el posterior es corto, grueso y con doble riego, por eso el BFPI aislado es raro.',
       ),
     },
     {
@@ -128,6 +128,41 @@ const lesson: Lesson = {
           highlightLeads: ['V1', 'V6'],
         },
       ],
+    },
+    {
+      kind: 'live',
+      scenario: 'lafb',
+      seed: 531,
+      dials: [{ id: 'axis' }],
+      view: TWELVE,
+      marks: [{ auto: 'q', lead: 'aVL' }, { auto: 's', lead: 'II' }],
+      play: {
+        dial: 'axis',
+        from: -50,
+        to: -80,
+        notes: [
+          {
+            min: -60,
+            max: -50,
+            text: l('电轴在 −45°…−90° 带内：I 正，II、III、aVF 都是 rS，aVL 呈 qR，QRS <120 ms。LAFB。', 'Inside the −45° to −90° band: I positive, rS in II, III and aVF, qR in aVL, QRS <120 ms. LAFB.', 'Dentro de la franja de −45° a −90°: I positiva, rS en II, III y aVF, qR en aVL y QRS <120 ms. BFAI.'),
+          },
+          {
+            min: -80,
+            max: -61,
+            text: l('越往左上，II 的 S 越深；aVL 仍是 qR，QRS 仍 <120 ms。分支阻滞是窄 QRS 的诊断。', 'The further up and left, the deeper the S in II; aVL stays qR and the QRS stays <120 ms. Fascicular block is a narrow-QRS diagnosis.', 'Cuanto más arriba y a la izquierda, más profunda la S de II; aVL sigue en qR y el QRS sigue <120 ms. El bloqueo fascicular es un diagnóstico de QRS estrecho.'),
+          },
+        ],
+      },
+      predict: {
+        question: l('把电轴从 −50° 转到 −80°，哪个导联始终是 qR？', 'Turn the axis from −50° to −80°. Which lead stays qR throughout?', 'Gira el eje de −50° a −80°. ¿Qué derivación sigue en qR todo el tiempo?'),
+        options: [l('aVL', 'aVL', 'aVL'), l('II', 'II', 'II'), l('V1', 'V1', 'V1')],
+        answer: 0,
+      },
+      caption: l(
+        'LAFB 由电轴决定：−45°…−90°，加 aVL qR、QRS 窄。−30°…−45° 只是中度左偏，不够 LAFB。',
+        'The axis makes the LAFB call: −45° to −90°, with qR in aVL and a narrow QRS. −30° to −45° is only moderate left deviation, not LAFB.',
+        'El eje decide el BFAI: de −45° a −90°, con qR en aVL y QRS estrecho. De −30° a −45° es solo una desviación izquierda moderada, no un BFAI.',
+      ),
     },
     {
       kind: 'criteria',
@@ -181,6 +216,14 @@ const lesson: Lesson = {
             'QRS >110 ms en adultos que no cumple criterios morfológicos de BRD ni de BRI (V1 y V6 deciden la morfología); enunciado descriptivo, sin localización. En deportistas, un TCIV >=140 ms es anormal y requiere evaluación',
           ),
         },
+        {
+          label: l('双分支阻滞：何时起搏', 'Bifascicular block: when to pace', 'Bloqueo bifascicular: cuándo estimular'),
+          value: l(
+            '无症状（伴或不伴一度房室阻滞）不需起搏；不明原因晕厥 → 电生理检查：HV ≥70 ms、递增心房起搏时出现希氏束内或其下的二度/三度阻滞、或药物激发试验异常 → 起搏（ESC 2021）；交替性束支阻滞 → I 类',
+            'Asymptomatic (with or without first-degree AV block): no pacemaker; unexplained syncope → EP study: pace if HV >=70 ms, if second- or third-degree intra- or infra-Hisian block appears with incremental atrial pacing, or if a pharmacological challenge is abnormal (ESC 2021); alternating BBB → Class I',
+            'Asintomático (con o sin bloqueo AV de primer grado): sin marcapasos; síncope inexplicado → estudio electrofisiológico: estimula si HV >=70 ms, si aparece bloqueo de segundo o tercer grado intra o infrahisiano con estimulación auricular progresiva o si la provocación farmacológica es anormal (ESC 2021); bloqueo de rama alternante → clase I',
+          ),
+        },
       ],
       source:
         'Surawicz B et al. AHA/ACCF/HRS Part III: Intraventricular conduction disturbances. Circulation 2009;119:e235-e240; Glikson M et al. 2021 ESC Guidelines on cardiac pacing and cardiac resynchronization therapy. Eur Heart J 2021;42:3427-3520',
@@ -211,20 +254,38 @@ const lesson: Lesson = {
       showConduction: true,
       emphasize: ['rbb', 'laf'],
       caption: l(
-        '双分支阻滞（最常见的组合：RBBB + LAFB）。右束支断了，右心室最后除极——V1 出现 rsR′、I/V6 宽 S（r6 的内容）；同时前分支断了，左心室内部改为自下而上——肢体导联电轴 −45°…−90°。**胸前导联讲右束支的故事，肢体导联讲分支的故事**；三个分支里只剩后分支还在给左心室带路。',
-        'Bifascicular block (the commonest combination: RBBB + LAFB). The right bundle is blocked, so the right ventricle depolarises last — rsR′ in V1, broad S in I/V6 (r6 material); and with the anterior fascicle also blocked, the left ventricle activates bottom-up — a frontal axis of −45° to −90°. **The precordial leads tell the right-bundle story, the limb leads tell the fascicular story**; of three fascicles, only the posterior one still leads the left ventricle.',
-        'Bloqueo bifascicular (la combinación más frecuente: BRD + BFAI). La rama derecha está bloqueada y el ventrículo derecho se despolariza el último: rsR′ en V1, S ancha en I/V6 (tema de r6); y con el fascículo anterior también bloqueado, el ventrículo izquierdo se activa de abajo arriba: eje frontal de −45° a −90°. **Las precordiales cuentan la historia de la rama derecha y las extremidades la del fascículo**; de tres fascículos, solo el posterior sigue guiando al ventrículo izquierdo.',
+        '最常见的双分支阻滞：RBBB + LAFB。胸前导联讲右束支的故事（V1 rsR′、V6 宽 S），肢体导联讲分支的故事（电轴 −45°…−90°）。只剩后分支在带路。',
+        'The commonest bifascicular block: RBBB + LAFB. The chest leads tell the right-bundle story (rsR′ in V1, broad S in V6), the limb leads the fascicular one (axis −45° to −90°). Only the posterior fascicle still leads.',
+        'El bloqueo bifascicular más frecuente: BRD + BFAI. Las precordiales cuentan la historia de la rama derecha (rsR′ en V1, S ancha en V6) y las extremidades la del fascículo (eje de −45° a −90°). Solo queda el fascículo posterior.',
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('bifascicular-block', 527, undefined, 'lpfb'),
+      kind: 'film',
+      title: l('同一个 RBBB，电轴说出第二支', 'One RBBB, and the axis names the second fascicle', 'Un BRD, y el eje nombra el segundo fascículo'),
       view: TWELVE,
-      marks: [{ auto: 'qrs' }],
+      frames: [
+        {
+          label: l('右束支 + 左前分支', 'RBBB + LAFB', 'BRD + BFAI'),
+          ecg: synth('bifascicular-block', 526),
+          note: l('V1 rsR′、I 和 V6 有宽 S：RBBB。I 正、aVF 负，电轴约 −70°：再加 LAFB。最常见的双分支阻滞。', 'rsR′ in V1 and a broad S in I and V6: RBBB. I positive, aVF negative, axis about −70°: LAFB on top. The commonest bifascicular block.', 'rsR′ en V1 y S ancha en I y V6: BRD. I positiva, aVF negativa, eje de unos −70°: además, BFAI. El bloqueo bifascicular más frecuente.'),
+          marks: [{ auto: 'qrs', lead: 'V1' }],
+        },
+        {
+          label: l('右束支 + 左后分支', 'RBBB + LPFB', 'BRD + BFPI'),
+          ecg: synth('bifascicular-block', 527, undefined, 'lpfb'),
+          note: l('V1 是宽大的 R（RBBB），但 I、aVL 呈 rS，III 呈 qR，电轴约 +95°：RBBB + LPFB。先排除右偏的其他原因。', 'V1 is a broad R (RBBB), but I and aVL are rS and III is qR, axis about +95°: RBBB + LPFB. Rule out the other causes of right axis deviation first.', 'V1 es una R ancha (BRD), pero I y aVL son rS y III es qR, con eje de unos +95°: BRD + BFPI. Descarta antes las demás causas de eje derecho.'),
+          marks: [{ auto: 'qrs', lead: 'V1' }, { auto: 's', lead: 'I' }],
+        },
+      ],
+      predict: {
+        question: l('V1 呈右束支阻滞形，I 主波向下、aVF 向上。第二支阻滞的是哪一支？', 'V1 shows RBBB, lead I is mainly negative and aVF positive. Which second fascicle is blocked?', 'V1 muestra un BRD, la derivación I es sobre todo negativa y aVF positiva. ¿Qué segundo fascículo está bloqueado?'),
+        options: [l('左前分支', 'The left anterior fascicle', 'El fascículo anterior izquierdo'), l('左后分支', 'The left posterior fascicle', 'El fascículo posterior izquierdo'), l('左束支主干', 'The main left bundle', 'El tronco de la rama izquierda')],
+        answer: 1,
+      },
       caption: l(
-        '少见的那一半：RBBB + LPFB。V1 仍是 rsR′，但肢体导联翻转——I/aVL 呈 rS、III/aVF 呈 qR、电轴右偏 +90°…+180°。LPFB 的排除规则在这里照用：先排除右偏的其他原因（右室肥厚、侧壁心梗、瘦长/垂直心、肺栓塞、肺气肿、导联接反），排除完毕才写“RBBB + LPFB”。QRS 全局测量 ≥120 ms（右束支那份宽度还在）。',
-        'The uncommon half: RBBB + LPFB. V1 still shows rsR′, but the limb leads flip — rS in I/aVL, qR in III/aVF, right axis +90° to +180°. LPFB’s exclusion rule applies unchanged: rule out the other causes of right axis deviation (RVH, lateral MI, slender or vertical heart, PE, emphysema, lead reversal) before writing “RBBB + LPFB”. The globally measured QRS is >=120 ms (the right-bundle width is still there).',
-        'La mitad infrecuente: BRD + BFPI. V1 sigue mostrando rsR′, pero las derivaciones de extremidades se invierten: rS en I/aVL, qR en III/aVF y eje derecho de +90° a +180°. La regla de exclusión del BFPI se aplica igual aquí: descarta las demás causas de desviación derecha (HVD, infarto lateral, corazón vertical o delgado, TEP, enfisema, inversión de derivaciones) antes de escribir «BRD + BFPI». El QRS medido de forma global es >=120 ms (conserva el ancho de la rama derecha).',
+        '胸前导联定 RBBB，肢体导联的电轴定第二支：左偏 −45°…−90° = LAFB，右偏 +90°…+180° = LPFB（先排除）。',
+        'The chest leads make the RBBB call; the limb-lead axis names the second fascicle: −45° to −90° = LAFB, +90° to +180° = LPFB (after exclusions).',
+        'Las precordiales deciden el BRD; el eje de las extremidades nombra el segundo fascículo: −45° a −90° = BFAI, +90° a +180° = BFPI (tras las exclusiones).',
       ),
     },
     {
@@ -256,32 +317,47 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('ivcd', 530, { qrs: 124 }),
+      kind: 'live',
+      scenario: 'ivcd',
+      seed: 530,
+      dials: [{ id: 'qrs' }],
       view: TWELVE,
       marks: [{ auto: 'qrs' }],
+      play: {
+        dial: 'qrs',
+        from: 112,
+        to: 135,
+        notes: [
+          {
+            min: 112,
+            max: 123,
+            text: l('QRS >110 ms，但 V1 没有 R′，I 和 V6 没有宽 S，V6 还有小 q：不像 RBBB，也不像 LBBB。', 'QRS >110 ms, yet V1 has no R′, I and V6 have no broad S, and V6 keeps a small q: neither RBBB nor LBBB.', 'QRS >110 ms, pero V1 no tiene R′, I y V6 no tienen S ancha y V6 conserva una q pequeña: ni BRD ni BRI.'),
+          },
+          {
+            min: 124,
+            max: 135,
+            text: l('再宽也一样：没有束支形态，就是非特异性室内传导延迟（IVCD）。它是描述，不是定位。', 'Wider still, same answer: without a bundle-branch shape it is a nonspecific intraventricular conduction delay (IVCD). A description, not a localisation.', 'Más ancho, la misma respuesta: sin morfología de rama es un trastorno inespecífico de la conducción intraventricular (TCIV). Una descripción, no una localización.'),
+          },
+        ],
+      },
+      predict: {
+        question: l('把 QRS 从 112 拉到 135 ms，它会变成束支阻滞吗？', 'Stretch the QRS from 112 to 135 ms. Does it become a bundle branch block?', 'Alarga el QRS de 112 a 135 ms. ¿Se convierte en un bloqueo de rama?'),
+        options: [l('不会，形态不变，仍是 IVCD', 'No, the shape is unchanged: still IVCD', 'No, la morfología no cambia: sigue siendo TCIV'), l('会，≥120 ms 就是 LBBB', 'Yes, at ≥120 ms it is LBBB', 'Sí, con ≥120 ms es un BRI'), l('会，≥120 ms 就是 RBBB', 'Yes, at ≥120 ms it is RBBB', 'Sí, con ≥120 ms es un BRD')],
+        answer: 0,
+      },
       caption: l(
-        'QRS 全局测量约 125 ms——但 V1 没有 rsR′（不是 RBBB），I、V5、V6 仍保留一个小的间隔 q 波（LBBB 时它会消失）：既不是 RBBB 也不是 LBBB → **非特异性室内传导延迟（IVCD）**：QRS >110 ms 而不符合任一束支形态。见于心肌病与心肌纤维化、药物（尤其 Ic 类抗心律失常药）、高钾血症。它是**描述**而不是**定位**——不像束支阻滞那样指向某一条分支。若 QRS 增宽同时 T 波高尖，先查血钾，再谈退行性传导系统病。',
-        'The globally measured QRS is about 125 ms — but V1 has no rsR′ (not RBBB), and a small septal q survives in I, V5 and V6 (it disappears in LBBB): neither RBBB nor LBBB → **nonspecific intraventricular conduction delay (IVCD)**: QRS >110 ms matching neither bundle morphology. Seen with cardiomyopathy and myocardial fibrosis, drugs (especially class Ic antiarrhythmics) and hyperkalaemia. It is a **description**, not a **localisation** — unlike a bundle branch block it does not point to one branch. If the QRS is wide while the T waves are peaked, check the potassium before blaming degenerative conduction-system disease.',
-        'El QRS medido de forma global es unos 125 ms, pero V1 no tiene rsR′ (no es BRD) y en I, V5 y V6 persiste una pequeña q septal (que desaparece en el BRI): no es BRD ni BRI → **trastorno inespecífico de la conducción intraventricular (TCIV)**: QRS >110 ms sin ninguna de las dos morfologías de rama. Se ve en miocardiopatías y fibrosis miocárdica, fármacos (sobre todo antiarrítmicos de clase Ic) e hiperpotasemia. Es una **descripción**, no una **localización**: a diferencia del bloqueo de rama, no señala una rama concreta. Si el QRS se ensancha con T apuntadas, mira primero la potasemia antes de culpar a la degeneración del sistema de conducción.',
+        '宽度不决定名字，形态才决定。IVCD 见于心肌病与纤维化、Ic 类药物、高钾血症（T 波高尖先查血钾）。',
+        'Width does not pick the name; shape does. IVCD is seen with cardiomyopathy and fibrosis, class Ic drugs and hyperkalaemia (with peaked T waves, check the potassium first).',
+        'La anchura no pone el nombre; la morfología sí. El TCIV se ve en miocardiopatías y fibrosis, fármacos de clase Ic e hiperpotasemia (con T apuntadas, mira primero el potasio).',
       ),
     },
     {
       kind: 'figure',
       figure: { id: 'decision-tree', params: { tree: 'bundle-branch' } },
       caption: l(
-        '把 r6 与本课并成一条决策链：先全局量 QRS——<110 ms 正常带，110–119 ms 不完全带（r6），≥120 ms 看 V1/V6 定右/左束支；然后让**肢体导联的电轴**说话：左偏 −45°…−90° 加 aVL qR = 合并 LAFB；右偏 +90°…+180° 加 rS I/aVL、qR III/aVF = 想到 LPFB（先排除）；都不符合 = 非特异性 IVCD。',
-        'Chain r6 and this lesson into one decision path: measure the QRS globally first — <110 ms normal, 110–119 ms the incomplete band (r6), >=120 ms decide right vs left branch from V1/V6; then let **the frontal axis of the limb leads** speak: left −45° to −90° with qR in aVL = add LAFB; right +90° to +180° with rS in I/aVL and qR in III/aVF = think LPFB (exclusions first); neither fits = nonspecific IVCD.',
-        'Encadena r6 con esta lección en una sola vía de decisión: mide primero el QRS de forma global — <110 ms normal, 110–119 ms la franja incompleta (r6), >=120 ms decide rama derecha o izquierda con V1/V6; y deja luego que hable **el eje frontal de las extremidades**: −45° a −90° con qR en aVL = añade BFAI; +90° a +180° con rS en I/aVL y qR en III/aVF = piensa en el BFPI (exclusiones primero); si nada encaja = TCIV inespecífico.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('用词与处置：从“三分支”到起搏', 'Words and actions: from “trifascicular” to pacing', 'Palabras y decisiones: del «trifascicular» a la estimulación'),
-      body: l(
-        '- 不把“三分支阻滞”写在报告里指代双分支阻滞 + 长 PR：按组成部分描述；PR 延长通常在房室结，风险与单纯双分支阻滞相近。\n- 真正的三支证据只有两种心电图表现：双分支阻滞 + 二度Ⅱ型脱落（上文 B），或**交替性束支阻滞**——同一份或连续心电图上 RBBB 与 LBBB 交替（或 RBBB+LAFB 与 RBBB+LPFB 交替）：I 类起搏指征，即使无症状。\n- **无症状**的双分支阻滞（伴或不伴一度房室传导阻滞）不需要起搏。\n- **不明原因晕厥** + 双分支阻滞 → 电生理检查：HV 间期 ≥70 ms、递增心房起搏时出现二度/三度希氏束内或其下阻滞、或药物诱发试验异常 → 起搏（ESC 2021）。\n- 孤立 LAFB 在老年人中很常见，多为退行性改变——按发现记录，不必启动全套检查。',
-        '- Never write “trifascicular block” to mean bifascicular block + long PR: describe the components; the PR delay is usually AV-nodal and the risk matches bifascicular block alone.\n- Only two ECG findings prove three-fascicle disease: bifascicular block + Mobitz II drops (B above), or **alternating bundle branch block** — RBBB and LBBB alternating on the same or successive tracings (or RBBB+LAFB alternating with RBBB+LPFB): a Class I pacing indication even without symptoms.\n- **Asymptomatic** bifascicular block, with or without first-degree AV block, needs no pacemaker.\n- **Unexplained syncope** + bifascicular block → EP study: pace if the HV interval is >=70 ms, if second- or third-degree intra- or infra-Hisian block appears during incremental atrial pacing, or if a pharmacological challenge is abnormal (ESC 2021).\n- Isolated LAFB is very common in the elderly and mostly degenerative — report it as a finding; do not launch a full work-up.',
-        '- Nunca escribas «bloqueo trifascicular» para referirte al bloqueo bifascicular + PR largo: describe los componentes; el alargamiento del PR suele estar en el nodo AV y el riesgo es el del bloqueo bifascicular aislado.\n- Solo dos hallazgos electrocardiográficos demuestran enfermedad de los tres fascículos: bloqueo bifascicular + abandonos en Mobitz II (el B de arriba), o **bloqueo de rama alternante**: BRD y BRI alternando en el mismo ECG o en ECG sucesivos (o BRD+BFAI alternando con BRD+BFPI): indicación de estimulación clase I aun sin síntomas.\n- El bloqueo bifascicular **asintomático**, con o sin bloqueo AV de primer grado, no necesita marcapasos.\n- **Síncope inexplicado** + bloqueo bifascicular → estudio electrofisiológico: estimula si el intervalo HV es >=70 ms, si aparece bloqueo AV de segundo o tercer grado intra o infrahisiano con estimulación auricular progresiva, o si la provocación farmacológica es anormal (ESC 2021).\n- El BFAI aislado es muy frecuente en ancianos y en su mayoría degenerativo: infórmalo como hallazgo; no inicies un estudio completo.',
+        '先全局量 QRS（<110 正常，110–119 不完全，≥120 看 V1/V6 定左右），再看电轴：−45°…−90° 加 aVL qR = LAFB；右偏加 I rS、III qR = 想到 LPFB；形态都不符 = IVCD。',
+        'Measure the QRS globally first (<110 normal, 110–119 incomplete, ≥120 read V1/V6 for the side), then the axis: −45° to −90° with qR in aVL = LAFB; right axis with rS in I and qR in III = think LPFB; no branch shape = IVCD.',
+        'Mide primero el QRS global (<110 normal, 110–119 incompleto, ≥120 lee V1/V6 para el lado) y luego el eje: −45° a −90° con qR en aVL = BFAI; eje derecho con rS en I y qR en III = piensa en BFPI; sin morfología de rama = TCIV.',
       ),
     },
     { kind: 'check', item: { family: 'bundle-branch', seed: 30 } },
