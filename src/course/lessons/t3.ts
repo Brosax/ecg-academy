@@ -106,9 +106,9 @@ const lesson: Lesson = {
           label: l('顺钟向', 'Clockwise', 'Horario'),
           ecg: synth('atrial-flutter', 649, { conductionRatio: 4 }, 'clockwise'),
           note: l(
-            '同一个环反着转：下壁 F 波变成**直立**，V1 变为负向 ⇒ 反向典型房扑，仍走峡部。',
-            'The same loop turning the other way: the inferior F waves turn **positive** and V1 turns negative → reverse-typical flutter, still through the isthmus.',
-            'El mismo circuito girando al revés: las F inferiores se vuelven **positivas** y V1 negativa → flutter típico inverso, que sigue pasando por el istmo.',
+            '同一个环反着转，这里也稍慢（F–F 210 ms，而非 200 ms）：下壁 F 波变成**直立**，V1 变为负向 ⇒ 反向典型房扑，仍走峡部。',
+            'The same loop turning the other way, and a little slower here (F–F 210 ms instead of 200 ms): the inferior F waves turn **positive** and V1 turns negative → reverse-typical flutter, still through the isthmus.',
+            'El mismo circuito girando al revés, y aquí algo más lento (F–F de 210 ms en lugar de 200 ms): las F inferiores se vuelven **positivas** y V1 negativa → flutter típico inverso, que sigue pasando por el istmo.',
           ),
           marks: [{ auto: 'f-waves', lead: 'II' }, { auto: 'f-waves', lead: 'V1' }],
         },
@@ -251,9 +251,9 @@ const lesson: Lesson = {
             min: 4,
             max: 4,
             text: l(
-              '4:1：心室 75 次/分，QRS 之间三个 F，锯齿清清楚楚。心房一直是 300 次/分。',
-              '4:1: ventricles at 75/min, three F waves between QRS complexes and a clear sawtooth. The atria stay at 300/min throughout.',
-              '4:1: ventrículos a 75 lpm, tres ondas F entre los QRS y un diente de sierra nítido. Las aurículas siguen a 300 lpm todo el tiempo.',
+              '4:1：心室 75 次/分，每个 RR 四个 F（一个与 QRS 重叠），锯齿清清楚楚。心房一直是 300 次/分。',
+              '4:1: ventricles at 75/min, four F waves per RR (one runs into the QRS) and a clear sawtooth. The atria stay at 300/min throughout.',
+              '4:1: ventrículos a 75 lpm, cuatro ondas F por RR (una se solapa con el QRS) y un diente de sierra nítido. Las aurículas siguen a 300 lpm todo el tiempo.',
             ),
           },
         ],
@@ -275,7 +275,7 @@ const lesson: Lesson = {
       view: STRIP,
       left: {
         ecg: synth('atrial-flutter', 645, { conductionRatio: 4 }),
-        caption: l('4:1 房扑：心室 75 次/分，QRS 之间三个 F', '4:1 flutter: ventricles at 75/min, three F waves between QRS complexes', 'Flutter 4:1: ventrículos a 75 lpm, tres ondas F entre los QRS'),
+        caption: l('4:1 房扑：心室 75 次/分，每个 RR 四个 F（一个与 QRS 重叠）', '4:1 flutter: ventricles at 75/min, four F waves per RR (one runs into the QRS)', 'Flutter 4:1: ventrículos a 75 lpm, cuatro ondas F por RR (una se solapa con el QRS)'),
         marks: [{ auto: 'f-waves', label: l('F 波', 'F waves', 'ondas F') }],
       },
       right: {
@@ -284,9 +284,9 @@ const lesson: Lesson = {
         marks: [{ auto: 'p' }],
       },
       point: l(
-        '心室率相同，心房真相完全不同：**左**每个 QRS 前有三个 F 波、锯齿相连、没有等电位线——房扑 4:1；**右**每个 QRS 前只有一个 P 波，P 前后有平坦的等电位线、PR 恒定。慢而不至于快的心动过速也可能是房扑：数心房波，别只数 QRS。',
-        'Identical ventricular rate, completely different atrial truth: on the **left** three F waves precede every QRS, linked in a sawtooth with no isoelectric line — 4:1 flutter; on the **right** one P wave before every QRS, with a flat baseline around it and a constant PR. A flutter can hide at a harmless-looking rate: count the atrial waves, not just the QRS complexes.',
-        'La misma frecuencia ventricular, una verdad auricular totalmente distinta: a la **izquierda** tres ondas F preceden cada QRS, encadenadas en diente de sierra sin línea isoeléctrica (flutter 4:1); a la **derecha** una sola P antes de cada QRS, con línea de base plana a su alrededor y PR constante. Un flutter puede esconderse tras una frecuencia inofensiva: cuenta las ondas auriculares, no solo los QRS.',
+        '心室率相同，心房真相完全不同：**左**每个 RR 有四个 F 波（一个与 QRS 重叠）、锯齿相连、没有等电位线——房扑 4:1；**右**每个 QRS 前只有一个 P 波，P 前后有平坦的等电位线、PR 恒定。慢而不至于快的心动过速也可能是房扑：数心房波，别只数 QRS。',
+        'Identical ventricular rate, completely different atrial truth: on the **left** four F waves per RR (one runs into the QRS), linked in a sawtooth with no isoelectric line — 4:1 flutter; on the **right** one P wave before every QRS, with a flat baseline around it and a constant PR. A flutter can hide at a harmless-looking rate: count the atrial waves, not just the QRS complexes.',
+        'La misma frecuencia ventricular, una verdad auricular totalmente distinta: a la **izquierda** cuatro ondas F por RR (una se solapa con el QRS), encadenadas en diente de sierra sin línea isoeléctrica (flutter 4:1); a la **derecha** una sola P antes de cada QRS, con línea de base plana a su alrededor y PR constante. Un flutter puede esconderse tras una frecuencia inofensiva: cuenta las ondas auriculares, no solo los QRS.',
       ),
     },
     {

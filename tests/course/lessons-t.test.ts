@@ -312,6 +312,18 @@ function diastolicP2p(e: Ecg, lead: StdLead): number {
   return out.sort((x, y) => x - y)[Math.floor(out.length / 2)];
 }
 const median = (xs: readonly number[]): number => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)];
+/** every RR holds four F waves, exactly one of them hidden, and that one starts within 100 ms before the next QRS (it overlaps it) */
+function expectFourFOneInQrs(e: Ecg): void {
+  const { beats, atrial } = e.truth!;
+  for (let i = 0; i + 1 < beats.length; i++) {
+    const f = atrial.filter((a) => a.t >= beats[i].qrsOn && a.t < beats[i + 1].qrsOn);
+    expect(f.length, `RR ${i}`).toBe(4);
+    const hidden = f.filter((a) => !a.visible);
+    expect(hidden.length, `RR ${i}`).toBe(1);
+    expect(beats[i + 1].qrsOn - hidden[0].t, `RR ${i}`).toBeGreaterThan(0);
+    expect(beats[i + 1].qrsOn - hidden[0].t, `RR ${i}`).toBeLessThan(100);
+  }
+}
 
 describe('t1 on the tracings', () => {
   it('worked AVRT: ~190/min, retrograde P′ ~115 ms after QRS onset, negative in I and aVL, positive in III and aVF; in II it rides on the T upstroke with no hump of its own', () => {
@@ -556,8 +568,11 @@ describe('t3 on the tracings', () => {
     expect(swing(b, 'V1').dn).toBeGreaterThan(1.5 * swing(b, 'V1').up);
     expect(a.truth!.rhythm).toBe('atrial-flutter');
     expect(b.truth!.rhythm).toBe('atrial-flutter');
+    const ff = (e: Ecg) => median(e.truth!.atrial.slice(1).map((x, i) => x.t - e.truth!.atrial[i].t));
+    expect(Math.abs(ff(a) - 200), 'counter-clockwise F–F').toBeLessThan(3);
+    expect(Math.abs(ff(b) - 210), 'clockwise F–F').toBeLessThan(3);
   });
-  it('ratio sweep notes: 2:1 at 150/min with about half the F waves hidden; 3:1 at 100/min with more F showing; 4:1 at 75/min with three F per RR; atria at 300/min throughout', () => {
+  it('ratio sweep notes: 2:1 at 150/min with about half the F waves hidden; 3:1 at 100/min with more F showing; 4:1 at 75/min with four F per RR, one running into the QRS; atria at 300/min throughout', () => {
     const [two, three, four] = [2, 3, 4].map((v) => played('t3', 0, v));
     for (const [e, hr] of [[two, 150], [three, 100], [four, 75]] as const) {
       expect(Math.abs(e.truth!.hrBpm - hr), `${hr}`).toBeLessThan(1);
@@ -567,6 +582,12 @@ describe('t3 on the tracings', () => {
     expect(hiddenShare(three)).toBeLessThan(hiddenShare(two) - 0.1);
     for (const rr of rrs(four)) expect(Math.round(rr / 200)).toBe(4);
     expect(hiddenShare(four)).toBeLessThan(0.35);
+    expectFourFOneInQrs(four);
+  });
+  it('4:1 contrast: ventricles at 75/min, four F per RR with one running into the QRS', () => {
+    const e = ecgOf(blocksOf('t3', 'contrast')[0].left.ecg);
+    expect(Math.abs(e.truth!.hrBpm - 75)).toBeLessThan(1);
+    expectFourFOneInQrs(e);
   });
   it('variable-block strip: every RR within 0.2 F–F of a whole multiple of 200 ms, from 3 to 5', () => {
     const e = ecgOf(blocksOf('t3', 'ecg')[0].ecg);
