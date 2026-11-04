@@ -1242,9 +1242,9 @@ describe('t7 on the tracings', () => {
     expect(ecgOf(blocksOf('t7', 'hook')[0].ecg).truth!.rhythm).toBe('asystole');
     const e = ecgOf(blocksOf('t7', 'heart')[0].ecg);
     const t = e.truth!;
-    expect(Math.abs(t.hrBpm - 34)).toBeLessThan(3);
+    expect(Math.abs(t.hrBpm - 34)).toBeLessThanOrEqual(1);
     expect(t.qrsMs).toBeGreaterThanOrEqual(120);
-    expect(Math.abs(t.atrialRateBpm! - 78)).toBeLessThan(3);
+    expect(Math.abs(t.atrialRateBpm! - 78)).toBeLessThanOrEqual(1);
     expect(t.atrial.every((a) => a.conductedTo === null)).toBe(true);
     expect(t.beats.every((b) => b.kind === 'escape-ventricular')).toBe(true);
     const rs = e.regions!;
@@ -1262,11 +1262,11 @@ describe('t7 on the tracings', () => {
   it('pulse film: a wide regular VT at about 150/min; an organised sinus rhythm at about 70/min', () => {
     const [vt, organised] = frames('t7', 0);
     expect(vt.truth!.rhythm).toBe('vt-monomorphic');
-    expect(Math.abs(vt.truth!.hrBpm - 150)).toBeLessThan(5);
+    expect(Math.abs(vt.truth!.hrBpm - 150)).toBeLessThanOrEqual(1);
     expect(vt.truth!.qrsMs).toBeGreaterThanOrEqual(120);
     expect(Math.max(...rrs(vt)) - Math.min(...rrs(vt))).toBeLessThan(20);
     expect(organised.truth!.rhythm).toBe('sinus-rhythm');
-    expect(Math.abs(organised.truth!.hrBpm - 70)).toBeLessThan(3);
+    expect(Math.abs(organised.truth!.hrBpm - 70)).toBeLessThanOrEqual(1);
   });
   it('post-ROSC film: ST up 1–3.5 mm in V1–V4 with II, III and aVF down; QT about 505 ms at about 64/min with QTc over 500 ms; PR about 115 ms with QRS about 125 ms and pre-excitation; coved ST about 3.5 mm into a negative T in V1–V2', () => {
     const [stemi, lqt, wpw, brugada] = frames('t7', 1);
@@ -1281,7 +1281,7 @@ describe('t7 on the tracings', () => {
     for (const l of ['II', 'III', 'aVF'] as const) expect(st(stemi, l), l).toBeLessThan(-0.05);
     const q = lqt.truth!;
     expect(Math.abs(q.qtMs - 505)).toBeLessThan(5);
-    expect(Math.abs(q.hrBpm - 64)).toBeLessThan(2);
+    expect(Math.abs(q.hrBpm - 64)).toBeLessThanOrEqual(1);
     for (const qtc of [q.qtcBazettMs, q.qtcFridericiaMs]) {
       expect(qtc).toBeGreaterThan(q.qtMs);
       expect(qtc).toBeGreaterThan(500);
@@ -1290,8 +1290,8 @@ describe('t7 on the tracings', () => {
     expect(Math.abs(wpw.truth!.qrsMs - 125)).toBeLessThan(5);
     expect(wpw.truth!.findings).toContain('wpw');
     for (const l of ['V1', 'V2'] as const) {
-      expect(st(brugada, l), l).toBeGreaterThanOrEqual(0.3);
-      expect(st(brugada, l), l).toBeLessThanOrEqual(0.4);
+      expect(st(brugada, l), l).toBeGreaterThanOrEqual(0.325);
+      expect(st(brugada, l), l).toBeLessThanOrEqual(0.375);
       expect(st(brugada, l, 60), l).toBeLessThan(st(brugada, l));
       const b = mid(brugada);
       let mn = Infinity;
