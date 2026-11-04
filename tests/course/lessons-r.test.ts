@@ -535,7 +535,7 @@ describe('r3: first degree and Mobitz I on the tracings', () => {
     expect(Math.abs(Math.max(...p) - 280)).toBeLessThan(10);
     expect(Math.abs(Math.max(...rrs(e)) - 1470)).toBeLessThan(40);
   });
-  it('worked marks: one cycle PR about 150 → 235 → 275 ms, RR about 885 → 840 ms, then the pause about 1470 ms; the PRs either side of it about 275 and 150 ms', () => {
+  it('worked marks: one cycle PR about 150 → 235 → 275 ms, RR about 890 → 840 ms, then the pause about 1470 ms; the PRs either side of it about 275 and 150 ms', () => {
     const e = ecgOf(blocksOf('r3', 'worked')[0].ecg);
     const b = e.truth!.beats;
     const r = rrs(e);
@@ -548,7 +548,7 @@ describe('r3: first degree and Mobitz I on the tracings', () => {
     const rrMarks = stepBeats('r3', 2, 'rr');
     expect(rrMarks.map((i) => i - rrMarks[0])).toEqual([0, 1]);
     expect(r[rrMarks[0] - 1], 'the bracketed RRs open a cycle').toBeGreaterThan(1300);
-    [885, 840].forEach((v, k) => expect(Math.abs(r[rrMarks[k]] - v), `RR ${k + 1}`).toBeLessThanOrEqual(5));
+    [890, 840].forEach((v, k) => expect(Math.abs(r[rrMarks[k]] - v), `RR ${k + 1}`).toBeLessThanOrEqual(5));
     const [last, first] = stepBeats('r3', 3, 'pr');
     expect(last).toBe(cycle[2]);
     expect(first).toBe(last + 1);

@@ -207,9 +207,9 @@ const lesson: Lesson = {
         {
           title: l('RR 逐搏缩短', 'The RR shortens beat by beat', 'El RR se acorta latido a latido'),
           body: l(
-            '每个 RR = PP + 该搏的 PR 增量。PP ≈ 800 ms，所以 RR ≈ 885 → 840 ms：因为增量在缩小，RR 在缩短——文氏周期里的“渐快”。',
-            'Each RR = PP + that beat\'s PR increment. The PP is about 800 ms, so the RR runs about 885 → 840 ms: because the increments shrink, the RR shortens — the "quickening" inside a Wenckebach cycle.',
-            'Cada RR = PP + el incremento del PR de ese latido. El PP es de unos 800 ms, así que el RR va de unos 885 → 840 ms: como los incrementos se reducen, el RR se acorta, la «aceleración» dentro del ciclo de Wenckebach.',
+            '每个 RR = PP + 该搏的 PR 增量。PP ≈ 800 ms，所以 RR ≈ 890 → 840 ms：因为增量在缩小，RR 在缩短——文氏周期里的“渐快”。',
+            'Each RR = PP + that beat\'s PR increment. The PP is about 800 ms, so the RR runs about 890 → 840 ms: because the increments shrink, the RR shortens — the "quickening" inside a Wenckebach cycle.',
+            'Cada RR = PP + el incremento del PR de ese latido. El PP es de unos 800 ms, así que el RR va de unos 890 → 840 ms: como los incrementos se reducen, el RR se acorta, la «aceleración» dentro del ciclo de Wenckebach.',
           ),
           marks: [{ auto: 'rr', beat: 1 }, { auto: 'rr', beat: 2 }],
         },
