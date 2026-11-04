@@ -363,7 +363,7 @@ describe('s1: the reading order on the tracings', () => {
     expect(Math.abs(longQt.truth!.qtMs - 520)).toBeLessThanOrEqual(5);
     expect(Math.abs(longQt.truth!.hrBpm - 60)).toBeLessThanOrEqual(1);
     expect(Math.abs(meanRr(longQt) - 1000)).toBeLessThanOrEqual(5);
-    expect(Math.abs(markedMs(longQt, qtMarks, 'RR') - 1000)).toBeLessThanOrEqual(10);
+    expect(Math.abs(markedMs(longQt, qtMarks, 'RR') - 1000)).toBeLessThanOrEqual(5);
     for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(stAt(occlusion, l), l).toBeGreaterThanOrEqual(0.1);
     for (const l of ['III', 'aVF'] as const) expect(stAt(occlusion, l), l).toBeLessThan(-0.05);
     for (const l of ['V3', 'V4'] as const) expect(tw(potassium, l).max, l).toBeGreaterThan(qrs(potassium, l).max);
