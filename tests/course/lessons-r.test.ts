@@ -838,10 +838,42 @@ describe('r8: ladders on the tracings', () => {
     expect(cycle.length).toBe(4);
     for (let i = 1; i < cycle.length; i++) expect(cycle[i]).toBeGreaterThan(cycle[i - 1]);
   });
-  it('dissociation ladder: sinus about 60/min with at least one capture', () => {
+  it('dissociation ladder: sinus about 60/min, junction about 66/min, with at least one capture', () => {
     const fig = blocksOf('r8', 'figure').find((b) => b.ecg?.kind === 'synth' && b.ecg.req.scenario === 'av-dissociation');
     const t = ecgOf(fig?.ecg).truth!;
-    expect(Math.abs((t.atrialRateBpm ?? 0) - 60)).toBeLessThan(2);
+    expect(Math.abs((t.atrialRateBpm ?? 0) - 60)).toBeLessThan(1);
+    const junc = t.beats.flatMap((b, i) => (i > 0 && b.kind === 'escape-junctional' && t.beats[i - 1].kind === 'escape-junctional' ? [b.qrsOn - t.beats[i - 1].qrsOn] : []));
+    for (const rr of junc) expect(Math.abs(60000 / rr - 66)).toBeLessThan(1);
     expect(t.beats.some((b) => b.kind === 'sinus')).toBe(true);
+  });
+  it('bigeminy ladder: every other beat ventricular with no P, the sinus P on time through each PVC (fully compensatory)', () => {
+    const fig = blocksOf('r8', 'figure').find((b) => b.ecg?.kind === 'synth' && b.ecg.req.scenario === 'ventricular-bigeminy');
+    const t = ecgOf(fig?.ecg).truth!;
+    t.beats.forEach((b, i) => expect(b.kind, `beat ${i}`).toBe(i % 2 ? 'ventricular' : 'sinus'));
+    const pp = t.atrial.slice(1).map((a, i) => a.t - t.atrial[i].t);
+    expect(Math.max(...pp) - Math.min(...pp)).toBeLessThan(60);
+    for (let i = 1; i + 1 < t.beats.length; i += 2) expect(t.beats[i].pOn).toBeNull();
+  });
+  it('five-lines film: first degree PR about 280 ms 1:1; Wenckebach PR about 150 → 235 → 275 then a drop; Mobitz II PR about 160 ms with every fourth P dropped and a wide QRS; third degree P about 78 vs QRS about 45, none conducted; PJC with a retrograde P′ after it; AIVR with a narrow capture and a fusion beat', () => {
+    const [first, m1, m2, third, pjc, aivr] = frames('r8', 0);
+    for (const p of prs(first)) expect(Math.abs(p - 280)).toBeLessThan(3);
+    expect(blocked(first).filter((a) => a.t < first.truth!.beats[first.truth!.beats.length - 1].qrsOn).length).toBe(0);
+    const p1 = prs(m1);
+    const resets = p1.flatMap((p, i) => (i > 0 && p < p1[i - 1] - 100 ? [i] : []));
+    expect(resets.length).toBeGreaterThanOrEqual(2);
+    for (const s of resets.filter((i) => i + 2 < p1.length)) [150, 235, 275].forEach((v, k) => expect(Math.abs(p1[s + k] - v), `beat ${s + k}`).toBeLessThan(5));
+    for (const p of prs(m2)) expect(Math.abs(p - 160)).toBeLessThan(3);
+    const t2 = m2.truth!;
+    t2.atrial.filter((a) => a.t < t2.beats[t2.beats.length - 1].qrsOn).forEach((a, i) => expect(a.conductedTo === null, `P ${i}`).toBe((i - 1) % 4 === 0));
+    expect(t2.qrsMs).toBeGreaterThanOrEqual(120);
+    expect(Math.abs(third.truth!.atrialRateBpm! - 78)).toBeLessThan(1);
+    expect(Math.abs(third.truth!.hrBpm - 45)).toBeLessThan(1);
+    expect(third.truth!.atrial.every((a) => a.conductedTo === null)).toBe(true);
+    const j = pjc.truth!.beats[5];
+    expect(j.kind).toBe('junctional');
+    expect(pjc.truth!.atrial.some((a) => a.kind === 'retrograde' && a.t >= j.qrsOff && a.t < j.qrsOff + 40)).toBe(true);
+    const [cap, fus] = [aivr.truth!.beats[5], aivr.truth!.beats[6]];
+    expect([cap.kind, fus.kind]).toEqual(['capture', 'fusion']);
+    expect(cap.qrsOff - cap.qrsOn).toBeLessThan(110);
   });
 });
