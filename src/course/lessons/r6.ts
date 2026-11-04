@@ -289,7 +289,7 @@ const lesson: Lesson = {
     },
     {
       kind: 'film',
-      title: l('完全、不完全，还是时有时无', 'Complete, incomplete, or now and then', 'Completo, incompleto o a ratos'),
+      title: l('先量 QRS，再命名', 'Measure the QRS, then name it', 'Mide el QRS y luego ponle nombre'),
       view: { layout: '3x4+1' },
       frames: [
         {
@@ -308,13 +308,14 @@ const lesson: Lesson = {
           label: l('频率依赖性 LBBB', 'Rate-dependent LBBB', 'BRI dependiente de la frecuencia'),
           ecg: synth('rate-dependent-bbb', 509),
           note: l('周期一缩短，随后的搏动就呈左束支阻滞形；周期变长又变窄。宽搏动前仍是窦性 P，PR 不变：差异性传导。', 'When the cycle shortens, the beats that follow take an LBBB shape; longer cycles conduct narrow again. A sinus P with the same PR precedes every wide beat: aberrancy.', 'Cuando el ciclo se acorta, los latidos siguientes toman forma de BRI; con ciclos largos vuelven a ser estrechos. Antes de cada latido ancho hay una P sinusal con el mismo PR: aberrancia.'),
-          marks: [{ auto: 'p' }, { auto: 'qrs' }],
+          marks: [{ auto: 'p', beat: 5 }, { auto: 'qrs', beat: 5 }],
         },
       ],
       predict: {
         question: l('V1 同样是 rsR′，但全局 QRS 约 114 ms。该叫什么？', 'V1 shows the same rsR′, but the global QRS is about 114 ms. What do you call it?', 'V1 muestra la misma rsR′, pero el QRS global mide unos 114 ms. ¿Cómo lo llamas?'),
-        options: [l('完全性右束支阻滞', 'Complete RBBB', 'BRD completo'), l('不完全性右束支阻滞', 'Incomplete RBBB', 'BRD incompleto'), l('正常变异', 'A normal variant', 'Una variante normal')],
+        options: [l('正常变异', 'A normal variant', 'Una variante normal'), l('不完全性右束支阻滞', 'Incomplete RBBB', 'BRD incompleto'), l('完全性右束支阻滞', 'Complete RBBB', 'BRD completo')],
         answer: 1,
+        ordered: true,
       },
       caption: l(
         '先全局量 QRS 再命名：≥120 ms 完全性，110–119 ms 不完全性。宽窄随周期变化 = 频率依赖性。',
@@ -384,9 +385,9 @@ const lesson: Lesson = {
           'Pregunta “qué lado se despolariza el último”: R′ en V1 más S ancha en I/V6 = BRD; QS/rS en V1 más R ancha con muescas y sin q en I/V5–V6 = BRI.',
         ),
         l(
-          'R 波峰时间：RBBB V1 >50 ms；LBBB V5–V6 >60 ms（V1–V3 正常）。电轴不是 LBBB 的标准。',
-          'R-peak time: >50 ms in V1 for RBBB; >60 ms in V5–V6 for LBBB (normal in V1–V3). The axis is not an LBBB criterion.',
-          'Tiempo hasta la cima de la R: >50 ms en V1 en el BRD; >60 ms en V5–V6 en el BRI (normal en V1–V3). El eje no es criterio de BRI.',
+          'R 波峰时间：RBBB 的 V1 为单纯宽大 R 时 >50 ms；LBBB V5–V6 >60 ms（V1–V3 正常）。电轴不是 LBBB 的标准。',
+          'R-peak time: >50 ms in V1 for RBBB when V1 is a pure dominant R; >60 ms in V5–V6 for LBBB (normal in V1–V3). The axis is not an LBBB criterion.',
+          'Tiempo hasta la cima de la R: >50 ms en V1 en el BRD cuando V1 es una R dominante pura; >60 ms en V5–V6 en el BRI (normal en V1–V3). El eje no es criterio de BRI.',
         ),
         l(
           'LBBB 的 ST-T 通常与 QRS 反向：正向同向可为正常；负向 QRS 导联的 ST 压低/T 倒置才是异常。',

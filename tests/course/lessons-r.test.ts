@@ -9,7 +9,7 @@ import type { AutoMark, Block, Lesson, LessonMark } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
 import { REGISTERED } from '../../src/course/lessons/index';
 import { realisedDials, startDials } from '../../src/course/live';
-import { baselineBefore, isAutoMark, qrsWaves } from '../../src/course/marks';
+import { baselineBefore, isAutoMark, MIN_WAVE_MV, qrsWaves } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
 import type { L10n } from '../../src/core/l10n';
@@ -274,6 +274,23 @@ const sMs = (e: Ecg, l: StdLead, b: BeatMarks): number => {
   return s ? Math.min(s.off, b.qrsOff) - s.on : 0;
 };
 const mid = (e: Ecg): BeatMarks => e.truth!.beats[Math.floor(e.truth!.beats.length / 2)];
+/** R-peak time in a lead: from QRS onset to the highest sample of the QRS (ms) */
+function rPeakMs(e: Ecg, l: StdLead, b: BeatMarks): number {
+  const a = e.signal.leads[l];
+  const fs = e.signal.fs;
+  let k = Math.round((b.qrsOn * fs) / 1000);
+  for (let i = k; i <= Math.round((b.qrsOff * fs) / 1000); i++) if (a[i] > a[k]) k = i;
+  return (k * 1000) / fs - b.qrsOn;
+}
+/** the T wave in a lead: its largest excursion from the PR baseline between J + 40 ms and T end (mV, signed) */
+function tWave(e: Ecg, l: StdLead, b: BeatMarks): number {
+  const a = e.signal.leads[l];
+  const fs = e.signal.fs;
+  const base = baselineBefore(a, fs, b.qrsOn);
+  let best = 0;
+  for (let i = Math.round(((b.j + 40) * fs) / 1000); i <= Math.round((b.tOff * fs) / 1000); i++) if (Math.abs(a[i] - base) > Math.abs(best)) best = a[i] - base;
+  return best;
+}
 /** the V1 QRS of a beat (default the middle one) as lowercase wave letters, e.g. "r s r'" */
 const v1Shape = (e: Ecg, b = mid(e)): string =>
   qrsWaves(e.signal.leads.V1, e.signal.fs, b.qrsOn, b.qrsOff)
@@ -909,19 +926,26 @@ describe('r6: bundle branch block on the tracings', () => {
       expect(w[2].mv).toBeGreaterThan(4 * w[0].mv);
     }
   });
-  it('worked: LBBB — QRS ≥ 120, V1 rS with no R′ up to where its S returns to the baseline, a dominant S in V2, no q in I or V6', () => {
+  /** LBBB V1: an rS up to where its S returns to the baseline (no R′ before the J point), the S over 3 x any R */
+  const lbbbV1 = (e: Ecg, b: BeatMarks, what: string) => {
+    const v1 = qrsSpan(e, 'V1', b);
+    expect(-v1.min, `${what}: V1 dominated by its S`).toBeGreaterThan(3 * Math.max(0, v1.max));
+    const s1 = sWave(e, 'V1', b);
+    expect(s1, `${what}: V1 has an S`).not.toBeNull();
+    expect(hasRPrime(e, 'V1', { ...b, qrsOff: s1!.off }), `${what}: no R′ in V1 before the J point`).toBe(false);
+    expect(shape(e, 'V1', { ...b, qrsOff: s1!.off }), what).toBe('rs');
+  };
+  it('worked: LBBB — QRS ≥ 120, V1 rS with no R′ up to where its S returns to the baseline, a dominant S in V2, no q in I, V5 or V6, R-peak time > 60 ms in V5–V6, T upright in V1–V3 and inverted in V5–V6', () => {
     const e = ecgOf(blocksOf('r6', 'worked')[0].ecg);
     const b = mid(e);
     expect(e.truth!.qrsMs).toBeGreaterThanOrEqual(120);
-    const v1 = qrsSpan(e, 'V1', b);
-    expect(-v1.min).toBeGreaterThan(3 * Math.max(0, v1.max));
-    const s1 = sWave(e, 'V1', b);
-    expect(s1, 'V1 has an S').not.toBeNull();
-    expect(hasRPrime(e, 'V1', { ...b, qrsOff: s1!.off }), 'no R′ in V1 before the J point').toBe(false);
-    expect(shape(e, 'V1', { ...b, qrsOff: s1!.off })).toBe('rs');
+    lbbbV1(e, b, 'worked');
     const v2 = qrsSpan(e, 'V2', b);
     expect(-v2.min, 'V2 dominated by its S').toBeGreaterThan(3 * v2.max);
-    for (const l of ['I', 'V6'] as const) expect(shape(e, l, b).startsWith('q'), l).toBe(false);
+    for (const l of ['I', 'V5', 'V6'] as const) expect(shape(e, l, b).startsWith('q'), l).toBe(false);
+    for (const l of ['V5', 'V6'] as const) expect(rPeakMs(e, l, b), `${l} R-peak time`).toBeGreaterThan(60);
+    for (const l of ['V1', 'V2', 'V3'] as const) expect(tWave(e, l, b), `${l} T`).toBeGreaterThan(MIN_WAVE_MV);
+    for (const l of ['V5', 'V6'] as const) expect(tWave(e, l, b), `${l} T`).toBeLessThan(-MIN_WAVE_MV);
   });
   const v1Waves = (e: Ecg) => {
     const b = mid(e);
@@ -969,22 +993,37 @@ describe('r6: bundle branch block on the tracings', () => {
     expect(qrsSpan(e, 'V6', mid(e)).min).toBeLessThan(-0.1);
     expect(sMs(e, 'V6', mid(e))).toBeGreaterThan(40);
   });
-  it('contrast: on the 12-lead, V6 shows a broad S (> 40 ms) in A (RBBB) and a dominant R with no q in B (LBBB)', () => {
+  it('contrast: B (LBBB) is rS in V1 with a deep S (over 1 mV); on the 12-lead, V6 shows a broad S (> 40 ms) in A (RBBB) and a dominant R with no q in B', () => {
     const c = blocksOf('r6', 'contrast')[0];
     const a = ecgOf(c.left.ecg);
     expect(sMs(a, 'V6', mid(a))).toBeGreaterThan(40);
     const b = ecgOf(c.right.ecg);
     const bb = mid(b);
+    lbbbV1(b, bb, 'contrast B');
+    expect(qrsSpan(b, 'V1', bb).min, 'a deep S in V1').toBeLessThan(-1);
     expect(shape(b, 'V6', bb).startsWith('q')).toBe(false);
     expect(qrsSpan(b, 'V6', bb).max).toBeGreaterThan(3 * -qrsSpan(b, 'V6', bb).min);
   });
-  it('rate-dependent LBBB (width film frame 3): wide beats end shorter cycles than narrow ones; same PR', () => {
+  it('rate-dependent LBBB (width film frame 3): wide beats end shorter cycles than narrow ones and take an LBBB shape (V1 rS, no q and a late R peak in I and V6); same PR; the marks sit on a wide beat', () => {
     const e = frames('r6', 0)[2];
     const beats = e.truth!.beats;
     const cyc = beats.slice(1).map((b, i) => ({ rr: b.qrsOn - beats[i].qrsOn, wide: b.aberrant }));
     expect(Math.max(...cyc.filter((c) => c.wide).map((c) => c.rr))).toBeLessThan(Math.min(...cyc.filter((c) => !c.wide).map((c) => c.rr)));
     const p = prs(e);
     expect(Math.max(...p) - Math.min(...p)).toBeLessThan(5);
+    const wide = beats.filter((b) => b.aberrant);
+    expect(wide.length).toBeGreaterThanOrEqual(2);
+    for (const b of wide) {
+      const at = `wide beat at ${Math.round(b.qrsOn)} ms`;
+      expect(b.qrsOff - b.qrsOn, at).toBeGreaterThanOrEqual(120);
+      lbbbV1(e, b, at);
+      for (const l of ['I', 'V6'] as const) expect(shape(e, l, b).startsWith('q'), `${at} ${l}`).toBe(false);
+      expect(rPeakMs(e, 'V6', b), `${at} V6 R-peak time`).toBeGreaterThan(60);
+    }
+    const [k] = markBeats('r6', 0, 2, 'p');
+    expect(markBeats('r6', 0, 2, 'qrs')).toEqual([k]);
+    expect(beats[k].aberrant).toBe(true);
+    expect(beats[k].kind).toBe('sinus');
   });
   it('incomplete RBBB (width film frame 2): QRS 110–119 ms', () => {
     const t = frames('r6', 0)[1].truth!;
