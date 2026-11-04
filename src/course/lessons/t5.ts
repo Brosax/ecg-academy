@@ -72,12 +72,14 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('定义与默认规则', 'Definition and the default rule', 'Definición y regla por defecto'),
-      body: l(
-        '**室性心动过速（VT）**：≥ 3 个连续的室性搏动、频率 > 100 次/分（心动周期 < 600 ms）。**非持续性**在 30 秒内自行终止；**持续性** = 持续 > 30 秒，或因血流动力学不稳定而需提前终止。单形性室速常见 **120–250 次/分**（用抗心律失常药时可更慢），QRS 通常 ≥ 120 ms（分支性室速可 110–140 ms），节律**基本规则**、可有轻度周期变化（起始时尤然）。\n**默认规则**：宽 QRS 心动过速里室速最常见（约 80%，结构性心脏病中更高），误判的代价最大——室上速的药（维拉帕米！）打在室速上可诱发室颤。所以拿不准时**一律按室速处理**：不稳定 ⇒ 镇静下同步电复律；稳定 ⇒ 按室速用药，并**在心动过速时录一份 12 导联**（事后分析的价值极高）。',
-        '**Ventricular tachycardia (VT)**: >= 3 consecutive ventricular beats at > 100/min (cycle length < 600 ms). **Non-sustained** VT stops by itself within 30 s; **sustained** VT lasts > 30 s, or has to be terminated earlier because of haemodynamic compromise. Monomorphic VT usually runs at **120-250/min** (slower on antiarrhythmics), the QRS is usually >= 120 ms (fascicular VT 110-140 ms), and the rhythm is **essentially regular** with small cycle-length variation, especially at onset.\n**The default rule**: VT is the commonest wide-complex tachycardia (about 80%, more with structural heart disease) and the costliest to miss — a supraventricular drug (verapamil!) thrown at VT can precipitate VF. So when in doubt, **treat as VT**: unstable -> synchronised cardioversion with sedation; stable -> VT treatment, and **record a 12-lead ECG during the tachycardia** (invaluable for later analysis).',
-        '**Taquicardia ventricular (TV)**: >= 3 latidos ventriculares consecutivos a > 100 lpm (longitud de ciclo < 600 ms). La TV **no sostenida** se detiene sola antes de 30 s; la TV **sostenida** dura > 30 s o hay que terminarla antes por inestabilidad hemodinámica. La TV monomórfica suele ir a **120-250 lpm** (más lenta con antiarrítmicos), el QRS suele ser >= 120 ms (la TV fascicular puede medir 110-140 ms) y el ritmo es **esencialmente regular**, con pequeña variación del ciclo, sobre todo al inicio.\n**La regla por defecto**: la TV es la taquicardia de QRS ancho más frecuente (en torno al 80 %, más con cardiopatía estructural) y la más cara de pasar por alto: un fármaco supraventricular (¡verapamilo!) sobre una TV puede desencadenar una FV. Así que, ante la duda, **trátala como TV**: inestable -> cardioversión eléctrica sincronizada con sedación; estable -> tratamiento de la TV, y **graba un ECG de 12 derivaciones durante la taquicardia** (impagable para el análisis posterior).',
+      kind: 'heart',
+      ecg: synth('vt-monomorphic', 684, undefined, 'teaching'),
+      showConduction: true,
+      emphasize: ['lv-apical-inferior', 'lv-mid-inferior'],
+      caption: l(
+        '这个室速起自下壁瘢痕边缘（高亮）。拖动光标：激动从这里出发，不走传导系统，在心肌间缓慢扩布 ⇒ QRS 宽（约 160 ms）。心房按自己的窦性节律跳动。',
+        'This VT starts at the border of the inferior scar (highlighted). Move the cursor: the impulse leaves from there and, off the conduction system, spreads slowly through the muscle → a wide QRS (about 160 ms). The atria keep beating to their own sinus rhythm.',
+        'Esta TV nace en el borde de la cicatriz inferior (resaltada). Mueve el cursor: el impulso sale de ahí y, fuera del sistema de conducción, se propaga despacio por el músculo → QRS ancho (unos 160 ms). Las aurículas siguen latiendo a su propio ritmo sinusal.',
       ),
     },
     {
@@ -148,6 +150,38 @@ const lesson: Lesson = {
             'El verapamilo está contraindicado en la taquicardia de QRS ancho sin diagnóstico (el diltiacem igual); inestable -> cardioversión sincronizada con sedación; una taquicardia idéntica a EV registrados en ritmo sinusal es una TV',
           ),
         },
+        {
+          label: l('例外：分支性室速与用药', 'Exceptions: fascicular VT and drugs', 'Excepciones: TV fascicular y fármacos'),
+          value: l(
+            '分支性室速 QRS 可仅 110–140 ms；用抗心律失常药时室速可慢于 120 次/分；非持续性室速在 30 秒内自行终止',
+            'Fascicular VT can have a QRS of only 110-140 ms; on antiarrhythmic drugs VT can run below 120/min; non-sustained VT stops by itself within 30 s',
+            'La TV fascicular puede tener un QRS de solo 110-140 ms; con antiarrítmicos la TV puede ir por debajo de 120 lpm; la TV no sostenida se detiene sola antes de 30 s',
+          ),
+        },
+        {
+          label: l('差异性传导（对比）', 'Aberrancy (for contrast)', 'Aberrancia (contraste)'),
+          value: l(
+            '既有或频率依赖的束支阻滞；V1 三相 rsR′ 加 V6 qRs，或典型束支阻滞形态 ⇒ 支持差异性传导；与旧图的束支阻滞一致 ⇒ 支持室上速伴原有阻滞',
+            'A pre-existing or rate-dependent bundle branch block; a triphasic rsR′ in V1 with qRs in V6, or a typical bundle-branch-block shape -> favours aberrancy; identical to an old bundle branch block -> supports SVT with a pre-existing block',
+            'Bloqueo de rama preexistente o dependiente de la frecuencia; rsR′ trifásico en V1 con qRs en V6, o morfología típica de bloqueo de rama -> favorece la aberrancia; idéntico a un bloqueo de rama previo -> apoya una TSV con bloqueo preexistente',
+          ),
+        },
+        {
+          label: l('预激性心动过速（对比）', 'Pre-excited tachycardia (for contrast)', 'Taquicardia preexcitada (contraste)'),
+          value: l(
+            '逆向型 AVRT 完全预激，形态上与室速分不开；Steurer 提示室速：V4–V6 主波向下、V2–V6 呈 QR、房室分离；年轻、窦律见 δ 波 ⇒ 想到预激',
+            'Antidromic AVRT is fully pre-excited and indistinguishable from VT on morphology; Steurer tips for VT: mainly negative V4-V6, QR in V2-V6, AV dissociation; a young patient or a delta wave in sinus rhythm -> think of pre-excitation',
+            'La TRAV antidrómica tiene preexcitación máxima y es indistinguible de la TV por morfología; pistas de Steurer para la TV: V4-V6 predominantemente negativas, QR en V2-V6, disociación AV; paciente joven o delta en ritmo sinusal -> piensa en preexcitación',
+          ),
+        },
+        {
+          label: l('起搏与伪差（对比）', 'Paced rhythm and artefact (for contrast)', 'Marcapasos y artefacto (contraste)'),
+          value: l(
+            '起搏：找小而尖的起搏钉（需合适的增益与滤波）；伪差：真 QRS 按原来的 RR 穿过，总有导联干净，患者如常——别电复律（Knight 1999）',
+            'Paced: hunt the small, sharp pacing spikes (they need the right gain and filter); artefact: the true QRS march through at the underlying RR, some lead stays clean and the patient is unchanged — never cardiovert it (Knight 1999)',
+            'Marcapasos: busca las espículas pequeñas y puntiagudas (hacen falta la ganancia y el filtro adecuados); artefacto: los QRS verdaderos avanzan con el RR de base, alguna derivación queda limpia y el paciente está igual: nunca lo cardioviertas (Knight 1999)',
+          ),
+        },
       ],
       source:
         'Al-Khatib SM et al. 2017 AHA/ACC/HRS Guideline for Management of Patients With Ventricular Arrhythmias and the Prevention of Sudden Cardiac Death. Circulation 2018;138:e272-e307; Brugada J et al. 2019 ESC Guidelines for the management of patients with supraventricular arrhythmias. Eur Heart J 2020;41:655-720',
@@ -209,46 +243,174 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('夺获、融合，以及“和旧图对照”', 'Capture, fusion, and "compare with the old ECG"', 'Captura, fusión y «comparar con el ECG antiguo»'),
-      body: l(
-        '房室分离时，偶尔有一个窦性冲动恰好赶上心室可激动：\n- **心室夺获**：一个**窄、准时**的 QRS——P 波经房室结正常下传，夹在两个室速搏动之间应到的位置上；\n- **室性融合波**：形态**介于**窦性 QRS 与室速 QRS 之间——两条波锋同时除极心室。\n两者**近乎确诊室速**，但都不常见，心率越快越难出现；见到一个就足够。\n另一条“免费”的证据是**与既往心电图对照**：窦性心律时记录的室早与现在的心动过速形态**完全一致 ⇒ 室速**（同一个出口）；既往束支阻滞与现在相同 ⇒ 支持室上速伴原有阻滞。所以报告之前先问一句：**有旧图吗？**',
-        'During AV dissociation, an occasional sinus impulse finds the ventricles excitable:\n- a **capture beat**: a **narrow, on-time** QRS — a P conducted normally through the AV node, landing exactly where it was due between two VT beats;\n- a **fusion beat**: a QRS **halfway between** the sinus and the VT shape — both fronts depolarise the ventricle together.\nBoth are **near-diagnostic of VT**, but neither is common, and both get rarer the faster the rate; one is enough.\nThe other "free" piece of evidence is **the old ECG**: PVCs recorded in sinus rhythm with a shape **identical to the present tachycardia => VT** (the same exit); a bundle branch block identical to a previous one supports SVT with a pre-existing block. So before reporting, always ask: **is there an old tracing?**',
-        'Durante la disociación AV, algún impulso sinusal ocasional encuentra los ventrículos excitables:\n- un **latido de captura**: un QRS **estrecho y puntual**, una P conducida con normalidad por el nodo AV que cae justo donde le tocaba entre dos latidos de TV;\n- un **latido de fusión**: un QRS **intermedio** entre el sinusal y el de la TV; ambos frentes despolarizan el ventrículo a la vez.\nAmbos son **casi diagnósticos de TV**, pero ninguno es frecuente, y más raros cuanto más rápida es la taquicardia; con uno basta.\nLa otra evidencia «gratis» es **el ECG antiguo**: unos EV registrados en ritmo sinusal con morfología **idéntica a la taquicardia actual => TV** (la misma salida); un bloqueo de rama idéntico al previo apoya una TSV con bloqueo preexistente. Así que, antes de informar, pregunta siempre: **¿hay un ECG antiguo?**',
+      kind: 'live',
+      scenario: 'vt-monomorphic',
+      seed: 689,
+      dials: [{ id: 'rate' }],
+      view: STRIP,
+      marks: [{ auto: 'blocked-p' }],
+      play: {
+        dial: 'rate',
+        from: 140,
+        to: 200,
+        notes: [
+          {
+            min: 140,
+            max: 150,
+            text: l(
+              'T 与下一个 QRS 之间还有 75–100 ms 平线：分离的窦性 P（约 80 次/分）不时露出来。',
+              'There is still 75–100 ms of flat line between the T and the next QRS: dissociated sinus P waves (about 80/min) surface here and there.',
+              'Aún quedan 75-100 ms de línea plana entre la T y el QRS siguiente: las P sinusales disociadas (unos 80 lpm) asoman aquí y allá.',
+            ),
+          },
+          {
+            min: 185,
+            max: 200,
+            text: l(
+              'T 几乎直接连到下一个 QRS（平线 < 25 ms）：P 几乎全被埋住，看不到房室分离。没看到分离不能排除室速。',
+              'The T runs almost into the next QRS (under 25 ms of flat line): nearly every P is buried and AV dissociation cannot be seen. Not seeing it never excludes VT.',
+              'La T llega casi al QRS siguiente (menos de 25 ms de línea plana): casi todas las P quedan enterradas y no se ve la disociación AV. No verla nunca excluye la TV.',
+            ),
+          },
+        ],
+      },
+      predict: {
+        question: l(
+          '这个室速从 140 加快到 200 次/分，原本穿行其中的窦性 P 波会怎样？',
+          'As this VT speeds up from 140 to 200/min, what happens to the sinus P waves marching through it?',
+          'Si esta TV se acelera de 140 a 200 lpm, ¿qué les pasa a las P sinusales que la atraviesan?',
+        ),
+        options: [
+          l('跟着室速一起加快', 'They speed up with the VT', 'Se aceleran con la TV'),
+          l('被埋进 QRS–T 里', 'They get buried in the QRS–T', 'Quedan enterradas en el QRS-T'),
+          l('变成逆行 P′', 'They turn into retrograde P′', 'Se convierten en P′ retrógradas'),
+        ],
+        answer: 1,
+      },
+      caption: l(
+        '从 140 到 200 次/分，QRS 始终约 160 ms、电轴始终在西北区：频率不决定诊断。房室分离只在体表 20–30% 的室速中看得见。',
+        'From 140 to 200/min the QRS stays about 160 ms and the axis stays northwest: the rate does not make the diagnosis. AV dissociation is visible on the surface in only 20–30% of VTs.',
+        'De 140 a 200 lpm el QRS sigue en unos 160 ms y el eje sigue en el noroeste: la frecuencia no decide el diagnóstico. La disociación AV solo se ve en superficie en el 20-30 % de las TV.',
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('vt-monomorphic', 684, undefined, 'captures'),
+      kind: 'film',
+      title: l('夺获与融合', 'Capture and fusion', 'Captura y fusión'),
       view: { layout: 'strip', lead: 'II', calipers: true },
-      marks: [
-        { auto: 'qrs', beat: 7, label: l('夺获', 'capture', 'captura') },
-        { auto: 'qrs', beat: 9, label: l('融合', 'fusion', 'fusión') },
-        { auto: 'qrs', beat: 22, label: l('夺获', 'capture', 'captura') },
+      frames: [
+        {
+          label: l('分离的 P', 'Dissociated P', 'P disociada'),
+          ecg: synth('vt-monomorphic', 684, undefined, 'captures'),
+          note: l(
+            '窦性 P 以自己的频率（约 68 次/分）穿过宽 QRS，与它没有固定关系：房室分离。',
+            'Sinus P waves march through the wide QRS at their own rate (about 68/min), with no fixed relation to it: AV dissociation.',
+            'Las P sinusales atraviesan los QRS anchos a su propia frecuencia (unos 68 lpm), sin relación fija con ellos: disociación AV.',
+          ),
+          marks: [{ auto: 'blocked-p', label: l('分离的窦性 P', 'dissociated sinus P', 'P sinusal disociada') }],
+        },
+        {
+          label: l('夺获', 'Capture', 'Captura'),
+          ecg: synth('vt-monomorphic', 684, undefined, 'captures'),
+          note: l(
+            '一个窄、直立、稍提前的 QRS：窦性 P 恰好赶上心室可激动 ⇒ 心室夺获。',
+            'A narrow, upright, slightly early QRS: a sinus P found the ventricles excitable → a capture beat.',
+            'Un QRS estrecho, positivo y algo adelantado: una P sinusal encontró los ventrículos excitables → latido de captura.',
+          ),
+          marks: [{ auto: 'qrs', beat: 7, label: l('夺获', 'capture', 'captura') }, { auto: 'qrs', beat: 22, label: l('夺获', 'capture', 'captura') }],
+        },
+        {
+          label: l('融合', 'Fusion', 'Fusión'),
+          ecg: synth('vt-monomorphic', 684, undefined, 'captures'),
+          note: l(
+            '第一个夺获之后两搏，一个形态介于窦性与室速之间的 QRS（约 115 ms）：两条波锋同时除极 ⇒ 融合波。',
+            'Two beats after the first capture, a QRS halfway between the sinus and the VT shape (about 115 ms): both fronts depolarise together → a fusion beat.',
+            'Dos latidos después de la primera captura, un QRS intermedio entre el sinusal y el de la TV (unos 115 ms): ambos frentes despolarizan a la vez → latido de fusión.',
+          ),
+          marks: [{ auto: 'qrs', beat: 9, label: l('融合', 'fusion', 'fusión') }],
+        },
       ],
+      predict: {
+        question: l(
+          '房室分离时，偶有一个窦性冲动恰好赶上心室可以激动。那一搏的 QRS 会是什么样？',
+          'During AV dissociation a sinus impulse occasionally finds the ventricles excitable. What will that beat’s QRS look like?',
+          'Durante la disociación AV, algún impulso sinusal encuentra los ventrículos excitables. ¿Cómo será el QRS de ese latido?',
+        ),
+        options: [
+          l('和室速一样宽', 'As wide as the VT', 'Tan ancho como la TV'),
+          l('窄，像正常下传的搏动', 'Narrow, like a normally conducted beat', 'Estrecho, como un latido conducido con normalidad'),
+          l('没有 QRS', 'There is no QRS', 'No hay QRS'),
+        ],
+        answer: 1,
+      },
       caption: l(
-        '同一个室速，约 146 次/分，窦性约 68 次/分。II 导联里室速 QRS 宽而深倒；约第 3 秒和第 9 秒各有一个**窄、直立、稍提前**的 QRS——窦性 P 恰好赶上心室可激动：**心室夺获**。第一个夺获之后再隔一搏（约第 4 秒），有一搏形态介于两者之间：**融合波**。一个就足以确诊室速——但要在整条节律条里找，它们很少。',
-        'The same VT at about 146/min, with the sinus node at about 68/min. In II the VT complexes are wide and deeply negative; at about 3 s and 9 s there is a **narrow, upright, slightly early** QRS — a sinus P found the ventricles excitable: a **capture beat**. Two beats after the first capture (at about 4 s) one complex has an intermediate shape: a **fusion beat**. One is enough to settle VT — but you have to search the whole strip; they are rare.',
-        'La misma TV a unos 146 lpm, con el nodo sinusal a unos 68 lpm. En II los complejos de la TV son anchos y muy negativos; hacia los 3 s y los 9 s aparece un QRS **estrecho, positivo y algo adelantado**: una P sinusal encontró los ventrículos excitables, un **latido de captura**. Dos latidos después de la primera captura (hacia los 4 s), un complejo tiene una morfología intermedia: un **latido de fusión**. Con uno basta para decidir que es TV, pero hay que buscarlos en toda la tira: son escasos.',
+        '夺获与融合近乎确诊室速，但少见，心率越快越少：要在整条节律条里找，一个就够。',
+        'Capture and fusion beats are near-diagnostic of VT but rare, and rarer the faster the rate: search the whole strip; one is enough.',
+        'Las capturas y las fusiones son casi diagnósticas de TV, pero escasas y más raras cuanto más rápida es: búscalas en toda la tira; con una basta.',
       ),
     },
     {
-      kind: 'text',
-      title: l('四个模仿者与一条红线', 'Four mimics and one red line', 'Cuatro imitadores y una línea roja'),
-      body: l(
-        '宽 QRS 心动过速的模仿者：\n- **室上速伴差异性传导**：既有的或频率依赖的束支阻滞——V1 三相 rsR′、V6 qRs 支持它；典型束支阻滞形态支持差异性传导；\n- **预激性心动过速**（逆向型 AVRT，旁路前传）：完全预激、又宽又规则，形态学上与室速分不开。Steurer 提示室速：V4–V6 主波向下、V2–V6 呈 QR、或见房室分离；年轻人、窦律有 δ波 ⇒ 想到预激；\n- **起搏心律**：找起搏钉——小而尖，需要合适的增益与滤波才看得清；\n- **伪差**（Knight 1999）：真 QRS 以原来的 RR“穿过”伪差，总有某个导联干净，患者状态如常——**别为伪差电复律**。\n**红线**：诊断未明的宽 QRS 心动过速**禁用维拉帕米**（地尔硫卓同理）；不稳定 ⇒ 镇静下**同步电复律**；拿不准 ⇒ 按室速治疗。',
-        'The mimics of a wide-QRS tachycardia:\n- **SVT with aberrancy**: a pre-existing or rate-dependent bundle branch block — a triphasic rsR′ in V1 with qRs in V6 supports it; a typical bundle-branch-block shape supports aberrancy;\n- **pre-excited tachycardia** (antidromic AVRT, antegrade over the pathway): fully pre-excited, wide and regular, indistinguishable from VT on morphology. Steurer tips for VT: mainly negative V4-V6, QR in V2-V6, or AV dissociation; a young patient or a delta wave in sinus rhythm points to pre-excitation;\n- **paced rhythm**: hunt for the pacing spikes — small and sharp, they need the right gain and filter settings;\n- **artefact** (Knight 1999): the true QRS complexes "march through" at the underlying RR, at least one lead stays clean, and the patient is unchanged — **never cardiovert an artefact**.\n**The red line**: verapamil is **contraindicated** in any wide-complex tachycardia of unknown origin (diltiazem likewise); unstable -> **synchronised cardioversion** with sedation; in doubt -> treat as VT.',
-        'Los imitadores de la taquicardia de QRS ancho:\n- **TSV con aberrancia**: un bloqueo de rama preexistente o dependiente de la frecuencia; un rsR′ trifásico en V1 con qRs en V6 la apoya; una morfología típica de bloqueo de rama apoya la aberrancia;\n- **taquicardia preexcitada** (TRAV antidrómica, anterógrada por la vía): preexcitación máxima, ancha y regular, indistinguible de la TV por morfología. Pistas de Steurer para la TV: V4-V6 predominantemente negativas, QR en V2-V6 o disociación AV; paciente joven o delta en ritmo sinusal -> piensa en preexcitación;\n- **ritmo de marcapasos**: busca las espículas, pequeñas y puntiagudas; hacen falta la ganancia y el filtro adecuados;\n- **artefacto** (Knight 1999): los QRS verdaderos «avanzan» con el RR de base a través del artefacto, al menos una derivación queda limpia y el paciente está igual: **nunca cardioviertas un artefacto**.\n**La línea roja**: el verapamilo está **contraindicado** en toda taquicardia de QRS ancho sin diagnóstico (el diltiacem igual); inestable -> **cardioversión sincronizada** con sedación; ante la duda -> trátala como TV.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('preexcited-af', 685),
-      view: { layout: 'strip', lead: 'II', calipers: true },
+      kind: 'film',
+      title: l('四个模仿者', 'Four mimics', 'Cuatro imitadores'),
+      view: { layout: '12x1' },
+      frames: [
+        {
+          label: l('差异性传导', 'Aberrancy', 'Aberrancia'),
+          ecg: synth('pac-aberrant', 690),
+          note: l(
+            '提前的 P′ 后一个宽 QRS（这里只有一搏）：V1 呈 rsR′、V6 呈 qRS，典型右束支阻滞形态 ⇒ 支持差异性传导。',
+            'An early P′, then a wide QRS (a single beat here): rsR′ in V1 and qRS in V6, a typical RBBB shape → favours aberrancy.',
+            'Una P′ precoz y después un QRS ancho (aquí un solo latido): rsR′ en V1 y qRS en V6, morfología típica de bloqueo de rama derecha → favorece la aberrancia.',
+          ),
+          marks: [{ auto: 'qrs', beat: 6, lead: 'V1' }, { auto: 'qrs', beat: 6, lead: 'V6' }],
+        },
+        {
+          label: l('预激', 'Pre-excited', 'Preexcitada'),
+          ecg: synth('preexcited-af', 685),
+          note: l(
+            '快、宽、**不规则**，QRS 逐搏变化，最短 RR 约 235 ms ⇒ 预激伴房颤（t4），走决策树“不规则”那一支。',
+            'Fast, broad, **irregular**, the QRS changing beat to beat, shortest RR about 235 ms → pre-excited AF (t4), the irregular branch of the tree.',
+            'Rápida, ancha, **irregular**, con el QRS cambiando de latido en latido y RR más corto de unos 235 ms → FA preexcitada (t4), la rama irregular del árbol.',
+          ),
+          marks: [{ auto: 'rr' }],
+        },
+        {
+          label: l('起搏', 'Paced', 'Marcapasos'),
+          ecg: synth('paced-vvi', 691),
+          note: l(
+            '每个宽 QRS 前都有一个小而尖的起搏钉 ⇒ 起搏心律。钉很小时，要调好增益与滤波才看得见。',
+            'A small, sharp pacing spike before every wide QRS → a paced rhythm. Small spikes need the right gain and filter to show.',
+            'Una espícula pequeña y puntiaguda antes de cada QRS ancho → ritmo de marcapasos. Las espículas pequeñas necesitan la ganancia y el filtro adecuados.',
+          ),
+          marks: [{ auto: 'pacing-spike' }],
+        },
+        {
+          label: l('伪差', 'Artefact', 'Artefacto'),
+          ecg: synth('motion-artefact', 692),
+          note: l(
+            '右臂电极晃动：I、II、aVR 像室速，但 III 干净，真 QRS 按原来的 RR 穿过 ⇒ 伪差，别电复律。',
+            'A moving right-arm electrode: I, II and aVR look like VT, but III is clean and the true QRS march through at the same RR → artefact; never cardiovert it.',
+            'Un electrodo del brazo derecho en movimiento: I, II y aVR parecen una TV, pero III está limpia y los QRS verdaderos siguen con el mismo RR → artefacto; nunca lo cardioviertas.',
+          ),
+          marks: [{ auto: 'qrs', lead: 'III' }],
+        },
+      ],
+      predict: {
+        question: l(
+          '一条“宽 QRS 心动过速”里，有一个导联完全干净，真 QRS 按原来的 RR 继续出现，患者在和你说话。你先做什么？',
+          'In a "wide-QRS tachycardia" one lead is perfectly clean, the true QRS complexes carry on at the same RR, and the patient is talking to you. What do you do first?',
+          'En una «taquicardia de QRS ancho» una derivación está totalmente limpia, los QRS verdaderos siguen con el mismo RR y el paciente te habla. ¿Qué haces primero?',
+        ),
+        options: [
+          l('同步电复律', 'Synchronised cardioversion', 'Cardioversión sincronizada'),
+          l('先看患者，再查各导联', 'Check the patient, then the other leads', 'Mirar al paciente y después las demás derivaciones'),
+          l('静脉胺碘酮', 'IV amiodarone', 'Amiodarona intravenosa'),
+        ],
+        answer: 1,
+      },
       caption: l(
-        '现在**自己读**：节律规则吗？QRS 宽吗？宽度与形态逐搏变吗？用分规找出最短的 RR。想好判断再看对比卡——这是 t4 的老朋友**预激伴房颤**：快、宽、**不规则**、逐搏变化，最短 RR 可 < 250 ms；房室结阻滞剂禁用。不规则宽 QRS 心动过速走决策树的另一支。',
-        'Now **read it yourself**: is the rhythm regular? Is the QRS wide? Do width and shape change beat to beat? Use the calipers to find the shortest RR. Decide your answer, then move on — this is the old friend from t4, **pre-excited AF**: fast, broad, **irregular**, changing beat to beat, shortest RR < 250 ms possible; AV-nodal blockers are contraindicated. An irregular wide-complex tachycardia takes the other branch of the tree.',
-        'Ahora **léela tú**: ¿el ritmo es regular? ¿El QRS es ancho? ¿Cambian anchura y morfología de latido en latido? Usa el compás para hallar el RR más corto. Decide tu respuesta y continúa: es la vieja conocida de t4, la **FA preexcitada**: rápida, ancha, **irregular**, cambiante de latido en latido, con RR más corto posible < 250 ms; los bloqueadores del nodo AV están contraindicados. La taquicardia de QRS ancho irregular va por la otra rama del árbol.',
+        '宽 QRS 心动过速的四个模仿者。拿不准时一律按室速处理；诊断未明时禁用维拉帕米。',
+        'Four mimics of a wide-QRS tachycardia. In doubt, treat as VT; no verapamil until the diagnosis is made.',
+        'Cuatro imitadores de la taquicardia de QRS ancho. Ante la duda, trátala como TV; nada de verapamilo sin diagnóstico.',
       ),
     },
     {
@@ -266,9 +428,9 @@ const lesson: Lesson = {
         marks: [{ auto: 'qrs' }],
       },
       point: l(
-        '两条都是宽、规则的心动过速，形态学流程经常分不出逆向型 AVRT——它完全预激，模仿室速。真正把两者分开的是**病史**：结构性心脏病或陈旧性心梗 ⇒ 室速优先（最强预测因子）；年轻、窦律见 δ波 ⇒ 预激。Steurer 三条提示室速（V4–V6 负向、V2–V6 呈 QR、房室分离）有帮助——这一对图里它们正好起作用：室速的 V4–V6 以负向为主（V5–V6 呈 QS），逆向型 AVRT 的 V4–V6 为正向；但没有一条形态规则是完美的，病史仍然优先。拿不准时的处理完全一致：**按室速对待**——标签可以以后再改，治疗错误要命。',
-        'Both are wide, regular tachycardias, and the morphology algorithms often cannot separate antidromic AVRT — fully pre-excited, it imitates VT. What separates them is the **history**: structural heart disease or an old MI points to VT (the strongest predictor); a young patient or a delta wave in sinus rhythm points to pre-excitation. The Steurer tips for VT (negative V4-V6, QR in V2-V6, AV dissociation) help, and on this pair they work: V4-V6 are predominantly negative in the VT (QS in V5-V6) and positive in the antidromic AVRT; but no morphology rule is perfect, and the history still comes first. And when in doubt the management is identical: **treat as VT** — the label can be corrected later; a treatment error can be fatal.',
-        'Ambas son taquicardias anchas y regulares, y los algoritmos morfológicos a menudo no separan la TRAV antidrómica, que con preexcitación máxima imita a la TV. Lo que las separa es la **historia**: cardiopatía estructural o infarto antiguo -> TV (el predictor más potente); paciente joven o delta en ritmo sinusal -> preexcitación. Las pistas de Steurer para la TV (V4-V6 negativas, QR en V2-V6, disociación AV) ayudan, y en esta pareja funcionan: V4-V6 son predominantemente negativas en la TV (QS en V5-V6) y positivas en la TRAV antidrómica; pero ninguna regla morfológica es perfecta y la historia sigue siendo lo primero. Y ante la duda el tratamiento es idéntico: **trátala como TV**; la etiqueta se corrige después, el error terapéutico mata.',
+        '两条都宽而规则，形态流程常分不出逆向型 AVRT（完全预激，模仿室速）。真正分开它们的是**病史**：陈旧性心梗或结构性心脏病 ⇒ 室速；年轻、窦律见 δ 波 ⇒ 预激。这一对里 Steurer 提示有用：室速的 V4–V6 以负向为主，AVRT 的为正向。拿不准时：**按室速对待**。',
+        'Both are wide and regular, and the morphology algorithms often cannot separate antidromic AVRT (fully pre-excited, it imitates VT). What separates them is the **history**: an old MI or structural heart disease → VT; a young patient or a delta wave in sinus rhythm → pre-excitation. On this pair the Steurer tips work: V4–V6 are mainly negative in the VT and positive in the AVRT. In doubt: **treat as VT**.',
+        'Ambas son anchas y regulares, y los algoritmos morfológicos a menudo no separan la TRAV antidrómica (con preexcitación máxima, imita a la TV). Lo que las separa es la **historia**: infarto antiguo o cardiopatía estructural → TV; paciente joven o delta en ritmo sinusal → preexcitación. En esta pareja las pistas de Steurer funcionan: V4-V6 son predominantemente negativas en la TV y positivas en la TRAV. Ante la duda: **trátala como TV**.',
       ),
     },
     {
@@ -276,9 +438,9 @@ const lesson: Lesson = {
       ecg: synth('ventricular-flutter', 688),
       view: { layout: 'strip', lead: 'II', calipers: true },
       caption: l(
-        '当宽而规则的心动过速快到**约 300 次/分**、QRS 与 T 融成一个连续的正弦波、再无等电位线——**心室扑动**。这里不再做鉴别流程：用分规量一下周期（约 200 ms），然后直接进入除颤领域（t6）。',
-        'When a wide, regular tachycardia accelerates to **about 300/min** and QRS and T merge into one continuous sine wave with no isoelectric line — **ventricular flutter**. No differential algorithm here: measure the cycle with the calipers (about 200 ms) and move straight to defibrillation territory (t6).',
-        'Cuando una taquicardia ancha y regular alcanza **unos 300 lpm** y el QRS y la T se funden en una onda sinusoidal continua sin línea isoeléctrica: **flutter ventricular**. Aquí no hay algoritmo diferencial: mide el ciclo con el compás (unos 200 ms) y pasa directamente al terreno de la desfibrilación (t6).',
+        '当宽而规则的心动过速快到**约 300 次/分**，QRS 与 T 融成连续的正弦波、没有等电位线：**心室扑动**，周期约 200 ms。这里不再鉴别，直接进入除颤（t6）。',
+        'When a wide, regular tachycardia reaches **about 300/min** and QRS and T merge into one continuous sine wave with no isoelectric line, it is **ventricular flutter**, cycle about 200 ms. No differential here: go straight to defibrillation (t6).',
+        'Cuando una taquicardia ancha y regular llega a **unos 300 lpm** y el QRS y la T se funden en una onda sinusoidal continua sin línea isoeléctrica, es un **flutter ventricular**, con ciclo de unos 200 ms. Aquí no hay diferencial: pasa directamente a la desfibrilación (t6).',
       ),
     },
     { kind: 'check', item: { family: 'wide-tachy', seed: 27 } },
