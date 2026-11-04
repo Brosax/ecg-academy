@@ -747,10 +747,18 @@ describe('h6: ARVC on the tracings', () => {
       expect(e.truth!.findings).toContain('epsilon-wave');
     }
   });
-  it('contrast B (iRBBB): r′ in V1, QRS < 120 ms', () => {
-    const e = ecgOf(blocksOf('h6', 'contrast')[0].right.ecg);
-    expect(hasRPrime(e, 'V1')).toBe(true);
+  it('contrast B (iRBBB): rSR′ in V1 (the R′ taller than the S), QRS < 120 ms; contrast A (ARVC): at most a small terminal r′ (< 2 mm) in V1', () => {
+    const c = blocksOf('h6', 'contrast')[0];
+    const e = ecgOf(c.right.ecg);
+    expect(waves(e, 'V1').map((w) => w.label)).toEqual(['r', 'S', 'R′']);
     expect(e.truth!.qrsMs).toBeLessThan(120);
+    expect(c.right.ecg).toEqual(blocksOf('h6', 'film')[1].frames[1].ecg);
+    const a = waves(ecgOf(c.left.ecg), 'V1');
+    for (const w of a.filter((x) => x.role === 'r' && x.label.includes('′'))) expect(w.mv, w.label).toBeLessThan(0.2);
+  });
+  it('heart: highlights the RV outflow tract and basal free wall the caption names, not the apex', () => {
+    const h = blocksOf('h6', 'heart')[0];
+    expect([...(h.emphasize ?? [])].sort()).toEqual(['rv-basal', 'rv-outflow']);
   });
   it('T-inversion film notes: juvenile T inverted V1–V3 with QRS about 95 ms and no epsilon; RBBB QRS about 140 ms with rsR′ and inverted T in V1; ARVC QRS about 115 ms with T about −7 mm in V1–V2 and inverted in V3', () => {
     const [juvenile, rbbb, arvc] = frames('h6', 0);
@@ -765,10 +773,10 @@ describe('h6: ARVC on the tracings', () => {
     for (const l of ['V1', 'V2'] as const) near(tw(arvc, l).min, -7);
     expect(tInverted(arvc, 'V3')).toBe(true);
   });
-  /** V1 after the QRS bracket: the largest deflection between QRS end + 5 and + 60 ms, its delay, and the level at + 10 ms */
-  function afterQrs(e: Ecg) {
+  /** a lead after the QRS bracket: the largest deflection between QRS end + 5 and + 60 ms, its delay, and the level at + 10 ms */
+  function afterQrs(e: Ecg, lead: StdLead = 'V1') {
     const b = midBeat(e);
-    const a = e.signal.leads.V1;
+    const a = e.signal.leads[lead];
     const fs = e.signal.fs;
     const base = baselineBefore(a, fs, b.qrsOn);
     const v = (ms: number) => a[Math.round(((b.qrsOff + ms) * fs) / 1000)] - base;
@@ -776,6 +784,15 @@ describe('h6: ARVC on the tracings', () => {
     for (let ms = 5; ms <= 60; ms++) if (Math.abs(v(ms)) > Math.abs(v(at))) at = ms;
     return { peak: v(at), atMs: at, at10: v(10) };
   }
+  it('T-inversion film prediction: frame 1 (juvenile) has a QRS under 120 ms and a flat baseline after it in V1–V3; the other options belong to frames 2 (QRS ≥ 120 ms) and 3 (a blip after the QRS)', () => {
+    const [juvenile, rbbb, arvc] = frames('h6', 0);
+    expect(juvenile.truth!.qrsMs).toBeLessThan(120);
+    for (const l of ['V1', 'V2', 'V3'] as const) expect(Math.abs(afterQrs(juvenile, l).peak), l).toBeLessThanOrEqual(0.05);
+    expect(rbbb.truth!.qrsMs).toBeGreaterThanOrEqual(120);
+    expect(arvc.truth!.qrsMs).toBeLessThan(120);
+    expect(afterQrs(arvc).peak).toBeGreaterThan(0.05);
+    expect(blocksOf('h6', 'film')[0].predict!.answer).toBe(0);
+  });
   it('epsilon film notes and prediction: ARVC (the strip shown first) has a blip of about 0.7 mm (under 1 mm) about 30 ms after the QRS bracket, back on the baseline in between; iRBBB has an R′ of about 7 mm inside a QRS of about 115 ms and nothing after it', () => {
     expect(blocksOf('h6', 'film')[1].frames[0].ecg).toEqual(blocksOf('h6', 'film')[0].frames[2].ecg);
     const [arvc, irbbb] = frames('h6', 1);
