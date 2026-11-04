@@ -16,6 +16,10 @@ const synth = (scenario: string, seed: number, dials?: Partial<Record<DialId, nu
 });
 const GRID = { layout: '3x4+1' } as const;
 const STRIP_V2 = { layout: 'strip', lead: 'V2' } as const;
+/** the heart block's type 1 heart; the same request with V1–V2 moved to another intercostal space */
+const TYPE1_REQ = { scenario: 'brugada-type1', seed: 1342, dials: { rate: 70 } } as const;
+const TYPE1: EcgSource = { kind: 'synth', req: TYPE1_REQ };
+const v1v2At = (ics: number) => ({ chest: { V1: { ics, line: 'sternal', side: 'R' }, V2: { ics, line: 'sternal', side: 'L' } } }) as const;
 
 const lesson: Lesson = {
   id: 'h8',
@@ -70,22 +74,13 @@ const lesson: Lesson = {
     },
     {
       kind: 'heart',
-      ecg: synth('brugada-type1', 1342, { rate: 70 }),
+      ecg: TYPE1,
       emphasize: ['rv-outflow'],
       showConduction: true,
       caption: l(
-        'Brugada 图形写在右心室流出道的**心外膜**上：钠电流减损让该处心外膜动作电位的穹顶丢失，局部复极提前且不均一——V1–V2 于是记到穹隆型 ST 抬高和 T 波倒置。播放一个心动周期并注意：传导系统本身完好，这不是真正的右束支阻滞，而是“假性右束支阻滞”。',
-        'The Brugada pattern is written on the **epicardium** of the right ventricular outflow tract: a reduced sodium current lets the action-potential dome drop out there, so repolarisation is early and uneven — and V1–V2 record a coved ST elevation with a negative T. Play one beat and notice: the conduction system itself is intact; this is not a true right bundle-branch block but a "pseudo-RBBB".',
-        'El patrón de Brugada se escribe en el **epicardio** del tracto de salida del ventrículo derecho: una corriente de sodio reducida hace que se pierda la cúpula del potencial de acción en esa zona, la repolarización se adelanta y se hace heterogénea, y V1-V2 registran una elevación del ST en cúpula con T negativa. Reproduce un latido y observa: el sistema de conducción está intacto; no es un bloqueo de rama derecha real, sino un «pseudo-BRD».',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('两种图形，只有一种能诊断', 'Two patterns, only one diagnoses', 'Dos patrones, solo uno diagnostica'),
-      body: l(
-        'Brugada 图形分两型，诊断价值完全不对称：\n- **1 型（穹隆型——唯一可诊断）**：≥1 个右胸导联（V1/V2，第 2–4 肋间记录）ST 段呈穹隆型抬高 **≥2 mm**，继以 **T 波倒置**；可为自发，也可由钠通道阻滞剂诱发。\n- **2 型（马鞍型——本身不诊断）**：J 点抬高（通常 ≥2 mm）伴高起点的 r′，ST 段上凹形回落但悬在基线之上，T 波直立或平坦——它的作用是提醒你去别处找 1 型。\n把 2 型变成答案的途径：发热、钠通道阻滞剂（院内监护下）或**高位肋间导联**（把 V1–V2 记在第 2–3 肋间）常能揭出 1 型。\n**图形与综合征**：无其他心脏病者出现**自发**的 1 型图形即可诊断 Brugada 综合征（2022 ESC）；药物或发热诱发的 1 型图形本身还不够，要再加上心律失常性晕厥、记录到的室颤/多形性室速，或家族史（Brugada 综合征，或 <45 岁原因不明的猝死）。\n识别模仿者：发热、高钾血症、钠通道阻滞剂中毒（见 o4），还有胸廓畸形和右心室缺血——先纠正，再下结论。',
-        'There are two Brugada patterns, and their diagnostic weight is utterly asymmetric:\n- **Type 1 (coved — the only diagnostic one)**: coved ST elevation **≥2 mm** followed by a **negative T** in ≥1 right precordial lead (V1/V2, recorded in the 2nd–4th intercostal space); spontaneous or induced by a sodium-channel blocker.\n- **Type 2 (saddleback — not diagnostic alone)**: J-point elevation (usually ≥2 mm) with a high take-off r′, an ST segment that falls concavely but stays above the baseline, and an upright or flat T — its job is to send you hunting for a type 1.\nThe ways a type 2 becomes an answer: fever, a sodium-channel blocker (in hospital, monitored) or **high intercostal leads** (V1–V2 recorded in the 2nd–3rd ICS) often unmask a type 1.\n**Pattern vs syndrome**: a **spontaneous** type 1 pattern in someone without other heart disease is enough to diagnose Brugada syndrome (2022 ESC); a drug- or fever-induced type 1 pattern is not enough on its own; add arrhythmic syncope, documented VF/polymorphic VT, or a family history (Brugada syndrome, or unexplained sudden death under 45).\nKnow the phenocopies: fever, hyperkalaemia, sodium-channel-blocker toxicity (see o4), also pectus deformity and right ventricular ischaemia — correct first, conclude after.',
-        'Hay dos patrones de Brugada y su peso diagnóstico es del todo asimétrico:\n- **Tipo 1 (en cúpula: el único diagnóstico)**: elevación del ST en cúpula **≥2 mm** seguida de **T negativa** en ≥1 derivación precordial derecha (V1/V2, registradas en el 2.º-4.º espacio intercostal); espontánea o inducida por un bloqueante de los canales del sodio.\n- **Tipo 2 (en silla de montar: no diagnóstica por sí sola)**: elevación del punto J (habitualmente ≥2 mm) con una r′ de inicio alto, un ST que desciende de forma cóncava pero se mantiene sobre la línea de base y una T positiva o plana; su función es enviarte a buscar un tipo 1.\nLas vías por las que un tipo 2 se convierte en respuesta: la fiebre, un bloqueante del canal del sodio (en el hospital, con monitorización) o las **derivaciones intercostales altas** (V1-V2 en el 2.º-3.º espacio) a menudo desenmascaran un tipo 1.\n**Patrón frente a síndrome**: un patrón tipo 1 **espontáneo** en alguien sin otra cardiopatía basta para diagnosticar el síndrome de Brugada (ESC 2022); un patrón tipo 1 inducido por fármacos o fiebre no basta por sí solo; hay que añadir síncope arrítmico, FV/TV polimórfica documentada o antecedentes familiares (síndrome de Brugada, o muerte súbita no explicada antes de los 45 años).\nReconoce las fenocopias: fiebre, hiperpotasemia, intoxicación por bloqueantes del canal del sodio (ver o4), también pectus excavatum e isquemia del ventrículo derecho: corrige primero y concluye después.',
+        '图形写在右心室流出道的**心外膜**上：钠电流减弱，那里动作电位的穹顶丢失，V1–V2 记下穹隆型 ST 抬高和倒置 T。传导系统完好：这是“假性右束支阻滞”。',
+        'The pattern is written on the **epicardium** of the RV outflow tract: a weak sodium current loses the action-potential dome there, so V1–V2 record a coved ST elevation and a negative T. The conduction system is intact: a "pseudo-RBBB".',
+        'El patrón se escribe en el **epicardio** del tracto de salida del VD: una corriente de sodio débil pierde allí la cúpula del potencial de acción, y V1-V2 registran un ST elevado en cúpula y una T negativa. El sistema de conducción está intacto: un «pseudo-BRD».',
       ),
     },
     {
@@ -197,6 +192,57 @@ const lesson: Lesson = {
       ],
     },
     {
+      kind: 'film',
+      title: l('同一颗心脏，V1–V2 换个肋间', 'One heart, V1–V2 one space up or down', 'Un corazón, V1-V2 un espacio arriba o abajo'),
+      view: { layout: '3x4+1', highlightLeads: ['V1', 'V2'] },
+      frames: [
+        {
+          label: l('低一个肋间', 'One space low', 'Un espacio más bajo'),
+          ecg: { kind: 'synth', req: { ...TYPE1_REQ, recording: { placement: v1v2At(5) } } },
+          note: l(
+            'V1–V2 贴在第 5 肋间：J 点只抬高约 1 mm，没有 ≥2 mm 的穹隆。1 型图形就这样被漏掉。',
+            'V1–V2 in the 5th intercostal space: the J point is up only about 1 mm, with no coved ST of ≥2 mm. This is how a type 1 is missed.',
+            'V1-V2 en el 5.º espacio intercostal: el punto J solo sube unos 1 mm y no hay cúpula de ≥2 mm. Así se pasa por alto un tipo 1.',
+          ),
+          marks: [{ auto: 'j', lead: 'V2' }],
+        },
+        {
+          label: l('第 4 肋间', '4th space', '4.º espacio'),
+          ecg: TYPE1,
+          note: l(
+            '标准位置：J 点约 3.5 mm，ST 一路下斜进入倒置 T（约 4 mm）：1 型 Brugada 图形。',
+            'Standard position: the J point is about 3.5 mm up and the ST slopes down into a negative T (about 4 mm): the type 1 Brugada pattern.',
+            'Posición estándar: el punto J sube unos 3,5 mm y el ST desciende hasta una T negativa (unos 4 mm): el patrón de Brugada tipo 1.',
+          ),
+          marks: [{ auto: 'j', lead: 'V2' }, { auto: 't', lead: 'V2' }],
+        },
+        {
+          label: l('高一个肋间', 'One space high', 'Un espacio más alto'),
+          ecg: { kind: 'synth', req: { ...TYPE1_REQ, recording: { placement: v1v2At(3) } } },
+          note: l(
+            '同一颗心脏，V1–V2 移到第 3 肋间、更贴近流出道：J 点约 5–7 mm，T 更深。高位导联能揭出并放大图形。',
+            'Same heart, V1–V2 in the 3rd intercostal space, closer to the outflow tract: the J point is about 5–7 mm up and the T deeper. High leads unmask and enlarge the pattern.',
+            'Mismo corazón, V1-V2 en el 3.er espacio intercostal, más cerca del tracto de salida: el punto J sube unos 5-7 mm y la T es más profunda. Las derivaciones altas desenmascaran y agrandan el patrón.',
+          ),
+          marks: [{ auto: 'j', lead: 'V2' }, { auto: 't', lead: 'V2' }],
+        },
+      ],
+      predict: {
+        question: l(
+          '把 V1–V2 往上移一个肋间，更贴近右心室流出道。穹隆型 ST 会怎样？',
+          'Move V1–V2 one space up, closer to the RV outflow tract. What happens to the coved ST?',
+          'Sube V1-V2 un espacio, más cerca del tracto de salida del VD. ¿Qué le pasa al ST en cúpula?',
+        ),
+        options: [l('变高', 'It grows', 'Crece'), l('变低', 'It shrinks', 'Disminuye'), l('不变', 'No change', 'No cambia')],
+        answer: 0,
+      },
+      caption: l(
+        '怀疑 Brugada 时把 V1–V2 记在第 2–3 肋间；2 型马鞍型本身不诊断，要在高位导联、发热时或监护下药物激发中去找 1 型。',
+        'When Brugada is suspected, record V1–V2 in the 2nd–3rd intercostal spaces; a type 2 saddleback diagnoses nothing alone, so hunt the type 1 in high leads, during fever or in a monitored drug challenge.',
+        'Ante la sospecha de Brugada, registra V1-V2 en el 2.º-3.er espacio intercostal; un tipo 2 en silla de montar no diagnostica por sí solo: busca el tipo 1 en derivaciones altas, con fiebre o en una prueba farmacológica monitorizada.',
+      ),
+    },
+    {
       kind: 'contrast',
       title: l('马鞍型 vs rSr′：V1 之辩', 'Saddleback vs rSr′: the V1 debate', 'Silla de montar frente a rSr′: el debate de V1'),
       view: GRID,
@@ -222,15 +268,6 @@ const lesson: Lesson = {
         '两个“晚到的右向力量”都写在 V1，裁决要看三处：**r′ 的形状**——马鞍型宽而圆钝，iRBBB 窄而尖；**β 角与三角形**——马鞍型 >58°，且 r′ 顶点下方 5 mm 处的底边 ≥3.5 mm，iRBBB 的三角形又窄又高；**V6/I 的终末 S**——右束支阻滞一定有，Brugada 没有（假性右束支阻滞）。三查之后，rSr′ 就不会再被误叫成 Brugada。',
         'Both "late rightward forces" write themselves in V1; the verdict lives in three places: the **shape of the r′** — broad and rounded in the saddleback, narrow and sharp in iRBBB; the **β angle and triangle** — >58° in the saddleback, with a base ≥3.5 mm measured 5 mm below the r′ apex, whereas the iRBBB triangle is tall and narrow; and the **terminal S in V6/I** — always present in RBBB, absent in Brugada (pseudo-RBBB). After those three checks an rSr′ will not be mislabelled Brugada again.',
         'Ambas «fuerzas derechas tardías» se escriben en V1; el veredicto vive en tres sitios: la **forma de la r′** (ancha y redondeada en la silla de montar, estrecha y puntiaguda en la BIRD); el **ángulo β y el triángulo** (>58° en la silla de montar, con base ≥3,5 mm medida 5 mm por debajo del vértice de la r′, mientras que el triángulo de la BIRD es alto y estrecho) y la **S terminal en V6/I** (siempre presente en el BRD, ausente en el Brugada, pseudo-BRD). Con esas tres comprobaciones, un rSr′ ya no volverá a etiquetarse de Brugada.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('另一种 J 波：早期复极', 'The other J wave: early repolarisation', 'La otra onda J: repolarización precoz'),
-      body: l(
-        '下壁和侧壁导联也有 J 波，含义完全不同。**早期复极图形（ERP）**：QRS 终末——高大 R 波的降支——有切迹（J 波）或粗钝，其顶点或起点（Jp）在 **≥2 个相邻下壁和/或侧壁导联 ≥1 mm**（V1–V3 不算），QRS <120 ms；ST 段抬高**不是**必要条件。\n单纯 V1–V4 的上凹形 ST 抬高（健康年轻男性常见）**不是 ERP**，而是“正常（男性型）ST 抬高”，界值按年龄和性别：V2–V3 <2.5 mm（<40 岁男性）、<2 mm（≥40 岁男性）、<1.5 mm（女性），其余导联 <1 mm。\n**无症状 = 良性**：ERP 在普通人群和运动员中都是常见正常发现（见 h9），不需要任何进一步检查。\n**早期复极综合征（ERS）**= ERP + 从原因不明的室颤/多形性室速中复苏。较高危特征：Jp ≥2 mm、下壁或广泛分布、J 点后 ST 水平或下斜、J 波动态变化——这是幸存者的风险语言，不是无症状者的检查指征。',
-        'The inferior and lateral leads have J waves too, with an entirely different meaning. **Early repolarisation pattern (ERP)**: a notch (J wave) or a slur at the end of the QRS, on the downslope of a prominent R, whose peak or onset (Jp) is **≥1 mm in ≥2 contiguous inferior and/or lateral leads** (V1–V3 do not count), with QRS <120 ms; ST elevation is **not** required.\nConcave ST elevation confined to V1–V4, common in healthy young men, is **not ERP** but "normal (male-pattern) ST elevation", with age- and sex-specific limits: in V2–V3 <2.5 mm (men <40 y), <2 mm (men ≥40 y), <1.5 mm (women); <1 mm in the other leads.\n**No symptoms = benign**: ERP is a common normal finding in the general population and in athletes (see h9) and needs no further testing whatsoever.\n**Early repolarisation syndrome (ERS)** = ERP + resuscitation from unexplained VF/polymorphic VT. Higher-risk features: Jp ≥2 mm, inferior or global distribution, a horizontal or descending ST after the J point, dynamic J waves — that vocabulary belongs to survivors, not to a work-up trigger in the asymptomatic.',
-        'Las derivaciones inferiores y laterales también tienen ondas J, con un significado del todo distinto. **Patrón de repolarización precoz (ERP)**: una muesca (onda J) o un empastamiento al final del QRS, en la rama descendente de una R prominente, cuyo vértice o inicio (Jp) alcanza **≥1 mm en ≥2 derivaciones contiguas inferiores y/o laterales** (V1-V3 no cuentan), con QRS <120 ms; la elevación del ST **no** es necesaria.\nLa elevación cóncava del ST limitada a V1-V4, frecuente en varones jóvenes sanos, **no es ERP**, sino «elevación normal del ST (patrón masculino)», con límites por edad y sexo: en V2-V3 <2,5 mm (varones <40 años), <2 mm (varones ≥40 años), <1,5 mm (mujeres); <1 mm en las demás derivaciones.\n**Sin síntomas = benigno**: el ERP es un hallazgo normal frecuente en la población general y en los deportistas (ver h9) y no exige ninguna prueba adicional.\n**Síndrome de repolarización precoz (ERS)** = ERP + reanimación de una FV/TV polimórfica no explicada. Rasgos de mayor riesgo: Jp ≥2 mm, distribución inferior o global, ST horizontal o descendente tras el punto J, ondas J dinámicas: ese vocabulario pertenece a los supervivientes, no a una indicación de estudio en asintomáticos.',
       ),
     },
     {
@@ -278,14 +315,35 @@ const lesson: Lesson = {
         'Macfarlane PW et al. J Am Coll Cardiol 2015;66:470-477; Antzelevitch C et al. J-wave syndromes expert consensus. Heart Rhythm 2016;13:e295-e310; Zeppenfeld K et al. 2022 ESC Guidelines for ventricular arrhythmias and the prevention of sudden cardiac death. Eur Heart J 2022;43:3997-4126',
     },
     {
-      kind: 'ecg',
-      ecg: synth('early-repolarization', 1346, { rate: 62 }),
-      view: GRID,
-      marks: [{ auto: 'j', lead: 'II' }, { auto: 't', lead: 'II' }],
+      kind: 'film',
+      title: l('下壁和侧壁的 J 波：过不过 1 mm', 'Inferolateral J waves: over 1 mm or not', 'Ondas J inferolaterales: ¿pasan de 1 mm?'),
+      view: { layout: '3x4+1', highlightLeads: ['II', 'III', 'aVF', 'V4', 'V5', 'V6'] },
+      frames: [
+        {
+          label: l('J 点低', 'Low J', 'J baja'),
+          ecg: synth('early-repolarization', 1346, { rate: 62, st: 0.06 }),
+          note: l(
+            'II、III、aVF 和 V4–V6 的 J 点都不到 1 mm：不够早期复极图形。',
+            'The J point is under 1 mm in II, III, aVF and V4–V6: not an early repolarisation pattern.',
+            'El punto J no llega a 1 mm en II, III, aVF ni V4-V6: no es un patrón de repolarización precoz.',
+          ),
+          marks: [{ auto: 'j', lead: 'II' }, { auto: 'j', lead: 'V5' }],
+        },
+        {
+          label: l('早期复极', 'Early repolarisation', 'Repolarización precoz'),
+          ecg: synth('early-repolarization', 1346, { rate: 62 }),
+          note: l(
+            '同一颗心脏：R 降支末端的 J 点（切迹或顿挫）在 II、III、aVF 和 V4–V6 抬高约 1–1.6 mm：下侧壁早期复极图形。无症状即良性。',
+            'Same heart: the J point at the end of the R downslope (notch or slur) is up about 1–1.6 mm in II, III, aVF and V4–V6: an inferolateral early repolarisation pattern. Benign without symptoms.',
+            'Mismo corazón: el punto J al final de la rama descendente de la R (muesca o empastamiento) sube unos 1-1,6 mm en II, III, aVF y V4-V6: patrón de repolarización precoz inferolateral. Benigno sin síntomas.',
+          ),
+          marks: [{ auto: 'j', lead: 'II' }, { auto: 'j', lead: 'V5' }],
+        },
+      ],
       caption: l(
-        '24 岁男性，体检心电图：II 导联 J 点抬高，R 波降支带切迹，T 波高耸——J 点在 II、III、aVF 和 V4–V6 约 1–1.5 mm（≥2 个相邻的下壁和侧壁导联：下侧壁型）；V1–V3 的抬高（<2.5 mm，24 岁男性的正常范围）不参与定义。无任何症状：这是**良性**早期复极图形，不需要检查，更不需要“除外室颤”。',
-        'A 24-year-old man, routine ECG: J-point elevation with a notch on the R downslope and a tall T in lead II — the J point sits about 1–1.5 mm up in II, III and aVF and in V4–V6 (≥2 contiguous inferior and lateral leads: an inferolateral pattern); the elevation in V1–V3 (<2.5 mm, normal for a man of 24) takes no part in the definition. No symptoms of any kind: this is a **benign** early repolarisation pattern; it needs no tests, and certainly no "rule-out VF".',
-        'Un varón de 24 años, ECG de rutina: elevación del punto J con muesca en la rama descendente de la R y T alta en la derivación II; el punto J está elevado alrededor de 1-1,5 mm en II, III y aVF y en V4-V6 (≥2 derivaciones contiguas inferiores y laterales: patrón inferolateral); la elevación de V1-V3 (<2,5 mm, normal en un varón de 24 años) no participa en la definición. Sin síntoma alguno: se trata de un patrón de repolarización precoz **benigno**; no exige pruebas y desde luego no un «descarte de FV».',
+        '早期复极看的是下壁和侧壁（≥2 个相邻导联 Jp ≥1 mm），V1–V3 不算。只有从原因不明的室颤中复苏的人才叫早期复极综合征。',
+        'Early repolarisation is read in the inferior and lateral leads (Jp ≥1 mm in ≥2 contiguous leads); V1–V3 do not count. Only a survivor of unexplained VF has early repolarisation syndrome.',
+        'La repolarización precoz se lee en las derivaciones inferiores y laterales (Jp ≥1 mm en ≥2 contiguas); V1-V3 no cuentan. Solo quien sobrevive a una FV no explicada tiene síndrome de repolarización precoz.',
       ),
     },
     {
@@ -295,10 +353,44 @@ const lesson: Lesson = {
       dials: [{ id: 'st', label: l('J 点抬高', 'J-point elevation', 'Elevación del punto J') }],
       view: STRIP_V2,
       marks: [{ auto: 'j', lead: 'V2' }],
+      play: {
+        dial: 'st',
+        from: 0.06,
+        to: 0.14,
+        notes: [
+          {
+            min: 0.06,
+            max: 0.1,
+            text: l(
+              'V2 的 ST 抬高约 0.6–1 mm（读数 mV × 10），T 直立：远低于年轻男性 2.5 mm 的界值。',
+              'The ST in V2 is up about 0.6–1 mm (the read-out in mV × 10) with an upright T: far under the 2.5 mm limit of a young man.',
+              'El ST de V2 sube unos 0,6-1 mm (la lectura en mV × 10) con T positiva: muy por debajo del límite de 2,5 mm de un varón joven.',
+            ),
+          },
+          {
+            min: 0.11,
+            max: 0.14,
+            text: l(
+              'V2 升到约 1.1–1.4 mm，T 仍直立、ST 不呈穹隆：男性型 ST 抬高，不是 Brugada，也不算早期复极。',
+              'V2 rises to about 1.1–1.4 mm, the T still upright and the ST not coved: male-pattern ST elevation, not Brugada and not early repolarisation.',
+              'V2 sube a unos 1,1-1,4 mm, con la T aún positiva y el ST sin cúpula: elevación del ST de patrón masculino, ni Brugada ni repolarización precoz.',
+            ),
+          },
+        ],
+      },
+      predict: {
+        question: l(
+          '滑杆最高是 0.14 mV。V2 的 ST 会达到年轻男性 2.5 mm 的界值吗？',
+          'The dial tops out at 0.14 mV. Will the ST in V2 ever reach the 2.5 mm limit of a young man?',
+          'El control llega como máximo a 0,14 mV. ¿Alcanzará el ST de V2 el límite de 2,5 mm de un varón joven?',
+        ),
+        options: [l('会', 'Yes', 'Sí'), l('不会：0.14 mV 只有 1.4 mm', 'No: 0.14 mV is only 1.4 mm', 'No: 0,14 mV son solo 1,4 mm'), l('只在心率快时会', 'Only at fast rates', 'Solo con frecuencia alta')],
+        answer: 1,
+      },
       caption: l(
-        '移动滑杆，整个图形一起变大变小：V2 的 J 点抬高在约 0.6–1.3 mm 之间摆动，下壁和侧壁导联的 J 波随之起落（II 约 0.8–1.6 mm），而 V6 的 T 波始终远高于 ST（ST/T 比值 <0.25）。无论滑到哪里——都远低于年轻男性 V2–V3 可达的 2.5 mm——它在无症状者身上仍是良性图形；“Jp ≥2 mm + 下壁/广泛 + ST 水平”那套风险语言属于从室颤中复苏过来的患者——单凭心电图永远不能把良性变成综合征。',
-        'Move the dial and the whole pattern grows and shrinks together: the J-point elevation in V2 swings between about 0.6 and 1.3 mm, the inferior and lateral J waves rise and fall with it (II about 0.8–1.6 mm), and the T wave in V6 stays far taller than the ST (ST/T ratio < 0.25). Wherever it sits — well under the 2.5 mm a young man may show in V2–V3 — it remains a benign pattern in an asymptomatic person; the "Jp ≥2 mm + inferior/global + horizontal ST" risk vocabulary belongs to patients resuscitated from VF — the ECG alone never turns benign into syndrome.',
-        'Mueve el control y todo el patrón crece y mengua a la vez: la elevación del punto J en V2 oscila entre unos 0,6 y 1,3 mm, las ondas J inferiores y laterales suben y bajan con ella (II, unos 0,8-1,6 mm) y la onda T de V6 sigue siendo mucho más alta que el ST (cociente ST/T < 0,25). Esté donde esté —muy por debajo de los 2,5 mm que puede mostrar un varón joven en V2-V3—, sigue siendo un patrón benigno en una persona asintomática; el vocabulario de riesgo «Jp ≥2 mm + inferior/global + ST horizontal» pertenece a pacientes reanimados de una FV: el ECG por sí solo nunca convierte lo benigno en síndrome.',
+        '移动滑杆，整个图形一起变大变小。无症状者无论滑到哪里都是良性；单凭心电图永远不能把良性图形变成综合征。',
+        'Move the dial and the whole pattern grows and shrinks together. In an asymptomatic person it stays benign wherever it sits; the ECG alone never turns a benign pattern into a syndrome.',
+        'Mueve el control y todo el patrón crece y mengua a la vez. En una persona asintomática sigue siendo benigno esté donde esté; el ECG por sí solo nunca convierte un patrón benigno en síndrome.',
       ),
     },
     { kind: 'check', item: { family: 'substrates', seed: 10 } },
@@ -327,6 +419,11 @@ const lesson: Lesson = {
           '对无症状者的 ERP 大做检查：ERP 在无症状人群中是常见的良性变异（运动员中也是正常发现）；ERS 只属于从原因不明室颤中复苏的患者。',
           'Over-investigating ERP in an asymptomatic person: ERP is a common benign variant in people without symptoms (a normal finding in athletes too); ERS belongs only to survivors of unexplained VF.',
           'Someter a un maremágnum de pruebas el ERP de una persona asintomática: el ERP es una variante benigna frecuente en personas sin síntomas (también hallazgo normal en deportistas); el ERS solo pertenece a los supervivientes de una FV no explicada.',
+        ),
+        l(
+          '把下侧壁的 J 点抬高读成心包炎：早期复极时 V6 的 T 远高于 ST（ST/T 比值 <0.25）；比值更大才提示心包炎。',
+          'Reading inferolateral J-point elevation as pericarditis: in early repolarisation the T in V6 stays far taller than the ST (ST/T ratio < 0.25); a larger ratio points to pericarditis.',
+          'Leer como pericarditis una elevación del punto J inferolateral: en la repolarización precoz la T de V6 sigue siendo mucho más alta que el ST (cociente ST/T < 0,25); un cociente mayor orienta a pericarditis.',
         ),
         l(
           '给 Brugada 患者开钠通道阻滞剂：氟卡尼、阿义马林、普鲁卡因胺会揭出并加重图形，还可能诱发室颤；开处方前先想起这份心电图（见 o4）。',

@@ -15,6 +15,7 @@ const synth = (scenario: string, seed: number, dials?: Partial<Record<DialId, nu
   req: { scenario, seed, ...(variant ? { variant } : {}), ...(dials ? { dials } : {}) },
 });
 const GRID = { layout: '3x4+1' } as const;
+const RVH_WORKED = synth('rvh', 1243, { rate: 80 });
 
 const lesson: Lesson = {
   id: 'h3',
@@ -73,18 +74,9 @@ const lesson: Lesson = {
       showConduction: true,
       emphasize: ['rv-basal', 'rv-mid', 'rv-apical', 'rv-outflow'],
       caption: l(
-        '播放一个心动周期。正常的右心室壁薄，除极力量被厚得多的左心室"接管"，V1 因此写下一个小 r 加深 S（rS）。肺动脉高压使右心室肥厚——图中高亮的四个右心室节段——向量重新指向右、前方，正对 V1：R 波长高，V5–V6 记下深 S 波，肢体导联则表现为电轴右偏。同一个向量，三处落笔。',
-        'Play one beat. The normal RV wall is thin, so its depolarisation force is swamped by the much thicker left ventricle, and V1 writes a small r with a deep S (rS). Pulmonary hypertension hypertrophies the right ventricle — the four highlighted RV segments — and the vector swings rightward and forward, straight at V1: the R grows, V5–V6 record a deep S, and the limb leads show right axis deviation. One vector, three places it is written down.',
-        'Reproduce un latido. La pared del VD normal es fina, su fuerza de despolarización queda eclipsada por el ventrículo izquierdo, mucho más grueso, y V1 escribe una r pequeña con una S profunda (rS). La hipertensión pulmonar hipertrofia el ventrículo derecho —los cuatro segmentos destacados— y el vector gira hacia la derecha y hacia delante, de frente a V1: la R crece, V5-V6 registran una S profunda y las derivaciones de extremidades muestran desviación derecha del eje. Un solo vector, escrito en tres sitios.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('先走阶梯，再谈标准', 'The ladder first, the criteria second', 'Primero la escalera, después los criterios'),
-      body: l(
-        '右心室肥厚没有单条金标准，只有一组互相支持的征象；而下结论之前必须先排除同样能"抬高 V1 的 R"的其他原因：\n- **右束支阻滞**：QRS ≥120 ms，V1 呈 rsR′——先看宽度；\n- **后壁心肌梗死**：下壁导联有病理性 Q，V1 的 T 直立（与右心室肥厚的 T 倒置相反）；\n- **WPW 预激**：PR 短、δ 波；\n- **肥厚型心肌病**、**右位心或电极放错**（看 I 导联和胸导联 R 波递增）、**儿童**（右心室占优势是正常的）。\n检查四样东西再签"右心室肥厚"：电轴、QRS 时限、PR 与 δ 波、T 波方向。',
-        'No single criterion is a gold standard for RVH — only a constellation of mutually supporting signs — and before concluding you must exclude the other causes that also "lift the R in V1":\n- **RBBB**: QRS ≥120 ms with rsR′ in V1 — check the width first;\n- **posterior MI**: pathological Q waves in the inferior leads with an **upright** T in V1 (the opposite of RVH, which inverts it);\n- **WPW**: short PR, delta wave;\n- **HCM**, **dextrocardia or misplaced leads** (check lead I and the precordial R progression), and **children** (RV dominance is normal).\nCheck four things before signing "RVH": axis, QRS width, PR/delta, and the T direction.',
-        'No existe un criterio único de oro para la HVD, solo un conjunto de signos que se apoyan entre sí, y antes de concluir hay que excluir las demás causas que también «elevan la R en V1»:\n- **bloqueo de rama derecha**: QRS ≥120 ms con rsR′ en V1; mira primero la anchura;\n- **infarto posterior**: ondas Q patológicas en las derivaciones inferiores con T **positiva** en V1 (lo contrario de la HVD, que la invierte);\n- **WPW**: PR corto, onda delta;\n- **miocardiopatía hipertrófica**, **dextrocardia o electrodos mal colocados** (mira la derivación I y la progresión de la R precordial) y **niños** (el dominio del VD es normal).\nComprueba cuatro cosas antes de firmar «HVD»: eje, anchura del QRS, PR/delta y dirección de la T.',
+        '播放一个心动周期。正常右心室壁薄，力量被左心室盖过，V1 写成 rS。右心室肥厚后向量转向右前、正对 V1：V1 的 R 长高，V5–V6 出现深 S，肢体导联电轴右偏。',
+        'Play one beat. A thin normal RV is outweighed by the LV, so V1 writes rS. A hypertrophied RV swings the vector right and forward, straight at V1: the R in V1 grows, V5–V6 get a deep S and the limb leads show right axis deviation.',
+        'Reproduce un latido. Un VD normal y fino queda eclipsado por el VI, y V1 escribe rS. Un VD hipertrofiado gira el vector a la derecha y adelante, de frente a V1: la R de V1 crece, V5-V6 ganan una S profunda y las derivaciones de miembros muestran eje derecho.',
       ),
     },
     {
@@ -158,7 +150,7 @@ const lesson: Lesson = {
     {
       kind: 'worked',
       title: l('在一份图上走完这条阶梯', 'Walk the ladder on one tracing', 'Recorre la escalera en un solo trazado'),
-      ecg: synth('rvh', 1243, { rate: 80 }),
+      ecg: RVH_WORKED,
       view: GRID,
       steps: [
         {
@@ -203,25 +195,96 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'ecg',
-      ecg: synth('rvh', 1244, { rate: 74 }, 'strain'),
-      view: { layout: '3x4+1', highlightLeads: ['V1', 'V2', 'III', 'aVF'] },
-      marks: [{ auto: 'r', lead: 'V1' }, { auto: 't', lead: 'V1' }, { auto: 't', lead: 'V2' }, { auto: 't', lead: 'III' }],
+      kind: 'film',
+      title: l('V1 的 R 高：一级一级排除', 'A tall R in V1: one rung at a time', 'R alta en V1: peldaño a peldaño'),
+      view: { layout: '3x4+1', highlightLeads: ['V1'] },
+      frames: [
+        {
+          label: l('右束支阻滞', 'RBBB', 'Bloqueo de rama derecha'),
+          ecg: synth('rbbb', 1248),
+          note: l(
+            'V1 呈 rsR′，R′ 约 11 mm；但 QRS 约 140 ms（≥120 ms）：右束支阻滞。第一级先看宽度。',
+            'V1 shows rsR′ with an R′ of about 11 mm, but the QRS is about 140 ms (≥120 ms): RBBB. The first rung is the width.',
+            'V1 muestra rsR′ con una R′ de unos 11 mm, pero el QRS dura unos 140 ms (≥120 ms): bloqueo de rama derecha. El primer peldaño es la anchura.',
+          ),
+          marks: [{ auto: 'qrs', lead: 'V1' }],
+        },
+        {
+          label: l('预激', 'Pre-excitation', 'Preexcitación'),
+          ecg: synth('wpw', 1249),
+          note: l(
+            'V1 的 R 略大于 S；但 PR 只有约 115 ms，QRS 起始是缓慢的 δ 波：预激，不是右心室肥厚。',
+            'The R in V1 just beats the S, but the PR is only about 115 ms and the QRS starts with a slow delta wave: pre-excitation, not RVH.',
+            'La R de V1 supera por poco a la S, pero el PR dura solo unos 115 ms y el QRS empieza con una onda delta lenta: preexcitación, no HVD.',
+          ),
+          marks: [{ auto: 'pr', lead: 'II' }, { auto: 'delta', lead: 'V1' }],
+        },
+        {
+          label: l('右心室肥厚', 'RVH', 'HVD'),
+          ecg: RVH_WORKED,
+          note: l(
+            'QRS 窄（约 95 ms）、PR 160 ms、无 δ 波，电轴约 +120°，V1 的 R 约 18 mm：阶梯走完，才是右心室肥厚。',
+            'Narrow QRS (about 95 ms), PR 160 ms, no delta, axis about +120°, R in V1 about 18 mm: only after the ladder is it RVH.',
+            'QRS estrecho (unos 95 ms), PR de 160 ms, sin delta, eje de unos +120° y R de unos 18 mm en V1: solo tras la escalera es HVD.',
+          ),
+          marks: [{ auto: 'r', lead: 'V1' }],
+        },
+      ],
+      predict: {
+        question: l(
+          'V1 的 R 很高，QRS 140 ms。哪一项测量最先把右心室肥厚换成别的诊断？',
+          'A tall R in V1 and a QRS of 140 ms. Which measurement first swaps RVH for another diagnosis?',
+          'R alta en V1 y un QRS de 140 ms. ¿Qué medición cambia primero la HVD por otro diagnóstico?',
+        ),
+        options: [l('QRS 时限', 'QRS width', 'Anchura del QRS'), l('PR 间期', 'PR interval', 'Intervalo PR'), l('V1 的 R 高度', 'R height in V1', 'Altura de la R en V1')],
+        answer: 0,
+      },
       caption: l(
-        '同一份右心室肥厚，加上**继发性ST-T改变**：V1–V2 的 T 深而不对称地倒置（约 7–9 mm），到 V3 只剩浅浅一点（约 1 mm），III 也倒置、aVF 浅倒——都发生在 R 波占优的导联；常可伴 ST 压低，并可延伸到 V3–V4。这与左心室肥厚的继发性改变是同一个机制、相反的方向。现用报告用语是"**右心室肥厚伴继发性ST-T改变**"——"劳损（strain）"和"收缩期负荷过重"都不再使用，也不要从心电图推断压力还是容量负荷。',
-        'The same RVH, now with a **secondary ST–T abnormality**: a deep, asymmetric T inversion in V1–V2 (about 7–9 mm) that fades to a trace in V3 (about 1 mm), with an inverted T in III and a shallow one in aVF — always in the leads where the R dominates; ST depression often accompanies it, and it can extend to V3–V4. The mechanism is the same as in LVH, pointing the other way. The current report wording is "**RVH with secondary ST–T abnormality**" — "strain" and "systolic overload" are out, and pressure vs volume load cannot be inferred from the ECG.',
-        'La misma HVD, ahora con una **alteración secundaria del ST-T**: inversión profunda y asimétrica de la T en V1-V2 (unos 7-9 mm) que en V3 queda en un esbozo (alrededor de 1 mm), con T negativa también en III y levemente negativa en aVF; siempre en las derivaciones donde domina la R; a menudo la acompaña un descenso del ST y puede extenderse a V3-V4. El mecanismo es el mismo que en la HVI, apuntando en sentido contrario. El informe actual es «**HVD con alteración secundaria del ST-T**»; «sobrecarga» («strain») y «sobrecarga sistólica» están en desuso, y la sobrecarga de presión o de volumen no puede deducirse del ECG.',
+        '签“右心室肥厚”之前查四样：QRS 宽度、PR 与 δ 波、电轴、V1 的 T 方向（后壁心梗的 T 直立）。',
+        'Before signing "RVH" check four things: QRS width, PR and delta wave, axis, and the T in V1 (upright in posterior MI).',
+        'Antes de firmar «HVD» comprueba cuatro cosas: anchura del QRS, PR y onda delta, eje y la T de V1 (positiva en el infarto posterior).',
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('copd-pattern', 1245, { rate: 84 }),
-      view: { layout: '3x4+1', highlightLeads: ['II', 'III', 'V1', 'V6'] },
-      marks: [{ auto: 'p', lead: 'II' }, { auto: 'r', lead: 'V1' }],
+      kind: 'film',
+      title: l('右心负荷的写法', 'How the right heart writes its load', 'Cómo escribe su sobrecarga el corazón derecho'),
+      view: { layout: '3x4+1', highlightLeads: ['II', 'III', 'V1', 'V2'] },
+      frames: [
+        {
+          label: l('右心室肥厚', 'RVH', 'HVD'),
+          ecg: synth('rvh', 1244, { rate: 74 }),
+          note: l(
+            'V1 的 R 约 17 mm、几乎没有 S，V5 的 S 约 10 mm。V1 的 T 只是浅倒（约 1.5 mm），V2 起直立。',
+            'R in V1 about 17 mm with almost no S, S in V5 about 10 mm. The T in V1 is only shallowly inverted (about 1.5 mm) and upright from V2.',
+            'R de unos 17 mm en V1 casi sin S, S de unos 10 mm en V5. La T de V1 solo es algo negativa (unos 1,5 mm) y positiva desde V2.',
+          ),
+          marks: [{ auto: 'r', lead: 'V1' }, { auto: 't', lead: 'V1' }],
+        },
+        {
+          label: l('伴 ST-T 改变', 'With ST–T change', 'Con alteración del ST-T'),
+          ecg: synth('rvh', 1244, { rate: 74 }, 'strain'),
+          note: l(
+            '同一颗心脏，加上继发性 ST-T：V1–V2 的 T 深而不对称地倒置（约 7–9 mm），V3 只剩约 1 mm，III 也倒置。',
+            'Same heart, now with a secondary ST–T: deep, asymmetric T inversion in V1–V2 (about 7–9 mm), only about 1 mm left in V3, inverted in III too.',
+            'Mismo corazón, ahora con ST-T secundario: T negativa profunda y asimétrica en V1-V2 (unos 7-9 mm), solo 1 mm en V3 y también negativa en III.',
+          ),
+          marks: [{ auto: 't', lead: 'V1' }, { auto: 't', lead: 'V2' }, { auto: 't', lead: 'III' }],
+        },
+        {
+          label: l('COPD 图形', 'COPD pattern', 'Patrón de EPOC'),
+          ecg: synth('copd-pattern', 1245, { rate: 84 }),
+          note: l(
+            'II、III、aVF 的 P 高约 3 mm（肺型 P），电轴约 +95°，V1 的 QRS 几乎贴着基线：经典电压标准全阴性，要看整组征象。',
+            'P about 3 mm tall in II, III and aVF (P pulmonale), axis about +95°, a V1 QRS that barely leaves the baseline: every classic voltage criterion is negative, so read the cluster.',
+            'P de unos 3 mm en II, III y aVF (P pulmonale), eje de unos +95° y un QRS de V1 que apenas sale de la línea de base: todos los criterios clásicos de voltaje son negativos; lee el conjunto.',
+          ),
+          marks: [{ auto: 'p', lead: 'II' }, { auto: 'r', lead: 'V1' }],
+        },
+      ],
       caption: l(
-        '71 岁男性的 COPD 图形，右心负荷的另一种写法。本图可见：**肺型 P 波**（II/III/aVF 约 3 mm，高而尖，P 电轴约 +90°，垂直）、QRS 电轴约 +95°（右偏）、I 和 aVL 的 QRS 很小、V1–V2 的 QRS 几乎贴着基线、R 波递增不良。完整的图形还可以有**肢体导联低电压**（本图 II/III/aVF 仍约 7 mm，未达到）和 S 波一直持续到 V5–V6（顺钟向转位）。R V1 只有约 0.6 mm——R V1 ≥7 mm、R V1 + S V5 >10.5 mm 这些经典标准一条也不阳性：它们在肺气肿里并不敏感。看到这组图形应想慢性肺心病并申请超声评估肺动脉压；**心电图正常也不能排除肺动脉高压**。',
-        'The COPD pattern of a 71-year-old man — right-heart load written differently. On this tracing: **P pulmonale** (about 3 mm in II/III/aVF, tall and peaked, P axis about +90°, vertical), a QRS axis of about +95° (rightward), tiny QRS complexes in I and aVL, and V1–V2 complexes that barely leave the baseline, with poor R progression. The full pattern can add **low limb-lead voltage** (not reached here: II/III/aVF still measure about 7 mm) and S waves persisting into V5–V6 (clockwise rotation). The R in V1 is only about 0.6 mm, so the classic criteria — R V1 ≥7 mm, R V1 + S V5 >10.5 mm — are all negative: they are insensitive in emphysema. Read this cluster as chronic cor pulmonale and request echo for the pulmonary pressures; **a normal ECG does not exclude pulmonary hypertension** either.',
-        'El patrón de EPOC de un varón de 71 años: la sobrecarga derecha escrita de otra manera. En este trazado: **P pulmonale** (unos 3 mm en II/III/aVF, alta y picuda, eje de la P de unos +90°, vertical), eje del QRS de unos +95° (derecho), QRS diminutos en I y aVL y complejos de V1-V2 que apenas se separan de la línea de base, con mala progresión de la R. El patrón completo puede añadir **bajo voltaje en extremidades** (aquí no se alcanza: II/III/aVF miden aún unos 7 mm) y ondas S que persisten hasta V5-V6 (rotación horaria). La R de V1 mide solo unos 0,6 mm, así que los criterios clásicos —R V1 ≥7 mm, R V1 + S V5 >10,5 mm— son todos negativos: son poco sensibles en el enfisema. Lee este conjunto como cor pulmonale crónico y solicita un ecocardiograma para las presiones pulmonares; **un ECG normal tampoco excluye la hipertensión pulmonar**.',
+        '继发性 ST-T 出现在 R 占优的导联，报告写“右心室肥厚伴继发性ST-T改变”。COPD 里电压标准不敏感，心电图正常也不能排除肺动脉高压。',
+        'The secondary ST–T sits in the leads where the R dominates: report "RVH with secondary ST–T abnormality". In COPD the voltage criteria are insensitive, and a normal ECG does not exclude pulmonary hypertension.',
+        'El ST-T secundario aparece donde domina la R: se informa «HVD con alteración secundaria del ST-T». En la EPOC los criterios de voltaje son poco sensibles y un ECG normal no excluye la hipertensión pulmonar.',
       ),
     },
     {
@@ -246,15 +309,6 @@ const lesson: Lesson = {
         '右心室肥厚是"右侧赢"；双心室肥厚是"两边都在用力，互相抵消"——本图里左心室的力量没有写成 V5–V6 的高 R，而是写成 V3 的巨大 S（V3 的 RS 约 35 mm），右心室则把电轴拉向右、把 V1 的 R 抬起来；只看 Sokolow-Lyon 就会漏掉左侧。所以双心室肥厚常被漏诊：**满足左心室肥厚电压而电轴却右偏（>+90°）**，或 LVH 伴 V1–V2 高 R / V5–V6 深 S，就应怀疑；V2–V4 出现 R+S ≥50–60 mm 的大双向 RS（Katz-Wachtel，主要见于儿童先心病）、或左心房异常合并右心室肥厚征象，同样提示。哪一侧的电压都不再"纯粹"时，写下双心室肥厚并让超声作证。',
         'RVH is "the right side wins"; biventricular hypertrophy is "both sides pushing, cancelling each other" — here the LV force is written not as a tall R in V5–V6 but as a huge S in V3 (an RS of about 35 mm), while the RV drags the axis rightward and lifts the R in V1; read Sokolow-Lyon alone and you miss the left side. That is why BVH is so often missed: suspect it when **LVH voltage comes with a rightward axis (>+90°)**, or LVH with a tall R in V1–V2 / a deep S in V5–V6; a large biphasic RS in V2–V4 with R+S ≥50–60 mm (Katz-Wachtel, mainly children with congenital disease), or LA abnormality with RVH signs, points the same way. When neither side\'s voltage looks "pure" any more, write biventricular hypertrophy and let echo confirm.',
         'La HVD es «gana el lado derecho»; la hipertrofia biventricular es «los dos lados empujan y se anulan»: aquí la fuerza del VI no se escribe como una R alta en V5-V6, sino como una S enorme en V3 (una RS de unos 35 mm), mientras el VD arrastra el eje a la derecha y levanta la R de V1; quien mire solo el Sokolow-Lyon pierde el lado izquierdo. Por eso la HVB pasa tan desapercibida: sospecha cuando **al voltaje de HVI se suma un eje derecho (>+90°)**, o la HVI viene con R alta en V1-V2 / S profunda en V5-V6; una RS bifásica grande en V2-V4 con R+S ≥50-60 mm (Katz-Wachtel, sobre todo en cardiopatía congénita infantil) o una anomalía auricular izquierda con signos de HVD apuntan igual. Cuando el voltaje de ningún lado luce ya «puro», escribe hipertrofia biventricular y que el ecocardiograma lo confirme.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('急性与慢性，压力与容量', 'Acute vs chronic, pressure vs volume', 'Agudo frente a crónico, presión frente a volumen'),
-      body: l(
-        '慢性右心室肥厚只是"右心负荷"的一种写法，另外两种别混为一谈：\n- **急性右心压力负荷（肺栓塞）**：窦性心动过速最常见；新发不完全/完全性右束支阻滞、S1Q3T3、V1–V4 T 倒置（±下壁）、V1 呈 QR、电轴右移、aVR/V1 的 ST 抬高。这些改变敏感度低但**有预后意义**，而且是一过性的——不要把它们写成"右心室肥厚"（详见肺栓塞一课 o6）。\n- **慢性右心容量负荷（继发孔型 ASD）**：V1 呈 rsR′/rSR′（不完全性右束支阻滞图形）+ 电轴右偏，II/III/aVF 的 R 上常有 crochetage 切迹，伴一度房室传导阻滞；原发孔型 ASD 的 rsR′ 伴电轴**左**偏。\n记住方向：压力负荷慢慢来 → 肥厚；容量负荷慢慢来 → rsR′；压力负荷突然来 → 肺栓塞的那组征象。',
-        'Chronic RVH is only one way the right heart writes its load; do not confuse it with the other two:\n- **Acute RV pressure overload (pulmonary embolism)**: sinus tachycardia is the commonest finding; then new incomplete/complete RBBB, S1Q3T3, T inversion in V1–V4 (± inferior), a QR in V1, right axis shift, ST elevation in aVR/V1. These signs have low sensitivity but **carry prognostic weight**, and they are transient — do not report them as "RVH" (see the pulmonary embolism lesson, o6).\n- **Chronic RV volume overload (secundum ASD)**: rsR′/rSR′ in V1 (incomplete RBBB pattern) + rightward axis, often a crochetage notch on R in II/III/aVF with first-degree AV block; in primum ASD the rsR′ comes with a **left**ward axis.\nRemember the directions: pressure load slowly → hypertrophy; volume load slowly → rsR′; pressure load suddenly → the PE cluster.',
-        'La HVD crónica es solo una de las formas en que el corazón derecho escribe su sobrecarga; no la confundas con las otras dos:\n- **Sobrecarga aguda de presión del VD (embolia pulmonar)**: lo más frecuente es la taquicardia sinusal; después, bloqueo de rama derecha incompleto/completo de nueva aparición, S1Q3T3, inversión de la T en V1-V4 (± inferior), QR en V1, desviación derecha del eje y elevación del ST en aVR/V1. Tienen baja sensibilidad pero **pesan en el pronóstico** y son transitorias: no las informes como «HVD» (véase la lección de embolia pulmonar, o6).\n- **Sobrecarga crónica de volumen del VD (CIA tipo ostium secundum)**: rsR′/rSR′ en V1 (patrón de bloqueo de rama derecha incompleto) + eje derecho, a menudo muesca en crochetage sobre la R en II/III/aVF con bloqueo AV de primer grado; en la CIA primum la rsR′ viene con desviación **izquierda** del eje.\nRecuerda las direcciones: sobrecarga de presión lenta → hipertrofia; de volumen lenta → rsR′; de presión brusca → el conjunto de la embolia pulmonar.',
       ),
     },
     { kind: 'check', item: { family: 'chambers', seed: 7 } },

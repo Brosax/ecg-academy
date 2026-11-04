@@ -14,6 +14,7 @@ const synth = (scenario: string, seed: number, dials?: Partial<Record<DialId, nu
   req: { scenario, seed, ...(variant ? { variant } : {}), ...(dials ? { dials } : {}) },
 });
 const GRID = { layout: '3x4+1' } as const;
+const APICAL = synth('apical-hcm', 1284, { rate: 62 });
 
 const lesson: Lesson = {
   id: 'h5',
@@ -72,9 +73,9 @@ const lesson: Lesson = {
       showConduction: true,
       emphasize: ['lv-basal-anteroseptal', 'lv-basal-inferoseptal', 'lv-mid-anteroseptal', 'lv-mid-inferoseptal', 'lv-apical-septal', 'lv-mid-anterolateral', 'lv-mid-inferolateral'],
       caption: l(
-        '播放一个心动周期。间隔除极从左束支进入室间隔，自左向右、朝向前方——这就是侧壁导联正常小 q 波的来源。室间隔肥厚把这一向量放大：**深而窄的间隔 q**（I、aVL、V5–V6）；左心室壁增厚让整个除极更强：高 R 与深 S（左心室肥厚电压）。两个机制住在同一份图上。很多患者还会加上第三个：左心房面对僵硬心室的异常（P 波增宽、切迹）——本图的 P 波还正常，别凭印象把它写进去。',
-        'Play one beat. Septal activation enters the septum from the left bundle and runs left to right and forward — that is where the normal small q of the lateral leads comes from. Septal hypertrophy amplifies that vector: a **deep, narrow septal q** (I, aVL, V5–V6); the thickened LV wall strengthens the whole depolarisation: a tall R and a deep S (LVH voltage). Two mechanisms on one tracing. Many patients add a third — the atrial answer to a stiff ventricle, a broad, notched P (left atrial abnormality); the P on this tracing is still normal, so do not write it in from memory.',
-        'Reproduce un latido. La activación septal entra en el septo por la rama izquierda y avanza de izquierda a derecha y hacia delante: de ahí sale la pequeña q normal de las derivaciones laterales. La hipertrofia septal amplifica ese vector: una **q septal profunda y estrecha** (I, aVL, V5-V6); la pared del VI engrosada refuerza toda la despolarización: R alta y S profunda (voltaje de HVI). Dos mecanismos en un mismo trazado. Muchos pacientes añaden un tercero, la respuesta auricular a un ventrículo rígido: una P ancha y con muesca (anomalía auricular izquierda); la P de este trazado aún es normal, así que no la escribas de memoria.',
+        '播放一个心动周期。室间隔自左向右、朝前除极，写出侧壁的小 q。室间隔肥厚把它放大成**深而窄的 q**（I、aVL、V5–V6）；左心室壁增厚给出高电压。本图 P 波正常，别凭印象写左心房异常。',
+        'Play one beat. The septum depolarises left to right and forward, writing the small lateral q. A hypertrophied septum amplifies it into a **deep, narrow q** (I, aVL, V5–V6); the thick LV wall adds the voltage. The P here is normal: do not write LA abnormality from memory.',
+        'Reproduce un latido. El septo se despolariza de izquierda a derecha y hacia delante y escribe la pequeña q lateral. Un septo hipertrofiado la amplifica en una **q profunda y estrecha** (I, aVL, V5-V6); la pared gruesa del VI añade el voltaje. Aquí la P es normal: no escribas anomalía auricular izquierda de memoria.',
       ),
     },
     {
@@ -179,43 +180,64 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'ecg',
-      ecg: synth('hcm', 1285, { rate: 70 }, 'repolarization'),
-      view: { layout: '3x4+1', highlightLeads: ['I', 'aVL', 'V5', 'V6'] },
-      marks: [{ auto: 'q', lead: 'V6' }, { auto: 'r', lead: 'V5' }, { auto: 'st', lead: 'V6' }, { auto: 't', lead: 'V6' }],
+      kind: 'film',
+      title: l('肥厚型心肌病的三副面孔', 'Three faces of HCM', 'Tres caras de la MCH'),
+      view: { layout: '3x4+1', highlightLeads: ['I', 'aVL', 'V4', 'V5', 'V6'] },
+      frames: [
+        {
+          label: l('室间隔肥厚', 'Septal', 'Septal'),
+          ecg: synth('hcm', 1285, { rate: 70 }),
+          note: l(
+            'aVL 和 V6 有深而窄的 q（约 3.5 mm），电压高（S V1 约 17 mm + R V6 约 23 mm）；V5–V6 的 T 仍直立。',
+            'A deep, narrow q in aVL and V6 (about 3.5 mm) and high voltage (S V1 about 17 mm + R V6 about 23 mm); the T is still upright in V5–V6.',
+            'q profunda y estrecha en aVL y V6 (unos 3,5 mm) y voltaje alto (S V1 unos 17 mm + R V6 unos 23 mm); la T sigue positiva en V5-V6.',
+          ),
+          marks: [{ auto: 'q', lead: 'aVL' }, { auto: 'q', lead: 'V6' }],
+        },
+        {
+          label: l('伴复极异常', 'With repolarisation', 'Con repolarización'),
+          ecg: synth('hcm', 1285, { rate: 70 }, 'repolarization'),
+          note: l(
+            '同一颗心脏，QRS 不变，加上侧壁复极异常：V5–V6 的 ST 压低约 1 mm、T 倒置，I 和 aVL 的 T 也倒置。',
+            'Same heart and QRS, plus a lateral repolarisation abnormality: about 1 mm of ST depression with T inversion in V5–V6, and inverted T in I and aVL.',
+            'Mismo corazón y mismo QRS, más una alteración lateral de la repolarización: descenso del ST de 1 mm con T negativa en V5-V6, y T negativa en I y aVL.',
+          ),
+          marks: [{ auto: 'st', lead: 'V6' }, { auto: 't', lead: 'V6' }],
+        },
+        {
+          label: l('心尖肥厚型', 'Apical', 'Apical'),
+          ecg: APICAL,
+          note: l(
+            '肥厚只在心尖：巨大倒置 T，V4 最深（约 20 mm）、V5 约 18 mm，前面是高 R（V5 约 15 mm）。',
+            'Hypertrophy only at the apex: giant negative T waves, deepest in V4 (about 20 mm) and V5 (about 18 mm), after a tall R (V5 about 15 mm).',
+            'Hipertrofia solo en el ápex: T negativas gigantes, máximas en V4 (unos 20 mm) y V5 (unos 18 mm), tras una R alta (V5 unos 15 mm).',
+          ),
+          marks: [{ auto: 'r', lead: 'V5' }, { auto: 't', lead: 'V4' }, { auto: 't', lead: 'V5' }],
+        },
+      ],
+      predict: {
+        question: l(
+          '如果肥厚只在心尖，最深的倒置 T 会出现在哪些导联？',
+          'If the hypertrophy sits only at the apex, in which leads will the deepest negative T waves be?',
+          'Si la hipertrofia está solo en el ápex, ¿en qué derivaciones estarán las T negativas más profundas?',
+        ),
+        options: [l('V1–V2', 'V1–V2', 'V1-V2'), l('V4–V5', 'V4–V5', 'V4-V5'), l('II、III、aVF', 'II, III, aVF', 'II, III, aVF')],
+        answer: 1,
+      },
       caption: l(
-        'HCM 的日常面貌：深而窄的间隔 q + LVH 电压 + 侧壁复极异常（V5–V6 ST 压低约 1 mm、T 倒置，I 和 aVL 的 T 也倒置）；左心房异常常同行，但本图没有。大多数 HCM 患者的心电图异常——它是有用的筛查工具；少数心电图正常者也不能就此排除，超声才是裁判。',
-        'The everyday face of HCM: a deep narrow septal q + LVH voltage + a lateral repolarisation abnormality (about 1 mm of ST depression with T inversion in V5–V6, and inverted T in I and aVL); left atrial abnormality often comes along, though not on this tracing. The ECG is abnormal in most HCM patients — a useful screening tool; the few with a normal ECG are not excluded either, and echo is the arbiter.',
-        'La cara cotidiana de la MCH: q septal profunda y estrecha + voltaje de HVI + alteración lateral de la repolarización (descenso del ST de alrededor de 1 mm con T negativa en V5-V6, y T negativa también en I y aVL); la anomalía auricular izquierda suele acompañar, aunque no en este trazado. El ECG es anormal en la mayoría de los pacientes con MCH: una herramienta de cribado útil; a los pocos con ECG normal tampoco se les puede excluir, y el ecocardiograma es el árbitro.',
+        '多数 HCM 心电图异常：电压 + 复极异常 + 深而窄的 q（常伴左心房异常）。巨大 T 倒置 + 高 R、没有胸痛故事：不是 NSTEMI，去成像看心尖。',
+        'The ECG is abnormal in most HCM: voltage + repolarisation abnormality + a deep narrow q (often with LA abnormality). Giant T inversion with a tall R and no chest-pain story is not an NSTEMI: image the apex.',
+        'El ECG es anormal en la mayoría de las MCH: voltaje + alteración de la repolarización + q profunda y estrecha (a menudo con anomalía auricular izquierda). T negativa gigante con R alta y sin dolor torácico no es un NSTEMI: estudia el ápex con imagen.',
       ),
     },
     {
-      kind: 'text',
-      title: l('心尖肥厚型：巨大的 T 波', 'The apical form: the giant T wave', 'La forma apical: la onda T gigante'),
-      body: l(
-        '肥厚只限于心尖时，心电图换了一副面孔（山口病，Yamaguchi 综合征）：**V2–V5 巨大倒置 T 波（≥10 mm）**，伴 V3–V5 高 R，QT 常延长。没有胸痛故事、没有动态演变——这不是 NSTEMI，也不是 Wellens（Wellens 出现在胸痛后、伴 V2–V3 双相或深倒 T 而 R 波仍在）。巨大 T 倒置 + 高 R + 无梗死故事 ⇒ 想心尖肥厚，去成像（超声造影/心脏磁共振看心尖）。',
-        'When the hypertrophy is confined to the apex, the ECG changes face (Yamaguchi syndrome): **giant negative T waves (>=10 mm) in V2–V5** with a tall R in V3–V5 and often a long QT. No chest-pain story, no dynamic course — this is not an NSTEMI and not Wellens (Wellens follows pain, with biphasic or deeply inverted T in V2–V3 while the R wave persists). Giant T inversion + tall R + no infarct story => think apical HCM and go to imaging (contrast echo / cardiac MRI for the apex).',
-        'Cuando la hipertrofia se limita al ápex, el ECG cambia de cara (síndrome de Yamaguchi): **ondas T negativas gigantes (>=10 mm) en V2-V5** con R alta en V3-V5 y a menudo QT largo. Sin dolor torácico ni curso dinámico: no es un NSTEMI ni un Wellens (el Wellens sigue al dolor, con T bifásica o profundamente invertida en V2-V3 mientras la R persiste). T gigante negativa + R alta + sin historia de infarto => piensa en la forma apical y recurre a la imagen (ecocardiograma con contraste / resonancia para el ápex).',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('apical-hcm', 1284, { rate: 62 }),
-      view: { layout: '3x4+1', highlightLeads: ['V3', 'V4', 'V5', 'V6'] },
-      marks: [{ auto: 'r', lead: 'V4' }, { auto: 't', lead: 'V4' }, { auto: 't', lead: 'V5' }],
+      kind: 'heart',
+      ecg: APICAL,
+      emphasize: ['lv-apex', 'lv-apical-anterior', 'lv-apical-septal', 'lv-apical-inferior', 'lv-apical-lateral'],
       caption: l(
-        '52 岁男性，体检发现。胸导联 T 波深倒，最深在 V4（约 20 mm）和 V5（约 18 mm），V3、V6 也达约 10 mm，V2 只是浅倒；I、II、aVL 的 T 也倒置。前面是高 R（V5 约 15 mm）——"巨大 T + 高 R"，心尖肥厚的签名。患者不痛、肌钙蛋白不升；把它当 NSTEMI 送进导管室是错误方向，正确方向是成像看心尖。',
-        'A 52-year-old man, an incidental finding. The precordial T waves are deeply inverted, deepest in V4 (about 20 mm) and V5 (about 18 mm), still about 10 mm in V3 and V6 and only shallow in V2; the T is inverted in I, II and aVL too. They follow a tall R (about 15 mm in V5) — "giant T + tall R", the signature of apical hypertrophy. The patient has no pain and the troponin is not rising; routing him to the cath lab as an NSTEMI is the wrong direction — the right one is imaging the apex.',
-        'Varón de 52 años, hallazgo casual. Las T precordiales están profundamente invertidas, con el máximo en V4 (unos 20 mm) y V5 (unos 18 mm), todavía unos 10 mm en V3 y V6 y solo levemente en V2; la T también está invertida en I, II y aVL. Siguen a una R alta (unos 15 mm en V5): «T gigante + R alta», la firma de la hipertrofia apical. El paciente no tiene dolor y la troponina no sube; llevarlo al laboratorio de hemodinámica como NSTEMI es la dirección equivocada; la acertada es el estudio de imagen del ápex.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('红旗：这真的是 HCM 吗', 'Red flags: is this really HCM?', 'Señales de alarma: ¿es realmente una MCH?'),
-      body: l(
-        '影像上"室壁厚"不等于 HCM。两个心电图红旗提示表型模仿者：\n- **短 PR / 预激** + 室壁肥厚 → 想贮积性心肌病：PRKAG2、Danon、Pompe；\n- **室壁厚而电压低**（电压–质量不匹配）→ 想浸润，首推心脏淀粉样变（见 h4），可伴 V1–V3 假性梗死 Q/QS。\n这两面小旗改变整个检查方向（基因、轻链、核素显像），在读图时就要竖起来，不要等影像科先说。',
-        'Thick walls on imaging are not the same as HCM. Two ECG red flags wave for phenocopies:\n- **short PR / pre-excitation** + hypertrophied walls -> think storage cardiomyopathy: PRKAG2, Danon, Pompe;\n- **thick walls with low voltage** (voltage–mass discordance) -> think infiltration, first of all cardiac amyloid (see h4), possibly with pseudo-infarct Q/QS in V1–V3.\nThese two small flags redirect the whole work-up (genetics, light chains, scintigraphy) — raise them at the reading stage, not after imaging says so.',
-        'Unas paredes gruesas en la imagen no equivalen a una MCH. Dos banderas electrocardiográficas avisan de fenocopias:\n- **PR corto / preexcitación** + paredes hipertrofiadas -> piensa en miocardiopatía de depósito: PRKAG2, Danon, Pompe;\n- **paredes gruesas con bajo voltaje** (discordancia voltaje-masa) -> piensa en infiltración, ante todo amiloidosis cardíaca (ver h4), con posible Q/QS de pseudoinfarto en V1-V3.\nEstas dos pequeñas banderas reorientan todo el estudio (genética, cadenas ligeras, gammagrafía): ízalas ya en la lectura, no cuando la imagen lo diga.',
+        '心尖肥厚型（Yamaguchi 综合征）：增厚的只是高亮的心尖节段。面对心尖的 V3–V5 写出高 R，再跟着巨大的倒置 T。',
+        'Apical HCM (Yamaguchi syndrome): only the highlighted apical segments are thick. V3–V5, which face the apex, write a tall R followed by a giant negative T.',
+        'MCH apical (síndrome de Yamaguchi): solo los segmentos apicales destacados están engrosados. V3-V5, que miran al ápex, escriben una R alta seguida de una T negativa gigante.',
       ),
     },
     {
@@ -262,6 +284,11 @@ const lesson: Lesson = {
           '把心尖肥厚的巨大 T 倒置直接写成"缺血/NSTEMI"：V2–V5 倒置 ≥10 mm 伴高 R、无胸痛与动态演变，先想心尖肥厚，去成像。',
           'Writing the giant T inversion of apical HCM straight down as "ischaemia / NSTEMI": >=10 mm inversion in V2–V5 with a tall R, no pain and no dynamics — think apical hypertrophy first and image it.',
           'Anotar sin más la T negativa gigante de la forma apical como «isquemia / NSTEMI»: inversión >=10 mm en V2-V5 con R alta, sin dolor ni dinámica: piensa primero en la hipertrofia apical y pide imagen.',
+        ),
+        l(
+          '把心尖肥厚叫成 Wellens：Wellens 出现在胸痛之后，V2–V3 的 T 双相或深倒而 R 波保留；心尖肥厚是 V3–V5 高 R 加巨大 T，没有胸痛故事。',
+          'Calling apical HCM Wellens: Wellens follows chest pain, with a biphasic or deeply inverted T in V2–V3 and the R preserved; apical HCM is a tall R with a giant T in V3–V5 and no pain story.',
+          'Llamar Wellens a la MCH apical: el Wellens sigue al dolor torácico, con T bifásica o profundamente negativa en V2-V3 y la R conservada; la MCH apical es una R alta con T gigante en V3-V5 y sin historia de dolor.',
         ),
         l(
           '脱离年龄、性别读电压：年轻男性电压本来就高，单纯高电压离 HCM 还很远；HCM 的力量在组合（电压 + 复极异常 + 深 Q + 左心房异常）。',
