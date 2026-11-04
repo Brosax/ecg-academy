@@ -118,7 +118,7 @@ const lesson: Lesson = {
             'Sweep all the leads: the clearest J-point elevation is in **V2**, running V1–V3 as one strip (V4 under 1 mm), with V5–V6 and I/aVL not elevated. The patient is a woman of 64: the V2–V3 limit is 1.5 mm — exceeded in both leads.',
             'Recorre todas las derivaciones: la mayor elevación del punto J está en **V2**, de forma continua por V1–V3 (V4 por debajo de 1 mm), con V5–V6 e I/aVL sin elevar. La paciente es una mujer de 64 años: el límite en V2–V3 es 1,5 mm, superado en ambas.',
           ),
-          marks: [{ auto: 'st60', lead: 'V2' }],
+          marks: [{ auto: 'j', lead: 'V2' }],
           highlightLeads: ['V1', 'V2', 'V3'],
         },
         {
