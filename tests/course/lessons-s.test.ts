@@ -657,6 +657,15 @@ describe('s4: intervals on the tracings', () => {
     expect(Math.abs(meanRr(slow) - 1330)).toBeLessThanOrEqual(5);
     expect(Math.abs(slow.truth!.hrBpm - 45)).toBeLessThanOrEqual(1);
   });
+  it('rate sweep prediction: with the QTc read-out held, the QT shortens from 60 to 100/min', () => {
+    const p = blocksOf('s4', 'live')[1].predict!;
+    expect(p.ordered).toBe(true);
+    expect(p.options[p.answer].en).toBe('Shortens');
+    const b = blocksOf('s4', 'live')[1];
+    const qt = (v: number) => markedMs(played('s4', 1, v), b.marks, 'QT', { layout: b.view?.layout, lead: b.view?.lead });
+    expect(qt(100)).toBeLessThan(qt(60) - 50);
+    for (const v of [60, 100]) expect(generate(playedReq('s4', 1, v)).applied.qtc, `${v}/min`).toBe(405);
+  });
   it('PR sweep prediction: at the end the PR spans 5 small squares', () => {
     const p = blocksOf('s4', 'live')[0].predict!;
     expect(p.ordered).toBe(true);
