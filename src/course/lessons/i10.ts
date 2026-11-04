@@ -145,9 +145,9 @@ const lesson: Lesson = {
         {
           title: l('确认底图：这就是 LBBB', 'Confirm the baseline: this is LBBB', 'Confirma el trazado base: es un BRI'),
           body: l(
-            'QRS 增宽（≥120 ms），I、V6 宽钝的 R 波，V1 呈深 S（rS 型），无间隔 q 波——底图是完全性左束支传导阻滞，ST-T 与 QRS 主波反向属于预期。患者胸痛仍在持续：底图归底图，任务归任务。',
-            'The QRS is wide (≥120 ms), I and V6 show broad slurred R waves, V1 a deep S (rS), with no septal q — the baseline is complete LBBB, and ST-T discordant to the QRS is expected here. The chest pain is ongoing: the baseline is one thing, the task another.',
-            'El QRS es ancho (≥120 ms), I y V6 muestran R anchas y empastadas, V1 una S profunda (rS) y no hay onda q septal: el trazado base es un BRI completo, y un ST-T discordante al QRS es lo esperado. El dolor torácico persiste; el trazado base es una cosa y la tarea otra.',
+            'QRS 增宽（≥120 ms），I、V6 宽钝的 R 波，V1 呈深 S 波，无间隔 q 波——底图是完全性左束支传导阻滞，ST-T 与 QRS 主波反向属于预期。患者胸痛仍在持续：底图归底图，任务归任务。',
+            'The QRS is wide (≥120 ms), I and V6 show broad slurred R waves, V1 a deep S, with no septal q — the baseline is complete LBBB, and ST-T discordant to the QRS is expected here. The chest pain is ongoing: the baseline is one thing, the task another.',
+            'El QRS es ancho (≥120 ms), I y V6 muestran R anchas y empastadas, V1 una S profunda y no hay onda q septal: el trazado base es un BRI completo, y un ST-T discordante al QRS es lo esperado. El dolor torácico persiste; el trazado base es una cosa y la tarea otra.',
           ),
           marks: [{ auto: 'qrs', lead: 'V6' }],
           highlightLeads: ['I', 'V1', 'V6'],
@@ -155,9 +155,9 @@ const lesson: Lesson = {
         {
           title: l('先扫同向改变（标准 1 和 2）', 'Scan for concordance first (criteria 1 and 2)', 'Busca primero la concordancia (criterios 1 y 2)'),
           body: l(
-            '标准 1：逐个检查 QRS 主波向上的导联。I、aVL、V5–V6 没有 ST 抬高（按 LBBB 的预期反向压低）；过渡导联 V4 的 QRS 以正向 R′ 结束、总体向上，ST 只抬高约 0.5 mm——不到 1 mm，**标准 1 阴性**（过渡导联最容易被漏看，每次都要查）。标准 2：QRS 主波向下的 V1–V3 有没有 ST 压低 ≥1 mm？没有。两条同向标准都阴性——判读还没结束。',
-            'Criterion 1: check every lead with a positive QRS. I, aVL and V5–V6 show no ST elevation (they are depressed, as LBBB expects); in V4, the transitional lead, the QRS ends in a positive R′ and is net positive, but the ST is up only about 0.5 mm — under 1 mm: **criterion 1 negative** (the transitional lead is the easiest to miss, so check it every time). Criterion 2: is there ST depression ≥1 mm in V1–V3, where the QRS is negative? No. Both concordance criteria are negative — the reading is not over.',
-            'Criterio 1: revisa cada derivación con QRS positivo. I, aVL y V5–V6 no muestran elevación del ST (descienden, como espera el BRI); en V4, la derivación de transición, el QRS termina en una R′ positiva y es positivo en conjunto, pero el ST solo sube unos 0,5 mm, menos de 1 mm: **criterio 1 negativo** (la derivación de transición es la más fácil de pasar por alto: revísala siempre). Criterio 2: ¿hay descenso del ST ≥1 mm en V1–V3, donde el QRS es negativo? No. Los dos criterios de concordancia son negativos: la lectura no ha terminado.',
+            '标准 1：逐个检查 QRS 主波向上的导联。I、aVL、V5–V6 没有 ST 抬高（I、V5–V6 按 LBBB 的预期反向压低，aVL 平）；过渡导联 V4 的 QRS 以正向 R′ 结束、总体向上，ST 只抬高约 0.5 mm——不到 1 mm，**标准 1 阴性**（过渡导联最容易被漏看，每次都要查）。标准 2：QRS 主波向下的 V1–V3 有没有 ST 压低 ≥1 mm？没有。两条同向标准都阴性——判读还没结束。',
+            'Criterion 1: check every lead with a positive QRS. I, aVL and V5–V6 show no ST elevation (I and V5–V6 are depressed, as LBBB expects, and aVL is flat); in V4, the transitional lead, the QRS ends in a positive R′ and is net positive, but the ST is up only about 0.5 mm — under 1 mm: **criterion 1 negative** (the transitional lead is the easiest to miss, so check it every time). Criterion 2: is there ST depression ≥1 mm in V1–V3, where the QRS is negative? No. Both concordance criteria are negative — the reading is not over.',
+            'Criterio 1: revisa cada derivación con QRS positivo. I, aVL y V5–V6 no muestran elevación del ST (I y V5–V6 descienden, como espera el BRI, y aVL queda plana); en V4, la derivación de transición, el QRS termina en una R′ positiva y es positivo en conjunto, pero el ST solo sube unos 0,5 mm, menos de 1 mm: **criterio 1 negativo** (la derivación de transición es la más fácil de pasar por alto: revísala siempre). Criterio 2: ¿hay descenso del ST ≥1 mm en V1–V3, donde el QRS es negativo? No. Los dos criterios de concordancia son negativos: la lectura no ha terminado.',
           ),
           marks: [
             { auto: 'st', lead: 'V4' },
@@ -215,9 +215,9 @@ const lesson: Lesson = {
           label: l('标准 1', 'Criterion 1', 'Criterio 1'),
           ecg: synth('sgarbossa', 984),
           note: l(
-            'V5–V6：R 波高大，ST 也向上抬高 1.5–2 mm：同向抬高，三条中最有力的一条。',
-            'V5–V6: tall R waves and the ST up as well, 1.5–2 mm: concordant elevation, the strongest of the three.',
-            'V5–V6: R altas y el ST también elevado, 1,5–2 mm: elevación concordante, el más potente de los tres.',
+            'V5–V6：R 波高大，ST 也向上抬高 1.4–1.8 mm：同向抬高，三条中最有力的一条。',
+            'V5–V6: tall R waves and the ST up as well, 1.4–1.8 mm: concordant elevation, the strongest of the three.',
+            'V5–V6: R altas y el ST también elevado, 1,4–1,8 mm: elevación concordante, el más potente de los tres.',
           ),
           marks: [{ auto: 'j', lead: 'V5' }, { auto: 'j', lead: 'V6' }],
         },
@@ -236,8 +236,8 @@ const lesson: Lesson = {
           ecg: synth('paced-ddd', 986),
           note: l(
             '钉样信号后接宽 QRS（约 160 ms）：II、III、aVF 和 V1 呈 QS，T 波与 QRS 反向。“电学 LBBB”：用同样的规则读。',
-            'A spike, then a wide QRS (about 160 ms): QS in II, III, aVF and V1, the T opposite the QRS. An "electrical LBBB": read it with the same rules.',
-            'Una espícula y después un QRS ancho (unos 160 ms): QS en II, III, aVF y V1, la T opuesta al QRS. Un «BRI eléctrico»: léelo con las mismas reglas.',
+            'A spike, then a wide QRS (about 160 ms): QS in II, III, aVF and V1, the T opposite the QRS. An "electronic LBBB": read it with the same rules.',
+            'Una espícula y después un QRS ancho (unos 160 ms): QS en II, III, aVF y V1, la T opuesta al QRS. Un «BRI electrónico»: léelo con las mismas reglas.',
           ),
           marks: [{ auto: 'pacing-spike' }, { auto: 'qrs', lead: 'V1' }],
         },
@@ -273,9 +273,9 @@ const lesson: Lesson = {
       right: {
         ecg: synth('sgarbossa', 988, undefined, 'smith'),
         caption: l(
-          'B：同一底图 + 前壁损伤电流：V3 的抬高对 S 波深度而言过大（ST/S 约 −0.3，≤ −0.25）——改良 Sgarbossa 阳性',
-          'B: the same baseline + an anterior injury current: the V3 elevation is far too large for the S depth (ST/S about −0.3, ≤ −0.25) — modified Sgarbossa positive',
-          'B: el mismo trazado base + corriente de lesión anterior: la elevación en V3 es demasiado grande para la profundidad de la S (ST/S en torno a −0,3, ≤ −0,25): Sgarbossa modificado positivo',
+          'B：同样是 LBBB 底图，加上前壁损伤电流：V3 的抬高对 S 波深度而言过大（ST/S 约 −0.3，≤ −0.25）——改良 Sgarbossa 阳性',
+          'B: also an LBBB baseline, plus an anterior injury current: the V3 elevation is far too large for the S depth (ST/S about −0.3, ≤ −0.25) — modified Sgarbossa positive',
+          'B: también un BRI de base, más una corriente de lesión anterior: la elevación en V3 es demasiado grande para la profundidad de la S (ST/S en torno a −0,3, ≤ −0,25): Sgarbossa modificado positivo',
         ),
         marks: [{ auto: 'st', lead: 'V3' }],
       },
@@ -343,9 +343,9 @@ const lesson: Lesson = {
           'Usar solo la «elevación discordante ≥5 mm» original de 1996: con ondas S profundas casi nunca se cumple; cámbiala por el cociente ST/S ≤ −0,25 de Smith, un único umbral que sirve igual con QRS grandes y pequeños.',
         ),
         l(
-          '起搏心律按普通 UDMI 阈值读：右室起搏就是“电学 LBBB”，抬高与压低都要按 Sgarbossa 型标准判读（同向压低还可计入 V4–V6）。',
-          'Reading a paced rhythm with the standard UDMI thresholds: right ventricular pacing is an "electronic LBBB"; judge its elevations and depressions with the Sgarbossa-type rules (concordant depression may also count in V4–V6).',
-          'Leer un ritmo de marcapasos con los umbrales habituales de la definición universal: la estimulación del ventrículo derecho es un «BRI electrónico»; valora sus elevaciones y descensos con las reglas tipo Sgarbossa (el descenso concordante también puede contar en V4–V6).',
+          '起搏心律按普通 UDMI 阈值读：右室起搏就是“电学 LBBB”，抬高与压低都要按 Sgarbossa 型标准判读。',
+          'Reading a paced rhythm with the standard UDMI thresholds: right ventricular pacing is an "electronic LBBB"; judge its elevations and depressions with the Sgarbossa-type rules.',
+          'Leer un ritmo de marcapasos con los umbrales habituales de la definición universal: la estimulación del ventrículo derecho es un «BRI electrónico»; valora sus elevaciones y descensos con las reglas tipo Sgarbossa.',
         ),
         l(
           'LVH 在 V1–V3 的不一致抬高直接判 STEMI：先量比例——≥ S 波深度的 25 %、凸面向上或新发才升级；否则它是肥厚的预期表现。',

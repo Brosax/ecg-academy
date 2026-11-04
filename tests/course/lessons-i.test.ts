@@ -1012,19 +1012,58 @@ describe('i10: confounders on the tracings', () => {
       for (const l of ALL) if (qrs(e, l).net > 0) expect(stAt(e, l), `${l}: concordant elevation`).toBeLessThan(0.1);
     }
   });
-  it('contrast A (uncomplicated LBBB): ST/S about −0.1 in V1–V3, lateral ST discordant', () => {
+  /** depth of the S wave (mm) below the PR baseline */
+  const i10SDepthMm = (e: Ecg, l: AnyLead): number => -qrs(e, l).min * 10;
+  it('hook (man of 73): V3 J about 3.5 mm on an S about 13 mm deep, ST/S about −0.28; V2 about 5 mm on an S about 18 mm; V1 crosses −0.25 too', () => {
+    const e = ecgOf(blocksOf('i10', 'hook')[0].ecg);
+    expect(stAt(e, 'V3') * 10).toBeGreaterThanOrEqual(3.25);
+    expect(stAt(e, 'V3') * 10).toBeLessThanOrEqual(3.75);
+    expect(i10SDepthMm(e, 'V3')).toBeGreaterThanOrEqual(12.35);
+    expect(i10SDepthMm(e, 'V3')).toBeLessThanOrEqual(13.65);
+    expect(stOverS(e, 'V3')).toBeGreaterThanOrEqual(-0.29);
+    expect(stOverS(e, 'V3')).toBeLessThanOrEqual(-0.27);
+    expect(stAt(e, 'V2') * 10).toBeGreaterThanOrEqual(4.75);
+    expect(stAt(e, 'V2') * 10).toBeLessThanOrEqual(5.25);
+    expect(i10SDepthMm(e, 'V2')).toBeGreaterThanOrEqual(17.1);
+    expect(i10SDepthMm(e, 'V2')).toBeLessThanOrEqual(18.9);
+    for (const l of ['V1', 'V2'] as const) expect(stOverS(e, l), l).toBeLessThanOrEqual(-0.25);
+  });
+  it('worked (seed 983): wide QRS, R without septal q in I and V6, deep S in V1; I and V5–V6 depressed, aVL flat; V4 net positive ending in R′ with J about 0.5 mm; V3 J about 3.5 mm on an S about 11.5 mm, ST/S about −0.3; V1 and V2 about −0.27 and −0.29', () => {
+    const e = ecgOf(blocksOf('i10', 'worked')[0].ecg);
+    expect(e.truth!.qrsMs).toBeGreaterThanOrEqual(120);
+    for (const l of ['I', 'V6'] as const) expect(shape(e, l), `${l} starts with the R`).toMatch(/^R/);
+    expect(qrs(e, 'V1').min).toBeLessThan(-1);
+    for (const l of ['I', 'V5', 'V6'] as const) expect(stAt(e, l), l).toBeLessThan(-0.05);
+    expect(Math.abs(stAt(e, 'aVL'))).toBeLessThanOrEqual(0.05);
+    expect(qrs(e, 'V4').net).toBeGreaterThan(0);
+    expect(shape(e, 'V4')).toMatch(/R′$/);
+    expect(stAt(e, 'V4')).toBeGreaterThanOrEqual(0.025);
+    expect(stAt(e, 'V4')).toBeLessThanOrEqual(0.075);
+    expect(stAt(e, 'V3') * 10).toBeGreaterThanOrEqual(3.25);
+    expect(stAt(e, 'V3') * 10).toBeLessThanOrEqual(3.75);
+    expect(i10SDepthMm(e, 'V3')).toBeGreaterThanOrEqual(10.925);
+    expect(i10SDepthMm(e, 'V3')).toBeLessThanOrEqual(12.075);
+    expect(stOverS(e, 'V3')).toBeGreaterThanOrEqual(-0.35);
+    expect(stOverS(e, 'V3')).toBeLessThanOrEqual(-0.25);
+    expect(stOverS(e, 'V1')).toBeGreaterThanOrEqual(-0.28);
+    expect(stOverS(e, 'V1')).toBeLessThanOrEqual(-0.26);
+    expect(stOverS(e, 'V2')).toBeGreaterThanOrEqual(-0.3);
+    expect(stOverS(e, 'V2')).toBeLessThanOrEqual(-0.28);
+  });
+  it('contrast A (uncomplicated LBBB): ST/S about −0.1 in V1–V3, lateral ST discordant; B is also an LBBB baseline', () => {
     const e = ecgOf(blocksOf('i10', 'contrast')[0].left.ecg);
     for (const l of ['V1', 'V2', 'V3'] as const) {
-      expect(stOverS(e, l), l).toBeGreaterThan(-0.15);
-      expect(stOverS(e, l), l).toBeLessThan(0);
+      expect(stOverS(e, l), l).toBeGreaterThanOrEqual(-0.15);
+      expect(stOverS(e, l), l).toBeLessThanOrEqual(-0.05);
     }
     for (const l of ['V5', 'V6'] as const) expect(stAt(e, l), l).toBeLessThan(0);
+    for (const side of ['left', 'right'] as const) expect(ecgOf(blocksOf('i10', 'contrast')[0][side].ecg).truth!.findings, side).toContain('lbbb');
   });
-  it('criterion 1 frame: concordant elevation 1.5–2 mm in V5–V6 over positive QRS', () => {
+  it('criterion 1 frame: concordant elevation 1.4–1.8 mm in V5–V6 over positive QRS', () => {
     const e = frame('i10', 0, 1);
     for (const l of ['V5', 'V6'] as const) {
-      expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.145);
-      expect(stAt(e, l), l).toBeLessThanOrEqual(0.2);
+      expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.14);
+      expect(stAt(e, l), l).toBeLessThanOrEqual(0.18);
     }
     for (const l of ['V5', 'V6'] as const) {
       expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
@@ -1033,8 +1072,8 @@ describe('i10: confounders on the tracings', () => {
   });
   it('criterion 2 frame: concordant depression ≥ 1 mm in V2–V3 (V3 about 2.5 mm, V1 about 0.5 mm) over negative QRS; no concordant elevation anywhere', () => {
     const e = frame('i10', 0, 2);
-    expect(stAt(e, 'V3')).toBeLessThan(-0.22);
-    expect(stAt(e, 'V3')).toBeGreaterThan(-0.3);
+    expect(stAt(e, 'V3')).toBeLessThanOrEqual(-0.225);
+    expect(stAt(e, 'V3')).toBeGreaterThanOrEqual(-0.275);
     for (const l of ['V1', 'V2', 'V3'] as const) expect(qrs(e, l).net, l).toBeLessThan(0);
     for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.1);
     expect(stAt(e, 'V1')).toBeLessThan(-0.03);
