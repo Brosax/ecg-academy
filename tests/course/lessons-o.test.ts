@@ -895,7 +895,7 @@ describe('o8: deep T inversion on the tracings', () => {
     expect(qrs(secondary, 'V2').min).toBeLessThan(-2);
     for (const l of ['I', 'aVL', 'V5', 'V6'] as const) expect(tInverted(secondary, l), l).toBe(true);
   });
-  it('memory film: RV pacing QRS ≈ 160 ms negative in III, aVF, V1; own rhythm QRS ≈ 95 ms with T inverted where the paced QRS was negative; Shvilkin depths ≈ 7 mm in V1 vs ≈ 4 mm in III', () => {
+  it('memory film: RV pacing QRS ≈ 160 ms negative in III, aVF, V1; another patient off pacing has QRS ≈ 95 ms with T inverted where the paced QRS was negative; Shvilkin depths ≈ 7 mm in V1 vs ≈ 4 mm in III', () => {
     const [paced, own, check] = frames('o8', 1);
     expect(Math.abs(paced.truth!.qrsMs - 160)).toBeLessThan(5);
     for (const l of ['III', 'aVF', 'V1'] as const) {
@@ -905,11 +905,11 @@ describe('o8: deep T inversion on the tracings', () => {
     expect(tInverted(own, 'V2')).toBe(true);
     expect(Math.abs(own.truth!.qrsMs - 95)).toBeLessThan(5);
     expect(blocksOf('o8', 'film')[1].frames[2].ecg).toEqual(blocksOf('o8', 'film')[1].frames[1].ecg);
-    expect(tw(check, 'V1').min).toBeGreaterThan(-0.78);
-    expect(tw(check, 'V1').min).toBeLessThan(-0.68);
+    expect(tw(check, 'V1').min).toBeGreaterThan(-0.75);
+    expect(tw(check, 'V1').min).toBeLessThan(-0.65);
     expect(Math.min(...(['V1', 'V2', 'V3', 'V4', 'V5', 'V6'] as const).map((l) => tw(check, l).min))).toBe(tw(check, 'V1').min);
-    expect(tw(check, 'III').min).toBeGreaterThan(-0.47);
-    expect(tw(check, 'III').min).toBeLessThan(-0.37);
+    expect(tw(check, 'III').min).toBeGreaterThan(-0.45);
+    expect(tw(check, 'III').min).toBeLessThan(-0.35);
   });
   it('apical HCM: giant inversion in V4 (> 1 mV), deepest in V4–V5, deep S in V1–V3, tall R in V6', () => {
     const e = ecgOf(contrastTitled('o8', 'Giant inverted T: apical HCM or Wellens type B?').left.ecg);
