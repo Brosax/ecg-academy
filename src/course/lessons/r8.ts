@@ -129,7 +129,7 @@ const lesson: Lesson = {
         {
           label: l('一度：线全到 V', 'First degree: every line', 'Primer grado: todas llegan'),
           ecg: synth('av-block-1', 442),
-          note: l('每个 P 都下传，PR 约 280 ms、每搏相同：每条线都画到 V 层，斜率一样，而且偏平（PR 长）。', 'Every P conducts with the same PR of about 280 ms: every line reaches the V tier at the same slope, a flat one (a long PR).', 'Cada P conduce con el mismo PR de unos 280 ms: todas las líneas llegan al nivel V con la misma pendiente, tendida (PR largo).'),
+          note: l('每个 P 都下传，PR 约 280 ms、每搏相同：每条线都画到 V 层，斜率一样，而且偏平（PR 长）。', 'Every P conducts with the same PR of about 280 ms: draw every line to the V tier at the same slope, a flat one (a long PR).', 'Cada P conduce con el mismo PR de unos 280 ms: dibuja todas las líneas hasta el nivel V con la misma pendiente, tendida (PR largo).'),
           marks: [{ auto: 'pr' }],
         },
         {
@@ -147,13 +147,13 @@ const lesson: Lesson = {
         {
           label: l('三度：不画连线', 'Third degree: no lines', 'Tercer grado: sin líneas'),
           ecg: synth('av-block-3', 466),
-          note: l('P 约 78、QRS 约 45 次/分，互不相关：A 层与 V 层各走各的，中间一条连线也不画。', 'P at about 78/min, QRS at about 45/min, unrelated: the A and V tiers run on their own, and no line joins them.', 'P a unos 78 lpm y QRS a unos 45 lpm, sin relación: los niveles A y V van por su cuenta y ninguna línea los une.'),
+          note: l('P 约 78、QRS 约 45 次/分，互不相关：A 层与 V 层各走各的，中间一条连线也不画。', 'P at about 78/min, QRS at about 45/min, unrelated: the A and V tiers run on their own; draw no line between them.', 'P a unos 78 lpm y QRS a unos 45 lpm, sin relación: los niveles A y V van por su cuenta; no dibujes ninguna línea entre ellos.'),
           marks: [{ auto: 'p' }, { auto: 'qrs' }],
         },
         {
           label: l('逆行：向上的线', 'Retrograde: a line upward', 'Retrógrada: línea hacia arriba'),
           ecg: synth('pjc', 488),
-          note: l('提前的窄 QRS 后紧跟一个逆行 P′：激动起自交界区，向下到 V，也向上逆传到 A。那条向上的线就是逆行。', 'An early narrow QRS followed at once by a retrograde P′: the impulse starts in the junction, runs down to V and back up to A. The upward line is the retrograde one.', 'Un QRS estrecho y precoz seguido enseguida de una P′ retrógrada: el impulso nace en la unión, baja a V y sube a A. La línea que sube es la retrógrada.'),
+          note: l('提前的窄 QRS 后紧跟一个逆行 P′：激动起自交界区，向下到 V，也向上逆传到 A。把这条线向上画：这就是逆行。', 'An early narrow QRS followed at once by a retrograde P′: the impulse starts in the junction, runs down to V and back up to A. Draw that line upward: it is the retrograde one.', 'Un QRS estrecho y precoz seguido enseguida de una P′ retrógrada: el impulso nace en la unión, baja a V y sube a A. Dibuja esa línea hacia arriba: es la retrógrada.'),
           marks: [{ auto: 'st', beat: 5 }],
         },
         {

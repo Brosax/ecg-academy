@@ -927,6 +927,21 @@ describe('r8: ladders on the tracings', () => {
     expect(cycle.length).toBe(4);
     for (let i = 1; i < cycle.length; i++) expect(cycle[i]).toBeGreaterThan(cycle[i - 1]);
   });
+  it('Wenckebach ladder (seed 542): every pause is shorter than 2 x PP, with a narrow QRS', () => {
+    const fig = blocksOf('r8', 'figure').find((b) => b.ecg?.kind === 'synth' && b.ecg.req.scenario === 'av-block-2-mobitz1');
+    const e = ecgOf(fig?.ecg);
+    const at = e.truth!.atrial.map((a) => a.t);
+    const pp = at
+      .slice(1)
+      .map((x, i) => x - at[i])
+      .sort((a, b) => a - b);
+    const medianPp = pp[Math.floor(pp.length / 2)];
+    const r = rrs(e);
+    const pauses = r.filter((x) => x > 1.3 * Math.min(...r));
+    expect(pauses.length).toBeGreaterThanOrEqual(2);
+    for (const x of pauses) expect(x).toBeLessThan(2 * medianPp);
+    expect(e.truth!.qrsMs).toBeLessThan(110);
+  });
   it('dissociation ladder: sinus about 60/min, junction about 66/min, with at least one capture', () => {
     const fig = blocksOf('r8', 'figure').find((b) => b.ecg?.kind === 'synth' && b.ecg.req.scenario === 'av-dissociation');
     const t = ecgOf(fig?.ecg).truth!;
