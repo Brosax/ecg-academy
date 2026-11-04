@@ -238,7 +238,7 @@ const lesson: Lesson = {
           'Tapa las derivaciones laterales del trazado inicial. ¿Qué queda en las 12 derivaciones?',
         ),
         options: [
-          l('只有 V1–V3 的压低', 'Only the V1–V3 depression', 'Solo el descenso en V1–V3'),
+          l('只有胸前导联的压低', 'Only the chest-lead depression', 'Solo el descenso en las precordiales'),
           l('下壁导联抬高', 'Inferior elevation', 'Elevación inferior'),
           l('什么都没有', 'Nothing', 'Nada'),
         ],

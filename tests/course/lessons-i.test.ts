@@ -657,7 +657,8 @@ describe('i6: posterior infarction on the tracings', () => {
     for (const src of [blocksOf('i6', 'hook')[0].ecg, blocksOf('i6', 'worked')[0].ecg]) {
       const e = ecgOf(src);
       for (const l of ['V1', 'V2'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.12);
-      expect(stAt(e, 'V3')).toBeLessThan(-0.07);
+      expect(stAt(e, 'V3')).toBeLessThanOrEqual(-0.075);
+      expect(stAt(e, 'V3')).toBeGreaterThanOrEqual(-0.125);
       expect(stAt(e, 'V3')).toBeGreaterThan(Math.min(stAt(e, 'V1'), stAt(e, 'V2')));
       expect(Math.abs(stAt(e, 'V4'))).toBeLessThan(0.03);
       for (const l of ['V5', 'V6'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
