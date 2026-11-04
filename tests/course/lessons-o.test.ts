@@ -1034,6 +1034,42 @@ describe('o11: pacing on the tracings', () => {
   });
 });
 
+describe('o12: what a machine can get wrong, on the tracings', () => {
+  it('machine film: LL tremor with a regular RR and lead I clean; the same heart with the arm cables swapped inverts lead I and leaves V1–V6 alone; bipolar VVI exactly 60/min; non-specific ST–T with flat lateral T waves and a level ST', () => {
+    const [tremor, swapped, paced, nonspecific] = frames('o12', 0);
+    expect(swapped.truth!.beats).toEqual(tremor.truth!.beats);
+    for (const l of ['II', 'III', 'aVF'] as const) expect(hfNoise(tremor, l), l).toBeGreaterThan(3 * hfNoise(tremor, 'I'));
+    expect(Math.max(...rrs(tremor)) - Math.min(...rrs(tremor))).toBeLessThan(60);
+    expect(qrs(swapped, 'I').max).toBeLessThan(0.05);
+    expect(qrs(swapped, 'I').min).toBeLessThan(-0.4);
+    expect(tInverted(swapped, 'I')).toBe(true);
+    const clean = ecgOf({ scenario: 'normal', seed: 1626, dials: { rate: 72 } });
+    for (const l of ['V1', 'V2', 'V3', 'V4', 'V5', 'V6'] as const) {
+      const a = swapped.signal.leads[l];
+      const b = clean.signal.leads[l];
+      let worst = 0;
+      for (let i = 0; i < a.length; i++) worst = Math.max(worst, Math.abs(a[i] - b[i]));
+      expect(worst, l).toBeLessThan(0.002);
+    }
+    expect(paced.truth!.beats.every((b) => b.kind === 'paced-ventricular')).toBe(true);
+    for (const r of rrs(paced)) expect(Math.abs(r - 1000)).toBeLessThan(5);
+    for (const l of ['I', 'aVL', 'V5', 'V6'] as const) expect(tw(nonspecific, l).max, l).toBeLessThan(0.06);
+    for (const l of ['I', 'II', 'aVL', 'V5', 'V6'] as const) expect(Math.abs(stAt(nonspecific, l, 60)), l).toBeLessThan(0.05);
+  });
+  it('measurement film (V2): a clear T end with QT ≈ 405 ms; low K keeps the QT ≈ 405 ms but the QU reads ≈ 565 ms; AF ≈ 100/min with RR from ≈ 350 to ≈ 1100 ms', () => {
+    const [clear, lowK, af] = frames('o12', 1);
+    for (const e of [clear, lowK]) expect(Math.abs(e.truth!.qtMs - 405)).toBeLessThan(5);
+    expect(uw(clear, 'V2').max).toBeLessThan(0.2 * tw(clear, 'V2').max);
+    expect(uw(lowK, 'V2').max).toBeGreaterThan(tw(lowK, 'V2').max);
+    const b = midBeat(lowK);
+    expect(Math.abs(b.uOff! - b.qrsOn - 565)).toBeLessThan(5);
+    expect(af.truth!.rhythm).toBe('atrial-fibrillation');
+    expect(Math.abs(af.truth!.hrBpm - 100)).toBeLessThan(5);
+    expect(Math.abs(Math.min(...rrs(af)) - 350)).toBeLessThan(10);
+    expect(Math.abs(Math.max(...rrs(af)) - 1100)).toBeLessThan(10);
+  });
+});
+
 describe('o10: artefacts and filters on the tracings', () => {
   it('Parkinsonian tremor (LL): II, III, aVF noisy, I clean', () => {
     for (const src of sourcesWith('o10', 'muscle-tremor-parkinsonian')) {
