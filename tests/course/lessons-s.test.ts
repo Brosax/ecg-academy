@@ -263,6 +263,14 @@ function jPeak(ecg: Ecg, lead: StdLead, b = midBeat(ecg)): number {
   for (let i = Math.floor(((b.j - 24) * fs) / 1000); i <= Math.ceil((b.j * fs) / 1000); i++) peak = Math.max(peak, a[i]);
   return peak - baselineBefore(a, fs, b.qrsOn);
 }
+/** the end-QRS notch: the lowest point where the R downstroke ends (J − 32…J − 20 ms) and the highest point after it */
+function notch(ecg: Ecg, lead: StdLead, b = midBeat(ecg)): { readonly dip: number; readonly peak: number } {
+  let dipAt = -32;
+  for (let d = -31; d <= -20; d++) if (stAt(ecg, lead, d, b) < stAt(ecg, lead, dipAt, b)) dipAt = d;
+  let peak = -Infinity;
+  for (let d = dipAt; d <= 0; d++) peak = Math.max(peak, stAt(ecg, lead, d, b));
+  return { dip: stAt(ecg, lead, dipAt, b), peak };
+}
 const mostEquiphasic = (ecg: Ecg): StdLead =>
   LIMB.reduce((best, l) => (Math.abs(qrs(ecg, l).net) / qrs(ecg, l).p2p < Math.abs(qrs(ecg, best).net) / qrs(ecg, best).p2p ? l : best));
 const transition = (ecg: Ecg): StdLead | undefined => CHEST.find((l) => qrs(ecg, l).max >= -qrs(ecg, l).min);
@@ -738,7 +746,7 @@ describe('s6: ST measurement on the tracings', () => {
 });
 
 describe('s7: normal variants on the tracings', () => {
-  it('athlete (hook = worked): about 48/min with RR varying > 120 ms, QRS 110–119 with r′ in V1, SV1 + RV5 ≥ 35 mm, J about 1–1.5 mm in II and V5–V6 (formal early repolarisation), T inverted in V1', () => {
+  it('athlete (hook = worked): about 48/min with RR varying > 120 ms, QRS 110–119 with r′ in V1, SV1 + RV5 ≥ 35 mm, J-point elevation about 1–1.5 mm in II and V5–V6, T inverted in V1', () => {
     const e = ecgOf(blocksOf('s7', 'hook')[0].ecg);
     expect(blocksOf('s7', 'worked')[0].ecg).toEqual(blocksOf('s7', 'hook')[0].ecg);
     const t = e.truth!;
@@ -756,24 +764,44 @@ describe('s7: normal variants on the tracings', () => {
     expect(tInverted(e, 'V1')).toBe(true);
     for (const l of ['V3', 'V4', 'V5', 'V6', 'I', 'II'] as const) expect(tUpright(e, l), l).toBe(true);
   });
-  it('ST sweep: the J notch is about 3.5 mm in II and 3 mm in aVF at 0.06–0.08, 3.5–4 mm in II up to 0.14, QRS < 120 ms throughout', () => {
+  it('ST sweep: in II and aVF at both ends the notch is a separate hump after the R downstroke (from a dip that stays on or above the baseline it rises over 2 mm to the Jp), standing above the J mark; QRS < 120 ms throughout', () => {
+    for (const v of [0.06, 0.14]) {
+      const e = played('s7', 0, v);
+      for (const l of ['II', 'aVF'] as const) {
+        const n = notch(e, l);
+        expect(n.peak - n.dip, `${v} ${l} hump above the dip`).toBeGreaterThan(0.2);
+        expect(n.dip, `${v} ${l} dip not below the baseline`).toBeGreaterThan(-MIN_WAVE_MV);
+        expect(Math.abs(n.peak - jPeak(e, l)), `${v} ${l} the hump is the Jp`).toBeLessThan(0.01);
+      }
+      expect(jPeak(e, 'II') - stAt(e, 'II'), `${v} notch stands above the J mark`).toBeGreaterThan(0.15);
+    }
+    for (const v of [0.06, 0.09, 0.14]) expect(played('s7', 0, v).truth!.qrsMs, `${v}`).toBeLessThan(120);
+  });
+  it('ST sweep note at 0.06–0.08: the notch about 3.5 mm in II and 3 mm in aVF, the ST at the J mark under 1 mm in both', () => {
     for (const v of [0.06, 0.08]) {
       const e = played('s7', 0, v);
       expect(Math.abs(jPeak(e, 'II') - 0.35), `${v} II`).toBeLessThan(0.03);
       expect(Math.abs(jPeak(e, 'aVF') - 0.3), `${v} aVF`).toBeLessThan(0.03);
-    }
-    for (const v of [0.06, 0.09, 0.14]) {
-      const e = played('s7', 0, v);
-      expect(jPeak(e, 'II'), `${v} II`).toBeGreaterThanOrEqual(0.33);
-      expect(jPeak(e, 'II'), `${v} II`).toBeLessThanOrEqual(0.4);
-      expect(jPeak(e, 'aVF'), `${v} aVF`).toBeGreaterThanOrEqual(0.1);
-      expect(jPeak(e, 'II') - stAt(e, 'II'), `${v} notch stands above the J mark`).toBeGreaterThan(0.15);
-      expect(e.truth!.qrsMs, `${v}`).toBeLessThan(120);
+      for (const l of ['II', 'aVF'] as const) expect(stAt(e, l), `${v} ${l}`).toBeLessThan(0.1);
     }
   });
-  it('ST sweep notes: the ST at the J mark in II is under 1 mm at 0.06–0.08 and reaches 1 mm from 0.09', () => {
-    for (const v of [0.06, 0.08]) expect(stAt(played('s7', 0, v), 'II'), `${v}`).toBeLessThan(0.1);
-    for (const v of [0.09, 0.14]) expect(stAt(played('s7', 0, v), 'II'), `${v}`).toBeGreaterThanOrEqual(0.1);
+  it('ST sweep note from 0.09: the ST at the J mark in II reaches 1 mm and the notch in II stays about 3.5–4 mm', () => {
+    const sc = scenarios().find((s) => s.id === 'early-repolarization')!;
+    for (const v of sweepValues('st', sc.dials.st!, 0.09, 0.14)) {
+      const e = played('s7', 0, v);
+      expect(stAt(e, 'II'), `${v}`).toBeGreaterThanOrEqual(0.1);
+      expect(jPeak(e, 'II'), `${v}`).toBeGreaterThanOrEqual(0.34);
+      expect(jPeak(e, 'II'), `${v}`).toBeLessThanOrEqual(0.4);
+    }
+  });
+  it('ST sweep caption: at both ends the notch is over 2 mm in II, III and aVF with a horizontal ST after it (within 0.5 mm of the J mark at J + 60 and J + 100 ms)', () => {
+    for (const v of [0.06, 0.14]) {
+      const e = played('s7', 0, v);
+      for (const l of ['II', 'III', 'aVF'] as const) {
+        expect(jPeak(e, l), `${v} ${l}`).toBeGreaterThan(0.2);
+        for (const d of [60, 100]) expect(Math.abs(stAt(e, l, d) - stAt(e, l)), `${v} ${l} J+${d}`).toBeLessThan(0.05);
+      }
+    }
   });
   it('juvenile T (both tracings): T inverted in V1–V3, upright from V4', () => {
     for (const src of [blocksOf('s7', 'film')[0].frames[0].ecg, blocksOf('s7', 'contrast')[0].left.ecg]) {

@@ -78,9 +78,9 @@ const lesson: Lesson = {
         'Futbolista de 22 años, asintomático, en el reconocimiento previo a la competición. Enumera lo que ves y di qué hallazgos requieren más pruebas.',
       ),
       reveal: l(
-        '窦性心动过缓（约 48 次/分）伴轻度窦性心律不齐，V1 呈 rSr′（不完全性右束支阻滞图形，QRS 约 115 ms），胸导联电压高（SV1 + RV5 ≈ 36 mm，单纯达到左心室肥厚的电压标准），II 和 V5–V6 有 J 点切迹、J 点抬高约 1–1.5 mm（已达到正式早期复极图形的标准）。**都不需要进一步检查**：对训练有素的运动员，这些都是训练相关改变。哪些表现需要检查，本课后面会列出（例如 V1–V3 以外或侧壁的 T 波倒置、ST 段压低、病理性 Q 波、QRS ≥ 140 ms）。',
-        'Sinus bradycardia (about 48/min) with mild sinus arrhythmia, an rSr′ in V1 (incomplete RBBB pattern, QRS about 115 ms), tall chest-lead voltages (SV1 + RV5 ≈ 36 mm: an isolated voltage criterion for LVH) and J-point notches with about 1–1.5 mm of J elevation in II and V5–V6 (enough for the formal early repolarisation pattern). **None needs further tests**: in a trained athlete all of them are training-related. What would need work-up is listed later in this lesson (for example T inversion beyond V1–V3 or in the lateral leads, ST depression, pathological Q waves, a QRS ≥ 140 ms).',
-        'Bradicardia sinusal (unos 48 lpm) con arritmia sinusal leve, rSr′ en V1 (patrón de bloqueo incompleto de rama derecha, QRS de unos 115 ms), voltajes precordiales altos (SV1 + RV5 ≈ 36 mm: un criterio aislado de voltaje de HVI) y muescas en el punto J con una elevación de J de 1-1,5 mm en II y V5-V6 (suficiente para el patrón formal de repolarización precoz). **Ninguno requiere más pruebas**: en un deportista entrenado todos son cambios relacionados con el entrenamiento. Lo que sí requeriría estudio se enumera más adelante en esta lección (por ejemplo, T negativas más allá de V1–V3 o en las derivaciones laterales, descenso del ST, ondas Q patológicas o un QRS ≥ 140 ms).',
+        '窦性心动过缓（约 48 次/分）伴轻度窦性心律不齐，V1 呈 rSr′（不完全性右束支阻滞图形，QRS 约 115 ms），胸导联电压高（SV1 + RV5 ≈ 36 mm，单纯达到左心室肥厚的电压标准），II 和 V5–V6 的 J 点抬高约 1–1.5 mm（即 2017 运动员标准中的“早期复极/ST 抬高”）。**都不需要进一步检查**：对训练有素的运动员，这些都是训练相关改变。哪些表现需要检查，本课后面会列出（例如 V1–V3 以外或侧壁的 T 波倒置、ST 段压低、病理性 Q 波、QRS ≥ 140 ms）。',
+        'Sinus bradycardia (about 48/min) with mild sinus arrhythmia, an rSr′ in V1 (incomplete RBBB pattern, QRS about 115 ms), tall chest-lead voltages (SV1 + RV5 ≈ 36 mm: an isolated voltage criterion for LVH) and about 1–1.5 mm of J-point elevation in II and V5–V6 (the “early repolarisation / ST elevation” of the 2017 athlete criteria). **None needs further tests**: in a trained athlete all of them are training-related. What would need work-up is listed later in this lesson (for example T inversion beyond V1–V3 or in the lateral leads, ST depression, pathological Q waves, a QRS ≥ 140 ms).',
+        'Bradicardia sinusal (unos 48 lpm) con arritmia sinusal leve, rSr′ en V1 (patrón de bloqueo incompleto de rama derecha, QRS de unos 115 ms), voltajes precordiales altos (SV1 + RV5 ≈ 36 mm: un criterio aislado de voltaje de HVI) y una elevación del punto J de 1-1,5 mm en II y V5-V6 (la “repolarización precoz / elevación del ST” de los criterios de deportistas de 2017). **Ninguno requiere más pruebas**: en un deportista entrenado todos son cambios relacionados con el entrenamiento. Lo que sí requeriría estudio se enumera más adelante en esta lección (por ejemplo, T negativas más allá de V1–V3 o en las derivaciones laterales, descenso del ST, ondas Q patológicas o un QRS ≥ 140 ms).',
       ),
     },
     {
@@ -116,9 +116,9 @@ const lesson: Lesson = {
       },
       predict: {
         question: l(
-          '一步步抬高切迹之后的 ST。早期复极图形从什么时候开始？',
-          'Raise the ST after the notch step by step. From when is this the early repolarisation pattern?',
-          'Sube poco a poco el ST que sigue a la muesca. ¿Desde cuándo es el patrón de repolarización precoz?',
+          '我们一步步抬高切迹之后的 ST。这份心电图从什么时候起算早期复极图形？',
+          'We raise the ST after the notch, step by step. When does this tracing count as the early repolarisation pattern?',
+          'Vamos a subir poco a poco el ST que sigue a la muesca. ¿Desde cuándo cuenta este trazado como patrón de repolarización precoz?',
         ),
         options: [
           l('一开始就是：II 和 aVF 的切迹已 ≥ 1 mm', 'From the start: the notch is already ≥ 1 mm in II and aVF', 'Desde el principio: la muesca ya mide ≥ 1 mm en II y aVF'),
@@ -128,9 +128,9 @@ const lesson: Lesson = {
         answer: 0,
       },
       caption: l(
-        '早期复极图形看 QRS 末端切迹或顿挫的峰高（≥ 2 个相邻下壁或侧壁导联 ≥ 1 mm），不要求 ST 抬高。',
-        'The early repolarisation pattern is the peak of the notch or slur at the end of the QRS (≥ 1 mm in ≥ 2 contiguous inferior or lateral leads); ST elevation is not required.',
-        'El patrón de repolarización precoz es el pico de la muesca o el empastamiento al final del QRS (≥ 1 mm en ≥ 2 derivaciones contiguas inferiores o laterales); no exige elevación del ST.',
+        '早期复极看 QRS 末端**切迹或顿挫的顶点**，不看 ST：两个相邻下壁或侧壁导联 ≥ 1 mm。这里切迹 > 2 mm、在下壁、其后 ST 水平，属高危特征；但只在有症状（如不明原因晕厥）或猝死家族史时才有意义，否则仍是正常变异。',
+        'Early repolarisation is read at the **top of the notch or slur** at the end of the QRS, not at the ST: ≥ 1 mm in two contiguous inferior or lateral leads. This notch is over 2 mm, inferior, with a horizontal ST after it: higher-risk features, but they matter only with symptoms such as unexplained syncope or a family history of sudden death. Otherwise it is a normal variant.',
+        'La repolarización precoz se mide en el **vértice de la muesca o del empastamiento** al final del QRS, no en el ST: ≥ 1 mm en dos derivaciones contiguas inferiores o laterales. Esta muesca supera los 2 mm, es inferior y el ST que sigue es horizontal: rasgos de mayor riesgo, que solo importan si hay síntomas (como un síncope inexplicado) o antecedentes familiares de muerte súbita. Si no, es una variante normal.',
       ),
     },
     {
@@ -278,9 +278,9 @@ const lesson: Lesson = {
         {
           title: l('复极', 'Repolarisation', 'Repolarización'),
           body: l(
-            '下壁和侧壁导联有 J 点切迹，J 点抬高约 1–1.5 mm（II、V5–V6，已达到正式早期复极图形的标准）——早期复极属于正常组。没有 ST 压低，T 波倒置不超过 V2：没有异常组表现。',
-            'J notches with about 1–1.5 mm of J-point elevation in the inferior and lateral leads (II, V5–V6: enough for the formal early repolarisation pattern) — early repolarisation belongs to the normal group. No ST depression and no T inversion beyond V2: nothing from the abnormal group.',
-            'Muescas J con una elevación del punto J de 1-1,5 mm en las derivaciones inferiores y laterales (II, V5-V6: suficiente para el patrón formal de repolarización precoz); la repolarización precoz pertenece al grupo normal. Sin descenso del ST ni T negativas más allá de V2: nada del grupo anormal.',
+            'II 和 V5–V6 的 J 点抬高约 1–1.5 mm：2017 运动员标准把这种早期复极/ST 抬高归入正常组。没有 ST 压低，T 波倒置不超过 V2：没有异常组表现。',
+            'About 1–1.5 mm of J-point elevation in II and V5–V6: the 2017 athlete criteria put this early repolarisation / ST elevation in the normal group. No ST depression and no T inversion beyond V2: nothing from the abnormal group.',
+            'Elevación del punto J de 1-1,5 mm en II y V5-V6: los criterios de deportistas de 2017 sitúan esta repolarización precoz / elevación del ST en el grupo normal. Sin descenso del ST ni T negativas más allá de V2: nada del grupo anormal.',
           ),
           marks: [{ auto: 'j', lead: 'V5' }, { auto: 'j', lead: 'II' }],
           highlightLeads: ['V1', 'V2', 'V4', 'V5', 'V6', 'II', 'aVF'],
