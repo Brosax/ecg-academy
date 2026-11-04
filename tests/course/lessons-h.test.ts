@@ -819,6 +819,17 @@ describe('h7: QT on the tracings', () => {
     for (let ms = b.j + 60; ms <= b.tOff - 10; ms += 2) if (v(ms) > 0.2 && v(ms) >= v(ms - 10) && v(ms) > v(ms + 10)) humps.push(ms);
     return humps;
   };
+  /** the top of each run of hump samples (a run breaks at a gap over 10 ms) */
+  const humpPeaks = (e: Ecg): number[] => {
+    const v = v3(e);
+    const runs: number[][] = [];
+    for (const ms of tHumps(e)) {
+      const last = runs[runs.length - 1];
+      if (last && ms - last[last.length - 1] <= 10) last.push(ms);
+      else runs.push([ms]);
+    }
+    return runs.map((r) => r.reduce((a, b) => (v(b) > v(a) ? b : a)));
+  };
   it('LQT2 shape (film frame 2): QTc about 520 ms, low T in II (about 1 mm, < 2.5 mm), a bifid T in V3 with humps about 100 ms apart', () => {
     const e = frames('h7', 0)[1];
     const v = v3(e);
@@ -828,11 +839,21 @@ describe('h7: QT on the tracings', () => {
     const humps = tHumps(e);
     expect(humps.length).toBeGreaterThanOrEqual(2);
     expect(humps[humps.length - 1] - humps[0]).toBeGreaterThan(70);
-    expect(Math.abs(humps[humps.length - 1] - humps[0] - 100)).toBeLessThanOrEqual(15);
+    const peaks = humpPeaks(e);
+    expect(peaks.length, 'two humps').toBe(2);
+    expect(Math.abs(peaks[1] - peaks[0] - 100), 'hump tops about 100 ms apart').toBeLessThanOrEqual(5);
     const notch = Math.min(...Array.from({ length: humps[humps.length - 1] - humps[0] }, (_, k) => v(humps[0] + k)));
     expect(notch).toBeLessThan(Math.min(v(humps[0]), v(humps[humps.length - 1])) - 0.05);
   });
-  it('genotype film notes: one QT of about 505 ms at 64/min in all four; LQT1 broad T; LQT3 flat ST for about 280 ms then a later, narrower T; the drug frame has a bifid T and a U wave after the T end', () => {
+  /** ms after J at which the V3 T first rises above 0.5 mm */
+  const tRise = (e: Ecg): number => {
+    const b = midBeat(e);
+    const v = v3(e);
+    let ms = b.j + 20;
+    while (v(ms) < 0.05) ms += 1;
+    return ms - b.j;
+  };
+  it('genotype film notes: one QT of about 505 ms at 64/min in all four; LQT1 broad-based T (V3 base over 200 ms, 1.5× the LQT3 base); LQT3 flat ST for about 290 ms then a later, narrower, taller T; the drug frame has a bifid T and a U wave after the T end', () => {
     const [lqt1, , lqt3, drug] = frames('h7', 0);
     for (const e of frames('h7', 0)) {
       expect(Math.abs(e.truth!.qtMs - 505)).toBeLessThan(5);
@@ -840,13 +861,16 @@ describe('h7: QT on the tracings', () => {
     }
     const peak = (e: Ecg) => midBeat(e).tPeak! - midBeat(e).j;
     const width = (e: Ecg) => midBeat(e).tOff - midBeat(e).tPeak!;
+    const base = (e: Ecg) => midBeat(e).tOff - midBeat(e).j - tRise(e);
+    expect(base(lqt1), 'LQT1 broad-based T').toBeGreaterThan(200);
+    expect(base(lqt1), 'LQT1 broad-based T').toBeGreaterThan(1.5 * base(lqt3));
     expect(peak(lqt3)).toBeGreaterThan(peak(lqt1) + 40);
     expect(width(lqt3)).toBeLessThan(width(lqt1) / 1.5);
+    expect(tw(lqt3, 'V3').max, 'LQT3 peaked: taller on a narrower base').toBeGreaterThan(tw(lqt1, 'V3').max);
     const b3 = midBeat(lqt3);
     const v = v3(lqt3);
-    let rise = b3.j + 20;
-    while (v(rise) < 0.05) rise += 1;
-    expect(Math.abs(rise - b3.j - 280)).toBeLessThanOrEqual(15);
+    const rise = b3.j + tRise(lqt3);
+    expect(Math.abs(rise - b3.j - 290)).toBeLessThanOrEqual(5);
     for (let ms = b3.j + 20; ms < rise - 20; ms += 5) expect(Math.abs(v(ms)), `flat ST at J+${ms - b3.j}`).toBeLessThan(0.02);
     expect(tHumps(drug).length).toBeGreaterThanOrEqual(2);
     const bd = midBeat(drug);
@@ -869,6 +893,17 @@ describe('h7: QT on the tracings', () => {
       expect(t.qtcFridericiaMs, `${q}`).toBeGreaterThan(500);
     }
     expect(Math.abs(played('h7', 0, 490).truth!.hrBpm - 64)).toBeLessThan(1);
+  });
+  it('live caption and Bazett pitfall: at one Fridericia QTc the QT shortens as the rate rises (50 → 80/min); Bazett reads under Fridericia at 50/min and over it at 80/min', () => {
+    const b = blocksOf('h7', 'live')[0];
+    for (const qtc of [500, 560]) {
+      const at = (rate: number) => ecgOf({ scenario: b.scenario, seed: b.seed, dials: { rate, qtc } }).truth!;
+      const [slow, fast] = [at(50), at(80)];
+      for (const t of [slow, fast]) expect(Math.abs(t.qtcFridericiaMs - qtc), `${qtc}`).toBeLessThan(3);
+      expect(fast.qtMs, `${qtc}`).toBeLessThan(slow.qtMs - 50);
+      expect(slow.qtcBazettMs, `${qtc}: low at a slow rate`).toBeLessThan(slow.qtcFridericiaMs - 10);
+      expect(fast.qtcBazettMs, `${qtc}: high at a fast rate`).toBeGreaterThan(fast.qtcFridericiaMs + 10);
+    }
   });
   it('hypokalaemia shows U waves; the true long QT does not reach its QTc through a U', () => {
     const c = blocksOf('h7', 'contrast')[1];

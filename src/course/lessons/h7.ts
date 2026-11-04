@@ -211,9 +211,9 @@ const lesson: Lesson = {
         answer: 1,
       },
       caption: l(
-        '看 T 的终点随 QTc 后移。之后再动心率：QT 跟着 RR 变，Bazett 会离开 Fridericia 越来越远。',
-        'Watch the T end move out as the QTc climbs. Then move the rate: the QT follows the RR, and Bazett drifts away from Fridericia.',
-        'Mira cómo el final de la T se aleja al subir el QTc. Mueve después la frecuencia: el QT sigue al RR y el Bazett se separa del Fridericia.',
+        '看 T 的终点随 QTc 后移。之后再动心率：Fridericia QTc 不变时，心率越快 QT 越短。',
+        'Watch the T end move out as the QTc climbs. Then move the rate: at the same Fridericia QTc, a faster rate shortens the QT.',
+        'Mira cómo el final de la T se aleja al subir el QTc. Mueve después la frecuencia: con el mismo QTc de Fridericia, a más frecuencia, QT más corto.',
       ),
     },
     {
@@ -255,9 +255,9 @@ const lesson: Lesson = {
           label: l('LQT1 型', 'LQT1 type', 'Tipo LQT1'),
           ecg: synth('long-qt', 1332),
           note: l(
-            '64 次/分时 QT 约 505 ms：T 基底宽、峰来得晚。运动、游泳是 LQT1 的典型诱因。',
-            'QT about 505 ms at 64/min: a broad-based T with a late peak. Exercise and swimming are the classic LQT1 triggers.',
-            'QT de unos 505 ms a 64 lpm: T de base ancha con el pico tardío. El ejercicio y la natación son los desencadenantes clásicos del LQT1.',
+            '64 次/分时 QT 约 505 ms：T 波基底宽。运动、游泳是 LQT1 的典型诱因。',
+            'QT about 505 ms at 64/min: a broad-based T. Exercise and swimming are the classic LQT1 triggers.',
+            'QT de unos 505 ms a 64 lpm: T de base ancha. El ejercicio y la natación son los desencadenantes clásicos del LQT1.',
           ),
           marks: [{ auto: 'qt', lead: 'V3' }],
         },
@@ -267,7 +267,7 @@ const lesson: Lesson = {
           note: l(
             'QT 不变；II 的 T 低平（约 1 mm），V3 的 T 有两个驼峰、相隔约 100 ms。第二个驼峰属于 T，量到它的终点。声音与惊吓诱发。',
             'Same QT; a low T in II (about 1 mm) and a bifid T in V3, humps about 100 ms apart. The second hump belongs to the T: measure to its end. Sounds and startles trigger it.',
-            'Mismo QT; T baja en II (unos 1 mm) y T bífida en V3, con jorobas separadas unos 100 ms. La segunda joroba es de la T: mide hasta su final. La desencadenan ruidos y sobresaltos.',
+            'Mismo QT; T baja en II (alrededor de 1 mm) y T bífida en V3, con jorobas separadas unos 100 ms. La segunda joroba es de la T: mide hasta su final. La desencadenan ruidos y sobresaltos.',
           ),
           marks: [{ auto: 't', lead: 'V3' }, { auto: 'qt', lead: 'V3' }],
         },
@@ -275,9 +275,9 @@ const lesson: Lesson = {
           label: l('LQT3 型', 'LQT3 type', 'Tipo LQT3'),
           ecg: synth('long-qt', 1332, undefined, 'lqt3'),
           note: l(
-            'QT 不变；ST 段长而平（约 280 ms），其后是迟发、窄而尖的 T。安静或睡眠中发作。',
-            'Same QT; a long flat ST (about 280 ms), then a late, narrow, peaked T. Events come at rest or in sleep.',
-            'Mismo QT; ST largo y plano (unos 280 ms) y después una T tardía, estrecha y apuntada. Los eventos llegan en reposo o durante el sueño.',
+            'QT 不变；ST 段长而平（约 290 ms），其后是迟发、窄而尖的 T。安静或睡眠中发作。',
+            'Same QT; a long flat ST (about 290 ms), then a late, narrow, peaked T. Events come at rest or in sleep.',
+            'Mismo QT; ST largo y plano (unos 290 ms) y después una T tardía, estrecha y apuntada. Los eventos llegan en reposo o durante el sueño.',
           ),
           marks: [{ auto: 'st', lead: 'V3' }, { auto: 't', lead: 'V3' }],
         },
@@ -375,9 +375,9 @@ const lesson: Lesson = {
       kind: 'pitfalls',
       items: [
         l(
-          '心率快时用 Bazett 报长 QT：>90 次/分它系统性虚高——换 Fridericia 或 Framingham 再下结论。',
-          'Calling long QT from Bazett at fast rates: beyond 90/min it runs systematically high — switch to Fridericia or Framingham before concluding.',
-          'Diagnosticar QT largo con Bazett en frecuencias altas: por encima de 90 lpm se infla de forma sistemática; cambia a Fridericia o Framingham antes de concluir.',
+          '离 60 次/分远时只信 Bazett：>90 次/分它过度校正、读数偏高；心率慢时它校正不足、读数偏低，会把长 QT 藏起来——换 Fridericia 或 Framingham 再下结论。',
+          'Trusting Bazett far from 60/min: beyond 90/min it over-corrects and reads high; at slow rates it under-corrects and reads low, which can hide a long QT — switch to Fridericia or Framingham before concluding.',
+          'Fiarse solo de Bazett lejos de 60 lpm: por encima de 90 lpm sobrecorrige y da cifras altas; con frecuencias lentas infracorrige y da cifras bajas que pueden ocultar un QT largo; cambia a Fridericia o Framingham antes de concluir.',
         ),
         l(
           '把 U 波量进 QT：低钾血症的"长 QT"常是 QU 间期；T 终点用切线法定，终点在 U 之前。',
