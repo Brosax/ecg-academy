@@ -820,41 +820,50 @@ describe('i8: Wellens, de Winter, aVR on the tracings', () => {
     for (const l of ['V2', 'V3'] as const) expect(Math.abs(stAt(e, l)), l).toBeLessThan(0.05);
     expect(qrs(e, 'V3').max).toBeGreaterThan(0.5);
   });
-  it('Wellens B frame: T inversion about 7 mm deep in V2–V3, reaching V1 and V4, ST flat, R preserved; type A frame = the hook', () => {
+  it('Wellens B frame: T inversion about 7 mm deep in V2–V3 with no real upright start (T max under a tenth of the depth and under half the type A upright part), reaching V1 and V4, ST flat, R preserved; type A frame = the hook', () => {
     expect(blocksOf('i8', 'film')[0].frames[0].ecg).toEqual(blocksOf('i8', 'hook')[0].ecg);
     const e = frame('i8', 0, 1);
+    const typeA = frame('i8', 0, 0);
     for (const l of ['V2', 'V3'] as const) {
       expect(tw(e, l).min, l).toBeLessThan(-0.62);
       expect(tw(e, l).min, l).toBeGreaterThan(-0.78);
       expect(Math.abs(stAt(e, l)), l).toBeLessThan(0.03);
+      expect(tw(e, l).max, `${l} upright start`).toBeLessThan(0.1 * -tw(e, l).min);
+      expect(tw(e, l).max, `${l} upright start against type A`).toBeLessThan(0.5 * tw(typeA, l).max);
     }
     expect(qrs(e, 'V3').max).toBeGreaterThan(0.5);
     for (const l of ['V1', 'V4'] as const) expect(tw(e, l).min, l).toBeLessThan(-0.1);
   });
-  it('de Winter frame: J depressed > 2 mm in V2–V4 and upsloping, tall T in V3, slight elevation in aVR', () => {
+  it('de Winter frame: J depressed > 2 mm in V2–V4 and upsloping, tall T in V3, slight elevation in aVR, no chest elevation (V1–V6 below the baseline at J, J+60 and all through J → J+80 ms)', () => {
     const e = frame('i8', 0, 2);
+    const b = midBeat(e);
     for (const l of ['V2', 'V3', 'V4'] as const) {
       expect(stAt(e, l), l).toBeLessThan(-0.2);
       expect(stAt(e, l, 60), l).toBeGreaterThan(stAt(e, l));
     }
     expect(tw(e, 'V3').max).toBeGreaterThan(0.5);
     expect(stAt(e, 'aVR')).toBeGreaterThan(0.05);
-    for (const l of CHEST) expect(stAt(e, l), l).toBeLessThan(0.05);
+    for (const l of CHEST) {
+      expect(stAt(e, l), l).toBeLessThan(0.05);
+      expect(stAt(e, l, 60), `${l} J+60`).toBeLessThan(0.05);
+      expect(span(e, l, b.j, b.j + 80, b).max, `${l} J → J+80`).toBeLessThan(0.05);
+    }
   });
   it('aVR + diffuse depression: ≥ 6 leads depressed ≥ 1 mm at J (II, III, aVF, V2–V5), aVR about 1 mm up, V1 depressed', () => {
     const e = ecgOf(blocksOf('i8', 'worked')[0].ecg);
     const depressed = ALL.filter((l) => stAt(e, l) <= -0.1);
     expect(depressed.length).toBeGreaterThanOrEqual(6);
     for (const l of ['II', 'III', 'aVF', 'V2', 'V3', 'V4', 'V5'] as const) expect(depressed, l).toContain(l);
-    expect(stAt(e, 'aVR')).toBeGreaterThan(0.07);
+    expect(stAt(e, 'aVR')).toBeGreaterThanOrEqual(0.075);
+    expect(stAt(e, 'aVR')).toBeLessThanOrEqual(0.125);
     expect(stAt(e, 'V1')).toBeLessThan(0);
   });
   it('heavier frame: seven leads depressed ≥ 1 mm at J, aVR and V1 about 1 mm up, depression to about 2.5 mm', () => {
     const e = frame('i8', 0, 3);
     expect(ALL.filter((l) => stAt(e, l) <= -0.1).length).toBe(7);
     for (const l of ['aVR', 'V1'] as const) {
-      expect(stAt(e, l), l).toBeGreaterThan(0.07);
-      expect(stAt(e, l), l).toBeLessThan(0.14);
+      expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.075);
+      expect(stAt(e, l), l).toBeLessThanOrEqual(0.125);
     }
     expect(Math.min(...ALL.map((l) => stAt(e, l, 60)))).toBeLessThan(-0.22);
     expect(Math.min(...ALL.map((l) => stAt(e, l, 60)))).toBeGreaterThan(-0.28);
