@@ -15,7 +15,6 @@ const LIMITS = { textZh: 200, captionZh: 120, noteZh: 80, media: 3, playing: 1 }
 const GATED = ['S', 'R', 'T', 'I', 'H', 'O', 'X'] as const;
 const PENDING: ReadonlySet<string> = new Set(
   [
-    'i1 i2 i3 i4 i5 i6 i7 i8 i9 i10 i11',
     'o1 o2 o3 o4 o5 o6 o7 o8 o9 o10 o11 o12',
   ].flatMap((s) => s.split(' ')),
 );

@@ -80,59 +80,6 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('Wellens：不痛的时候最危险', 'Wellens: most dangerous when the pain has gone', 'Wellens: más peligroso cuando el dolor ha cesado'),
-      body: l(
-        '- 出现于**心绞痛发作后的无痛间歇期**——患者在急诊常“感觉良好”；肌钙蛋白正常或仅轻度升高（NSTE-ACS）。\n- **A 型**：V2–V3 双向 T 波（先直立后倒置）；**B 型**：深而对称的 T 波倒置。两型意义相同，B 型更常见、更醒目。\n- R 波保留、无 R 波递增不良，无病理性 Q 波，ST 段等电位或仅轻微抬高。\n- 机制：左前降支近段临界狭窄，血栓自溶或痉挛缓解后血管再通——狭窄仍在，随时可能完全闭塞。\n- 处理：**禁止负荷试验**；按高危 NSTE-ACS 安排早期侵入评估（造影）。狭窄不处理，大面积前壁梗死只是时间问题。',
-        '- It appears in the **pain-free interval after an angina episode** — the patient often "feels well" in the emergency department; troponin is normal or only mildly raised (NSTE-ACS).\n- **Type A**: biphasic T in V2–V3 (upright then inverted). **Type B**: deep, symmetric T inversion. Both mean the same; type B is commoner and more striking.\n- R waves preserved with no poor progression, no pathological Q waves, ST isoelectric or minimally elevated.\n- Mechanism: a critical proximal LAD stenosis that has reopened (the clot has lysed or spasm has subsided) — the stenosis remains and can occlude completely at any time.\n- Management: **no stress testing**; arrange early invasive assessment (angiography) as high-risk NSTE-ACS. Left alone, a large anterior infarct is only a matter of time.',
-        '- Aparece en el **intervalo sin dolor tras un episodio de angina**: el paciente a menudo «se encuentra bien» en urgencias; la troponina es normal o solo levemente elevada (SCASEST).\n- **Tipo A**: T bifásica en V2–V3 (positiva y después negativa). **Tipo B**: T negativa, profunda y simétrica. Ambas significan lo mismo; la B es más frecuente y más llamativa.\n- R conservadas sin mala progresión, sin ondas Q patológicas y ST isoeléctrico o con elevación mínima.\n- Mecanismo: estenosis crítica proximal de la descendente anterior que se ha reabierto (el trombo se ha lisado o el espasmo ha cedido); la estenosis persiste y puede ocluirse por completo en cualquier momento.\n- Manejo: **nada de pruebas de esfuerzo**; valoración invasiva precoz (coronariografía) como SCASEST de alto riesgo. Sin tratar, un infarto anterior extenso es cuestión de tiempo.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('wellens', 943, undefined, 'b'),
-      view: { layout: 'single', lead: 'V3' },
-      marks: [{ auto: 't', lead: 'V3' }],
-      caption: l(
-        '更深的 Wellens 变体：倒置部分占了主导——V2–V3 约 4 mm 深，并波及 V1 与 V4；R 波保留、无 Q 波、ST 等电位。教科书上的 B 型是整个 T 波深而对称地倒置；这里倒置前仍残留一个小的正向起始部。与 A 型传递完全相同的信息：左前降支近段临界狭窄——不负荷、早造影。',
-        'A deeper Wellens variant: the inverted limb now dominates — about 4 mm deep in V2–V3 and reaching V1 and V4; R waves preserved, no Q waves, ST isoelectric. In the textbook type B the whole T is deeply and symmetrically inverted; here a small upright start still precedes the inversion. It carries exactly the same message as type A: critical proximal LAD — no stress test, early angiography.',
-        'Una variante de Wellens más profunda: domina ya la rama negativa —unos 4 mm de profundidad en V2–V3, que alcanza V1 y V4—; R conservadas, sin ondas Q, ST isoeléctrico. En el tipo B de libro toda la T es negativa, profunda y simétrica; aquí aún precede a la inversión un pequeño inicio positivo. Transmite exactamente el mismo mensaje que el tipo A: estenosis crítica proximal de la descendente anterior; sin prueba de esfuerzo, coronariografía precoz.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('de Winter T波：不抬高的前壁闭塞', 'de Winter: the anterior occlusion that does not elevate', 'De Winter: la oclusión anterior que no eleva'),
-      body: l(
-        '- 胸前导联 **J 点处上斜型 ST 压低 >1 mm**：ST 段向上斜行，直接融入**高大而对称的 T 波**——没有 ST 抬高。\n- aVR 常有轻度抬高；与 Wellens 相反，患者通常**胸痛持续存在**（闭塞正在进行）。\n- 这是**左前降支近段急性闭塞**的 STEMI 等危症：直接启动再灌注（导管室），不要等肌钙蛋白，也不要“收住院观察”。\n- 图形常**保持静态**：系列心电图不会“演变”成典型 STEMI——等它演变，就是等心肌坏死。',
-        '- **Upsloping ST depression >1 mm at the J point** in the precordial leads: the ST slopes upward and runs straight into **tall, symmetric T waves** — there is no ST elevation.\n- aVR often shows slight elevation; and unlike Wellens, the patient usually has **ongoing chest pain** (the occlusion is happening now).\n- This is a **STEMI equivalent of acute proximal LAD occlusion**: activate reperfusion (cath lab) — do not wait for troponin and do not "admit for observation".\n- The pattern tends to stay **static**: serial ECGs will not "evolve" into a classic STEMI — waiting for it to evolve is waiting for myocardium to die.',
-        '- **Descenso ascendente del ST >1 mm en el punto J** en las derivaciones precordiales: el ST asciende en diagonal y desemboca directamente en **ondas T altas y simétricas**; no hay elevación del ST.\n- aVR suele mostrar una elevación ligera; y a diferencia de Wellens, el paciente suele tener **dolor torácico persistente** (la oclusión está ocurriendo ahora).\n- Es un **equivalente de IAMCEST por oclusión aguda proximal de la descendente anterior**: activa la reperfusión (sala de hemodinámica), sin esperar la troponina ni «ingresar para observación».\n- El patrón suele mantenerse **estático**: los ECG seriados no «evolucionarán» a un IAMCEST clásico; esperar esa evolución es esperar a que muera miocardio.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('de-winter', 944),
-      view: { layout: 'single', lead: 'V3' },
-      marks: [
-        { auto: 'j', lead: 'V3' },
-        { auto: 'st', lead: 'V3' },
-        { auto: 't', lead: 'V3' },
-      ],
-      caption: l(
-        'V3：J 点下移 >1 mm，ST 段上斜融入高大而对称的 T 波——de Winter T波。注意 T 波宽基底、对称，不是高钾血症那种尖窄的“帐篷状”T（该查血钾，但形态本身已经给出方向）。再看 aVR：轻度抬高。',
-        'V3: the J point sits more than 1 mm down and the ST slopes up into a tall symmetric T — the de Winter pattern. Note the T is broad-based and symmetric, not the narrow tented T of hyperkalaemia (check the potassium, but the shape already points the way). Look again at aVR: slight elevation.',
-        'V3: el punto J está más de 1 mm por debajo y el ST asciende hacia una T alta y simétrica: el patrón de De Winter. Fíjate en que la T es de base ancha y simétrica, no la T estrecha y en tienda de campaña de la hiperpotasemia (pide el potasio, pero la morfología ya orienta). Mira también aVR: elevación ligera.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('aVR 抬高 + 广泛压低：多支血管或左主干', 'aVR elevation + diffuse depression: multivessel or left main', 'Elevación en aVR + descenso difuso: multivaso o tronco común'),
-      body: l(
-        '- **≥6 个下侧壁导联**（I、II、III、aVL、aVF、V2–V6）水平型或下斜型 **ST 压低 ≥1 mm**，伴 **aVR 抬高**（± V1）。\n- 整个左心室心内膜下缺血，损伤向量指向心底部与右侧——aVR 从右肩“俯视”心底部，是唯一记录到抬高的导联。\n- 这是**弥漫性心内膜下缺血**，不是某一支血管的闭塞：病因可以是**多支血管病变或左主干（或同等）狭窄**，也可以是供需失衡（快速心律失常、低血压、贫血、重度主动脉瓣狭窄或左心室肥厚）。真正完全闭塞的左主干通常表现为休克或心脏骤停，而不是这张图。\n- 处理：**紧急侵入评估**（不稳定者 <2 小时）——它不是经典 STEMI，但风险更高；绝不能写成“非特异性 ST-T 改变”。',
-        '- Horizontal or downsloping **ST depression ≥1 mm in ≥6 inferolateral leads** (I, II, III, aVL, aVF, V2–V6) with **ST elevation in aVR** (± V1).\n- The whole left ventricle is ischaemic subendocardially; the injury vector points towards the base and the right — aVR looks down at the heart base from the right shoulder and is the only lead recording elevation.\n- This is **diffuse subendocardial ischaemia**, not the occlusion of one artery: the cause may be **multivessel disease or left main (or equivalent) stenosis**, or a supply–demand mismatch (tachyarrhythmia, hypotension, anaemia, severe aortic stenosis or LVH). A truly occluded left main usually presents as shock or cardiac arrest, not as this tracing.\n- Management: **urgent invasive assessment** (within 2 h if unstable) — it is not a classic STEMI, but the risk is higher; never report it as "nonspecific ST-T changes".',
-        '- Descenso del ST horizontal o descendente **≥1 mm en ≥6 derivaciones inferolaterales** (I, II, III, aVL, aVF, V2–V6) con **elevación del ST en aVR** (± V1).\n- Todo el ventrículo izquierdo está isquémico de forma subendocárdica y el vector de lesión se dirige hacia la base y hacia la derecha: aVR contempla la base desde el hombro derecho y es la única derivación que registra elevación.\n- Es **isquemia subendocárdica difusa**, no la oclusión de una arteria: la causa puede ser **enfermedad multivaso o estenosis del tronco común (o equivalente)**, o un desequilibrio entre aporte y demanda (taquiarritmia, hipotensión, anemia, estenosis aórtica grave o HVI). Un tronco común realmente ocluido suele presentarse como shock o parada cardiaca, no como este trazado.\n- Manejo: **valoración invasiva urgente** (<2 h si hay inestabilidad); no es un IAMCEST clásico, pero el riesgo es mayor, y nunca debe reportarse como «cambios inespecíficos del ST-T».',
-      ),
-    },
-    {
       kind: 'criteria',
       title: l('三种高危图形：一眼标准', 'Three high-risk patterns at a glance', 'Tres patrones de alto riesgo de un vistazo'),
       items: [
@@ -179,6 +126,76 @@ const lesson: Lesson = {
       ],
       source:
         'de Zwaan C et al. Am Heart J 1982;103:730-736; de Winter RJ et al. N Engl J Med 2008;359:2071-2073; Thygesen K et al. Fourth Universal Definition of Myocardial Infarction. Eur Heart J 2019;40:237-269; Byrne RA et al. 2023 ESC Guidelines for the management of acute coronary syndromes. Eur Heart J 2023;44:3720-3826',
+    },
+    {
+      kind: 'film',
+      title: l('三种没有 ST 抬高的图形', 'Three patterns without ST elevation', 'Tres patrones sin elevación del ST'),
+      view: { layout: '3x4+1' },
+      frames: [
+        {
+          label: l('Wellens A 型', 'Wellens type A', 'Wellens tipo A'),
+          ecg: synth('wellens', 941),
+          note: l(
+            '开头那份图：V2–V3 的 T 波先直立后倒置，ST 平，R 波保留，没有 Q 波。左前降支近段临界狭窄：不做负荷试验。',
+            'The opening tracing: T in V2–V3 up then down, ST flat, R preserved, no Q. Critical proximal LAD: no stress test.',
+            'El trazado inicial: T en V2–V3 primero positiva y luego negativa, ST plano, R conservada, sin Q. DA proximal crítica: sin prueba de esfuerzo.',
+          ),
+          marks: [{ auto: 't', lead: 'V2' }],
+        },
+        {
+          label: l('Wellens B 型', 'Wellens type B', 'Wellens tipo B'),
+          ecg: synth('wellens', 943, undefined, 'b'),
+          note: l(
+            '倒置占了主导：V2–V3 深约 7 mm，并波及 V1 和 V4；R 波保留、ST 平。与 A 型意义相同。',
+            'The inversion takes over: about 7 mm deep in V2–V3, reaching V1 and V4; R preserved, ST flat. Same message as type A.',
+            'Domina la inversión: unos 7 mm de profundidad en V2–V3, que alcanza V1 y V4; R conservada, ST plano. El mismo mensaje que el tipo A.',
+          ),
+          marks: [{ auto: 't', lead: 'V3' }],
+        },
+        {
+          label: l('de Winter T波', 'de Winter', 'De Winter'),
+          ecg: synth('de-winter', 944),
+          note: l(
+            'V2–V4 的 J 点压低超过 2 mm，ST 上斜融入高大对称的 T 波，aVR 轻度抬高，胸前没有抬高：左前降支近段急性闭塞，按 STEMI 处理。',
+            'J more than 2 mm down in V2–V4, the ST sloping up into tall symmetric T waves, aVR slightly up, no chest elevation: acute proximal LAD occlusion, treat as STEMI.',
+            'J más de 2 mm por debajo en V2–V4, ST ascendente hacia T altas y simétricas, aVR algo elevada, sin elevación precordial: oclusión aguda de la DA proximal, tratar como IAMCEST.',
+          ),
+          marks: [{ auto: 'j', lead: 'V3' }, { auto: 't', lead: 'V3' }, { auto: 'j', lead: 'aVR' }],
+        },
+        {
+          label: l('aVR + 广泛压低', 'aVR + diffuse depression', 'aVR + descenso difuso'),
+          ecg: synth('avr-elevation-diffuse-std', 946, undefined, 'left-main'),
+          note: l(
+            '7 个导联压低 ≥ 1 mm（最深约 2.5 mm），aVR 和 V1 抬高约 1 mm：弥漫性心内膜下缺血，左主干或三支病变可能更大。',
+            'Seven leads down ≥ 1 mm (deepest about 2.5 mm), aVR and V1 up about 1 mm: diffuse subendocardial ischaemia; left main or three-vessel disease more likely.',
+            'Siete derivaciones con descenso ≥ 1 mm (máximo unos 2,5 mm), aVR y V1 elevadas 1 mm: isquemia subendocárdica difusa; más probable el tronco común o tres vasos.',
+          ),
+          marks: [{ auto: 'j', lead: 'aVR' }, { auto: 'st60', lead: 'V4' }],
+        },
+      ],
+      predict: {
+        question: l('这几种图形里，哪一种可以安排负荷试验？', 'Which of these patterns can go for a stress test?', '¿Cuál de estos patrones puede ir a una prueba de esfuerzo?'),
+        options: [
+          l('一种都不行', 'None of them', 'Ninguno'),
+          l('Wellens，因为现在不痛', 'Wellens, since the pain has gone', 'Wellens, porque ya no duele'),
+          l('aVR 抬高，只要血压稳定', 'aVR elevation, if the blood pressure is stable', 'La elevación en aVR, si la tensión es estable'),
+        ],
+        answer: 0,
+      },
+      caption: l(
+        'Wellens 出现在疼痛缓解之后；de Winter 出现在疼痛持续时，而且图形常保持不变：等它“演变”就是等心肌坏死。',
+        'Wellens shows up after the pain has gone; de Winter while it goes on, and it tends to stay static: waiting for it to "evolve" is waiting for muscle to die.',
+        'Wellens aparece cuando el dolor ya ha cedido; De Winter mientras persiste, y suele quedarse estático: esperar a que «evolucione» es esperar a que muera músculo.',
+      ),
+    },
+    {
+      kind: 'heart',
+      ecg: synth('avr-elevation-diffuse-std', 945),
+      caption: l(
+        '播放一个心动周期：整个左心室的内层都在缺血。总损伤矢量指向心底部和右侧，所以只有 aVR（± V1）抬高，其余 ≥ 6 个导联压低。',
+        'Play one beat: the whole inner layer of the left ventricle is ischaemic. The overall injury vector points to the base and the right, so only aVR (± V1) rises while ≥ 6 leads fall.',
+        'Reproduce un latido: toda la capa interna del ventrículo izquierdo está isquémica. El vector de lesión global apunta a la base y a la derecha, así que solo aVR (± V1) sube mientras ≥ 6 derivaciones bajan.',
+      ),
     },
     {
       kind: 'worked',
@@ -228,17 +245,6 @@ const lesson: Lesson = {
           highlightLeads: ['aVR', 'V1'],
         },
       ],
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('avr-elevation-diffuse-std', 946, undefined, 'left-main'),
-      view: { layout: '3x4+1', highlightLeads: ['aVR', 'V1', 'V4', 'V5'] },
-      marks: [{ auto: 'st', lead: 'aVR' }, { auto: 'st', lead: 'V1' }, { auto: 'st', lead: 'V4' }],
-      caption: l(
-        '另一份更重的图：aVR 抬高约 1.2 mm，V1 也抬高约 1 mm，下侧壁压低更深（达 2.5 mm）。缺血范围越广、压低越深，左主干或三支病变的可能越大——但心电图只能提示，不能证明左主干；床旁不稳时属最高危，立即侵入策略。',
-        'A heavier tracing: aVR is up about 1.2 mm, V1 about 1 mm as well, and the inferolateral depression is deeper (up to 2.5 mm). The wider and deeper the ischaemia, the likelier left main or three-vessel disease — but the ECG can only suggest the left main, never prove it; with an unstable patient this is the highest-risk group: immediate invasive strategy.',
-        'Un trazado más grave: aVR se eleva unos 1,2 mm, V1 también alrededor de 1 mm, y el descenso inferolateral es más profundo (hasta 2,5 mm). Cuanto más extensa y profunda la isquemia, más probable el tronco común o la enfermedad de tres vasos; pero el ECG solo sugiere el tronco común, nunca lo demuestra; con un paciente inestable es el grupo de mayor riesgo: estrategia invasiva inmediata.',
-      ),
     },
     {
       kind: 'contrast',
@@ -303,6 +309,11 @@ const lesson: Lesson = {
           '低血压患者被写成“复极异常/劳损”：广泛压低 + aVR 抬高 + 血流动力学不稳 = 左主干或多支病变，直到被排除为止。',
           'A hypotensive patient labelled "repolarisation abnormality / strain": diffuse depression + aVR elevation + haemodynamic compromise = left main or multivessel disease until proven otherwise.',
           'Un paciente hipotenso etiquetado de «alteración de la repolarización / sobrecarga»: descenso difuso + elevación en aVR + inestabilidad hemodinámica = tronco común o enfermedad multivaso hasta que se demuestre lo contrario.',
+        ),
+        l(
+          '把 aVR 抬高伴广泛压低直接读成“左主干闭塞”：它是弥漫性心内膜下缺血，可来自多支或左主干狭窄，也可来自供需失衡（快速心律失常、低血压、贫血、重度主动脉瓣狭窄、左心室肥厚）。',
+          'Reading aVR elevation with diffuse depression as "left main occlusion": it is diffuse subendocardial ischaemia, from multivessel or left-main stenosis or from a supply–demand mismatch (tachyarrhythmia, hypotension, anaemia, severe aortic stenosis, LVH).',
+          'Leer la elevación en aVR con descenso difuso como «oclusión del tronco común»: es isquemia subendocárdica difusa, por estenosis multivaso o del tronco, o por desequilibrio entre aporte y demanda (taquiarritmia, hipotensión, anemia, estenosis aórtica grave, HVI).',
         ),
         l(
           '忘了对应性思维：aVR 的抬高不是孤立发现，而是广泛心内膜下损伤向量的镜像——与其余导联一起读，模式才成立。',

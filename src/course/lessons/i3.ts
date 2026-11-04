@@ -74,15 +74,6 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('前壁家族：从 V1–V2 到 V1–V6', 'The anterior family: from V1–V2 to V1–V6', 'La familia anterior: de V1–V2 a V1–V6'),
-      body: l(
-        '- **室间隔**（V1–V2）：LAD 间隔支。\n- **前间壁**（V1–V4）：LAD 最常见的闭塞段（多在第一对角支之后）。\n- **前壁/心尖**（V3–V4）：LAD 中远段。\n- **广泛前壁**（V1–V6 ± I/aVL）：近段 LAD——危险心肌最大的一型。\n- **前侧壁**（V3–V6 + I/aVL）：LAD 加粗大的对角支；孤立的高侧壁（I、aVL）则是对角支或 LCx。\n规则：**抬高的导联越多、侧壁越早加入，闭塞越靠近近段，预后越重**。命名要具体——广泛前壁不是前间壁。',
-        '- **Septal** (V1–V2): LAD septal branches.\n- **Anteroseptal** (V1–V4): the commonest LAD occlusion segment (usually after the first diagonal).\n- **Anterior/apical** (V3–V4): mid-to-distal LAD.\n- **Extensive anterior** (V1–V6 ± I/aVL): proximal LAD — the largest myocardium at risk.\n- **Anterolateral** (V3–V6 + I/aVL): the LAD plus a large diagonal; isolated high lateral (I, aVL) is a diagonal or the LCx.\nThe rule: **the more leads elevated, and the earlier the lateral wall joins, the more proximal the occlusion and the heavier the prognosis**. Name it precisely — extensive anterior is not anteroseptal.',
-        '- **Septal** (V1–V2): ramas septales de la DA.\n- **Anteroseptal** (V1–V4): el segmento de oclusión más frecuente de la DA (habitualmente distal a la primera diagonal).\n- **Anterior/apical** (V3–V4): DA media y distal.\n- **Anterior extenso** (V1–V6 ± I/aVL): DA proximal, la mayor masa en riesgo.\n- **Anterolateral** (V3–V6 + I/aVL): la DA más una diagonal gruesa; el lateral alto aislado (I, aVL) es una diagonal o la Cx.\nLa regla: **cuantas más derivaciones elevadas y cuanto antes se sume la pared lateral, más proximal es la oclusión y más grave el pronóstico**. Nómbralo con precisión: un anterior extenso no es un anteroseptal.',
-      ),
-    },
-    {
       kind: 'criteria',
       title: l('前壁家族：导联 ↔ 区域 ↔ 预后', 'The anterior family: leads ↔ territory ↔ prognosis', 'La familia anterior: derivaciones ↔ territorio ↔ pronóstico'),
       items: [
@@ -220,31 +211,96 @@ const lesson: Lesson = {
       scenario: 'stemi-anterior',
       seed: 846,
       dials: [{ id: 'st' }],
-      marks: [{ auto: 'st60', lead: 'V3' }, { auto: 'st60', lead: 'III' }],
+      marks: [{ auto: 'j', lead: 'V3' }, { auto: 'j', lead: 'V5' }, { auto: 'j', lead: 'III' }],
+      play: {
+        dial: 'st',
+        from: 0.22,
+        to: 0.45,
+        notes: [
+          {
+            min: 0.22,
+            max: 0.3,
+            text: l(
+              'J点：V3 2–3.5 mm，V5–V6不到1 mm。抬高停留在前壁导联。',
+              'At J: V3 2–3.5 mm, V5–V6 under 1 mm. The elevation stays on the front-wall leads.',
+              'En J: V3 2–3,5 mm, V5–V6 por debajo de 1 mm. La elevación se queda en las derivaciones de la pared anterior.',
+            ),
+          },
+          {
+            min: 0.31,
+            max: 0.45,
+            text: l(
+              'V2–V4继续升高，III压得更深，V5–V6仍不到1 mm：电流更大，区域不变。',
+              'V2–V4 keep growing and III sinks deeper, yet V5–V6 stay under 1 mm: more current, same territory.',
+              'V2–V4 siguen creciendo y III baja más, pero V5–V6 siguen por debajo de 1 mm: más corriente, mismo territorio.',
+            ),
+          },
+        ],
+      },
+      predict: {
+        question: l('把损伤电流调到最大，V5–V6 会加入抬高吗？', 'Turn the injury current to its maximum. Will V5–V6 join the elevation?', 'Sube la corriente de lesión al máximo. ¿Se sumarán V5–V6 a la elevación?'),
+        options: [
+          l('不会：导联范围由区域决定', 'No: the territory sets the lead extent', 'No: el territorio fija la extensión'),
+          l('会：电流越大，抬高的导联越多', 'Yes: more current lifts more leads', 'Sí: más corriente eleva más derivaciones'),
+        ],
+        answer: 0,
+      },
       caption: l(
-        '上下调动损伤电流（0.22–0.45 mV）：V3 的读数升降，III 反向跟随。注意：**导联范围不变**——V1–V4 抬高加下壁镜像。变的是毫米数，不变的是要问的问题：多大、哪些相邻导联、有没有镜像、是不是新出现。',
-        'Move the injury current up and down (0.22–0.45 mV): the reading in V3 rises and falls while III follows the other way. Notice: **the lead extent does not change** — elevation across V1–V4 with an inferior mirror. What changes is the millimetres; what never changes is the question set: how much, in which contiguous leads, is there a mirror, is it new.',
-        'Sube y baja la corriente de lesión (0,22–0,45 mV): la lectura en V3 asciende y desciende mientras III lo hace en sentido contrario. Fíjate: **la extensión de las derivaciones no cambia** —elevación en V1–V4 con imagen especular inferior—. Cambian los milímetros; no cambian las preguntas: cuánto, en qué derivaciones contiguas, hay espejo, es nuevo.',
+        '拖动损伤电流：看哪些导联在动，而不只是动了多少。',
+        'Drag the injury current: watch which leads move, not only how far.',
+        'Mueve la corriente de lesión: mira qué derivaciones se mueven, no solo cuánto.',
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('hyperacute-t', 847),
+      kind: 'film',
+      title: l('前壁闭塞：最早的信号与家族成员', 'Anterior occlusion: the earliest sign and the family', 'Oclusión anterior: la señal más precoz y la familia'),
       view: { layout: '3x4+1' },
-      marks: [{ auto: 't', lead: 'V2' }, { auto: 't', lead: 'V3' }, { auto: 't', lead: 'III' }],
+      frames: [
+        {
+          label: l('超急性期T波', 'Hyperacute T', 'T hiperaguda'),
+          ecg: synth('hyperacute-t', 847),
+          note: l(
+            'V2–V4的T波宽大、超过5 mm，J点仍不到1 mm；III的T波倒置。最早的信号：15–30分钟内复查。',
+            'V2–V4: broad, bulky T waves over 5 mm while J stays under 1 mm; T inverted in III. The earliest sign: repeat the ECG in 15–30 min.',
+            'V2–V4: T anchas y voluminosas de más de 5 mm con J por debajo de 1 mm; T negativa en III. La señal más precoz: repite el ECG en 15–30 min.',
+          ),
+          marks: [{ auto: 't', lead: 'V3' }, { auto: 't', lead: 'III' }],
+        },
+        {
+          label: l('前间壁', 'Anteroseptal', 'Anteroseptal'),
+          ecg: synth('stemi-anteroseptal', 848),
+          note: l(
+            'V1–V3抬高，V2最高，V4不到1 mm；V5–V6、I、aVL平坦：前间壁 → D1之后的LAD。',
+            'V1–V3 up, V2 highest, V4 under 1 mm; V5–V6, I and aVL flat: anteroseptal → LAD beyond D1.',
+            'V1–V3 elevadas, máxima en V2, V4 por debajo de 1 mm; V5–V6, I y aVL planas: anteroseptal → DA distal a D1.',
+          ),
+          marks: [{ auto: 'j', lead: 'V2' }, { auto: 'j', lead: 'V4' }],
+        },
+        {
+          label: l('前壁', 'Anterior', 'Anterior'),
+          ecg: synth('stemi-anterior', 846, { st: 0.3 }),
+          note: l(
+            'V1–V4抬高，V3最高，II、III、aVF呈镜像：前壁 → LAD。',
+            'V1–V4 up, most in V3, with a mirror in II, III and aVF: anterior → LAD.',
+            'V1–V4 elevadas, máxima en V3, con espejo en II, III y aVF: anterior → DA.',
+          ),
+          marks: [{ auto: 'j', lead: 'V3' }, { auto: 'j', lead: 'III' }],
+        },
+        {
+          label: l('前侧壁', 'Anterolateral', 'Anterolateral'),
+          ecg: synth('stemi-anterolateral', 841),
+          note: l(
+            '开头那份图：V3–V6加I、aVL抬高，V1–V2没有；III压低。前侧壁 → LAD加粗大对角支。',
+            'The opening tracing: V3–V6 plus I and aVL up, V1–V2 not; III down. Anterolateral → LAD with a large diagonal.',
+            'El trazado inicial: V3–V6 más I y aVL elevadas, V1–V2 no; III descendida. Anterolateral → DA con una diagonal gruesa.',
+          ),
+          marks: [{ auto: 'j', lead: 'aVL' }, { auto: 'j', lead: 'V5' }],
+        },
+      ],
       caption: l(
-        '55岁男性，胸痛20分钟：V2–V4 的 T 波**宽底、粗大、对称**，与其 QRS 相比明显过大——而 ST 抬高只有约 0.5 mm，未达阈值；III、aVF 的 T 波倒置是微妙的镜像。这是**超急性期T波**：闭塞最早的心电图信号，可先于 ST 抬高出现（≥ 2 个相邻导联）。不要当作“正常变异”打发：15–30 分钟内复查并找旧图对比（第 i7 课系统练习）。',
-        'Man, 55, chest pain for 20 minutes: the T waves in V2–V4 are **broad-based, bulky and symmetric**, clearly too large for their QRS — and the ST elevation is only about 0.5 mm, below threshold; the inverted T in III and aVF is a subtle mirror. These are **hyperacute T waves**: the earliest ECG sign of occlusion, appearing before ST elevation (≥ 2 contiguous leads). Do not wave them off as a "normal variant": repeat the ECG within 15–30 minutes and compare with the old tracing (lesson i7 drills this systematically).',
-        'Varón de 55 años, dolor torácico de 20 minutos: las ondas T de V2–V4 son **anchas de base, voluminosas y simétricas**, claramente desproporcionadas respecto a su QRS, y la elevación del ST es de solo unos 0,5 mm, por debajo del umbral; la T negativa en III y aVF es un espejo sutil. Son **ondas T hiperagudas**: la señal electrocardiográfica más precoz de la oclusión, que puede preceder a la elevación del ST (≥ 2 derivaciones contiguas). No las despaches como «variante normal»: repite el ECG en 15–30 minutos y compáralo con el trazado previo (la lección i7 lo entrena a fondo).',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('为什么要认真对待前壁闭塞', 'Why anterior occlusion deserves respect', 'Por qué la oclusión anterior merece respeto'),
-      body: l(
-        '- 前壁是 LAD 的领地、各区域中面积最大：**危险心肌最多**，急性期风险最高。\n- 并发症集中在泵与电：**心源性休克**、**室性心动过速/心室颤动**；近段闭塞累及间隔支时还可波及传导系统。\n- 处理上没有“观察一下”的选项：诊断成立即启动**再灌注**（首选直接 PCI）——心电图本身决定通路，不必等肌钙蛋白。\n- 远期：大面积前壁梗死是室壁瘤与心力衰竭的温床（第 i9 课）。',
-        '- The anterior territory is LAD country and the largest of all: **the most myocardium at risk**, with the highest acute-phase risk.\n- Its complications sit in the pump and the rhythm: **cardiogenic shock**, **ventricular tachycardia/fibrillation**; a proximal occlusion taking the septal branches can also reach the conduction system.\n- There is no "watch and wait" option: once the diagnosis stands, start **reperfusion** (primary PCI preferred) — the ECG alone sets the pathway; do not wait for troponin.\n- Later on, a large anterior infarct is the seedbed of aneurysm and heart failure (lesson i9).',
-        '- El territorio anterior es país de la DA y el más extenso de todos: **la mayor masa en riesgo**, con el mayor riesgo en fase aguda.\n- Sus complicaciones están en la bomba y en el ritmo: **shock cardiogénico**, **taquicardia/fibrilación ventricular**; una oclusión proximal que toma las ramas septales puede alcanzar también el sistema de conducción.\n- No existe la opción de «observar y esperar»: hecho el diagnóstico, inicia la **reperfusión** (de elección, ICP primaria); el ECG por sí solo marca la vía, sin esperar la troponina.\n- A largo plazo, un infarto anterior extenso es el caldo de cultivo del aneurisma y la insuficiencia cardiaca (lección i9).',
+        '抬高的导联越多、侧壁越早加入，闭塞越靠近近段，危险心肌越大。',
+        'The more leads that rise, and the sooner the lateral leads join, the more proximal the occlusion and the more muscle at risk.',
+        'Cuantas más derivaciones se elevan y antes se suman las laterales, más proximal es la oclusión y más músculo está en riesgo.',
       ),
     },
     { kind: 'check', item: { family: 'territory', seed: 2 } },
