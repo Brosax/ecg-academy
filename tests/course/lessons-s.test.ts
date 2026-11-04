@@ -547,21 +547,32 @@ describe('s5: axis on the tracings', () => {
     expect(mostEquiphasic(e)).toBe('III');
     for (const l of ['I', 'II'] as const) expect(qrs(e, l).net, l).toBeGreaterThan(0.1);
   });
-  it('R-wave progression film, normal frame: rS in V1, the R overtakes the S at V3, qR in V6', () => {
+  it('R-wave progression film, normal frame: rS in V1, the R overtakes the S at V3, qR in V6, small or no S in V5–V6', () => {
     const e = ecgOf(blocksOf('s5', 'film')[0].frames[0].ecg);
     expect(transition(e)).toBe('V3');
     const b = midBeat(e);
-    const roles = (l: StdLead) => qrsWaves(e.signal.leads[l], e.signal.fs, b.qrsOn, b.qrsOff).map((w) => w.role).join('');
+    const waves = (l: StdLead) => qrsWaves(e.signal.leads[l], e.signal.fs, b.qrsOn, b.qrsOff);
+    const roles = (l: StdLead) => waves(l).map((w) => w.role).join('');
     expect(roles('V1')).toBe('rs');
     expect(roles('V6').startsWith('qr')).toBe(true);
+    for (const l of ['V5', 'V6'] as const) {
+      const r = Math.max(...waves(l).filter((w) => w.role === 'r').map((w) => w.mv));
+      for (const s of waves(l).filter((w) => w.role === 's')) {
+        expect(-s.mv, `${l} S`).toBeLessThan(0.1);
+        expect(-s.mv, `${l} S`).toBeLessThan(0.1 * r);
+      }
+    }
   });
-  it('R-wave progression film: poor progression has an R of about 2 mm in V3 and its transition at V4; V1–V2 high on the same heart shrinks the r in V2 from about 3.5 to 1 mm and turns the P in V1 negative', () => {
+  it('R-wave progression film: poor progression has an R of about 2 mm in V3 (transition at V4); V1–V2 high on the same heart shrinks the r in V2 from about 3.5 to 1 mm, halves the r in V1 and turns the P in V1 negative', () => {
     const [normal, poor, high] = blocksOf('s5', 'film')[0].frames.map((f) => ecgOf(f.ecg));
     expect(qrs(poor, 'V3').max).toBeGreaterThan(0.15);
     expect(qrs(poor, 'V3').max).toBeLessThanOrEqual(0.25);
     expect(transition(poor)).toBe('V4');
     expect(Math.abs(qrs(normal, 'V2').max - 0.35)).toBeLessThan(0.05);
     expect(Math.abs(qrs(high, 'V2').max - 0.1)).toBeLessThan(0.03);
+    const v1 = qrs(high, 'V1').max / qrs(normal, 'V1').max;
+    expect(v1).toBeGreaterThan(0.4);
+    expect(v1).toBeLessThan(0.6);
     expect(pw(normal, 'V1').max).toBeGreaterThan(0.005);
     expect(pw(high, 'V1').max).toBeLessThan(0.003);
     expect(pw(high, 'V1').min).toBeLessThan(-0.02);
