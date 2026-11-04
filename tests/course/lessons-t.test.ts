@@ -654,7 +654,7 @@ describe('t4 on the tracings', () => {
     expect(net('aVF', b.qrsOn, b.qrsOff).net).toBeGreaterThan(0.3);
     expect(e.truth!.axisDeg.qrs).toBeGreaterThan(90);
   });
-  it('pathway film: sinus PR about 115 ms with QRS about 120 ms; orthodromic AVRT narrow and regular at about 190/min with the P′ after the QRS; antidromic AVRT regular, about 185/min, QRS about 155 ms; pre-excited AF about 200/min, irregular, QRS width varying with narrower beats, shortest RR about 210 ms', () => {
+  it('pathway film: sinus PR about 115 ms with QRS about 120 ms; orthodromic AVRT narrow and regular at about 190/min with the P′ after the QRS, through a concealed pathway (no WPW finding); antidromic AVRT regular, about 185/min, QRS about 155 ms; pre-excited AF about 200/min, irregular, QRS width varying with narrower beats, shortest RR about 210 ms', () => {
     const [sinus, ortho, anti, af] = frames('t4', 1);
     expect(Math.abs(sinus.truth!.prMs! - 115)).toBeLessThan(5);
     expect(Math.abs(sinus.truth!.qrsMs - 120)).toBeLessThan(5);
@@ -664,6 +664,7 @@ describe('t4 on the tracings', () => {
     expect(o.qrsMs).toBeLessThan(110);
     expect(Math.max(...rrs(ortho)) - Math.min(...rrs(ortho))).toBeLessThan(10);
     expect(mid(ortho).pOn!).toBeGreaterThan(mid(ortho).qrsOff);
+    expect(o.findings).not.toContain('wpw');
     const a = anti.truth!;
     expect(Math.abs(a.hrBpm - 185)).toBeLessThan(5);
     expect(Math.abs(a.qrsMs - 155)).toBeLessThan(5);

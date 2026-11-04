@@ -203,9 +203,9 @@ const lesson: Lesson = {
         answer: 1,
       },
       caption: l(
-        '四个不同的患者，旁路都在左侧游离壁：窦性心律时它画出图形，心动过速时充当环路。图形 + 心动过速 = WPW 综合征。',
-        'Four different patients, each with a left free-wall pathway: in sinus rhythm it draws the pattern; in tachycardia it forms the circuit. Pattern + tachycardia = WPW syndrome.',
-        'Cuatro pacientes distintos, todos con una vía de pared libre izquierda: en ritmo sinusal dibuja el patrón; en taquicardia forma el circuito. Patrón + taquicardia = síndrome de WPW.',
+        '四个不同的患者，旁路都在左侧游离壁。能前传的旁路在窦性心律时画出图形（顺向型那位的旁路是隐匿的，没有图形）；心动过速时旁路充当环路。图形 + 心动过速 = WPW 综合征。',
+        'Four different patients, each with a left free-wall pathway. A pathway that conducts forward draws the pattern in sinus rhythm (the orthodromic patient’s is concealed: no pattern); in tachycardia the pathway forms the circuit. Pattern + tachycardia = WPW syndrome.',
+        'Cuatro pacientes distintos, todos con una vía de pared libre izquierda. Una vía que conduce hacia delante dibuja el patrón en ritmo sinusal (la del paciente ortodrómico está oculta: no hay patrón); en taquicardia la vía forma el circuito. Patrón + taquicardia = síndrome de WPW.',
       ),
     },
     {
@@ -293,7 +293,7 @@ const lesson: Lesson = {
           value: l(
             '竞技运动员与高危职业者：建议电生理检查（含异丙肾上腺素，I 类）；其他无症状者应考虑（IIa）；有高危特征 ⇒ 消融',
             'Competitive athletes and high-risk occupations: EP study with isoprenaline recommended (Class I); other asymptomatic people: should be considered (IIa); high-risk features -> ablation',
-            'Deportistas de competición y profesiones de alto riesgo: estudio electrofisiológico con isoproterenol recomendado (clase I); otras personas asintomáticas: debe considerarse (IIa); características de alto riesgo -> ablación',
+            'Deportistas de competición y profesiones de alto riesgo: estudio electrofisiológico con isoprenalina recomendado (clase I); otras personas asintomáticas: debe considerarse (IIa); características de alto riesgo -> ablación',
           ),
         },
         {
