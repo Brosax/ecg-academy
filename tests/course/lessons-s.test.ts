@@ -870,9 +870,9 @@ describe('s7: normal variants on the tracings', () => {
     expect(tInverted(e, 'V1')).toBe(true);
     for (const l of ['V3', 'V4', 'V5', 'V6', 'I', 'II'] as const) expect(tUpright(e, l), l).toBe(true);
   });
-  it('athlete: the hump before the J mark in II, aVF, V5 and V6 rises from below the baseline, so it is not a notch by the rule the ST sweep uses (the text says J-point elevation, not notch)', () => {
+  it('athlete: the hump before the J mark in II, aVF and V4–V6 rises from below the baseline, so it is not a notch by the rule the ST sweep uses (the text says J-point elevation, not notch)', () => {
     const e = ecgOf(blocksOf('s7', 'hook')[0].ecg);
-    for (const l of ['II', 'aVF', 'V5', 'V6'] as const) expect(notch(e, l).dip, l).toBeLessThan(-MIN_WAVE_MV);
+    for (const l of ['II', 'aVF', 'V4', 'V5', 'V6'] as const) expect(notch(e, l).dip, l).toBeLessThan(-MIN_WAVE_MV);
   });
   it('ST sweep: in II and aVF at both ends the notch is a separate hump after the R downstroke (from a dip that stays on or above the baseline it rises over 2 mm to the Jp), standing above the J mark; QRS < 120 ms throughout', () => {
     for (const v of [0.06, 0.14]) {
@@ -905,6 +905,9 @@ describe('s7: normal variants on the tracings', () => {
     }
   });
   it('ST sweep prediction: in II and aVF the notch (≥ 1 mm, standing above the J mark) is there at every step and does not shrink, while the ST at the J mark rises', () => {
+    const p = blocksOf('s7', 'live')[0].predict!;
+    expect(p.ordered).toBeUndefined();
+    expect(p.options[p.answer].en).toBe('It stays from start to end while the ST after it rises');
     const sc = scenarios().find((s) => s.id === 'early-repolarization')!;
     for (const v of sweepValues('st', sc.dials.st!, 0.06, 0.14)) {
       const e = played('s7', 0, v);
@@ -1061,9 +1064,10 @@ const REAL_CLAIMS: Readonly<Partial<Record<(typeof IDS)[number], readonly RealCl
     { id: 13683, sex: 'M', age: 19, has: ['normal-ecg'] },
     { id: 5469, sex: 'M', age: 39, has: ['normal-ecg'] },
   ],
-  // "three people aged 16 to 42"; "one carries the label incomplete RBBB"
+  // "three people aged 16 to 42"; "one carries the label incomplete RBBB: measure its QRS before you agree with the label"
+  // (12SL QRS 86 ms, under the 110 ms the lesson's incomplete RBBB needs)
   s7: [
-    { id: 15112, age: 42, has: ['irbbb'] },
+    { id: 15112, age: 42, has: ['irbbb'], qrs: [0, 109] },
     { id: 13683, age: 19, not: ['irbbb'] },
     { id: 2084, age: 16, not: ['irbbb'] },
   ],
