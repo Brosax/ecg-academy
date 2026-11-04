@@ -763,11 +763,13 @@ describe('h6: ARVC on the tracings', () => {
     for (let ms = 5; ms <= 60; ms++) if (Math.abs(v(ms)) > Math.abs(v(at))) at = ms;
     return { peak: v(at), atMs: at, at10: v(10) };
   }
-  it('epsilon film notes: ARVC has a blip of about 0.7 mm about 30 ms after the QRS bracket, back on the baseline in between; iRBBB has an R′ of about 7 mm inside a QRS of about 115 ms and nothing after it', () => {
+  it('epsilon film notes and prediction: ARVC (the strip shown first) has a blip of about 0.7 mm (under 1 mm) about 30 ms after the QRS bracket, back on the baseline in between; iRBBB has an R′ of about 7 mm inside a QRS of about 115 ms and nothing after it', () => {
     expect(blocksOf('h6', 'film')[1].frames[0].ecg).toEqual(blocksOf('h6', 'film')[0].frames[2].ecg);
     const [arvc, irbbb] = frames('h6', 1);
     const eps = afterQrs(arvc);
     near(eps.peak, 0.7, 0.2);
+    expect(eps.peak, 'not a flat baseline').toBeGreaterThan(0.05);
+    expect(eps.peak, 'under 1 mm').toBeLessThan(0.1);
     expect(Math.abs(eps.atMs - 30)).toBeLessThanOrEqual(5);
     expect(Math.abs(eps.at10)).toBeLessThan(0.01);
     expect(hasRPrime(irbbb, 'V1')).toBe(true);
