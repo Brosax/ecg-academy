@@ -69,8 +69,9 @@ const lesson: Lesson = {
       },
       predict: {
         question: l('心率从 60 升到 100 次/分，两个 R 波之间会剩几个大格？', 'As the rate climbs from 60 to 100/min, how many large squares will separate the R waves?', 'Si la frecuencia sube de 60 a 100 lpm, ¿cuántos cuadros grandes separarán las ondas R?'),
-        options: [l('4 个', '4', '4'), l('3 个', '3', '3'), l('2 个', '2', '2')],
+        options: [l('2 个', '2', '2'), l('3 个', '3', '3'), l('4 个', '4', '4')],
         answer: 1,
+        ordered: true,
       },
       caption: l(
         '纸就是一只钟：1 大格 = 200 ms，5 大格 = 1 秒。看 RR 随心率缩短，记住 300、150、100、75、60、50。',
@@ -204,13 +205,15 @@ const lesson: Lesson = {
           label: l('随呼吸变化', 'Breathing with', 'Varía con la respiración'),
           ecg: synth('sinus-arrhythmia', 208),
           note: l('RR 随呼吸忽长忽短：只量一对会偏，改数 10 秒内的 QRS × 6。', 'RR stretches and shrinks with breathing: one pair misleads, so count QRS in 10 s × 6.', 'El RR se alarga y acorta con la respiración: un par engaña; cuenta los QRS de 10 s × 6.'),
-          marks: [{ auto: 'rr' }],
+          // the shortest RR on the strip: the pair that misleads most
+          marks: [{ auto: 'rr', beat: 9 }],
         },
         {
           label: l('完全不规则', 'Irregularly irregular', 'Irregularmente irregular'),
           ecg: synth('atrial-fibrillation', 206),
           note: l('没有两个 RR 相同：每对给出不同的“心率”。只能数整条 10 秒，再乘以 6。', 'No two RR alike: each pair gives a different "rate". Count the whole 10 s and multiply by 6.', 'No hay dos RR iguales: cada par da otra «frecuencia». Cuenta los 10 s enteros y multiplica por 6.'),
-          marks: [{ auto: 'rr' }],
+          // the shortest RR on the strip: its "rate" is far from the 10-s count
+          marks: [{ auto: 'rr', beat: 16 }],
         },
       ],
       predict: {

@@ -12,10 +12,12 @@ import { realisedDials, startDials, sweepValues } from '../../src/course/live';
 import { baselineBefore, leadWindows, MIN_WAVE_MV, qrsWaves, resolveMarks, type ResolveOptions } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
+import type { FindingId } from '../../src/core/findings';
 import type { L10n } from '../../src/core/l10n';
 import type { StdLead } from '../../src/core/leads';
 import type { EcgSource, Item } from '../../src/practice/api';
 import { generateItem } from '../../src/practice';
+import { getCase } from '../../src/real/library';
 import { generate, scenarios, type SynthRequest } from '../../src/synth';
 
 const IDS = ['s1', 's2', 's3', 's4', 's5', 's6', 's7'] as const;
@@ -426,6 +428,16 @@ describe('s2: rate on the tracings', () => {
     expect(Math.max(...rrs(reg)) - Math.min(...rrs(reg))).toBeLessThan(40);
     expect(Math.max(...rrs(sa)) - Math.min(...rrs(sa))).toBeGreaterThan(120);
     expect(af.truth!.rhythm).toBe('atrial-fibrillation');
+  });
+  it('film: the RR marked on the breathing and AF strips is their shortest, and its rate misses the 10-s count × 6 by more than 10 %', () => {
+    const film = blocksOf('s2', 'film')[0];
+    for (const k of [1, 2]) {
+      const e = ecgOf(film.frames[k].ecg);
+      const rr = rrs(e)[markBeat(film.frames[k].marks, 'rr')];
+      expect(rr, `frame ${k}`).toBe(Math.min(...rrs(e)));
+      const counted = 6 * e.truth!.beats.length;
+      expect(Math.abs(60000 / rr - counted) / counted, `frame ${k}`).toBeGreaterThan(0.1);
+    }
   });
 });
 
@@ -883,4 +895,60 @@ describe('s7: normal variants on the tracings', () => {
     expect(Math.abs(e.truth!.prMs! - 220)).toBeLessThan(10);
     expect(hasRPrime(e, 'V1')).toBe(true);
   });
+});
+
+// ── what the text says about each real case (labels and the 12SL reference) ─────────────────────────────────────────
+
+interface RealClaim {
+  readonly id: number;
+  readonly sex?: 'M' | 'F';
+  readonly age?: number;
+  /** labels the text names */
+  readonly has?: readonly FindingId[];
+  /** labels the text says are absent */
+  readonly not?: readonly FindingId[];
+  readonly hr?: readonly [number, number];
+  readonly pr?: readonly [number, number];
+  readonly axis?: readonly [number, number];
+  readonly qtcF?: readonly [number, number];
+}
+
+/** per lesson, every real case it shows and what its text states about it (a bare id: the text states nothing) */
+const REAL_CLAIMS: Readonly<Partial<Record<(typeof IDS)[number], readonly RealClaim[]>>> = {
+  s1: [{ id: 13683 }, { id: 21589 }, { id: 14918 }],
+  s2: [{ id: 14918 }, { id: 8931 }, { id: 19505 }],
+};
+
+function realIdsOf(lesson: Lesson): number[] {
+  const ids = sourcesOf(lesson).flatMap(({ src }) => (src.kind === 'real' ? [src.id] : []));
+  for (const b of lesson.blocks) if (b.kind === 'real') ids.push(...b.ids);
+  return [...new Set(ids)].sort((a, b) => a - b);
+}
+
+describe('stage S real cases: the text agrees with the labels and the 12SL reference', () => {
+  for (const [lessonId, claims] of Object.entries(REAL_CLAIMS)) {
+    it(`${lessonId}: every real case it shows has a claim`, () => {
+      expect(realIdsOf(lessonById(lessonId))).toEqual(claims!.map((c) => c.id).sort((a, b) => a - b));
+    });
+    for (const c of claims!) {
+      it(`${lessonId} PTB-XL ${c.id}${c.sex ? ` ${c.sex}${c.age}` : ''}${c.has ? `, ${c.has.join(' + ')}` : ''}`, () => {
+        const k = getCase(c.id);
+        expect(k, `PTB-XL ${c.id}`).toBeDefined();
+        if (c.sex) expect(k!.sex).toBe(c.sex);
+        if (c.age !== undefined) expect(k!.age).toBe(c.age);
+        for (const f of c.has ?? []) expect(k!.findings, `${c.id} labelled ${f}`).toContain(f);
+        for (const f of c.not ?? []) expect(k!.findings, `${c.id} not labelled ${f}`).not.toContain(f);
+        const within = (v: number | null, r: readonly [number, number] | undefined, what: string) => {
+          if (!r) return;
+          expect(v, `${c.id} ${what}`).not.toBeNull();
+          expect(v!, `${c.id} ${what}`).toBeGreaterThanOrEqual(r[0]);
+          expect(v!, `${c.id} ${what}`).toBeLessThanOrEqual(r[1]);
+        };
+        within(k!.ref.hrBpm, c.hr, 'HR');
+        within(k!.ref.prMs, c.pr, 'PR');
+        within(k!.ref.qrsAxisDeg, c.axis, 'axis');
+        within(k!.ref.qtcFridericiaMs, c.qtcF, 'QTc (Fridericia)');
+      });
+    }
+  }
 });
