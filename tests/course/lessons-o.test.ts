@@ -696,8 +696,10 @@ describe('o5: hypothermia on the tracings', () => {
     expect(Math.abs(cold.truth!.qtMs - 530)).toBeLessThan(5);
     expect(Math.abs(stAt(cold, 'II', 60))).toBeLessThan(0.05);
     expect(Math.abs(ca.truth!.qtMs - 310)).toBeLessThan(5);
-    for (const l of ['II', 'aVF'] as const) expect(stAt(stemi, 'III', 60), l).toBeGreaterThan(stAt(stemi, l, 60));
-    expect(stAt(stemi, 'II', 60)).toBeGreaterThan(0.1);
+    for (const l of ['II', 'aVF'] as const) {
+      expect(stAt(stemi, 'III', 60), l).toBeGreaterThan(stAt(stemi, l, 60));
+      expect(stAt(stemi, l, 60), l).toBeGreaterThan(0.1);
+    }
     expect(stAt(stemi, 'aVL', 60)).toBeLessThan(-0.1);
   });
   it('shivering film: the same cold heart with EMG on LA has I, III and aVL noisy and II clean; slow AF ≈ 55/min and irregular', () => {
