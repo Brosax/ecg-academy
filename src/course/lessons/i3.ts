@@ -114,9 +114,9 @@ const lesson: Lesson = {
         {
           title: l('找最大 ST 抬高', 'Find the greatest ST elevation', 'Busca la mayor elevación del ST'),
           body: l(
-            '扫过全部导联：J 点抬高最明显处在 **V2**，V1–V3 连成一片（V4 不到 1 mm），V5–V6 与 I/aVL 基本幸免。患者为 64 岁女性：V2–V3 界值 1.5 mm，已超过。',
-            'Sweep all the leads: the clearest J-point elevation is in **V2**, running V1–V3 as one strip (V4 under 1 mm), with V5–V6 and I/aVL largely spared. The patient is a woman of 64: the V2–V3 limit is 1.5 mm — exceeded.',
-            'Recorre todas las derivaciones: la mayor elevación del punto J está en **V2**, de forma continua por V1–V3 (V4 por debajo de 1 mm), con V5–V6 e I/aVL prácticamente respetadas. La paciente es una mujer de 64 años: el límite en V2–V3 es 1,5 mm, superado.',
+            '扫过全部导联：J 点抬高最明显处在 **V2**，V1–V3 连成一片（V4 不到 1 mm），V5–V6 与 I/aVL 不抬高。患者为 64 岁女性：V2–V3 界值 1.5 mm，两个导联都已超过。',
+            'Sweep all the leads: the clearest J-point elevation is in **V2**, running V1–V3 as one strip (V4 under 1 mm), with V5–V6 and I/aVL not elevated. The patient is a woman of 64: the V2–V3 limit is 1.5 mm — exceeded in both leads.',
+            'Recorre todas las derivaciones: la mayor elevación del punto J está en **V2**, de forma continua por V1–V3 (V4 por debajo de 1 mm), con V5–V6 e I/aVL sin elevar. La paciente es una mujer de 64 años: el límite en V2–V3 es 1,5 mm, superado en ambas.',
           ),
           marks: [{ auto: 'st60', lead: 'V2' }],
           highlightLeads: ['V1', 'V2', 'V3'],
@@ -163,16 +163,16 @@ const lesson: Lesson = {
       right: {
         ecg: synth('stemi-high-lateral', 845),
         caption: l(
-          'B：高侧壁——I、aVL 抬高（aVL 约 2 mm），V2 也抬高（与 V1 相当；V3 较小，V4 不到 1 mm），V5–V6 平坦；III 压低约 3 mm 只是镜像',
-          'B: high lateral — I and aVL elevated (aVL about 2 mm), V2 up as well (as much as V1; V3 less, V4 under 1 mm), V5–V6 flat; the 3 mm depression in III is only the mirror',
-          'B: lateral alto — I y aVL elevadas (aVL unos 2 mm), también V2 (tanto como V1; V3 menos y V4 por debajo de 1 mm), V5–V6 planas; el descenso de 3 mm en III es solo la imagen especular',
+          'B：高侧壁——I、aVL 抬高（aVL 约 2 mm），V2 也抬高（与 V1 相当；V3 较小，V4–V6 不到 1 mm）；III 压低约 3 mm 只是镜像',
+          'B: high lateral — I and aVL elevated (aVL about 2 mm), V2 up as well (as much as V1; V3 less, V4–V6 under 1 mm); the depression of about 3 mm in III is only the mirror',
+          'B: lateral alto — I y aVL elevadas (aVL unos 2 mm), también V2 (tanto como V1; V3 menos y V4–V6 por debajo de 1 mm); el descenso de unos 3 mm en III es solo la imagen especular',
         ),
         marks: [{ auto: 'st', lead: 'I' }, { auto: 'st', lead: 'aVL' }, { auto: 'st', lead: 'III' }],
       },
       point: l(
-        'A 与 B 都抬高 V2–V3，区分它们的是 I 和 aVL：A 的 I、aVL 平坦——LAD 主干（D1 之后）的前间壁区域；B 的 I、aVL 抬高并带上 V2，III（± II/aVF）深度压低只是它的镜像，V5–V6 平坦——这是**第一对角支（D1）**闭塞的“南非国旗”征（第 i5 课）。把 B 读成“下壁缺血”（III 的偏移最大）就漏掉了一个闭塞；反过来，A 里 V5–V6/I/aVL 的加入才是 LAD 更近段或粗大对角支的标志。同样的相邻导联逻辑，指向两个不同的罪犯血管。',
-        'Both A and B elevate V2–V3; what separates them is I and aVL. In A, I and aVL are flat — the anteroseptal territory of the main LAD beyond D1. In B, I and aVL are elevated together with V2, the deep ST depression in III (± II/aVF) is only the mirror and V5–V6 are flat — the "South African flag" of a **first diagonal (D1)** occlusion (lesson i5). Reading B as "inferior ischaemia" (III carries its largest deflection) misses an occlusion; conversely, V5–V6/I/aVL joining A is what marks a more proximal LAD or a large diagonal. The same contiguity logic points to two different culprit arteries.',
-        'A y B elevan V2–V3; lo que las separa son I y aVL. En A, I y aVL están planas: el territorio anteroseptal de la DA principal, distal a D1. En B, I y aVL se elevan junto con V2, el descenso profundo del ST en III (± II/aVF) es solo la imagen especular y V5–V6 están planas: la «bandera sudafricana» de una oclusión de la **primera diagonal (D1)** (lección i5). Leer B como «isquemia inferior» (III tiene su mayor desviación) deja pasar una oclusión; a la inversa, que en A se sumen V5–V6/I/aVL es lo que señala una DA más proximal o una diagonal gruesa. La misma lógica de contigüidad apunta a dos arterias responsables distintas.',
+        'A 与 B 都抬高 V2–V3，区分它们的是 I 和 aVL：A 的 I、aVL 平坦——LAD 主干（D1 之后）的前间壁区域；B 的 I、aVL 抬高并带上 V2，III（± II/aVF）深度压低只是它的镜像，V4–V6 不到 1 mm——这是**第一对角支（D1）**闭塞的“南非国旗”征（第 i5 课）。把 B 读成“下壁缺血”（III 的偏移最大）就漏掉了一个闭塞；反过来，A 里 V5–V6/I/aVL 的加入才是 LAD 更近段或粗大对角支的标志。同样的相邻导联逻辑，指向两个不同的罪犯血管。',
+        'Both A and B elevate V2–V3; what separates them is I and aVL. In A, I and aVL are flat — the anteroseptal territory of the main LAD beyond D1. In B, I and aVL are elevated together with V2, the deep ST depression in III (± II/aVF) is only the mirror and V4–V6 stay under 1 mm — the "South African flag" of a **first diagonal (D1)** occlusion (lesson i5). Reading B as "inferior ischaemia" (III carries its largest deflection) misses an occlusion; conversely, V5–V6/I/aVL joining A is what marks a more proximal LAD or a large diagonal. The same contiguity logic points to two different culprit arteries.',
+        'A y B elevan V2–V3; lo que las separa son I y aVL. En A, I y aVL están planas: el territorio anteroseptal de la DA principal, distal a D1. En B, I y aVL se elevan junto con V2, el descenso profundo del ST en III (± II/aVF) es solo la imagen especular y V4–V6 quedan por debajo de 1 mm: la «bandera sudafricana» de una oclusión de la **primera diagonal (D1)** (lección i5). Leer B como «isquemia inferior» (III tiene su mayor desviación) deja pasar una oclusión; a la inversa, que en A se sumen V5–V6/I/aVL es lo que señala una DA más proximal o una diagonal gruesa. La misma lógica de contigüidad apunta a dos arterias responsables distintas.',
       ),
     },
     {
@@ -270,9 +270,9 @@ const lesson: Lesson = {
           label: l('前间壁 V1–V3', 'Anteroseptal V1–V3', 'Anteroseptal V1–V3'),
           ecg: synth('stemi-anteroseptal', 848),
           note: l(
-            'V1–V3抬高，V2最高，V4不到1 mm；V5–V6、I、aVL平坦：前间壁 → D1之后的LAD。',
-            'V1–V3 up, V2 highest, V4 under 1 mm; V5–V6, I and aVL flat: anteroseptal → LAD beyond D1.',
-            'V1–V3 elevadas, máxima en V2, V4 por debajo de 1 mm; V5–V6, I y aVL planas: anteroseptal → DA distal a D1.',
+            'V1–V3抬高，V2最高，V4不到1 mm；V5–V6、I、aVL不抬高：前间壁 → D1之后的LAD。',
+            'V1–V3 up, V2 highest, V4 under 1 mm; V5–V6, I and aVL not elevated: anteroseptal → LAD beyond D1.',
+            'V1–V3 elevadas, máxima en V2, V4 por debajo de 1 mm; V5–V6, I y aVL sin elevar: anteroseptal → DA distal a D1.',
           ),
           marks: [{ auto: 'j', lead: 'V2' }, { auto: 'j', lead: 'V4' }],
         },
@@ -381,6 +381,7 @@ const lesson: Lesson = {
     'Thygesen K et al. Fourth Universal Definition of Myocardial Infarction. Eur Heart J 2019;40:237-269',
     'Byrne RA et al. 2023 ESC Guidelines for the management of acute coronary syndromes. Eur Heart J 2023;44:3720-3826',
     'Engelen DJ et al. J Am Coll Cardiol 1999;34:389-395',
+    'Amsterdam EA et al. 2014 AHA/ACC Guideline for the Management of Patients With Non-ST-Elevation Acute Coronary Syndromes. J Am Coll Cardiol 2014;64:e139-e228',
     'Castellano et al. 2004',
   ],
 };

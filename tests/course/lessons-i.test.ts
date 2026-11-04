@@ -501,11 +501,12 @@ describe('i2: territories on the tracings', () => {
 });
 
 describe('i3: anterior occlusion on the tracings', () => {
-  it('hook (anterolateral): V3–V6 and I/aVL ≥ 1 mm, V1–V2 not ≥ 1 mm (not extensive anterior), III depressed more than II', () => {
+  it('hook (anterolateral): V3–V6 and I/aVL ≥ 1 mm, V1–V2 not ≥ 1 mm (not extensive anterior), III and aVF depressed, III more than II', () => {
     const e = ecgOf(blocksOf('i3', 'hook')[0].ecg);
     for (const l of ['V3', 'V4', 'V5', 'V6', 'I', 'aVL'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
     for (const l of ['V1', 'V2'] as const) expect(stAt(e, l), l).toBeLessThan(0.1);
     expect(stAt(e, 'III')).toBeLessThan(-0.1);
+    expect(stAt(e, 'aVF')).toBeLessThanOrEqual(-0.05);
     expect(stAt(e, 'III')).toBeLessThan(stAt(e, 'II'));
   });
   it('worked and contrast A (anteroseptal, woman of 64): V1–V3 elevated, V2 highest, V4 under 1 mm', () => {
@@ -517,15 +518,24 @@ describe('i3: anterior occlusion on the tracings', () => {
       expect(stAt(e, 'aVR')).toBeLessThan(0.05);
     }
   });
-  it('contrast B (high lateral, D1): I and aVL ≥ 1 mm (aVL about 2) with V2 up as much as V1, V3 less, V4 < 1 mm, the mirror in III about 3 mm, V5–V6 flat; A has I/aVL flat', () => {
+  it('worked: V2 and V3 over the 1.5 mm limit, V5–V6 and I/aVL not elevated, no depression beyond the flat band in II, III, aVF', () => {
+    const e = ecgOf(blocksOf('i3', 'worked')[0].ecg);
+    for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.15);
+    for (const l of ['V5', 'V6', 'I', 'aVL'] as const) expect(stAt(e, l), l).toBeLessThan(0.05);
+    for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(-0.05);
+  });
+  it('contrast B (high lateral, D1): I and aVL ≥ 1 mm (aVL about 2) with V2 up as much as V1, V3 less, V4–V6 < 1 mm, the mirror in III about 3 mm and its largest deflection; A has I/aVL flat', () => {
     const e = ecgOf(blocksOf('i3', 'contrast')[0].right.ecg);
     for (const l of ['I', 'aVL', 'V2'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
-    expect(stAt(e, 'aVL')).toBeGreaterThan(0.18);
+    expect(stAt(e, 'aVL')).toBeGreaterThanOrEqual(0.175);
+    expect(stAt(e, 'aVL')).toBeLessThanOrEqual(0.225);
     expect(stAt(e, 'V2')).toBeGreaterThanOrEqual(stAt(e, 'V1') - 0.02);
     expect(stAt(e, 'V3')).toBeLessThan(stAt(e, 'V2'));
-    expect(stAt(e, 'V4')).toBeLessThan(0.1);
-    expect(stAt(e, 'III')).toBeLessThanOrEqual(-0.27);
-    for (const l of ['V5', 'V6'] as const) expect(Math.abs(stAt(e, l)), l).toBeLessThan(0.06);
+    expect(stAt(e, 'III')).toBeLessThanOrEqual(-0.275);
+    expect(stAt(e, 'III')).toBeGreaterThanOrEqual(-0.325);
+    const others = ALL.filter((l) => l !== 'III').map((l) => Math.abs(stAt(e, l)));
+    expect(-stAt(e, 'III'), 'III the largest deflection').toBeGreaterThan(Math.max(...others));
+    for (const l of ['V4', 'V5', 'V6'] as const) expect(stAt(e, l), l).toBeLessThan(0.1);
     const a = ecgOf(blocksOf('i3', 'contrast')[0].left.ecg);
     for (const l of ['I', 'aVL'] as const) expect(Math.abs(stAt(a, l)), l).toBeLessThan(0.05);
     for (const l of ['V2', 'V3'] as const) expect(stAt(a, l), l).toBeGreaterThan(0.1);
@@ -538,12 +548,12 @@ describe('i3: anterior occlusion on the tracings', () => {
     }
     expect(tInverted(e, 'III')).toBe(true);
   });
-  it('family film: anteroseptal V1–V3 up with V2 highest, V4 < 1 mm, V5–V6/I/aVL flat; anteroseptal V1–V4 up with V3 highest and an inferior mirror; anterolateral = the hook', () => {
+  it('family film: anteroseptal V1–V3 up with V2 highest, V4 < 1 mm, V5–V6/I/aVL not elevated; anteroseptal V1–V4 up with V3 highest and an inferior mirror; anterolateral = the hook', () => {
     const as = frame('i3', 0, 1);
     for (const l of ['V1', 'V2', 'V3'] as const) expect(stAt(as, l), l).toBeGreaterThanOrEqual(0.1);
     expect(CHEST.reduce((m, l) => (stAt(as, l) > stAt(as, m) ? l : m))).toBe('V2');
     expect(stAt(as, 'V4')).toBeLessThan(0.1);
-    for (const l of ['V5', 'V6', 'I', 'aVL'] as const) expect(Math.abs(stAt(as, l)), l).toBeLessThan(0.07);
+    for (const l of ['V5', 'V6', 'I', 'aVL'] as const) expect(stAt(as, l), l).toBeLessThan(0.05);
     const ant = frame('i3', 0, 2);
     for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(stAt(ant, l), l).toBeGreaterThanOrEqual(0.1);
     expect(CHEST.reduce((m, l) => (stAt(ant, l) > stAt(ant, m) ? l : m))).toBe('V3');
