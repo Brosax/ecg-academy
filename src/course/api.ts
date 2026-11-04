@@ -56,7 +56,7 @@ export interface Prediction {
   /** index into options */
   readonly answer: number;
   /** the options form a scale (numbers, less → more) and are shown as written; otherwise the player shows them in a
-   * fixed order seeded by the question (live.ts optionOrder), so the answer's position gives nothing away */
+   * fixed order seeded by the question (predict.ts optionOrder), so the answer's position gives nothing away */
   readonly ordered?: boolean;
 }
 

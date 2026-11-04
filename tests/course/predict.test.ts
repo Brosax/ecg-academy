@@ -23,7 +23,7 @@ describe('optionOrder', () => {
   it('shows every option exactly once, the same way every time', () => {
     const p = q('What happens to the PR?', 4);
     const order = optionOrder(p);
-    expect([...order].sort()).toEqual([0, 1, 2, 3]);
+    expect([...order].sort((a, b) => a - b)).toEqual([0, 1, 2, 3]);
     expect(optionOrder(p)).toEqual(order);
   });
 

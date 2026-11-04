@@ -96,7 +96,9 @@ describe('f-wave labels', () => {
       expect(fs.length, scenario).toBeLessThan(wavelets / 4);
       const ts = fs.map((m) => (m.kind === 'wave' ? m.t : NaN));
       ts.slice(1).forEach((t, i) => expect(t - ts[i], scenario).toBeGreaterThanOrEqual(600));
+      for (const t of ts) expect(beats.some((b) => t >= b.qrsOn - 20 && t <= b.qrsOff + 20), `${scenario}: f label at ${t} on a QRS`).toBe(false);
       if (scenario === 'af-regularised') for (const t of ts) expect(beats.some((b) => t >= b.qrsOn - 20 && t <= b.tOff + 20), `${t} in a gap`).toBe(false);
+      expect(ts[ts.length - 1], `${scenario}: labels reach the last quarter of the strip`).toBeGreaterThan(0.75 * ecg.signal.durationMs);
     }
   });
 

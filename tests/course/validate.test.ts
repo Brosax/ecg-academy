@@ -111,6 +111,8 @@ describe('validateLesson', () => {
     live.play = { dial: 'rate', to: 90 };
     live.predict = { question: l('q', 'q', 'q'), options: [l('a', 'a', 'a'), l('b', 'b', 'b')], answer: 2 };
     expect(errors(x).map((i) => i.path)).toEqual(['blocks[3].predict.answer']);
+    live.predict = { question: l('q', 'q', 'q'), options: [l('a', 'a', 'a'), l('b', 'b', 'b')], answer: 1, ordered: 'yes' };
+    expect(errors(x).map((i) => i.path)).toEqual(['blocks[3].predict.ordered']);
   });
 
   it('a film has 2–6 frames, each an ECG with a label and a note', () => {

@@ -111,8 +111,9 @@ type Win = readonly [number, number];
  * Time windows of the sheet panels that show `lead` (one entry per panel; 'all' = every panel). Mirrors the viewer's
  * layout rules (src/ecg/layout.ts): 3×4 columns of a quarter page each plus full-width rhythm strips; 6×2 and 12×1
  * show the first half page / whole page in every lead; single / strip show the window. The player passes exactly the
- * options it gives the viewer; if the learner then changes layout or speed in the viewer toolbar, default beats are
- * not re-chosen (a mark may then sit in another column) — teaching ECGs with marks open without the toolbar.
+ * options it gives the viewer; if the learner then changes layout, speed or lead in the viewer toolbar, default beats
+ * and lead-less marks are not re-chosen (a mark may then sit in another column) — teaching ECGs with marks open
+ * without the toolbar.
  */
 export function leadWindows(lead: Lead | 'all', durationMs: number, o: ResolveOptions = {}): Win[] {
   const layout = o.layout ?? '3x4+1';
@@ -344,18 +345,20 @@ const FIB_GAP_MS = 600;
 const FIB_MAX = 8;
 
 /**
- * A few fibrillatory waves to label: those in the gaps between beats (QRS onset to T end ± 20 ms excluded), at least
- * FIB_GAP_MS apart, at most FIB_MAX; when no wavelet falls in a gap (fast AF), the same spacing over all of them.
+ * A few fibrillatory waves to label, spread over the whole panel: those in the gaps between beats (QRS onset to T end
+ * ± 20 ms excluded), spaced by the panel width / FIB_MAX but never closer than FIB_GAP_MS; when no wavelet falls in a
+ * gap (fast AF), the same spacing over the wavelets outside the QRS.
  */
-function sparseFibrillation(ts: readonly number[], truth: EcgTruth): number[] {
-  const inBeat = (t: number) => truth.beats.some((b) => t >= b.qrsOn - 20 && t <= b.tOff + 20);
+function sparseFibrillation(ts: readonly number[], truth: EcgTruth, spanMs: number): number[] {
+  const step = Math.max(FIB_GAP_MS, spanMs / FIB_MAX);
+  const within = (t: number, tail: (b: BeatMarks) => number) => truth.beats.some((b) => t >= b.qrsOn - 20 && t <= tail(b) + 20);
   const pickSpaced = (cand: readonly number[]) => {
     const out: number[] = [];
-    for (const t of cand) if (out.length < FIB_MAX && (out.length === 0 || t - out[out.length - 1] >= FIB_GAP_MS)) out.push(t);
+    for (const t of cand) if (out.length < FIB_MAX && (out.length === 0 || t - out[out.length - 1] >= step)) out.push(t);
     return out;
   };
-  const gaps = pickSpaced(ts.filter((t) => !inBeat(t)));
-  return gaps.length > 0 ? gaps : pickSpaced(ts);
+  const gaps = pickSpaced(ts.filter((t) => !within(t, (b) => b.tOff)));
+  return gaps.length > 0 ? gaps : pickSpaced(ts.filter((t) => !within(t, (b) => b.qrsOff)));
 }
 
 function medianPDuration(truth: EcgTruth): number {
@@ -395,7 +398,7 @@ function resolveOne(ecg: Ecg, truth: EcgTruth, m: AutoMark, lead: Lead | 'all', 
       const narrow = wins.reduce<Win | null>((a, w) => (a === null || w[1] - w[0] < a[1] - a[0] ? w : a), null) ?? [0, ecg.signal.durationMs];
       const inWin = truth.atrial.filter((e) => e.t >= narrow[0] && e.t <= narrow[1]);
       const flutter = inWin.filter((e) => e.kind === 'flutter').map((e) => e.t);
-      const fib = sparseFibrillation(inWin.filter((e) => e.kind === 'fibrillation').map((e) => e.t), truth);
+      const fib = sparseFibrillation(inWin.filter((e) => e.kind === 'fibrillation').map((e) => e.t), truth, narrow[1] - narrow[0]);
       return [...flutter.map((t) => ({ t, f: 'F' })), ...fib.map((t) => ({ t, f: 'f' }))]
         .sort((a, b) => a.t - b.t)
         .map((x): EcgMark => ({ kind: 'wave', lead: l, t: x.t, label: text(x.f), color }));

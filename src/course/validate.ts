@@ -129,6 +129,7 @@ export function validateLesson(lesson: unknown, deps: ValidateDeps): LessonIssue
     l10n(v.question, `${path}.question`);
     const opts = l10nList(v.options, `${path}.options`, 2);
     if (!isInt(v.answer) || v.answer < 0 || v.answer >= opts.length) err(`${path}.answer`, 'answer must index one of the options');
+    if (v.ordered !== undefined && typeof v.ordered !== 'boolean') err(`${path}.ordered`, 'ordered is true or false');
   };
   const finding = (v: unknown, path: string) => {
     if (!isStr(v) || !(v in FINDINGS)) err(path, `unknown finding id ${JSON.stringify(v)} (src/core/findings.ts)`);

@@ -3,13 +3,17 @@
  * (src/course/marks.ts defaultBeat); on a strip with more than one beat kind, an aberrant beat or a changing RR that
  * default can land on the wrong beat (a pause bracket on a normal cycle, a P′ mark on a sinus P). So on such strips
  * every auto mark names its beat, and the stage test asserts what that beat is. Every auto mark must also draw
- * something on a lead the block shows: a P mark on a beat without a P, or a lead-II mark on a V2 strip, draws nothing.
+ * something the viewer shows (a panel of its lead at its time, src/ecg/marks.ts markInPanel): a P mark on a beat without
+ * a P, a lead-II mark on a V2 strip, or a V3 mark on a beat outside the V3 column draws nothing. A live block is checked
+ * where it starts and where its sweep stops (marks show after the reveal, on the held end state).
  */
 import { describe, expect, it } from 'vitest';
 import type { AutoMark, Block, Lesson, LessonMark } from '../../src/course/api';
 import { LESSONS } from '../../src/course/lessons/index';
 import { startDials } from '../../src/course/live';
 import { isAutoMark, resolveMarks } from '../../src/course/marks';
+import { computeSheet } from '../../src/ecg/layout';
+import { markInPanel } from '../../src/ecg/marks';
 import type { Ecg } from '../../src/core/ecg';
 import type { EcgSource, ItemView } from '../../src/practice/api';
 import { generate, scenarios, type SynthRequest } from '../../src/synth';
@@ -23,6 +27,8 @@ const RR_SPREAD = 1.15;
 
 interface Site {
   readonly path: string;
+  /** the held end of a live sweep: a strip-wide mark may draw nothing there (the waves it marks can vanish) */
+  readonly sweepEnd?: boolean;
   readonly req: SynthRequest;
   readonly marks: readonly LessonMark[];
   readonly view?: ItemView;
@@ -51,7 +57,9 @@ function sites(b: Block, p: string): Site[] {
       const sc = scenarios().find((s) => s.id === b.scenario);
       if (sc && b.marks?.length) {
         const dials = startDials(sc, b.variant, b.dials.map((d) => d.id), b.play);
-        out.push({ path: p, req: { scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed, dials }, marks: b.marks, view: b.view });
+        const at = (path: string, d: typeof dials, sweepEnd = false) => out.push({ path, sweepEnd, req: { scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed, dials: d }, marks: b.marks!, view: b.view });
+        at(p, dials);
+        if (b.play) at(`${p} (sweep end)`, { ...dials, [b.play.dial]: b.play.to }, true);
       }
       break;
     }
@@ -97,20 +105,34 @@ function unnamed(lesson: Lesson): string[] {
   return out;
 }
 
-/** auto marks that draw nothing, or only on a lead the block's single-lead view does not show */
+/** auto marks that no panel of the sheet shows, at the viewer's default settings (25 mm/s; 3x4+1 unless the block sets a layout) */
 function invisible(lesson: Lesson): string[] {
   const out: string[] = [];
   lesson.blocks.forEach((b, i) => {
     for (const s of sites(b, `blocks[${i}]`)) {
+      const ecg = ecgOf(s.req);
       const layout = s.view?.layout ?? '3x4+1';
-      const shown = s.view?.lead ?? 'II';
-      const oneLead = layout === 'single' || layout === 'strip';
+      const window = s.view?.window;
+      const sheet = computeSheet(ecg.signal, {
+        layout,
+        speed: 25,
+        gain: 10,
+        chestHalfGain: false,
+        cabrera: false,
+        lead: s.view?.lead ?? 'II',
+        window: window ? [window[0], window[1]] : null,
+        brackets: false,
+        waveLabels: false,
+        stMarkers: false,
+      });
       for (const m of s.marks) {
         if (!isAutoMark(m)) continue;
-        const drawn = resolveMarks(ecgOf(s.req), [m], { layout, lead: s.view?.lead, window: s.view?.window });
+        const drawn = resolveMarks(ecg, [m], { layout, speed: 25, lead: s.view?.lead, window });
         const what = `${s.path} '${m.auto}'${m.lead ? ` in ${m.lead}` : ''}${m.beat !== undefined ? ` beat ${m.beat}` : ''}`;
-        if (drawn.length === 0) out.push(`${what}: draws nothing`);
-        else if (oneLead && drawn.every((d) => d.lead !== 'all' && d.lead !== shown)) out.push(`${what}: drawn off the ${shown} ${layout}`);
+        if (drawn.length === 0) {
+          if (!(s.sweepEnd && STRIP_WIDE.has(m.auto))) out.push(`${what}: draws nothing`);
+        }
+        else if (!drawn.some((d) => sheet.panels.some((p) => markInPanel(d, p)))) out.push(`${what}: no panel of the ${layout} sheet shows it`);
       }
     }
   });
