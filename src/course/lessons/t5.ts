@@ -264,7 +264,7 @@ const lesson: Lesson = {
             ),
           },
           {
-            min: 185,
+            min: 189,
             max: 200,
             text: l(
               'T 几乎直接连到下一个 QRS（平线 < 25 ms）：P 几乎全被埋住，看不到房室分离。没看到分离不能排除室速。',
@@ -312,9 +312,9 @@ const lesson: Lesson = {
           label: l('夺获', 'Capture', 'Captura'),
           ecg: synth('vt-monomorphic', 684, undefined, 'captures'),
           note: l(
-            '一个窄、直立、稍提前的 QRS：窦性 P 恰好赶上心室可激动 ⇒ 心室夺获。',
-            'A narrow, upright, slightly early QRS: a sinus P found the ventricles excitable → a capture beat.',
-            'Un QRS estrecho, positivo y algo adelantado: una P sinusal encontró los ventrículos excitables → latido de captura.',
+            '一个窄而直立的 QRS，对室速来说提前，对它的窦性 P 来说准时：这个 P 恰好赶上心室可激动 ⇒ 心室夺获。',
+            'A narrow, upright QRS, early for the VT but on time for its sinus P: that P found the ventricles excitable → a capture beat.',
+            'Un QRS estrecho y positivo, adelantado para la TV pero puntual para su P sinusal: esa P encontró los ventrículos excitables → latido de captura.',
           ),
           marks: [{ auto: 'qrs', beat: 7, label: l('夺获', 'capture', 'captura') }, { auto: 'qrs', beat: 22, label: l('夺获', 'capture', 'captura') }],
         },
@@ -357,9 +357,9 @@ const lesson: Lesson = {
           label: l('差异性传导', 'Aberrancy', 'Aberrancia'),
           ecg: synth('pac-aberrant', 690),
           note: l(
-            '提前的 P′ 后一个宽 QRS（这里只有一搏）：V1 呈 rsR′、V6 呈 qRS，典型右束支阻滞形态 ⇒ 支持差异性传导。',
-            'An early P′, then a wide QRS (a single beat here): rsR′ in V1 and qRS in V6, a typical RBBB shape → favours aberrancy.',
-            'Una P′ precoz y después un QRS ancho (aquí un solo latido): rsR′ en V1 y qRS en V6, morfología típica de bloqueo de rama derecha → favorece la aberrancia.',
+            '提前的 P′ 后一个宽 QRS（这里只有一搏）：V1 呈 rsR′；V6 小 q、高 R、较小的 S（R/S > 1），典型右束支阻滞形态 ⇒ 支持差异性传导。',
+            'An early P′, then a wide QRS (a single beat here): rsR′ in V1; in V6 a small q, a tall R and a smaller S (R/S > 1), a typical RBBB shape → favours aberrancy.',
+            'Una P′ precoz y después un QRS ancho (aquí un solo latido): rsR′ en V1; en V6 una q pequeña, una R alta y una S menor (R/S > 1), morfología típica de bloqueo de rama derecha → favorece la aberrancia.',
           ),
           marks: [{ auto: 'qrs', beat: 6, lead: 'V1' }, { auto: 'qrs', beat: 6, lead: 'V6' }],
         },

@@ -690,7 +690,7 @@ describe('t5 on the tracings', () => {
     expect(t.findings).toContain('av-dissociation');
     expect(t.atrial.filter((a) => a.conductedTo === null && a.visible).length).toBeGreaterThanOrEqual(3);
   });
-  it('capture film: one strip in every frame; sinus P at about 68/min dissociated; narrow upright early captures at beats 7 and 22; a fusion beat of about 115 ms at beat 9, between the capture and the VT widths', () => {
+  it('capture film: one strip in every frame; sinus P at about 68/min dissociated; narrow upright captures at beats 7 and 22, early for the VT but on time for their sinus P; a fusion beat of about 115 ms at beat 9, between the capture and the VT widths', () => {
     const film = blocksOf('t5', 'film')[0];
     for (const f of film.frames) expect(f.ecg).toEqual(film.frames[0].ecg);
     const e = ecgOf(film.frames[0].ecg);
@@ -714,10 +714,17 @@ describe('t5 on the tracings', () => {
       return mx + mn;
     };
     const vtRr = median(rrs(e));
+    const pp = median(t.atrial.slice(1).map((a, k) => a.t - t.atrial[k].t));
     for (const i of [7, 22]) {
       expect(w(i), `capture ${i}`).toBeLessThan(100);
       expect(netII(i), `capture ${i}`).toBeGreaterThan(0.2);
       expect(beats[i].qrsOn - beats[i - 1].qrsOn, `capture ${i} early`).toBeLessThan(vtRr - 10);
+      const k = t.atrial.findIndex((a) => a.conductedTo === i);
+      expect(k, `capture ${i} has its P`).toBeGreaterThan(0);
+      expect(t.atrial[k].kind, `capture ${i}`).toBe('sinus');
+      expect(Math.abs(t.atrial[k].t - t.atrial[k - 1].t - pp), `capture ${i}: its P on the sinus PP`).toBeLessThan(20);
+      expect(beats[i].qrsOn - t.atrial[k].t, `capture ${i} PR`).toBeGreaterThanOrEqual(120);
+      expect(beats[i].qrsOn - t.atrial[k].t, `capture ${i} PR`).toBeLessThanOrEqual(220);
     }
     expect(netII(5)).toBeLessThan(-0.2);
     expect(Math.abs(w(9) - 115)).toBeLessThan(5);
@@ -744,17 +751,19 @@ describe('t5 on the tracings', () => {
     expect(Math.abs(e.truth!.qrsMs - 160)).toBeLessThan(5);
     expect(e.truth!.atrial.every((a) => a.kind === 'sinus' && a.conductedTo === null)).toBe(true);
   });
-  it('VT sweep notes: 75–100 ms of flat line and some dissociated P visible at 140–150 (sinus about 80/min); under 25 ms and at most 2 P visible at 185–200; QRS about 160 ms with a northwest axis at both ends', () => {
+  it('VT sweep notes: 75–100 ms of flat line and some dissociated P visible at every rate of 140–150 (sinus about 80/min); under 25 ms and at most 2 P visible at every rate of 189–200; QRS about 160 ms with a northwest axis at both ends', () => {
     const flat = (e: Ecg) => median(rrs(e)) - (mid(e).tOff - mid(e).qrsOn);
     const visibleP = (e: Ecg) => e.truth!.atrial.filter((a) => a.conductedTo === null && a.visible).length;
-    for (const v of [140, 150]) {
+    const notes = blocksOf('t5', 'live')[0].play!.notes!;
+    expect(notes.map((n) => [n.min, n.max])).toEqual([[140, 150], [189, 200]]);
+    for (let v = 140; v <= 150; v++) {
       const e = played('t5', 0, v);
       expect(flat(e), `${v}`).toBeGreaterThan(75);
       expect(flat(e), `${v}`).toBeLessThan(100);
       expect(visibleP(e), `${v}`).toBeGreaterThanOrEqual(3);
       expect(Math.abs(e.truth!.atrialRateBpm! - 80), `${v}`).toBeLessThan(3);
     }
-    for (const v of [185, 200]) {
+    for (let v = 189; v <= 200; v++) {
       const e = played('t5', 0, v);
       expect(flat(e), `${v}`).toBeLessThan(25);
       expect(visibleP(e), `${v}`).toBeLessThanOrEqual(2);
@@ -766,7 +775,7 @@ describe('t5 on the tracings', () => {
       expect(t.rhythm).toBe('vt-monomorphic');
     }
   });
-  it('mimics film: an early aberrant PAC with rsR′ in V1 and qRS in V6; pre-excited AF irregular with shortest RR about 235 ms; every QRS paced and wide; right-arm artefact in I, II and aVR with III untouched and a steady RR', () => {
+  it('mimics film: an early aberrant PAC with rsR′ in V1 and in V6 a q, a tall R and a smaller S (R/S > 1); pre-excited AF irregular with the QRS width changing beat to beat and shortest RR about 235 ms; every QRS paced and wide; right-arm artefact in I, II and aVR with III untouched and a steady RR', () => {
     const [ab, pre, paced, art] = frames('t5', 1);
     const bs = ab.truth!.beats;
     const b = bs[6];
@@ -776,8 +785,15 @@ describe('t5 on the tracings', () => {
     const labels = (lead: StdLead) => qrsWaves(ab.signal.leads[lead], ab.signal.fs, b.qrsOn, b.qrsOff).map((x) => x.label).join('');
     expect(labels('V1')).toBe('rsR′');
     expect(labels('V6')).toBe('qRS');
+    const v6 = qrsWaves(ab.signal.leads.V6, ab.signal.fs, b.qrsOn, b.qrsOff);
+    expect(v6.map((x) => x.role)).toEqual(['q', 'r', 's']);
+    expect(v6[1].mv / Math.abs(v6[2].mv), 'V6 R/S').toBeGreaterThan(1);
     expect(Math.abs(Math.min(...rrs(pre)) - 235)).toBeLessThan(5);
     expect(Math.max(...rrs(pre)) - Math.min(...rrs(pre))).toBeGreaterThan(150);
+    const widths = pre.truth!.beats.map((x) => x.qrsOff - x.qrsOn);
+    expect(Math.max(...widths)).toBeGreaterThanOrEqual(140);
+    expect(Math.max(...widths) - Math.min(...widths)).toBeGreaterThan(30);
+    expect(widths.slice(1).filter((x, i) => Math.abs(x - widths[i]) > 20).length, 'width changes between neighbouring beats').toBeGreaterThanOrEqual(8);
     expect(paced.truth!.beats.every((x) => x.kind === 'paced-ventricular' && x.qrsOff - x.qrsOn >= 120)).toBe(true);
     const artReq = blocksOf('t5', 'film')[1].frames[3].ecg;
     if (artReq.kind !== 'synth') throw new Error('synthetic artefact frame expected');
