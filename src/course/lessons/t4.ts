@@ -391,9 +391,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [11889, 2145, 12559],
       caption: l(
-        '三份真实的 WPW 图形（55–63 岁）。先测量 PR、在至少两个导联找 δ波、判断 QRS 宽度，想好你的报告，然后揭晓。注意：三份都没有心律失常标签，12SL 也测得每个 QRS 一个 P——此刻没有心动过速，所以它们是“图形”，不是“综合征”。预激程度各不相同：有一份 12SL 测得 PR 140 ms——不是每份图形都会量出 <120 ms，要逐导联仔细量。',
-        'Three real WPW patterns (ages 55-63). Measure the PR, find the delta in at least two leads, judge the QRS width and commit to your report — then reveal. Note: none of the three carries an arrhythmia label and the 12SL counts one P per QRS: no tachyarrhythmia at this moment, so they are "patterns", not "syndromes". The degree of pre-excitation differs: in one the 12SL PR is 140 ms — not every pattern measures under 120 ms, so measure carefully, lead by lead.',
-        'Tres patrones de WPW reales (55-63 años). Mide el PR, busca la delta en al menos dos derivaciones, valora la anchura del QRS y decide tu informe antes de mirar la solución. Fíjate: ninguno lleva una etiqueta de arritmia y el 12SL cuenta una P por QRS; ahora mismo no hay taquicardia, así que son «patrones», no «síndromes». El grado de preexcitación varía: en uno el 12SL mide un PR de 140 ms; no todos los patrones miden menos de 120 ms, así que mide con cuidado, derivación por derivación.',
+        '三份真实的 WPW 图形（55–63 岁）。先测量 PR、在至少两个导联找 δ波、判断 QRS 宽度，想好你的报告，然后揭晓。注意：三份都没有心律失常标签，机器测量（12SL）也是每个 QRS 一个 P——此刻没有心动过速，所以它们是“图形”，不是“综合征”。预激程度各不相同：有一份机器测得 PR 140 ms——不是每份图形都会量出 <120 ms，要逐导联仔细量。',
+        'Three real WPW patterns (ages 55-63). Measure the PR, find the delta in at least two leads, judge the QRS width and commit to your report — then reveal. Note: none of the three carries an arrhythmia label and the machine reading (12SL) counts one P per QRS: no tachyarrhythmia at this moment, so they are "patterns", not "syndromes". The degree of pre-excitation differs: in one the machine PR is 140 ms — not every pattern measures under 120 ms, so measure carefully, lead by lead.',
+        'Tres patrones de WPW reales (55-63 años). Mide el PR, busca la delta en al menos dos derivaciones, valora la anchura del QRS y decide tu informe antes de mirar la solución. Fíjate: ninguno lleva una etiqueta de arritmia y la medición automática (12SL) cuenta una P por QRS; ahora mismo no hay taquicardia, así que son «patrones», no «síndromes». El grado de preexcitación varía: en uno la máquina mide un PR de 140 ms; no todos los patrones miden menos de 120 ms, así que mide con cuidado, derivación por derivación.',
       ),
     },
     {
