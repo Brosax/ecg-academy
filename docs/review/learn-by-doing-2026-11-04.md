@@ -36,6 +36,8 @@ The engine exposes few dials per scenario: of 130 scenarios, 71 offer only `rate
 | 8 | Stage S first as a pilot; the other six stages only after its diff and tests were checked. | A flaw in the brief then costs one rerun, not seven. | The pilot needed no change to the recipe; its three lessons learned went into every later brief. |
 | 9 | Every number in a note must be proven by a truth assertion in the stage test. | The s2 note at 102–110/min was wrong by arithmetic and caught only by hand; the S5 notes said +30° while the read-out showed +50°. | `tests/course/lessons-s.test.ts`. |
 | 10 | Launch R, T, I, H, O, X before the S review returned, with the reviewer's checklist in every brief. | Writers take about 30 minutes each; a reviewer reads every stage afterwards anyway. | `brief-common.md` in the session scratchpad. |
+| 11 | Hide a live note when the learner moves any other dial (`liveNote`), instead of a writing rule. | The S review found a note that stayed on screen with a false value after the second dial moved; a structure makes the stale state impossible. | 099b79b, `tests/course/live.test.ts`. |
+| 12 | Send the review's general findings to the six running writers and fix S in a fresh agent with the reviewer's list and the coordinator's decision per item. | The same mistakes would repeat in every stage. | `s-review-fixes.md` in the session scratchpad. |
 
 ## Units
 
@@ -43,4 +45,4 @@ The engine exposes few dials per scenario: of 130 scenarios, 71 offer only `rate
 |---|---|---|---|
 | Gate, criteria baseline, `live.play`, `film`, validator rules, unit tests | 555b82a | course + assistant tests: 1150 passed, 58 expected fail; typecheck clean | VERIFIED |
 | s2 | b5a8ab4, 46dc7fe | gate, `lessons-s`, typecheck; browser: rate sweep 60 → 100 holds at 100/min with RR 611 ms and the "3 large squares" note; film steps regular → sinus arrhythmia → AF and holds; 375 px wide: no horizontal overflow | VERIFIED |
-| s1, s3–s7 (pilot subagent) | 1a936dd … a841d25 | merged fast-forward; course + assistant tests 1173 passed, 51 expected fail; typecheck clean; browser: s4 Bazett sweep ends at 100/min with "higher than true" marked right, s6 four-frame filter film loads without placeholders | VERIFIED (content review pending) |
+| s1, s3–s7 (pilot subagent) | 1a936dd … a841d25 | merged fast-forward; course + assistant tests 1173 passed, 51 expected fail; typecheck clean; browser: s4 Bazett sweep ends at 100/min with "higher than true" marked right, s6 four-frame filter film loads without placeholders | NOT VERIFIED: the review found 5 blocking content errors (numbers not on screen, a stale note, a knowledge-quiz prediction, an early-repolarization boundary off by 0.02 mV, overstated P-wave claims), 6 wording errors, 7 loose tolerances, 3 lost reading rules; fix round running |
