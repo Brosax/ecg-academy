@@ -182,11 +182,11 @@ const lesson: Lesson = {
           label: l('预激伴房颤', 'Pre-excited AF', 'FA preexcitada'),
           ecg: synth('preexcited-af', 667),
           note: l(
-            '快（约 200 次/分）、宽、不规则，QRS 宽度逐搏变化，夹着几个较窄的搏动；最短 RR 约 210 ms ⇒ 高危。',
-            'Fast (about 200/min), broad and irregular, with the QRS width changing beat to beat and a few narrower beats mixed in; shortest RR about 210 ms → high risk.',
-            'Rápida (unos 200 lpm), ancha e irregular, con la anchura del QRS cambiando de latido en latido y algunos latidos más estrechos; RR más corto de unos 210 ms → alto riesgo.',
+            '快（约 200 次/分）、宽、不规则，QRS 宽度逐搏变化，夹着几个较窄的搏动；两个宽搏动之间的最短 RR 约 240 ms（<250 ms）⇒ 高危。',
+            'Fast (about 200/min), broad and irregular, with the QRS width changing beat to beat and a few narrower beats mixed in; the shortest RR between two wide beats is about 240 ms (< 250 ms) → high risk.',
+            'Rápida (unos 200 lpm), ancha e irregular, con la anchura del QRS cambiando de latido en latido y algunos latidos más estrechos; el RR más corto entre dos latidos anchos es de unos 240 ms (< 250 ms) → alto riesgo.',
           ),
-          marks: [{ auto: 'qrs', beat: 29 }, { auto: 'rr', beat: 28 }],
+          marks: [{ auto: 'qrs', beat: 22 }, { auto: 'rr', beat: 21 }],
         },
       ],
       predict: {
