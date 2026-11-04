@@ -9,7 +9,7 @@ import type { Block, Lesson } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
 import { REGISTERED } from '../../src/course/lessons/index';
 import { realisedDials, startDials } from '../../src/course/live';
-import { baselineBefore, qrsWaves, resolveMarks } from '../../src/course/marks';
+import { baselineBefore, MIN_WAVE_MV, qrsWaves, resolveMarks } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
 import { FINDINGS, type FindingId } from '../../src/core/findings';
@@ -284,8 +284,26 @@ function played(id: string, i: number, v: number): Ecg {
 }
 const frames = (id: string, k: number): Ecg[] => blocksOf(id, 'film')[k].frames.map((f) => ecgOf(f.ecg));
 
-/** The anterior STEMI of x1 (hook and worked) as the text reads it, step by step. */
-function expectX1Stemi(e: Ecg): void {
+/** What the hook's reveal says about an anterior STEMI of x1: sinus at about 84/min, normal intervals and axis, ST elevation in V1–V4 highest (about 4 mm) in V3, reciprocal depression in II, III and aVF. */
+function expectX1Reveal(e: Ecg): void {
+  const t = e.truth!;
+  expect(Math.abs(t.hrBpm - 84)).toBeLessThanOrEqual(1);
+  expect(t.rhythm).toBe('sinus-rhythm');
+  expect(t.prMs!).toBeGreaterThanOrEqual(120);
+  expect(t.prMs!).toBeLessThanOrEqual(200);
+  expect(t.qrsMs).toBeLessThan(110);
+  expect(t.qtcFridericiaMs).toBeLessThan(450);
+  expect(t.axisDeg.qrs).toBeGreaterThanOrEqual(-30);
+  expect(t.axisDeg.qrs).toBeLessThanOrEqual(90);
+  expect(t.findings).toContain('stemi-anterior');
+  for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(stAt(e, l, 60), `${l} raised`).toBeGreaterThanOrEqual(0.1);
+  for (const l of [...LIMB, ...CHEST]) expect(stAt(e, l, 60), `${l} no higher than V3`).toBeLessThanOrEqual(stAt(e, 'V3', 60));
+  expect(Math.abs(stAt(e, 'V3', 60) - 0.4)).toBeLessThanOrEqual(0.025);
+  for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l, 60), `${l} reciprocal depression`).toBeLessThan(-MIN_WAVE_MV);
+}
+
+/** The worked anterior STEMI of x1 (seed 1802) as its ten steps read it, number by number. */
+function expectX1Worked(e: Ecg): void {
   const t = e.truth!;
   expect(Math.abs(t.hrBpm - 84)).toBeLessThanOrEqual(1);
   expect(t.atrialRateBpm).toBeCloseTo(t.hrBpm, 0);
@@ -305,10 +323,10 @@ function expectX1Stemi(e: Ecg): void {
   expect(Math.abs(t.qtcFridericiaMs - 410)).toBeLessThanOrEqual(5);
   expect(Math.abs(t.axisDeg.qrs - 40)).toBeLessThanOrEqual(5);
   expect(t.findings).toContain('stemi-anterior');
-  // recording and rhythm: P and QRS upright in I, negative in aVR; P upright in II
+  // recording and rhythm: P and QRS upright in I, negative in aVR (beyond the flat band); P upright in II
   for (const part of [pw, qrs]) {
-    expect(part(e, 'I').net).toBeGreaterThan(0.03);
-    expect(part(e, 'aVR').net).toBeLessThan(-0.03);
+    expect(part(e, 'I').net).toBeGreaterThan(MIN_WAVE_MV);
+    expect(part(e, 'aVR').net).toBeLessThan(-MIN_WAVE_MV);
   }
   expect(qrs(e, 'I').net).toBeGreaterThan(0.3);
   expect(qrs(e, 'aVR').net).toBeLessThan(-0.3);
@@ -327,13 +345,13 @@ function expectX1Stemi(e: Ecg): void {
   const raised = [...LIMB, ...CHEST].filter((l) => stAt(e, l, 60) >= 0.05);
   expect(raised).toEqual(expect.arrayContaining(['V1', 'V2', 'V3', 'V4']));
   for (const l of raised) expect(tUpright(e, l), l).toBe(true);
-  // ST at J + 60: V2 ≈ 3, V3 ≈ 4 (the highest), V4 ≈ 2, V1 ≈ 1.5 mm; III ≈ −1.5 mm, II/aVF depressed; I, aVL, V5 < 1 mm; V6 ≈ 0
+  // ST at J + 60: V2 ≈ 3, V3 ≈ 4 (the highest), V4 ≈ 2, V1 ≈ 1.3 mm; III ≈ −1.3 mm, II/aVF depressed; I, aVL, V5 < 1 mm; V6 ≈ 0
   expect(Math.abs(stAt(e, 'V2', 60) - 0.3)).toBeLessThanOrEqual(0.025);
   expect(Math.abs(stAt(e, 'V3', 60) - 0.4)).toBeLessThanOrEqual(0.025);
   expect(Math.abs(stAt(e, 'V4', 60) - 0.2)).toBeLessThanOrEqual(0.025);
-  expect(Math.abs(stAt(e, 'V1', 60) - 0.15)).toBeLessThanOrEqual(0.025);
+  expect(Math.abs(stAt(e, 'V1', 60) - 0.13)).toBeLessThanOrEqual(0.025);
   for (const l of CHEST) expect(stAt(e, l, 60), l).toBeLessThanOrEqual(stAt(e, 'V3', 60));
-  expect(Math.abs(stAt(e, 'III', 60) + 0.15)).toBeLessThanOrEqual(0.025);
+  expect(Math.abs(stAt(e, 'III', 60) + 0.13)).toBeLessThanOrEqual(0.025);
   for (const l of ['II', 'aVF'] as const) expect(stAt(e, l, 60), l).toBeLessThan(-0.05);
   for (const l of ['I', 'aVL', 'V5'] as const) expect(Math.abs(stAt(e, l, 60)), l).toBeLessThan(0.1);
   expect(Math.abs(stAt(e, 'V6', 60))).toBeLessThan(0.05);
@@ -342,9 +360,12 @@ function expectX1Stemi(e: Ecg): void {
 }
 
 describe('x1: the structured report on the tracings', () => {
-  it('hook and worked example: the same anterior STEMI reading (84/min, normal intervals and axis, ST ↑ V1–V4, reciprocal ↓ II/III/aVF)', () => {
-    expectX1Stemi(ecgOf(blocksOf('x1', 'hook')[0].ecg));
-    expectX1Stemi(ecgOf(blocksOf('x1', 'worked')[0].ecg));
+  it('hook reveal, on the hook and the worked tracing: 84/min sinus, normal intervals and axis, ST ↑ V1–V4 highest (about 4 mm) in V3, reciprocal ↓ II/III/aVF', () => {
+    expectX1Reveal(ecgOf(blocksOf('x1', 'hook')[0].ecg));
+    expectX1Reveal(ecgOf(blocksOf('x1', 'worked')[0].ecg));
+  });
+  it('worked example: every number of the ten steps, on the worked tracing', () => {
+    expectX1Worked(ecgOf(blocksOf('x1', 'worked')[0].ecg));
   });
   it('worked step 2: the RR its mark brackets is about 710 ms', () => {
     const w = blocksOf('x1', 'worked')[0];
@@ -358,8 +379,8 @@ describe('x1: the structured report on the tracings', () => {
     const e = ecgOf(film.frames[0].ecg);
     const t = e.truth!;
     for (const part of [pw, qrs]) {
-      expect(part(e, 'I').net).toBeGreaterThan(0.03);
-      expect(part(e, 'aVR').net).toBeLessThan(-0.03);
+      expect(part(e, 'I').net).toBeGreaterThan(MIN_WAVE_MV);
+      expect(part(e, 'aVR').net).toBeLessThan(-MIN_WAVE_MV);
     }
     expect(meanRr(e) / 200).toBeGreaterThan(4);
     expect(meanRr(e) / 200).toBeLessThan(4.4);
@@ -379,21 +400,22 @@ describe('x1: the structured report on the tracings', () => {
     for (const l of ['I', 'II', 'V3', 'V4', 'V5', 'V6'] as const) expect(tUpright(e, l), l).toBe(true);
     expect(t.findings).toContain('normal-ecg');
   });
-  it('ST sweep notes: the worked heart; the slider reads the ST in V2; V3 about +3 mm and III about −1 mm at 0.22–0.25; V2–V4 rise as II, III and aVF fall across 0.26–0.39; V3 about +5–6 mm and III about −2 mm at 0.40–0.45; acute anterior STEMI throughout', () => {
+  it('ST sweep notes: the worked heart; the slider reads the ST in V2; V3 about +3 mm and III about −1 mm at 0.22–0.24; V2–V4 rise as II, III and aVF fall across 0.25–0.42; V3 about +5–6 mm and III about −2 mm at 0.43–0.45; acute anterior STEMI throughout', () => {
     const b = blocksOf('x1', 'live')[0];
     expect({ kind: 'synth', req: { scenario: b.scenario, seed: b.seed } }).toEqual(blocksOf('x1', 'worked')[0].ecg);
+    expect(b.play!.notes!.map((n) => [n.min, n.max])).toEqual([[0.22, 0.24], [0.25, 0.42], [0.43, 0.45]]);
     for (const v of [0.22, 0.45]) expect(Math.abs(stAt(played('x1', 0, v), 'V2', 60) - v), `V2 at ${v}`).toBeLessThan(0.01);
-    for (const v of [0.22, 0.25]) {
+    for (const v of [0.22, 0.24]) {
       const e = played('x1', 0, v);
       expect(stAt(e, 'V3', 60), `${v}`).toBeGreaterThanOrEqual(0.275);
       expect(stAt(e, 'V3', 60), `${v}`).toBeLessThanOrEqual(0.325);
       expect(stAt(e, 'III', 60), `${v}`).toBeGreaterThanOrEqual(-0.125);
       expect(stAt(e, 'III', 60), `${v}`).toBeLessThanOrEqual(-0.085);
     }
-    const [lo, hi] = [played('x1', 0, 0.26), played('x1', 0, 0.39)];
+    const [lo, hi] = [played('x1', 0, 0.25), played('x1', 0, 0.42)];
     for (const l of ['V2', 'V3', 'V4'] as const) expect(stAt(hi, l, 60), l).toBeGreaterThan(stAt(lo, l, 60) + 0.05);
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(hi, l, 60), l).toBeLessThan(stAt(lo, l, 60) - 0.02);
-    for (const v of [0.4, 0.45]) {
+    for (const v of [0.43, 0.45]) {
       const e = played('x1', 0, v);
       expect(stAt(e, 'V3', 60), `${v}`).toBeGreaterThanOrEqual(0.5);
       expect(stAt(e, 'V3', 60), `${v}`).toBeLessThanOrEqual(0.6);

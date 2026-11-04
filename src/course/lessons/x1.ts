@@ -248,9 +248,9 @@ const lesson: Lesson = {
         {
           title: l('7 · ST 段：按导联组', '7 · ST segments, group by group', '7 · Segmento ST, grupo a grupo'),
           body: l(
-            '"前壁组：V2 约 3 mm、V3 约 4 mm、V4 约 2 mm 抬高（J 点后 60 ms），V1 约 1.5 mm——V2–V3 超过任何性别与年龄的阈值。下壁组：II、III、aVF **镜像压低**（III 约 1.5 mm）。侧壁组：I、aVL、V5 < 1 mm，V6 等电位。"三组都读，镜像改变才会被看到。',
-            '"Anterior group: ST elevation of about 3 mm in V2, 4 mm in V3 and 2 mm in V4 (at J + 60 ms), about 1.5 mm in V1 — V2–V3 are above the threshold for any sex and age. Inferior group: **reciprocal depression** in II, III and aVF (about 1.5 mm in III). Lateral group: I, aVL and V5 < 1 mm, V6 isoelectric." Read all three groups — that is how the reciprocal change gets seen.',
-            '«Grupo anterior: elevación del ST de unos 3 mm en V2, 4 mm en V3 y 2 mm en V4 (a J + 60 ms), y de unos 1,5 mm en V1; V2-V3 superan el umbral para cualquier sexo y edad. Grupo inferior: **descenso recíproco** en II, III y aVF (de unos 1,5 mm en III). Grupo lateral: I, aVL y V5 < 1 mm, V6 isoeléctrica». Hay que leer los tres grupos: así se ve el cambio recíproco.',
+            '"前壁组：V2 约 3 mm、V3 约 4 mm、V4 约 2 mm 抬高（J 点后 60 ms），V1 约 1.3 mm——V2–V3 超过任何性别与年龄的阈值。下壁组：II、III、aVF **镜像压低**（III 约 1.3 mm）。侧壁组：I、aVL、V5 < 1 mm，V6 等电位。"三组都读，镜像改变才会被看到。',
+            '"Anterior group: ST elevation of about 3 mm in V2, 4 mm in V3 and 2 mm in V4 (at J + 60 ms), about 1.3 mm in V1 — V2–V3 are above the threshold for any sex and age. Inferior group: **reciprocal depression** in II, III and aVF (about 1.3 mm in III). Lateral group: I, aVL and V5 < 1 mm, V6 isoelectric." Read all three groups — that is how the reciprocal change gets seen.',
+            '«Grupo anterior: elevación del ST de unos 3 mm en V2, 4 mm en V3 y 2 mm en V4 (a J + 60 ms), y de unos 1,3 mm en V1; V2-V3 superan el umbral para cualquier sexo y edad. Grupo inferior: **descenso recíproco** en II, III y aVF (de unos 1,3 mm en III). Grupo lateral: I, aVL y V5 < 1 mm, V6 isoeléctrica». Hay que leer los tres grupos: así se ve el cambio recíproco.',
           ),
           marks: [{ auto: 'st60', lead: 'V3' }, { auto: 'st60', lead: 'III' }],
           highlightLeads: ['V1', 'V2', 'V3', 'V4', 'II', 'III', 'aVF'],
@@ -274,9 +274,9 @@ const lesson: Lesson = {
         {
           title: l('10 · 紧急程度与下一步', '10 · Urgency and next action', '10 · Urgencia y siguiente paso'),
           body: l(
-            '"**现在处理**：启动再灌注并立即通知上级医师——诊断后 120 分钟内能开始直接 PCI 就做直接 PCI，否则 10 分钟内溶栓（ESC 2023）。"一个箱子，一个动作，一个收信人。',
-            '"**Act now**: activate reperfusion and tell the senior at once — primary PCI if it can start within 120 min of the diagnosis, otherwise fibrinolysis within 10 min (ESC 2023)." One bin, one action, one person to tell.',
-            '«**Actuar ya**: activar la reperfusión y avisar al responsable de inmediato; ICP primaria si puede empezar en los 120 min siguientes al diagnóstico y, si no, fibrinólisis en los 10 min siguientes (ESC 2023)». Una categoría, una acción, una persona a quien avisar.',
+            '"**现在处理**：启动再灌注并立即通知上级医师——诊断后 120 分钟内能开通血管就做直接 PCI，否则 10 分钟内溶栓（症状 < 12 小时；ESC 2023）。"一个箱子，一个动作，一个收信人。',
+            '"**Act now**: activate reperfusion and tell the senior at once — primary PCI if the artery can be opened within 120 min of the diagnosis, otherwise fibrinolysis within 10 min (symptoms < 12 h; ESC 2023)." One bin, one action, one person to tell.',
+            '«**Actuar ya**: activar la reperfusión y avisar al responsable de inmediato; ICP primaria si la arteria puede abrirse en los 120 min siguientes al diagnóstico y, si no, fibrinólisis en los 10 min siguientes (síntomas < 12 h; ESC 2023)». Una categoría, una acción, una persona a quien avisar.',
           ),
           highlightLeads: ['V2', 'V3', 'V4'],
         },
@@ -296,7 +296,7 @@ const lesson: Lesson = {
         notes: [
           {
             min: 0.22,
-            max: 0.25,
+            max: 0.24,
             text: l(
               '滑块读数是 V2 的 ST。描述：V3 抬高约 **3 mm**，III 压低约 1 mm。诊断：急性前壁 STEMI。紧急程度：现在处理。',
               'The slider reads the ST in V2. Description: V3 up about **3 mm**, III down about 1 mm. Diagnosis: acute anterior STEMI. Urgency: act now.',
@@ -304,8 +304,8 @@ const lesson: Lesson = {
             ),
           },
           {
-            min: 0.26,
-            max: 0.39,
+            min: 0.25,
+            max: 0.42,
             text: l(
               'V2–V4 一起升高，II、III、aVF 一起压低：描述那一行的毫米在变，诊断那一行不变。',
               'V2–V4 rise as II, III and aVF fall: the millimetres in the description change, the diagnosis line does not.',
@@ -313,7 +313,7 @@ const lesson: Lesson = {
             ),
           },
           {
-            min: 0.4,
+            min: 0.43,
             max: 0.45,
             text: l(
               '描述：V3 抬高约 **5–6 mm**，III 压低约 2 mm。诊断和第一动作都和刚才一样。',
