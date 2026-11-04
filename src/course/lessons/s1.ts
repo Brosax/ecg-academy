@@ -109,46 +109,6 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'film',
-      title: l('按顺序读：一个诊断解释全部', 'Read in order: one diagnosis explains it all', 'Lee en orden: un diagnóstico lo explica todo'),
-      frames: [
-        {
-          label: l('心率、节律', 'Rate, rhythm', 'Frecuencia, ritmo'),
-          ecg: PRE_EXCITED,
-          note: l('第 2–3 步：约 72 次/分，每个 QRS 前有窦性 P 波。到这里都正常。', 'Steps 2–3: about 72/min, a sinus P before every QRS. Normal so far.', 'Pasos 2–3: unos 72 lpm, una P sinusal antes de cada QRS. Normal hasta aquí.'),
-          marks: [{ auto: 'rr' }, { auto: 'p' }],
-        },
-        {
-          label: l('PR', 'PR', 'PR'),
-          ecg: PRE_EXCITED,
-          note: l('第 4 步：PR 约 115 ms，不到 120：**短 PR**。不要停，问为什么。', 'Step 4: PR about 115 ms, under 120: a **short PR**. Do not stop; ask why.', 'Paso 4: PR de unos 115 ms, menos de 120: **PR corto**. No te detengas; pregúntate por qué.'),
-          marks: [{ auto: 'pr' }],
-        },
-        {
-          label: l('QRS', 'QRS', 'QRS'),
-          ecg: PRE_EXCITED,
-          note: l('第 5 步：QRS 约 125 ms，起始部顿挫（**δ 波**）：心室预激，短 PR 有了解释。', 'Step 5: QRS about 125 ms, opening with a slurred **delta wave**: pre-excitation explains the short PR.', 'Paso 5: QRS de unos 125 ms que empieza con un empastamiento (**onda delta**): la preexcitación explica el PR corto.'),
-          marks: [{ auto: 'qrs' }, { auto: 'delta' }],
-        },
-        {
-          label: l('T 波', 'T waves', 'Ondas T'),
-          ecg: PRE_EXCITED,
-          note: l('第 8 步：II、III、aVF 和 V3–V6 的 T 波倒置：预激的继发改变，不是缺血。', 'Step 8: T inverted in II, III, aVF and V3–V6: secondary to the pre-excitation, not ischaemia.', 'Paso 8: T negativas en II, III, aVF y V3–V6: secundarias a la preexcitación, no isquemia.'),
-          marks: [{ auto: 't', lead: 'III' }, { auto: 't', lead: 'V5' }],
-        },
-      ],
-      predict: {
-        question: l('心率和节律都正常。哪一步会找到原因？', 'Rate and rhythm are normal. Which step finds the cause?', 'La frecuencia y el ritmo son normales. ¿Qué paso encuentra la causa?'),
-        options: [l('第 4 步：PR', 'Step 4: the PR', 'Paso 4: el PR'), l('第 7 步：电轴', 'Step 7: the axis', 'Paso 7: el eje'), l('第 8 步：形态', 'Step 8: morphology', 'Paso 8: la morfología')],
-        answer: 0,
-      },
-      caption: l(
-        '同一份图，每步只看一样东西。测 PR 的人在第 4 步就找到原因，再用它解释后面的一切。',
-        'One tracing, one thing per step. Whoever measures the PR finds the cause at step 4 and uses it to explain the rest.',
-        'Un trazado, una cosa por paso. Quien mide el PR encuentra la causa en el paso 4 y con ella explica el resto.',
-      ),
-    },
-    {
       kind: 'criteria',
       title: l('读图顺序与正常值（成人）', 'The reading order and adult normal values', 'El orden de lectura y los valores normales del adulto'),
       items: [
@@ -265,12 +225,52 @@ const lesson: Lesson = {
     },
     {
       kind: 'film',
+      title: l('按顺序读：一个诊断解释全部', 'Read in order: one diagnosis explains it all', 'Lee en orden: un diagnóstico lo explica todo'),
+      frames: [
+        {
+          label: l('心率、节律', 'Rate, rhythm', 'Frecuencia, ritmo'),
+          ecg: PRE_EXCITED,
+          note: l('第 2–3 步：约 72 次/分，每个 QRS 前有窦性 P 波。到这里都正常。', 'Steps 2–3: about 72/min, a sinus P before every QRS. Normal so far.', 'Pasos 2–3: unos 72 lpm, una P sinusal antes de cada QRS. Normal hasta aquí.'),
+          marks: [{ auto: 'rr' }, { auto: 'p' }],
+        },
+        {
+          label: l('PR', 'PR', 'PR'),
+          ecg: PRE_EXCITED,
+          note: l('第 4 步：PR 约 115 ms，不到 120：**短 PR**。不要停，问为什么。', 'Step 4: PR about 115 ms, under 120: a **short PR**. Do not stop; ask why.', 'Paso 4: PR de unos 115 ms, menos de 120: **PR corto**. No te detengas; pregúntate por qué.'),
+          marks: [{ auto: 'pr' }],
+        },
+        {
+          label: l('QRS', 'QRS', 'QRS'),
+          ecg: PRE_EXCITED,
+          note: l('第 5 步：QRS 约 125 ms，起始部顿挫（**δ 波**）：心室预激，短 PR 有了解释。', 'Step 5: QRS about 125 ms, opening with a slurred **delta wave**: pre-excitation explains the short PR.', 'Paso 5: QRS de unos 125 ms que empieza con un empastamiento (**onda delta**): la preexcitación explica el PR corto.'),
+          marks: [{ auto: 'qrs' }, { auto: 'delta' }],
+        },
+        {
+          label: l('T 波', 'T waves', 'Ondas T'),
+          ecg: PRE_EXCITED,
+          note: l('第 8 步：II、III、aVF 和 V3–V6 的 T 波倒置：预激的继发改变，不是缺血。', 'Step 8: T inverted in II, III, aVF and V3–V6: secondary to the pre-excitation, not ischaemia.', 'Paso 8: T negativas en II, III, aVF y V3–V6: secundarias a la preexcitación, no isquemia.'),
+          marks: [{ auto: 't', lead: 'III' }, { auto: 't', lead: 'V5' }],
+        },
+      ],
+      predict: {
+        question: l('开头那份图：心率和节律都正常。按顺序，下一步看什么？', 'The opening tracing: rate and rhythm are normal. In the order, what do you look at next?', 'El trazado del principio: la frecuencia y el ritmo son normales. Siguiendo el orden, ¿qué miras ahora?'),
+        options: [l('第 4 步：PR', 'Step 4: the PR', 'Paso 4: el PR'), l('第 8 步：T 波', 'Step 8: the T waves', 'Paso 8: las ondas T'), l('机器的自动诊断', 'The computer statement', 'El informe automático')],
+        answer: 0,
+      },
+      caption: l(
+        '同一份图，每步只看一样东西。测 PR 的人在第 4 步就找到原因，再用它解释后面的一切。',
+        'One tracing, one thing per step. Whoever measures the PR finds the cause at step 4 and uses it to explain the rest.',
+        'Un trazado, una cosa por paso. Quien mide el PR encuentra la causa en el paso 4 y con ella explica el resto.',
+      ),
+    },
+    {
+      kind: 'film',
       title: l('第 1 步：先查记录', 'Step 1: check the recording first', 'Paso 1: comprueba primero el registro'),
       frames: [
         {
           label: l('接线正确', 'Correct', 'Correcto'),
           ecg: { kind: 'synth', req: CHECKED },
-          note: l('I 导联的 P、QRS、T 都直立，aVR 倒置：电极接对了。', 'Lead I has upright P, QRS and T, and aVR is negative: the cables are right.', 'La derivación I tiene P, QRS y T positivas y aVR es negativa: los cables están bien.'),
+          note: l('I 导联的 P、QRS、T 都直立，aVR 倒置：左右手电极接对了。', 'Lead I has upright P, QRS and T, and aVR is negative: the arm cables are right.', 'La derivación I tiene P, QRS y T positivas y aVR es negativa: los cables de los brazos están bien.'),
         },
         {
           label: l('左右手接反', 'Arm cables swapped', 'Cables de brazos invertidos'),
@@ -280,7 +280,7 @@ const lesson: Lesson = {
         {
           label: l('电极噪声', 'Noisy electrode', 'Electrodo con ruido'),
           ecg: { kind: 'synth', req: { ...CHECKED, recording: { noise: { emgMv: 0.05, emgOn: ['LA'] } } } },
-          note: l('I、III、aVL 有细密的毛刺，II 却干净：问题在左手电极。先修好记录再测量。', 'Fine fuzz in I, III and aVL while II stays clean: the left-arm electrode. Fix the recording before you measure.', 'Vibración fina en I, III y aVL con II limpia: el electrodo del brazo izquierdo. Arregla el registro antes de medir.'),
+          note: l('I、III、aVL 有细密的毛刺，II 却干净：问题在左手电极。先修好记录再测量。', 'Fine fuzz in I, III and aVL while II stays clean: the left-arm electrode. Fix the recording before you measure.', 'Temblor muscular fino en I, III y aVL con II limpia: el electrodo del brazo izquierdo. Arregla el registro antes de medir.'),
         },
       ],
       predict: {
@@ -301,12 +301,16 @@ const lesson: Lesson = {
         {
           label: l('急性闭塞', 'Occlusion', 'Oclusión'),
           ecg: synth('stemi-anterior', NEVER_MISS_SEED),
-          note: l('V1–V4 的 ST 抬高，III、aVF 镜像压低：先按急性冠脉闭塞处理。', 'ST up in V1–V4 with a mirror-image dip in III and aVF: acute occlusion until proven otherwise.', 'ST elevado en V1–V4 con descenso especular en III y aVF: oclusión aguda mientras no se demuestre lo contrario.'),
+          note: l(
+            '急性冠脉闭塞，或它的等同图形？这里 V1–V4 的 ST 抬高，III、aVF 镜像压低：先按闭塞处理。',
+            'An acute occlusion, or one of its equivalents? Here ST is up in V1–V4 with a mirror-image dip in III and aVF: occlusion until proven otherwise.',
+            '¿Oclusión aguda o uno de sus equivalentes? Aquí el ST sube en V1–V4 con descenso especular en III y aVF: oclusión mientras no se demuestre lo contrario.',
+          ),
         },
         {
           label: l('高钾', 'Potassium', 'Potasio'),
           ecg: synth('hyperkalemia', NEVER_MISS_SEED),
-          note: l('V3–V4 的 T 波高尖、比 R 波还高，PR 和 QRS 变长：想到高钾血症。', 'Narrow, peaked T waves taller than the R in V3–V4, with a longer PR and QRS: think hyperkalaemia.', 'T picudas y estrechas, más altas que la R en V3–V4, con PR y QRS más largos: piensa en hiperpotasemia.'),
+          note: l('V3–V4 的 T 波高尖、比 R 波还高，PR 和 QRS 变长：想到高钾血症。', 'Peaked T waves taller than the R in V3–V4, with a longer PR and QRS: think hyperkalaemia.', 'T picudas, más altas que la R en V3–V4, con PR y QRS más largos: piensa en hiperpotasemia.'),
         },
         {
           label: l('长 QT', 'Long QT', 'QT largo'),
@@ -332,9 +336,9 @@ const lesson: Lesson = {
         },
       ],
       caption: l(
-        '签字前，用这六个问题再过一遍图。每一个都会改变今天的处理，后面各有专门的课。',
-        'Before you sign, run these six past the tracing. Each changes what happens today, and each has its own lesson later.',
-        'Antes de firmar, repasa el trazado con estas seis. Cada una cambia lo que se hace hoy y cada una tiene su propia lección más adelante.',
+        '签字前，在图上再找一遍这六种绝不能漏掉的情况。每一种都会改变今天的处理，后面各有专门的课。',
+        'Before you sign, check the tracing for these six things you must never miss. Each changes what happens today, and each has its own lesson later.',
+        'Antes de firmar, busca en el trazado estas seis cosas que nunca se pueden pasar por alto. Cada una cambia lo que se hace hoy y cada una tiene su propia lección más adelante.',
       ),
     },
     {

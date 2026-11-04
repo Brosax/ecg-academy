@@ -256,10 +256,9 @@ describe('s1: the reading order on the tracings', () => {
   it('hook (pre-excitation): PR about 115 ms, QRS about 125 ms, R ≥ S in V1, T inverted in II, III, aVF and V3–V6', () => {
     const e = ecgOf(blocksOf('s1', 'hook')[0].ecg);
     const t = e.truth!;
-    expect(t.prMs!).toBeGreaterThanOrEqual(105);
+    expect(Math.abs(t.prMs! - 115)).toBeLessThanOrEqual(5);
     expect(t.prMs!).toBeLessThan(120);
-    expect(t.qrsMs).toBeGreaterThanOrEqual(115);
-    expect(t.qrsMs).toBeLessThanOrEqual(135);
+    expect(Math.abs(t.qrsMs - 125)).toBeLessThanOrEqual(5);
     expect(t.findings).toContain('wpw');
     expect(qrs(e, 'V1').max).toBeGreaterThanOrEqual(-qrs(e, 'V1').min);
     for (const l of ['II', 'III', 'aVF', 'V3', 'V4', 'V5', 'V6'] as const) expect(tInverted(e, l), l).toBe(true);
