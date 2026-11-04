@@ -9,7 +9,7 @@
  * course cannot hide the stage-O results.
  */
 import { describe, expect, it } from 'vitest';
-import type { Block, Lesson, LessonMark } from '../../src/course/api';
+import type { AutoMark, Block, Lesson, LessonMark } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
 import { realisedDials, startDials } from '../../src/course/live';
 import { baselineBefore, isAutoMark, qrsWaves, resolveMarks } from '../../src/course/marks';
@@ -374,6 +374,9 @@ const stTp = (ecg: Ecg, lead: StdLead, b = midBeat(ecg)) => sample(ecg, lead, b.
 /** PR-segment shift from the TP segment (mid-PR segment minus TP) */
 const prShift = (ecg: Ecg, lead: StdLead, b = midBeat(ecg)) => sample(ecg, lead, (b.pOff! + b.qrsOn) / 2) - sample(ecg, lead, b.pOn! - 40);
 const rrs = (ecg: Ecg): number[] => ecg.truth!.beats.slice(1).map((b, i) => b.qrsOn - ecg.truth!.beats[i].qrsOn);
+/** the beats that the auto marks of one kind name (a mark without `beat` gives -1, which no assertion accepts) */
+const markBeats = (marks: readonly LessonMark[] | undefined, auto: AutoMark['auto']): number[] =>
+  (marks ?? []).filter((m): m is AutoMark => isAutoMark(m) && m.auto === auto).map((m) => m.beat ?? -1);
 const roles = (ecg: Ecg, lead: StdLead): string => {
   const b = midBeat(ecg);
   return qrsWaves(ecg.signal.leads[lead], ecg.signal.fs, b.qrsOn, b.qrsOff).map((w) => w.role).join('');
@@ -555,7 +558,7 @@ describe('o3: digoxin on the tracings', () => {
     expect(Math.abs(dig.truth!.qtMs - 350)).toBeLessThan(5);
     expect(Math.abs(dig.truth!.prMs! - 190)).toBeLessThan(3);
   });
-  it('toxicity film (II): bigeminy with early wide PVCs; AT 180/min with 2:1 block and the blocked P′ in the T upslope; junctional ≈ 80/min without P; complete block ≈ 45/min; regularised AF ≈ 45/min, perfectly regular', () => {
+  it('toxicity film (II): bigeminy with early wide PVCs, the RR mark on the short sinus-to-PVC coupling; AT 180/min with 2:1 block and the blocked P′ in the T upslope; junctional ≈ 80/min without P; complete block ≈ 45/min; regularised AF ≈ 45/min, perfectly regular', () => {
     const [big, at, ajr, chb, regAf] = frames('o3', 1);
     const kinds = big.truth!.beats.map((b) => b.kind);
     kinds.forEach((k, i) => expect(k).toBe(kinds[0] === 'sinus' ? (i % 2 ? 'ventricular' : 'sinus') : i % 2 ? 'sinus' : 'ventricular'));
@@ -566,6 +569,10 @@ describe('o3: digoxin on the tracings', () => {
     expect(width(pvcs[0])).toBeGreaterThan(width(sinus[0]) + 30);
     const r = rrs(big);
     expect(Math.min(...r)).toBeLessThan(0.6 * Math.max(...r));
+    const [early] = markBeats(blocksOf('o3', 'film')[1].frames[0].marks, 'rr');
+    expect(big.truth!.beats[early].kind).toBe('sinus');
+    expect(big.truth!.beats[early + 1].kind).toBe('ventricular');
+    expect(r[early]).toBeLessThan(0.6 * r[early + 1]);
     expect(Math.abs(at.truth!.atrialRateBpm! - 180)).toBeLessThan(5);
     expect(Math.abs(at.truth!.hrBpm - 90)).toBeLessThan(5);
     const b = midBeat(at);
