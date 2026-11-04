@@ -178,9 +178,9 @@ const lesson: Lesson = {
         {
           title: l('粗还是细？', 'Coarse or fine?', '¿Gruesa o fina?'),
           body: l(
-            '按振幅分**粗颤**与**细颤**。粗颤常见于骤停早期；细颤振幅低，越细越是晚期。分类不改变处理——两者都除颤。',
-            'By amplitude: **coarse** or fine. Coarse VF is typical of early arrest; fine VF is low-amplitude and later. The class does not change the management — both are defibrillated.',
-            'Por amplitud: **gruesa** o fina. La FV gruesa es típica de la parada precoz; la fina es de baja amplitud y más tardía. La clase no cambia el tratamiento: ambas se desfibrilan.',
+            '按振幅分**粗颤**与**细颤**。粗颤常见于骤停早期；细颤振幅低，越细越是晚期。只要看得出是室颤，分类不改变处理——两者都除颤。',
+            'By amplitude: **coarse** or fine. Coarse VF is typical of early arrest; fine VF is low-amplitude and later. While you can see it is VF, the class does not change the management — both are defibrillated.',
+            'Por amplitud: **gruesa** o fina. La FV gruesa es típica de la parada precoz; la fina es de baja amplitud y más tardía. Mientras se vea que es FV, la clase no cambia el tratamiento: ambas se desfibrilan.',
           ),
         },
         {
@@ -221,9 +221,9 @@ const lesson: Lesson = {
         ],
       },
       caption: l(
-        '把颤动调小：波变小，但始终杂乱无章。粗细不改变处理。真正的细颤比这里最小的还要小得多（见下一段影片）。',
-        'Turn the fibrillation down: the waves shrink but stay chaotic. Coarse or fine does not change the management. True fine VF is far smaller than the smallest setting here (see the next film).',
-        'Baja la fibrilación: las ondas se reducen pero siguen caóticas. Gruesa o fina no cambia el tratamiento. La FV fina de verdad es mucho más pequeña que el mínimo de aquí (mira la película siguiente).',
+        '把颤动调小：波变小，但始终杂乱无章。看得见的室颤，无论粗细，都要电击。真正的细颤比这里最小的还要小得多（见下一段影片）。',
+        'Turn the fibrillation down: the waves shrink but stay chaotic. Visible VF, coarse or fine, is shocked. True fine VF is far smaller than the smallest setting here (see the next film).',
+        'Baja la fibrilación: las ondas se reducen pero siguen caóticas. La FV visible, gruesa o fina, se desfibrila. La FV fina de verdad es mucho más pequeña que el mínimo de aquí (mira la película siguiente).',
       ),
     },
     {
@@ -233,15 +233,17 @@ const lesson: Lesson = {
       left: {
         ecg: synth('vt-polymorphic', 704),
         caption: l('急性缺血，窦性搏动 QT 正常', 'Acute ischaemia; sinus-beat QT normal', 'Isquemia aguda; QT sinusal normal'),
+        marks: [{ auto: 'qt', beat: 0 }],
       },
       right: {
         ecg: synth('torsades', 705),
-        caption: l('药物性长 QT（窦性 QTc ≈ 570 ms）', 'Drug-induced long QT (sinus QTc ≈ 570 ms)', 'QT largo farmacológico (QTc sinusal ≈ 570 ms)'),
+        caption: l('药物性长 QT（窦性 QT 约 565 ms）', 'Drug-induced long QT (sinus QT about 565 ms)', 'QT largo farmacológico (QT sinusal de unos 565 ms)'),
+        marks: [{ auto: 'qt', beat: 0 }],
       },
       point: l(
-        '两段都宽、都快、都在变形，但“多形性”只是描述，“尖端扭转”需要**长 QT** 支持。左：窦性搏动 QT 正常 ⇒ **缺血性多形性室速**：找闭塞的冠脉、再灌注；镁剂和起搏帮不了它。右：发作前窦性 QTc ≈ 570 ms ⇒ **尖端扭转**：停 QT 药物、纠正钾镁、静脉镁剂。同样的图形，相反的处理：第一步永远是测窦性搏动的 QT。',
-        'Both runs are wide, fast and changing shape, but "polymorphic" is a description, while "torsades" needs the **long QT**. Left: sinus beats with a normal QT → **ischaemic polymorphic VT**: find the occluded coronary artery and reperfuse; magnesium and pacing will not help. Right: sinus QTc ≈ 570 ms before the run → **torsades**: stop the QT drug, correct K⁺ and Mg²⁺, give IV magnesium. Same pattern, opposite management: the first step is always the QT of a sinus beat.',
-        'Ambos episodios son anchos, rápidos y cambiantes, pero «polimorfa» es una descripción, mientras que «torsade» necesita el **QT largo**. Izquierda: latidos sinusales con QT normal → **TV polimorfa isquémica**: busca la coronaria ocluida y reperfunde; el magnesio y la estimulación no ayudan. Derecha: QTc sinusal ≈ 570 ms antes del episodio → **torsade**: suspende el fármaco, corrige K⁺ y Mg²⁺ y da magnesio intravenoso. Mismo patrón, tratamiento opuesto: el primer paso es siempre el QT de un latido sinusal.',
+        '两段都宽、都快、都在变形，但“多形性”只是描述，“尖端扭转”需要**长 QT** 支持。左：窦性搏动 QT 正常 ⇒ **缺血性多形性室速**：找闭塞的冠脉、再灌注；镁剂和起搏帮不了它。右：发作前窦性 QT 约 565 ms ⇒ **尖端扭转**：停 QT 药物、纠正钾镁、静脉镁剂。同样的图形，相反的处理：第一步永远是测窦性搏动的 QT。',
+        'Both runs are wide, fast and changing shape, but "polymorphic" is a description, while "torsades" needs the **long QT**. Left: sinus beats with a normal QT → **ischaemic polymorphic VT**: find the occluded coronary artery and reperfuse; magnesium and pacing will not help. Right: a sinus QT of about 565 ms before the run → **torsades**: stop the QT drug, correct K⁺ and Mg²⁺, give IV magnesium. Same pattern, opposite management: the first step is always the QT of a sinus beat.',
+        'Ambos episodios son anchos, rápidos y cambiantes, pero «polimorfa» es una descripción, mientras que «torsade» necesita el **QT largo**. Izquierda: latidos sinusales con QT normal → **TV polimorfa isquémica**: busca la coronaria ocluida y reperfunde; el magnesio y la estimulación no ayudan. Derecha: QT sinusal de unos 565 ms antes del episodio → **torsade**: suspende el fármaco, corrige K⁺ y Mg²⁺ y da magnesio intravenoso. Mismo patrón, tratamiento opuesto: el primer paso es siempre el QT de un latido sinusal.',
       ),
     },
     {
@@ -334,9 +336,9 @@ const lesson: Lesson = {
         answer: 1,
       },
       caption: l(
-        '真 QRS 按原来的 RR 穿行，不经右臂电极的 III 导联是干净的，患者如常 ⇒ 伪差。先看病人，再读节律条。',
-        'The true QRS march through at the underlying RR, lead III (which does not use the right-arm electrode) is clean, and the patient is unchanged → artefact. Look at the patient before the strip.',
-        'Los QRS verdaderos desfilan con el RR de base, III (que no usa el electrodo del brazo derecho) está limpia y el paciente está igual → artefacto. Mira al paciente antes que la tira.',
+        '真 QRS 按原来的 RR 穿行，患者如常 ⇒ 伪差。先看病人，再读节律条。',
+        'The true QRS march through at the underlying RR and the patient is unchanged → artefact. Look at the patient before the strip.',
+        'Los QRS verdaderos desfilan con el RR de base y el paciente está igual → artefacto. Mira al paciente antes que la tira.',
       ),
     },
     { kind: 'check', item: { family: 'arrest', seed: 17 } },

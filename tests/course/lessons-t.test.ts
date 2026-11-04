@@ -839,6 +839,15 @@ describe('t6 on the tracings', () => {
     expect(left.rhythm).toBe('vt-polymorphic');
     expect(left.findings).not.toContain('long-qt');
   });
+  it('torsades contrast: the QT of the first sinus beat is marked on both sides; normal (under 440 ms) on the left, about 565 ms on the right', () => {
+    const c = blocksOf('t6', 'contrast')[0];
+    for (const side of [c.left, c.right]) expect(side.marks).toContainEqual({ auto: 'qt', beat: 0 });
+    const [l0, r0] = [ecgOf(c.left.ecg).truth!.beats[0], ecgOf(c.right.ecg).truth!.beats[0]];
+    expect(l0.kind).toBe('sinus');
+    expect(l0.tOff - l0.qrsOn).toBeLessThan(440);
+    expect(r0.kind).toBe('sinus');
+    expect(Math.abs(r0.tOff - r0.qrsOn - 565)).toBeLessThan(5);
+  });
   it('artefact film: sinus rhythm with regular QRS through the burst (RR about 830 ms, marked beats inside it); the burst sits at about 3–6 s in II; with the electrode still the same heart beats identically and III never changes', () => {
     const film = blocksOf('t6', 'film')[1];
     expect(film.frames[1].ecg).toEqual(film.frames[0].ecg);
