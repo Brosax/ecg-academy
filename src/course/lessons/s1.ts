@@ -314,8 +314,13 @@ const lesson: Lesson = {
         },
         {
           label: l('长 QT', 'Long QT', 'QT largo'),
-          ecg: synth('long-qt', NEVER_MISS_SEED, { qtc: 520 }),
-          note: l('QTc 约 520 ms：> 500 ms 为高危。不测量就看不出来。', 'QTc about 520 ms: over 500 ms is high risk. You only see it if you measure it.', 'QTc de unos 520 ms: > 500 ms es de alto riesgo. Solo lo ves si lo mides.'),
+          ecg: synth('long-qt', NEVER_MISS_SEED, { qtc: 520, rate: 60 }),
+          note: l(
+            'QT 约 520 ms，60 次/分（RR 约 1 s），所以 QTc ≈ QT ≈ 520 ms：> 500 ms 为高危。不测量就看不出来。',
+            'QT about 520 ms at 60/min (RR about 1 s), so QTc ≈ QT ≈ 520 ms: over 500 ms is high risk. You only see it if you measure it.',
+            'QT de unos 520 ms a 60 lpm (RR de 1 s aprox.), así que QTc ≈ QT ≈ 520 ms: > 500 ms es de alto riesgo. Solo lo ves si lo mides.',
+          ),
+          marks: [{ auto: 'qt' }, { auto: 'rr' }],
         },
         {
           label: l('预激', 'Pre-excitation', 'Preexcitación'),
@@ -353,9 +358,9 @@ const lesson: Lesson = {
         caption: l('按顺序读：第 1–8 步', 'Read it in order: steps 1–8', 'Léelo en orden: pasos 1–8'),
       },
       point: l(
-        'B 在三步上不正常：PR 约 205 ms（第 4 步），QRS 约 115 ms（第 5 步），V3–V5 的 T 波高尖、基底窄，与 R 波一样高甚至更高（第 8 步）。单看每一项都不显眼，合在一起再经过“不可漏诊”筛查，就指向高钾血症——这是急症。在电轴之后就停下的人会漏掉它。',
-        'B is abnormal at three steps: PR about 205 ms (step 4), QRS about 115 ms (step 5) and tall, narrow-based, peaked T waves in V3–V5, as tall as the R waves or taller (step 8). Each is subtle on its own; together, and with the never-miss screen, they point to hyperkalaemia, an emergency. A reader who stops after the axis misses it.',
-        'B es anormal en tres pasos: PR de unos 205 ms (paso 4), QRS de unos 115 ms (paso 5) y ondas T altas, picudas y de base estrecha en V3–V5, tan altas como las R o más (paso 8). Cada uno es sutil por separado; juntos, y con el cribado final, apuntan a una hiperpotasemia, que es una urgencia. Quien se detiene tras el eje la pasa por alto.',
+        'B 在三步上不正常：PR 约 205 ms（第 4 步），QRS 约 115 ms（第 5 步），V3–V5 的 T 波高尖、基底窄，V3–V4 的 T 波比 R 波还高（第 8 步）。单看每一项都不显眼，合在一起再经过“不可漏诊”筛查，就指向高钾血症——这是急症。在电轴之后就停下的人会漏掉它。',
+        'B is abnormal at three steps: PR about 205 ms (step 4), QRS about 115 ms (step 5) and tall, narrow-based, peaked T waves in V3–V5, taller than the R in V3–V4 (step 8). Each is subtle on its own; together, and with the never-miss screen, they point to hyperkalaemia, an emergency. A reader who stops after the axis misses it.',
+        'B es anormal en tres pasos: PR de unos 205 ms (paso 4), QRS de unos 115 ms (paso 5) y ondas T altas, picudas y de base estrecha en V3–V5, más altas que la R en V3–V4 (paso 8). Cada uno es sutil por separado; juntos, y con el cribado final, apuntan a una hiperpotasemia, que es una urgencia. Quien se detiene tras el eje la pasa por alto.',
       ),
     },
     { kind: 'check', item: { inline: firstStep } },

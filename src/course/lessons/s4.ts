@@ -111,8 +111,9 @@ const lesson: Lesson = {
       },
       predict: {
         question: l('PR 从 120 ms 延长到 200 ms。最后它占几个小格？', 'The PR grows from 120 to 200 ms. How many small squares will it span at the end?', 'El PR pasa de 120 a 200 ms. ¿Cuántos cuadros pequeños ocupará al final?'),
-        options: [l('5 个', '5', '5'), l('4 个', '4', '4'), l('8 个', '8', '8')],
-        answer: 0,
+        options: [l('4 个', '4', '4'), l('5 个', '5', '5'), l('8 个', '8', '8')],
+        answer: 1,
+        ordered: true,
       },
       caption: l(
         '先看 PR 从下限走到上限。然后随意设置 PR 和 QRS，用分规测量，和读数比较，直到误差在 20 ms（半个小格）以内。',
@@ -191,9 +192,9 @@ const lesson: Lesson = {
             min: 63,
             max: 99,
             text: l(
-              '心率加快：标出的 QT 变短，QTc 读数（模型固定的 Fridericia 值）停在 405 ms。',
-              'Faster: the marked QT shortens; the QTc read-out (the model holds Fridericia fixed) stays at 405 ms.',
-              'Más rápido: el QT marcado se acorta; la lectura del QTc (el modelo fija el de Fridericia) se queda en 405 ms.',
+              '心率加快：标出的 QT 变短，QTc 读数停在 Fridericia 值 405 ms。',
+              'Faster: the marked QT shortens; the QTc read-out stays at the Fridericia value, 405 ms.',
+              'Más rápido: el QT marcado se acorta; la lectura del QTc se queda en el valor de Fridericia, 405 ms.',
             ),
           },
           {
@@ -209,9 +210,9 @@ const lesson: Lesson = {
       },
       predict: {
         question: l(
-          '模型把 QTc（Fridericia）固定不变。把心率从 60 提到 100 次/分，Bazett 公式算出的 QTc 会怎样？',
-          'The model holds its QTc (Fridericia) fixed. Raise the rate from 60 to 100/min: what does Bazett’s QTc do?',
-          'El modelo mantiene fijo su QTc (Fridericia). Sube la frecuencia de 60 a 100 lpm: ¿qué hace el QTc de Bazett?',
+          'QTc 读数停在 Fridericia 值不变。把心率从 60 提到 100 次/分，Bazett 公式算出的 QTc 会怎样？',
+          'The QTc read-out stays at the Fridericia value. Raise the rate from 60 to 100/min: what does Bazett’s QTc do?',
+          'La lectura del QTc se queda en el valor de Fridericia. Sube la frecuencia de 60 a 100 lpm: ¿qué hace el QTc de Bazett?',
         ),
         options: [l('升到读数之上', 'Climbs above the read-out', 'Sube por encima de la lectura'), l('保持不变', 'Stays the same', 'No cambia'), l('降到读数之下', 'Falls below it', 'Baja por debajo')],
         answer: 0,
