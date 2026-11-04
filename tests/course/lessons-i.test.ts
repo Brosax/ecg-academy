@@ -841,8 +841,19 @@ describe('i8: Wellens, de Winter, aVR on the tracings', () => {
 });
 
 describe('i9: evolution, Q waves and aneurysm on the tracings', () => {
-  it('timeline: hyperacute (V2 ST < 1 mm, tall T) → acute (V2 ≥ 2 mm) → evolving (Q in V2, T turning negative, ST still up) → old (QS V1–V3, ST back)', () => {
-    const [p1, p2, p3] = blocksOf('i9', 'ecg').slice(0, 3).map((b) => ecgOf(b.ecg));
+  it('timeline film (one seed): hyperacute (V2 ST < 1 mm, T taller than R) → acute (V2 about 3 mm, III down) → evolving (Q in V2, T turning negative, ST still up about 1 mm) → old (QS V1–V3, ST back), as in the hook', () => {
+    const film = blocksOf('i9', 'film')[0];
+    expect(new Set(film.frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req.seed : -1))).size).toBe(1);
+    const [p1, p2, p3, p4] = film.frames.map((f) => ecgOf(f.ecg));
+    expect(tw(p1, 'V2').max).toBeGreaterThan(qrs(p1, 'V2').max);
+    expect(stAt(p2, 'V2')).toBeGreaterThan(0.25);
+    expect(stAt(p2, 'V2')).toBeLessThan(0.33);
+    expect(stAt(p2, 'III')).toBeLessThan(-0.05);
+    expect(stAt(p3, 'V2')).toBeLessThan(0.13);
+    for (const l of ['V1', 'V2', 'V3'] as const) {
+      expect(qrs(p4, l).max, l).toBeLessThan(0.05);
+      expect(Math.abs(stAt(p4, l)), l).toBeLessThan(0.05);
+    }
     expect(stAt(p1, 'V2')).toBeLessThan(0.1);
     expect(tw(p1, 'V2').max).toBeGreaterThan(0.4);
     expect(stAt(p2, 'V2')).toBeGreaterThanOrEqual(0.2);
@@ -864,8 +875,9 @@ describe('i9: evolution, Q waves and aneurysm on the tracings', () => {
     expect(e.truth!.axisDeg.qrs).toBeGreaterThan(-55);
     expect(e.truth!.axisDeg.qrs).toBeLessThan(-30);
   });
-  it('fragmented QRS: QS in V1–V3 and an extra r′ after the S in V4', () => {
-    const e = ecgOf(blocksOf('i9', 'ecg')[3].ecg);
+  it('fragmented QRS (heart block): QS in V1–V3 and an extra r′ after the S in V4', () => {
+    const e = ecgOf(blocksOf('i9', 'heart')[0].ecg);
+    expect(qrs(e, 'V1').max).toBeLessThan(0.05);
     for (const l of ['V2', 'V3'] as const) expect(qrs(e, l).max, l).toBeLessThan(0.05);
     expect(shape(e, 'V4')).toMatch(/r′/);
   });
