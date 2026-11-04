@@ -109,9 +109,9 @@ const lesson: Lesson = {
         {
           label: l('室速：脉搏决定处理', 'VT: the pulse decides', 'TV: el pulso decide'),
           value: l(
-            '无脉 ⇒ 除颤（与室颤同桶）；有脉而不稳定（低血压、胸痛、心衰、意识改变）⇒ 镇静下同步电复律；有脉且稳定 ⇒ 静脉胺碘酮或普鲁卡因胺，并备好复律（t5）',
-            'No pulse -> defibrillate (same bin as VF); a pulse with instability (hypotension, chest pain, heart failure, altered consciousness) -> synchronised cardioversion under sedation; a pulse and stable -> IV amiodarone or procainamide with cardioversion ready (t5)',
-            'Sin pulso -> desfibrilar (el mismo grupo que la FV); con pulso e inestable (hipotensión, dolor torácico, insuficiencia cardiaca, alteración de la conciencia) -> cardioversión sincronizada con sedación; con pulso y estable -> amiodarona o procainamida intravenosas con la cardioversión preparada (t5)',
+            '无脉 ⇒ 除颤（与室颤同桶）；有脉而不稳定（低血压、胸痛、心衰、意识改变）⇒ 镇静下同步电复律；有脉且稳定 ⇒ 镇静风险低时镇静下同步电复律，或静脉抗心律失常药（普鲁卡因胺、胺碘酮）（t5）',
+            'No pulse -> defibrillate (same bin as VF); a pulse with instability (hypotension, chest pain, heart failure, altered consciousness) -> synchronised cardioversion under sedation; a pulse and stable -> synchronised cardioversion under sedation when the sedation risk is low, or an IV antiarrhythmic (procainamide, amiodarone) (t5)',
+            'Sin pulso -> desfibrilar (el mismo grupo que la FV); con pulso e inestable (hipotensión, dolor torácico, insuficiencia cardiaca, alteración de la conciencia) -> cardioversión sincronizada con sedación; con pulso y estable -> cardioversión sincronizada con sedación si el riesgo de la sedación es bajo, o un antiarrítmico intravenoso (procainamida, amiodarona) (t5)',
           ),
         },
         {
@@ -129,9 +129,9 @@ const lesson: Lesson = {
         {
           label: l('ROSC 后：继续找原因', 'After ROSC: keep hunting the cause', 'Tras la RCE: sigue buscando la causa'),
           value: l(
-            'VF/无脉性室速的背景常是冠脉闭塞；复律成功不等于 4 H/4 T 结束（高钾、低氧、肺栓塞、出血逐项排除）；12 导联还可能显示长 QT、预激或 Brugada 图形；不再固定要求 32–36 °C',
-            'The background of VF/pulseless VT is often a coronary occlusion; a successful shock does not close the 4 Hs and 4 Ts (rule out hyperkalaemia, hypoxia, pulmonary embolism and bleeding one by one); the 12-lead may also show a long QT, pre-excitation or a Brugada pattern; a fixed 32-36 °C target is no longer required',
-            'El sustrato de la FV/TV sin pulso suele ser una oclusión coronaria; una descarga eficaz no cierra las 4 H y 4 T (descarta una a una hiperpotasemia, hipoxia, tromboembolia pulmonar y hemorragia); el ECG de 12 derivaciones también puede mostrar un QT largo, una preexcitación o un patrón de Brugada; ya no se exige un objetivo fijo de 32-36 °C',
+            'VF/无脉性室速的背景常是冠脉闭塞：ST 段抬高或其他冠脉闭塞等同表现（i8、i10）都去导管室；复律成功不等于 4 H/4 T 结束（高钾、低氧、肺栓塞、出血逐项排除）；12 导联还可能显示长 QT、预激或 Brugada 图形；不再固定要求 32–36 °C',
+            'The background of VF/pulseless VT is often a coronary occlusion: ST elevation or another occlusion-MI equivalent (i8, i10) goes to the cath lab; a successful shock does not close the 4 Hs and 4 Ts (rule out hyperkalaemia, hypoxia, pulmonary embolism and bleeding one by one); the 12-lead may also show a long QT, pre-excitation or a Brugada pattern; a fixed 32-36 °C target is no longer required',
+            'El sustrato de la FV/TV sin pulso suele ser una oclusión coronaria: la elevación del ST u otro equivalente de oclusión coronaria (i8, i10) va a la sala de hemodinámica; una descarga eficaz no cierra las 4 H y 4 T (descarta una a una hiperpotasemia, hipoxia, tromboembolia pulmonar y hemorragia); el ECG de 12 derivaciones también puede mostrar un QT largo, una preexcitación o un patrón de Brugada; ya no se exige un objetivo fijo de 32-36 °C',
           ),
         },
       ],
@@ -285,7 +285,7 @@ const lesson: Lesson = {
           marks: [{ auto: 'st', lead: 'V1' }, { auto: 'st', lead: 'V2' }],
         },
       ],
-      caption: l('自主循环一恢复就做 12 导联：下一次骤停的原因可能就写在这张纸上。', 'Record a 12-lead as soon as circulation returns: the cause of the next arrest may be written on it.', 'Registra un ECG de 12 derivaciones en cuanto vuelva la circulación: la causa de la próxima parada puede estar escrita en él.'),
+      caption: l('自主循环一恢复就做 12 导联：这次骤停的原因可能就写在这张纸上。', 'Record a 12-lead as soon as circulation returns: the cause of this arrest may be written on it.', 'Registra un ECG de 12 derivaciones en cuanto vuelva la circulación: la causa de esta parada puede estar escrita en él.'),
     },
     { kind: 'check', item: { family: 'arrest', seed: 8 } },
     { kind: 'check', item: { family: 'arrest', seed: 13 } },
