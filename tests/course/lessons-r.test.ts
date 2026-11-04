@@ -531,14 +531,14 @@ describe('r2: escape and dissociation on the tracings', () => {
 });
 
 describe('r3: first degree and Mobitz I on the tracings', () => {
-  it('worked: PR about 150 → 280, pause about 1470 ms (< 2 x PP)', () => {
+  it('worked: PR about 145 → 280, pause about 1465 ms (< 2 x PP)', () => {
     const e = ecgOf(blocksOf('r3', 'worked')[0].ecg);
     const p = prs(e);
-    expect(Math.abs(Math.min(...p) - 150)).toBeLessThan(10);
+    expect(Math.abs(Math.min(...p) - 145)).toBeLessThan(10);
     expect(Math.abs(Math.max(...p) - 280)).toBeLessThan(10);
-    expect(Math.abs(Math.max(...rrs(e)) - 1470)).toBeLessThan(40);
+    expect(Math.abs(Math.max(...rrs(e)) - 1465)).toBeLessThan(40);
   });
-  it('worked marks: one cycle PR about 150 → 235 → 275 ms, RR about 890 → 840 ms, then the pause about 1470 ms; the PRs either side of it about 275 and 150 ms', () => {
+  it('worked marks: one cycle PR about 145 → 235 → 280 ms (increments about 90, then 45); on that cycle PP about 800 and RR about 800 + 90 = 890 → 800 + 45 = 845 ms; the pause about 1600 − (90 + 45) = 1465 ms; the PRs either side of it about 280 and 145 ms', () => {
     const e = ecgOf(blocksOf('r3', 'worked')[0].ecg);
     const b = e.truth!.beats;
     const r = rrs(e);
@@ -547,17 +547,20 @@ describe('r3: first degree and Mobitz I on the tracings', () => {
     expect(cycle).toHaveLength(3);
     expect(cycle.map((i) => i - cycle[0])).toEqual([0, 1, 2]);
     expect(r[cycle[0] - 1], 'the cycle starts after a pause').toBeGreaterThan(1300);
-    [150, 235, 275].forEach((v, k) => expect(Math.abs(pr(cycle[k]) - v), `PR ${k + 1}`).toBeLessThanOrEqual(5));
+    [145, 235, 280].forEach((v, k) => expect(Math.abs(pr(cycle[k]) - v), `PR ${k + 1}`).toBeLessThanOrEqual(5));
+    expect(Math.abs(pr(cycle[1]) - pr(cycle[0]) - 90), 'first increment').toBeLessThanOrEqual(5);
+    expect(Math.abs(pr(cycle[2]) - pr(cycle[1]) - 45), 'second increment').toBeLessThanOrEqual(5);
+    for (const k of [0, 1]) expect(Math.abs((b[cycle[k + 1]].pOn ?? 0) - (b[cycle[k]].pOn ?? 0) - 800), `PP ${k + 1}`).toBeLessThanOrEqual(5);
     const rrMarks = stepBeats('r3', 2, 'rr');
-    expect(rrMarks.map((i) => i - rrMarks[0])).toEqual([0, 1]);
-    expect(r[rrMarks[0] - 1], 'the bracketed RRs open a cycle').toBeGreaterThan(1300);
-    [890, 840].forEach((v, k) => expect(Math.abs(r[rrMarks[k]] - v), `RR ${k + 1}`).toBeLessThanOrEqual(5));
+    expect(rrMarks, 'the RR brackets sit on the cycle the PR marks are on').toEqual(cycle.slice(0, 2));
+    [890, 845].forEach((v, k) => expect(Math.abs(r[rrMarks[k]] - v), `RR ${k + 1}`).toBeLessThanOrEqual(5));
     const [last, first] = stepBeats('r3', 3, 'pr');
     expect(last).toBe(cycle[2]);
     expect(first).toBe(last + 1);
-    expect(Math.abs(r[last] - 1470), 'the pause').toBeLessThanOrEqual(5);
-    expect(Math.abs(pr(last) - 275)).toBeLessThanOrEqual(5);
-    expect(Math.abs(pr(first) - 150)).toBeLessThanOrEqual(5);
+    expect(Math.abs(pr(last) - pr(first) - 135), 'total increment').toBeLessThanOrEqual(5);
+    expect(Math.abs(r[last] - 1465), 'the pause').toBeLessThanOrEqual(5);
+    expect(Math.abs(pr(last) - 280)).toBeLessThanOrEqual(5);
+    expect(Math.abs(pr(first) - 145)).toBeLessThanOrEqual(5);
   });
   it('5:4 film marks: the four PRs of one cycle, the first right after a pause', () => {
     const e = frames('r3', 0)[2];
