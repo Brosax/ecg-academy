@@ -170,11 +170,12 @@ const lesson: Lesson = {
           'Este ECG resulta ser normal. ¿Cuántas líneas del informe necesita todavía?',
         ),
         options: [
-          l('十行都要写', 'All ten', 'Las diez'),
           l('一行：“正常心电图”', 'One: "normal ECG"', 'Una: «ECG normal»'),
           l('三行：心率、节律、结论', 'Three: rate, rhythm, verdict', 'Tres: frecuencia, ritmo, conclusión'),
+          l('十行都要写', 'All ten', 'Las diez'),
         ],
-        answer: 0,
+        answer: 2,
+        ordered: true,
       },
       caption: l(
         '每一帧填写它标出的那几行，高亮的是你在纸上看的位置。前七行描述，第八行诊断，最后两行决定下一步。',
