@@ -374,6 +374,12 @@ function localPeak(e: Ecg, lead: StdLead, sign: 1 | -1, t0: number, t1: number):
   }
   return best;
 }
+/** how far a lead goes below its level at the P′ onset between the P′ onset and 10 ms before the T peak (a dip the eye sees), mV */
+function dipBelowOnset(e: Ecg, lead: StdLead, b: { readonly pOn: number | null; readonly tPeak: number | null }): number {
+  let mn = Infinity;
+  for (let t = b.pOn!; t <= b.tPeak! - 10; t += 2) mn = Math.min(mn, at(e, lead, t));
+  return at(e, lead, b.pOn!) - mn;
+}
 /** P onset of each beat minus the T end of the beat before (negative: the P starts on the previous T) */
 const pAfterT = (e: Ecg): number[] => e.truth!.beats.slice(1).map((b, i) => b.pOn! - e.truth!.beats[i].tOff);
 const hiddenShare = (e: Ecg): number => e.truth!.atrial.filter((a) => !a.visible).length / e.truth!.atrial.length;
@@ -410,7 +416,7 @@ function expectFourFOneInQrs(e: Ecg): void {
 }
 
 describe('t1 on the tracings', () => {
-  it('worked AVRT: 190/min with RR about 316 ms; retrograde P′ about 115 ms after QRS onset and about 200 ms before the next QRS; a dip in I and aVL and a hump in III; in II and aVF it rides on the T upstroke with no hump of its own', () => {
+  it('worked AVRT: 190/min with RR about 316 ms; retrograde P′ about 115 ms after QRS onset and about 200 ms before the next QRS; step 2: a dip in aVL at least 0.5 mm below the P′-onset level on every beat and a hump in III; step 4: P′ negative in I against the T slope; in II and aVF it rides on the T upstroke with no hump of its own', () => {
     const e = ecgOf(blocksOf('t1', 'worked')[0].ecg);
     expect(Math.abs(e.truth!.hrBpm - 190)).toBeLessThanOrEqual(1);
     expect(Math.abs(median(rrs(e)) - 316)).toBeLessThan(5);
@@ -429,7 +435,9 @@ describe('t1 on the tracings', () => {
     expect(b.pOn!).toBeGreaterThan(b.j);
     expect(b.pOn!).toBeLessThan(b.tPeak!);
     const wave = (l: StdLead, sign: 1 | -1) => localPeak(e, l, sign, b.pOn!, b.tPeak! - 10);
-    for (const l of ['I', 'aVL'] as const) expect(wave(l, -1), `dip in ${l}`).toBeGreaterThan(0.05);
+    expect(wave('aVL', -1), 'dip in aVL').toBeGreaterThan(0.05);
+    for (const x of bs.slice(1, -1)) expect(dipBelowOnset(e, 'aVL', x), `aVL dip below the P′ onset, beat at ${Math.round(x.qrsOn)} ms`).toBeGreaterThanOrEqual(0.05);
+    expect(wave('I', -1), 'step 4: a negative P′ of its own in I').toBeGreaterThan(0.05);
     expect(wave('III', 1), 'hump in III').toBeGreaterThan(0.05);
     for (const l of ['II', 'aVF'] as const) expect(wave(l, 1), `no hump in ${l}`).toBeLessThanOrEqual(0.05);
     expect(at(e, 'II', b.tPeak!) - at(e, 'II', b.pOn!)).toBeGreaterThan(0.15);
@@ -457,10 +465,10 @@ describe('t1 on the tracings', () => {
       expect(r, `beat at ${Math.round(b.qrsOn)} ms`).toBeLessThan(0.06);
     }
   });
-  it('P′ film (12-lead sheet): sinus P upright in II with PR about 150 ms and RP > PR; AVNRT P′ starts inside the QRS with a pseudo-S in II; AVRT P′ after the QRS and before the T peak, a dip in I and aVL (where its marks sit) and no hump in II, RP about 115 ms and < P′R; AT P′ 180/min, QRS 90/min, each blocked P′ on the ST–T of the beat before', () => {
+  it('P′ film (12-lead sheet): sinus P upright in II with PR about 150 ms and RP > PR; AVNRT P′ starts inside the QRS with a pseudo-S in II; AVRT P′ after the QRS and before the T peak, a dip in aVL at least 0.5 mm below the P′-onset level on every beat (where its mark sits) and no hump in II, RP about 115 ms and < P′R; AT P′ 180/min, QRS 90/min, each blocked P′ on the ST–T of the beat before', () => {
     const film = blocksOf('t1', 'film')[0];
     expect(film.view?.layout).toBe('3x4+1');
-    expect(film.frames[2].marks?.map((m) => ('auto' in m ? m.lead : null))).toEqual(['I', 'aVL']);
+    expect(film.frames[2].marks?.map((m) => ('auto' in m ? m.lead : null))).toEqual(['aVL']);
     const [sinus, avnrt, avrt, at21] = frames('t1', 0);
     const s = sinus.truth!;
     const sb = mid(sinus);
@@ -476,7 +484,8 @@ describe('t1 on the tracings', () => {
     expect(Math.abs(rp - 115)).toBeLessThan(5);
     expect(vb.pOn!).toBeGreaterThan(vb.qrsOff);
     expect(vb.pOn!).toBeLessThan(vb.tPeak!);
-    for (const l of ['I', 'aVL'] as const) expect(localPeak(avrt, l, -1, vb.pOn!, vb.tPeak! - 10), `dip in ${l}`).toBeGreaterThan(0.05);
+    expect(localPeak(avrt, 'aVL', -1, vb.pOn!, vb.tPeak! - 10), 'dip in aVL').toBeGreaterThan(0.05);
+    for (const x of avrt.truth!.beats.slice(1, -1)) expect(dipBelowOnset(avrt, 'aVL', x), `aVL dip below the P′ onset, beat at ${Math.round(x.qrsOn)} ms`).toBeGreaterThanOrEqual(0.05);
     expect(localPeak(avrt, 'II', 1, vb.pOn!, vb.tPeak! - 10), 'no hump in II').toBeLessThanOrEqual(0.05);
     for (const rr of rrs(avrt)) expect(rr - rp).toBeGreaterThan(rp);
     const a = at21.truth!;
