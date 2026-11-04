@@ -604,6 +604,39 @@ describe('o4: sodium-channel blockade on the tracings', () => {
     const inline = ecgOf(inlineItem('o4', 'o4:tca-qrs-risk').ecg);
     expect(inline.truth!.qrsMs).toBeGreaterThanOrEqual(100);
   });
+  it('blockade film: before, QRS ≈ 95 ms with aVR all negative and I all upright; blocked, QRS ≈ 130 ms, aVR ends in an R ≈ 4 mm, I in an S; the Brugada variant raises J ≈ 3 mm in V1–V2 into a negative T in V1; RBBB ends in an R in aVR with a tall R′ in V1 the poisoning lacks', () => {
+    const [before, na, brugada, rbbb] = frames('o4', 0);
+    expect(Math.abs(before.truth!.hrBpm - 104)).toBeLessThan(1);
+    expect(Math.abs(before.truth!.qrsMs - 95)).toBeLessThan(5);
+    expect(qrs(before, 'aVR').max).toBeLessThan(0.08);
+    expect(qrs(before, 'I').min).toBeGreaterThan(-0.06);
+    expect(Math.abs(na.truth!.qrsMs - 130)).toBeLessThan(5);
+    expect(qrs(na, 'aVR').max).toBeGreaterThan(0.35);
+    expect(qrs(na, 'aVR').max).toBeLessThan(0.45);
+    for (const l of ['V1', 'V2'] as const) {
+      expect(stAt(brugada, l), l).toBeGreaterThan(0.25);
+      expect(stAt(brugada, l), l).toBeLessThan(0.35);
+    }
+    expect(tInverted(brugada, 'V1')).toBe(true);
+    expect(brugada.truth!.findings).toContain('brugada-type1');
+    expect(roles(rbbb, 'aVR').endsWith('r')).toBe(true);
+    expect(qrs(rbbb, 'V1').max).toBeGreaterThan(1.0);
+    expect(qrs(na, 'V1').max).toBeLessThan(0.2);
+  });
+  it('drug film: K-channel block QT ≈ 505 ms at 64/min with a low, broad T and a narrow QRS; digoxin QT ≈ 350 ms with a scooped V5 ST and a low T; AV-nodal blockers ≈ 55/min with PR 240 ms', () => {
+    const [k, dig, avn] = frames('o4', 1);
+    expect(Math.abs(k.truth!.qtMs - 505)).toBeLessThan(5);
+    expect(Math.abs(k.truth!.hrBpm - 64)).toBeLessThan(1);
+    expect(k.truth!.qrsMs).toBeLessThan(110);
+    expect(tw(k, 'II').max).toBeLessThan(0.15);
+    expect(tWidth(k, 'II')).toBeGreaterThan(200);
+    expect(Math.abs(dig.truth!.qtMs - 350)).toBeLessThan(5);
+    expect(stAt(dig, 'V5', 60)).toBeLessThan(stAt(dig, 'V5'));
+    expect(stAt(dig, 'V5')).toBeLessThan(-0.03);
+    expect(tw(dig, 'V5').max).toBeLessThan(0.2);
+    expect(Math.abs(avn.truth!.hrBpm - 55)).toBeLessThan(1);
+    expect(Math.abs(avn.truth!.prMs! - 240)).toBeLessThan(3);
+  });
   it('contrast: severe hyperkalaemia is slow, without a measurable PR, with an even wider QRS', () => {
     const e = ecgOf(contrastTitled('o4', 'Two "metabolic" wide QRS complexes').right.ecg);
     expect(e.truth!.hrBpm).toBeLessThan(70);

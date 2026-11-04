@@ -85,27 +85,59 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('为什么是 aVR', 'Why aVR', 'Por qué aVR'),
-      body: l(
-        '钠通道阻滞剂让整个心室传导变慢（QRS 变宽），而在传导储备最少、最后被激动的部位——右室流出道、右室基底部和室间隔基底部——减慢最多。于是 QRS 的**最后 40 ms** 指向右上方，正对 aVR 的正极：aVR 出现终末 R 波（≥3 mm 或 R/S ≥0.7），I 和 aVL 出现宽钝的终末 S 波。\n三环类还有抗胆碱作用（窦速）和 α 受体阻滞作用（低血压），并阻滞钾通道（QT 延长）。宽 QRS 并不只出现在三环类：Ia/Ic 类抗心律失常药、可卡因、苯海拉明、卡马西平、局麻药、奎宁和（羟）氯喹都能做到。',
-        'Sodium-channel blockers slow conduction throughout the ventricles (a wider QRS) and most of all where the conduction reserve is lowest and activation comes last — the RV outflow tract, the basal RV and the basal septum. So the **last 40 ms** of the QRS point up and to the right, straight at aVR’s positive pole: a terminal R in aVR (≥3 mm or R/S ≥0.7) and a broad terminal S in I and aVL.\nTricyclics also have anticholinergic effects (sinus tachycardia), alpha-blockade (hypotension) and potassium-channel block (a longer QT). A wide QRS is not only a tricyclic signature: class Ia/Ic antiarrhythmics, cocaine, diphenhydramine, carbamazepine, local anaesthetics, quinine and (hydroxy)chloroquine can all produce it.',
-        'Los bloqueantes del sodio enlentecen la conducción en todo el ventrículo (QRS más ancho), y sobre todo donde la reserva de conducción es menor y la activación llega la última: el tracto de salida del VD, el VD basal y el septo basal. Por eso los **últimos 40 ms** del QRS apuntan arriba y a la derecha, directos al polo positivo de aVR: R terminal en aVR (≥3 mm o R/S ≥0,7) y S terminal ancha en I y aVL.\nLos tricíclicos tienen además efecto anticolinérgico (taquicardia sinusal), bloqueo alfa (hipotensión) y bloqueo de canales de potasio (QT más largo). El QRS ancho no es exclusivo de los tricíclicos: los antiarrítmicos Ia/Ic, la cocaína, la difenhidramina, la carbamazepina, los anestésicos locales, la quinina y la (hidroxi)cloroquina también lo producen.',
+      kind: 'heart',
+      ecg: synth('na-channel-blockade', 1462),
+      showConduction: true,
+      emphasize: ['rv-outflow', 'rv-basal', 'lv-basal-anteroseptal'],
+      caption: l(
+        '阻滞剂让整个心室传导变慢，最后被激动的右室流出道和基底部最慢：QRS最后40 ms指向右上方，正对aVR。',
+        'The blocker slows conduction in the whole ventricle, most where activation comes last (RV outflow and base): the last 40 ms of the QRS point up and right, straight at aVR.',
+        'El bloqueante enlentece la conducción en todo el ventrículo, sobre todo donde la activación llega la última (tracto de salida y base del VD): los últimos 40 ms del QRS apuntan arriba y a la derecha, hacia aVR.',
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('na-channel-blockade', 1462),
-      view: { layout: '3x4+1', highlightLeads: ['aVR', 'I'] },
-      marks: [
-        { auto: 'qrs', lead: 'II' },
-        { auto: 'r', lead: 'aVR', label: l('终末 R', 'terminal R', 'R terminal') },
-        { auto: 's', lead: 'I', label: l('终末 S', 'terminal S', 'S terminal') },
+      kind: 'film',
+      title: l('钠通道被阻滞时', 'When the sodium channel is blocked', 'Cuando se bloquea el canal de sodio'),
+      view: { layout: '3x4+1', highlightLeads: ['aVR', 'I', 'V1'] },
+      frames: [
+        {
+          label: l('用药前', 'Before', 'Antes'),
+          ecg: synth('sinus-tachycardia', 1462, { rate: 104 }),
+          note: l('窦速104次/分，QRS约95 ms：aVR全是负的，I导联全是正的。', 'Sinus tachycardia at 104/min, QRS about 95 ms: aVR is all negative, lead I all upright.', 'Taquicardia sinusal a 104 lpm, QRS de unos 95 ms: aVR es todo negativo y I todo positivo.'),
+          marks: [{ auto: 'qrs', lead: 'II' }],
+        },
+        {
+          label: l('钠通道阻滞', 'Sodium-channel block', 'Bloqueo del sodio'),
+          ecg: synth('na-channel-blockade', 1462, { rate: 104 }),
+          note: l('QRS约130 ms，每个导联都宽。aVR现在以约4 mm的宽R波结束，I导联以宽S波结束。', 'QRS about 130 ms, wide in every lead. aVR now ends in a broad R of about 4 mm; lead I ends in a broad S.', 'QRS de unos 130 ms, ancho en todas las derivaciones. aVR acaba ahora en una R ancha de unos 4 mm; I acaba en una S ancha.'),
+          marks: [
+            { auto: 'qrs', lead: 'II' },
+            { auto: 'r', lead: 'aVR', label: l('终末 R', 'terminal R', 'R terminal') },
+            { auto: 's', lead: 'I', label: l('终末 S', 'terminal S', 'S terminal') },
+          ],
+        },
+        {
+          label: l('药物性Brugada', 'Drug Brugada', 'Brugada por fármacos'),
+          ecg: synth('na-channel-blockade', 1462, { rate: 104 }, 'brugada'),
+          note: l('有的阻滞剂还让V1–V2出现约3 mm的穹窿形ST抬高，V1接倒置T：药物性Brugada图形。先纠正病因，再复查。', 'Some blockers also raise a coved ST of about 3 mm in V1–V2, into a negative T in V1: a drug-induced Brugada pattern. Correct the cause, then repeat.', 'Algunos bloqueantes elevan además el ST en V1–V2 unos 3 mm, en cúpula y hacia una T negativa en V1: patrón de Brugada por fármacos. Corrige la causa y repite.'),
+          marks: [{ auto: 'j', lead: 'V1' }, { auto: 'j', lead: 'V2' }],
+        },
+        {
+          label: l('右束支阻滞', 'RBBB', 'Bloqueo de rama derecha'),
+          ecg: synth('rbbb', 1462, { rate: 95 }),
+          note: l('右束支阻滞的aVR也以R波结束，但V1有高大的rsR′（兔耳）；中毒时V1没有大R′。', 'RBBB also ends with an R in aVR, but V1 has a tall rsR′ (rabbit ears); in the poisoning V1 has no big R′.', 'El bloqueo de rama derecha también acaba en R en aVR, pero V1 tiene una rsR′ alta (orejas de conejo); en la intoxicación V1 no tiene una R′ grande.'),
+          marks: [{ auto: 'r', lead: 'V1' }, { auto: 'r', lead: 'aVR' }],
+        },
       ],
+      predict: {
+        question: l('阻滞剂让最后激动的右上部分最慢。哪个导联会以宽R波结束？', 'The blocker slows the last, upper-right region most. Which lead will end in a broad R?', 'El bloqueante frena sobre todo la última región, arriba a la derecha. ¿Qué derivación acabará en una R ancha?'),
+        options: [l('aVR', 'aVR', 'aVR'), l('aVF', 'aVF', 'aVF'), l('V6', 'V6', 'V6')],
+        answer: 0,
+      },
       caption: l(
-        '同一种中毒，全 12 导联：QRS 约 130 ms，每个导联都宽；aVR 呈 qR 形，终末 R 约 4 mm（R/S 约 0.75）；I 导联终末 S 宽钝。注意 V1 **没有** 右束支阻滞的 rsR′ 大兔耳——终末力量是“向右上”，而不是“向右前”。窦速约 104 次/分，P 波仍在 T 波之后可见。',
-        'The same poisoning on all 12 leads: QRS about 130 ms, wide in every lead; aVR is qR with a terminal R of about 4 mm (R/S about 0.75); a broad terminal S in lead I. Note that V1 has **no** big rsR′ "rabbit ears" of RBBB — the terminal force points up and right, not right and forward. Sinus tachycardia at about 104/min, the P still visible after the T.',
-        'La misma intoxicación en las 12 derivaciones: QRS de unos 130 ms, ancho en todas; aVR es qR con una R terminal de unos 4 mm (R/S de unos 0,75); S terminal ancha en I. Fíjate en que V1 **no** tiene las grandes "orejas de conejo" rsR′ del BRD: la fuerza terminal apunta arriba y a la derecha, no a la derecha y adelante. Taquicardia sinusal a unos 104 lpm, con la P todavía visible tras la T.',
+        '钠通道阻滞剂：三环类、Ia/IC类、可卡因、苯海拉明、卡马西平、局麻药、奎宁、（羟）氯喹。看QRS宽度、aVR终末R和I导联终末S。',
+        'Sodium-channel blockers: tricyclics, class Ia/IC, cocaine, diphenhydramine, carbamazepine, local anaesthetics, quinine, (hydroxy)chloroquine. Read the QRS width, the terminal R in aVR and the terminal S in I.',
+        'Bloqueantes del sodio: tricíclicos, clase Ia/IC, cocaína, difenhidramina, carbamazepina, anestésicos locales, quinina, (hidroxi)cloroquina. Lee la anchura del QRS, la R terminal de aVR y la S terminal de I.',
       ),
     },
     {
@@ -117,6 +149,22 @@ const lesson: Lesson = {
         { label: l('aVR 与 I', 'aVR and I', 'aVR e I'), value: l('aVR 终末 R ≥3 mm 或 R/S ≥0.7；I、aVL 终末 S；终末 40 ms 向量右偏', 'Terminal R in aVR ≥3 mm or R/S ≥0.7; terminal S in I and aVL; rightward terminal 40-ms axis', 'R terminal en aVR ≥3 mm o R/S ≥0,7; S terminal en I y aVL; eje de los últimos 40 ms a la derecha') },
         { label: l('其他表现', 'Other findings', 'Otros hallazgos'), value: l('QT 延长；Brugada 样图形；低血压；晚期心动过缓是不祥之兆', 'QT prolongation; Brugada-like pattern; hypotension; late bradycardia is an ominous sign', 'QT largo; patrón tipo Brugada; hipotensión; la bradicardia tardía es un signo ominoso') },
         { label: l('治疗', 'Treatment', 'Tratamiento'), value: l('静脉高渗碳酸氢钠（推注、可重复，看 QRS 变窄）；避免 Ia/Ic/III 类抗心律失常药；毒理会诊', 'IV hypertonic sodium bicarbonate (bolus, repeat while the QRS narrows); avoid class Ia/Ic/III antiarrhythmics; call toxicology', 'Bicarbonato sódico hipertónico IV (en bolo, repetible mientras se estrecha el QRS); evitar antiarrítmicos Ia/Ic/III; consultar con toxicología') },
+        {
+          label: l('各类药物的心电图', 'Drug classes on the ECG', 'Clases de fármacos en el ECG'),
+          value: l(
+            'Ia：QRS 增宽 + QT 延长；IC：心率越快 QRS 越宽，可揭示 Brugada 图形，可使房扑减慢至 1:1 下传（t3）；III：QT 延长（胺碘酮还减慢窦律）；β 受体阻滞剂、维拉帕米、地尔硫䓬：窦缓、PR 延长、房室阻滞',
+            'Ia: wide QRS + long QT; IC: the QRS widens further at faster rates, can unmask a Brugada pattern, can slow flutter into 1:1 conduction (t3); III: long QT (amiodarone also slows the sinus rate); beta-blockers, verapamil, diltiazem: sinus bradycardia, long PR, AV block',
+            'Ia: QRS ancho + QT largo; IC: el QRS se ensancha más a frecuencias altas, puede desenmascarar un patrón de Brugada y enlentecer el flúter hasta conducción 1:1 (t3); III: QT largo (la amiodarona además frena el ritmo sinusal); betabloqueantes, verapamilo, diltiazem: bradicardia sinusal, PR largo, bloqueo AV',
+          ),
+        },
+        {
+          label: l('药物性长 QT', 'Drug-induced long QT', 'QT largo por fármacos'),
+          value: l(
+            'hERG 阻滞：T 低而宽、QRS 窄；QTc >500 ms 为尖端扭转型室速高风险：停药、补钾补镁至正常高值、监护；非心脏药也算（大环内酯类、氟喹诺酮类、美沙酮、抗精神病药、昂丹司琼）',
+            'hERG block: a low, broad T with a narrow QRS; QTc >500 ms is high torsades risk: stop the drugs, bring K and Mg to high-normal, monitor; non-cardiac drugs count (macrolides, fluoroquinolones, methadone, antipsychotics, ondansetron)',
+            'Bloqueo hERG: T baja y ancha con QRS estrecho; QTc >500 ms es alto riesgo de torsades: suspende los fármacos, sube K y Mg a valores normales altos y monitoriza; cuentan también los no cardiacos (macrólidos, fluoroquinolonas, metadona, antipsicóticos, ondansetrón)',
+          ),
+        },
       ],
       source: 'Lavonas EJ et al. AHA 2023 Focused Update on poisoning-related cardiac arrest and toxicity. Circulation 2023;148:e149-e186; Boehnert MT, Lovejoy FH. N Engl J Med 1985;313:474-479; Liebelt EL et al. Ann Emerg Med 1995;26:195-201',
     },
@@ -169,32 +217,33 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('这不是右束支阻滞，也不是 Brugada 综合征', 'Not RBBB, and not Brugada syndrome', 'No es un BRD ni un síndrome de Brugada'),
-      body: l(
-        '两个常见误读：\n- **右束支阻滞**：aVR 也可以有终末 R，但右束支阻滞的终末力量指向**右前**——V1 是高大的 rsR′、I 和 V6 是宽 S，QRS 后段宽而前段正常；中毒是**整个** QRS 都被拉宽，V1 没有大的 R′，再加上窦速和中毒史。\n- **Brugada 图形**：钠通道阻滞剂（三环类、Ic 类、锂盐、可卡因等）可以在 V1–V2 制造穹顶样 ST 抬高——这是**药物诱发的 Brugada 图形**，可能揭示潜在的 Brugada 综合征，也可能只是中毒的一部分。发热和高钾也能产生类似图形（“表型拷贝”）。先排除药物、发热和电解质，待其纠正后复查，再决定是否需要专科评估（h8）。',
-        'Two common misreadings:\n- **RBBB**: aVR can show a terminal R too, but in RBBB the terminal force points **right and forward** — a tall rsR′ in V1, a broad S in I and V6, a normal initial QRS with a wide tail; poisoning widens the **whole** QRS, V1 has no big R′, and the story is tachycardia plus an overdose.\n- **Brugada pattern**: sodium-channel blockers (tricyclics, class IC drugs, lithium, cocaine and others) can produce coved ST elevation in V1–V2 — a **drug-induced Brugada pattern** that may unmask an underlying Brugada syndrome or may simply be part of the poisoning. Fever and hyperkalaemia make similar copies ("phenocopies"). Exclude drugs, fever and electrolytes, repeat once they are corrected, and only then decide on specialist assessment (h8).',
-        'Dos lecturas erróneas frecuentes:\n- **BRD**: aVR también puede tener una R terminal, pero en el BRD la fuerza terminal apunta **a la derecha y adelante**: rsR′ alta en V1, S ancha en I y V6, inicio del QRS normal con una cola ancha; la intoxicación ensancha **todo** el QRS, V1 no tiene una R′ grande y la historia es taquicardia más sobredosis.\n- **Patrón de Brugada**: los bloqueantes del sodio (tricíclicos, fármacos IC, litio, cocaína y otros) pueden producir una elevación del ST en cúpula en V1–V2, un **patrón de Brugada inducido por fármacos** que puede desenmascarar un síndrome de Brugada subyacente o ser simplemente parte de la intoxicación. La fiebre y la hiperpotasemia producen copias parecidas ("fenocopias"). Descarta fármacos, fiebre y electrolitos, repite tras corregirlos y solo entonces decide si hace falta una valoración especializada (h8).',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('药物心电图菜单', 'The drug ECG menu', 'El menú electrocardiográfico de los fármacos'),
-      body: l(
-        '读一份“说不通”的心电图之前，先问“患者在吃什么药”：\n- **Ic 类（氟卡尼、普罗帕酮）**：QRS 增宽，心率越快越宽；可揭示 Brugada 图形；可把房扑减慢到 1:1 下传（t3）；\n- **Ia 类（奎尼丁、普鲁卡因胺、丙吡胺）**：QRS 增宽 + QT 延长；\n- **III 类（胺碘酮、索他洛尔、多非利特）**：QT 延长（h7）；胺碘酮还减慢窦律；\n- **地高辛**：鱼钩样效应 → 中毒节律（o3）；\n- **β 阻滞剂 / 维拉帕米 / 地尔硫䓬**：窦缓、PR 延长、房室阻滞（r3、r4）；\n- **非心脏药也会延长 QT**（hERG 阻滞）：大环内酯类、氟喹诺酮类、美沙酮、氟哌啶醇等抗精神病药、昂丹司琼、部分抗抑郁药——叠加两种并不“温和”，低钾低镁时更危险（CredibleMeds 名单，h7）。',
-        'Before reading an ECG that "does not add up", ask what the patient is taking:\n- **class IC (flecainide, propafenone)**: a wide QRS that widens further at faster rates; can unmask a Brugada pattern; can slow flutter until it conducts 1:1 (t3);\n- **class Ia (quinidine, procainamide, disopyramide)**: a wide QRS plus a long QT;\n- **class III (amiodarone, sotalol, dofetilide)**: a long QT (h7); amiodarone also slows the sinus rate;\n- **digoxin**: the scooped effect, then the toxic rhythms (o3);\n- **beta-blockers / verapamil / diltiazem**: sinus bradycardia, a longer PR, AV block (r3, r4);\n- **non-cardiac drugs lengthen the QT too** (hERG block): macrolides, fluoroquinolones, methadone, haloperidol and other antipsychotics, ondansetron, some antidepressants — two of them together are not "mild", and low potassium or magnesium makes it worse (CredibleMeds list, h7).',
-        'Antes de leer un ECG que "no cuadra", pregunta qué toma el paciente:\n- **IC (flecainida, propafenona)**: QRS ancho que se ensancha más con frecuencias altas; puede desenmascarar un patrón de Brugada; puede enlentecer el flutter hasta que conduzca 1:1 (t3);\n- **Ia (quinidina, procainamida, disopiramida)**: QRS ancho y QT largo;\n- **III (amiodarona, sotalol, dofetilida)**: QT largo (h7); la amiodarona además enlentece el ritmo sinusal;\n- **digoxina**: efecto en cuchara y después las arritmias tóxicas (o3);\n- **betabloqueantes / verapamilo / diltiacem**: bradicardia sinusal, PR más largo, bloqueo AV (r3, r4);\n- **fármacos no cardiacos también alargan el QT** (bloqueo hERG): macrólidos, fluoroquinolonas, metadona, haloperidol y otros antipsicóticos, ondansetrón, algunos antidepresivos; dos juntos no son "suaves", y el potasio o el magnesio bajos lo empeoran (lista CredibleMeds, h7).',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('long-qt', 1467, undefined, 'drug'),
-      view: { layout: 'strip', lead: 'II' },
-      marks: [{ auto: 'qt', lead: 'II' }, { auto: 't', lead: 'II' }],
+      kind: 'film',
+      title: l('先问患者在吃什么药', 'Ask what the patient takes', 'Pregunta qué toma el paciente'),
+      view: { layout: '3x4+1', highlightLeads: ['II', 'V5'] },
+      frames: [
+        {
+          label: l('钾通道阻滞', 'Potassium-channel block', 'Bloqueo del potasio'),
+          ecg: synth('long-qt', 1467, undefined, 'drug'),
+          note: l('64次/分，QT约505 ms，T波低而宽，QRS却窄：被拉长的是复极，不是除极。', 'At 64/min the QT is about 505 ms with a low, broad T, yet the QRS is narrow: repolarisation is stretched, not depolarisation.', 'A 64 lpm el QT mide unos 505 ms con una T baja y ancha, pero el QRS es estrecho: se alarga la repolarización, no la despolarización.'),
+          marks: [{ auto: 'qt', lead: 'II' }, { auto: 't', lead: 'II' }],
+        },
+        {
+          label: l('地高辛', 'Digoxin', 'Digoxina'),
+          ecg: synth('digoxin-effect', 1470),
+          note: l('V5的ST勺状下垂，T波低，QT短（约350 ms）：在用地高辛（第o3课）。', 'A scooped ST in V5, a low T and a short QT (about 350 ms): digoxin on board (lesson o3).', 'ST en cuchara en V5, T baja y QT corto (unos 350 ms): toma digoxina (lección o3).'),
+          marks: [{ auto: 'st60', lead: 'V5' }, { auto: 'qt', lead: 'II' }],
+        },
+        {
+          label: l('房室结阻滞药', 'AV-nodal blockers', 'Frenadores del nodo AV'),
+          ecg: synth('av-block-1', 1471, { rate: 55, pr: 240 }),
+          note: l('窦性约55次/分，PR 240 ms：β受体阻滞剂、维拉帕米或地尔硫䓬减慢窦房结和房室结（第r3、r4课）。', 'Sinus at about 55/min with a PR of 240 ms: beta-blockers, verapamil or diltiazem slow the sinus and AV nodes (lessons r3, r4).', 'Sinusal a unos 55 lpm con PR de 240 ms: betabloqueantes, verapamilo o diltiazem frenan el nodo sinusal y el AV (lecciones r3, r4).'),
+          marks: [{ auto: 'pr', lead: 'II' }, { auto: 'rr', lead: 'II' }],
+        },
+      ],
       caption: l(
-        '药物性 QT 延长（II）：心率约 64 次/分，QT 约 505 ms，QTc 约 515 ms；T 波低、宽并呈双峰（先一个小切迹再一个驼峰——hERG 阻滞的典型形态）。QTc >500 ms 是尖端扭转型室速的高风险区：停用延长 QT 的药物，补钾补镁到正常高值，连续监护。这里 QRS 不宽——钾通道阻滞拉长的是复极，不是除极。',
-        'Drug-induced QT prolongation (II): rate about 64/min, QT about 505 ms, QTc about 515 ms; a low, broad, two-humped (bifid) T — the typical hERG-block shape. A QTc >500 ms is the high-risk zone for torsades de pointes: stop the QT-prolonging drugs, bring potassium and magnesium to high-normal, monitor continuously. Note the QRS is narrow — potassium-channel block stretches repolarisation, not depolarisation.',
-        'QT largo farmacológico (II): frecuencia de unos 64 lpm, QT de unos 505 ms, QTc de unos 515 ms; T baja, ancha y bífida (con dos jorobas), la forma típica del bloqueo hERG. Un QTc >500 ms es la zona de alto riesgo de torsades de pointes: suspende los fármacos que alargan el QT, sube el potasio y el magnesio a valores normales altos y monitoriza de forma continua. Fíjate en que el QRS es estrecho: el bloqueo de los canales de potasio alarga la repolarización, no la despolarización.',
+        '心电图“说不通”时，先要完整的用药清单，包括非心脏药物。每类药都留下自己的痕迹。',
+        'When an ECG does not add up, get the full drug list, non-cardiac drugs included. Each class leaves its own mark.',
+        'Cuando un ECG no cuadra, pide la lista completa de fármacos, también los no cardiacos. Cada clase deja su huella.',
       ),
     },
     { kind: 'check', item: { inline: qrsRiskCheck } },
@@ -219,6 +268,11 @@ const lesson: Lesson = {
         l('药物诱发的 Brugada 图形被直接送去做遗传学评估，却不查用药单、体温和电解质。', 'A drug-induced Brugada pattern sent straight to genetics without checking the drug list, the temperature and the electrolytes.', 'Mandar un patrón de Brugada inducido por fármacos directamente a genética sin revisar la medicación, la temperatura y los electrolitos.'),
         l('药物史只问“心脏病药”，漏掉抗生素、止吐药和精神科药物。', 'Taking a drug history of "cardiac medicines" only and missing antibiotics, antiemetics and psychiatric drugs.', 'Hacer una anamnesis farmacológica solo de "medicación cardiaca" y olvidar antibióticos, antieméticos y psicofármacos.'),
         l('叠加 QT 延长药物（两种“温和”的药合用并不温和），又不纠正低钾低镁。', 'Stacking QT-prolonging drugs (two "mild" drugs are not mild together) without correcting low potassium and magnesium.', 'Sumar fármacos que alargan el QT (dos "suaves" juntos no lo son) sin corregir el potasio y el magnesio bajos.'),
+        l(
+          '因为 aVR 以 R 波结束就叫“右束支阻滞”：右束支阻滞 V1 有高大的 rsR′，QRS 起始正常、只是尾部宽；中毒是整个 QRS 变宽，V1 没有大 R′。',
+          'Calling the poisoning "RBBB" because aVR ends in an R: RBBB has a tall rsR′ in V1 and a normal start with a wide tail; the poison widens the whole QRS and V1 has no big R′.',
+          'Llamar «bloqueo de rama derecha» a la intoxicación porque aVR acaba en R: el bloqueo de rama derecha tiene una rsR′ alta en V1 y un inicio normal con una cola ancha; el tóxico ensancha todo el QRS y V1 no tiene una R′ grande.',
+        ),
       ],
     },
     {
