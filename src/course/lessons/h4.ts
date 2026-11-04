@@ -326,7 +326,7 @@ const lesson: Lesson = {
         l(
           '只在 II 导联节律条上找电交替：心脏朝前胸摆动，交替在 V2–V4 最大，低电压的肢体导联里可能只有约 1 mm。',
           'Looking for alternans only on the lead II rhythm strip: the heart swings towards the front of the chest, so the alternation is largest in V2–V4 and may be only about 1 mm in the low-voltage limb leads.',
-          'Buscar la alternancia solo en la tira de ritmo de II: el corazón oscila hacia la cara anterior del tórax, así que la alternancia es máxima en V2-V4 y en las derivaciones de miembros, de bajo voltaje, puede ser de solo 1 mm.',
+          'Buscar la alternancia solo en la tira de ritmo de II: el corazón oscila hacia la cara anterior del tórax, así que la alternancia es máxima en V2-V4 y en las derivaciones de miembros, de bajo voltaje, puede ser de solo alrededor de 1 mm.',
         ),
         l(
           '低电压 + 超声室壁厚却不想到淀粉样变：电压–质量不匹配加上 V1–V3 假性梗死 Q/QS，是浸润性心肌病的信号；电压正常也同样不能排除。',
