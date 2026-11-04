@@ -4,6 +4,8 @@
  * cases, summary), every family check generates, every synthetic ECG can be generated and shows what the text says,
  * and every real PTB-XL case is described as its labels and 12SL reference measurements say.
  */
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import type { Block, Lesson } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
@@ -13,11 +15,12 @@ import { baselineBefore, qrsWaves } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
 import { FINDINGS, type FindingId } from '../../src/core/findings';
+import { axisFromNets, limbNetAreas, qrsWindows } from '../../src/figures/math/axis';
 import type { L10n } from '../../src/core/l10n';
 import type { StdLead } from '../../src/core/leads';
 import type { EcgSource, Item } from '../../src/practice/api';
 import { generateItem } from '../../src/practice';
-import { CONFIDENCE_EXPECTED, LEITNER_DAYS, REVIEW_PASS } from '../../src/practice/core/mastery';
+import { CONFIDENCE_EXPECTED, criticalStatus, LEITNER_DAYS, REVIEW_PASS } from '../../src/practice/core/mastery';
 import { getCase } from '../../src/real/library';
 import { generate, scenarios, type SynthRequest } from '../../src/synth';
 
@@ -568,7 +571,7 @@ describe('x4: calibration tracings', () => {
     expect(r.findings).toContain('lafb');
     expect(Math.abs(r.axisDeg.qrs + 75)).toBeLessThan(5);
   });
-  it('statements film: one sinus tachycardia in every frame; a P upright in II before every QRS; RR about 12 small squares (about 480 ms) on every beat, about 125/min, regular', () => {
+  it('statements film: one sinus tachycardia in every frame; a P upright in II before every QRS; RR about 12 small squares (470–490 ms) on every beat, about 125/min, regular', () => {
     const film = blocksOf('x4', 'film')[1];
     for (const f of film.frames) expect(f.ecg).toEqual(film.frames[0].ecg);
     const e = ecgOf(film.frames[0].ecg);
@@ -579,12 +582,19 @@ describe('x4: calibration tracings', () => {
     expect(t.beats.every((b) => b.pOn !== null)).toBe(true);
     expect(pw(e, 'II').max).toBeGreaterThan(0.05);
     for (const rr of rrs(e)) {
-      expect(Math.abs(rr - 480)).toBeLessThan(20);
+      expect(rr).toBeGreaterThanOrEqual(470);
+      expect(rr).toBeLessThanOrEqual(490);
       expect(Math.abs(rr / 40 - 12)).toBeLessThan(0.5);
     }
   });
-  it('axis calculator: the autopsy tracing', () => {
-    expect(blocksOf('x4', 'figure')[0].ecg).toEqual(blocksOf('x4', 'worked')[0].ecg);
+  it('axis calculator: the autopsy tracing; the wheel, fed the net QRS areas of I and aVF the way the figure reads them, lands at about −60°', () => {
+    const src = blocksOf('x4', 'figure')[0].ecg!;
+    expect(src).toEqual(blocksOf('x4', 'worked')[0].ecg);
+    const sig = ecgOf(src).signal;
+    const windows = qrsWindows(ecgOf(src).truth!.beats, []).filter(([a, b]) => a >= 40 && b <= sig.durationMs - 10);
+    const nets = limbNetAreas(sig, windows);
+    const wheel = axisFromNets(nets.I, nets.aVF);
+    expect(Math.abs(wheel.deg! + 60)).toBeLessThan(5);
   });
   it('error-type film: QT about 510 ms and longer than half the RR; the autopsy tracing (I up, II/III/aVF down, qR in aVL); complete block with P waves running on and a wide escape about 34/min', () => {
     const film = blocksOf('x4', 'film')[0];
@@ -605,6 +615,17 @@ describe('x4: calibration tracings', () => {
     expect(CONFIDENCE_EXPECTED).toEqual({ 1: 0.4, 2: 0.7, 3: 0.95 });
     expect(REVIEW_PASS).toBe(0.8);
     expect([...LEITNER_DAYS]).toEqual([1, 2, 4, 8, 16]);
+  });
+  it('Progress-page card: the overconfidence warning needs at least five "Sure" answers under 80 %; a critical finding is secured only after at least 3 attempts with the last five all ≥ 80 % and no missed-critical flag', () => {
+    const page = readFileSync(fileURLToPath(new URL('../../src/practice/ui/ProgressPage.tsx', import.meta.url)), 'utf8');
+    expect(page).toMatch(/sure\.n >= 5 && sure\.accuracy !== null && sure\.accuracy < 0\.8 && <p class="pr-warn">\{tp\('overconfident'\)\}/);
+    const pass = { score: 0.8, missedCritical: false };
+    const fail = { score: 0.7, missedCritical: false };
+    expect(criticalStatus([pass, pass])).toBe('learning');
+    expect(criticalStatus([pass, pass, pass])).toBe('secured');
+    expect(criticalStatus([fail, pass, pass, pass, pass, pass])).toBe('secured');
+    expect(criticalStatus([pass, fail, pass, pass, pass, pass])).toBe('learning');
+    expect(criticalStatus([pass, pass, { score: 1, missedCritical: true }])).toBe('learning');
   });
 });
 

@@ -165,7 +165,7 @@ const lesson: Lesson = {
           body: l(
             '三种类型，三种处方：\n- **没看见** → 流程问题：重练固定顺序与十秒流程（x1、x3），让电轴永远被走到；\n- **看见了但命名错** → 知识问题：本例最可能就是它——回去重练电轴分型与分支阻滞的判据卡；\n- **命名对了但紧急度错** → 分诊问题：LAFB 被报成“现在处理”或三度阻滞被报成“常规”，重练 x3 的箱子。\n当时标的信心 3 是第二份证据：**你不知道自己不知道**——这正是台账要抓的缺口。',
             'Three types, three prescriptions:\n- **didn\'t see** → a process problem: retrain the fixed order and the ten-second routine (x1, x3) so the axis is always walked;\n- **saw but misnamed** → a knowledge problem: the likeliest file for this case — go back to the axis-category and fascicular-block criteria cards;\n- **named it but wrong urgency** → a triage problem: LAFB reported as "act now", or complete block as "routine" — retrain the bins from x3.\nThe confidence 3 given at the time is the second piece of evidence: **you did not know that you did not know** — exactly the gap the ledger exists to catch.',
-            'Tres tipos, tres recetas:\n- **no visto** → problema de proceso: reentrenar el orden fijo y la rutina de diez segundos (x1, x3) para que el eje siempre se mida;\n- **visto pero mal nombrado** → problema de conocimiento: lo más probable en este caso; vuelve a las tarjetas de criterios de las categorías del eje y de los bloqueos fasciculares;\n- **bien nombrado pero con urgencia equivocada** → problema de triaje: un BFAI informado como «actuar ya» o un bloqueo completo como «rutina»; reentrenar las categorías de x3.\nLa confianza 3 de entonces es la segunda prueba: **no sabías que no sabías** — justo el hueco que el registro existe para cazar.',
+            'Tres tipos, tres recetas:\n- **no visto** → problema de proceso: reentrenar el orden fijo y el barrido de diez segundos (x1, x3) para que el eje siempre se mida;\n- **visto pero mal nombrado** → problema de conocimiento: lo más probable en este caso; vuelve a las tarjetas de criterios de las categorías del eje y de los bloqueos fasciculares;\n- **bien nombrado pero con urgencia equivocada** → problema de triaje: un BFAI informado como «actuar ya» o un bloqueo completo como «rutina»; reentrenar las categorías de x3.\nLa confianza 3 de entonces es la segunda prueba: **no sabías que no sabías** — justo el hueco que el registro existe para cazar.',
           ),
         },
         {
@@ -183,9 +183,9 @@ const lesson: Lesson = {
       figure: { id: 'axis-calculator' },
       ecg: AUTOPSY,
       caption: l(
-        '亲手量尸检那份图：把 I 和 aVF 的 QRS 净值放到轮上。−60° 落在 −45° 至 −90° 之间。量过的“3”才算数。',
-        'Measure the autopsy tracing yourself: put the net QRS of I and aVF on the wheel. −60° lands between −45° and −90°. A 3 counts only once you have measured.',
-        'Mide tú el ECG de la autopsia: lleva el QRS neto de I y aVF a la rueda. −60° cae entre −45° y −90°. Un 3 solo cuenta cuando has medido.',
+        '亲手量尸检那份图：把 I 和 aVF 的 QRS 净值放到轮上。约 −60°，落在 −45° 至 −90° 之间。量过的“3”才算数。',
+        'Measure the autopsy tracing yourself: put the net QRS of I and aVF on the wheel. About −60° lands between −45° and −90°. A 3 counts only once you have measured.',
+        'Mide tú el ECG de la autopsia: lleva el QRS neto de I y aVF a la rueda. Unos −60° caen entre −45° y −90°. Un 3 solo cuenta cuando has medido.',
       ),
     },
     {
@@ -274,6 +274,14 @@ const lesson: Lesson = {
           ),
         },
         {
+          label: l('怎么读柱子', 'Reading the bars', 'Cómo leer las barras'),
+          value: l(
+            '“非常确定”的柱子低于横线 = 过度自信；“猜的”柱子远高于 40% = 自信不足',
+            'A "Sure" bar below its line = overconfidence; a "Guess" bar far above 40 % = underconfidence',
+            'Una barra de «Seguro» por debajo de su línea = exceso de confianza; una barra de «Lo adivino» muy por encima del 40 % = defecto de confianza',
+          ),
+        },
+        {
           label: l('危急表现追踪', 'The critical-findings tracker', 'El seguimiento de hallazgos críticos'),
           value: l('至少练 3 次、最近 5 次都 ≥ 80%、没有漏诊标记，才算“已掌握”', '"Secured" only after at least 3 attempts, the last five all ≥ 80 % and no missed-critical flag', '«Dominado» solo tras al menos 3 intentos, los cinco últimos ≥ 80 % y sin marca de omisión crítica'),
         },
@@ -325,9 +333,9 @@ const lesson: Lesson = {
           label: l('心率', 'Rate', 'Frecuencia'),
           ecg: FAST,
           note: l(
-            'RR 约 12 个小格（约 480 ms），每拍一样：“约 125 次/分，规则”是量出来的，可以给 3。',
-            'RR about 12 small squares (about 480 ms), the same every beat: "about 125/min, regular" is measured, so it can be a 3.',
-            'RR de unos 12 cuadros pequeños (unos 480 ms), igual en cada latido: «unas 125 lpm, regular» está medido, así que puede ser un 3.',
+            '每拍 RR 约 12 个小格（470–490 ms）：“约 125 次/分，规则”是量出来的，可以给 3。',
+            'RR about 12 small squares (470–490 ms) on every beat: "about 125/min, regular" is measured, so it can be a 3.',
+            'RR de unos 12 cuadros pequeños (470–490 ms) en cada latido: «unas 125 lpm, regular» está medido, así que puede ser un 3.',
           ),
           marks: [{ auto: 'rr' }],
         },
