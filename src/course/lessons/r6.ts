@@ -282,9 +282,9 @@ const lesson: Lesson = {
         marks: [{ auto: 'qrs' }],
       },
       point: l(
-        '同样在 V1：A 的终末向量朝向电极——第二个 R（R′）；B 的终末向量背离电极——深 S。问一句“哪一侧最晚除极？”：A 右心室晚（RBBB），B 左心室晚（LBBB）。再到 V6 验证：A 有宽 S，B 只有宽 R、没有 q。',
-        'Same lead V1: in A the terminal forces point at the electrode — a second R (R′); in B they point away from it — a deep S. Ask “which side depolarises last?”: in A the right ventricle (RBBB), in B the left ventricle (LBBB). Confirm in V6: A has a broad S; B has only a broad R with no q.',
-        'En la misma derivación V1: en A las fuerzas terminales apuntan al electrodo — una segunda R (R′); en B se alejan de él — una S profunda. Pregunta “¿qué ventrículo se despolariza el último?”: en A el derecho (BRD), en B el izquierdo (BRI). Confírmalo en V6: A tiene una S ancha; B solo una R ancha, sin q.',
+        '同样在 V1：A 的终末向量朝向电极——第二个 R（R′）；B 的终末向量背离电极——深 S。问一句“哪一侧最晚除极？”：A 右心室晚（RBBB），B 左心室晚（LBBB）。在 12 导联上用 V6 验证：RBBB 留下宽 S，LBBB 是没有 q 的宽 R。',
+        'Same lead V1: in A the terminal forces point at the electrode — a second R (R′); in B they point away from it — a deep S. Ask “which side depolarises last?”: in A the right ventricle (RBBB), in B the left ventricle (LBBB). On a 12-lead, V6 confirms it: RBBB leaves a broad S, LBBB a broad R with no q.',
+        'En la misma derivación V1: en A las fuerzas terminales apuntan al electrodo — una segunda R (R′); en B se alejan de él — una S profunda. Pregunta “¿qué ventrículo se despolariza el último?”: en A el derecho (BRD), en B el izquierdo (BRI). En un ECG de 12 derivaciones, V6 lo confirma: el BRD deja una S ancha; el BRI, una R ancha sin q.',
       ),
     },
     {
