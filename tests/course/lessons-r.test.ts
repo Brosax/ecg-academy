@@ -5,11 +5,11 @@
  * show can be generated.
  */
 import { describe, expect, it } from 'vitest';
-import type { Block, Lesson } from '../../src/course/api';
+import type { AutoMark, Block, Lesson } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
 import { REGISTERED } from '../../src/course/lessons/index';
 import { realisedDials, startDials } from '../../src/course/live';
-import { baselineBefore, qrsWaves } from '../../src/course/marks';
+import { baselineBefore, isAutoMark, qrsWaves } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
 import type { L10n } from '../../src/core/l10n';
@@ -211,6 +211,9 @@ function played(id: string, i: number, v: number): Ecg {
   return ecgOf({ scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed, dials });
 }
 const frames = (id: string, i: number): Ecg[] => blocksOf(id, 'film')[i].frames.map((f) => ecgOf(f.ecg));
+/** the beat indices of a film frame's `kind` marks, as the lesson places them */
+const markBeats = (id: string, film: number, frame: number, kind: AutoMark['auto']): number[] =>
+  (blocksOf(id, 'film')[film].frames[frame].marks ?? []).flatMap((m) => (isAutoMark(m) && m.auto === kind && m.beat !== undefined ? [m.beat] : []));
 /** the P wave of a beat (default the middle one) in a lead: its largest excursion above (sign 1) or below (sign −1, returned positive) the PR baseline (mV) */
 function pAmp(e: Ecg, lead: StdLead, b = mid(e), sign: 1 | -1 = 1): number {
   const a = e.signal.leads[lead];
@@ -286,25 +289,35 @@ describe('r1: the sinus node on the tracings', () => {
       expect(Math.abs(x - 1580)).toBeLessThan(10);
       expect(Math.abs(x / pp - 2)).toBeLessThan(0.03);
     }
+    expect(markBeats('r1', 0, 0, 'rr').map((k) => arrest[k]), 'the arrest bracket is on the pause').toEqual([a]);
+    const exitMarks = markBeats('r1', 0, 1, 'rr');
+    expect(exitMarks).toHaveLength(1);
+    expect(Math.abs(exit[exitMarks[0]] - 1580), 'the type II bracket is on a pause').toBeLessThan(10);
   });
-  it('type I SA block (film frame 3): in each group the PP shortens from about 920 to about 850 ms, then a pause shorter than 2 x PP', () => {
+  it('type I SA block (film frame 3): in each group the PP shortens from a little over 900 to about 850 ms, then a pause shorter than 2 x PP; the brackets mark one group and its pause', () => {
     const r = rrs(frames('r1', 0)[2]);
     expect(Math.max(...r)).toBeLessThan(2 * Math.min(...r));
     expect(Math.max(...r)).toBeGreaterThan(1.4 * Math.min(...r));
     const pauses = r.flatMap((x, i) => (x > 1.4 * Math.min(...r) ? [i] : []));
     for (const k of pauses.filter((i) => i + 2 < r.length)) {
-      expect(Math.abs(r[k + 1] - 920), `group after pause ${k}`).toBeLessThan(15);
-      expect(Math.abs(r[k + 2] - 850), `group after pause ${k}`).toBeLessThan(15);
+      expect(r[k + 1], `group after pause ${k}`).toBeGreaterThan(900);
+      expect(r[k + 1], `group after pause ${k}`).toBeLessThan(920);
+      expect(Math.abs(r[k + 2] - 850), `group after pause ${k}`).toBeLessThan(5);
       expect(r[k + 2]).toBeLessThan(r[k + 1]);
     }
+    const [first, second, pause] = markBeats('r1', 0, 2, 'rr');
+    expect(pauses, 'the first bracket opens a group').toContain(first - 1);
+    expect([second, pause]).toEqual([first + 1, first + 2]);
+    expect(pauses, 'the third bracket is the pause').toContain(pause);
   });
-  it('tachy–brady (film frame 4): an atrial tachycardia ends in a post-conversion pause of about 2.9 s', () => {
+  it('tachy–brady (film frame 4): an atrial tachycardia ends in a post-conversion pause of about 2.9 s, and the bracket is on it', () => {
     const e = frames('r1', 0)[3];
     expect(e.truth!.rhythm).toBe('sinus-node-dysfunction');
     const r = rrs(e);
     const k = r.indexOf(Math.max(...r));
     expect(Math.abs(r[k] - 2900)).toBeLessThan(50);
     expect(e.truth!.beats[k].kind).toBe('atrial');
+    expect(markBeats('r1', 0, 3, 'rr')).toEqual([k]);
   });
   it('rate sweep notes: 50–58 below 60 and 40–49 below 50 and 38–39 below 40 on the read-out; P and PR the same at every rate, only the RR grows', () => {
     for (const [v, lo, hi] of [[58, 50, 60], [50, 50, 60], [49, 40, 50], [40, 40, 50], [39, 30, 40], [38, 30, 40]] as const) {
