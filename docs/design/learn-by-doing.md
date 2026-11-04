@@ -15,9 +15,6 @@ lesson in stages S, R, T, I, H, O or X. `src/course/lessons/s2.ts` is the worked
 - At least 1 block that plays: a `live` block with `play`, or a `film`.
 - Every criteria item in `tests/course/fixtures/criteria-baseline.json` still exists, word for word, in its lesson.
 
-A lesson still listed in `PENDING` is expected to fail. When your lesson passes, the test turns red with "Expect test
-to fail": delete the lesson id from its stage's line in `PENDING`.
-
 The stage test (`tests/course/lessons-<stage>.test.ts`) still applies: hook first, a `worked` block before the first
 `check` or `drill`, `criteria`, `contrast`, `drill`, `real` and `pitfalls` present, `summary` last with 3–5 points,
 every live dial realised by the engine.
@@ -110,4 +107,4 @@ npx vitest run --maxWorkers=2 tests/course/learn-by-doing.test.ts tests/course/l
 npm run typecheck
 ```
 
-Replace `lessons-s` with your stage. Both must pass, and your lessons must be off `PENDING`.
+Replace `lessons-s` with your stage. Both must pass.

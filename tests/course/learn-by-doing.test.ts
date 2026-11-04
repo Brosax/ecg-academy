@@ -1,8 +1,7 @@
 /**
  * Learn by doing (docs/design/learn-by-doing.md): every lesson after Foundations teaches through things the learner
  * watches or moves, with short explanations attached to them. Limits are anchored to the F lessons (no text blocks,
- * captions ≤ 95 zh characters). Lessons still in PENDING are expected to fail; once one passes, `it.fails` turns red
- * and the lesson must leave PENDING, so the list only shrinks. One line per stage.
+ * captions ≤ 95 zh characters).
  *
  * Criteria are reading thresholds: every item in fixtures/criteria-baseline.json must survive verbatim in its lesson.
  */
@@ -13,11 +12,6 @@ import baseline from './fixtures/criteria-baseline.json';
 
 const LIMITS = { textZh: 200, captionZh: 120, noteZh: 80, media: 3, playing: 1 } as const;
 const GATED = ['S', 'R', 'T', 'I', 'H', 'O', 'X'] as const;
-const PENDING: ReadonlySet<string> = new Set(
-  [
-    'o1 o2 o3 o4 o5 o6 o7 o8 o9 o10 o11 o12',
-  ].flatMap((s) => s.split(' ')),
-);
 const MEDIA: ReadonlySet<Block['kind']> = new Set(['live', 'heart', 'figure', 'film']);
 
 const zh = (x: { readonly zh: string } | undefined) => (x ? x.zh.length : 0);
@@ -48,7 +42,7 @@ const lessons = [...LESSONS.values()].sort((a, b) => a.order - b.order);
 for (const stage of GATED) {
   describe(`stage ${stage} teaches by animation and experiment`, () => {
     for (const lesson of lessons.filter((l) => l.stage === stage)) {
-      (PENDING.has(lesson.id) ? it.fails : it)(lesson.id, () => {
+      it(lesson.id, () => {
         expect(problems(lesson)).toEqual([]);
       });
     }

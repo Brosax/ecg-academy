@@ -67,33 +67,6 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('先复核，再签名', 'Over-read, then sign', 'Sobrelee, luego firma'),
-      body: l(
-        '现代心电图机几乎都会在图上打印一份自动判读。它有用——但规则只有一条：**每一条自动判读都必须经有资质的读者复核后才能签署**；未经复核的结论不能作为诊断进入病历。\n- 机器擅长的是**测量**：PR、QRS、QT 的全局测量又快又稳。\n- 机器做不到的是**把图形和患者联系起来**：它看不见胸痛，看不见地高辛，看不见三年前那张正常图。\n- 于是它的措辞充满对冲："非特异性 ST-T 改变……考虑缺血，建议结合临床"。翻译过来就是："侧壁的 T 波有点平，我不知道为什么。"\n复核不是客气地点头：自己按顺序读一遍图，逐条同意或反对，然后**签你自己的判读**。',
-        'Modern electrocardiographs almost all print an automated interpretation on the tracing. It is useful — but there is one rule only: **every automated statement must be over-read by a qualified reader before it is signed**; an unover-read statement must not enter the chart as a diagnosis.\n- What the machine is good at is **measurement**: global PR, QRS and QT, fast and stable.\n- What it cannot do is **connect the tracing to the patient**: it cannot see the chest pain, the digoxin, or the normal ECG from three years ago.\n- So its wording hedges: "Non-specific ST-T changes… consider ischaemia, correlate clinically." Translated, that means: "The lateral T waves are a bit flat, and I do not know why."\nOver-reading is not a polite nod: read the tracing yourself in order, agree or disagree item by item, and **sign your own statement**.',
-        'Los electrocardiógrafos modernos casi todos imprimen una interpretación automática en el trazado. Es útil, pero solo hay una regla: **toda interpretación automática debe revisarse mediante sobrelectura de un lector cualificado antes de firmarse**; una conclusión no revisada no debe entrar en la historia clínica como diagnóstico.\n- Lo que la máquina hace bien es **medir**: PR, QRS y QT globales, rápidos y estables.\n- Lo que no puede hacer es **relacionar el trazado con el paciente**: no ve el dolor torácico, ni la digoxina, ni el ECG normal de hace tres años.\n- Por eso su redacción se cubre: «Alteraciones inespecíficas del ST-T… valorar isquemia, correlacionar con la clínica». Traducido: «Las T laterales están algo planas y no sé por qué».\nLa sobrelectura no es un saludo de cortesía: lee tú el trazado en orden, muestra tu acuerdo o desacuerdo punto por punto y **firma tu propia conclusión**.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('自动化偏倚：为什么"知道"防不住', 'Automation bias: why knowing is not enough', 'Sesgo de automatización: por qué saber no basta'),
-      body: l(
-        '**自动化偏倚**是打印结论对读者的锚定：你的判读会向机器那行字漂移——而且这个引力对**知道该效应存在**的读者同样起作用。所以"我了解这个偏倚"不是防护，**流程才是**：\n- **先读后比**：盖住结论，按 s1 的固定顺序（记录 → 心率 → 节律 → PR → QRS → QT/QTc → 电轴 → 形态 → 比较与结论）读完并定下你的判读，然后才揭开机器那行字逐条对比。\n- **当作数据点**：机器判读像一位同事的意见——可能帮忙，也可能误导；它进你的报告要靠证据，不靠权威。\n- **记录分歧**：结论不同就写下你的和你的理由。病历上签名的是你，不是机器。\n反向的错误也存在：为了显得独立而刻意反驳机器。机器看的是同一条图——它对你错的时候，先弄清你漏了什么。',
-        '**Automation bias** is the anchoring pull of a printed statement: your read drifts toward whatever the machine said — and the pull works on readers who **know the effect exists**. So "I know about this bias" is not protection; **the workflow is**:\n- **Read first, compare after**: cover the statement, finish the fixed s1 order (recording → rate → rhythm → PR → QRS → QT/QTc → axis → morphology → compare and conclude), commit to your read, and only then uncover the machine\'s line and compare item by item.\n- **Treat it as a data point**: the machine statement is like a colleague\'s opinion — it may help or mislead; it earns its place in your report by evidence, not by authority.\n- **Document disagreement**: when your conclusions differ, write yours, with your reasons. The signature on the chart is yours, not the machine\'s.\nThe mirror error also exists: contradicting the machine just to seem independent. It reads the same tracing you do — when it is right and you were wrong, find out what you missed.',
-        '**El sesgo de automatización** es el anclaje que ejerce una conclusión impresa: tu lectura deriva hacia lo que dijo la máquina, y esa fuerza actúa también en lectores que **saben que el efecto existe**. Por eso «yo conozco este sesgo» no protege; **protege el flujo de trabajo**:\n- **Leer primero, comparar después**: tapa la conclusión, termina el orden fijo de s1 (registro → frecuencia → ritmo → PR → QRS → QT/QTc → eje → morfología → comparar y concluir), decide tu lectura y solo entonces descubre la línea de la máquina y compárala punto por punto.\n- **Trátala como un dato más**: la interpretación de la máquina es como la opinión de un colega; puede ayudar o despistar, y entra en tu informe por evidencia, no por autoridad.\n- **Documenta el desacuerdo**: si las conclusiones difieren, escribe la tuya con tus razones. En la historia clínica firmas tú, no la máquina.\nTambién existe el error inverso: contradecir a la máquina para aparentar independencia. Ella lee el mismo trazado que tú; cuando acierta y tú te equivocas, averigua qué se te escapó.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('机器在哪里出错', 'Where the machine goes wrong', 'Dónde se equivoca la máquina'),
-      body: l(
-        '全部都要复核，但这三处要读两遍：\n- **节律**——机器最弱的地方：震颤伪差常被判成"心房颤动"（真正的 QRS 在下面按规则的 RR 行进，总有一个导联是干净的——o10）；起搏心律也常被误标（o11）。\n- **电极接反**——机器并不能可靠识别：左右手接反时 I 导联整体倒置，机器可能报"异常电轴"，而胸前导联其实正常（o9）。\n- **过度诊断的缺血**——"非特异性 ST-T 改变，考虑缺血"是最常见的对冲措辞，多数这类图并不是缺血。见到它要找原因：药物、电解质、过度通气、餐后状态、左室肥厚、束支阻滞的继发性改变——并**与既往心电图对比**后再下结论。',
-        'Over-read everything, but read these three zones twice:\n- **Rhythm** — the machine\'s weakest ground: tremor artefact is often called "atrial fibrillation" (the real QRS complexes march through at a regular RR, and one lead is always clean — o10); paced rhythms are also frequently mislabelled (o11).\n- **Electrode reversals** — not recognised reliably: with the arms swapped, lead I is wholly inverted and the machine may report an "abnormal axis" while the chest leads are normal (o9).\n- **Over-called ischaemia** — "non-specific ST-T changes, consider ischaemia" is the commonest hedge, and most such tracings are not ischaemia. When you meet it, look for a reason: drugs, electrolytes, hyperventilation, the postprandial state, LVH, the secondary changes of bundle branch block — and **compare with an old ECG** before you commit.',
-        'Revisa todo, pero estas tres zonas léelas dos veces:\n- **El ritmo**, el terreno más débil de la máquina: el artefacto de temblor suele leerse como «fibrilación auricular» (los QRS reales avanzan por debajo con RR regular y siempre hay una derivación limpia —o10—); los ritmos con marcapasos también se etiquetan mal a menudo (o11).\n- **La inversión de electrodos**, que la máquina no reconoce de forma fiable: con los brazos intercambiados, la derivación I queda invertida por completo y la máquina puede informar de un «eje anómalo» mientras las precordiales son normales (o9).\n- **La isquemia sobrediagnosticada**: «alteraciones inespecíficas del ST-T, valorar isquemia» es la fórmula de prudencia más frecuente, y la mayoría de esos trazados no son isquemia. Al encontrarla, busca un motivo: fármacos, electrolitos, hiperventilación, estado posprandial, HVI, los cambios secundarios del bloqueo de rama, y **compara con un ECG previo** antes de decidir.',
-      ),
-    },
-    {
       kind: 'criteria',
       title: l('自动判读复核卡', 'The over-reading card', 'La tarjeta de sobrelectura'),
       items: [
@@ -140,6 +113,47 @@ const lesson: Lesson = {
       ],
       source:
         'Schläpfer J, Wellens HJ. Computer-interpreted electrocardiograms. J Am Coll Cardiol 2017;70:1183-1192; Kligfield P et al. AHA/ACCF/HRS Part I: The electrocardiogram and its technology. Circulation 2007;115:1306-1324',
+    },
+    {
+      kind: 'film',
+      title: l('机器在哪里出错', 'Where a machine goes wrong', 'Dónde se equivoca la máquina'),
+      view: { layout: '3x4+1', highlightLeads: ['I', 'II', 'III', 'aVF'] },
+      frames: [
+        {
+          label: l('“房扑？”', '“Flutter?”', '«¿Flúter?»'),
+          ecg: { kind: 'synth', req: { scenario: 'normal', seed: 1626, dials: { rate: 72 }, recording: { noise: { tremor: { mv: 0.1, hz: 5, on: 'LL' } } } } },
+          note: l('机器可能打印“心房扑动？”。但QRS按规则的RR走过去，I导联干净：是左腿的震颤（o10）。', 'A machine may print “atrial flutter?”. But the QRS marches at a regular RR and lead I is clean: a tremor on the left leg (o10).', 'Una máquina puede imprimir «¿flúter auricular?». Pero el QRS desfila con un RR regular y la I está limpia: un temblor en la pierna izquierda (o10).'),
+          marks: [{ auto: 'rr', lead: 'I' }],
+        },
+        {
+          label: l('“电轴右偏”', '“Right axis”', '«Eje derecho»'),
+          ecg: { kind: 'synth', req: { scenario: 'normal', seed: 1626, dials: { rate: 72 }, recording: { placement: { limbs: { RA: 'LA', LA: 'RA' } } } } },
+          note: l('机器可能打印“电轴右偏”。I导联完全倒置，V1–V6却正常：是上肢导线接反了（o9）。', 'A machine may print “right axis deviation”. Lead I is fully inverted while V1–V6 are normal: the arm cables are swapped (o9).', 'Una máquina puede imprimir «desviación del eje a la derecha». La I está del todo invertida y V1–V6 son normales: los cables de los brazos están cambiados (o9).'),
+          marks: [{ auto: 'p', lead: 'I' }],
+        },
+        {
+          label: l('“左束支阻滞”', '“LBBB”', '«Bloqueo de rama izquierda»'),
+          ecg: synth('paced-vvi', 1628, undefined, 'bipolar'),
+          note: l('机器可能打印“左束支阻滞”。找那个小起搏钉：规则、宽、像左束支阻滞、正好60次/分的QRS，是起搏（o11）。', 'A machine may print “LBBB”. Find the small spike: a regular, wide, LBBB-like QRS at exactly 60/min is pacing (o11).', 'Una máquina puede imprimir «bloqueo de rama izquierda». Busca la espícula pequeña: un QRS regular, ancho, tipo bloqueo de rama izquierda y a 60 lpm justos es estimulación (o11).'),
+          marks: [{ auto: 'pacing-spike' }],
+        },
+        {
+          label: l('“缺血？”', '“Ischaemia?”', '«¿Isquemia?»'),
+          ecg: synth('nonspecific-st-t', 1629),
+          note: l('机器可能打印“非特异性ST–T改变，考虑缺血”。只是侧壁T波低平，ST没有偏移：这是一个假设。查药物、电解质，找旧图。', 'A machine may print “non-specific ST–T changes, consider ischaemia”. Only the lateral T waves are flat, the ST is level: a hypothesis. Check drugs, electrolytes, an old ECG.', 'Una máquina puede imprimir «alteraciones inespecíficas del ST-T, valorar isquemia». Solo las T laterales están aplanadas y el ST no se desvía: una hipótesis. Revisa fármacos, electrolitos y un ECG previo.'),
+          marks: [{ auto: 't', lead: 'V6' }, { auto: 't', lead: 'I' }],
+        },
+      ],
+      predict: {
+        question: l('机器打印“心房颤动”，但RR规则、有一个导联干净。最可能是什么？', 'A machine prints “atrial fibrillation”, yet the RR is regular and one lead is clean. What is it most likely to be?', 'Una máquina imprime «fibrilación auricular», pero el RR es regular y una derivación está limpia. ¿Qué es lo más probable?'),
+        options: [l('伪差', 'Artefact', 'Artefacto'), l('房颤', 'Atrial fibrillation', 'Fibrilación auricular'), l('房扑', 'Atrial flutter', 'Flúter auricular')],
+        answer: 0,
+      },
+      caption: l(
+        '每份都要复核，节律、导线错误和“缺血”要读两遍。先自己读，再逐项对比，签你自己的结论。',
+        'Over-read everything, and read rhythm, cable errors and “ischaemia” twice. Read it yourself first, then compare item by item and sign your own statement.',
+        'Revisa todo, y lee dos veces el ritmo, los errores de cables y la «isquemia». Lee tú primero, compara punto por punto y firma tu propia conclusión.',
+      ),
     },
     {
       kind: 'worked',
@@ -209,14 +223,47 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('normal', 1625),
-      view: STRIP,
-      marks: [{ auto: 'pr' }, { auto: 'qt' }],
+      kind: 'film',
+      title: l('用它的数字，再核对', 'Use its numbers, then check them', 'Usa sus números y luego compruébalos'),
+      view: { layout: 'strip', lead: 'V2' },
+      frames: [
+        {
+          label: l('T波终点清楚', 'Clear T end', 'Final de T nítido'),
+          ecg: synth('normal', 1625, { rate: 60 }),
+          note: l('T波终点清楚、没有U波：QT约405 ms，机器和你都容易量准。', 'A clear T end and no U: the QT is about 405 ms, easy to measure for a machine and for you.', 'Final de T nítido y sin U: el QT mide unos 405 ms, fácil de medir para la máquina y para ti.'),
+          marks: [{ auto: 'qt' }],
+        },
+        {
+          label: l('大U波', 'Big U wave', 'U grande'),
+          ecg: synth('hypokalemia', 1625, { rate: 60 }),
+          note: l('T波低平、U波高大：量到T波终点QT仍约405 ms，一直量到U波终点却约565 ms。机器可能这样量；自己用切线法量（h7）。', 'A flat T and a big U: to the end of the T the QT is still about 405 ms, run to the end of the U it reads about 565 ms. A machine may do that; measure it yourself with the tangent (h7).', 'T plana y U grande: hasta el final de la T el QT sigue en unos 405 ms; llevado hasta el final de la U marca unos 565 ms. Una máquina puede hacerlo; mídelo tú con la tangente (h7).'),
+          marks: [{ auto: 't' }, { auto: 'u' }, { auto: 'qt' }],
+        },
+        {
+          label: l('房颤', 'AF', 'FA'),
+          ecg: synth('atrial-fibrillation', 1627),
+          note: l('房颤约100次/分：RR从约350到1100 ms不等，用平均RR算出的一个QTc并不可靠。多量几个心搏。', 'AF at about 100/min: the RR runs from about 350 to 1100 ms, so one QTc from the average RR is shaky. Measure several beats.', 'FA a unos 100 lpm: el RR va de unos 350 a 1100 ms, así que un único QTc con el RR medio es poco fiable. Mide varios latidos.'),
+          marks: [{ auto: 'rr' }],
+        },
+      ],
+      predict: {
+        question: l('低钾时U波很大。如果机器把QT量到U波终点，它的QT会怎样？', 'With low potassium the U wave is big. If a machine runs the QT to the end of the U, its QT will be…', 'Con potasio bajo la U es grande. Si una máquina lleva el QT hasta el final de la U, su QT será…'),
+        options: [l('太长', 'Too long', 'Demasiado largo'), l('太短', 'Too short', 'Demasiado corto'), l('正确', 'Right', 'Correcto')],
+        answer: 0,
+      },
       caption: l(
-        '机器真正的长处是测量：它的 PR、QRS、QT 是**全局值**——从所有同步记录导联中最早的起点量到最晚的终点——因此系统性略长于你单导联的读数：这不是谁错了，是方法不同。拿来用，但照样复核：T 波终末低平或 U 波明显时，机器的 QT 取决于它把 T 终点定在哪里，你用切线法自己量一遍（h7）；房颤和伪差下的"平均间期"更要打折。',
-        "The machine's real strength is measurement: its PR, QRS and QT are **global values** — measured from the earliest onset to the latest offset across all simultaneously recorded leads — so they run systematically slightly longer than your single-lead readings: that is method, not error. Use them, and over-read them anyway: when the T end is flat or a U wave is prominent, the machine's QT depends on where it decides the T ends — measure it yourself with the tangent method (h7); and its \"average intervals\" in AF or artefact deserve an extra discount.",
-        'El punto fuerte real de la máquina es medir: sus PR, QRS y QT son **valores globales** —del inicio más precoz al final más tardío en todas las derivaciones registradas a la vez—, por lo que dan de forma sistemática algo más largos que tus lecturas en una sola derivación: es método, no error. Úsalos y, aun así, revísalos: cuando el final de la T es plano o hay una U prominente, el QT de la máquina depende de dónde decida que acaba la T; mídelo tú con el método de la tangente (h7), y sus «intervalos medios» en la FA o con artefactos merecen aún más descuento.',
+        '机器的强项是测量：用它的PR、QRS和QT，但T波终点不清、U波显著或心律不齐时，自己再量一次。',
+        'Measurement is the machine’s strength: use its PR, QRS and QT, but measure again yourself when the T end is unclear, the U is prominent or the rhythm is irregular.',
+        'Medir es el punto fuerte de la máquina: usa su PR, QRS y QT, pero vuelve a medir tú cuando el final de la T no es claro, la U es prominente o el ritmo es irregular.',
+      ),
+    },
+    {
+      kind: 'figure',
+      figure: { id: 'qtc-calculator' },
+      caption: l(
+        '用切线法自己量出QT，再试各个公式：心率快或慢时它们相差很大，一个打印出来的QTc会把这点藏起来。',
+        'Measure the QT yourself with the tangent method, then try each formula: at fast or slow rates they disagree, and one printed QTc hides that.',
+        'Mide tú el QT con la tangente y prueba cada fórmula: con frecuencias rápidas o lentas discrepan, y un único QTc impreso lo oculta.',
       ),
     },
     { kind: 'check', item: { family: 'spot', seed: 4 } },
