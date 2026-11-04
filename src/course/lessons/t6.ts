@@ -221,9 +221,9 @@ const lesson: Lesson = {
         ],
       },
       caption: l(
-        '把颤动调小：波变小，但始终杂乱无章。看得见的室颤，无论粗细，都要电击。真正的细颤比这里最小的还要小得多（见下一段影片）。',
-        'Turn the fibrillation down: the waves shrink but stay chaotic. Visible VF, coarse or fine, is shocked. True fine VF is far smaller than the smallest setting here (see the next film).',
-        'Baja la fibrilación: las ondas se reducen pero siguen caóticas. La FV visible, gruesa o fina, se desfibrila. La FV fina de verdad es mucho más pequeña que el mínimo de aquí (mira la película siguiente).',
+        '把颤动调小：波变小，但始终杂乱无章。看得见的室颤，无论粗细，都要电击。',
+        'Turn the fibrillation down: the waves shrink but stay chaotic. Visible VF, coarse or fine, is shocked.',
+        'Baja la fibrilación: las ondas se reducen pero siguen caóticas. La FV visible, gruesa o fina, se desfibrila.',
       ),
     },
     {
@@ -287,16 +287,18 @@ const lesson: Lesson = {
       ],
       predict: {
         question: l(
-          '细颤可以冒充停搏。第 3 帧是细颤：II 导联上会是什么样？',
-          'Fine VF can pass for asystole. Frame 3 is fine VF: what will lead II show?',
-          'La FV fina puede pasar por asistolia. El fotograma 3 es FV fina: ¿qué mostrará la derivación II?',
+          '细颤可以冒充停搏。第 3 帧是细颤：它在 II 导联上的波有多高？',
+          'Fine VF can pass for asystole. Frame 3 is fine VF: how tall are its waves in lead II?',
+          'La FV fina puede pasar por asistolia. El fotograma 3 es FV fina: ¿qué altura tienen sus ondas en II?',
         ),
         options: [
-          l('一条完全平直的线', 'A perfectly flat line', 'Una línea totalmente plana'),
-          l('细小而杂乱的波', 'Small, chaotic waves', 'Ondas pequeñas y caóticas'),
-          l('细小而规则的波群', 'Small, regular complexes', 'Complejos pequeños y regulares'),
+          l('一条平线', 'A flat line', 'Una línea plana'),
+          l('约 2 mm', 'About 2 mm', 'Unos 2 mm'),
+          l('约 10 mm', 'About 10 mm', 'Unos 10 mm'),
+          l('约 20 mm', 'About 20 mm', 'Unos 20 mm'),
         ],
         answer: 1,
+        ordered: true,
       },
       caption: l(
         '10 秒内叫出骤停节律：室颤与心室扑动可电击，停搏与无脉性电活动不可电击。本课节律条均为合成：PTB-XL 里没有骤停心律。',
@@ -340,7 +342,11 @@ const lesson: Lesson = {
           'During this burst the patient is talking to you. What do you do first?',
           'Durante esta ráfaga el paciente está hablando contigo. ¿Qué haces primero?',
         ),
-        options: [l('立即电击', 'Shock at once', 'Descarga inmediata'), l('用分规在伪差里找真 QRS', 'Look for the true QRS inside the noise with calipers', 'Buscar con el compás los QRS verdaderos dentro del ruido'), l('给胺碘酮', 'Give amiodarone', 'Dar amiodarona')],
+        options: [
+          l('立即电击', 'Shock at once', 'Descarga inmediata'),
+          l('用分规把发作前的 RR 一路走过去', 'Walk the pre-burst RR through it with calipers', 'Recorre con el compás el RR previo a través de la ráfaga'),
+          l('给胺碘酮', 'Give amiodarone', 'Dar amiodarona'),
+        ],
         answer: 1,
       },
       caption: l(

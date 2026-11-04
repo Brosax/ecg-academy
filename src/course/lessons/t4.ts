@@ -162,11 +162,11 @@ const lesson: Lesson = {
           label: l('顺向型 AVRT', 'Orthodromic AVRT', 'TRAV ortodrómica'),
           ecg: synth('avrt', 668),
           note: l(
-            '经房室结下传、经旁路逆传 ⇒ QRS 窄而规则，约 190 次/分；P′ 落在 ST 段上，I、aVL 里清楚下凹。',
-            'Down the AV node, back up the pathway → a narrow, regular QRS at about 190/min; the P′ sits on the ST segment, a crisp dip in I and aVL.',
-            'Baja por el nodo AV y vuelve por la vía → QRS estrecho y regular a unos 190 lpm; la P′ cae sobre el segmento ST, con una muesca negativa nítida en I y aVL.',
+            '经房室结下传、经旁路逆传 ⇒ QRS 窄而规则，约 190 次/分；P′ 落在 ST 段上，aVL 里一个小下凹。',
+            'Down the AV node, back up the pathway → a narrow, regular QRS at about 190/min; the P′ sits on the ST segment, a small dip in aVL.',
+            'Baja por el nodo AV y vuelve por la vía → QRS estrecho y regular a unos 190 lpm; la P′ cae sobre el segmento ST, con una pequeña deflexión negativa en aVL.',
           ),
-          marks: [{ auto: 'p', lead: 'I', label: l('P′', 'P′', 'P′') }, { auto: 'p', lead: 'aVL', label: l('P′', 'P′', 'P′') }],
+          marks: [{ auto: 'p', lead: 'aVL', label: l('P′', 'P′', 'P′') }],
         },
         {
           label: l('逆向型 AVRT', 'Antidromic AVRT', 'TRAV antidrómica'),
@@ -182,11 +182,11 @@ const lesson: Lesson = {
           label: l('预激伴房颤', 'Pre-excited AF', 'FA preexcitada'),
           ecg: synth('preexcited-af', 667),
           note: l(
-            '快（约 200 次/分）、宽、不规则，QRS 宽度逐搏变化，夹着几个较窄的搏动；两个宽搏动之间的最短 RR 约 240 ms（<250 ms）⇒ 高危。',
-            'Fast (about 200/min), broad and irregular, with the QRS width changing beat to beat and a few narrower beats mixed in; the shortest RR between two wide beats is about 240 ms (< 250 ms) → high risk.',
-            'Rápida (unos 200 lpm), ancha e irregular, con la anchura del QRS cambiando de latido en latido y algunos latidos más estrechos; el RR más corto entre dos latidos anchos es de unos 240 ms (< 250 ms) → alto riesgo.',
+            '快（约 200 次/分）、宽、不规则，QRS 宽度逐搏变化，夹着几个较窄的搏动；两个宽搏动之间的最短 RR 约 225 ms（<250 ms）⇒ 高危。',
+            'Fast (about 200/min), broad and irregular, with the QRS width changing beat to beat and a few narrower beats mixed in; the shortest RR between two wide beats is about 225 ms (< 250 ms) → high risk.',
+            'Rápida (unos 200 lpm), ancha e irregular, con la anchura del QRS cambiando de latido en latido y algunos latidos más estrechos; el RR más corto entre dos latidos anchos es de unos 225 ms (< 250 ms) → alto riesgo.',
           ),
-          marks: [{ auto: 'qrs', beat: 22 }, { auto: 'rr', beat: 21 }],
+          marks: [{ auto: 'qrs', beat: 18 }, { auto: 'rr', beat: 17 }],
         },
       ],
       predict: {
@@ -391,9 +391,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [11889, 2145, 12559],
       caption: l(
-        '三份真实的 WPW 图形（55–63 岁）。先测量 PR、在至少两个导联找 δ波、判断 QRS 宽度，想好你的报告，然后揭晓。注意：三份都没有心律失常标签，机器测量（12SL）也是每个 QRS 一个 P——此刻没有心动过速，所以它们是“图形”，不是“综合征”。预激程度各不相同：有一份机器测得 PR 140 ms——不是每份图形都会量出 <120 ms，要逐导联仔细量。',
-        'Three real WPW patterns (ages 55-63). Measure the PR, find the delta in at least two leads, judge the QRS width and commit to your report — then reveal. Note: none of the three carries an arrhythmia label and the machine reading (12SL) counts one P per QRS: no tachyarrhythmia at this moment, so they are "patterns", not "syndromes". The degree of pre-excitation differs: in one the machine PR is 140 ms — not every pattern measures under 120 ms, so measure carefully, lead by lead.',
-        'Tres patrones de WPW reales (55-63 años). Mide el PR, busca la delta en al menos dos derivaciones, valora la anchura del QRS y decide tu informe antes de mirar la solución. Fíjate: ninguno lleva una etiqueta de arritmia y la medición automática (12SL) cuenta una P por QRS; ahora mismo no hay taquicardia, así que son «patrones», no «síndromes». El grado de preexcitación varía: en uno la máquina mide un PR de 140 ms; no todos los patrones miden menos de 120 ms, así que mide con cuidado, derivación por derivación.',
+        '三份真实的 WPW 图形（55–63 岁）。先测量 PR、在至少两个导联找 δ波、判断 QRS 宽度，想好你的报告，然后揭晓。注意：三份都没有心律失常标签，机器测量（12SL）也是每个 QRS 一个 P。PTB-XL 没有给出心动过速病史，所以你能报告的只是“图形”。预激程度各不相同：有一份机器测得 PR 140 ms——不是每份图形都会量出 <120 ms，要逐导联仔细量。',
+        'Three real WPW patterns (ages 55-63). Measure the PR, find the delta in at least two leads, judge the QRS width and commit to your report — then reveal. Note: none of the three carries an arrhythmia label and the machine reading (12SL) counts one P per QRS. PTB-XL gives no history of tachycardia, so all you can report is the pattern. The degree of pre-excitation differs: in one the machine PR is 140 ms — not every pattern measures under 120 ms, so measure carefully, lead by lead.',
+        'Tres patrones de WPW reales (55-63 años). Mide el PR, busca la delta en al menos dos derivaciones, valora la anchura del QRS y decide tu informe antes de mirar la solución. Fíjate: ninguno lleva una etiqueta de arritmia y la medición automática (12SL) cuenta una P por QRS. PTB-XL no da antecedentes de taquicardia, así que solo puedes informar el patrón. El grado de preexcitación varía: en uno la máquina mide un PR de 140 ms; no todos los patrones miden menos de 120 ms, así que mide con cuidado, derivación por derivación.',
       ),
     },
     {

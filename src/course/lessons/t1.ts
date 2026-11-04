@@ -100,11 +100,11 @@ const lesson: Lesson = {
           label: l('房室折返', 'AVRT', 'TRAV'),
           ecg: synth('avrt', 604),
           note: l(
-            'P′ 与 QRS 分开，在 **ST 段**上：I、aVL 里清楚下凹，II 里藏在 T 升支上。RP 约 115 ms，短于 P′R ⇒ 顺向型 AVRT。',
-            'The P′ sits apart from the QRS, on the **ST segment**: a crisp dip in I and aVL, while in II it hides on the T upstroke. RP about 115 ms, shorter than the P′R → orthodromic AVRT.',
-            'La P′ está separada del QRS, sobre el **segmento ST**: una muesca negativa nítida en I y aVL, mientras que en II se esconde en la rama ascendente de la T. RP de unos 115 ms, más corto que el P′R → TRAV ortodrómica.',
+            'P′ 与 QRS 分开，在 **ST 段**上：aVL 里一个小下凹，II 里藏在 T 升支上。RP 约 115 ms，短于 P′R ⇒ 顺向型 AVRT。',
+            'The P′ sits apart from the QRS, on the **ST segment**: a small dip in aVL, while in II it hides on the T upstroke. RP about 115 ms, shorter than the P′R → orthodromic AVRT.',
+            'La P′ está separada del QRS, sobre el **segmento ST**: una pequeña deflexión negativa en aVL, mientras que en II se esconde en la rama ascendente de la T. RP de unos 115 ms, más corto que el P′R → TRAV ortodrómica.',
           ),
-          marks: [{ auto: 'p', lead: 'I', label: l('P′', 'P′', 'P′') }, { auto: 'p', lead: 'aVL', label: l('P′', 'P′', 'P′') }],
+          marks: [{ auto: 'p', lead: 'aVL', label: l('P′', 'P′', 'P′') }],
         },
         {
           label: l('房速 2:1', 'AT 2:1', 'TA 2:1'),
@@ -286,14 +286,14 @@ const lesson: Lesson = {
           highlightLeads: ['II'],
         },
         {
-          title: l('在 II、III、aVF 和 V1 里找 P′', 'Hunt the P′ in II, III, aVF and V1', 'Caza la P′ en II, III, aVF y V1'),
+          title: l('在 aVL 和 III 里找 P′', 'Hunt the P′ in aVL and III', 'Caza la P′ en aVL y III'),
           body: l(
-            '逐个导联看 QRS 之后的 ST 段：I 和 aVL 里有一个小而清晰的**负向**波，III 里同一时刻是一个小的**正向**驼峰；II 和 aVF 里它骑在 T 波升支上，很容易漏看。它每搏位置相同：**逆行 P′**。',
-            'Look at the ST segment after each QRS, lead by lead: in I and aVL there is a small, crisp **negative** deflection, and at the same instant a small **positive** hump in III; in II and aVF it rides on the T upstroke and is easy to miss. It sits identically every beat: a **retrograde P′**.',
-            'Mira el segmento ST tras cada QRS, derivación por derivación: en I y aVL hay una pequeña deflexión **negativa** nítida y, en el mismo instante, una pequeña joroba **positiva** en III; en II y aVF cabalga sobre la rama ascendente de la T y es fácil que se te escape. Ocupa el mismo lugar en cada latido: una **P′ retrógrada**.',
+            '逐个导联看 QRS 之后的 ST 段：aVL 里有一个小的**负向**波，III 里同一时刻是一个小的**正向**驼峰；II 和 aVF 里它骑在 T 波升支上，很容易漏看。它每搏位置相同：**逆行 P′**。',
+            'Look at the ST segment after each QRS, lead by lead: in aVL there is a small **negative** deflection, and at the same instant a small **positive** hump in III; in II and aVF it rides on the T upstroke and is easy to miss. It sits identically every beat: a **retrograde P′**.',
+            'Mira el segmento ST tras cada QRS, derivación por derivación: en aVL hay una pequeña deflexión **negativa** y, en el mismo instante, una pequeña joroba **positiva** en III; en II y aVF cabalga sobre la rama ascendente de la T y es fácil que se te escape. Ocupa el mismo lugar en cada latido: una **P′ retrógrada**.',
           ),
-          marks: [{ auto: 'p', lead: 'I', label: l('P′', 'P′', 'P′') }, { auto: 'p', lead: 'aVL', label: l('P′', 'P′', 'P′') }],
-          highlightLeads: ['I', 'aVL', 'III'],
+          marks: [{ auto: 'p', lead: 'aVL', label: l('P′', 'P′', 'P′') }],
+          highlightLeads: ['aVL', 'III'],
         },
         {
           title: l('P′ 相对 QRS 在哪里？', 'Where is the P′ relative to the QRS?', '¿Dónde está la P′ respecto al QRS?'),

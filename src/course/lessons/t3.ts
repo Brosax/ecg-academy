@@ -61,9 +61,9 @@ const lesson: Lesson = {
         'Varón de 69 años, palpitaciones y disnea de esfuerzo desde hace 3 días. Esta tira de derivación II: regular, unos 150 lpm, QRS estrecho. ¿Dónde está la segunda onda auricular? Decide una respuesta antes de seguir.',
       ),
       reveal: l(
-        '**锯齿来了。** II 导联的基线不是平的：一串负向锯齿状 **F 波**，F–F ≈ 200 ms ⇒ **心房率约 300 次/分**。房室结每两个 F 只下传一个：**典型心房扑动，2:1 下传**。你看不见第二个 F，因为它从 T 波结束处一直延伸进下一个 QRS。任何约 150 次/分的规则窄 QRS 心动过速，第一件事都是搜第二个 F。',
-        '**There is the sawtooth.** The baseline in II is not flat: a train of negative sawtooth **F waves** with F–F about 200 ms, so an **atrial rate of about 300/min**. The AV node conducts only every second F: **typical atrial flutter with 2:1 conduction**. You cannot see the second F because it runs from the end of the T straight into the next QRS. With any regular narrow-QRS tachycardia at about 150/min, the first job is to hunt the second F.',
-        '**Ahí está el diente de sierra.** La línea de base en II no es plana: un tren de **ondas F** negativas en diente de sierra con un F–F de unos 200 ms, es decir, una **frecuencia auricular de unos 300 lpm**. El nodo AV conduce solo una de cada dos F: **flutter auricular típico con conducción 2:1**. La segunda F no se ve porque va desde el final de la T hasta dentro del QRS siguiente. Ante cualquier taquicardia regular de QRS estrecho a unos 150 lpm, la primera tarea es buscar la segunda F.',
+        '**锯齿来了。** II 导联的基线不是平的：一串负向锯齿状 **F 波**，F–F ≈ 200 ms ⇒ **心房率约 300 次/分**。房室结每两个 F 只下传一个：**典型心房扑动，2:1 下传**。你分辨不出第二个 F：它紧接在 T 波结束后开始，一直延伸进下一个 QRS。任何约 150 次/分的规则窄 QRS 心动过速，第一件事都是搜第二个 F。',
+        '**There is the sawtooth.** The baseline in II is not flat: a train of negative sawtooth **F waves** with F–F about 200 ms, so an **atrial rate of about 300/min**. The AV node conducts only every second F: **typical atrial flutter with 2:1 conduction**. You cannot pick out the second F: it starts just after the T ends and runs straight into the next QRS. With any regular narrow-QRS tachycardia at about 150/min, the first job is to hunt the second F.',
+        '**Ahí está el diente de sierra.** La línea de base en II no es plana: un tren de **ondas F** negativas en diente de sierra con un F–F de unos 200 ms, es decir, una **frecuencia auricular de unos 300 lpm**. El nodo AV conduce solo una de cada dos F: **flutter auricular típico con conducción 2:1**. La segunda F no se distingue: empieza justo después de acabar la T y se mete en el QRS siguiente. Ante cualquier taquicardia regular de QRS estrecho a unos 150 lpm, la primera tarea es buscar la segunda F.',
       ),
     },
     {
@@ -71,9 +71,9 @@ const lesson: Lesson = {
       figure: { id: 'laddergram', params: { maxBeats: 8 } },
       ecg: synth('atrial-flutter', 641, { conductionRatio: 2 }),
       caption: l(
-        '开头那条节律条的梯形图：心房层每 200 ms 一个 F，只有每第二个下传。被挡住的那个，正是你在节律条上看不见的 F：看不见不等于不存在。',
-        'The ladder of the opening strip: an F every 200 ms in the atrial tier, and only every second one conducts. The blocked F is exactly the one you could not see on the strip: not visible does not mean not there.',
-        'La escalera de la tira inicial: una F cada 200 ms en el nivel auricular, y solo conduce una de cada dos. La F bloqueada es justo la que no veías en la tira: que no se vea no significa que no esté.',
+        '开头那条节律条的梯形图：心房层每 200 ms 一个 F，只有每第二个下传。被挡住的那个，正是你在节律条上分辨不出的 F：看不见不等于不存在。',
+        'The ladder of the opening strip: an F every 200 ms in the atrial tier, and only every second one conducts. The blocked F is exactly the one you could not pick out on the strip: not visible does not mean not there.',
+        'La escalera de la tira inicial: una F cada 200 ms en el nivel auricular, y solo conduce una de cada dos. La F bloqueada es justo la que no distinguías en la tira: que no se vea no significa que no esté.',
       ),
     },
     {
@@ -210,9 +210,9 @@ const lesson: Lesson = {
         {
           title: l('第二个 F 在哪里？', 'Where is the second F?', '¿Dónde está la segunda F?'),
           body: l(
-            '两个下传的 F 之间还有一个 F：它从 T 波结束处开始，一直**延伸进下一个 QRS**，所以看不见——你能看见的那个 F 紧跟在 QRS 之后，落在 ST 段上。每两个 F 一个 QRS：**2:1 下传**。所以"看不见"不等于"不存在"。',
-            'Between two conducted F waves there is one more F: it starts as the T ends and **runs into the next QRS**, so you cannot see it — the one you can see sits on the ST segment, right after the QRS. One QRS per two F waves: **2:1 conduction**. "Not visible" does not mean "not there".',
-            'Entre dos F conducidas hay una F más: empieza cuando acaba la T y **se mete en el QRS siguiente**, así que no se ve; la que sí ves está justo después del QRS, sobre el segmento ST. Un QRS por cada dos F: **conducción 2:1**. "No visible" no significa "inexistente".',
+            '两个下传的 F 之间还有一个 F：它紧接在 T 波结束后开始，一直**延伸进下一个 QRS**，所以分辨不出来——你能看见的那个 F 紧跟在 QRS 之后，落在 ST 段上。每两个 F 一个 QRS：**2:1 下传**。所以"看不见"不等于"不存在"。',
+            'Between two conducted F waves there is one more F: it starts just after the T ends and **runs into the next QRS**, so you cannot pick it out — the one you can see sits on the ST segment, right after the QRS. One QRS per two F waves: **2:1 conduction**. "Not visible" does not mean "not there".',
+            'Entre dos F conducidas hay una F más: empieza justo después de acabar la T y **se mete en el QRS siguiente**, así que no se distingue; la que sí ves está justo después del QRS, sobre el segmento ST. Un QRS por cada dos F: **conducción 2:1**. "No visible" no significa "inexistente".',
           ),
           marks: [{ auto: 'f-waves', label: l('F 波', 'F waves', 'ondas F') }, { auto: 'qrs' }, { auto: 't' }],
         },
@@ -353,9 +353,9 @@ const lesson: Lesson = {
           'Flutter típico = macroreentrada antihoraria istmodependiente a 250-330 lpm: F en diente de sierra negativo sin línea isoeléctrica en II/III/aVF, positiva en V1; el horario da F inferiores anchas y positivas con V1 negativa o bifásica, también istmodependiente.',
         ),
         l(
-          '未治疗 2:1 下传 ⇒ 心室率约 150 次/分：任何规则的约 150 次/分窄 QRS 心动过速都要在 II、III、aVF、V1 搜第二个 F（常藏在 T 波里、V1 上）。',
-          'Untreated 2:1 conduction gives a ventricular rate of about 150/min: in any regular narrow-QRS tachycardia near 150/min, hunt the second F in II, III, aVF and V1 (usually inside the T wave, and in V1).',
-          'La conducción 2:1 sin tratamiento da una frecuencia ventricular de unos 150 lpm: en toda taquicardia regular de QRS estrecho cerca de 150 lpm, busca la segunda F en II, III, aVF y V1 (normalmente dentro de la onda T y en V1).',
+          '未治疗 2:1 下传 ⇒ 心室率约 150 次/分：任何规则的约 150 次/分窄 QRS 心动过速都要在 II、III、aVF、V1 搜第二个 F（在 T 波里、ST 段上或延伸进 QRS；V1 最清楚）。',
+          'Untreated 2:1 conduction gives a ventricular rate of about 150/min: in any regular narrow-QRS tachycardia near 150/min, hunt the second F in II, III, aVF and V1 (in the T, on the ST or running into the QRS; clearest in V1).',
+          'La conducción 2:1 sin tratamiento da una frecuencia ventricular de unos 150 lpm: en toda taquicardia regular de QRS estrecho cerca de 150 lpm, busca la segunda F en II, III, aVF y V1 (en la T, sobre el ST o metida en el QRS; más clara en V1).',
         ),
         l(
           '报告要写传导比例：2:1/3:1/4:1 心室率不同，诊断相同；比例不等 ⇒ 不规则，但 RR 聚集在恒定 F–F（约 200 ms）的整数倍——这是它与房颤的分界。',
