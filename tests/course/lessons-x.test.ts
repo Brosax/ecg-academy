@@ -609,7 +609,7 @@ describe('x4: calibration tracings', () => {
     const e = ecgOf(film.frames[0].ecg);
     const t = e.truth!;
     expect(t.rhythm).toBe('sinus-tachycardia');
-    expect(Math.abs(t.hrBpm - 125)).toBeLessThan(3);
+    expect(Math.abs(t.hrBpm - 125)).toBeLessThanOrEqual(1);
     expect(t.regular).toBe(true);
     expect(t.beats.every((b) => b.pOn !== null)).toBe(true);
     expect(pw(e, 'II').max).toBeGreaterThan(0.05);
@@ -640,7 +640,7 @@ describe('x4: calibration tracings', () => {
     const b = block.truth!;
     expect(b.findings).toContain('av-block-3');
     expect(b.atrial.every((a) => a.conductedTo === null)).toBe(true);
-    expect(Math.abs(b.hrBpm - 34)).toBeLessThan(2);
+    expect(Math.abs(b.hrBpm - 34)).toBeLessThanOrEqual(1);
     expect(b.qrsMs).toBeGreaterThanOrEqual(120);
   });
   it('Progress-page card: the numbers are the app\'s own (ideal 40/70/95 %, review pass 80 %, Leitner 1–16 days)', () => {
@@ -648,7 +648,7 @@ describe('x4: calibration tracings', () => {
     expect(REVIEW_PASS).toBe(0.8);
     expect([...LEITNER_DAYS]).toEqual([1, 2, 4, 8, 16]);
   });
-  it('Progress-page card: the overconfidence warning needs at least five "Sure" answers under 80 %; a critical finding is secured only after at least 3 attempts with the last five all ≥ 80 % and no missed-critical flag', () => {
+  it('Progress-page card: the overconfidence warning needs five or more "Sure" answers with under 80 % of them right; a critical finding is secured only after at least 3 attempts with the last five all ≥ 80 % and no missed-critical flag', () => {
     expect(overconfident({ n: 4, accuracy: 0 })).toBe(false);
     expect(overconfident({ n: 5, accuracy: 0.79 })).toBe(true);
     expect(overconfident({ n: 5, accuracy: 0.8 })).toBe(false);
@@ -709,8 +709,8 @@ const CLAIMS: readonly RealClaim[] = [
   { id: 16151, sex: 'F', age: 87, has: ['av-block-3'], hr: [20, 32], qrs: [120, 200] },
   { id: 19505, sex: 'F', age: 43, has: ['sinus-tachycardia', 'normal-ecg'], hr: [130, 145] },
   // x4
-  { id: 2084, sex: 'F', age: 16, has: ['normal-ecg', 'sinus-arrhythmia'], hr: [72, 80] },
-  { id: 10730, sex: 'F', age: 80, has: ['lafb'], qrs: [85, 100], axis: [-44, -31] },
+  { id: 2084, sex: 'F', age: 16, has: ['normal-ecg', 'sinus-arrhythmia'], hr: [74, 76] },
+  { id: 10730, sex: 'F', age: 80, has: ['lafb'], qrs: [89, 99], axis: [-44, -35] },
   { id: 4078, sex: 'F', age: 69, has: ['sinus-tachycardia', 'pac'], hr: [102, 112] },
   { id: 17892, sex: 'F', age: 63, has: ['nonspecific-st-t'] },
   { id: 18373, sex: 'F', age: 79, has: ['lafb'], axis: [-90, -45] },
@@ -794,13 +794,17 @@ describe('stage X real cases: the text agrees with the labels and the 12SL refer
     }
   });
 
-  it('x4 borderline axis: 10730 is labelled LAFB but its 12SL axis misses the current −45° threshold; the "sure" answer is the description', () => {
+  it('x4 borderline axis: 10730 is labelled LAFB but its 12SL axis (−39°) misses the current −45° threshold; the QRS signs the prompt states follow from that axis; the "sure" answer is the description', () => {
     const it = inlineItem('x4', 'x4:sure-statement-10730');
     if (it.kind !== 'choice' || it.ecg.kind !== 'real') throw new Error('expected a real choice item');
     const k = getCase(it.ecg.id)!;
     expect(k.findings).toContain('lafb');
+    expect(k.ref.qrsAxisDeg).toBe(-39);
     expect(k.ref.qrsAxisDeg!).toBeGreaterThan(-45);
     expect(k.ref.qrsAxisDeg!).toBeLessThan(-30);
+    const projection = (leadDeg: number) => Math.cos(((k.ref.qrsAxisDeg! - leadDeg) * Math.PI) / 180);
+    for (const [lead, deg] of [['I', 0], ['aVL', -30]] as const) expect(projection(deg), lead).toBeGreaterThan(0);
+    for (const [lead, deg] of [['II', 60], ['III', 120], ['aVF', 90]] as const) expect(projection(deg), lead).toBeLessThan(0);
     expect(it.key.correct).toBe('lad');
   });
 });

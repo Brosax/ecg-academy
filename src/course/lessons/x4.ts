@@ -5,7 +5,7 @@
  * bullet of docs/curriculum/criteria.md (Schläpfer/Wellens); the error autopsy uses criteria.md `lafb` (current value,
  * Surawicz Part III). The learner's own data is what src/practice records and the Progress page draws: confidence on
  * exam answers only (lesson checks and drills do not ask; there the learner rates it mentally), calibration bars against the ideal
- * 40/70/95 % (CONFIDENCE_EXPECTED), the "overconfident" warning (≥ 5 "sure" answers under 80 %), the critical-findings
+ * 40/70/95 % (CONFIDENCE_EXPECTED), the "overconfident" warning (≥ 5 "sure" answers, < 80 % of them right), the critical-findings
  * tracker (secured = ≥ 3 attempts, last five ≥ 0.8, no missed-critical flag) and the Leitner queue (< 0.8 → box 1).
  * Real cases: 2084 (F16, sinus arrhythmia, 12SL 76/min), 10730 (F80, labelled LAFB, 12SL axis −39°: the
  * label-versus-criteria calibration example), 4078 (F69, sinus tachycardia ≈ 107/min, PACs), 17892 (F63, non-specific
@@ -38,16 +38,16 @@ const borderlineAxis: Item = {
   seed: 0,
   kind: 'choice',
   prompt: l(
-    '真实病例：80 岁女性。I 与 aVL 高 R，II 以负向为主，III、aVF 深 S，QRS 约 94 ms。你只能给一句话打“信心 3”——选哪一句？',
-    'A real case: an 80-year-old woman. Tall R in I and aVL, II mainly negative, deep S in III and aVF, QRS about 94 ms. You may give a confidence of 3 to one statement only — which one?',
-    'Un caso real: mujer de 80 años. R alta en I y aVL, II predominantemente negativa, S profundas en III y aVF, QRS de unos 94 ms. Solo puedes dar confianza 3 a una afirmación: ¿a cuál?',
+    '真实病例：80 岁女性。QRS 在 I 与 aVL 以正向为主，在 II、III、aVF 以负向为主，QRS 约 94 ms。你只能给一句话打“信心 3”——选哪一句？',
+    'A real case: an 80-year-old woman. QRS mainly positive in I and aVL, mainly negative in II, III and aVF, QRS about 94 ms. You may give a confidence of 3 to one statement only — which one?',
+    'Un caso real: mujer de 80 años. QRS predominantemente positivo en I y aVL y negativo en II, III y aVF, QRS de unos 94 ms. Solo puedes dar confianza 3 a una afirmación: ¿a cuál?',
   ),
   ecg: real(10730),
   view: GRID,
   explanation: l(
-    '电轴约 **−40°**（I 正、aVF 负、II 也是负向为主 → 超过 −30°；12SL 测得 −39°）。“电轴左偏约 −40°”是描述，量得出来，可以给 3。“左前分支阻滞”需要 **−45° 至 −90°**（Surawicz 2009），这里差一点——心脏科医师的标注写了 LAFB（旧标准“超过 −30°”就算），所以报告应写“电轴左偏约 −40°，按现行标准未达 LAFB”，对 LAFB 这一句只给 2：核对、复测、与旧图比较。“电轴正常”是错的：II 已经负向。**把信心挂在你量到的东西上，而不是挂在名字上。**',
-    'The axis is about **−40°** (I positive, aVF negative, and II mainly negative too → beyond −30°; 12SL measured −39°). "Left axis deviation, about −40°" is a description you can measure — it earns a 3. "Left anterior fascicular block" needs **−45° to −90°** (Surawicz 2009), and this falls just short — the cardiologists\' label says LAFB (the older "beyond −30°" threshold), so the report should read "left axis deviation about −40°, LAFB criteria not met by current thresholds", with only a 2 on the LAFB line: check, re-measure, compare with old tracings. "Normal axis" is wrong: II is already negative. **Attach confidence to what you measured, not to a name.**',
-    'El eje es de unos **−40°** (I positiva, aVF negativa y también II predominantemente negativa → más allá de −30°; el 12SL midió −39°). «Desviación izquierda del eje, de unos −40°» es una descripción que se puede medir: se gana un 3. «Bloqueo fascicular anterior izquierdo» exige **−45° a −90°** (Surawicz 2009), y aquí se queda justo corto; la etiqueta de los cardiólogos dice BFAI (con el umbral antiguo de «más allá de −30°»), así que el informe debe decir «desviación izquierda del eje de unos −40°, sin criterios actuales de BFAI», con solo un 2 en la línea del BFAI: comprobar, volver a medir y comparar con previos. «Eje normal» es erróneo: II ya es negativa. **Pon la confianza en lo que has medido, no en un nombre.**',
+    '电轴约 **−40°**（I 正、aVF 负、II 也是负向为主 → 超过 −30°；12SL 测得 −39°）。“电轴左偏约 −40°”是描述，量得出来，可以给 3。“左前分支阻滞”需要 **−45° 至 −90°**（Surawicz 2009），这里差一点——心脏科医师的标注是 LAFB，测得的电轴是 −39°，所以报告应写“电轴左偏约 −40°，按现行标准未达 LAFB”，对 LAFB 这一句只给 2：核对、复测、与旧图比较。“电轴正常”是错的：II 已经负向。**把信心挂在你量到的东西上，而不是挂在名字上。**',
+    'The axis is about **−40°** (I positive, aVF negative, and II mainly negative too → beyond −30°; 12SL measured −39°). "Left axis deviation, about −40°" is a description you can measure — it earns a 3. "Left anterior fascicular block" needs **−45° to −90°** (Surawicz 2009), and this falls just short — the cardiologists\' label says LAFB and the measured axis is −39°, so the report should read "left axis deviation about −40°, LAFB criteria not met by current thresholds", with only a 2 on the LAFB line: check, re-measure, compare with old tracings. "Normal axis" is wrong: II is already negative. **Attach confidence to what you measured, not to a name.**',
+    'El eje es de unos **−40°** (I positiva, aVF negativa y también II predominantemente negativa → más allá de −30°; el 12SL midió −39°). «Desviación izquierda del eje, de unos −40°» es una descripción que se puede medir: se gana un 3. «Bloqueo fascicular anterior izquierdo» exige **−45° a −90°** (Surawicz 2009), y aquí se queda justo corto; la etiqueta de los cardiólogos dice BFAI y el eje medido es de −39°, así que el informe debe decir «desviación izquierda del eje de unos −40°, sin criterios actuales de BFAI», con solo un 2 en la línea del BFAI: comprobar, volver a medir y comparar con previos. «Eje normal» es erróneo: II ya es negativa. **Pon la confianza en lo que has medido, no en un nombre.**',
   ),
   findings: ['lad', 'lafb'],
   key: {
@@ -268,17 +268,17 @@ const lesson: Lesson = {
         {
           label: l('信心校准图', 'The calibration chart', 'El gráfico de calibración'),
           value: l(
-            '每档一根柱（你的正确率）对一条线（理想：猜的约 40%、比较确定约 70%、非常确定约 95%）；≥ 5 次“非常确定”且正确率 < 80% 会提醒你过度自信',
-            'One bar per level (your accuracy) against a line (the ideal: about 40 % Guess, 70 % Fairly sure, 95 % Sure); at least five "Sure" answers under 80 % triggers the overconfidence warning',
-            'Una barra por nivel (tu acierto) frente a una línea (el ideal: en torno al 40 % Lo adivino, 70 % Bastante seguro, 95 % Seguro); al menos cinco «Seguro» con menos del 80 % activan el aviso de exceso de confianza',
+            '每档一根柱（你的正确率）对一条线（理想：猜的约 40%、比较确定约 70%、非常确定约 95%）；“非常确定”答满 5 次、其中答对的不到 80% 时，会提醒你过度自信',
+            'One bar per level (your accuracy) against a line (the ideal: about 40 % Guess, 70 % Fairly sure, 95 % Sure); once you have five or more "Sure" answers and under 80 % of them are right, the overconfidence warning shows',
+            'Una barra por nivel (tu acierto) frente a una línea (el ideal: en torno al 40 % Lo adivino, 70 % Bastante seguro, 95 % Seguro); cuando tienes cinco o más respuestas «Seguro» y aciertas menos del 80 % de ellas, aparece el aviso de exceso de confianza',
           ),
         },
         {
           label: l('怎么读柱子', 'Reading the bars', 'Cómo leer las barras'),
           value: l(
-            '“非常确定”的柱子低于横线 = 过度自信；“猜的”柱子远高于 40% = 自信不足',
-            'A "Sure" bar below its line = overconfidence; a "Guess" bar far above 40 % = underconfidence',
-            'Una barra de «Seguro» por debajo de su línea = exceso de confianza; una barra de «Lo adivino» muy por encima del 40 % = defecto de confianza',
+            '“非常确定”的柱子远低于横线 = 过度自信；“猜的”柱子远高于 40% = 自信不足',
+            'A "Sure" bar well below its line = overconfidence; a "Guess" bar far above 40 % = underconfidence',
+            'Una barra de «Seguro» muy por debajo de su línea = exceso de confianza; una barra de «Lo adivino» muy por encima del 40 % = defecto de confianza',
           ),
         },
         {
