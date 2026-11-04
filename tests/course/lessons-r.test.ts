@@ -283,7 +283,7 @@ describe('r1: the sinus node on the tracings', () => {
     expect(a / mean(arrest.filter((x) => x < 1000))).toBeLessThan(3.35);
     const pp = mean(exit.filter((x) => x < 1000));
     for (const x of exit.filter((y) => y > 1000)) {
-      expect(Math.abs(x - 1580)).toBeLessThan(20);
+      expect(Math.abs(x - 1580)).toBeLessThan(10);
       expect(Math.abs(x / pp - 2)).toBeLessThan(0.03);
     }
   });
@@ -427,8 +427,8 @@ describe('r3: first degree and Mobitz I on the tracings', () => {
   it('3:2 cycles (PR film frame 2): two of every three P conduct, PR about 150 → 260 ms', () => {
     const e = frames('r3', 0)[1];
     const p = prs(e);
-    expect(Math.abs(Math.min(...p) - 150)).toBeLessThan(10);
-    expect(Math.abs(Math.max(...p) - 260)).toBeLessThan(10);
+    expect(Math.abs(Math.min(...p) - 150)).toBeLessThan(5);
+    expect(Math.abs(Math.max(...p) - 260)).toBeLessThan(5);
     for (let i = 0; i + 1 < p.length; i += 2) expect(p[i + 1]).toBeGreaterThan(p[i] + 80);
     const a = e.truth!.atrial;
     expect(Math.abs(a.length / a.filter((x) => x.conductedTo !== null).length - 1.5)).toBeLessThan(0.1);
