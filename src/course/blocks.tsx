@@ -94,10 +94,11 @@ export function blockLabel(b: Block): string {
 const pct = (x: number) => Math.round(x * 100);
 const commaIfEs = (s: string) => (store.lang.value === 'es' ? s.replace('.', ',') : s);
 
-function Caption(props: { readonly text?: L10n }) {
+/** `hidden`: the caption keeps its space but stays unseen until the learner has committed to a prediction. */
+function Caption(props: { readonly text?: L10n; readonly hidden?: boolean }) {
   if (!props.text) return null;
   return (
-    <figcaption class="crs-caption">
+    <figcaption class={`crs-caption${props.hidden ? ' is-hidden' : ''}`} aria-hidden={props.hidden || undefined}>
       <Markup text={lt(props.text)} />
     </figcaption>
   );
@@ -469,7 +470,7 @@ function LiveBlock(props: { readonly block: BlockOf<'live'> }) {
           </div>
         </fieldset>
       )}
-      <Caption text={b.caption} />
+      <Caption text={b.caption} hidden={!revealed} />
     </figure>
   );
 }
@@ -521,7 +522,7 @@ function FilmBlock(props: { readonly block: BlockOf<'film'> }) {
         )}
         <NoteBox notes={b.frames.map((x) => x.note)} current={revealed ? f.note : undefined} />
       </div>
-      <Caption text={b.caption} />
+      <Caption text={b.caption} hidden={!revealed} />
     </figure>
   );
 }

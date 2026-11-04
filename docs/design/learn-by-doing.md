@@ -86,6 +86,8 @@ usually becomes one `film`.
   learner moves another dial.
 - A prediction must be answerable from what the lesson has already shown. If it needs something taught later, it is
   a quiz: move the block or change the question.
+- Nothing on screen before the reveal may give the answer away. The block's title is the step heading and is always
+  visible, so a title never states the answer. The caption stays hidden until the learner has predicted.
 - An assertion's tolerance matches the note's precision: "about 115 ms" needs ±5 ms; "2–3.5 mm" needs the value
   inside 2–3.5. Where a note range marks the threshold of a finding, assert both sides of the boundary in every lead
   the definition uses.

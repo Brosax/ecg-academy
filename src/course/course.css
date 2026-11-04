@@ -604,6 +604,9 @@ a.crs-lcard:hover {
 .crs-caption {
   max-width: 80ch;
 }
+.crs-caption.is-hidden {
+  visibility: hidden;
+}
 .crs-unavail {
   display: flex;
   align-items: center;
