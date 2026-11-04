@@ -1036,6 +1036,33 @@ describe('o9: placement errors on the tracings', () => {
     expect(pAmp(high, 'V1').min).toBeLessThan(-0.02);
     expect(Math.abs(r(high, 'V2') - 0.2)).toBeLessThan(0.05);
   });
+  it('dextrocardia (worked, contrast): P, QRS and T inverted in I; the P clearly inverted in aVL and only just above the line in aVR; the tallest R in V1, falling to V4, smaller still in V5–V6, V6 almost fully negative; the LA/RA side rises smoothly from V1 to V5', () => {
+    const r = (e: Ecg, l: StdLead) => qrs(e, l).max;
+    const worked = ecgOf(blocksOf('o9', 'worked')[0].ecg);
+    const right = ecgOf(contrastTitled('o9', 'One inverted I, two different chests').right.ecg);
+    for (const e of [worked, right]) {
+      expect(pAmp(e, 'I').max).toBeLessThan(0.01);
+      expect(pAmp(e, 'I').min).toBeLessThan(-0.05);
+      expect(qrs(e, 'I').max).toBeLessThan(0.05);
+      expect(qrs(e, 'I').min).toBeLessThan(-0.5);
+      expect(tInverted(e, 'I')).toBe(true);
+      expect(pAmp(e, 'aVL').max).toBeLessThan(0.01);
+      expect(pAmp(e, 'aVL').min).toBeLessThan(-0.075);
+      expect(pAmp(e, 'aVR').max).toBeGreaterThan(0.01);
+      expect(pAmp(e, 'aVR').max).toBeLessThanOrEqual(0.05);
+      expect(pAmp(e, 'aVR').min).toBeGreaterThan(-0.01);
+      for (let k = 1; k < 4; k++) expect(r(e, CHEST4[k]), CHEST4[k]).toBeLessThan(r(e, CHEST4[k - 1]));
+      for (const l of ['V5', 'V6'] as const) expect(r(e, l), l).toBeLessThan(r(e, 'V4'));
+      expect(-qrs(e, 'V6').min).toBeGreaterThan(5 * r(e, 'V6'));
+    }
+    const left = ecgOf(contrastTitled('o9', 'One inverted I, two different chests').left.ecg);
+    const chest = ['V1', 'V2', 'V3', 'V4', 'V5'] as const;
+    for (let k = 1; k < chest.length; k++) expect(r(left, chest[k]), chest[k]).toBeGreaterThan(r(left, chest[k - 1]));
+    expect(pAmp(left, 'I').max).toBeLessThan(0.01);
+    expect(pAmp(left, 'I').min).toBeLessThan(-0.05);
+    expect(qrs(left, 'I').net).toBeLessThan(0);
+    expect(tInverted(left, 'I')).toBe(true);
+  });
 });
 const CHEST4: readonly StdLead[] = ['V1', 'V2', 'V3', 'V4'];
 
