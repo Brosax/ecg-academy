@@ -204,6 +204,15 @@ function ecgOf(src: EcgSource | SynthRequest): Ecg {
   }
   return e;
 }
+/** what a playing live block shows with its played dial at `v` (its other dials at their start values) */
+function played(id: string, i: number, v: number): Ecg {
+  const b = blocksOf(id, 'live')[i];
+  if (!b.play) throw new Error(`${id}: live block ${i} does not play`);
+  const sc = scenarios().find((s) => s.id === b.scenario);
+  if (!sc) throw new Error(`unknown scenario ${b.scenario}`);
+  const dials = { ...startDials(sc, b.variant, b.dials.map((d) => d.id), b.play), [b.play.dial]: v };
+  return ecgOf({ scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed, dials });
+}
 
 const LIMB: readonly StdLead[] = ['I', 'II', 'III', 'aVR', 'aVL', 'aVF'];
 const CHEST: readonly StdLead[] = ['V1', 'V2', 'V3', 'V4', 'V5', 'V6'];
@@ -382,17 +391,61 @@ describe('s3: sinus rhythm on the tracings', () => {
     expect(Math.abs(e.truth!.prMs! - 160)).toBeLessThan(10);
     expect(Math.max(...rrs(e)) - Math.min(...rrs(e))).toBeGreaterThan(120);
   });
-  it('140/min: the marked P starts before the marked T has ended', () => {
-    const b = blocksOf('s3', 'ecg')[0];
-    const e = ecgOf(b.ecg);
+  it('140/min film frame: the marked P starts before the marked T has ended', () => {
+    const f = blocksOf('s3', 'film')[0].frames[2];
+    const e = ecgOf(f.ecg);
     const beats = e.truth!.beats;
     const beatOf = (k: string): number => {
-      const m = (b.marks ?? []).find((x) => 'auto' in x && x.auto === k);
+      const m = (f.marks ?? []).find((x) => 'auto' in x && x.auto === k);
       if (!m || !('auto' in m) || m.beat === undefined) throw new Error(`no ${k} mark with a beat`);
       return m.beat;
     };
     expect(beatOf('p')).toBe(beatOf('t') + 1);
     expect(beats[beatOf('p')].pOn!).toBeLessThan(beats[beatOf('t')].tOff);
+  });
+  it('rate film: 50, 75 and 140/min, each with a P upright in II and negative in aVR; the same P at 50 and 75', () => {
+    const frames = blocksOf('s3', 'film')[0].frames.map((f) => ecgOf(f.ecg));
+    frames.forEach((e, k) => {
+      expect(Math.abs(e.truth!.hrBpm - [50, 75, 140][k]), `frame ${k}`).toBeLessThan(3);
+      expect(e.truth!.rhythm, `frame ${k}`).toMatch(/^sinus/);
+      expect(pw(e, 'II').max, `frame ${k}`).toBeGreaterThan(0.05);
+      expect(pw(e, 'aVR').net, `frame ${k}`).toBeLessThan(-0.03);
+    });
+    expect(Math.abs(pw(frames[0], 'II').max - pw(frames[1], 'II').max)).toBeLessThan(0.01);
+  });
+  it('P-axis sweep notes: III flat or slightly negative at 20–30; III and aVL small at 35–55; aVL flat or slightly negative with III upright at 60–70; I and II upright and aVR negative throughout, aVF upright from 35', () => {
+    for (const v of [20, 30, 35, 55, 60, 70]) {
+      const e = played('s3', 0, v);
+      expect(Math.abs(e.truth!.axisDeg.p! - v), `${v}°`).toBeLessThan(3);
+      for (const l of ['I', 'II'] as const) expect(pw(e, l).net, `${v}° ${l}`).toBeGreaterThan(0.03);
+      expect(pw(e, 'aVR').net, `${v}° aVR`).toBeLessThan(-0.04);
+      if (v >= 35) expect(pw(e, 'aVF').net, `${v}° aVF`).toBeGreaterThan(0.03);
+      const [iii, avl, ii] = [pw(e, 'III').net, pw(e, 'aVL').net, pw(e, 'II').net];
+      if (v <= 30) {
+        expect(iii, `${v}° III`).toBeLessThan(0.005);
+        expect(iii, `${v}° III`).toBeGreaterThan(-0.04);
+      } else if (v <= 55) {
+        for (const x of [iii, avl]) expect(Math.abs(x), `${v}° III/aVL`).toBeLessThan(0.6 * ii);
+      } else {
+        expect(avl, `${v}° aVL`).toBeLessThan(0.005);
+        expect(avl, `${v}° aVL`).toBeGreaterThan(-0.04);
+        expect(iii, `${v}° III`).toBeGreaterThan(0.04);
+      }
+    }
+  });
+  it('variability sweep notes: PP spread > 120 ms at 0.10–0.139 and 230–290 ms at 0.14–0.18, with a PR of 160 ms on every beat', () => {
+    for (const v of [0.1, 0.139, 0.14, 0.18]) {
+      const e = played('s3', 1, v);
+      const beats = e.truth!.beats;
+      const pp = beats.slice(1).map((b, i) => b.pOn! - beats[i].pOn!);
+      const spread = Math.max(...pp) - Math.min(...pp);
+      if (v < 0.14) expect(spread, `${v}`).toBeGreaterThan(120);
+      else {
+        expect(spread, `${v}`).toBeGreaterThan(225);
+        expect(spread, `${v}`).toBeLessThan(295);
+      }
+      for (const b of beats) expect(Math.abs(b.qrsOn - b.pOn! - 160), `${v}`).toBeLessThan(5);
+    }
   });
   it('long-PR check: sinus P (upright I, II, aVF; negative aVR), PR about 220 ms, rate under 60', () => {
     const e = ecgOf(inlineItem('s3', 's3:long-pr-still-sinus').ecg);

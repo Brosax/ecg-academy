@@ -83,18 +83,37 @@ const lesson: Lesson = {
       showConduction: true,
       emphasize: ['sa-node', 'ra', 'la'],
       caption: l(
-        '播放一个心动周期。窦房结位于右心房上部，激动向下、向左扩布到两个心房。这个方向（约 +50°）使窦性 P 波在 I、II、aVF 直立，在 aVR 倒置。',
-        'Play one beat. The sinus node sits high in the right atrium, and activation spreads down and to the left across both atria. That direction (about +50°) makes the sinus P upright in I, II and aVF and inverted in aVR.',
-        'Reproduce un latido. El nodo sinusal está en la parte alta de la aurícula derecha y la activación se propaga hacia abajo y a la izquierda por ambas aurículas. Esa dirección (unos +50°) hace que la P sinusal sea positiva en I, II y aVF y negativa en aVR.',
+        '播放一个心动周期。窦房结在右心房上部，激动向下、向左扩布到两个心房：所以窦性 P 波在 I、II、aVF 直立，aVR 倒置。',
+        'Play one beat. The sinus node sits high in the right atrium, and activation spreads down and to the left across both atria: that is why the sinus P is upright in I, II and aVF and inverted in aVR.',
+        'Reproduce un latido. El nodo sinusal está en la parte alta de la aurícula derecha y la activación se propaga hacia abajo y a la izquierda por ambas aurículas: por eso la P sinusal es positiva en I, II y aVF y negativa en aVR.',
       ),
     },
     {
-      kind: 'text',
-      title: l('什么决定窦性心律', 'What makes a rhythm sinus', 'Qué hace que un ritmo sea sinusal'),
-      body: l(
-        '窦性心律由 **P 波的来源**决定，而不是由 PR 或心率决定：\n- P 波形态符合窦性：I、II、aVF 直立，aVR 倒置（V1 常为正负双向）；\n- P 波电轴在 0° 至 +75° 之间；\n- PP 间期规则（窦性心律不齐除外）。\n窦性心律伴 PR 延长（一度房室传导阻滞）仍然是窦性心律。III 和 aVL 的窦性 P 波可以直立、低平或倒置。',
-        'Sinus rhythm is defined by **where the P wave comes from**, not by the PR or the rate:\n- a P wave of sinus shape: upright in I, II and aVF, inverted in aVR (often biphasic in V1);\n- a P axis between 0° and +75°;\n- a regular PP interval, apart from sinus arrhythmia.\nSinus rhythm with a long PR (first-degree AV block) is still sinus rhythm. In III and aVL a sinus P may be upright, flat or negative.',
-        'El ritmo sinusal se define por **el origen de la onda P**, no por el PR ni por la frecuencia:\n- una P de morfología sinusal: positiva en I, II y aVF, negativa en aVR (a menudo bifásica en V1);\n- un eje de la P entre 0° y +75°;\n- un intervalo PP regular, salvo la arritmia sinusal.\nUn ritmo sinusal con PR largo (bloqueo AV de primer grado) sigue siendo sinusal. En III y aVL la P sinusal puede ser positiva, plana o negativa.',
+      kind: 'live',
+      scenario: 'normal',
+      seed: 309,
+      dials: [{ id: 'pAxis' }],
+      view: { layout: '6x2', highlightLeads: ['I', 'II', 'III', 'aVR', 'aVL', 'aVF'] },
+      marks: [{ auto: 'p', lead: 'III' }, { auto: 'p', lead: 'aVL' }],
+      play: {
+        dial: 'pAxis',
+        from: 20,
+        to: 70,
+        notes: [
+          { min: 20, max: 30, text: l('I、II 的 P 波直立，aVR 倒置。**III** 的 P 波低平或略倒置：仍是窦性。', 'P upright in I and II, negative in aVR. In **III** it is flat or slightly negative: still sinus.', 'P positiva en I y II, negativa en aVR. En **III** es plana o algo negativa: sigue siendo sinusal.') },
+          { min: 35, max: 55, text: l('I、II、aVF 直立，aVR 倒置；III 和 aVL 的 P 波都很小：典型的窦性 P 波。', 'Upright in I, II and aVF, negative in aVR; small in III and aVL: the classic sinus P.', 'Positiva en I, II y aVF, negativa en aVR; pequeña en III y aVL: la P sinusal típica.') },
+          { min: 60, max: 70, text: l('现在 **aVL** 的 P 波低平或略倒置，III 直立：仍是窦性。I、II、aVF 直立，aVR 倒置。', 'Now **aVL** is flat or slightly negative and III upright: still sinus. I, II and aVF upright, aVR negative.', 'Ahora **aVL** es plana o algo negativa y III positiva: sigue siendo sinusal. I, II y aVF positivas, aVR negativa.') },
+        ],
+      },
+      predict: {
+        question: l('P 波电轴从 +20° 转到 +70°，哪些导联的 P 波始终不变？', 'As the P axis turns from +20° to +70°, which leads keep the same P?', 'Si el eje de la P gira de +20° a +70°, ¿qué derivaciones mantienen la misma P?'),
+        options: [l('I、II 直立，aVR 倒置', 'I and II upright, aVR negative', 'I y II positivas, aVR negativa'), l('III 和 aVL', 'III and aVL', 'III y aVL'), l('六个肢体导联全部', 'All six limb leads', 'Las seis derivaciones de miembros')],
+        answer: 0,
+      },
+      caption: l(
+        '窦性 P 波电轴在 0° 至 +75° 之间。转动它：III 和 aVL 的 P 波会变，I、II 和 aVR 不变。',
+        'A sinus P axis lies between 0° and +75°. Turn it: the P in III and aVL changes, the P in I, II and aVR does not.',
+        'El eje de la P sinusal está entre 0° y +75°. Gíralo: la P de III y aVL cambia; la de I, II y aVR, no.',
       ),
     },
     {
@@ -165,10 +184,24 @@ const lesson: Lesson = {
       dials: [{ id: 'hrv' }],
       view: STRIP,
       marks: [{ auto: 'p' }, { auto: 'pr' }],
+      play: {
+        dial: 'hrv',
+        from: 0.1,
+        to: 0.18,
+        notes: [
+          { min: 0.1, max: 0.139, text: l('PP 间期已相差 > 120 ms：窦性心律不齐。P 波和 PR 不变。', 'The PP already varies by more than 120 ms: sinus arrhythmia. Same P, same PR.', 'El PP ya varía más de 120 ms: arritmia sinusal. Misma P, mismo PR.') },
+          { min: 0.14, max: 0.18, text: l('PP 摆动到 230–290 ms，P 波形态和 PR（160 ms）始终不变：窦房结只是随呼吸加快、减慢。', 'The PP now swings by 230–290 ms while the P shape and the PR (160 ms) stay fixed: the node just speeds up and slows with breathing.', 'El PP oscila ahora 230–290 ms mientras la forma de la P y el PR (160 ms) no cambian: el nodo solo se acelera y se frena con la respiración.') },
+        ],
+      },
+      predict: {
+        question: l('加大 PP 的变异度，PR 会怎样？', 'Turn up the PP variability. What does the PR do?', 'Aumenta la variabilidad del PP. ¿Qué hace el PR?'),
+        options: [l('保持不变', 'Stays the same', 'No cambia'), l('跟着 PP 一起变', 'Varies with the PP', 'Varía con el PP'), l('逐渐延长', 'Gets longer and longer', 'Se alarga cada vez más')],
+        answer: 0,
+      },
       caption: l(
-        '加大变异度：PP 间期摆动更大，但 P 波和 PR 保持不变。窦房结只是在吸气时加快、呼气时减慢。',
-        'Increase the variability: the PP interval swings more, but the P wave and the PR stay the same. The sinus node simply speeds up with inspiration and slows with expiration.',
-        'Aumenta la variabilidad: el PP oscila más, pero la onda P y el PR no cambian. El nodo sinusal simplemente se acelera en la inspiración y se frena en la espiración.',
+        '加大变异度：PP 摆动更大，P 波和 PR 不变。吸气时窦房结加快，呼气时减慢。',
+        'Turn up the variability: the PP swings more, the P and the PR do not. The sinus node speeds up on inspiration and slows on expiration.',
+        'Aumenta la variabilidad: el PP oscila más; la P y el PR, no. El nodo sinusal se acelera en la inspiración y se frena en la espiración.',
       ),
     },
     {
@@ -184,15 +217,39 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('sinus-tachycardia', 307, { rate: 140 }),
+      kind: 'film',
+      title: l('任何心率都可以是窦性', 'Sinus at any rate', 'Sinusal a cualquier frecuencia'),
       view: STRIP,
-      // the T wave of one beat and the P wave of the next: at 140/min the P starts before that T has ended
-      marks: [{ auto: 't', beat: 10 }, { auto: 'p', beat: 11 }],
+      frames: [
+        {
+          label: l('50 次/分', '50/min', '50 lpm'),
+          ecg: synth('sinus-bradycardia', 307, { rate: 50 }),
+          note: l('同样的窦性 P 波在每个 QRS 之前，心率 < 60：窦性心动过缓。', 'The same sinus P before every QRS at under 60/min: sinus bradycardia.', 'La misma P sinusal antes de cada QRS por debajo de 60 lpm: bradicardia sinusal.'),
+          marks: [{ auto: 'p' }],
+        },
+        {
+          label: l('75 次/分', '75/min', '75 lpm'),
+          ecg: synth('normal', 307, { rate: 75 }),
+          note: l('75 次/分：窦性心律。P 波没变，变的只有 PP 间期。', '75/min: sinus rhythm. The P has not changed, only the PP interval.', '75 lpm: ritmo sinusal. La P no ha cambiado; solo el intervalo PP.'),
+          marks: [{ auto: 'p' }],
+        },
+        {
+          label: l('140 次/分', '140/min', '140 lpm'),
+          ecg: synth('sinus-tachycardia', 307, { rate: 140 }),
+          note: l('140 次/分：P 波骑在前一个 T 波的末端。先找到它，再问为什么快（发热、疼痛、出血、缺氧……）。', '140/min: the P rides on the end of the previous T. Find it, then ask why (fever, pain, bleeding, hypoxia…).', '140 lpm: la P cabalga sobre el final de la T anterior. Búscala y pregúntate por qué (fiebre, dolor, sangrado, hipoxia…).'),
+          // the T wave of one beat and the P wave of the next: at 140/min the P starts before that T has ended
+          marks: [{ auto: 't', beat: 10 }, { auto: 'p', beat: 11 }],
+        },
+      ],
+      predict: {
+        question: l('从 50 到 140 次/分，三条都是窦性。靠什么判断？', 'All three, from 50 to 140/min, are sinus. What tells you?', 'Las tres, de 50 a 140 lpm, son sinusales. ¿Qué te lo dice?'),
+        options: [l('每个 QRS 前都有同样的窦性 P 波', 'The same sinus P before every QRS', 'La misma P sinusal antes de cada QRS'), l('心率在 60–100 次/分之间', 'A rate between 60 and 100/min', 'Una frecuencia entre 60 y 100 lpm'), l('PR 正常', 'A normal PR', 'Un PR normal')],
+        answer: 0,
+      },
       caption: l(
-        '140 次/分时，P 波骑在前一个 T 波的末端。先找到它，再决定一个快速节律是不是“非窦性”。窦性心动过速是一种描述，要问的是“为什么”（发热、疼痛、出血、缺氧……）。',
-        'At 140/min the P wave rides on the end of the previous T wave. Find it before you call a fast rhythm “not sinus”. Sinus tachycardia is a description; the question is why (fever, pain, bleeding, hypoxia…).',
-        'A 140 lpm la onda P cabalga sobre el final de la T anterior. Búscala antes de llamar “no sinusal” a un ritmo rápido. La taquicardia sinusal es una descripción; la pregunta es por qué (fiebre, dolor, sangrado, hipoxia…).',
+        '窦性心律由 P 波决定，不由心率决定。心率快时 P 波会藏进 T 波：先找到它，再说“不是窦性”。',
+        'The P wave decides sinus rhythm, not the rate. At fast rates the P hides in the T: find it before you call a rhythm “not sinus”.',
+        'La P decide el ritmo sinusal, no la frecuencia. Con frecuencias rápidas la P se esconde en la T: búscala antes de llamar “no sinusal” a un ritmo.',
       ),
     },
     { kind: 'check', item: { family: 'sinus', seed: 30 } },
