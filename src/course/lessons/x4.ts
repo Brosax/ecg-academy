@@ -38,16 +38,16 @@ const borderlineAxis: Item = {
   seed: 0,
   kind: 'choice',
   prompt: l(
-    '真实病例：80 岁女性。QRS 在 I 与 aVL 以正向为主，在 II、III、aVF 以负向为主，QRS 约 94 ms。你只能给一句话打“信心 3”——选哪一句？',
-    'A real case: an 80-year-old woman. QRS mainly positive in I and aVL, mainly negative in II, III and aVF, QRS about 94 ms. You may give a confidence of 3 to one statement only — which one?',
-    'Un caso real: mujer de 80 años. QRS predominantemente positivo en I y aVL y negativo en II, III y aVF, QRS de unos 94 ms. Solo puedes dar confianza 3 a una afirmación: ¿a cuál?',
+    '真实病例：80 岁女性。QRS 在 I 与 aVL 以正向为主，在 III、aVF 以负向为主，II 略负，QRS 约 94 ms。你只能给一句话打“信心 3”——选哪一句？',
+    'A real case: an 80-year-old woman. QRS mainly positive in I and aVL, mainly negative in III and aVF, II slightly negative, QRS about 94 ms. You may give a confidence of 3 to one statement only — which one?',
+    'Un caso real: mujer de 80 años. QRS predominantemente positivo en I y aVL, negativo en III y aVF y ligeramente negativo en II, QRS de unos 94 ms. Solo puedes dar confianza 3 a una afirmación: ¿a cuál?',
   ),
   ecg: real(10730),
   view: GRID,
   explanation: l(
-    '电轴约 **−40°**（I 正、aVF 负、II 也是负向为主 → 超过 −30°；12SL 测得 −39°）。“电轴左偏约 −40°”是描述，量得出来，可以给 3。“左前分支阻滞”需要 **−45° 至 −90°**（Surawicz 2009），这里差一点——心脏科医师的标注是 LAFB，测得的电轴是 −39°，所以报告应写“电轴左偏约 −40°，按现行标准未达 LAFB”，对 LAFB 这一句只给 2：核对、复测、与旧图比较。“电轴正常”是错的：II 已经负向。**把信心挂在你量到的东西上，而不是挂在名字上。**',
-    'The axis is about **−40°** (I positive, aVF negative, and II mainly negative too → beyond −30°; 12SL measured −39°). "Left axis deviation, about −40°" is a description you can measure — it earns a 3. "Left anterior fascicular block" needs **−45° to −90°** (Surawicz 2009), and this falls just short — the cardiologists\' label says LAFB and the measured axis is −39°, so the report should read "left axis deviation about −40°, LAFB criteria not met by current thresholds", with only a 2 on the LAFB line: check, re-measure, compare with old tracings. "Normal axis" is wrong: II is already negative. **Attach confidence to what you measured, not to a name.**',
-    'El eje es de unos **−40°** (I positiva, aVF negativa y también II predominantemente negativa → más allá de −30°; el 12SL midió −39°). «Desviación izquierda del eje, de unos −40°» es una descripción que se puede medir: se gana un 3. «Bloqueo fascicular anterior izquierdo» exige **−45° a −90°** (Surawicz 2009), y aquí se queda justo corto; la etiqueta de los cardiólogos dice BFAI y el eje medido es de −39°, así que el informe debe decir «desviación izquierda del eje de unos −40°, sin criterios actuales de BFAI», con solo un 2 en la línea del BFAI: comprobar, volver a medir y comparar con previos. «Eje normal» es erróneo: II ya es negativa. **Pon la confianza en lo que has medido, no en un nombre.**',
+    '电轴约 **−40°**（I 正、aVF 负、II 也略负 → 超过 −30°；12SL 测得 −39°）。“电轴左偏约 −40°”是描述，量得出来，可以给 3。“左前分支阻滞”需要 **−45° 至 −90°**（Surawicz 2009），这里差一点——心脏科医师的标注是 LAFB，测得的电轴是 −39°，所以报告应写“电轴左偏约 −40°，按现行标准未达 LAFB”，对 LAFB 这一句只给 2：核对、复测、与旧图比较。“电轴正常”是错的：II 已经略负。**把信心挂在你量到的东西上，而不是挂在名字上。**',
+    'The axis is about **−40°** (I positive, aVF negative, and II slightly negative too → beyond −30°; 12SL measured −39°). "Left axis deviation, about −40°" is a description you can measure — it earns a 3. "Left anterior fascicular block" needs **−45° to −90°** (Surawicz 2009), and this falls just short — the cardiologists\' label says LAFB and the measured axis is −39°, so the report should read "left axis deviation about −40°, LAFB criteria not met by current thresholds", with only a 2 on the LAFB line: check, re-measure, compare with old tracings. "Normal axis" is wrong: II is already slightly negative. **Attach confidence to what you measured, not to a name.**',
+    'El eje es de unos **−40°** (I positiva, aVF negativa y también II ligeramente negativa → más allá de −30°; el 12SL midió −39°). «Desviación izquierda del eje, de unos −40°» es una descripción que se puede medir: se gana un 3. «Bloqueo fascicular anterior izquierdo» exige **−45° a −90°** (Surawicz 2009), y aquí se queda justo corto; la etiqueta de los cardiólogos dice BFAI y el eje medido es de −39°, así que el informe debe decir «desviación izquierda del eje de unos −40°, sin criterios actuales de BFAI», con solo un 2 en la línea del BFAI: comprobar, volver a medir y comparar con previos. «Eje normal» es erróneo: II ya es ligeramente negativa. **Pon la confianza en lo que has medido, no en un nombre.**',
   ),
   findings: ['lad', 'lafb'],
   key: {
