@@ -8,8 +8,8 @@ import { describe, expect, it } from 'vitest';
 import type { Block, Lesson } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
 import { REGISTERED } from '../../src/course/lessons/index';
-import { realisedDials, startDials } from '../../src/course/live';
-import { baselineBefore, qrsWaves } from '../../src/course/marks';
+import { realisedDials, startDials, sweepValues } from '../../src/course/live';
+import { baselineBefore, MIN_WAVE_MV, qrsWaves } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
 import type { L10n } from '../../src/core/l10n';
@@ -412,7 +412,22 @@ describe('s3: sinus rhythm on the tracings', () => {
     });
     expect(Math.abs(pw(frames[0], 'II').max - pw(frames[1], 'II').max)).toBeLessThan(0.01);
   });
-  it('P-axis sweep notes: III flat or slightly negative at 20–30; III and aVL small at 35–55; aVL flat or slightly negative with III upright at 60–70; I and II upright and aVR negative throughout, aVF upright from 35', () => {
+  it('P-axis sweep notes: III flat or slightly negative at 20–30 with a small upright aVF; III and aVL small at 35–55; aVL flat or slightly negative with III upright at 60–70; I, II, aVF upright and aVR negative at every step (no opposite wave of 0.5 mm), changing only in size', () => {
+    const sc = scenarios().find((s) => s.id === 'normal')!;
+    for (const v of sweepValues('pAxis', sc.dials.pAxis!, 20, 70)) {
+      const e = played('s3', 0, v);
+      for (const l of ['I', 'II', 'aVF'] as const) {
+        expect(pw(e, l).max, `${v}° ${l}`).toBeGreaterThan(0.03);
+        expect(pw(e, l).min, `${v}° ${l}`).toBeGreaterThan(-MIN_WAVE_MV);
+      }
+      for (const l of ['II', 'aVF'] as const) expect(pw(e, l).max, `${v}° ${l}`).toBeGreaterThan(MIN_WAVE_MV);
+      expect(pw(e, 'aVR').min, `${v}° aVR`).toBeLessThan(-MIN_WAVE_MV);
+      expect(pw(e, 'aVR').max, `${v}° aVR`).toBeLessThan(MIN_WAVE_MV);
+      if (v <= 30) expect(pw(e, 'aVF').max, `${v}° aVF small`).toBeLessThan(0.1);
+    }
+    const [lo, hi] = [played('s3', 0, 20), played('s3', 0, 70)];
+    expect(pw(hi, 'I').net).toBeLessThan(pw(lo, 'I').net);
+    for (const l of ['II', 'aVF'] as const) expect(pw(hi, l).net, l).toBeGreaterThan(pw(lo, l).net);
     for (const v of [20, 30, 35, 55, 60, 70]) {
       const e = played('s3', 0, v);
       expect(Math.abs(e.truth!.axisDeg.p! - v), `${v}°`).toBeLessThan(3);
@@ -432,7 +447,7 @@ describe('s3: sinus rhythm on the tracings', () => {
       }
     }
   });
-  it('variability sweep notes: PP spread > 120 ms at 0.10–0.139 and 230–290 ms at 0.14–0.18, with a PR of 160 ms on every beat', () => {
+  it('variability sweep notes: PP spread > 120 ms at 0.10–0.139 and 230–290 ms at 0.14–0.18, with a PR of 160 ms and the same P height in II on every beat', () => {
     for (const v of [0.1, 0.139, 0.14, 0.18]) {
       const e = played('s3', 1, v);
       const beats = e.truth!.beats;
@@ -444,6 +459,8 @@ describe('s3: sinus rhythm on the tracings', () => {
         expect(spread, `${v}`).toBeLessThan(295);
       }
       for (const b of beats) expect(Math.abs(b.qrsOn - b.pOn! - 160), `${v}`).toBeLessThan(5);
+      const heights = beats.map((b) => pw(e, 'II', b).max);
+      expect(Math.max(...heights) - Math.min(...heights), `${v} P height`).toBeLessThan(0.005);
     }
   });
   it('long-PR check: sinus P (upright I, II, aVF; negative aVR), PR about 220 ms, rate under 60', () => {

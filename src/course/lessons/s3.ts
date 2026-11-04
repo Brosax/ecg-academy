@@ -100,20 +100,28 @@ const lesson: Lesson = {
         from: 20,
         to: 70,
         notes: [
-          { min: 20, max: 30, text: l('I、II 的 P 波直立，aVR 倒置。**III** 的 P 波低平或略倒置：仍是窦性。', 'P upright in I and II, negative in aVR. In **III** it is flat or slightly negative: still sinus.', 'P positiva en I y II, negativa en aVR. En **III** es plana o algo negativa: sigue siendo sinusal.') },
+          {
+            min: 20,
+            max: 30,
+            text: l(
+              'I、II 的 P 波直立，aVR 倒置，aVF 小而直立。**III** 的 P 波低平或略倒置：仍是窦性。',
+              'P upright in I and II, negative in aVR, small but upright in aVF. In **III** it is flat or slightly negative: still sinus.',
+              'P positiva en I y II, negativa en aVR, pequeña pero positiva en aVF. En **III** es plana o algo negativa: sigue siendo sinusal.',
+            ),
+          },
           { min: 35, max: 55, text: l('I、II、aVF 直立，aVR 倒置；III 和 aVL 的 P 波都很小：典型的窦性 P 波。', 'Upright in I, II and aVF, negative in aVR; small in III and aVL: the classic sinus P.', 'Positiva en I, II y aVF, negativa en aVR; pequeña en III y aVL: la P sinusal típica.') },
           { min: 60, max: 70, text: l('现在 **aVL** 的 P 波低平或略倒置，III 直立：仍是窦性。I、II、aVF 直立，aVR 倒置。', 'Now **aVL** is flat or slightly negative and III upright: still sinus. I, II and aVF upright, aVR negative.', 'Ahora **aVL** es plana o algo negativa y III positiva: sigue siendo sinusal. I, II y aVF positivas, aVR negativa.') },
         ],
       },
       predict: {
-        question: l('P 波电轴从 +20° 转到 +70°，哪些导联的 P 波始终不变？', 'As the P axis turns from +20° to +70°, which leads keep the same P?', 'Si el eje de la P gira de +20° a +70°, ¿qué derivaciones mantienen la misma P?'),
-        options: [l('I、II 直立，aVR 倒置', 'I and II upright, aVR negative', 'I y II positivas, aVR negativa'), l('III 和 aVL', 'III and aVL', 'III y aVL'), l('六个肢体导联全部', 'All six limb leads', 'Las seis derivaciones de miembros')],
+        question: l('P 波电轴从 +20° 转到 +70°，哪些导联的 P 波始终保持方向？', 'As the P axis turns from +20° to +70°, which leads keep the direction of their P?', 'Si el eje de la P gira de +20° a +70°, ¿qué derivaciones mantienen la dirección de su P?'),
+        options: [l('I、II、aVF 直立，aVR 倒置', 'I, II and aVF upright, aVR negative', 'I, II y aVF positivas, aVR negativa'), l('III 和 aVL', 'III and aVL', 'III y aVL'), l('六个肢体导联全部', 'All six limb leads', 'Las seis derivaciones de miembros')],
         answer: 0,
       },
       caption: l(
-        '窦性 P 波电轴在 0° 至 +75° 之间。转动它：III 和 aVL 的 P 波会变，I、II 和 aVR 不变。',
-        'A sinus P axis lies between 0° and +75°. Turn it: the P in III and aVL changes, the P in I, II and aVR does not.',
-        'El eje de la P sinusal está entre 0° y +75°. Gíralo: la P de III y aVL cambia; la de I, II y aVR, no.',
+        '窦性 P 波电轴在 0° 至 +75° 之间。转动它：III 和 aVL 的 P 波翻转方向；I、II、aVF 保持直立、aVR 保持倒置，只是大小在变。',
+        'A sinus P axis lies between 0° and +75°. Turn it: the P in III and aVL changes direction; I, II and aVF stay upright and aVR negative, changing only in size.',
+        'El eje de la P sinusal está entre 0° y +75°. Gíralo: la P de III y aVL cambia de dirección; I, II y aVF siguen positivas y aVR negativa, y solo cambia su tamaño.',
       ),
     },
     {
