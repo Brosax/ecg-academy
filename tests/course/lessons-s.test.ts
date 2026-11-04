@@ -772,7 +772,7 @@ describe('s6: ST measurement on the tracings', () => {
     const label = m && 'label' in m && m.label ? (typeof m.label === 'string' ? m.label : m.label.en) : '';
     return /ST ([+−±]\d+\.\d) mm/.exec(label)?.[1] ?? label;
   };
-  it('worked (anterior): V2 about 2.6 mm at J with a read-out of +3.0, V3 about 3.3 mm at J with +3.8, read-outs V4 +2.2 and V1 +1.3; at J aVL up by less than 1 mm and I almost flat but on the same side; read-outs III −1.3 and aVF −1.0', () => {
+  it('worked (anterior): V2 about 2.6 mm at J with a read-out of +3.0, V3 about 3.3 mm at J with +3.8, read-outs V4 +2.2 and V1 +1.3; at J aVL up by less than 1 mm (same side) and I flat; read-outs III −1.3 and aVF −1.0', () => {
     const e = ecgOf(blocksOf('s6', 'worked')[0].ecg);
     expect(Math.abs(stAt(e, 'V2') - 0.26)).toBeLessThanOrEqual(0.015);
     expect(Math.abs(stAt(e, 'V3') - 0.33)).toBeLessThanOrEqual(0.015);
@@ -782,8 +782,7 @@ describe('s6: ST measurement on the tracings', () => {
       expect(stAt(e, l, 60), l).toBeLessThan(0.1);
     }
     expect(stAt(e, 'aVL')).toBeGreaterThan(MIN_WAVE_MV);
-    expect(stAt(e, 'I')).toBeGreaterThan(0);
-    expect(stAt(e, 'I')).toBeLessThanOrEqual(MIN_WAVE_MV);
+    expect(Math.abs(stAt(e, 'I'))).toBeLessThanOrEqual(MIN_WAVE_MV);
   });
   it('live: more injury current raises V3 and lowers III (reciprocity)', () => {
     const b = blocksOf('s6', 'live')[0];

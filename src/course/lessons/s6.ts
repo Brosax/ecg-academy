@@ -102,9 +102,9 @@ const lesson: Lesson = {
         '¿En qué derivaciones está desplazado el ST y cuánto? Nombra las derivaciones antes de seguir leyendo.',
       ),
       reveal: l(
-        '**II、III、aVF** 的 ST 段抬高约 1.5–2 mm（III 最高），**aVL** 和 I 的 ST 段压低。下壁导联互相相邻，每个都 ≥ 1 mm，对侧又有镜像改变：符合下壁闭塞的 ST 抬高标准。本课讲怎么测量；第 I1–I4 课再讲怎么解读。',
-        'ST elevation of about 1.5–2 mm in **II, III and aVF** (largest in III), with ST depression in **aVL** and I. The inferior leads are contiguous, each is ≥ 1 mm, and the opposite side shows the mirror image: this meets the ST-elevation criteria for an inferior occlusion. This lesson is about measuring it; lessons I1–I4 interpret it.',
-        'Elevación del ST de unos 1,5–2 mm en **II, III y aVF** (máxima en III), con descenso del ST en **aVL** y en I. Las derivaciones inferiores son contiguas, cada una ≥ 1 mm, y el lado opuesto muestra la imagen especular: cumple los criterios de elevación del ST de una oclusión inferior. Esta lección trata de cómo medirlo; las lecciones I1–I4 lo interpretan.',
+        '**II、III、aVF** 的 ST 段在 J 点抬高约 1.5–2 mm（III 最高），**aVL** 和 I 的 ST 段压低。下壁导联互相相邻，每个都 ≥ 1 mm，对侧又有镜像改变：符合下壁闭塞的 ST 抬高标准。本课讲怎么测量；第 I1–I4 课再讲怎么解读。',
+        'ST elevation at the J point of about 1.5–2 mm in **II, III and aVF** (largest in III), with ST depression in **aVL** and I. The inferior leads are contiguous, each is ≥ 1 mm, and the opposite side shows the mirror image: this meets the ST-elevation criteria for an inferior occlusion. This lesson is about measuring it; lessons I1–I4 interpret it.',
+        'Elevación del ST en el punto J de unos 1,5–2 mm en **II, III y aVF** (máxima en III), con descenso del ST en **aVL** y en I. Las derivaciones inferiores son contiguas, cada una ≥ 1 mm, y el lado opuesto muestra la imagen especular: cumple los criterios de elevación del ST de una oclusión inferior. Esta lección trata de cómo medirlo; las lecciones I1–I4 lo interpretan.',
       ),
     },
     {
@@ -151,9 +151,9 @@ const lesson: Lesson = {
         {
           title: l('相邻导联', 'Contiguous leads', 'Derivaciones contiguas'),
           body: l(
-            'ST 抬高出现在相邻的导联：V2–V4 明显（V4 读数 2.2 mm），V1 读数 1.3 mm。诊断标准要求 ≥ 2 个相邻导联。aVL 抬高不到 1 mm，I 几乎平坦：达不到界值，但方向一致。',
-            'The ST elevation sits in neighbouring leads: clearly in V2–V4 (V4 reads 2.2 mm) and in V1 (1.3 mm). The criteria need at least 2 contiguous leads. aVL rises by less than 1 mm and I is almost flat: below the threshold, but pointing the same way.',
-            'La elevación del ST aparece en derivaciones vecinas: claramente en V2–V4 (V4 marca 2,2 mm) y en V1 (1,3 mm). Los criterios exigen al menos 2 derivaciones contiguas. aVL sube menos de 1 mm e I está casi plana: no llegan al umbral, pero van en la misma dirección.',
+            'ST 抬高出现在相邻的导联：V2–V4 明显（V4 读数 2.2 mm），V1 读数 1.3 mm。诊断标准要求 ≥ 2 个相邻导联。J 点处 aVL 抬高不到 1 mm，方向一致；I 导联平坦。',
+            'The ST elevation sits in neighbouring leads: clearly in V2–V4 (V4 reads 2.2 mm) and in V1 (1.3 mm). The criteria need at least 2 contiguous leads. At the J point aVL rises by less than 1 mm, the same way; I is flat.',
+            'La elevación del ST aparece en derivaciones vecinas: claramente en V2–V4 (V4 marca 2,2 mm) y en V1 (1,3 mm). Los criterios exigen al menos 2 derivaciones contiguas. En el punto J, aVL sube menos de 1 mm, en la misma dirección; I está plana.',
           ),
           marks: [{ auto: 'st60', lead: 'V4' }, { auto: 'st60', lead: 'V1' }],
           highlightLeads: ['V1', 'V2', 'V3', 'V4'],
@@ -267,7 +267,7 @@ const lesson: Lesson = {
           label: l('左束支阻滞', 'LBBB', 'Bloqueo de rama izquierda'),
           ecg: synth('lbbb', 608),
           note: l(
-            'V1–V2 的 ST 抬高 2–2.5 mm，超过界值，但不到前面 S 波的 1/4（QRS 约 150 ms）：按 Smith 比值不过度（第 I10 课）。',
+            'V1–V2 ST 抬高 2–2.5 mm，超过界值，但不到前面 S 波的 1/4（QRS 约 150 ms）：按 Smith 比值不算过度（第 I10 课）。',
             'ST up 2–2.5 mm in V1–V2, over the limits, but under a quarter of the depth of the S before it (QRS about 150 ms): not excessive by Smith’s ratio (lesson I10).',
             'ST elevado 2–2,5 mm en V1–V2, por encima de los umbrales, pero menos de un cuarto de la profundidad de la S que lo precede (QRS de unos 150 ms): no es excesivo según el cociente de Smith (lección I10).',
           ),
