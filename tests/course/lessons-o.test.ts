@@ -868,6 +868,46 @@ describe('o8: deep T inversion on the tracings', () => {
     }
     for (const l of ['V1', 'V4'] as const) expect(tw(b, l).min, l).toBeGreaterThan(tw(b, 'V2').min);
   });
+  it('family film: Wellens biphasic in V3 with R kept, no Q, ST barely up; cerebral T ≈ 14 mm in V4 with QT ≈ 535 ms at 68/min; apical HCM deepest in V4 ≈ 20 mm with R ≈ 21 mm in V6; secondary T against a tall-R, deep-S QRS in I, aVL, V5–V6', () => {
+    const [wellens, cerebral, hcm, secondary] = frames('o8', 0);
+    expect(tw(wellens, 'V3').max).toBeGreaterThan(0.05);
+    expect(tw(wellens, 'V3').min).toBeLessThan(-0.05);
+    expect(qrs(wellens, 'V3').max).toBeGreaterThan(0.8);
+    for (const l of ['V2', 'V3'] as const) {
+      expect(roles(wellens, l).startsWith('q'), l).toBe(false);
+      expect(Math.abs(stAt(wellens, l)), l).toBeLessThan(0.1);
+    }
+    expect(tw(cerebral, 'V4').min).toBeGreaterThan(-1.45);
+    expect(tw(cerebral, 'V4').min).toBeLessThan(-1.35);
+    for (const l of ['V2', 'V3', 'V4', 'V5', 'V6', 'I', 'II', 'aVF'] as const) expect(tInverted(cerebral, l), l).toBe(true);
+    expect(Math.abs(cerebral.truth!.qtMs - 535)).toBeLessThan(5);
+    expect(Math.abs(cerebral.truth!.hrBpm - 68)).toBeLessThan(1);
+    expect(tw(hcm, 'V4').min).toBeGreaterThan(-2.05);
+    expect(tw(hcm, 'V4').min).toBeLessThan(-1.95);
+    for (const l of ['V1', 'V2', 'V3', 'V5', 'V6'] as const) expect(tw(hcm, 'V4').min, l).toBeLessThan(tw(hcm, l).min);
+    for (const l of ['V1', 'V2', 'V3'] as const) expect(qrs(hcm, l).min, l).toBeLessThan(-1.5);
+    expect(qrs(hcm, 'V6').max).toBeGreaterThan(2.05);
+    expect(qrs(hcm, 'V6').max).toBeLessThan(2.15);
+    expect(qrs(secondary, 'V6').max).toBeGreaterThan(1.5);
+    expect(qrs(secondary, 'V2').min).toBeLessThan(-2);
+    for (const l of ['I', 'aVL', 'V5', 'V6'] as const) expect(tInverted(secondary, l), l).toBe(true);
+  });
+  it('memory film: RV pacing QRS ≈ 160 ms negative in III, aVF, V1; own rhythm QRS ≈ 95 ms with T inverted where the paced QRS was negative; Shvilkin depths ≈ 7 mm in V1 vs ≈ 4 mm in III', () => {
+    const [paced, own, check] = frames('o8', 1);
+    expect(Math.abs(paced.truth!.qrsMs - 160)).toBeLessThan(5);
+    for (const l of ['III', 'aVF', 'V1'] as const) {
+      expect(qrs(paced, l).max, l).toBeLessThan(0.05);
+      expect(tInverted(own, l), l).toBe(true);
+    }
+    expect(tInverted(own, 'V2')).toBe(true);
+    expect(Math.abs(own.truth!.qrsMs - 95)).toBeLessThan(5);
+    expect(blocksOf('o8', 'film')[1].frames[2].ecg).toEqual(blocksOf('o8', 'film')[1].frames[1].ecg);
+    expect(tw(check, 'V1').min).toBeGreaterThan(-0.78);
+    expect(tw(check, 'V1').min).toBeLessThan(-0.68);
+    expect(Math.min(...(['V1', 'V2', 'V3', 'V4', 'V5', 'V6'] as const).map((l) => tw(check, l).min))).toBe(tw(check, 'V1').min);
+    expect(tw(check, 'III').min).toBeGreaterThan(-0.47);
+    expect(tw(check, 'III').min).toBeLessThan(-0.37);
+  });
   it('apical HCM: giant inversion in V4 (> 1 mV), deepest in V4–V5, deep S in V1–V3, tall R in V6', () => {
     const e = ecgOf(contrastTitled('o8', 'Giant inverted T: apical HCM or Wellens type B?').left.ecg);
     expect(tw(e, 'V4').min).toBeLessThan(-1.0);

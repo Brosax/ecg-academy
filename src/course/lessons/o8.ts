@@ -92,15 +92,6 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('深倒 T 波的非缺血家族', 'The non-ischaemic deep-T family', 'La familia no isquémica de la T negativa profunda'),
-      body: l(
-        '看到深倒 T 波先过一遍名单：\n- **Wellens**（i8）：无痛期，V2–V3 双相（先正后负）或深而对称的倒置，R 波保留、无 Q 波、ST 几乎不抬高——**唯一必须立刻行动的深倒 T**（临界前降支近端狭窄）；\n- **脑源性 T**：神经事件 + QT 显著延长 + 深、宽、跨区域的倒置；\n- **心动过速后 T**：室上速或室速终止后一过性倒置，数小时到数天恢复；\n- **心脏记忆**：起搏、间歇性左束支阻滞或预激之后，正常 QRS 的 T 波“记住”异常 QRS 的方向；\n- **心尖肥厚型心肌病**：高电压 + V4–V5 巨大倒置 T，无胸痛；\n- **应激性心肌病（Takotsubo）晚期**、**肺栓塞**（V1–V4 + III）、**幼年型 / 运动员变异**（s7）；\n- **继发性 T**（束支阻滞、左室肥厚，r6、h2）——QRS 本身就异常，别单独报 T。\n再强调一次：T 波倒置本身不诊断缺血，**组合与上下文**才诊断。',
-        'Run the list whenever you see deep T inversion:\n- **Wellens** (i8): pain-free, biphasic (up then down) or deep symmetric inversion in V2–V3, preserved R waves, no Q, barely any ST elevation — **the one deep T that demands immediate action** (a critical proximal LAD stenosis);\n- **cerebral T**: neurological event + very long QT + deep, wide inversion across territories;\n- **post-tachycardia T**: transient inversion after SVT or VT ends, recovering over hours to days;\n- **cardiac memory**: after pacing, intermittent LBBB or pre-excitation, the T of the normal QRS "remembers" the abnormal QRS direction;\n- **apical HCM**: high voltage + giant T inversion in V4–V5, no chest pain;\n- **late takotsubo**, **pulmonary embolism** (V1–V4 + III), **juvenile / athlete variants** (s7);\n- **secondary T** (bundle-branch block, LVH — r6, h2): the QRS itself is abnormal; never report the T alone.\nAnd once more: T inversion alone does not diagnose ischaemia — **the combination and the context** do.',
-        'Recorre la lista siempre que veas una T negativa profunda:\n- **Wellens** (i8): sin dolor, T bifásica (positiva y luego negativa) o profunda y simétrica en V2–V3, R conservadas, sin Q y casi sin elevación del ST: **la única T negativa que exige actuar ya** (estenosis crítica proximal de la DA);\n- **T cerebrales**: evento neurológico + QT muy largo + inversión profunda y ancha que cruza territorios;\n- **T postaquicardia**: inversión transitoria al terminar una TSV o una TV, que se recupera en horas o días;\n- **memoria cardiaca**: tras estimulación, BRI intermitente o preexcitación, la T del QRS normal "recuerda" la dirección del QRS anómalo;\n- **miocardiopatía hipertrófica apical**: alto voltaje + T negativa gigante en V4–V5, sin dolor torácico;\n- **tako-tsubo tardío**, **tromboembolismo pulmonar** (V1–V4 + III), **variantes juvenil y del deportista** (s7);\n- **T secundaria** (bloqueo de rama, HVI: r6, h2): el QRS ya es anómalo; nunca informes la T sola.\nY otra vez: la inversión de la T por sí sola no diagnostica isquemia; lo hacen **la combinación y el contexto**.',
-      ),
-    },
-    {
       kind: 'criteria',
       title: l('深倒 T 波的鉴别', 'The deep-T differential', 'El diagnóstico diferencial de la T negativa profunda'),
       items: [
@@ -111,6 +102,47 @@ const lesson: Lesson = {
         { label: l('心动过速后 T', 'Post-tachycardia T', 'T postaquicardia'), value: l('心动过速终止后一过性倒置，自行恢复（仍需结合临床排除缺血）', 'Transient inversion after a tachycardia ends; resolves on its own (still exclude ischaemia clinically)', 'Inversión transitoria tras terminar la taquicardia; se recupera sola (aun así, descarta la isquemia clínicamente)') },
       ],
       source: 'Shvilkin A et al. Heart Rhythm 2005;2:1072-1078; Byrne RA et al. 2023 ESC Guidelines for the management of acute coronary syndromes. Eur Heart J 2023;44:3720-3826; Arbelo E et al. 2023 ESC Guidelines for the management of cardiomyopathies. Eur Heart J 2023;44:3503-3626',
+    },
+    {
+      kind: 'film',
+      title: l('深倒置T波家族', 'The deep-T family', 'La familia de la T profunda'),
+      view: { layout: '3x4+1', highlightLeads: ['V2', 'V3', 'V4', 'V5'] },
+      frames: [
+        {
+          label: l('Wellens综合征', 'Wellens', 'Wellens'),
+          ecg: synth('wellens', 1550),
+          note: l('Wellens：疼痛已过，V3的T波先上后下（双相），R波保留，没有Q波，ST几乎不抬高。唯一不能等的深T。', 'Wellens: the pain has gone, the T in V3 goes up then down, the R is preserved, no Q, the ST barely raised. The one deep T that cannot wait.', 'Wellens: el dolor ya pasó, la T de V3 sube y luego baja, la R se conserva, sin Q y con el ST apenas elevado. La única T profunda que no puede esperar.'),
+          marks: [{ auto: 't', lead: 'V3' }, { auto: 'r', lead: 'V3' }],
+        },
+        {
+          label: l('脑源性T波', 'Cerebral T', 'T cerebral'),
+          ecg: synth('cerebral-t', 1551),
+          note: l('脑源性T：V2–V6及I、II、aVF深而宽地倒置（V4约14 mm），QT很长（68次/分时约535 ms）。', 'Cerebral T: deep, wide inversion in V2–V6 and in I, II and aVF (about 14 mm in V4), with a very long QT (about 535 ms at 68/min).', 'T cerebral: inversión profunda y ancha en V2–V6 y en I, II y aVF (unos 14 mm en V4), con un QT muy largo (unos 535 ms a 68 lpm).'),
+          marks: [{ auto: 't', lead: 'V4' }, { auto: 'qt', lead: 'V4' }],
+        },
+        {
+          label: l('心尖肥厚型心肌病', 'Apical HCM', 'MCH apical'),
+          ecg: synth('apical-hcm', 1552),
+          note: l('心尖HCM：巨大倒置，V4最深（约20 mm），电压很高（V1–V3深S，V6 R波约21 mm）。无胸痛，多年不变。', 'Apical HCM: giant inversion, deepest in V4 (about 20 mm), with huge voltage (deep S in V1–V3, an R of about 21 mm in V6). No pain, unchanged for years.', 'MCH apical: inversión gigante, máxima en V4 (unos 20 mm), con voltaje enorme (S profunda en V1–V3, R de unos 21 mm en V6). Sin dolor, igual durante años.'),
+          marks: [{ auto: 't', lead: 'V4' }, { auto: 'r', lead: 'V6' }],
+        },
+        {
+          label: l('继发性T波', 'Secondary T', 'T secundaria'),
+          ecg: synth('lvh-strain', 1553),
+          note: l('继发性T：QRS本身异常（V6高R、V2深S），T波在I、aVL、V5–V6与之反向。不要单独解读T波。', 'Secondary T: the QRS itself is abnormal (tall R in V6, deep S in V2) and the T points against it in I, aVL and V5–V6. Never read the T alone.', 'T secundaria: el QRS ya es anómalo (R alta en V6, S profunda en V2) y la T va en contra en I, aVL y V5–V6. Nunca leas la T sola.'),
+          marks: [{ auto: 'r', lead: 'V6' }, { auto: 't', lead: 'V6' }],
+        },
+      ],
+      predict: {
+        question: l('深T家族里，哪一个要尽早冠脉造影，而不是做负荷试验？', 'Which member of the deep-T family needs early angiography, not a stress test?', '¿Qué miembro de la familia de la T profunda necesita una coronariografía precoz y no una prueba de esfuerzo?'),
+        options: [l('Wellens综合征', 'Wellens', 'Wellens'), l('脑源性T波', 'Cerebral T', 'T cerebral'), l('心尖肥厚型心肌病', 'Apical HCM', 'MCH apical')],
+        answer: 0,
+      },
+      caption: l(
+        '每见深倒置T都过一遍清单：先排除Wellens，再想脑源性、记忆、心动过速后、心尖HCM、晚期应激性心肌病、肺栓塞、青少年变异和继发性T。',
+        'Run the list for every deep T: Wellens first, then cerebral, memory, post-tachycardia, apical HCM, late takotsubo, PE, juvenile variants and secondary T.',
+        'Repasa la lista ante toda T profunda: primero Wellens, luego cerebral, memoria, postaquicardia, MCH apical, takotsubo tardío, TEP, variantes juveniles y T secundaria.',
+      ),
     },
     {
       kind: 'worked',
@@ -141,14 +173,53 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'ecg',
-      ecg: synth('cardiac-memory', 1542),
-      view: { layout: '3x4+1', highlightLeads: ['I', 'aVL', 'III', 'V1', 'V2'] },
-      marks: [{ auto: 't', lead: 'aVL' }, { auto: 't', lead: 'III' }, { auto: 't', lead: 'V1' }],
+      kind: 'heart',
+      ecg: synth('paced-ddd', 1542),
+      showConduction: true,
+      emphasize: ['rv-apical'],
       caption: l(
-        '起搏器患者恢复自身心律后：T 波在 III、aVF 和 V1–V3 倒置（V1–V2 最深，约 7 mm），QRS 正常——T 波“记住”了右室心尖起搏时 QRS 的方向。逐条核对 Shvilkin：aVL 的 T **直立** ✓，I 的 T **直立** ✓，胸前最深倒置（约 7 mm）**深于** III（约 4 mm）✓——三条都满足，支持心脏记忆而不是前降支缺血。',
-        'A pacemaker patient back in her own rhythm: the T is inverted in III, aVF and V1–V3 (deepest in V1–V2, about 7 mm) with a normal QRS — the T "remembers" the QRS direction of RV apical pacing. Tick the Shvilkin signs one by one: T in aVL **upright** ✓, T in I **upright** ✓, the deepest precordial inversion (about 7 mm) **deeper** than in III (about 4 mm) ✓ — all three met, favouring cardiac memory over LAD ischaemia.',
-        'Una paciente con marcapasos de vuelta a su ritmo propio: T negativa en III, aVF y V1–V3 (máxima en V1–V2, unos 7 mm) con QRS normal; la T "recuerda" la dirección del QRS de la estimulación apical del VD. Comprueba los signos de Shvilkin uno a uno: T en aVL **positiva** ✓, T en I **positiva** ✓, inversión precordial máxima (unos 7 mm) **mayor** que en III (unos 4 mm) ✓: se cumplen los tres, a favor de la memoria cardiaca frente a la isquemia de la DA.',
+        '从右室心尖起搏：激动从右下向上扩布，QRS宽，在III、aVF和V1为负。起搏几周后复极随之重塑，自身QRS恢复后T波仍会沿着那个方向一段时间。',
+        'Paced from the RV apex, the wave runs up from the bottom right: the QRS is wide and negative in III, aVF and V1. After weeks of this, repolarisation remodels, and the T keeps that direction for a while once the own QRS returns.',
+        'Estimulado desde el ápex del VD, el frente sube desde abajo a la derecha: QRS ancho y negativo en III, aVF y V1. Tras semanas así la repolarización se remodela y la T conserva esa dirección un tiempo cuando vuelve el QRS propio.',
+      ),
+    },
+    {
+      kind: 'film',
+      title: l('起搏停止之后', 'After the pacing stops', 'Cuando se para la estimulación'),
+      view: { layout: '3x4+1', highlightLeads: ['I', 'aVL', 'III', 'V1', 'V2'] },
+      frames: [
+        {
+          label: l('起搏', 'Paced', 'Estimulado'),
+          ecg: synth('paced-ddd', 1542),
+          note: l('右室心尖起搏：QRS宽（约160 ms），在III、aVF和V1为负。', 'RV apical pacing: a wide QRS (about 160 ms), negative in III, aVF and V1.', 'Estimulación apical del VD: QRS ancho (unos 160 ms), negativo en III, aVF y V1.'),
+          marks: [{ auto: 'pacing-spike' }, { auto: 'qrs', lead: 'III' }],
+        },
+        {
+          label: l('自身节律', 'Own rhythm', 'Ritmo propio'),
+          ecg: synth('cardiac-memory', 1542),
+          note: l('停止起搏，QRS正常（约95 ms），但III、aVF和V1–V2的T波倒置：仍指向起搏QRS的方向。', 'Pacing off, a normal QRS (about 95 ms), yet the T is inverted in III, aVF and V1–V2: it still points where the paced QRS pointed.', 'Sin estimulación, QRS normal (unos 95 ms), pero la T está invertida en III, aVF y V1–V2: sigue apuntando hacia donde iba el QRS estimulado.'),
+          marks: [{ auto: 't', lead: 'III' }, { auto: 't', lead: 'V1' }],
+        },
+        {
+          label: l('Shvilkin检查', 'Shvilkin check', 'Criterios de Shvilkin'),
+          ecg: synth('cardiac-memory', 1542),
+          note: l('aVL的T直立 ✓，I的T直立 ✓；胸导最深倒置（V1约7 mm）深于III（约4 mm）✓。是记忆，不是前降支缺血。', 'T upright in aVL ✓ and in I ✓; the deepest precordial inversion (about 7 mm in V1) is deeper than in III (about 4 mm) ✓. Memory, not LAD ischaemia.', 'T positiva en aVL ✓ y en I ✓; la inversión precordial más profunda (unos 7 mm en V1) supera a la de III (unos 4 mm) ✓. Memoria, no isquemia de la DA.'),
+          marks: [{ auto: 't', lead: 'aVL' }, { auto: 't', lead: 'I' }, { auto: 't', lead: 'III' }, { auto: 't', lead: 'V1' }],
+        },
+      ],
+      predict: {
+        question: l('右室起搏几周后恢复自身QRS。T波会在哪里倒置？', 'After weeks of RV pacing the own QRS returns. Where will the T be inverted?', 'Tras semanas de estimulación del VD vuelve el QRS propio. ¿Dónde estará invertida la T?'),
+        options: [
+          l('III、aVF和V1–V2：起搏QRS为负的导联', 'III, aVF and V1–V2: where the paced QRS was negative', 'III, aVF y V1–V2: donde el QRS estimulado era negativo'),
+          l('I和aVL', 'I and aVL', 'I y aVL'),
+          l('哪里都不倒置', 'Nowhere', 'En ninguna'),
+        ],
+        answer: 0,
+      },
+      caption: l(
+        '起搏、间歇性左束支阻滞或预激之后，正常QRS的T波会“记住”异常QRS的方向。三项Shvilkin征都满足时，倾向心脏记忆。',
+        'After pacing, intermittent LBBB or pre-excitation, the T of the normal QRS “remembers” the abnormal QRS direction. When all three Shvilkin signs are met, think memory.',
+        'Tras la estimulación, un bloqueo de rama izquierda intermitente o la preexcitación, la T del QRS normal «recuerda» la dirección del QRS anómalo. Si se cumplen los tres criterios de Shvilkin, piensa en memoria.',
       ),
     },
     {
