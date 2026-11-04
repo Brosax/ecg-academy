@@ -828,12 +828,13 @@ describe('t5 on the tracings', () => {
 });
 
 describe('t6 on the tracings', () => {
-  it('hook torsades: sinus beats first, QT of the first sinus beat about 560–600 ms; contrast left has a normal QT context', () => {
+  it('hook torsades: sinus beats first, QT of the first sinus beat about 565 ms and its Bazett QTc about 570 ms; contrast left has a normal QT context', () => {
     const e = ecgOf(blocksOf('t6', 'hook')[0].ecg);
-    const first = e.truth!.beats[0];
+    const [first, second] = e.truth!.beats;
     expect(first.kind).toBe('sinus');
-    expect(first.tOff - first.qrsOn).toBeGreaterThan(540);
-    expect(first.tOff - first.qrsOn).toBeLessThan(620);
+    const qt = first.tOff - first.qrsOn;
+    expect(Math.abs(qt - 565)).toBeLessThan(5);
+    expect(Math.abs(qt / Math.sqrt((second.qrsOn - first.qrsOn) / 1000) - 570)).toBeLessThan(10);
     expect(e.truth!.findings).toContain('long-qt');
     const left = ecgOf(blocksOf('t6', 'contrast')[0].left.ecg).truth!;
     expect(left.rhythm).toBe('vt-polymorphic');
