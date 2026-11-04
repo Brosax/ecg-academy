@@ -3,13 +3,14 @@
  * The triage bins (act now / review today / routine) are this course's assessment framework and match the `triage`
  * drill: act now = any finding of severity 'critical' in src/core/findings.ts (Brugada type 1 without symptoms is
  * same-day, TRIAGE_OVERRIDE); occlusion urgency per Byrne 2023, unstable bradycardia per Kusumoto 2019 (2018
- * ACC/AHA/HRS), arrest rhythms per Soar 2021 ERC ALS, unstable AF per Van Gelder 2024 ESC, long QT: act now only with QTc ≥ 500 ms or torsades / symptoms
+ * ACC/AHA/HRS), bundle branch block with ongoing ischaemic symptoms managed like STEMI whether new or known (Byrne
+ * 2023), arrest rhythms per Soar 2021 ERC ALS, unstable AF per Van Gelder 2024 ESC, long QT: act now only with QTc ≥ 500 ms or torsades / symptoms
  * such as syncope (AHA 2009 Part IV), otherwise review promptly (same day).
  *
  * ECGs: synthetic infra-His complete AV block (escape ≈ 34/min, QRS ≈ 150 ms, atrial ≈ 78/min), synthetic anterior
  * STEMI (92/min, ST ↑ ≈ 2.5–4.5 mm V2–V4, reciprocal ↓ II/III/aVF), severe hyperkalaemia (QRS ≈ 170 ms, no visible P,
  * peaked T in V3–V5), digoxin effect (PR ≈ 190 ms, sagging ST V4–V6); the triage film adds VF (1846), rapid AF (1847,
- * ≈ 140/min) and a normal tracing (1848), the T-and-device film adds loss of capture (1849). Real PTB-XL: 4408 (M77, sinus tachycardia
+ * 23 QRS in 10 s ≈ 138/min) and a normal tracing (1848), the T-and-device film adds loss of capture (1849). Real PTB-XL: 4408 (M77, sinus tachycardia
  * ≈ 130/min), 7688 (F86, complete AV block, ≈ 40/min, narrow escape), 19269 (F87, acute inferoposterior MI, stadium I),
  * 16151 (F87, complete AV block, ≈ 27/min, wide escape), 19505 (F43, sinus tachycardia ≈ 139/min, otherwise normal).
  */
@@ -116,11 +117,11 @@ const lesson: Lesson = {
           value: l('骤停与室性节律 · 二度 II 型/高度/三度阻滞 · STEMI 及等危症 · 高钾 · 钠通道阻滞剂中毒 · QTc ≥500 ms 或长 QT 伴尖端扭转/晕厥 · 低体温 · 急性肺栓塞 · 起搏器失夺获/感知过度 · 预激房颤', 'Arrest and ventricular rhythms · Mobitz II / high-grade / complete block · STEMI and equivalents · hyperkalaemia · Na-channel-blocker toxicity · QTc ≥ 500 ms, or long QT with torsades / syncope · hypothermia · acute PE · pacing failure to capture / oversensing · pre-excited AF', 'Ritmos de parada y ventriculares · Mobitz II / avanzado / completo · IAMCEST y equivalentes · hiperpotasemia · intoxicación por bloqueantes del sodio · QTc ≥ 500 ms, o QT largo con torsade / síncope · hipotermia · TEP agudo · fallo de captura / sobredetección · FA preexcitada'),
         },
         {
-          label: l('STEMI 等危症（现在处理）', 'STEMI equivalents (act now)', 'Equivalentes de IAMCEST (actuar ya)'),
+          label: l('STEMI 等危症及其他“现在处理”图形', 'STEMI equivalents and other act-now patterns', 'Equivalentes de IAMCEST y otros patrones de actuar ya'),
           value: l(
-            '后壁心梗 · 右心室心梗 · de Winter T 波 · Wellens 图形 · 超急性 T 波 · aVR 抬高伴广泛 ST 压低 · Sgarbossa 阳性的左束支阻滞或起搏心律',
-            'Posterior MI · RV MI · de Winter T waves · Wellens pattern · hyperacute T waves · aVR elevation with diffuse ST depression · Sgarbossa-positive LBBB or paced rhythm',
-            'IAM posterior · IAM del VD · ondas T de De Winter · patrón de Wellens · T hiperagudas · elevación en aVR con descenso difuso del ST · BRI o ritmo de marcapasos con Sgarbossa positivo',
+            '后壁心梗 · 右心室心梗 · de Winter T 波 · 超急性 T 波 · aVR 抬高伴广泛 ST 压低 · Sgarbossa 阳性的左束支阻滞或起搏心律 · 左或右束支阻滞（新发或已知）伴持续缺血症状 · Wellens 图形：此刻不痛，但前降支严重狭窄——立即联系心内科，不做负荷试验',
+            'Posterior MI · RV MI · de Winter T waves · hyperacute T waves · aVR elevation with diffuse ST depression · Sgarbossa-positive LBBB or paced rhythm · LBBB or RBBB, new or known, with ongoing ischaemic symptoms · Wellens pattern: pain-free now, but a critical LAD stenosis — call cardiology now, no stress test',
+            'IAM posterior · IAM del VD · ondas T de De Winter · T hiperagudas · elevación en aVR con descenso difuso del ST · BRI o ritmo de marcapasos con Sgarbossa positivo · bloqueo de rama izquierda o derecha, nuevo o conocido, con síntomas isquémicos en curso · patrón de Wellens: ahora sin dolor, pero con una estenosis crítica de la DA; avisar ya a cardiología, sin prueba de esfuerzo',
           ),
         },
         {
@@ -187,11 +188,11 @@ const lesson: Lesson = {
           label: l('快速房颤', 'Fast AF', 'FA rápida'),
           ecg: synth('atrial-fibrillation', 1847, undefined, 'rapid'),
           note: l(
-            '没有 P 波，RR 绝对不齐，约 140 次/分：**房颤伴快速心室率**。稳定：当天评估（控率、找原因、评估抗凝）；不稳定：现在处理，同步电复律。',
-            'No P waves, RR irregularly irregular, about 140/min: **AF with a fast ventricular rate**. Stable: review today (rate, cause, anticoagulation). Unstable: act now, synchronised cardioversion.',
-            'Sin ondas P, RR irregularmente irregular, unas 140 lpm: **FA con respuesta ventricular rápida**. Estable: revisar hoy (frecuencia, causa, anticoagulación). Inestable: actuar ya, cardioversión sincronizada.',
+            '无 P 波，RR 绝对不齐；10 秒 23 个 QRS×6≈138 次/分：**快速房颤**。稳定：当天评估（控率、病因、抗凝）；不稳定：现在处理，同步电复律。',
+            'No P waves, RR irregularly irregular; 23 QRS in 10 s × 6 ≈ 138/min: **AF with a fast ventricular rate**. Stable: review today (rate, cause, anticoagulation). Unstable: act now, synchronised cardioversion.',
+            'Sin ondas P, RR irregularmente irregular; 23 QRS en 10 s × 6 ≈ 138 lpm: **FA con respuesta ventricular rápida**. Estable: revisar hoy (frecuencia, causa, anticoagulación). Inestable: actuar ya, cardioversión sincronizada.',
           ),
-          marks: [{ auto: 'rr' }],
+          marks: [{ auto: 'rr', beat: 3 }, { auto: 'rr', beat: 4 }],
         },
         {
           label: l('完全性阻滞', 'Complete block', 'Bloqueo completo'),
@@ -301,9 +302,9 @@ const lesson: Lesson = {
         marks: [{ auto: 'qrs', label: l('宽 QRS 逸搏', 'Wide escape QRS', 'QRS de escape ancho') }],
       },
       point: l(
-        '两份都“异常”，箱子相反。左：快，标注为窦性心动过速——它是**症状**，治疗对象是它背后的原因（发热、疼痛、失血、脓毒症、缺氧、休克），不是节律本身；箱子由原因决定，心电图本身最多是“当天”。右：慢而宽，P 与 QRS 各行其道——直接进“现在处理”箱：电极片、起搏。**心率数字不定箱：患者的稳定状态与节律的机制才定箱。**',
-        'Both are "abnormal"; the bins are opposite. Left: fast and labelled sinus tachycardia, which is a **symptom**, and the target of treatment is whatever drives it (fever, pain, blood loss, sepsis, hypoxia, shock), not the rhythm itself; the cause sets the bin, and the tracing on its own is at most "today". Right: slow and wide, P waves marching independently — straight into the act-now bin: pads on, pace. **The heart-rate number does not set the bin; the patient\'s stability and the mechanism of the rhythm do.**',
-        'Ambos son «anormales» y las categorías son opuestas. Izquierda: rápido y etiquetado como taquicardia sinusal, que es un **síntoma** y el objetivo del tratamiento es lo que la provoca (fiebre, dolor, hemorragia, sepsis, hipoxia, shock), no el ritmo en sí; la causa decide la categoría, y el ECG por sí solo como mucho es «hoy». Derecha: lento y ancho, con ondas P independientes; directo a la categoría de actuar ya: parches y estimulación. **El número de frecuencia no decide la categoría; la estabilidad del paciente y el mecanismo del ritmo sí.**',
+        '两份都“异常”，箱子相反。左：快，标注为窦性心动过速——它是身体的**反应**，治疗对象是它背后的原因（发热、疼痛、失血、脓毒症、缺氧、休克），不是节律本身；箱子由原因决定，心电图本身最多是“当天”。右：慢而宽，P 与 QRS 各行其道——直接进“现在处理”箱：电极片、起搏。**心率数字不定箱：患者的稳定状态与节律的机制才定箱。**',
+        'Both are "abnormal"; the bins are opposite. Left: fast and labelled sinus tachycardia, which is a **response**, and the target of treatment is whatever drives it (fever, pain, blood loss, sepsis, hypoxia, shock), not the rhythm itself; the cause sets the bin, and the tracing on its own is at most "today". Right: slow and wide, P waves marching independently — straight into the act-now bin: pads on, pace. **The heart-rate number does not set the bin; the patient\'s stability and the mechanism of the rhythm do.**',
+        'Ambos son «anormales» y las categorías son opuestas. Izquierda: rápido y etiquetado como taquicardia sinusal, que es una **respuesta** y el objetivo del tratamiento es lo que la provoca (fiebre, dolor, hemorragia, sepsis, hipoxia, shock), no el ritmo en sí; la causa decide la categoría, y el ECG por sí solo como mucho es «hoy». Derecha: lento y ancho, con ondas P independientes; directo a la categoría de actuar ya: parches y estimulación. **El número de frecuencia no decide la categoría; la estabilidad del paciente y el mecanismo del ritmo sí.**',
       ),
     },
     {
@@ -364,9 +365,9 @@ const lesson: Lesson = {
       kind: 'real',
       ids: [19269, 16151, 19505],
       caption: l(
-        '三份真实心电图：87 岁女性、87 岁女性、43 岁女性——一份闭塞、一份慢得危险、一份快而良性。**每份只给十秒**：先说出分诊箱与第一动作，再揭晓对照标注与测量。提示：闭塞那份，除了下壁导联，也看看 V1–V3 的 ST 往哪个方向走。',
-        'Three real ECGs: an 87-year-old woman, another 87-year-old woman, a 43-year-old woman — one occlusion, one dangerously slow, one fast and benign. **Ten seconds each**: commit to a bin and a first action before the reveal shows the labels and measurements. A hint: in the occlusion, look beyond the inferior leads at which way the ST goes in V1–V3.',
-        'Tres ECG reales: mujer de 87 años, otra de 87 y una de 43: una oclusión, uno peligrosamente lento y uno rápido y benigno. **Diez segundos para cada uno**: decide la categoría y la primera acción antes de que la solución muestre las etiquetas y las mediciones. Una pista: en la oclusión, mira más allá de las inferiores hacia dónde va el ST en V1-V3.',
+        '三份真实心电图：87 岁女性、87 岁女性、43 岁女性——一份闭塞、一份慢得危险、一份快但其余标注正常。**每份只给十秒**：先说出分诊箱与第一动作，再揭晓对照标注与测量。提示：闭塞那份，除了下壁导联，也看看 V1–V3 的 ST 往哪个方向走。',
+        'Three real ECGs: an 87-year-old woman, another 87-year-old woman, a 43-year-old woman — one occlusion, one dangerously slow, one fast and otherwise labelled normal. **Ten seconds each**: commit to a bin and a first action before the reveal shows the labels and measurements. A hint: in the occlusion, look beyond the inferior leads at which way the ST goes in V1–V3.',
+        'Tres ECG reales: mujer de 87 años, otra de 87 y una de 43: una oclusión, uno peligrosamente lento y uno rápido y, por lo demás, etiquetado como normal. **Diez segundos para cada uno**: decide la categoría y la primera acción antes de que la solución muestre las etiquetas y las mediciones. Una pista: en la oclusión, mira más allá de las inferiores hacia dónde va el ST en V1-V3.',
       ),
     },
     {

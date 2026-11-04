@@ -5,10 +5,11 @@
  *
  * The stream (14 real PTB-XL tracings, only age and sex are known — no clinical vignettes are invented):
  *   normal 5 · 6271 (F60), 2320 (M64), 11459 (F18), 2594 (F58, sinus bradycardia), 14874 (M47, sinus arrhythmia)
- *   minor 4  · 6282 (M42, complete RBBB), 6727 (F28, first-degree AV block), 2466 (F73, PAC), 17835 (M76, PAC)
+ *   minor 4  · 6282 (M42, complete RBBB), 6727 (F28, first-degree AV block), 2466 (F73, PAC + low T / non-specific
+ *              ischaemic ST–T labels, 12SL PR 224 ms), 17835 (M76, PAC)
  *   major 4  · 19170 (M73, AF/flutter labels, ≈ 111/min), 2627 (M45, old inferior MI), 18776 (M35, LVH label),
  *              2739 (M89, atrial flutter ≈ 147/min)
- *   act now 1 · 12899 (F67, acute inferior STEMI, PTB-XL infarction stadium I)
+ *   act now 1 · 12899 (F67, inferior MI in infarction stadium I = acute inferior STEMI, plus an ST-depression label)
  * Films on real tracings point at leads with 'lead' marks only and claim only labels and 12SL values; the synthetic
  * frames (lvh-strain 1851, atrial-flutter 1850 at 2:1 → 4:1) carry AutoMarks.
  */
@@ -46,9 +47,9 @@ const hiddenStemi: Item = {
   ecg: real(12899),
   view: GRID,
   explanation: l(
-    '**现在处理。** II、III、aVF 的 ST 段明显抬高（III 与 aVF 最高），aVL 与 I 镜像压低——**急性下壁 STEMI**（心脏科医师标注：下壁心梗，梗死分期 I＝急性期）。下壁组中两个相邻导联 ≥1 mm 即达标准，这里远超。空白的申请单不改变心电图：立即找到患者、问症状、启动再灌注流程，并加做右胸导联（V4R）找右心室受累。门诊流最危险的时刻，正是连续六份正常之后。',
-    '**Act now.** Clear ST elevation in II, III and aVF (highest in III and aVF) with reciprocal depression in aVL and I — an **acute inferior STEMI** (cardiologists\' label: inferior MI, infarction stadium I = acute). Two contiguous inferior leads at ≥ 1 mm meet the criterion; this is far beyond it. An empty request slip does not change the tracing: find the patient now, ask about symptoms, activate the reperfusion pathway, and record right-sided leads (V4R) to look for RV involvement. The most dangerous moment in a clinic stream is right after six normals in a row.',
-    '**Actuar ya.** Elevación clara del ST en II, III y aVF (máxima en III y aVF) con descenso recíproco en aVL e I: un **IAMCEST inferior agudo** (etiqueta de los cardiólogos: IAM inferior, estadio I = agudo). Dos derivaciones inferiores contiguas con ≥ 1 mm cumplen el criterio, y aquí se supera con creces. Una petición sin datos no cambia el ECG: localiza ya al paciente, pregunta por los síntomas, activa el circuito de reperfusión y registra derivaciones derechas (V4R) para buscar afectación del VD. El momento más peligroso de una serie de consulta es justo después de seis normales seguidos.',
+    '**现在处理。** 心脏科医师标注：**下壁心梗，梗死分期 I（急性期）**，同时标注了 ST 压低——**急性下壁 STEMI**。在图上自己核对：判据是 II、III、aVF 中两个相邻导联 ST 抬高 ≥1 mm，常伴 I/aVL 镜像压低。空白的申请单不改变心电图：立即找到患者、问症状、启动再灌注流程，并加做右胸导联（V4R）找右心室受累。门诊流最危险的时刻，正是一连串不急的图之后。',
+    '**Act now.** The cardiologists labelled an **inferior MI, infarction stadium I (acute)**, with ST depression labelled as well: an **acute inferior STEMI**. Check it on the tracing: the criterion is ST elevation ≥ 1 mm in two contiguous leads of II, III and aVF, often with reciprocal depression in I/aVL. An empty request slip does not change the tracing: find the patient now, ask about symptoms, activate the reperfusion pathway, and record right-sided leads (V4R) to look for RV involvement. The most dangerous moment in a clinic stream is right after a run of tracings that needed nothing urgent.',
+    '**Actuar ya.** Los cardiólogos etiquetaron un **IAM inferior en estadio I (agudo)**, también con descenso del ST: un **IAMCEST inferior agudo**. Compruébalo en el trazado: el criterio es una elevación del ST ≥ 1 mm en dos derivaciones contiguas de II, III y aVF, a menudo con descenso recíproco en I/aVL. Una petición sin datos no cambia el ECG: localiza ya al paciente, pregunta por los síntomas, activa el circuito de reperfusión y registra derivaciones derechas (V4R) para buscar afectación del VD. El momento más peligroso de una serie de consulta es justo después de una racha de ECG sin urgencia.',
   ),
   findings: ['stemi-inferior'],
   key: {
@@ -91,17 +92,17 @@ const lesson: Lesson = {
         'ECG 1 de la serie de consulta: varón de 73 años (la petición no aporta datos clínicos). Antes de continuar: elabora mentalmente tu informe completo en el orden fijo de x1 y cierra con una línea de urgencia.',
       ),
       reveal: l(
-        '节律：任何导联都找不到规则的 P 波，基线是不规则的心房活动（II 导联局部像扑动波），RR 毫无规律——**不规则的房性快速心律失常，心室率约 110 次/分（未控制）**。心脏科医师同时标了心房扑动与心房颤动：粗颤与不等比下传的房扑在单份图上本就难分，而处理是同一条路——控制心室率、找诱因、评估抗凝。报告不止这一行：QRS 约 116 ms（临界增宽）、电轴约 −14°，ST 段仍要逐组读一遍。紧急程度：**当天评估**（无不稳定表现时）。',
-        'Rhythm: no regular P wave in any lead, an irregular atrial baseline (flutter-like in places in II), RR intervals with no pattern at all — **an irregular atrial tachyarrhythmia with a ventricular response of about 110/min (uncontrolled)**. The cardiologists labelled both atrial flutter and atrial fibrillation: coarse AF and flutter with variable conduction are often hard to separate on one tracing, and the management path is the same — control the rate, look for a cause, assess the case for anticoagulation. The report is more than that line: QRS about 116 ms (borderline wide), axis about −14°, and the ST segments still have to be read group by group. Urgency: **review today** (in the absence of instability).',
-        'Ritmo: ninguna derivación muestra ondas P regulares, la línea de base tiene una actividad auricular irregular (con aspecto de aleteo a ratos en II) y los RR no siguen ningún patrón: **una taquiarritmia auricular irregular con respuesta ventricular de unas 110 lpm (no controlada)**. Los cardiólogos etiquetaron a la vez aleteo y fibrilación auricular: una FA gruesa y un aleteo con conducción variable a menudo no se distinguen en un solo ECG, y el manejo es el mismo: controlar la frecuencia, buscar la causa y valorar la anticoagulación. El informe es más que esa línea: QRS de unos 116 ms (en el límite de ancho), eje de unos −14°, y los segmentos ST aún deben leerse por grupos. Urgencia: **revisar hoy** (si no hay inestabilidad).',
+        '节律：12SL 找不到 P 波（没有 PR，也没有 P 电轴），心脏科医师同时标了心房扑动与心房颤动——**房性快速心律失常，心室率约 110 次/分（未控制）**。粗颤与不等比下传的房扑在单份图上本就难分，而处理是同一条路——控制心室率、找诱因、评估抗凝。报告不止这一行：QRS 约 116 ms（临界增宽）、电轴约 −14°，ST 段仍要逐组读一遍。紧急程度：**当天评估**（无不稳定表现时）。',
+        'Rhythm: the 12SL finds no P wave (no PR, no P axis), and the cardiologists labelled both atrial flutter and atrial fibrillation — **an atrial tachyarrhythmia with a ventricular response of about 110/min (uncontrolled)**. Coarse AF and flutter with variable conduction are often hard to separate on one tracing, and the management path is the same — control the rate, look for a cause, assess the case for anticoagulation. The report is more than that line: QRS about 116 ms (borderline wide), axis about −14°, and the ST segments still have to be read group by group. Urgency: **review today** (in the absence of instability).',
+        'Ritmo: el 12SL no encuentra ondas P (ni PR ni eje de la P) y los cardiólogos etiquetaron a la vez aleteo y fibrilación auricular: **una taquiarritmia auricular con respuesta ventricular de unas 110 lpm (no controlada)**. Una FA gruesa y un aleteo con conducción variable a menudo no se distinguen en un solo ECG, y el manejo es el mismo: controlar la frecuencia, buscar la causa y valorar la anticoagulación. El informe es más que esa línea: QRS de unos 116 ms (en el límite de ancho), eje de unos −14°, y los segmentos ST aún deben leerse por grupos. Urgencia: **revisar hoy** (si no hay inestabilidad).',
       ),
     },
     {
       kind: 'text',
       body: l(
-        '今天的门诊流有 14 份真实心电图：**5 份正常**（含一份窦缓、一份窦性心律不齐）、**4 份小发现**（右束支阻滞、一度房室阻滞、两份房早）、**4 份显著发现**（两份房扑/房颤、陈旧性下壁心梗、左心室肥厚电压）、**1 份现在处理**；真实门诊里正常的只会更多。最常见的错误是过度诊断，代价是不必要的转诊、检查和焦虑。每一份都走完 x1 的十步：这就是筛子。',
-        'Today\'s stream holds 14 real ECGs: **5 normal** (one sinus bradycardia, one sinus arrhythmia), **4 with a small finding** (RBBB, first-degree AV block, two with PACs), **4 with a significant finding** (two atrial flutter or AF, an old inferior MI, LVH voltage) and **1 act now**; a real clinic has even more normals. The commonest error is over-calling, and it costs needless referrals, tests and anxiety. Every one gets the ten steps from x1: that is the sieve.',
-        'La serie de hoy tiene 14 ECG reales: **5 normales** (una bradicardia sinusal y una arritmia sinusal), **4 con un hallazgo menor** (bloqueo de rama derecha, bloqueo AV de primer grado, dos con extrasístoles auriculares), **4 con un hallazgo relevante** (dos aleteos o FA, un IAM inferior antiguo, voltaje de HVI) y **1 de actuar ya**; una consulta real tiene aún más normales. El error más frecuente es sobrediagnosticar, y cuesta derivaciones, pruebas y ansiedad innecesarias. Cada uno recibe los diez pasos de x1: ese es el tamiz.',
+        '今天的门诊流有 14 份真实心电图：**5 份正常**（窦缓、窦性心律不齐各一）、**4 份小发现**（右束支阻滞、一度房室阻滞、两份房早，其一另有发现）、**4 份标注为显著**（两份房扑/房颤、陈旧性下壁心梗、左心室肥厚电压：第 8 份问它对他意味着什么）、**1 份现在处理**；真实门诊正常的更多。最常见的错误是过度诊断，代价是多余的转诊、检查和焦虑。每一份都走完 x1 的十步：这就是筛子。',
+        'Today\'s stream holds 14 real ECGs: **5 normal** (one sinus bradycardia, one sinus arrhythmia), **4 with a small finding** (RBBB, first-degree AV block, two with PACs, one of which hides more), **4 labelled significant** (two atrial flutter or AF, an old inferior MI, LVH voltage: tracing 8 asks what it means in him) and **1 act now**; a real clinic has even more normals. The commonest error is over-calling, and it costs needless referrals, tests and anxiety. Every one gets the ten steps from x1: that is the sieve.',
+        'La serie de hoy tiene 14 ECG reales: **5 normales** (una bradicardia sinusal y una arritmia sinusal), **4 con un hallazgo menor** (bloqueo de rama derecha, bloqueo AV de primer grado, dos con extrasístoles auriculares, una de ellas con algo más), **4 etiquetados como relevantes** (dos aleteos o FA, un IAM inferior antiguo, voltaje de HVI: el ECG 8 pregunta qué significa en él) y **1 de actuar ya**; una consulta real tiene aún más normales. El error más frecuente es sobrediagnosticar, y cuesta derivaciones, pruebas y ansiedad innecesarias. Cada uno recibe los diez pasos de x1: ese es el tamiz.',
       ),
     },
     {
@@ -198,9 +199,9 @@ const lesson: Lesson = {
         answer: 0,
       },
       caption: l(
-        '门诊流第 2 份：42 岁男性。先在纸上写十步报告，再揭晓。新发右束支阻滞伴缺血症状才升到“当天”或更高（x3）。',
-        'Tracing 2: a 42-year-old man. Write the ten lines first, then reveal. Only a new RBBB with ischaemic symptoms moves up to "today" or higher (x3).',
-        'ECG 2: varón de 42 años. Escribe primero las diez líneas y luego mira. Solo un bloqueo de rama derecha nuevo con síntomas isquémicos sube a «hoy» o más (x3).',
+        '门诊流第 2 份：42 岁男性。先在纸上写十步报告，再揭晓。右束支阻滞伴持续缺血症状，不论新旧，都属于“现在处理”（x3）。',
+        'Tracing 2: a 42-year-old man. Write the ten lines first, then reveal. An RBBB with ongoing ischaemic symptoms, new or known, is act now (x3).',
+        'ECG 2: varón de 42 años. Escribe primero las diez líneas y luego mira. Un bloqueo de rama derecha con síntomas isquémicos en curso, nuevo o conocido, es de actuar ya (x3).',
       ),
     },
     {
@@ -231,36 +232,36 @@ const lesson: Lesson = {
         {
           title: l('记录、心率、节律', 'Recording, rate, rhythm', 'Registro, frecuencia, ritmo'),
           body: l(
-            '"25 mm/s、10 mm/mV、伪差很小。窦性心律约 80 次/分（RR 轻度呼吸性变化——窦性心律不齐），PR 约 144 ms，QRS 约 88 ms，电轴约 0°。"——到这里一切普通。',
-            '"25 mm/s, 10 mm/mV, minimal artefact. Sinus rhythm at about 80/min (mild respiratory RR variation — sinus arrhythmia), PR about 144 ms, QRS about 88 ms, axis about 0°." — So far, entirely ordinary.',
-            '«25 mm/s, 10 mm/mV, artefacto mínimo. Ritmo sinusal a unas 80 lpm (leve variación respiratoria del RR: arritmia sinusal), PR de unos 144 ms, QRS de unos 88 ms, eje en torno a 0°». Hasta aquí, del todo banal.',
+            '"25 mm/s、10 mm/mV。窦性心律约 80 次/分，标注为窦性心律不齐（RR 随呼吸变化），PR 约 144 ms，QRS 约 88 ms，电轴约 0°。"——到这里一切普通。',
+            '"25 mm/s, 10 mm/mV. Sinus rhythm at about 80/min, labelled sinus arrhythmia (the RR varies with breathing), PR about 144 ms, QRS about 88 ms, axis about 0°." — So far, entirely ordinary.',
+            '«25 mm/s, 10 mm/mV. Ritmo sinusal a unas 80 lpm, etiquetado como arritmia sinusal (el RR varía con la respiración), PR de unos 144 ms, QRS de unos 88 ms, eje en torno a 0°». Hasta aquí, del todo banal.',
           ),
           highlightLeads: ['II'],
         },
         {
           title: l('形态步骤找到了它', 'The morphology step finds it', 'El paso de la morfología lo encuentra'),
           body: l(
-            'III 导联见宽 Q 波，aVF 亦见 q 波；III、aVF 的 T 波低平或倒置，而 I、aVL 直立——**下壁导联组的病理性 Q 波**：这是梗死，不是正常变异（III 导联孤立的小 q 可见于正常人，但这里 Q 波宽而且累及 aVF）。',
-            'Lead III shows a broad Q wave and aVF a q wave too; T is flat or inverted in III and aVF while I and aVL stay upright — **pathological Q waves in the inferior group**: this is infarction, not a variant (an isolated small q in III can be normal, but here the Q is broad and reaches aVF).',
-            'La derivación III muestra una Q ancha y aVF también una q; la T está aplanada o invertida en III y aVF mientras I y aVL siguen positivas: **ondas Q patológicas en el grupo inferior**. Esto es un infarto, no una variante (una q pequeña aislada en III puede ser normal, pero aquí la Q es ancha y alcanza aVF).',
+            '现在看 II、III、aVF 的 Q 波：心脏科医师标注了 **Q 波**和**下壁心梗**。拿判据卡量一量（两个相邻导联 ≥30 ms 且 ≥1 mm，或 QS）：下壁组的病理性 Q 波是梗死，不是正常变异；只有 III 导联孤立的小 q 可见于正常人。',
+            'Now the Q waves of II, III and aVF: the cardiologists labelled **Q waves** and an **inferior infarction**. Measure them against the criteria card (≥ 30 ms and ≥ 1 mm, or QS, in two contiguous leads): a pathological Q in the inferior group is infarction, not a variant; only a small q isolated in III can be normal.',
+            'Ahora las Q de II, III y aVF: los cardiólogos etiquetaron **ondas Q** y un **infarto inferior**. Mídelas con la tarjeta de criterios (≥ 30 ms y ≥ 1 mm, o QS, en dos derivaciones contiguas): una Q patológica en el grupo inferior es un infarto, no una variante; solo una q pequeña aislada en III puede ser normal.',
           ),
-          highlightLeads: ['II', 'III', 'aVF', 'I', 'aVL'],
+          highlightLeads: ['II', 'III', 'aVF'],
         },
         {
           title: l('ST 段回答“急性吗”', 'The ST segments answer "acute?"', 'El segmento ST responde: ¿agudo?'),
           body: l(
-            'II、III、aVF 的 ST 段等电位，无镜像改变：**不是正在进行的闭塞**（心脏科医师标注：陈旧性下壁心梗）。若两个相邻下壁导联 ST 抬高 ≥1 mm 并伴 I/aVL 压低，那就是急性下壁 STEMI——立即行动。同一组导联，两种截然不同的紧迫度：下一份图就是这样。',
-            'The ST segments in II, III and aVF are isoelectric with no reciprocal change: **no ongoing occlusion** (cardiologists\' label: old inferior MI). Had two contiguous inferior leads shown ST elevation ≥ 1 mm with depression in I/aVL, that would be an acute inferior STEMI — act now. The same lead group, two very different urgencies: the next tracing is exactly that.',
-            'Los segmentos ST en II, III y aVF son isoeléctricos, sin cambios recíprocos: **no hay oclusión en curso** (etiqueta de los cardiólogos: IAM inferior antiguo). Si dos derivaciones inferiores contiguas mostraran elevación del ST ≥ 1 mm con descenso en I/aVL, sería un IAMCEST inferior agudo: actuar ya. El mismo grupo de derivaciones, dos urgencias opuestas: el siguiente ECG es justo eso.',
+            '没有任何 ST 标注，心脏科医师把梗死分期为陈旧期（III 期）：**不是正在进行的闭塞**。II、III、aVF 的 ST 照样自己读一遍。若两个相邻下壁导联 ST 抬高 ≥1 mm 并伴 I/aVL 压低，那就是急性下壁 STEMI——立即行动。同一组导联，两种截然不同的紧迫度：下一份图就是这样。',
+            'No ST statement is labelled, and the cardiologists staged the infarct as old (stadium III): **no ongoing occlusion**. Read the ST in II, III and aVF yourself all the same. Had two contiguous inferior leads shown ST elevation ≥ 1 mm with depression in I/aVL, that would be an acute inferior STEMI — act now. The same lead group, two very different urgencies: the next tracing is exactly that.',
+            'No hay ninguna etiqueta del ST y los cardiólogos clasificaron el infarto como antiguo (estadio III): **no hay oclusión en curso**. Aun así, lee tú el ST de II, III y aVF. Si dos derivaciones inferiores contiguas mostraran elevación del ST ≥ 1 mm con descenso en I/aVL, sería un IAMCEST inferior agudo: actuar ya. El mismo grupo de derivaciones, dos urgencias opuestas: el siguiente ECG es justo eso.',
           ),
           highlightLeads: ['II', 'III', 'aVF'],
         },
         {
           title: l('按严重程度收尾', 'Ending in severity order', 'Cierre por orden de gravedad'),
           body: l(
-            '"1. 下壁导联病理性 Q 波伴 T 波改变——**陈旧性下壁心肌梗死**（何时发生的？追问病史、调旧图、做超声）。2. 窦性心律不齐，正常。紧急程度：常规——今天不需要导管室，但梗死史与二级预防必须核查。"——平凡的节律，不平凡的发现。',
-            '"1. Pathological Q waves with T-wave changes in the inferior leads — **old inferior myocardial infarction** (when? ask the patient, pull old tracings, order an echo). 2. Sinus arrhythmia, normal. Urgency: routine — no cath lab today, but the infarct history and secondary prevention must be checked." — An ordinary rhythm, a far from ordinary finding.',
-            '«1. Ondas Q patológicas con alteración de la T en las derivaciones inferiores: **infarto de miocardio inferior antiguo** (¿cuándo? preguntar al paciente, recuperar ECG previos, solicitar un ecocardiograma). 2. Arritmia sinusal, normal. Urgencia: rutina; hoy no hace falta hemodinámica, pero hay que confirmar el infarto y revisar la prevención secundaria». Un ritmo banal, un hallazgo nada banal.',
+            '"1. 下壁导联病理性 Q 波——**陈旧性下壁心肌梗死**（何时发生的？追问病史、调旧图、做超声）。2. 窦性心律不齐，正常。紧急程度：常规——今天不需要导管室，但梗死史与二级预防必须核查。"——平凡的节律，不平凡的发现。',
+            '"1. Pathological Q waves in the inferior leads — **old inferior myocardial infarction** (when? ask the patient, pull old tracings, order an echo). 2. Sinus arrhythmia, normal. Urgency: routine — no cath lab today, but the infarct history and secondary prevention must be checked." — An ordinary rhythm, a far from ordinary finding.',
+            '«1. Ondas Q patológicas en las derivaciones inferiores: **infarto de miocardio inferior antiguo** (¿cuándo? preguntar al paciente, recuperar ECG previos, solicitar un ecocardiograma). 2. Arritmia sinusal, normal. Urgencia: rutina; hoy no hace falta hemodinámica, pero hay que confirmar el infarto y revisar la prevención secundaria». Un ritmo banal, un hallazgo nada banal.',
           ),
         },
       ],
@@ -272,16 +273,16 @@ const lesson: Lesson = {
       view: { layout: '3x4+1', highlightLeads: ['II', 'III', 'aVF', 'aVL'] },
       left: {
         ecg: real(2627),
-        caption: l('第 6 份（45 岁男性）：下壁 Q 波，ST 在基线——陈旧性心梗，常规', 'Tracing 6 (man, 45): inferior Q waves, ST on the baseline — old MI, routine', 'ECG 6 (varón, 45 años): Q inferiores, ST en la línea de base; IAM antiguo, rutina'),
+        caption: l('第 6 份（45 岁男性）：下壁 Q 波，标注为陈旧性心梗，无 ST 标注——常规', 'Tracing 6 (man, 45): inferior Q waves, labelled an old MI, no ST label — routine', 'ECG 6 (varón, 45 años): Q inferiores, etiquetado como IAM antiguo, sin etiqueta del ST; rutina'),
       },
       right: {
         ecg: real(12899),
-        caption: l('第 7 份（67 岁女性）：下壁 ST 抬高，aVL 镜像压低——急性 STEMI，现在处理', 'Tracing 7 (woman, 67): inferior ST elevation, reciprocal depression in aVL — acute STEMI, act now', 'ECG 7 (mujer, 67 años): elevación del ST inferior, descenso recíproco en aVL; IAMCEST agudo, actuar ya'),
+        caption: l('第 7 份（67 岁女性）：标注为急性下壁心梗（I 期），伴 ST 压低——急性 STEMI，现在处理', 'Tracing 7 (woman, 67): labelled an acute inferior MI (stadium I) with ST depression — acute STEMI, act now', 'ECG 7 (mujer, 67 años): etiquetado como IAM inferior agudo (estadio I) con descenso del ST; IAMCEST agudo, actuar ya'),
       },
       point: l(
-        '两份图都是“下壁”，决定紧迫度的却是 **ST 段**，不是 Q 波，也不是申请单。左边：Q 波是已经发生的事，ST 回到基线，没有镜像——常规处理，查二级预防。右边：ST 弓背抬高，III 与 aVF 最高，aVL 反向压低——正在发生的事，每一分钟都在丢心肌。门诊流里，前一份的平静不能让你在后一份的 ST 上偷懒。',
-        'Both tracings are "inferior", yet the urgency is set by the **ST segment** — not by the Q waves and not by the request slip. Left: the Q waves are something that already happened; the ST is back on the baseline with no reciprocal change — routine, check secondary prevention. Right: convex ST elevation, highest in III and aVF, with the mirror-image depression in aVL — something happening now, with myocardium lost every minute. In a clinic stream, the calm of the last tracing must not make you skip the ST of the next one.',
-        'Los dos ECG son «inferiores», pero la urgencia la fija el **segmento ST**, no las ondas Q ni la petición. Izquierda: las Q son algo que ya ocurrió; el ST ha vuelto a la línea de base y no hay cambio recíproco: rutina y revisar la prevención secundaria. Derecha: elevación convexa del ST, máxima en III y aVF, con el descenso en espejo de aVL: algo que está ocurriendo ahora, con miocardio perdido cada minuto. En una serie de consulta, la calma del ECG anterior no puede hacer que te saltes el ST del siguiente.',
+        '两份图都是“下壁”，决定紧迫度的却是 **ST 段**，不是 Q 波，也不是申请单。左边：Q 波，梗死被分期为陈旧，没有 ST 标注——常规处理，查二级预防。右边：分期为急性的下壁心梗，也标注了 ST 压低——自己在 II、III、aVF 找 ST 抬高，再找压低：正在发生的事，每一分钟都在丢心肌。门诊流里，前一份的平静不能让你在后一份的 ST 上偷懒。',
+        'Both tracings are "inferior", yet the urgency is set by the **ST segment** — not by the Q waves and not by the request slip. Left: Q waves, an infarct the cardiologists staged as old, no ST statement — routine, check secondary prevention. Right: an inferior MI staged as acute, with ST depression labelled too — find the ST elevation in II, III and aVF and the depression yourself: something happening now, with myocardium lost every minute. In a clinic stream, the calm of the last tracing must not make you skip the ST of the next one.',
+        'Los dos ECG son «inferiores», pero la urgencia la fija el **segmento ST**, no las ondas Q ni la petición. Izquierda: ondas Q, un infarto que los cardiólogos clasificaron como antiguo y ninguna etiqueta del ST: rutina y revisar la prevención secundaria. Derecha: un IAM inferior clasificado como agudo, también con descenso del ST etiquetado; busca tú la elevación del ST en II, III y aVF y el descenso: algo que está ocurriendo ahora, con miocardio perdido cada minuto. En una serie de consulta, la calma del ECG anterior no puede hacer que te saltes el ST del siguiente.',
       ),
     },
     {
@@ -400,6 +401,7 @@ const lesson: Lesson = {
           l('150 → 300 次/分', '150 → 300/min', '150 → 300 lpm'),
         ],
         answer: 0,
+        ordered: true,
       },
       caption: l(
         '房扑的心房率约 300 次/分：心室率 = 300 ÷ 下传比例。约 150 次/分的规则窄 QRS 心动过速，先在 II、III、aVF 找锯齿波。',

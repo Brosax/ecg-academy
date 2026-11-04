@@ -9,7 +9,7 @@ import type { Block, Lesson } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
 import { REGISTERED } from '../../src/course/lessons/index';
 import { realisedDials, startDials } from '../../src/course/live';
-import { baselineBefore, qrsWaves } from '../../src/course/marks';
+import { baselineBefore, qrsWaves, resolveMarks } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
 import { FINDINGS, type FindingId } from '../../src/core/findings';
@@ -287,37 +287,53 @@ const frames = (id: string, k: number): Ecg[] => blocksOf(id, 'film')[k].frames.
 /** The anterior STEMI of x1 (hook and worked) as the text reads it, step by step. */
 function expectX1Stemi(e: Ecg): void {
   const t = e.truth!;
-  expect(Math.abs(t.hrBpm - 84)).toBeLessThan(2);
+  expect(Math.abs(t.hrBpm - 84)).toBeLessThanOrEqual(1);
   expect(t.atrialRateBpm).toBeCloseTo(t.hrBpm, 0);
   expect(t.rhythm).toBe('sinus-rhythm');
-  for (const rr of rrs(e)) expect(Math.abs(rr - 712)).toBeLessThan(30);
-  expect(Math.abs(t.prMs! - 160)).toBeLessThan(5);
-  expect(Math.abs(t.qrsMs - 95)).toBeLessThan(6);
-  expect(Math.abs(t.qtMs - 365)).toBeLessThan(10);
-  expect(Math.abs(t.qtcFridericiaMs - 410)).toBeLessThan(8);
-  expect(Math.abs(t.axisDeg.qrs - 40)).toBeLessThan(8);
+  expect(t.regular).toBe(true);
+  // RR about 710 ms, about three and a half large squares (17.5 mm ± 5 %)
+  expect(Math.abs(meanRr(e) - 710)).toBeLessThanOrEqual(5);
+  for (const rr of rrs(e)) expect(Math.abs(rr / 40 - 17.5)).toBeLessThanOrEqual(0.875);
+  expect(Math.abs(t.prMs! - 160)).toBeLessThanOrEqual(5);
+  // a P before every QRS at a constant PR
+  for (const b of t.beats) {
+    expect(b.pOn, `P before the QRS at ${b.qrsOn}`).not.toBeNull();
+    expect(Math.abs(b.qrsOn - b.pOn! - t.prMs!), `PR at ${b.qrsOn}`).toBeLessThan(5);
+  }
+  expect(Math.abs(t.qrsMs - 95)).toBeLessThanOrEqual(5);
+  expect(Math.abs(t.qtMs - 365)).toBeLessThanOrEqual(5);
+  expect(Math.abs(t.qtcFridericiaMs - 410)).toBeLessThanOrEqual(5);
+  expect(Math.abs(t.axisDeg.qrs - 40)).toBeLessThanOrEqual(5);
   expect(t.findings).toContain('stemi-anterior');
-  // recording: P and QRS upright in I, negative in aVR
+  // recording and rhythm: P and QRS upright in I, negative in aVR; P upright in II
+  for (const part of [pw, qrs]) {
+    expect(part(e, 'I').net).toBeGreaterThan(0.03);
+    expect(part(e, 'aVR').net).toBeLessThan(-0.03);
+  }
   expect(qrs(e, 'I').net).toBeGreaterThan(0.3);
   expect(qrs(e, 'aVR').net).toBeLessThan(-0.3);
+  expect(pw(e, 'II').max).toBeGreaterThan(Math.max(0.05, -pw(e, 'II').min));
   // axis step: I and aVF positive, II the most positive limb lead
   expect(qrs(e, 'aVF').net).toBeGreaterThan(0.2);
   expect(qrs(e, 'II').net).toBeGreaterThanOrEqual(Math.max(qrs(e, 'I').net, qrs(e, 'aVF').net));
-  // morphology: rS in V1–V2, transition at V3, no Q in V1–V3, T upright in V2–V4
+  // morphology: rS in V1–V2, transition at V3, no Q in V1–V3
   for (const l of ['V1', 'V2'] as const) {
     expect(shape(e, l).startsWith('rs'), l).toBe(true);
     expect(-qrs(e, l).min, l).toBeGreaterThan(qrs(e, l).max);
   }
   expect(transition(e)).toBe('V3');
   for (const l of ['V1', 'V2', 'V3'] as const) expect(shape(e, l).startsWith('q'), l).toBe(false);
-  for (const l of ['V2', 'V3', 'V4'] as const) expect(tUpright(e, l), l).toBe(true);
-  // ST at J + 60: V2 ≈ 3, V3 ≈ 4 (the highest), V4 ≈ 2, V1 ≈ 1 mm; III ≈ −1 mm, II/aVF depressed; I, aVL, V5 < 1 mm; V6 ≈ 0
-  expect(Math.abs(stAt(e, 'V2', 60) - 0.3)).toBeLessThan(0.06);
-  expect(Math.abs(stAt(e, 'V3', 60) - 0.4)).toBeLessThan(0.06);
-  expect(Math.abs(stAt(e, 'V4', 60) - 0.2)).toBeLessThan(0.06);
-  expect(Math.abs(stAt(e, 'V1', 60) - 0.1)).toBeLessThan(0.05);
+  // T upright in every lead whose ST is raised
+  const raised = [...LIMB, ...CHEST].filter((l) => stAt(e, l, 60) >= 0.05);
+  expect(raised).toEqual(expect.arrayContaining(['V1', 'V2', 'V3', 'V4']));
+  for (const l of raised) expect(tUpright(e, l), l).toBe(true);
+  // ST at J + 60: V2 ≈ 3, V3 ≈ 4 (the highest), V4 ≈ 2, V1 ≈ 1.5 mm; III ≈ −1.5 mm, II/aVF depressed; I, aVL, V5 < 1 mm; V6 ≈ 0
+  expect(Math.abs(stAt(e, 'V2', 60) - 0.3)).toBeLessThanOrEqual(0.025);
+  expect(Math.abs(stAt(e, 'V3', 60) - 0.4)).toBeLessThanOrEqual(0.025);
+  expect(Math.abs(stAt(e, 'V4', 60) - 0.2)).toBeLessThanOrEqual(0.025);
+  expect(Math.abs(stAt(e, 'V1', 60) - 0.15)).toBeLessThanOrEqual(0.025);
   for (const l of CHEST) expect(stAt(e, l, 60), l).toBeLessThanOrEqual(stAt(e, 'V3', 60));
-  expect(Math.abs(stAt(e, 'III', 60) + 0.1)).toBeLessThan(0.05);
+  expect(Math.abs(stAt(e, 'III', 60) + 0.15)).toBeLessThanOrEqual(0.025);
   for (const l of ['II', 'aVF'] as const) expect(stAt(e, l, 60), l).toBeLessThan(-0.05);
   for (const l of ['I', 'aVL', 'V5'] as const) expect(Math.abs(stAt(e, l, 60)), l).toBeLessThan(0.1);
   expect(Math.abs(stAt(e, 'V6', 60))).toBeLessThan(0.05);
@@ -330,6 +346,12 @@ describe('x1: the structured report on the tracings', () => {
     expectX1Stemi(ecgOf(blocksOf('x1', 'hook')[0].ecg));
     expectX1Stemi(ecgOf(blocksOf('x1', 'worked')[0].ecg));
   });
+  it('worked step 2: the RR its mark brackets is about 710 ms', () => {
+    const w = blocksOf('x1', 'worked')[0];
+    const brackets = resolveMarks(ecgOf(w.ecg), w.steps[1].marks, { layout: '3x4+1' }).flatMap((m) => (m.kind === 'bracket' ? [m.t1 - m.t0] : []));
+    expect(brackets.length).toBe(1);
+    expect(Math.abs(brackets[0] - 710)).toBeLessThanOrEqual(5);
+  });
   it('ten-line film: every frame is the normal tracing of the contrast; I upright and aVR negative; RR just over 4 large squares at about 72/min with an upright P in II before every QRS; PR 160, QRS about 95, QT about 385; I, II, aVF positive; transition at V3; ST on the baseline everywhere', () => {
     const film = blocksOf('x1', 'film')[0];
     for (const f of film.frames) expect(f.ecg).toEqual(blocksOf('x1', 'contrast')[1].left.ecg);
@@ -341,7 +363,7 @@ describe('x1: the structured report on the tracings', () => {
     }
     expect(meanRr(e) / 200).toBeGreaterThan(4);
     expect(meanRr(e) / 200).toBeLessThan(4.4);
-    expect(Math.abs(t.hrBpm - 72)).toBeLessThan(2);
+    expect(Math.abs(t.hrBpm - 72)).toBeLessThanOrEqual(1);
     expect(t.rhythm).toBe('sinus-rhythm');
     for (const b of t.beats) {
       expect(b.pOn, `P before the QRS at ${b.qrsOn}`).not.toBeNull();
@@ -363,10 +385,10 @@ describe('x1: the structured report on the tracings', () => {
     for (const v of [0.22, 0.45]) expect(Math.abs(stAt(played('x1', 0, v), 'V2', 60) - v), `V2 at ${v}`).toBeLessThan(0.01);
     for (const v of [0.22, 0.25]) {
       const e = played('x1', 0, v);
-      expect(stAt(e, 'V3', 60), `${v}`).toBeGreaterThan(0.25);
-      expect(stAt(e, 'V3', 60), `${v}`).toBeLessThan(0.35);
-      expect(stAt(e, 'III', 60), `${v}`).toBeGreaterThan(-0.125);
-      expect(stAt(e, 'III', 60), `${v}`).toBeLessThan(-0.085);
+      expect(stAt(e, 'V3', 60), `${v}`).toBeGreaterThanOrEqual(0.275);
+      expect(stAt(e, 'V3', 60), `${v}`).toBeLessThanOrEqual(0.325);
+      expect(stAt(e, 'III', 60), `${v}`).toBeGreaterThanOrEqual(-0.125);
+      expect(stAt(e, 'III', 60), `${v}`).toBeLessThanOrEqual(-0.085);
     }
     const [lo, hi] = [played('x1', 0, 0.26), played('x1', 0, 0.39)];
     for (const l of ['V2', 'V3', 'V4'] as const) expect(stAt(hi, l, 60), l).toBeGreaterThan(stAt(lo, l, 60) + 0.05);
@@ -388,17 +410,17 @@ describe('x1: the structured report on the tracings', () => {
     expect(c.left.ecg).toEqual(c.right.ecg);
     expect(c.left.ecg).toEqual(blocksOf('x1', 'worked')[0].ecg);
   });
-  it('normal vs first-degree AV block: 72/min PR 160 QRS ≈ 95 QTc ≈ 410 axis ≈ +40 vs PR 280', () => {
+  it('normal vs first-degree AV block: 72/min PR 160 QRS 95 QTc 410 axis +40 vs PR 280', () => {
     const c = blocksOf('x1', 'contrast')[1];
     const a = ecgOf(c.left.ecg).truth!;
-    expect(Math.abs(a.hrBpm - 72)).toBeLessThan(2);
-    expect(Math.abs(a.prMs! - 160)).toBeLessThan(5);
-    expect(Math.abs(a.qrsMs - 95)).toBeLessThan(6);
-    expect(Math.abs(a.qtcFridericiaMs - 410)).toBeLessThan(8);
-    expect(Math.abs(a.axisDeg.qrs - 40)).toBeLessThan(8);
+    expect(Math.abs(a.hrBpm - 72)).toBeLessThanOrEqual(1);
+    expect(Math.abs(a.prMs! - 160)).toBeLessThanOrEqual(5);
+    expect(Math.abs(a.qrsMs - 95)).toBeLessThanOrEqual(5);
+    expect(Math.abs(a.qtcFridericiaMs - 410)).toBeLessThanOrEqual(5);
+    expect(Math.abs(a.axisDeg.qrs - 40)).toBeLessThanOrEqual(5);
     expect(a.findings).toContain('normal-ecg');
     const b = ecgOf(c.right.ecg).truth!;
-    expect(Math.abs(b.prMs! - 280)).toBeLessThan(5);
+    expect(Math.abs(b.prMs! - 280)).toBeLessThanOrEqual(5);
     expect(b.findings).toContain('av-block-1');
   });
   it('the inline report on PTB-XL 4440 is keyed to the 12SL values and the labels', () => {
@@ -441,10 +463,10 @@ describe('x2: the synthetic frames', () => {
     es.forEach((e, k) => {
       const t = e.truth!;
       expect(t.rhythm).toBe('atrial-flutter');
-      expect(Math.abs(t.atrialRateBpm! - 300), `frame ${k}`).toBeLessThan(5);
+      expect(Math.abs(t.atrialRateBpm! - 300), `frame ${k}`).toBeLessThanOrEqual(1);
       const gaps = t.atrial.slice(1).map((a, i) => a.t - t.atrial[i].t);
-      for (const g of gaps) expect(Math.abs(g - 200), `frame ${k}`).toBeLessThan(10);
-      expect(Math.abs(t.hrBpm - [150, 100, 75][k]), `frame ${k}`).toBeLessThan(3);
+      for (const g of gaps) expect(Math.abs(g - 200), `frame ${k}`).toBeLessThanOrEqual(5);
+      expect(Math.abs(t.hrBpm - [150, 100, 75][k]), `frame ${k}`).toBeLessThanOrEqual(1);
       expect(t.regular, `frame ${k}`).toBe(true);
       expect(t.qrsMs, `frame ${k}`).toBeLessThan(120);
     });
@@ -465,8 +487,8 @@ describe('x3: triage tracings', () => {
     for (const src of [blocksOf('x3', 'hook')[0].ecg, blocksOf('x3', 'contrast')[0].right.ecg]) {
       const t = ecgOf(src).truth!;
       expect(t.findings).toContain('av-block-3');
-      expect(Math.abs(t.hrBpm - 34)).toBeLessThan(2);
-      expect(Math.abs(t.atrialRateBpm! - 78)).toBeLessThan(3);
+      expect(Math.abs(t.hrBpm - 34)).toBeLessThanOrEqual(1);
+      expect(Math.abs(t.atrialRateBpm! - 78)).toBeLessThanOrEqual(1);
       expect(t.qrsMs).toBeGreaterThanOrEqual(140);
       expect(t.qrsMs).toBeLessThan(160);
     }
@@ -475,7 +497,7 @@ describe('x3: triage tracings', () => {
   it('worked: 92/min, narrow QRS, ST ↑ ≈ 2.5–4.5 mm V2–V4 (highest V3), reciprocal ↓ II/III/aVF, no tall tented T', () => {
     const e = ecgOf(blocksOf('x3', 'worked')[0].ecg);
     const t = e.truth!;
-    expect(Math.abs(t.hrBpm - 92)).toBeLessThan(2);
+    expect(Math.abs(t.hrBpm - 92)).toBeLessThanOrEqual(1);
     expect(t.qrsMs).toBeLessThan(110);
     for (const l of ['V2', 'V3', 'V4'] as const) {
       expect(stAt(e, l, 60), l).toBeGreaterThanOrEqual(0.245);
@@ -485,10 +507,11 @@ describe('x3: triage tracings', () => {
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l, 60), l).toBeLessThan(-0.05);
     expect(t.findings).not.toContain('hyperkalemia');
   });
-  it('T-and-device film, hyperkalaemia: no visible P in II, QRS about 170 ms, tall T in V3–V5 (well above the T in II)', () => {
+  it('T-and-device film, hyperkalaemia: no visible P in II, QRS about 170 ms, tall T in V3–V5 (well above the T in II), the "Tented T" mark on a scenario that carries peaked T', () => {
     const e = ecgOf(blocksOf('x3', 'film')[1].frames[0].ecg);
     const t = e.truth!;
     expect(t.findings).toContain('hyperkalemia');
+    expect(t.findings).toContain('peaked-t');
     expect(Math.abs(t.qrsMs - 170)).toBeLessThan(5);
     const b = midBeat(e);
     expect(span(e, 'II', b.qrsOn - 200, b.qrsOn - 20, b).max).toBeLessThan(0.05);
@@ -528,7 +551,7 @@ describe('x3: triage tracings', () => {
       expect(slope(at - 15, at + 15), `spike at ${at}`).toBeGreaterThan(5 * slope(at + 60, at + 160));
     }
   });
-  it('triage film: VF has no QRS; the occlusion is the worked STEMI; rapid AF irregularly irregular at about 140/min with no P; complete block is the hook (P about 78, escape about 34); the normal frame has nothing to catch', () => {
+  it('triage film: VF has no QRS; the occlusion is the worked STEMI; rapid AF irregularly irregular, 23 QRS in 10 s ≈ 138/min, no P, its two RR marks on adjacent unequal cycles in the II panel; complete block is the hook (P about 78, escape about 34); the normal frame has nothing to catch', () => {
     const film = blocksOf('x3', 'film')[0];
     const [vf, , af, , normal] = frames('x3', 0);
     expect(vf.truth!.rhythm).toBe('ventricular-fibrillation');
@@ -536,9 +559,20 @@ describe('x3: triage tracings', () => {
     expect(film.frames[1].ecg).toEqual(blocksOf('x3', 'worked')[0].ecg);
     expect(film.frames[3].ecg).toEqual(blocksOf('x3', 'hook')[0].ecg);
     expect(af.truth!.rhythm).toBe('atrial-fibrillation');
-    expect(Math.abs(af.truth!.hrBpm - 140)).toBeLessThan(5);
+    expect(af.signal.durationMs).toBe(10000);
+    expect(af.truth!.beats.length).toBe(23);
+    expect(Math.abs(af.truth!.hrBpm - 138)).toBeLessThanOrEqual(1);
     expect(af.truth!.beats.every((b) => b.pOn === null)).toBe(true);
     expect(Math.max(...rrs(af)) - Math.min(...rrs(af))).toBeGreaterThan(200);
+    const marked = film.frames[2].marks!.flatMap((m) => ('auto' in m && m.auto === 'rr' && m.beat !== undefined ? [m.beat] : []));
+    expect(marked).toEqual([3, 4]);
+    const beats = af.truth!.beats;
+    for (const i of marked) expect(beats[i].kind, `beat ${i}`).toBe(beats[0].kind);
+    const brackets = resolveMarks(af, film.frames[2].marks, { layout: '3x4+1' }).flatMap((m) => (m.kind === 'bracket' ? [[m.t0, m.t1] as const] : []));
+    expect(brackets.length).toBe(2);
+    for (const [t0, t1] of brackets) expect(t1, 'inside the II column of the sheet').toBeLessThanOrEqual(2500 - 20);
+    const [a, b] = brackets.map(([t0, t1]) => t1 - t0);
+    expect(Math.max(a, b) / Math.min(a, b)).toBeGreaterThan(1.15);
     const n = normal.truth!;
     expect(n.findings).toContain('normal-ecg');
     expect(n.hrBpm).toBeGreaterThan(60);
@@ -575,7 +609,7 @@ describe('x4: calibration tracings', () => {
     const e = ecgOf(film.frames[0].ecg);
     const t = e.truth!;
     expect(t.rhythm).toBe('sinus-tachycardia');
-    expect(Math.abs(t.hrBpm - 125)).toBeLessThan(3);
+    expect(Math.abs(t.hrBpm - 125)).toBeLessThanOrEqual(1);
     expect(t.regular).toBe(true);
     expect(t.beats.every((b) => b.pOn !== null)).toBe(true);
     expect(pw(e, 'II').max).toBeGreaterThan(0.05);
@@ -606,7 +640,7 @@ describe('x4: calibration tracings', () => {
     const b = block.truth!;
     expect(b.findings).toContain('av-block-3');
     expect(b.atrial.every((a) => a.conductedTo === null)).toBe(true);
-    expect(Math.abs(b.hrBpm - 34)).toBeLessThan(2);
+    expect(Math.abs(b.hrBpm - 34)).toBeLessThanOrEqual(1);
     expect(b.qrsMs).toBeGreaterThanOrEqual(120);
   });
   it('Progress-page card: the numbers are the app\'s own (ideal 40/70/95 %, review pass 80 %, Leitner 1–16 days)', () => {
@@ -614,7 +648,7 @@ describe('x4: calibration tracings', () => {
     expect(REVIEW_PASS).toBe(0.8);
     expect([...LEITNER_DAYS]).toEqual([1, 2, 4, 8, 16]);
   });
-  it('Progress-page card: the overconfidence warning needs at least five "Sure" answers under 80 %; a critical finding is secured only after at least 3 attempts with the last five all ≥ 80 % and no missed-critical flag', () => {
+  it('Progress-page card: the overconfidence warning needs five or more "Sure" answers with under 80 % of them right; a critical finding is secured only after at least 3 attempts with the last five all ≥ 80 % and no missed-critical flag', () => {
     expect(overconfident({ n: 4, accuracy: 0 })).toBe(false);
     expect(overconfident({ n: 5, accuracy: 0.79 })).toBe(true);
     expect(overconfident({ n: 5, accuracy: 0.8 })).toBe(false);
@@ -643,23 +677,25 @@ interface RealClaim {
   readonly pr?: readonly [number, number];
   readonly qrs?: readonly [number, number];
   readonly axis?: readonly [number, number];
+  /** PTB-XL infarction stadium the text names */
+  readonly stadium?: string;
 }
 
 const CLAIMS: readonly RealClaim[] = [
   // x1
-  { id: 4440, sex: 'F', age: 63, has: ['sinus-rhythm', 'av-block-1'], hr: [80, 90], pr: [240, 265], qrs: [85, 100] },
+  { id: 4440, sex: 'F', age: 63, has: ['sinus-rhythm', 'av-block-1'], not: ['pathological-q', 'nonspecific-st-t', 'st-depression-ischemic', 't-inversion-ischemic', 'secondary-st-t'], hr: [84, 86], pr: [249, 259], qrs: [89, 99] },
   { id: 1101, sex: 'F', age: 53, has: ['normal-ecg'] },
   { id: 13441, sex: 'F', age: 81, has: ['rbbb'] },
   { id: 6764, sex: 'M', age: 64, has: ['pathological-q', 'old-mi-anterior', 'old-mi-lateral'] },
   // x2
-  { id: 19170, sex: 'M', age: 73, has: ['atrial-fibrillation', 'atrial-flutter'], hr: [105, 118], qrs: [110, 120], axis: [-20, -8] },
-  { id: 6282, sex: 'M', age: 42, has: ['sinus-rhythm', 'rbbb'], not: ['pathological-q', 'old-mi-anterior', 'old-mi-inferior', 'old-mi-lateral', 'stemi-anterior', 'stemi-inferior', 'stemi-lateral'], hr: [73, 79], pr: [130, 138], qrs: [149, 159] },
+  { id: 19170, sex: 'M', age: 73, has: ['atrial-fibrillation', 'atrial-flutter'], hr: [109, 111], qrs: [111, 121], axis: [-19, -9] },
+  { id: 6282, sex: 'M', age: 42, has: ['sinus-rhythm', 'rbbb'], not: ['pathological-q', 'old-mi-anterior', 'old-mi-inferior', 'old-mi-lateral', 'stemi-anterior', 'stemi-inferior', 'stemi-lateral'], hr: [75, 77], pr: [129, 139], qrs: [149, 159] },
   { id: 6271, sex: 'F', age: 60, has: ['normal-ecg'] },
   { id: 2320, sex: 'M', age: 64, has: ['normal-ecg'] },
   { id: 11459, sex: 'F', age: 18, has: ['normal-ecg'] },
-  { id: 2627, sex: 'M', age: 45, has: ['sinus-arrhythmia', 'pathological-q', 'old-mi-inferior'], not: ['stemi-inferior'], hr: [75, 85], pr: [135, 150], qrs: [80, 95], axis: [-10, 5] },
-  { id: 12899, sex: 'F', age: 67, has: ['stemi-inferior'] },
-  { id: 18776, sex: 'M', age: 35, has: ['lvh', 'sinus-rhythm'], not: ['lvh-strain', 'secondary-st-t', 'nonspecific-st-t', 't-inversion-ischemic', 'st-depression-ischemic', 'pathological-q'], hr: [50, 56], qrs: [95, 105] },
+  { id: 2627, sex: 'M', age: 45, has: ['sinus-arrhythmia', 'pathological-q', 'old-mi-inferior'], not: ['stemi-inferior', 'nonspecific-st-t', 't-inversion-ischemic', 'st-depression-ischemic', 'secondary-st-t'], stadium: 'Stadium III', hr: [79, 81], pr: [139, 149], qrs: [83, 93], axis: [-5, 5] },
+  { id: 12899, sex: 'F', age: 67, has: ['stemi-inferior', 'nonspecific-st-t'], stadium: 'Stadium I' },
+  { id: 18776, sex: 'M', age: 35, has: ['lvh', 'sinus-rhythm'], not: ['lvh-strain', 'secondary-st-t', 'nonspecific-st-t', 't-inversion-ischemic', 'st-depression-ischemic', 'pathological-q'], hr: [52, 54], qrs: [95, 105] },
   { id: 2594, sex: 'F', age: 58, has: ['normal-ecg', 'sinus-bradycardia'] },
   { id: 14874, sex: 'M', age: 47, has: ['normal-ecg', 'sinus-arrhythmia'] },
   { id: 6727, sex: 'F', age: 28, has: ['av-block-1'] },
@@ -667,14 +703,14 @@ const CLAIMS: readonly RealClaim[] = [
   { id: 2466, sex: 'F', age: 73, has: ['pac'] },
   { id: 17835, sex: 'M', age: 76, has: ['pac'] },
   // x3
-  { id: 4408, sex: 'M', age: 77, has: ['sinus-tachycardia'], hr: [125, 135] },
-  { id: 7688, sex: 'F', age: 86, has: ['av-block-3'], hr: [36, 44], qrs: [80, 115] },
+  { id: 4408, sex: 'M', age: 77, has: ['sinus-tachycardia'], hr: [129, 131] },
+  { id: 7688, sex: 'F', age: 86, has: ['av-block-3'], hr: [39, 41], qrs: [80, 115] },
   { id: 19269, sex: 'F', age: 87, has: ['stemi-inferior', 'stemi-posterior'] },
   { id: 16151, sex: 'F', age: 87, has: ['av-block-3'], hr: [20, 32], qrs: [120, 200] },
   { id: 19505, sex: 'F', age: 43, has: ['sinus-tachycardia', 'normal-ecg'], hr: [130, 145] },
   // x4
-  { id: 2084, sex: 'F', age: 16, has: ['normal-ecg', 'sinus-arrhythmia'], hr: [72, 80] },
-  { id: 10730, sex: 'F', age: 80, has: ['lafb'], qrs: [85, 100], axis: [-44, -31] },
+  { id: 2084, sex: 'F', age: 16, has: ['normal-ecg', 'sinus-arrhythmia'], hr: [74, 76] },
+  { id: 10730, sex: 'F', age: 80, has: ['lafb'], qrs: [89, 99], axis: [-44, -35] },
   { id: 4078, sex: 'F', age: 69, has: ['sinus-tachycardia', 'pac'], hr: [102, 112] },
   { id: 17892, sex: 'F', age: 63, has: ['nonspecific-st-t'] },
   { id: 18373, sex: 'F', age: 79, has: ['lafb'], axis: [-90, -45] },
@@ -702,8 +738,14 @@ describe('stage X real cases: the text agrees with the labels and the 12SL refer
       within(k.ref.prMs, c.pr, 'PR');
       within(k.ref.qrsMs, c.qrs, 'QRS');
       within(k.ref.qrsAxisDeg, c.axis, 'axis');
+      if (c.stadium) expect(k.infarctionStadium, `${c.id} stadium`).toBe(c.stadium);
     });
   }
+
+  it('x2 tracing 1 (19170): the 12SL finds no P wave (no PR, no P axis, no P duration)', () => {
+    const r = getCase(19170)!.ref;
+    expect([r.prMs, r.pAxisDeg, r.pDurMs]).toEqual([null, null, null]);
+  });
 
   it('x2 stream is prevalence-weighted as its text says: 5 normal, 4 minor, 4 major, 1 act-now (14 tracings)', () => {
     const tally = { normal: 0, minor: 0, major: 0, critical: 0 };
@@ -717,7 +759,10 @@ describe('stage X real cases: the text agrees with the labels and the 12SL refer
     expect(tally).toEqual({ normal: 5, minor: 4, major: 4, critical: 1 });
   });
 
-  it('x2 stream text names each group: normals with one sinus bradycardia and one sinus arrhythmia; small = RBBB, first-degree AV block, two PACs; significant = two flutter/AF, old inferior MI, LVH; the fast one of the last three is the flutter', () => {
+  it('x2 stream text names each group: normals with one sinus bradycardia and one sinus arrhythmia; small = RBBB, first-degree AV block, two PACs, one of which hides more (a non-specific ST–T label and a 12SL PR over 200 ms); significant = two flutter/AF, old inferior MI, LVH; the fast one of the last three is the flutter', () => {
+    const pacs = [2466, 17835].map((id) => getCase(id)!);
+    expect(pacs.map((c) => c.findings.filter((f) => f !== 'sinus-rhythm'))).toEqual([['pac', 'nonspecific-st-t'], ['pac']]);
+    expect(pacs.map((c) => c.ref.prMs! > 200)).toEqual([true, false]);
     const group = (id: number) => {
       const f = getCase(id)!.findings;
       if (f.includes('normal-ecg')) return 'normal';
@@ -749,13 +794,17 @@ describe('stage X real cases: the text agrees with the labels and the 12SL refer
     }
   });
 
-  it('x4 borderline axis: 10730 is labelled LAFB but its 12SL axis misses the current −45° threshold; the "sure" answer is the description', () => {
+  it('x4 borderline axis: 10730 is labelled LAFB but its 12SL axis (−39°) misses the current −45° threshold; the QRS signs the prompt states follow from that axis; the "sure" answer is the description', () => {
     const it = inlineItem('x4', 'x4:sure-statement-10730');
     if (it.kind !== 'choice' || it.ecg.kind !== 'real') throw new Error('expected a real choice item');
     const k = getCase(it.ecg.id)!;
     expect(k.findings).toContain('lafb');
+    expect(k.ref.qrsAxisDeg).toBe(-39);
     expect(k.ref.qrsAxisDeg!).toBeGreaterThan(-45);
     expect(k.ref.qrsAxisDeg!).toBeLessThan(-30);
+    const projection = (leadDeg: number) => Math.cos(((k.ref.qrsAxisDeg! - leadDeg) * Math.PI) / 180);
+    for (const [lead, deg] of [['I', 0], ['aVL', -30]] as const) expect(projection(deg), lead).toBeGreaterThan(0);
+    for (const [lead, deg] of [['II', 60], ['III', 120], ['aVF', 90]] as const) expect(projection(deg), lead).toBeLessThan(0);
     expect(it.key.correct).toBe('lad');
   });
 });
