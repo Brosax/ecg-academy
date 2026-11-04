@@ -4,8 +4,6 @@
  * cases, summary), every family check generates, every synthetic ECG can be generated and shows what the text says,
  * and every real PTB-XL case is described as its labels and 12SL reference measurements say.
  */
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import type { Block, Lesson } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
@@ -20,7 +18,7 @@ import type { L10n } from '../../src/core/l10n';
 import type { StdLead } from '../../src/core/leads';
 import type { EcgSource, Item } from '../../src/practice/api';
 import { generateItem } from '../../src/practice';
-import { CONFIDENCE_EXPECTED, criticalStatus, LEITNER_DAYS, REVIEW_PASS } from '../../src/practice/core/mastery';
+import { CONFIDENCE_EXPECTED, criticalStatus, LEITNER_DAYS, overconfident, REVIEW_PASS } from '../../src/practice/core/mastery';
 import { getCase } from '../../src/real/library';
 import { generate, scenarios, type SynthRequest } from '../../src/synth';
 
@@ -617,8 +615,10 @@ describe('x4: calibration tracings', () => {
     expect([...LEITNER_DAYS]).toEqual([1, 2, 4, 8, 16]);
   });
   it('Progress-page card: the overconfidence warning needs at least five "Sure" answers under 80 %; a critical finding is secured only after at least 3 attempts with the last five all ≥ 80 % and no missed-critical flag', () => {
-    const page = readFileSync(fileURLToPath(new URL('../../src/practice/ui/ProgressPage.tsx', import.meta.url)), 'utf8');
-    expect(page).toMatch(/sure\.n >= 5 && sure\.accuracy !== null && sure\.accuracy < 0\.8 && <p class="pr-warn">\{tp\('overconfident'\)\}/);
+    expect(overconfident({ n: 4, accuracy: 0 })).toBe(false);
+    expect(overconfident({ n: 5, accuracy: 0.79 })).toBe(true);
+    expect(overconfident({ n: 5, accuracy: 0.8 })).toBe(false);
+    expect(overconfident({ n: 9, accuracy: null })).toBe(false);
     const pass = { score: 0.8, missedCritical: false };
     const fail = { score: 0.7, missedCritical: false };
     expect(criticalStatus([pass, pass])).toBe('learning');
