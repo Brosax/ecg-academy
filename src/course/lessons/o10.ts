@@ -68,7 +68,7 @@ const lesson: Lesson = {
   summary: l(
     '先排除记录问题再归咎于心脏：震颤、寒战和运动伪差会伪装成房颤、房扑甚至室速，但真实的 QRS 会按原来的 RR“走”过去，总有某个导联干净，患者的状态也对不上。两个乱、一个干净的肢体导联指出坏电极。监护档滤波（0.5–40 Hz）会伪造或掩盖 ST 改变——读 ST 用诊断档。',
     'Rule out the recording before blaming the heart: tremor, shivering and motion artefact pass for AF, flutter or even VT, but the real QRS complexes "march through" at the underlying RR, at least one lead stays clean, and the patient does not fit. Two noisy limb leads and one clean one point to the faulty electrode. The monitor filter (0.5–40 Hz) can fake or hide ST changes — read the ST on the diagnostic bandwidth.',
-    'Descarta el registro antes de culpar al corazón: el temblor, los escalofríos y el movimiento se hacen pasar por FA, flutter o incluso TV, pero los QRS reales "desfilan" con el RR subyacente, al menos una derivación queda limpia y el paciente no encaja. Dos derivaciones de los miembros con ruido y una limpia señalan el electrodo defectuoso. El filtro de monitor (0,5–40 Hz) puede fingir u ocultar cambios del ST: lee el ST con el ancho de banda diagnóstico.',
+    'Descarta el registro antes de culpar al corazón: el temblor, los escalofríos y el movimiento se hacen pasar por FA, flúter o incluso TV, pero los QRS reales "desfilan" con el RR subyacente, al menos una derivación queda limpia y el paciente no encaja. Dos derivaciones de los miembros con ruido y una limpia señalan el electrodo defectuoso. El filtro de monitor (0,5–40 Hz) puede fingir u ocultar cambios del ST: lee el ST con el ancho de banda diagnóstico.',
   ),
   objectives: [
     l('用“QRS 走过去 + 有干净导联 + 患者状态不符”识别伪装成心律失常的伪差。', 'Recognise arrhythmia-mimicking artefact by "QRS marching through + a clean lead + the patient does not fit".', 'Reconocer el artefacto que simula arritmias con "QRS desfilando + una derivación limpia + clínica discordante".'),
@@ -87,7 +87,7 @@ const lesson: Lesson = {
       question: l(
         '一位 74 岁帕金森病患者，监护仪提示“房扑？”——II 导联看起来全是规则的小波动。患者神志清楚、血压正常。这是心律失常吗？你如何证明？',
         'A 74-year-old with Parkinson’s disease; the monitor flags "flutter?" — lead II looks like regular small ripples. The patient is alert with a normal blood pressure. Is this an arrhythmia, and how would you prove it?',
-        'Un paciente de 74 años con enfermedad de Parkinson; el monitor marca "¿flutter?": la derivación II parece un rizado pequeño y regular. Está consciente y con tensión normal. ¿Es una arritmia? ¿Cómo lo demuestras?',
+        'Un paciente de 74 años con enfermedad de Parkinson; el monitor marca "¿flúter?": la derivación II parece un rizado pequeño y regular. Está consciente y con tensión normal. ¿Es una arritmia? ¿Cómo lo demuestras?',
       ),
       reveal: l(
         '不是。这是帕金森静止性震颤（约 5 Hz）产生的伪差。两条证据：**真实的 QRS 按固有的 RR 间期“走”过去**（用分规量），以及**总有至少一个导联干净**（伪差来自某个电极附近；这里 I 导联干净，因为震颤在左腿电极上）。把“貌似恶性的节律 + 患者安然无恙”当作伪差警号——误读曾导致不必要的抗凝、电复律甚至有创操作。',
@@ -100,9 +100,9 @@ const lesson: Lesson = {
       figure: { id: 'noisy-electrode', params: { electrode: 'LA', noise: 'emg' } },
       ecg: recorded(1583),
       caption: l(
-        '每个肢体导联只用两个电极。噪声在一个电极上，只会进入用它的两个导联，第三个保持干净。换个电极试试。',
-        'Each limb lead uses only two electrodes. Noise on one electrode reaches only the two leads that use it; the third stays clean. Move it to another electrode.',
-        'Cada derivación de miembros usa solo dos electrodos. El ruido de un electrodo llega solo a las dos que lo usan; la tercera queda limpia. Pásalo a otro electrodo.',
+        'I、II、III各用两个电极。噪声在一个电极上：用它的两个导联和以它命名的加压导联满是噪声，另两个加压导联带一半，剩下一个导联干净。换个电极试试。',
+        'Leads I, II and III each use two electrodes. Noise on one electrode fills the two that use it and the augmented lead named after it, half-fills the other two augmented leads and leaves one lead clean. Move it to another electrode.',
+        'I, II y III usan dos electrodos cada una. El ruido de un electrodo llena las dos que lo usan y la aumentada que lleva su nombre, llega a la mitad a las otras dos aumentadas y deja una derivación limpia. Pásalo a otro electrodo.',
       ),
     },
     {
@@ -189,7 +189,7 @@ const lesson: Lesson = {
         },
         {
           title: l('走 RR', 'March the RR', 'Recorre el RR'),
-          body: l('间距恒定、逐搏都对得上（约 830 ms，72 次/分）——伪差从不打乱真实的节律。房扑的 F 波与 QRS 有固定关系，而这里的波动和 QRS 毫无关系。', 'The spacing is constant and marches through beat after beat (about 830 ms, 72/min) — artefact never disturbs the true rhythm. Flutter waves keep a fixed relation to the QRS; this ripple has no relation to it at all.', 'La separación es constante y desfila latido a latido (unos 830 ms, 72 lpm): el artefacto nunca altera el ritmo real. Las ondas F del flutter mantienen una relación fija con el QRS; este rizado no tiene ninguna.'),
+          body: l('间距恒定、逐搏都对得上（约 830 ms，72 次/分）——伪差从不打乱真实的节律。房扑的 F 波与 QRS 有固定关系，而这里的波动和 QRS 毫无关系。', 'The spacing is constant and marches through beat after beat (about 830 ms, 72/min) — artefact never disturbs the true rhythm. Flutter waves keep a fixed relation to the QRS; this ripple has no relation to it at all.', 'La separación es constante y desfila latido a latido (unos 830 ms, 72 lpm): el artefacto nunca altera el ritmo real. Las ondas F del flúter mantienen una relación fija con el QRS; este rizado no tiene ninguna.'),
           marks: [{ auto: 'rr', lead: 'II' }],
           view: { layout: 'strip', lead: 'II', calipers: true },
         },
@@ -200,7 +200,7 @@ const lesson: Lesson = {
         },
         {
           title: l('看患者，修记录', 'Look at the patient, fix the recording', 'Mira al paciente y arregla el registro'),
-          body: l('患者状态与“房扑”矛盾——报告“窦性心律，左下肢电极震颤伪差”，不要开抗凝或复律。让腿放松、电极移到大腿近端，然后重做。', 'The patient contradicts "flutter" — report "sinus rhythm, tremor artefact on the left-leg electrode", and do not start anticoagulation or cardioversion. Let the leg relax, move the electrode to the upper thigh, and record again.', 'El paciente contradice el "flutter": informa "ritmo sinusal, artefacto por temblor en el electrodo de la pierna izquierda" y no inicies anticoagulación ni cardioversión. Relaja la pierna, sube el electrodo al muslo y repite el registro.'),
+          body: l('患者状态与“房扑”矛盾——报告“窦性心律，左下肢电极震颤伪差”，不要开抗凝或复律。让腿放松、电极移到大腿近端，然后重做。', 'The patient contradicts "flutter" — report "sinus rhythm, tremor artefact on the left-leg electrode", and do not start anticoagulation or cardioversion. Let the leg relax, move the electrode to the upper thigh, and record again.', 'El paciente contradice el "flúter": informa "ritmo sinusal, artefacto por temblor en el electrodo de la pierna izquierda" y no inicies anticoagulación ni cardioversión. Relaja la pierna, sube el electrodo al muslo y repite el registro.'),
         },
       ],
     },
@@ -250,7 +250,7 @@ const lesson: Lesson = {
       ],
       predict: {
         question: l('把同一份正常心电图换成监护档（0.5–40 Hz），V5的J点会怎样？', 'Put the same normal ECG through the monitor band (0.5–40 Hz). What happens to the J point in V5?', 'Pasa el mismo ECG normal por la banda de monitor (0,5–40 Hz). ¿Qué le pasa al punto J de V5?'),
-        options: [l('被拉到基线以下', 'It is dragged below the baseline', 'Baja por debajo de la línea de base'), l('不变', 'It stays put', 'No cambia'), l('明显抬高', 'It rises clearly', 'Sube claramente')],
+        options: [l('离开基线', 'It moves off the baseline', 'Se separa de la línea de base'), l('不变', 'It stays put', 'No cambia')],
         answer: 0,
       },
       caption: l(

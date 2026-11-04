@@ -82,9 +82,9 @@ const lesson: Lesson = {
         'Dolor torácico con elevación difusa del ST: ¿IAMCEST o pericarditis? Enumera las características que comprobarás en los próximos dos minutos.',
       ),
       reveal: l(
-        '**分布**、**PR 段**和**对应性**。这里 ST 凹面向上，在 I、II、aVF 和 V2–V6 广泛抬高（跨越血管分区），只有 aVR（和 V1）压低；PR 段在 II 和 V4–V6 压低、在 aVR 抬高——这是心包的弥漫性炎症，而不是某一支冠状动脉的地图。',
-        '**Distribution**, the **PR segment** and **reciprocity**. Here the ST is concave and widely elevated in I, II, aVF and V2–V6 (crossing coronary territories), depressed only in aVR (and V1); the PR segment is depressed in II and V4–V6 and elevated in aVR — diffuse inflammation of the pericardium, not the map of one coronary artery.',
-        '**Distribución**, **segmento PR** y **reciprocidad**. Aquí el ST es cóncavo y está elevado de forma difusa en I, II, aVF y V2–V6 (cruza territorios coronarios), y solo desciende en aVR (y V1); el PR desciende en II y V4–V6 y se eleva en aVR: inflamación difusa del pericardio, no el mapa de una arteria coronaria.',
+        '**分布**、**PR 段**和**对应性**。这里 ST 凹面向上，在 I、II、aVF 和 V2–V6 广泛抬高（跨越血管分区），只有 aVR 压低；PR 段在 II 和 V4–V6 压低、在 aVR 抬高——这是心包的弥漫性炎症，而不是某一支冠状动脉的地图。',
+        '**Distribution**, the **PR segment** and **reciprocity**. Here the ST is concave and widely elevated in I, II, aVF and V2–V6 (crossing coronary territories), depressed only in aVR; the PR segment is depressed in II and V4–V6 and elevated in aVR — diffuse inflammation of the pericardium, not the map of one coronary artery.',
+        '**Distribución**, **segmento PR** y **reciprocidad**. Aquí el ST es cóncavo y está elevado de forma difusa en I, II, aVF y V2–V6 (cruza territorios coronarios), y solo desciende en aVR; el PR desciende en II y V4–V6 y se eleva en aVR: inflamación difusa del pericardio, no el mapa de una arteria coronaria.',
       ),
     },
     {
@@ -128,7 +128,7 @@ const lesson: Lesson = {
       ],
       predict: {
         question: l('心包炎让包绕全心的心外膜受损。ST会在哪里压低？', 'Pericarditis injures the epicardium all around the heart. Where will the ST be depressed?', 'La pericarditis lesiona el epicardio alrededor de todo el corazón. ¿Dónde estará descendido el ST?'),
-        options: [l('只在aVR（和V1）', 'Only in aVR (and V1)', 'Solo en aVR (y V1)'), l('在一支冠脉对面的导联', 'In the leads facing away from one artery', 'En las derivaciones opuestas a una arteria'), l('到处都压低', 'Everywhere', 'En todas partes')],
+        options: [l('只在aVR', 'Only in aVR', 'Solo en aVR'), l('在一支冠脉对面的导联', 'In the leads facing away from one artery', 'En las derivaciones opuestas a una arteria'), l('到处都压低', 'Everywhere', 'En todas partes')],
         answer: 0,
       },
       caption: l(
@@ -170,7 +170,7 @@ const lesson: Lesson = {
         },
         {
           title: l('查对应性', 'Check reciprocity', 'Comprueba la reciprocidad'),
-          body: l('压低出现在哪里？只有 aVR（V1 也基本平）。I 和 aVL 没有镜像压低——如果是下壁 STEMI，aVL 一定会压低（i4）。', 'Where is the depression? Only in aVR (V1 is roughly flat). There is no mirror depression in I and aVL — an inferior STEMI would depress aVL (i4).', '¿Dónde está el descenso? Solo en aVR (V1 está prácticamente plana). No hay descenso especular en I ni aVL; un IAMCEST inferior descendería aVL (i4).'),
+          body: l('压低出现在哪里？只有 aVR。I 和 aVL 没有镜像压低——如果是下壁 STEMI，aVL 一定会压低（i4）。', 'Where is the depression? Only in aVR. There is no mirror depression in I and aVL — an inferior STEMI would depress aVL (i4).', '¿Dónde está el descenso? Solo en aVR. No hay descenso especular en I ni aVL; un IAMCEST inferior descendería aVL (i4).'),
           highlightLeads: ['aVR', 'aVL', 'I'],
         },
         {

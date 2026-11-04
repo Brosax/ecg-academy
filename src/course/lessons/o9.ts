@@ -58,9 +58,9 @@ const lesson: Lesson = {
       figure: { id: 'cable-swap', params: { start: 'correct' } },
       ecg: placed(1561),
       caption: l(
-        '导联是两个电极之差。交换两根导线，导联就会翻转或互换位置；胸导联始终不变。逐一试试每种接反。',
-        'A lead is the difference between two electrodes. Swap two cables and leads flip or trade places; the chest leads never change. Try each swap.',
-        'Una derivación es la diferencia entre dos electrodos. Intercambia dos cables y las derivaciones se invierten o cambian de sitio; las precordiales no cambian nunca. Prueba cada inversión.',
+        '导联是两个电极之差。交换两根导线，导联就会翻转或互换位置；RA、LA、LL之间互换从不改变胸导联。逐一试试每种接反。',
+        'A lead is the difference between two electrodes. Swap two cables and leads flip or trade places; swaps among RA, LA and LL never change the chest leads. Try each swap.',
+        'Una derivación es la diferencia entre dos electrodos. Intercambia dos cables y las derivaciones se invierten o cambian de sitio; los intercambios entre RA, LA y LL nunca cambian las precordiales. Prueba cada inversión.',
       ),
     },
     {
@@ -75,25 +75,25 @@ const lesson: Lesson = {
           marks: [{ auto: 'p', lead: 'II' }],
         },
         {
-          label: l('左右上肢接反', 'LA/RA swapped', 'LA/RA invertidos'),
+          label: l('左右上肢接反', 'LA/RA swapped', 'Inversión AI/AD'),
           ecg: placed(1561, { limbs: { RA: 'LA', LA: 'RA' } }),
           note: l('两上肢接反：I导联完全倒置（P、QRS、T）；II与III互换，aVR与aVL互换；aVF和V1–V6不变。', 'Arm cables swapped: lead I fully inverted (P, QRS, T); II and III trade places, so do aVR and aVL; aVF and V1–V6 unchanged.', 'Cables de los brazos invertidos: I del todo invertida (P, QRS, T); II y III se intercambian, igual que aVR y aVL; aVF y V1–V6 no cambian.'),
           marks: [{ auto: 'p', lead: 'I' }],
         },
         {
-          label: l('左上肢与左下肢接反', 'LA/LL swapped', 'LA/LL invertidos'),
+          label: l('左上肢与左下肢接反', 'LA/LL swapped', 'Inversión AI/PI'),
           ecg: placed(1561, { limbs: { LA: 'LL', LL: 'LA' } }),
           note: l('左上肢与左下肢接反：I与II互换，aVL与aVF互换，III倒置，aVR不变。线索：I的P波比II大。', 'Left arm and left leg swapped: I and II trade places, aVL and aVF too, III inverts, aVR unchanged. Clue: the P is bigger in I than in II.', 'Brazo y pierna izquierdos invertidos: I y II se intercambian, aVL y aVF también, III se invierte y aVR no cambia. Pista: la P es mayor en I que en II.'),
           marks: [{ auto: 'p', lead: 'I' }, { auto: 'p', lead: 'II' }],
         },
         {
-          label: l('右上肢与左下肢接反', 'RA/LL swapped', 'RA/LL invertidos'),
+          label: l('右上肢与左下肢接反', 'RA/LL swapped', 'Inversión AD/PI'),
           ecg: placed(1561, { limbs: { RA: 'LL', LL: 'RA' } }),
           note: l('右上肢与左下肢接反：I、II、III看起来都倒置，aVR变直立，aVF变成负的：像下壁Q波或低位房性心律。', 'Right arm and left leg swapped: I, II and III all look inverted, aVR turns upright and aVF negative: it can pass for inferior Q waves or a low atrial rhythm.', 'Brazo derecho y pierna izquierda invertidos: I, II y III parecen invertidas, aVR se vuelve positiva y aVF negativa: puede pasar por Q inferiores o un ritmo auricular bajo.'),
           marks: [{ auto: 'p', lead: 'II' }],
         },
         {
-          label: l('左上肢与右下肢接反', 'LA/RL swapped', 'LA/RL invertidos'),
+          label: l('左上肢与右下肢接反', 'LA/RL swapped', 'Inversión AI/PD'),
           ecg: placed(1561, { limbs: { LA: 'RL', RL: 'LA' } }),
           note: l('左上肢导线接到右腿（中性电极）：III几乎成了一条直线，I和II一模一样，胸导联也稍有改变。', 'Left-arm cable on the right leg (the neutral electrode): lead III goes almost flat, I and II look identical, and the chest leads shift a little.', 'Cable del brazo izquierdo en la pierna derecha (el electrodo neutro): III queda casi plana, I y II son idénticas y las precordiales cambian algo.'),
           marks: [{ auto: 'qrs', lead: 'III' }],
@@ -278,7 +278,7 @@ const lesson: Lesson = {
       points: [
         l('上肢与左下肢导线互换不碰胸前导联：LA/RA = I 导联全倒置、II↔III、aVR↔aVL、aVF 不变，V1–V6 正常。', 'Arm and left-leg cable swaps spare the chest leads: LA/RA = lead I fully inverted, II↔III, aVR↔aVL, aVF unchanged, V1–V6 normal.', 'Los intercambios de cables de brazos y pierna izquierda no tocan las precordiales: AI/AD = derivación I invertida por completo, II↔III, aVR↔aVL, aVF sin cambios y V1-V6 normales.'),
         l('I 导联倒置 + V1–V6 R 波递增不良 = 右位心，不是接反；右侧胸导联可证实。', 'Inverted lead I + poor R progression across V1–V6 = dextrocardia, not cable reversal; right-sided chest leads confirm it.', 'Derivación I invertida + mala progresión de la R en V1-V6 = dextrocardia, no inversión de cables; las precordiales derechas lo confirman.'),
-        l('LA/LL 最隐秘（I↔II、aVR 正常、I 的 P 大于 II）；涉及中性电极的反接让一个导联近乎平坦。', 'LA/LL is the subtlest (I↔II, aVR normal, P larger in I than in II); any reversal involving the neutral electrode flattens one lead.', 'La AI/PI es la más sutil (I↔II, aVR normal, P mayor en I que en II); toda inversión que afecte al electrodo neutro aplana una derivación.'),
+        l('LA/LL 最隐秘（I↔II、aVR 正常、I 的 P 大于 II）；上肢导线与中性电极（RL）互换让一个导联近乎平坦（LA/RL→III，RA/RL→II），LL/RL 互换几乎没有变化。', 'LA/LL is the subtlest (I↔II, aVR normal, P larger in I than in II); an arm cable swapped with the neutral (RL) one flattens one lead (LA/RL→III, RA/RL→II), while LL/RL changes almost nothing.', 'La AI/PI es la más sutil (I↔II, aVR normal, P mayor en I que en II); cambiar un cable de brazo por el del electrodo neutro (PD) aplana una derivación (AI/PD→III, AD/PD→II), mientras que PI/PD apenas cambia nada.'),
         l('胸导联错位打断 R 波递增（孤立跳变）；V1–V2 过高貌似 iRBBB/Brugada。先查记录，再查心脏。', 'Chest-lead misplacement breaks R progression (an isolated jump); high V1–V2 mimics iRBBB/Brugada. Check the recording before the heart.', 'La mala colocación precordial rompe la progresión de la R (salto aislado); V1-V2 altas simulan un bloqueo de rama derecha incompleto o Brugada. Comprueba el registro antes que el corazón.'),
       ],
     },

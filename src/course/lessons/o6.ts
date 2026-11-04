@@ -233,9 +233,9 @@ const lesson: Lesson = {
       left: {
         ecg: synth('pulmonary-embolism', 1506, { rate: 104 }),
         caption: l(
-          '急性肺栓塞：窦性心动过速、S1Q3T3、V1–V3 T 波倒置；QRS 电压不高',
-          'Acute PE: sinus tachycardia, S1Q3T3, T inversion in V1–V3; QRS voltage not increased',
-          'TEP agudo: taquicardia sinusal, S1Q3T3, T invertida en V1–V3; voltaje del QRS no aumentado',
+          '急性肺栓塞：窦性心动过速、S1Q3T3、V1–V2 T 波倒置；QRS 电压不高',
+          'Acute PE: sinus tachycardia, S1Q3T3, T inversion in V1–V2; QRS voltage not increased',
+          'TEP agudo: taquicardia sinusal, S1Q3T3, T invertida en V1–V2; voltaje del QRS no aumentado',
         ),
         marks: [{ auto: 't', lead: 'V2' }],
       },

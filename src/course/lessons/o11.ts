@@ -98,6 +98,10 @@ const lesson: Lesson = {
           value: l('有效 CRT：V1 主波向上（类 RBBB）+ I 导联 QS/负向，QRS 比基线窄；变回 LBBB 样（V1 负、I 正、更宽）= 左室失夺获', 'Effective CRT: dominant R in V1 (RBBB-like) + QS/negative lead I, QRS narrower than baseline; reversion to LBBB-like (negative V1, positive I, wider) = loss of LV capture', 'TRC eficaz: R dominante en V1 (tipo BRD) + QS/negativa en la derivación I, QRS más estrecho que el basal; la reversión a un patrón tipo BRI (V1 negativa, I positiva, más ancho) = pérdida de captura del VI'),
         },
         {
+          label: l('双室起搏：右室失夺获', 'Biventricular pacing: loss of RV capture', 'Estimulación biventricular: pérdida de captura del VD'),
+          value: l('宽 QRS、类 RBBB（比双室同时夺获时更宽），I 导联 QS 或负向 = 只剩左室起搏，即右室失夺获', 'A wide RBBB-like QRS (wider than with both leads capturing) with QS or a negative lead I = LV-only pacing, i.e. loss of RV capture', 'QRS ancho tipo BRD (más ancho que con los dos electrodos capturando) con QS o negatividad en la derivación I = estimulación solo del VI, es decir, pérdida de captura del VD'),
+        },
+        {
           label: l('DDD 的算法', 'DDD algorithms', 'Algoritmos del DDD'),
           value: l(
             '四种状态（AP–VP、AP–VS、AS–VP、AS–VS）逐跳切换属正常；房性快速心律失常时自动模式转换为不跟踪模式（如 DDI）；室早后延长 PVARP，避免跟踪逆传 P 波；逆传 P 波被持续跟踪 = 起搏器介导的心动过速（接近上限频率的规则心室起搏心动过速，磁铁可终止）',
@@ -261,7 +265,7 @@ const lesson: Lesson = {
         {
           label: l('感知过度', 'Oversensing', 'Sobredetección'),
           ecg: synth('pacing-oversensing', 1608),
-          note: l('一个约2.6秒的停顿，既无起搏钉也无QRS，长于1秒的下限间期：感知过度（这里是胸大肌肌电）。', 'A pause of about 2.6 s with no spike and no QRS, longer than the 1-s lower-rate interval: oversensing (here, pectoral muscle).', 'Una pausa de unos 2,6 s sin espícula ni QRS, más larga que el intervalo mínimo de 1 s: sobredetección (aquí, músculo pectoral).'),
+          note: l('一个约2.6秒的停顿，既无起搏钉也无QRS，长于1秒的下限间期：感知过度。', 'A pause of about 2.6 s with no spike and no QRS, longer than the 1-s lower-rate interval: oversensing.', 'Una pausa de unos 2,6 s sin espícula ni QRS, más larga que el intervalo mínimo de 1 s: sobredetección.'),
           marks: [{ auto: 'rr' }],
         },
       ],
@@ -297,6 +301,7 @@ const lesson: Lesson = {
         l('伪融合波被当作感知不足：钉落在自身 QRS 上而没有改变它，是正常的时间巧合，不是故障。', 'Calling pseudofusion undersensing: a spike falling on an intrinsic QRS without changing it is a normal timing coincidence, not a malfunction.', 'Llamar infradetección a la pseudofusión: una espícula que cae sobre un QRS propio sin modificarlo es una coincidencia temporal normal, no un fallo.'),
         l('见到超过下限频率的长间歇就宣布“电池耗竭”，不先排除频率滞后、睡眠频率和减少右室起搏的算法。', 'Declaring "battery depletion" at a pause beyond the lower rate without first excluding rate hysteresis, sleep rates and RV-pacing-avoidance algorithms.', 'Declarar «agotamiento de la batería» ante una pausa superior a la frecuencia límite inferior sin excluir antes la histéresis de frecuencia, la frecuencia de reposo y los algoritmos que minimizan la estimulación del VD.'),
         l('用普通 ST 阈值判读起搏心律的 ST 段：右室起搏掩盖梗死的方式与 LBBB 相同，要用 Sgarbossa 型标准（i10）。', 'Reading ST in a paced rhythm with the usual thresholds: RV pacing hides infarction exactly as LBBB does — apply the Sgarbossa-type rules (i10).', 'Leer el ST de un ritmo estimulado con los umbrales habituales: la estimulación del VD oculta el infarto igual que el BRI; aplica las reglas tipo Sgarbossa (i10).'),
+        l('只凭 V1 负向就判定左室失夺获：V1 的形态取决于左室导线的位置和 V1 电极的位置。CRT 那一帧 V1 是负的，但 I 导联转负、QRS 比单纯右室起搏窄，说明两根导线都在夺获。', 'Calling loss of LV capture from a negative V1 alone: V1 depends on the LV lead site and on where V1 sits. In the CRT frame V1 is negative, yet lead I turns negative and the QRS is narrower than with RV pacing alone, so both leads capture.', 'Diagnosticar pérdida de captura del VI solo porque V1 es negativa: V1 depende del sitio del electrodo del VI y de dónde esté V1. En el fotograma de TRC V1 es negativa, pero la derivación I se vuelve negativa y el QRS es más estrecho que con el VD solo: los dos electrodos capturan.'),
         l('盲目相信图上的钉样信号：数字心电图可能漏画、错画，或只是加上注释——夺获要看钉后有没有 P/QRS，不是看钉本身。', 'Trusting the printed spike blindly: a digital electrocardiograph can miss or falsely insert spikes, or merely annotate one — capture is judged by the P/QRS after it, not by the spike.', 'Confiar a ciegas en la espícula impresa: un electrocardiógrafo digital puede omitirla, insertarla por error o limitarse a anotarla; la captura se juzga por la P o el QRS que sigue, no por la espícula.'),
       ],
     },
@@ -307,7 +312,7 @@ const lesson: Lesson = {
         l('右室心尖起搏 = “电学 LBBB”：宽 QRS、电轴偏上（II/III/aVF 负）、V1 呈 QS/rS，V5–V6 也可以负向；双极的钉可以小到看不见。', 'RV apical pacing = an "electronic LBBB": wide QRS, superior axis (negative II/III/aVF), QS/rS in V1, V5–V6 may also be negative; a bipolar spike can be invisible.', 'La estimulación del ápex del VD = un «BRI electrónico»: QRS ancho, eje superior (II/III/aVF negativas), QS/rS en V1, V5-V6 también puede ser negativa; la espícula bipolar puede ser invisible.'),
         l('三项检查：夺获（钉后必有 P/QRS，不应期内的例外不算失夺获）、感知（自身波后仍发钉 = 感知不足；长于下限频率间期的间歇无钉 = 感知过度）、频率（钉到钉 = 下限频率；磁铁 → 非同步）。', 'The three-function check: capture (a P/QRS after every spike — a spike inside the refractory period does not count as failure), sensing (spikes after intrinsic beats = undersensing; a pause beyond the lower-rate interval with no spike = oversensing), rate (spike-to-spike = the lower rate; magnet = asynchronous).', 'La comprobación de tres funciones: captura (P/QRS tras cada espícula; la espícula dentro del periodo refractario no cuenta como fallo), detección (espículas tras latidos propios = infradetección; pausa más allá del intervalo límite sin espícula = sobredetección) y frecuencia (espícula a espícula = frecuencia límite inferior; imán = asíncrono).'),
         l('融合波与伪融合波是正常现象；起搏后自身心跳的深倒 T 可能是心脏记忆（o8），不是缺血。', 'Fusion and pseudofusion beats are normal; deep T inversion in intrinsic beats after pacing may be cardiac memory (o8), not ischaemia.', 'Los latidos de fusión y pseudofusión son normales; la T profundamente negativa de los latidos propios tras la estimulación puede ser memoria cardiaca (o8), no isquemia.'),
-        l('CRT：V1 主波向上 + I 导联负向；变回 LBBB 样 = 左室失夺获。起搏心律中的急性梗死要用 Sgarbossa 型标准判读（i10）。', 'CRT: dominant R in V1 + negative lead I; reversion to LBBB-like = loss of LV capture. Acute MI in a paced rhythm is read with the Sgarbossa-type rules (i10).', 'TRC: R dominante en V1 + derivación I negativa; la reversión a un patrón tipo BRI = pérdida de captura del VI. El infarto agudo en ritmo estimulado se lee con las reglas tipo Sgarbossa (i10).'),
+        l('CRT：V1 常主波向上；I 导联负向；变回 LBBB 样 = 左室失夺获。起搏心律中的急性梗死要用 Sgarbossa 型标准判读（i10）。', 'CRT: often a dominant R in V1; lead I negative; reversion to LBBB-like = loss of LV capture. Acute MI in a paced rhythm is read with the Sgarbossa-type rules (i10).', 'TRC: a menudo R dominante en V1; derivación I negativa; la reversión a un patrón tipo BRI = pérdida de captura del VI. El infarto agudo en ritmo estimulado se lee con las reglas tipo Sgarbossa (i10).'),
       ],
     },
   ],

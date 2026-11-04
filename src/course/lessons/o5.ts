@@ -260,7 +260,7 @@ const lesson: Lesson = {
         l('缓慢房颤被当作原发性心律失常处理，忽略了体温。', 'Slow AF treated as a primary arrhythmia while the temperature is ignored.', 'Tratar la FA lenta como una arritmia primaria ignorando la temperatura.'),
         l('粗暴搬动重度低温患者，诱发室颤。', 'Handling a severely hypothermic patient roughly and triggering VF.', 'Movilizar con brusquedad a un paciente con hipotermia grave y desencadenar una FV.'),
         l('用 J 波大小当温度计：用体温计量核心体温。', 'Using J-wave size as a thermometer: measure the core temperature with a thermometer.', 'Usar el tamaño de la onda J como termómetro: mide la temperatura central con un termómetro.'),
-        l('寒战伪差读成房颤/房扑并给药：找干净导联，QRS 仍规则走过去。', 'Shivering artefact read as AF or flutter and treated: find the clean lead where the QRS still marches regularly.', 'Leer el artefacto por escalofríos como FA o flutter y tratarlo: busca la derivación limpia donde el QRS sigue desfilando regular.'),
+        l('寒战伪差读成房颤/房扑并给药：找干净导联，QRS 仍规则走过去。', 'Shivering artefact read as AF or flutter and treated: find the clean lead where the QRS still marches regularly.', 'Leer el artefacto por escalofríos como FA o flúter y tratarlo: busca la derivación limpia donde el QRS sigue desfilando regular.'),
       ],
     },
     {

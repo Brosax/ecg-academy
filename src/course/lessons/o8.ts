@@ -195,9 +195,9 @@ const lesson: Lesson = {
           marks: [{ auto: 'pacing-spike' }, { auto: 'qrs', lead: 'III' }],
         },
         {
-          label: l('自身节律', 'Own rhythm', 'Ritmo propio'),
+          label: l('另一位患者，已停起搏', 'Another patient, pacing stopped', 'Otra paciente, sin estimulación'),
           ecg: synth('cardiac-memory', 1542),
-          note: l('停止起搏，QRS正常（约95 ms），但III、aVF和V1–V2的T波倒置：仍指向起搏QRS的方向。', 'Pacing off, a normal QRS (about 95 ms), yet the T is inverted in III, aVF and V1–V2: it still points where the paced QRS pointed.', 'Sin estimulación, QRS normal (unos 95 ms), pero la T está invertida en III, aVF y V1–V2: sigue apuntando hacia donde iba el QRS estimulado.'),
+          note: l('另一位患者，右室起搏已停：QRS正常（约95 ms），但III、aVF和V1–V2的T波倒置，仍沿着右室心尖起搏QRS的方向。', 'Another patient, her RV pacing stopped: a normal QRS (about 95 ms), yet the T is inverted in III, aVF and V1–V2, the way an RV-apex paced QRS points.', 'Otra paciente, ya sin estimulación del VD: QRS normal (unos 95 ms), pero la T está invertida en III, aVF y V1–V2, hacia donde apunta un QRS estimulado desde el ápex del VD.'),
           marks: [{ auto: 't', lead: 'III' }, { auto: 't', lead: 'V1' }],
         },
         {
