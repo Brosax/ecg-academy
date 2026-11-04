@@ -457,11 +457,12 @@ describe('s2: rate on the tracings', () => {
 });
 
 describe('s3: sinus rhythm on the tracings', () => {
-  it('hook: same PR every beat, PP from about 730 to about 980 ms', () => {
+  it('hook: same PR every beat, PP (P onset to P onset) from about 735 to about 985 ms', () => {
     const e = ecgOf(blocksOf('s3', 'hook')[0].ecg);
-    const pp = rrs(e);
-    expect(Math.abs(Math.min(...pp) - 730)).toBeLessThanOrEqual(5);
-    expect(Math.abs(Math.max(...pp) - 980)).toBeLessThanOrEqual(5);
+    const beats = e.truth!.beats;
+    const pp = beats.slice(1).map((b, i) => b.pOn! - beats[i].pOn!);
+    expect(Math.abs(Math.min(...pp) - 735)).toBeLessThanOrEqual(5);
+    expect(Math.abs(Math.max(...pp) - 985)).toBeLessThanOrEqual(5);
     const prs = e.truth!.beats.map((b) => b.qrsOn - b.pOn!);
     expect(Math.max(...prs) - Math.min(...prs)).toBeLessThan(5);
   });
@@ -479,7 +480,7 @@ describe('s3: sinus rhythm on the tracings', () => {
     const b = beats[marked[0]];
     expect(b.kind).toBe('sinus');
     expect(pw(e, 'II', b).max).toBeGreaterThan(0.05);
-    expect(pw(e, 'aVR', b).min).toBeLessThan(-0.03);
+    expect(pw(e, 'aVR', b).min).toBeLessThan(-MIN_WAVE_MV);
     expect(Math.abs(b.qrsOn - b.pOn! - 160)).toBeLessThanOrEqual(5);
     const inColumn = leadWindows('aVR', e.signal.durationMs).some(([t0, t1]) => b.pOn! >= t0 && b.pOff! <= t1);
     expect(inColumn, 'P inside the aVR column').toBe(true);
