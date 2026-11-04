@@ -59,3 +59,9 @@ The engine exposes few dials per scenario: of 130 scenarios, 71 offer only `rate
 | t1–t7 (stage T subagent) | 28c99cf … c727391, merged 7a2132d | gate + `lessons-t` + i18n: 261 passed, 23 expected fail; typecheck clean; browser: t5 four-mimics film plays, caption hidden before the reveal | content review running |
 | i1–i11 (stage I subagent) | d7686c1 … d7c41e6, merged e627fcc | gate + `lessons-i` + i18n: 326 passed, 12 expected fail; typecheck clean; browser: i9 timeline film plays minutes → hours → 1 day → weeks; frame 4 note says "the same as the opening tracing" although it is another seed | content review running |
 | o1–o12 (stage O subagent) | 76402fa … 5e26a3c, merged eda43d8 | the PENDING list is empty and deleted; the gate is strict for all 58 S–X lessons: 332 passed; typecheck clean | content review running |
+
+## Stopped 2026-11-04 (usage limit)
+
+- Full suite at eda43d8: 4884 passed, 1 failed (`tests/course/heart-block.test.ts` > every heart block in the course > six-phase timeline; likely a heart block added by a stage writer), 9 skipped. Not fixed.
+- Stopped mid-run, branches kept: R fix (worktree-agent-a84ea4df4403eddf7), S residual fix (…a8196621ee72a67fd), X fix (…a1c4b60b7fc6f73ef), H fix (…a05d267f80e79e948). Their fix lists are in the session scratchpad. Reviews of T, I and O were stopped before reporting.
+- Content still NOT VERIFIED for R, T, I, H, O, X: each stage passes the gate and its tests, but reviews found (or would need to check) medical and wording errors listed above.
