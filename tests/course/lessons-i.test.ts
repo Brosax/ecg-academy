@@ -474,13 +474,36 @@ describe('i3: anterior occlusion on the tracings', () => {
     for (const l of ['I', 'aVL'] as const) expect(Math.abs(stAt(a, l)), l).toBeLessThan(0.05);
     for (const l of ['V2', 'V3'] as const) expect(stAt(a, l), l).toBeGreaterThan(0.1);
   });
-  it('hyperacute T: broad tall T in V2–V4 (≥ 5 mm) with the J point under 1 mm, inverted T in III', () => {
-    const e = ecgOf(blocksOf('i3', 'ecg')[0].ecg);
+  it('hyperacute T frame: broad tall T in V2–V4 (≥ 5 mm) with the J point under 1 mm, inverted T in III', () => {
+    const e = frame('i3', 0, 0);
     for (const l of ['V2', 'V3', 'V4'] as const) {
       expect(tw(e, l).max, l).toBeGreaterThanOrEqual(0.5);
       expect(stAt(e, l), l).toBeLessThan(0.1);
     }
     expect(tInverted(e, 'III')).toBe(true);
+  });
+  it('family film: anteroseptal V1–V3 up with V2 highest, V4 < 1 mm, V5–V6/I/aVL flat; anterior V1–V4 up with V3 highest and an inferior mirror; anterolateral = the hook', () => {
+    const as = frame('i3', 0, 1);
+    for (const l of ['V1', 'V2', 'V3'] as const) expect(stAt(as, l), l).toBeGreaterThanOrEqual(0.1);
+    expect(CHEST.reduce((m, l) => (stAt(as, l) > stAt(as, m) ? l : m))).toBe('V2');
+    expect(stAt(as, 'V4')).toBeLessThan(0.1);
+    for (const l of ['V5', 'V6', 'I', 'aVL'] as const) expect(Math.abs(stAt(as, l)), l).toBeLessThan(0.07);
+    const ant = frame('i3', 0, 2);
+    for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(stAt(ant, l), l).toBeGreaterThanOrEqual(0.1);
+    expect(CHEST.reduce((m, l) => (stAt(ant, l) > stAt(ant, m) ? l : m))).toBe('V3');
+    for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(ant, l), l).toBeLessThan(-0.05);
+    expect(blocksOf('i3', 'film')[0].frames[3].ecg).toEqual(blocksOf('i3', 'hook')[0].ecg);
+  });
+  it('injury sweep notes (J point): V3 2–3.5 mm with V5–V6 under 1 mm at 0.22–0.30; V2–V4 grow and III deepens with V5–V6 still under 1 mm across 0.31–0.45', () => {
+    for (const v of [0.22, 0.3]) {
+      const e = played('i3', 0, v);
+      expect(stAt(e, 'V3'), `${v} V3`).toBeGreaterThanOrEqual(0.2);
+      expect(stAt(e, 'V3'), `${v} V3`).toBeLessThanOrEqual(0.35);
+    }
+    for (const v of [0.22, 0.26, 0.3, 0.31, 0.38, 0.45]) for (const l of ['V5', 'V6'] as const) expect(stAt(played('i3', 0, v), l), `${v} ${l}`).toBeLessThan(0.1);
+    const [lo, hi] = [played('i3', 0, 0.31), played('i3', 0, 0.45)];
+    for (const l of ['V2', 'V3', 'V4'] as const) expect(stAt(hi, l), l).toBeGreaterThan(stAt(lo, l) + 0.05);
+    expect(stAt(hi, 'III')).toBeLessThan(stAt(lo, 'III') - 0.03);
   });
 });
 
