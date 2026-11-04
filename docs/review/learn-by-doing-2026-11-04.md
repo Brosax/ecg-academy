@@ -65,3 +65,8 @@ The engine exposes few dials per scenario: of 130 scenarios, 71 offer only `rate
 - Full suite at eda43d8: 4884 passed, 1 failed (`tests/course/heart-block.test.ts` > every heart block in the course > six-phase timeline; likely a heart block added by a stage writer), 9 skipped. Not fixed.
 - Stopped mid-run, branches kept: R fix (worktree-agent-a84ea4df4403eddf7), S residual fix (…a8196621ee72a67fd), X fix (…a1c4b60b7fc6f73ef), H fix (…a05d267f80e79e948). Their fix lists are in the session scratchpad. Reviews of T, I and O were stopped before reporting.
 - Content still NOT VERIFIED for R, T, I, H, O, X: each stage passes the gate and its tests, but reviews found (or would need to check) medical and wording errors listed above.
+
+## Resumed 2026-11-04
+
+- Heart-block test fixed (8e1add2): t1's AVRT heart has a retrograde P′, so the six heart phases cannot compile; HeartBlock already falls back to following the cursor, and the test now checks that fallback. Browser: t1 step 7 renders the heart and the ECG with no console error.
+- Of the four stopped fix branches only X1 had a commit (f698877); merged as d9fe209. Fresh fix agents for R, S (residual), H and X2–X4 and reviews of T, I and O started from d9fe209; fix agents now commit each lesson as soon as it passes.
