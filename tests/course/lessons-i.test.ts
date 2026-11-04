@@ -413,7 +413,7 @@ describe('i2: territories on the tracings', () => {
     const e = frame('i2', 1, 1);
     expect(stAt(e, 'V4R')).toBeGreaterThan(0.1);
     expect(stAt(e, 'V1')).toBeGreaterThanOrEqual(0.1);
-    expect(stAt(e, 'V1')).toBeLessThan(0.14);
+    expect(stAt(e, 'V1')).toBeLessThanOrEqual(0.125);
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
   });
   it('posterolateral frame: V1–V2 depressed ≥ 0.5 mm ending in upright T waves (V1–V3), V5/V6 elevated ≥ 1 mm, I/aVL slightly up (< 1 mm); V8 ≥ 0.5 mm', () => {
@@ -443,8 +443,8 @@ describe('i2: territories on the tracings', () => {
     expect(stAt(lat, 'III')).toBeLessThan(-0.05);
     const rv = frame('i2', 0, 4);
     expect(rv.truth!.findings).toContain('rv-infarction');
-    expect(stAt(rv, 'V1')).toBeGreaterThanOrEqual(0.08);
-    expect(stAt(rv, 'V1')).toBeLessThan(0.14);
+    expect(stAt(rv, 'V1')).toBeGreaterThanOrEqual(0.075);
+    expect(stAt(rv, 'V1')).toBeLessThanOrEqual(0.125);
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(rv, l), l).toBeGreaterThanOrEqual(0.1);
   });
 });

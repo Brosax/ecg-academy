@@ -256,7 +256,7 @@ const lesson: Lesson = {
           note: l(
             '下壁STEMI加V1抬高约1 mm：右心室受累 → 近端RCA。RCA也供应窦房结和房室结：留意心率。',
             'Inferior STEMI plus V1 up about 1 mm: the right ventricle joins → proximal RCA. The RCA also feeds the sinus and AV nodes: check the rate.',
-            'IAMCEST inferior con V1 elevada unos 1 mm: se suma el ventrículo derecho → CD proximal. La CD irriga también los nodos sinusal y AV: vigila la frecuencia.',
+            'IAMCEST inferior con V1 elevada alrededor de 1 mm: se suma el ventrículo derecho → CD proximal. La CD irriga también los nodos sinusal y AV: vigila la frecuencia.',
           ),
           marks: [{ auto: 'j', lead: 'V1' }, { auto: 'rr' }],
         },
