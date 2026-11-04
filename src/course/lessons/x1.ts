@@ -99,7 +99,7 @@ const lesson: Lesson = {
     },
     {
       kind: 'film',
-      title: l('正常的图也写满十行', 'A normal tracing still gets ten lines', 'Un ECG normal también lleva diez líneas'),
+      title: l('给一份正常的图写报告', 'Reporting a normal tracing', 'El informe de un ECG normal'),
       view: GRID,
       frames: [
         {
@@ -108,7 +108,7 @@ const lesson: Lesson = {
           note: l(
             '第 1 行：定标 10 mm、25 mm/s、基线干净；I 导联直立、aVR 倒置：电极接对了。',
             'Line 1: 10 mm pulse, 25 mm/s, clean baseline; I upright and aVR negative: the cables are right.',
-            'Línea 1: pulso de 10 mm, 25 mm/s, línea de base limpia; I positiva y aVR negativa: los cables están bien.',
+            'Línea 1: pulso de calibración de 10 mm, 25 mm/s, línea de base limpia; I positiva y aVR negativa: los cables están bien.',
           ),
           marks: [{ kind: 'lead', lead: 'I' }, { kind: 'lead', lead: 'aVR' }],
         },
@@ -296,9 +296,9 @@ const lesson: Lesson = {
             min: 0.22,
             max: 0.25,
             text: l(
-              '描述：V3 抬高约 **3 mm**，III 压低约 1 mm。诊断：急性前壁 STEMI。紧急程度：现在处理。',
-              'Description: V3 up about **3 mm**, III down about 1 mm. Diagnosis: acute anterior STEMI. Urgency: act now.',
-              'Descripción: V3 elevado unos **3 mm**, III descendido alrededor de 1 mm. Diagnóstico: IAMCEST anterior agudo. Urgencia: actuar ya.',
+              '滑块读数是 V2 的 ST。描述：V3 抬高约 **3 mm**，III 压低约 1 mm。诊断：急性前壁 STEMI。紧急程度：现在处理。',
+              'The slider reads the ST in V2. Description: V3 up about **3 mm**, III down about 1 mm. Diagnosis: acute anterior STEMI. Urgency: act now.',
+              'El control marca el ST de V2. Descripción: V3 elevado unos **3 mm**, III descendido alrededor de 1 mm. Diagnóstico: IAMCEST anterior agudo. Urgencia: actuar ya.',
             ),
           },
           {
@@ -323,9 +323,9 @@ const lesson: Lesson = {
       },
       predict: {
         question: l(
-          '把损伤电流从 0.22 调到 0.45 mV，报告里哪一行会变？',
-          'Turn the injury current up from 0.22 to 0.45 mV. Which line of the report changes?',
-          'Sube la corriente de lesión de 0,22 a 0,45 mV. ¿Qué línea del informe cambia?',
+          '把 V2 的 ST 从 0.22 调到 0.45 mV，报告里哪一行会变？',
+          'Raise the ST in V2 from 0.22 to 0.45 mV. Which line of the report changes?',
+          'Sube el ST de V2 de 0,22 a 0,45 mV. ¿Qué línea del informe cambia?',
         ),
         options: [
           l('ST 描述里的毫米数', 'The millimetres in the ST description', 'Los milímetros de la descripción del ST'),
@@ -345,9 +345,9 @@ const lesson: Lesson = {
       ecg: WORKED,
       emphasize: ['lv-basal-anteroseptal', 'lv-mid-anteroseptal', 'lv-basal-anterior', 'lv-mid-anterior', 'lv-apical-anterior', 'lv-apical-septal'],
       caption: l(
-        '为什么是 V1–V4？损伤在前壁，损伤电流朝向前壁导联，所以抬高；它背离 II、III、aVF，所以那里压低。',
-        'Why V1–V4? The injury is in the anterior wall: its current points toward the anterior leads, which rise, and away from II, III and aVF, which dip.',
-        '¿Por qué V1–V4? La lesión está en la cara anterior: su corriente apunta hacia las derivaciones anteriores, que suben, y se aleja de II, III y aVF, que bajan.',
+        '为什么是 V1–V4？损伤在前壁，损伤电流朝向前壁导联，所以那里抬高。这份图的 II、III、aVF 是这次前壁损伤的镜像改变：ST 压低。',
+        'Why V1–V4? The injury is in the anterior wall and its current points toward the anterior leads, so they rise. On this tracing, II, III and aVF show the reciprocal (mirror) change of this anterior injury: their ST dips.',
+        '¿Por qué V1–V4? La lesión está en la cara anterior y su corriente apunta hacia las derivaciones anteriores, que suben. En este ECG, II, III y aVF muestran el cambio recíproco (en espejo) de esta lesión anterior: su ST baja.',
       ),
     },
     {
