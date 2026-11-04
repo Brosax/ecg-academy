@@ -292,6 +292,25 @@ function detrended(e: Ecg, lead: StdLead, t0: number, t1: number): number {
 /** P onset of each beat minus the T end of the beat before (negative: the P starts on the previous T) */
 const pAfterT = (e: Ecg): number[] => e.truth!.beats.slice(1).map((b, i) => b.pOn! - e.truth!.beats[i].tOff);
 const hiddenShare = (e: Ecg): number => e.truth!.atrial.filter((a) => !a.visible).length / e.truth!.atrial.length;
+/** median peak-to-peak of the baseline between T end + 40 ms and the next QRS − 40 ms (f or F waves), mV */
+function diastolicP2p(e: Ecg, lead: StdLead): number {
+  const b = e.truth!.beats;
+  const out: number[] = [];
+  for (let i = 0; i + 1 < b.length; i++) {
+    const t0 = b[i].tOff + 40;
+    const t1 = b[i + 1].qrsOn - 40;
+    if (t1 - t0 < 150) continue;
+    let mx = -Infinity;
+    let mn = Infinity;
+    for (let t = t0; t <= t1; t += 2) {
+      mx = Math.max(mx, at(e, lead, t));
+      mn = Math.min(mn, at(e, lead, t));
+    }
+    out.push(mx - mn);
+  }
+  return out.sort((x, y) => x - y)[Math.floor(out.length / 2)];
+}
+const median = (xs: readonly number[]): number => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)];
 
 describe('t1 on the tracings', () => {
   it('worked AVRT: ~190/min, retrograde P′ ~115 ms after QRS onset, negative in I and aVL, positive in III and aVF', () => {
@@ -410,6 +429,75 @@ describe('t2 on the tracings', () => {
     const ratios = rrs(e).map((rr) => Math.round(rr / 200));
     for (const r of ratios) expect([3, 4, 5]).toContain(r);
     expect(new Set(ratios).size).toBeGreaterThanOrEqual(2);
+  });
+  it('laddergram: the worked flutter tracing, an F every 200 ms, every 3rd, 4th or 5th F conducted', () => {
+    const fig = blocksOf('t2', 'figure').find((b) => b.figure.id === 'laddergram')!;
+    expect(fig.ecg).toEqual(blocksOf('t2', 'worked')[0].ecg);
+    const atr = ecgOf(fig.ecg!).truth!.atrial;
+    for (let i = 1; i < atr.length; i++) expect(Math.abs(atr[i].t - atr[i - 1].t - 200)).toBeLessThan(3);
+    const conducted = atr.flatMap((a, i) => (a.conductedTo !== null ? [i] : []));
+    for (let k = 1; k < conducted.length; k++) expect([3, 4, 5]).toContain(conducted[k] - conducted[k - 1]);
+  });
+  it('irregular film: AF RR with no pattern; flutter = the worked tracing; two PACs with P′ negative in II and a less-than-compensatory pause; sinus arrhythmia with one P and one PR; bigeminy pairs a sinus beat with an early wide QRS that has no P', () => {
+    const film = blocksOf('t2', 'film')[0];
+    const [af, , pac, sa, big] = frames('t2', 0);
+    expect(af.truth!.rhythm).toBe('atrial-fibrillation');
+    expect(Math.max(...rrs(af)) - Math.min(...rrs(af))).toBeGreaterThan(300);
+    expect(film.frames[1].ecg).toEqual(blocksOf('t2', 'worked')[0].ecg);
+    const pb = pac.truth!.beats;
+    const early = pb.flatMap((b, i) => (b.kind === 'atrial' ? [i] : []));
+    expect(early.length).toBe(2);
+    const sinusRr = median(pb.slice(1).flatMap((b, i) => (b.kind === 'sinus' && pb[i].kind === 'sinus' ? [b.qrsOn - pb[i].qrsOn] : [])));
+    const s = pb.find((b) => b.kind === 'sinus')!;
+    expect(detrended(pac, 'II', s.pOn!, s.pOff!)).toBeGreaterThan(0.05);
+    for (const i of early) {
+      expect(detrended(pac, 'II', pb[i].pOn!, pb[i].pOff!), `PAC ${i}`).toBeLessThan(-0.05);
+      expect(pb[i].qrsOn - pb[i - 1].qrsOn, `PAC ${i} early`).toBeLessThan(0.8 * sinusRr);
+      expect(pb[i + 1].qrsOn - pb[i - 1].qrsOn, `PAC ${i} pause`).toBeLessThan(2 * sinusRr - 100);
+    }
+    const sb = sa.truth!.beats;
+    expect(sb.every((b) => b.kind === 'sinus')).toBe(true);
+    const prs = sb.map((b) => b.qrsOn - b.pOn!);
+    expect(Math.max(...prs) - Math.min(...prs)).toBeLessThan(5);
+    expect(Math.max(...rrs(sa)) - Math.min(...rrs(sa))).toBeGreaterThan(200);
+    const bb = big.truth!.beats;
+    bb.forEach((b, i) => expect(b.kind, `beat ${i}`).toBe(bb[0].kind === 'ventricular' ? (i % 2 ? 'sinus' : 'ventricular') : i % 2 ? 'ventricular' : 'sinus'));
+    const pvcs = bb.filter((b) => b.kind === 'ventricular');
+    for (const b of pvcs) {
+      expect(b.qrsOff - b.qrsOn).toBeGreaterThanOrEqual(120);
+      expect(b.pOn).toBeNull();
+    }
+    const coupling = bb.flatMap((b, i) => (b.kind === 'ventricular' && i > 0 ? [b.qrsOn - bb[i - 1].qrsOn] : []));
+    expect(Math.max(...coupling) - Math.min(...coupling)).toBeLessThan(10);
+    const after = bb.flatMap((b, i) => (b.kind === 'ventricular' && i + 1 < bb.length ? [bb[i + 1].qrsOn - b.qrsOn] : []));
+    expect(Math.min(...after)).toBeGreaterThan(2 * Math.max(...coupling));
+  });
+  it('f-wave sweep notes: V1 f waves over 1 mm at 0.7–0.9 and under 1 mm at 0.2–0.45; the RR identical at every setting', () => {
+    for (const v of [0.7, 0.9]) expect(diastolicP2p(played('t2', 0, v), 'V1'), `${v}`).toBeGreaterThan(0.1);
+    for (const v of [0.2, 0.45]) expect(diastolicP2p(played('t2', 0, v), 'V1'), `${v}`).toBeLessThan(0.1);
+    const ref = rrs(played('t2', 0, 0.9));
+    for (const v of [0.2, 0.46, 0.69]) expect(rrs(played('t2', 0, v)), `${v}`).toEqual(ref);
+    expect(played('t2', 0, 0.2).truth!.rhythm).toBe('atrial-fibrillation');
+  });
+  it('rate film: about 130/min irregular; about 45/min irregular; about 45/min regular escape with f waves and complete AV block; pre-excited AF about 190/min, wide QRS varying beat to beat, shortest RR about 225 ms', () => {
+    const [untreated, slow, regular, pre] = frames('t2', 1);
+    expect(Math.abs(untreated.truth!.hrBpm - 130)).toBeLessThanOrEqual(5);
+    expect(Math.max(...rrs(untreated)) - Math.min(...rrs(untreated))).toBeGreaterThan(300);
+    expect(Math.abs(slow.truth!.hrBpm - 45)).toBeLessThanOrEqual(3);
+    expect(Math.max(...rrs(slow)) - Math.min(...rrs(slow))).toBeGreaterThan(300);
+    const r = regular.truth!;
+    expect(Math.abs(r.hrBpm - 45)).toBeLessThanOrEqual(3);
+    expect(Math.max(...rrs(regular)) - Math.min(...rrs(regular))).toBeLessThan(10);
+    expect(r.findings).toContain('av-block-3');
+    expect(r.beats.every((b) => b.kind.startsWith('escape'))).toBe(true);
+    expect(diastolicP2p(regular, 'V1')).toBeGreaterThan(0.05);
+    const p = pre.truth!;
+    expect(Math.abs(p.hrBpm - 190)).toBeLessThanOrEqual(5);
+    expect(Math.abs(Math.min(...rrs(pre)) - 225)).toBeLessThan(5);
+    const widths = p.beats.map((b) => b.qrsOff - b.qrsOn);
+    expect(Math.max(...widths)).toBeGreaterThanOrEqual(140);
+    expect(Math.max(...widths) - Math.min(...widths)).toBeGreaterThan(30);
+    expect(p.findings).toContain('wpw');
   });
 });
 
