@@ -1026,12 +1026,16 @@ describe('h9: the athlete ECG on the tracings', () => {
     expect(Math.abs(frames('h9', 0)[1].truth!.prMs! - 220)).toBeLessThan(10);
     expect(Math.abs(frames('h9', 0)[1].truth!.prMs! - 220)).toBeLessThan(5);
   });
-  it('PR film notes: about 48/min with a PR of 160 ms; the first-degree frame is the same heart', () => {
+  it('PR film notes and prediction: about 48/min with a PR of 160 ms; the first-degree frame is the same heart with a longer PR, the same rate and a P before every QRS', () => {
     const [a, b] = blocksOf('h9', 'film')[0].frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req : null));
     expect({ ...a, variant: 'first-degree' }).toEqual(b);
-    const t = frames('h9', 0)[0].truth!;
+    const [normal, first] = frames('h9', 0);
+    const t = normal.truth!;
     expect(Math.abs(t.hrBpm - 48)).toBeLessThan(3);
     expect(Math.abs(t.prMs! - 160)).toBeLessThan(5);
+    expect(first.truth!.prMs!).toBeGreaterThan(t.prMs! + 40);
+    expect(Math.abs(first.truth!.hrBpm - t.hrBpm), 'the rate stays').toBeLessThan(0.5);
+    for (const bt of first.truth!.beats) expect(bt.pOn, 'a P before every QRS').not.toBeNull();
   });
   it('rate sweep notes: sinus with a P before every QRS and the PR fixed at 160 ms at 40–58/min, always above 30/min', () => {
     for (const v of [40, 49, 50, 58]) {
