@@ -105,6 +105,7 @@ const lesson: Lesson = {
         question: l('房早的 P′ 会重整窦房结。它后面的间歇比完全代偿……', 'A PAC resets the sinus node. Compared with a fully compensatory pause, the pause after it is…', 'Una extrasístole auricular reinicia el nodo sinusal. Frente a una pausa compensatoria completa, la pausa que la sigue es…'),
         options: [l('更短', 'Shorter', 'Más corta'), l('一样长', 'The same', 'Igual'), l('更长', 'Longer', 'Más larga')],
         answer: 0,
+        ordered: true,
       },
       caption: l(
         '前面有没有 P′？QRS 宽不宽？间歇是否完全代偿？早到是期前收缩，晚到是逸搏（r2）。',
@@ -197,7 +198,7 @@ const lesson: Lesson = {
             'The RR suddenly stretches — a "pause". Do not jump to sinus arrest or AV block (revision of r1 and r3): set the calipers on one PP and walk them along the strip first.',
             'El RR se alarga de golpe: una «pausa». No saltes a la parada sinusal ni al bloqueo AV (repaso de r1 y r3): ajusta primero el compás a un PP y recorre la tira.',
           ),
-          marks: [{ auto: 'rr' }],
+          marks: [{ auto: 'rr', beat: 4 }],
           view: { layout: 'strip', lead: 'II', calipers: true },
         },
         {
@@ -207,7 +208,7 @@ const lesson: Lesson = {
             'The T just before the pause does not look like the others — taller, notched, or with a "horn". That is not all T wave: it is the **T plus an early P′ hidden on it**. Compare the T shapes beat by beat.',
             'La T justo antes de la pausa no se parece a las demás: más alta, mellada o «con un cuerno». No es solo onda T: es la **T más una P′ precoz escondida sobre ella**. Compara las morfologías de las T latido a latido.',
           ),
-          marks: [{ auto: 't' }],
+          marks: [{ auto: 't', beat: 4 }],
         },
         {
           title: l('P′ 到时，门还关着', 'The P′ arrives while the door is still shut', 'La P′ llega con la puerta aún cerrada'),
@@ -225,7 +226,7 @@ const lesson: Lesson = {
             'Diagnosis: **blocked PAC**. Unlike second-degree AV block, where the P arrives **on time** (constant PP), the decisive P′ here is **early**; unlike sinus arrest, the P′ can be found — hidden on the T. The mechanism is an atrium firing too early, not a diseased conduction system, and management follows from that.',
             'Diagnóstico: **extrasístole auricular bloqueada**. A diferencia del bloqueo AV de segundo grado, donde la P llega **a su hora** (PP constante), aquí la P′ decisiva es **precoz**; y a diferencia de la parada sinusal, la P′ se puede encontrar, oculta sobre la T. El mecanismo es una aurícula que dispara demasiado pronto, no un sistema de conducción enfermo, y el manejo se deriva de eso.',
           ),
-          marks: [{ auto: 'p' }],
+          marks: [{ auto: 'p', beat: 3 }, { auto: 'p', beat: 4 }, { auto: 'blocked-p' }],
           view: { layout: 'strip', lead: 'II', calipers: true },
         },
       ],
@@ -248,9 +249,9 @@ const lesson: Lesson = {
           marks: [{ auto: 'rr', beat: 1 }],
         },
         {
-          label: l('多源三联律', 'Multifocal trigeminy', 'Trigeminismo multifocal'),
+          label: l('多形三联律', 'Polymorphic trigeminy', 'Trigeminismo polimorfo'),
           ecg: synth('pvc-patterns', 489, undefined, 'multifocal'),
-          note: l('每第 3 个搏动是室早，II 导联上两种宽 QRS 交替出现（一高一矮）：两个起源，多源三联律。', 'Every third beat is a PVC, and in lead II two wide QRS shapes alternate (one tall, one short): two origins, multifocal trigeminy.', 'Cada tercer latido es una extrasístole, y en II alternan dos QRS anchos (uno alto y otro bajo): dos orígenes, trigeminismo multifocal.'),
+          note: l('每第 3 个搏动是室早，II 导联上两种宽 QRS 交替出现（一高一矮）：两种形态，多形三联律。', 'Every third beat is a PVC, and in lead II two wide QRS shapes alternate (one tall, one short): two shapes, polymorphic trigeminy.', 'Cada tercer latido es una extrasístole, y en II alternan dos QRS anchos (uno alto y otro bajo): dos morfologías, trigeminismo polimorfo.'),
           marks: [{ auto: 'qrs', beat: 2 }, { auto: 'qrs', beat: 5 }],
         },
         {
@@ -262,13 +263,14 @@ const lesson: Lesson = {
       ],
       predict: {
         question: l('节律条看似 46 次/分的窦缓，可每个 T 波都有切迹。心房实际多快？', 'A strip looks like sinus bradycardia at 46/min, yet every T wave is notched. How fast are the atria really?', 'Una tira parece una bradicardia sinusal a 46 lpm, pero todas las ondas T tienen una muesca. ¿A qué frecuencia van de verdad las aurículas?'),
-        options: [l('约 46 次/分', 'About 46/min', 'Unos 46 lpm'), l('约 95 次/分', 'About 95/min', 'Unos 95 lpm'), l('约 30 次/分', 'About 30/min', 'Unos 30 lpm')],
-        answer: 1,
+        options: [l('约 30 次/分', 'About 30/min', 'Unos 30 lpm'), l('约 46 次/分', 'About 46/min', 'Unos 46 lpm'), l('约 95 次/分', 'About 95/min', 'Unos 95 lpm')],
+        answer: 2,
+        ordered: true,
       },
       caption: l(
-        '任何“窦缓”先数 T 波。室早用描述性的话：二联律、三联律、成对、多源，不用 Lown 分级。',
-        'On any "slow sinus" strip, count the T waves first. Describe PVCs in plain terms (bigeminy, trigeminy, couplet, multifocal), not Lown grades.',
-        'Ante cualquier «sinusal lenta», cuenta primero las ondas T. Describe las extrasístoles con términos llanos (bigeminismo, trigeminismo, pareja, multifocal), no con grados de Lown.',
+        '任何“窦缓”先数 T 波。室早用描述性的话：二联律、三联律、成对、多形，不用 Lown 分级。',
+        'On any "slow sinus" strip, count the T waves first. Describe PVCs in plain terms (bigeminy, trigeminy, couplet, polymorphic), not Lown grades.',
+        'Ante cualquier «sinusal lenta», cuenta primero las ondas T. Describe las extrasístoles con términos llanos (bigeminismo, trigeminismo, pareja, polimorfas), no con grados de Lown.',
       ),
     },
     {
@@ -278,17 +280,17 @@ const lesson: Lesson = {
       left: {
         ecg: synth('pac-aberrant', 486),
         caption: l('宽 QRS 前有提前的 P′；QRS 右束支阻滞形；间歇不完全代偿——差异性传导', 'A premature P′ before the wide QRS; RBBB shape; less-than-compensatory pause — aberrancy', 'Una P′ prematura delante del QRS ancho; morfología de bloqueo de rama derecha; pausa menos que compensatoria: aberrancia'),
-        marks: [{ auto: 'p' }],
+        marks: [{ auto: 'p', beat: 6 }],
       },
       right: {
         ecg: synth('pvc', 487),
-        caption: l('无 P′；联律固定；其后完全代偿间歇，窦性 P 埋在宽 QRS 里——右室流出道室早', 'No P′; fixed coupling; a fully compensatory pause after it, the sinus P buried in the wide QRS — RV outflow-tract PVC', 'Sin P′; acoplamiento fijo; pausa compensatoria completa después, con la P sinusal enterrada en el QRS ancho: extrasístole del tracto de salida del VD'),
-        marks: [{ auto: 'qrs' }],
+        caption: l('无 P′；其后完全代偿间歇，窦性 P 埋在宽 QRS 里——右室流出道室早', 'No P′; a fully compensatory pause after it, the sinus P buried in the wide QRS — RV outflow-tract PVC', 'Sin P′; pausa compensatoria completa después, con la P sinusal enterrada en el QRS ancho: extrasístole del tracto de salida del VD'),
+        marks: [{ auto: 'qrs', beat: 5 }],
       },
       point: l(
-        '左：早到的 P′ 遇上没缓过来的右束支 → QRS 增宽，但**机制是室上性的**：找 P′、看 V1 的三相 rSR′、量间歇是否短于完全代偿。右：没有 P′——宽 QRS 自己就是起源，联律固定、代偿完全。把左图叫成室早是本课最常见的错误（当它升级成宽 QRS 心动过速时也最危险）：**宽 ≠ 室性**。',
-        'Left: an early P′ meets a right bundle branch that has not recovered → the QRS widens, but **the mechanism is supraventricular**: look for the P′, the triphasic rSR′ in V1, and a pause short of full compensation. Right: no P′ — the wide QRS is its own origin, with fixed coupling and full compensation. Calling the left tracing a PVC is this lesson\'s commonest error (and the most dangerous one when it later escalates into a wide-QRS tachycardia): **wide does not mean ventricular**.',
-        'Izquierda: una P′ precoz encuentra una rama derecha que no se ha recuperado → el QRS se ensancha, pero **el mecanismo es supraventricular**: busca la P′, el rSR′ trifásico en V1 y una pausa que se queda corta de la compensación completa. Derecha: no hay P′; el QRS ancho es su propio origen, con acoplamiento fijo y compensación completa. Llamar extrasístole ventricular al trazado izquierdo es el error más común de esta lección (y el más peligroso si después escala a una taquicardia de QRS ancho): **ancho no significa ventricular**.',
+        '左：早到的 P′ 遇上没缓过来的右束支 → QRS 增宽，但**机制是室上性的**：找 P′、看 V1 的三相 rSR′、量间歇是否短于完全代偿。右：没有 P′——宽 QRS 自己就是起源，其后的间歇完全代偿。把左图叫成室早是本课最常见的错误（当它升级成宽 QRS 心动过速时也最危险）：**宽 ≠ 室性**。',
+        'Left: an early P′ meets a right bundle branch that has not recovered → the QRS widens, but **the mechanism is supraventricular**: look for the P′, the triphasic rSR′ in V1, and a pause short of full compensation. Right: no P′ — the wide QRS is its own origin, and the pause after it is fully compensatory. Calling the left tracing a PVC is this lesson\'s commonest error (and the most dangerous one when it later escalates into a wide-QRS tachycardia): **wide does not mean ventricular**.',
+        'Izquierda: una P′ precoz encuentra una rama derecha que no se ha recuperado → el QRS se ensancha, pero **el mecanismo es supraventricular**: busca la P′, el rSR′ trifásico en V1 y una pausa que se queda corta de la compensación completa. Derecha: no hay P′; el QRS ancho es su propio origen, y la pausa que lo sigue es compensatoria completa. Llamar extrasístole ventricular al trazado izquierdo es el error más común de esta lección (y el más peligroso si después escala a una taquicardia de QRS ancho): **ancho no significa ventricular**.',
       ),
     },
     { kind: 'check', item: { family: 'ectopy', seed: 3 } },
