@@ -72,40 +72,44 @@ const lesson: Lesson = {
       showConduction: true,
       emphasize: ['rv-outflow'],
       caption: l(
-        '跟着光标看这个室早的来源：右心室流出道——特发性室早最常见的部位。激动从流出道进入心室，先激动右室、后激动左室，所以 V1 呈左束支阻滞形（主波向下），II、III、aVF 呈高 R（电轴下偏）。窦性搏动仍来自窦房结：宽大提前的 QRS 不经过心房，代偿间歇因此“完全”。',
-        'Follow the cursor to the source of this PVC: the right ventricular outflow tract, the commonest site of idiopathic PVCs. Activation enters the ventricles from the outflow tract — right ventricle first, left ventricle second — so V1 looks LBBB-shaped (dominant S) and II, III and aVF show tall R waves (inferior axis). The sinus beats still come from the sinus node: a wide premature QRS never touches the atria, which is why the pause is "compensatory".',
-        'Sigue el cursor hasta el origen de esta extrasístole ventricular: el tracto de salida del ventrículo derecho, la localización más frecuente de las extrasístoles idiopáticas. La activación entra en los ventrículos desde el tracto de salida (primero el ventrículo derecho, después el izquierdo), de modo que V1 adopta morfología de bloqueo de rama izquierda (S dominante) y II, III y aVF muestran R altas (eje inferior). Los latidos sinusales siguen naciendo en el nodo sinusal: un QRS ancho y prematuro no toca las aurículas, y por eso la pausa es «compensatoria».',
+        '这个室早起自右室流出道。激动先右室后左室：V1 主波向下（左束支阻滞形），II、III、aVF 高 R。它不经过心房，窦房结照常放电。',
+        'This PVC starts in the right ventricular outflow tract. The right ventricle fires first, then the left: V1 points down (LBBB-shaped) and II, III and aVF show tall R waves. It never touches the atria, so the sinus node keeps firing.',
+        'Esta extrasístole nace en el tracto de salida del VD. Primero se activa el ventrículo derecho y después el izquierdo: V1 es negativo (morfología de bloqueo de rama izquierda) y II, III y aVF tienen R altas. No toca las aurículas, así que el nodo sinusal sigue disparando.',
       ),
     },
     {
-      kind: 'text',
-      title: l('提前的搏动：三个问题定位', 'A premature beat: three questions', 'Un latido prematuro: tres preguntas'),
-      body: l(
-        '期前收缩 = 提前出现（对照 r2：逸搏是**晚**到，期前收缩是**早**到）。看到提前的搏动，问三个问题：\n- 它前面有 P′ 吗？有、且形态与窦性不同 → **房早（PAC）**；有但倒置（II、III、aVF 负向）、紧贴 QRS 或落在其后 → **交界性早搏（PJC）**；没有 → **室早（PVC）**。\n- QRS 宽吗？房早与交界性早搏通常窄（除非差异性传导）；室早 ≥120 ms、束支阻滞形。\n- 间歇是哪一种？房早多为**不完全代偿**（窦房结被重整）；室早多为**完全代偿**（窦房结不受干扰）。\n三个答案合起来，几乎每个提前的搏动都能归位。',
-        'A premature beat arrives early (contrast r2: an escape beat is **late**, ectopy is **early**). Three questions sort them out:\n- Is there a P′ before it? Yes, with a shape different from sinus → **PAC**; yes but inverted (negative in II, III, aVF) hugging the QRS or just after it → **PJC**; none → **PVC**.\n- Is the QRS wide? PACs and PJCs are usually narrow (unless conducted with aberrancy); a PVC is ≥120 ms and bundle-branch-block-shaped.\n- What kind of pause follows? A PAC usually leaves a **less-than-compensatory** pause (the sinus node is reset); a PVC a **fully compensatory** one (the sinus node is untouched).\nTaken together, the three answers place nearly every premature beat.',
-        'Una extrasístole llega pronto (contraste con r2: el latido de escape es **tardío**, la extrasístole es **precoz**). Tres preguntas las ordenan:\n- ¿Hay una P′ delante? Sí, con morfología distinta de la sinusal → **extrasístole auricular**; sí, pero invertida (negativa en II, III, aVF), pegada al QRS o justo después → **extrasístole de la unión**; no la hay → **extrasístole ventricular**.\n- ¿El QRS es ancho? Las auriculares y las de la unión suelen ser estrechas (salvo conducción aberrante); la ventricular mide ≥120 ms con morfología de bloqueo de rama.\n- ¿Qué tipo de pausa sigue? La extrasístole auricular deja habitualmente una pausa **menos que compensatoria** (el nodo sinusal se reinicia); la ventricular, una **pausa compensatoria completa** (el nodo sinusal no se inmuta).\nJuntas, las tres respuestas sitúan casi cualquier extrasístole.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('pac', 483),
+      kind: 'film',
+      title: l('提前的搏动：问三件事', 'A premature beat: ask three things', 'Un latido prematuro: tres preguntas'),
       view: STRIP,
-      marks: [{ auto: 'p' }, { auto: 'pr' }],
+      frames: [
+        {
+          label: l('房早', 'PAC', 'Extrasístole auricular'),
+          ecg: synth('pac', 483),
+          note: l('P′ 提前、形态不同（II 倒置）；P′R 约 155 ms，QRS 与窦性相同。其后间歇短于完全代偿。', 'The P′ comes early and looks different (negative in II); the P′R is about 155 ms and the QRS matches sinus. The pause after it is less than compensatory.', 'La P′ llega pronto y es distinta (negativa en II); el P′R mide unos 155 ms y el QRS es igual al sinusal. La pausa posterior es menos que compensatoria.'),
+          marks: [{ auto: 'p', beat: 5 }, { auto: 'pr', beat: 5 }],
+        },
+        {
+          label: l('交界性早搏', 'PJC', 'Extrasístole de la unión'),
+          ecg: synth('pjc', 488),
+          note: l('窄 QRS 提前，前面没有 P。和窦性搏动比，ST 起始处多了一个小负向波：逆行 P′。它也可在 QRS 前或埋在 QRS 里。', 'A narrow early QRS with no P before it. Compared with the sinus beats, a small negative wave sits at the start of the ST: a retrograde P′. It can also come before the QRS or hide inside it.', 'QRS estrecho y precoz sin P delante. Frente a los latidos sinusales, hay una pequeña onda negativa al inicio del ST: una P′ retrógrada. También puede ir antes del QRS u ocultarse en él.'),
+          marks: [{ auto: 'st', beat: 5 }],
+        },
+        {
+          label: l('室早', 'PVC', 'Extrasístole ventricular'),
+          ecg: synth('pvc', 482),
+          note: l('没有 P′，QRS 宽（约 175 ms）。窦性节律不受打扰：室早两侧的 R 相距约 2 个窦性周期，间歇完全代偿。', 'No P′ and a wide QRS (about 175 ms). The sinus rhythm is undisturbed: the R waves either side of the PVC are about two sinus cycles apart, a fully compensatory pause.', 'Sin P′ y QRS ancho (unos 175 ms). El ritmo sinusal no se altera: las R a ambos lados de la extrasístole distan unos dos ciclos sinusales, una pausa compensatoria completa.'),
+          marks: [{ auto: 'qrs', beat: 5 }],
+        },
+      ],
+      predict: {
+        question: l('房早的 P′ 会重整窦房结。它后面的间歇比完全代偿……', 'A PAC resets the sinus node. Compared with a fully compensatory pause, the pause after it is…', 'Una extrasístole auricular reinicia el nodo sinusal. Frente a una pausa compensatoria completa, la pausa que la sigue es…'),
+        options: [l('更短', 'Shorter', 'Más corta'), l('一样长', 'The same', 'Igual'), l('更长', 'Longer', 'Más larga')],
+        answer: 0,
+      },
       caption: l(
-        '房早：P′ 比预期的窦性 P 提前出现，且形态不同（本例灶位于左房下部，P′ 在 II 倒置）。本例 P′R 与窦性 PR 几乎相同（约 155 ms）；P′ 来得更早时，它会遇上尚在恢复的房室结，P′R 随之延长。QRS 与窦性相同：下传正常。随后的间歇**短于完全代偿**：P′ 重整了窦房结，下一个窦性 P 从 P′ 重新计时。',
-        'A PAC: the P′ arrives earlier than the expected sinus P and looks different (this focus sits in the lower left atrium, so the P′ is negative in II). Here the P′R is about the same as the sinus PR (about 155 ms); a P′ that comes earlier meets an AV node still recovering, and its P′R lengthens. The QRS is identical to sinus: conduction is normal. The pause that follows is **less than compensatory**: the P′ resets the sinus node, which restarts its clock from the P′.',
-        'Una extrasístole auricular: la P′ llega antes de lo esperado y tiene otra morfología (este foco está en la aurícula izquierda inferior, así que la P′ es negativa en II). Aquí el P′R es casi igual al PR sinusal (unos 155 ms); una P′ más precoz encuentra el nodo AV aún en recuperación y su P′R se alarga. El QRS es idéntico al sinusal: conducción normal. La pausa que sigue es **menos que compensatoria**: la P′ reinicia el nodo sinusal, que vuelve a cronometrar desde ella.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('pjc', 488),
-      view: STRIP,
-      marks: [{ auto: 'p' }],
-      caption: l(
-        '交界性早搏：QRS 窄、提前、形态似窦性；QRS 前没有 P 波。这里的**逆行 P′** 紧跟在 QRS 之后出现——在 II 导联的 ST 段起始处是一个小小的负向波（约 0.5 mm），窦性搏动没有它（逆行 P′ 在 II 倒置，因为心房被自下而上地激动）。逆行 P′ 有三个位置：QRS 之前（P′R <120 ms）、埋在 QRS 里（最常见）、或紧跟在 QRS 之后、落在 ST 段内（本例）。看不见 P′ 时别放弃：把提前搏动的 QRS 末端和 ST 段与窦性搏动逐一对比。',
-        'A PJC: the QRS is narrow, early and similar to sinus; no P wave precedes it. Here the **retrograde P′** comes just after the QRS — in lead II a small negative wave (about 0.5 mm) at the start of the ST segment that the sinus beats do not have (a retrograde P′ is negative in II because the atria are activated from below upwards). The retrograde P′ can occupy one of three places: before the QRS (P′R <120 ms), hidden inside it (most often), or just after it in the ST segment (as here). If you see none, do not give up: compare the end of the early QRS and its ST segment with the sinus beats.',
-        'Una extrasístole de la unión: el QRS es estrecho, precoz y parecido al sinusal; no le precede ninguna onda P. Aquí la **P′ retrógrada** aparece justo después del QRS: en la derivación II, una pequeña onda negativa (unos 0,5 mm) al comienzo del segmento ST que los latidos sinusales no tienen (la P′ retrógrada es negativa en II porque las aurículas se activan de abajo hacia arriba). La P′ retrógrada puede ocupar tres posiciones: antes del QRS (P′R <120 ms), oculta dentro de él (lo más frecuente) o justo después, en el segmento ST (como aquí). Si no la ves, no te rindas: compara el final del QRS precoz y su segmento ST con los latidos sinusales.',
+        '前面有没有 P′？QRS 宽不宽？间歇是否完全代偿？早到是期前收缩，晚到是逸搏（r2）。',
+        'Is there a P′ before it? Is the QRS wide? Is the pause fully compensatory? Early means ectopy; late means escape (r2).',
+        '¿Hay una P′ delante? ¿El QRS es ancho? ¿La pausa es compensatoria completa? Precoz es extrasístole; tardío, escape (r2).',
       ),
     },
     {
@@ -168,6 +172,14 @@ const lesson: Lesson = {
             'Una carga en el Holter ≥10 % con caída inexplicada de la FEVI → sospechar miocardiopatía inducida por extrasístoles; otros rasgos de mayor riesgo: acoplamiento corto <300 ms (R-on-T), QRS >150-160 ms, origen no del tracto de salida, extrasístoles polimórficas y aumento con el ejercicio',
           ),
         },
+        {
+          label: l('单个宽而早的搏动：差异性传导还是室早', 'One wide early beat: aberrancy or PVC', 'Un latido ancho y precoz: aberrancia o extrasístole ventricular'),
+          value: l(
+            '倾向差异性传导：宽 QRS 前有提前的 P′（最可靠）、V1 三相 rSR′ 而 V6 qRs、起始向量同窦性、间歇不完全代偿；Ashman 长–短周期支持但不能证明。倾向室早：无 P′、联律固定、V1 单相 R 或 qR 或不典型左束支阻滞形、间歇完全代偿。“同向性”只用于宽 QRS 心动过速，不用于单个搏动',
+            'Favour aberrancy: a premature P′ before the wide QRS (the most reliable sign), a triphasic rSR′ in V1 with qRs in V6, an initial vector matching the sinus beats, a less-than-compensatory pause; an Ashman long-short sequence supports it but does not prove it. Favour PVC: no P′, fixed coupling, a monophasic R or qR in V1 or an atypical LBBB shape, a fully compensatory pause. "Concordance" belongs to wide-QRS tachycardia, not to a single beat',
+            'A favor de la aberrancia: una P′ prematura antes del QRS ancho (el signo más fiable), rSR′ trifásico en V1 con qRs en V6, vector inicial igual al de los latidos sinusales y pausa menos que compensatoria; una secuencia larga-corta de Ashman la apoya, pero no la demuestra. A favor de la extrasístole ventricular: sin P′, acoplamiento fijo, R monofásica o qR en V1 o morfología atípica de bloqueo de rama izquierda y pausa compensatoria completa. La «concordancia» es de la taquicardia de QRS ancho, no de un latido aislado',
+          ),
+        },
       ],
       source:
         'Mason JW et al. AHA/ACCF/HRS Part II: Electrocardiography diagnostic statement list. Circulation 2007;115:1325-1332; Brugada J et al. 2019 ESC Guidelines for the management of patients with supraventricular arrhythmias. Eur Heart J 2020;41:655-720; Al-Khatib SM et al. 2017 AHA/ACC/HRS Guideline for Management of Patients With Ventricular Arrhythmias and the Prevention of Sudden Cardiac Death. Circulation 2018;138:e272-e307',
@@ -219,23 +231,44 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'ecg',
-      ecg: synth('pac-blocked', 485, undefined, 'bigeminy'),
+      kind: 'film',
+      title: l('先数 T 波，再说出分组', 'Count the T waves, then name the grouping', 'Cuenta las ondas T y nombra la agrupación'),
       view: STRIP,
-      marks: [{ auto: 'blocked-p' }],
+      frames: [
+        {
+          label: l('未下传房早二联律', 'Blocked PAC bigeminy', 'Bigeminismo auricular bloqueado'),
+          ecg: synth('pac-blocked', 485, undefined, 'bigeminy'),
+          note: l('看似约 46 次/分的窦缓，但每个 T 波上都骑着一个 P′：心房约 95 次/分，P′ 全部未下传。', 'It looks like sinus bradycardia at about 46/min, but every T wave carries a P′: the atria fire at about 95/min and no P′ conducts.', 'Parece una bradicardia sinusal a unos 46 lpm, pero cada onda T lleva una P′: las aurículas van a unos 95 lpm y ninguna P′ conduce.'),
+          marks: [{ auto: 'blocked-p' }],
+        },
+        {
+          label: l('室早二联律', 'Ventricular bigeminy', 'Bigeminismo ventricular'),
+          ecg: synth('ventricular-bigeminy', 481),
+          note: l('每个窦性搏动后跟一个宽而提前的 QRS：二联律。联律间期固定，约 480 ms。', 'Every sinus beat is followed by a wide early QRS: bigeminy. The coupling interval is fixed at about 480 ms.', 'Cada latido sinusal va seguido de un QRS ancho y precoz: bigeminismo. El acoplamiento es fijo, de unos 480 ms.'),
+          marks: [{ auto: 'rr', beat: 1 }],
+        },
+        {
+          label: l('多源三联律', 'Multifocal trigeminy', 'Trigeminismo multifocal'),
+          ecg: synth('pvc-patterns', 489, undefined, 'multifocal'),
+          note: l('每第 3 个搏动是室早，II 导联上两种宽 QRS 交替出现（一高一矮）：两个起源，多源三联律。', 'Every third beat is a PVC, and in lead II two wide QRS shapes alternate (one tall, one short): two origins, multifocal trigeminy.', 'Cada tercer latido es una extrasístole, y en II alternan dos QRS anchos (uno alto y otro bajo): dos orígenes, trigeminismo multifocal.'),
+          marks: [{ auto: 'qrs', beat: 2 }, { auto: 'qrs', beat: 5 }],
+        },
+        {
+          label: l('成对', 'Couplet', 'Pareja'),
+          ecg: synth('pvc-patterns', 490),
+          note: l('连续两个室早 = 成对。再多一个（≥3 个、>100 次/分）就是非持续性室速。', 'Two PVCs in a row = a couplet. One more (≥3 at >100/min) is non-sustained VT.', 'Dos extrasístoles seguidas = una pareja. Una más (≥3 a >100 lpm) es una taquicardia ventricular no sostenida.'),
+          marks: [{ auto: 'qrs', beat: 4 }, { auto: 'qrs', beat: 5 }],
+        },
+      ],
+      predict: {
+        question: l('节律条看似 46 次/分的窦缓，可每个 T 波都有切迹。心房实际多快？', 'A strip looks like sinus bradycardia at 46/min, yet every T wave is notched. How fast are the atria really?', 'Una tira parece una bradicardia sinusal a 46 lpm, pero todas las ondas T tienen una muesca. ¿A qué frecuencia van de verdad las aurículas?'),
+        options: [l('约 46 次/分', 'About 46/min', 'Unos 46 lpm'), l('约 95 次/分', 'About 95/min', 'Unos 95 lpm'), l('约 30 次/分', 'About 30/min', 'Unos 30 lpm')],
+        answer: 1,
+      },
       caption: l(
-        '现在每个窦性搏动后面都跟着一个藏在 T 波上的未下传 P′——**未下传房早二联律**。乍看是“约 46 次/分的窦性心动过缓”，但数一数 T 波：每个 T 波上都骑着一个 P′，**心房实际每分钟激动约 95 次**，而每一个 P′ 都没能下传。处理思路完全不同：这种假性窦缓要找的是房早的诱因，而不是评估起搏器。任何“窦缓”条图，先把 T 波数一遍。',
-        'Now every sinus beat is followed by a blocked P′ hidden on the T wave — **blocked-PAC bigeminy**. At first glance it reads as "sinus bradycardia at about 46/min", but count the T waves: each one carries a P′, so **the atria actually fire about 95 times a minute** — and every P′ fails to conduct. The management is entirely different: this pseudo-bradycardia asks why the atria are irritable, not whether the patient needs a pacemaker. On any "slow sinus" strip, count the T waves first.',
-        'Ahora cada latido sinusal va seguido de una P′ bloqueada oculta en la onda T: **bigeminismo auricular bloqueado**. A primera vista parece una «bradicardia sinusal a unos 46 lpm», pero cuenta las ondas T: cada una lleva una P′, así que **las aurículas se activan en realidad unas 95 veces por minuto**, y ninguna P′ logra conducir. El manejo es totalmente distinto: esta pseudobradicardia obliga a buscar por qué las aurículas están irritables, no si el paciente necesita un marcapasos. Ante cualquier tira con «sinusal lenta», cuenta primero las ondas T.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('又宽又早：差异性传导还是室早？', 'Wide and early: aberrancy or PVC?', 'Ancho y precoz: ¿aberrancia o extrasístole ventricular?'),
-      body: l(
-        '一个提前的宽 QRS 只有两条来路：室上性冲动遇上尚未恢复的束支（**差异性传导**），或心室自己的灶（**PVC**）。倾向差异性传导：\n- 宽 QRS 前**有提前的 P′**（最可靠的征象）；\n- V1 呈三相 **rSR′**，V6 呈 qRs；\n- **起始向量**与窦性下传搏动相同；\n- 其后间歇**不完全代偿**；\n- Ashman 长–短序列（长周期后跟短周期——长周期把束支不应期拉长）支持差异性传导，但**不能证明**它。\n倾向 PVC：无 P′、联律间期固定、V1 呈单相 R/qR 或不典型左束支阻滞形、其后**完全代偿间歇**。注意：“同向性”是宽 QRS 心动过速鉴别室速的标准，不用于单个早搏。',
-        'A premature wide QRS has only two explanations: a supraventricular impulse that met a bundle branch still refractory (**aberrancy**), or a ventricular focus (**PVC**). Favour aberrancy:\n- a **premature P′ precedes** the wide QRS (the most reliable sign);\n- V1 shows a triphasic **rSR′**, V6 a qRs;\n- the **initial vector matches** the conducted sinus beats;\n- the pause after it is **less than compensatory**;\n- an Ashman long-short sequence (a long cycle followed by a short one — the long cycle lengthens the bundle refractoriness) supports aberrancy but **does not prove it**.\nFavour PVC: no P′, fixed coupling, a monophasic R or qR in V1 or an atypical LBBB shape, and a **fully compensatory pause** after it. Note: "concordance" is a criterion for VT in wide-QRS tachycardia, not a single-beat test.',
-        'Un QRS ancho y prematuro solo admite dos explicaciones: un impulso supraventricular que encuentra una rama aún refractaria (**aberrancia**) o un foco ventricular (**extrasístole ventricular**). A favor de la aberrancia:\n- una **P′ prematura precede** al QRS ancho (el signo más fiable);\n- V1 muestra un **rSR′** trifásico y V6 un qRs;\n- el **vector inicial coincide** con el de los latidos sinusales conducidos;\n- la pausa posterior es **menos que compensatoria**;\n- una secuencia larga-corta de Ashman (un ciclo largo seguido de uno corto: el ciclo largo alarga el periodo refractario de la rama) apoya la aberrancia, pero **no la demuestra**.\nA favor de la extrasístole ventricular: sin P′, acoplamiento fijo, R monofásica o qR en V1 o morfología atípica de bloqueo de rama izquierda, y **pausa compensatoria completa** tras ella. Ojo: la «concordancia» es un criterio de TV en la taquicardia de QRS ancho, no una prueba de un solo latido.',
+        '任何“窦缓”先数 T 波。室早用描述性的话：二联律、三联律、成对、多源，不用 Lown 分级。',
+        'On any "slow sinus" strip, count the T waves first. Describe PVCs in plain terms (bigeminy, trigeminy, couplet, multifocal), not Lown grades.',
+        'Ante cualquier «sinusal lenta», cuenta primero las ondas T. Describe las extrasístoles con términos llanos (bigeminismo, trigeminismo, pareja, multifocal), no con grados de Lown.',
       ),
     },
     {
@@ -256,17 +289,6 @@ const lesson: Lesson = {
         '左：早到的 P′ 遇上没缓过来的右束支 → QRS 增宽，但**机制是室上性的**：找 P′、看 V1 的三相 rSR′、量间歇是否短于完全代偿。右：没有 P′——宽 QRS 自己就是起源，联律固定、代偿完全。把左图叫成室早是本课最常见的错误（当它升级成宽 QRS 心动过速时也最危险）：**宽 ≠ 室性**。',
         'Left: an early P′ meets a right bundle branch that has not recovered → the QRS widens, but **the mechanism is supraventricular**: look for the P′, the triphasic rSR′ in V1, and a pause short of full compensation. Right: no P′ — the wide QRS is its own origin, with fixed coupling and full compensation. Calling the left tracing a PVC is this lesson\'s commonest error (and the most dangerous one when it later escalates into a wide-QRS tachycardia): **wide does not mean ventricular**.',
         'Izquierda: una P′ precoz encuentra una rama derecha que no se ha recuperado → el QRS se ensancha, pero **el mecanismo es supraventricular**: busca la P′, el rSR′ trifásico en V1 y una pausa que se queda corta de la compensación completa. Derecha: no hay P′; el QRS ancho es su propio origen, con acoplamiento fijo y compensación completa. Llamar extrasístole ventricular al trazado izquierdo es el error más común de esta lección (y el más peligroso si después escala a una taquicardia de QRS ancho): **ancho no significa ventricular**.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('pvc-patterns', 489, undefined, 'multifocal'),
-      view: STRIP,
-      marks: [{ auto: 'qrs' }],
-      caption: l(
-        '描述室早的“分组语言”：本例呈三联律模式，且**多源**——两种形态的宽 QRS 交替出现（一个来自右室流出道，一个来自左室侧壁）。术语：二联律 = 每第 2 个搏动；三联律 = 每第 3 个；成对 = 连续两个；**连续 ≥3 个且 >100 次/分 = 非持续性室速**（“三连律”已计入 NSVT）。量化靠 Holter：负荷 ≥10% 伴不明原因 EF 减低要警惕 PVC 诱导的心肌病；联律 <300 ms 为高危。',
-        'The "grouping language" of ventricular ectopy: this example runs in a trigeminal pattern and is **multifocal** — two QRS shapes alternate (one from the RV outflow tract, one from the LV lateral wall). The terms: bigeminy = every second beat; trigeminy = every third; a couplet = two in a row; **three or more consecutive at >100/min = non-sustained VT** (a "triplet" already counts as NSVT). Quantify with a Holter: a burden ≥10 % with an unexplained fall in EF raises suspicion of PVC-induced cardiomyopathy, and coupling <300 ms is high-risk.',
-        'El «lenguaje de agrupación» del ectopismo ventricular: este ejemplo sigue un patrón trigeminal y es **multifocal**: alternan dos morfologías de QRS (una del tracto de salida del VD y otra de la pared lateral del VI). Los términos: bigeminismo = cada segundo latido; trigeminismo = cada tercero; pareja = dos seguidos; **tres o más consecutivos a >100 lpm = taquicardia ventricular no sostenida** (un «triplete» ya cuenta como TVNS). Cuantifica con un Holter: una carga ≥10 % con caída inexplicada de la FEVI debe hacer sospechar miocardiopatía inducida por extrasístoles, y un acoplamiento <300 ms es de alto riesgo.',
       ),
     },
     { kind: 'check', item: { family: 'ectopy', seed: 3 } },

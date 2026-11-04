@@ -211,13 +211,13 @@ function played(id: string, i: number, v: number): Ecg {
   return ecgOf({ scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed, dials });
 }
 const frames = (id: string, i: number): Ecg[] => blocksOf(id, 'film')[i].frames.map((f) => ecgOf(f.ecg));
-/** the P wave of the middle beat in a lead: its largest excursion above the PR baseline (mV) */
-function pAmp(e: Ecg, lead: StdLead, b = mid(e)): number {
+/** the P wave of a beat (default the middle one) in a lead: its largest excursion above (sign 1) or below (sign −1, returned positive) the PR baseline (mV) */
+function pAmp(e: Ecg, lead: StdLead, b = mid(e), sign: 1 | -1 = 1): number {
   const a = e.signal.leads[lead];
   const fs = e.signal.fs;
   const base = baselineBefore(a, fs, b.qrsOn);
   let max = -Infinity;
-  for (let i = Math.round(((b.pOn ?? b.qrsOn - 150) * fs) / 1000); i < Math.round((b.qrsOn * fs) / 1000); i++) max = Math.max(max, a[i] - base);
+  for (let i = Math.round(((b.pOn ?? b.qrsOn - 150) * fs) / 1000); i < Math.round((b.qrsOn * fs) / 1000); i++) max = Math.max(max, sign * (a[i] - base));
   return max;
 }
 const onsets = (e: Ecg): number[] => e.truth!.beats.map((b) => b.qrsOn);
@@ -573,15 +573,38 @@ describe('r4: Mobitz II to complete block on the tracings', () => {
 });
 
 describe('r5: premature beats on the tracings', () => {
-  it('PAC: P′R about the sinus PR; less-than-compensatory pause', () => {
-    const e = ecgOf(blocksOf('r5', 'ecg')[0].ecg);
+  it('PAC (three-questions film frame 1): an early P′ negative in II, P′R about 155 ms like the sinus PR, same QRS; less-than-compensatory pause', () => {
+    const e = frames('r5', 0)[0];
     const beats = e.truth!.beats;
     const i = beats.findIndex((b) => b.kind === 'atrial');
+    expect(i).toBe(5);
     expect(Math.abs(beats[i].qrsOn - (beats[i].pOn ?? 0) - e.truth!.prMs!)).toBeLessThan(15);
+    expect(Math.abs(beats[i].qrsOn - (beats[i].pOn ?? 0) - 155)).toBeLessThan(5);
+    expect(beats[i].qrsOn - beats[i - 1].qrsOn).toBeLessThan(0.8 * (beats[i - 1].qrsOn - beats[i - 2].qrsOn));
+    expect(pAmp(e, 'II', beats[i])).toBeLessThan(0.03);
+    expect(pAmp(e, 'II', beats[i], -1), 'P′ depth below baseline in II').toBeGreaterThan(0.04);
+    expect(pAmp(e, 'II', beats[i - 1])).toBeGreaterThan(0.08);
+    expect(Math.abs(beats[i].qrsOff - beats[i].qrsOn - (beats[0].qrsOff - beats[0].qrsOn))).toBeLessThan(3);
     expect(beats[i + 1].qrsOn - beats[i - 1].qrsOn).toBeLessThan(2 * (beats[i - 1].qrsOn - beats[i - 2].qrsOn) - 100);
   });
-  it('PJC: narrow early beat, retrograde P′ just after the QRS (early ST), negative in II', () => {
-    const e = ecgOf(blocksOf('r5', 'ecg')[1].ecg);
+  it('PVC (three-questions film frame 3): no P′, QRS about 175 ms, the R waves either side about two sinus cycles apart; V1 negative and II, III, aVF tall (the heart caption)', () => {
+    const e = frames('r5', 0)[2];
+    expect(blocksOf('r5', 'film')[0].frames[2].ecg).toEqual(blocksOf('r5', 'heart')[0].ecg);
+    const beats = e.truth!.beats;
+    const i = beats.findIndex((b) => b.kind === 'ventricular');
+    expect(i).toBe(5);
+    expect(beats[i].pOn).toBeNull();
+    expect(Math.abs(beats[i].qrsOff - beats[i].qrsOn - 175)).toBeLessThan(5);
+    const pp = beats[i - 1].qrsOn - beats[i - 2].qrsOn;
+    expect(Math.abs(beats[i + 1].qrsOn - beats[i - 1].qrsOn - 2 * pp)).toBeLessThan(60);
+    expect(qrsSpan(e, 'V1', beats[i]).min).toBeLessThan(-3 * Math.max(0, qrsSpan(e, 'V1', beats[i]).max));
+    for (const l of ['II', 'III', 'aVF'] as const) {
+      expect(qrsSpan(e, l, beats[i]).max, l).toBeGreaterThan(0.8);
+      expect(qrsSpan(e, l, beats[i]).max, l).toBeGreaterThan(qrsSpan(e, l, beats[i - 1]).max);
+    }
+  });
+  it('PJC (three-questions film frame 2): narrow early beat, retrograde P′ just after the QRS (early ST), negative in II', () => {
+    const e = frames('r5', 0)[1];
     const t = e.truth!;
     const j = t.beats.find((b) => b.kind === 'junctional')!;
     expect(j.qrsOff - j.qrsOn).toBeLessThan(110);
@@ -593,11 +616,26 @@ describe('r5: premature beats on the tracings', () => {
     const v = (ms: number) => a[Math.round((ms * e.signal.fs) / 1000)] - base;
     expect(Math.min(v(j.qrsOff + 40), v(j.qrsOff + 50))).toBeLessThan(-0.04);
   });
-  it('blocked-PAC bigeminy: ventricles about 46/min, atria about 95/min, every P′ blocked', () => {
-    const t = ecgOf(blocksOf('r5', 'ecg')[2].ecg).truth!;
-    expect(Math.abs(t.hrBpm - 46)).toBeLessThan(2);
-    expect(Math.abs((t.atrialRateBpm ?? 0) - 95)).toBeLessThan(4);
+  it('blocked-PAC bigeminy (grouping film frame 1): ventricles about 46/min, atria about 95/min, every P′ blocked', () => {
+    const t = frames('r5', 1)[0].truth!;
+    expect(Math.abs(t.hrBpm - 46)).toBeLessThan(1);
+    expect(Math.abs((t.atrialRateBpm ?? 0) - 95)).toBeLessThan(1.5);
     expect(t.atrial.filter((a) => a.kind === 'ectopic').every((a) => a.conductedTo === null)).toBe(true);
+  });
+  it('grouping film: bigeminy with a fixed coupling of about 480 ms; trigeminy with two alternating PVC shapes in II; a couplet', () => {
+    const [, big, tri, cp] = frames('r5', 1);
+    const kinds = (e: Ecg) => e.truth!.beats.map((b) => (b.kind === 'ventricular' ? 'V' : 'S')).join('');
+    expect(kinds(big)).toMatch(/^(VS)+V?$|^(SV)+S?$/);
+    const t = big.truth!.beats;
+    for (let i = 1; i < t.length; i++) if (t[i].kind === 'ventricular') expect(Math.abs(t[i].qrsOn - t[i - 1].qrsOn - 480)).toBeLessThan(5);
+    expect(kinds(tri)).toMatch(/^S*(SSV)+S*$/);
+    const pv = tri.truth!.beats.filter((b) => b.kind === 'ventricular' && b.qrsOff < 9800).map((b) => qrsSpan(tri, 'II', b).max);
+    expect(pv.length).toBeGreaterThanOrEqual(3);
+    for (let i = 1; i < pv.length; i++) expect(Math.abs(pv[i] - pv[i - 1])).toBeGreaterThan(0.4);
+    for (let i = 2; i < pv.length; i++) expect(Math.abs(pv[i] - pv[i - 2])).toBeLessThan(0.05);
+    expect(kinds(cp)).toContain('SVVS');
+    expect(kinds(cp)).not.toContain('VVV');
+    expect(cp.truth!.findings).toContain('ventricular-couplet');
   });
   it('contrast: aberrant PAC is wide with an R′ in V1 after an early P′; the PVC pause is fully compensatory', () => {
     const c = blocksOf('r5', 'contrast')[0];
