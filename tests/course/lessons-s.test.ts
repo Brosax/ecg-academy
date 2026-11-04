@@ -691,20 +691,49 @@ describe('s7: normal variants on the tracings', () => {
     expect(tInverted(e, 'V1')).toBe(true);
     for (const l of ['V3', 'V4', 'V5', 'V6', 'I', 'II'] as const) expect(tUpright(e, l), l).toBe(true);
   });
-  it('early repolarisation pattern: J ≥ 1 mm in II and aVF, QRS < 120 ms', () => {
-    const e = ecgOf(blocksOf('s7', 'ecg')[0].ecg);
+  it('early repolarisation pattern (end of the J sweep): J ≥ 1 mm in II and aVF, QRS < 120 ms', () => {
+    const e = played('s7', 0, 0.14);
     for (const l of ['II', 'aVF'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
     expect(e.truth!.qrsMs).toBeLessThan(120);
   });
+  it('J sweep notes: under 1 mm in every lead at 0.06–0.07; about 1 mm in II at 0.08–0.10; ≥ 1 mm in II, aVF and V5 with QRS < 120 ms at 0.11–0.14', () => {
+    for (const v of [0.06, 0.07]) {
+      const e = played('s7', 0, v);
+      for (const l of [...LIMB, ...CHEST]) expect(Math.abs(stAt(e, l)), `${v} ${l}`).toBeLessThan(0.1);
+    }
+    for (const v of [0.08, 0.1]) {
+      const j = stAt(played('s7', 0, v), 'II');
+      expect(j, `${v}`).toBeGreaterThan(0.09);
+      expect(j, `${v}`).toBeLessThan(0.13);
+    }
+    for (const v of [0.11, 0.14]) {
+      const e = played('s7', 0, v);
+      for (const l of ['II', 'aVF', 'V5'] as const) expect(stAt(e, l), `${v} ${l}`).toBeGreaterThanOrEqual(0.1);
+      expect(e.truth!.qrsMs, `${v}`).toBeLessThan(120);
+    }
+  });
   it('juvenile T (both tracings): T inverted in V1–V3, upright from V4', () => {
-    for (const src of [blocksOf('s7', 'ecg')[1].ecg, blocksOf('s7', 'contrast')[0].left.ecg]) {
+    for (const src of [blocksOf('s7', 'film')[0].frames[0].ecg, blocksOf('s7', 'contrast')[0].left.ecg]) {
       const e = ecgOf(src);
       for (const l of ['V1', 'V2', 'V3'] as const) expect(tInverted(e, l), l).toBe(true);
       for (const l of ['V4', 'V5', 'V6'] as const) expect(tUpright(e, l), l).toBe(true);
     }
   });
+  it('never-a-variant film: QS in V2–V3; complete LBBB with QRS about 150 ms; PR about 115 ms with pre-excitation; QTc about 500 ms', () => {
+    const [oldMi, lbbb, preExcited, longQt] = blocksOf('s7', 'film')[1].frames.map((f) => ecgOf(f.ecg));
+    for (const l of ['V2', 'V3'] as const) {
+      expect(qrs(oldMi, l).max, l).toBeLessThan(0.02);
+      expect(qrs(oldMi, l).min, l).toBeLessThan(-0.8);
+    }
+    expect(oldMi.truth!.findings).toContain('pathological-q');
+    expect(Math.abs(lbbb.truth!.qrsMs - 150)).toBeLessThan(10);
+    expect(lbbb.truth!.findings).toContain('lbbb');
+    expect(Math.abs(preExcited.truth!.prMs! - 115)).toBeLessThan(6);
+    expect(preExcited.truth!.findings).toContain('wpw');
+    for (const q of [longQt.truth!.qtcBazettMs, longQt.truth!.qtcFridericiaMs]) expect(Math.abs(q - 500)).toBeLessThan(10);
+  });
   it('incomplete RBBB: QRS about 118 ms (110–119) with an r′ in V1', () => {
-    const e = ecgOf(blocksOf('s7', 'ecg')[2].ecg);
+    const e = ecgOf(blocksOf('s7', 'film')[0].frames[1].ecg);
     expect(e.truth!.qrsMs).toBeGreaterThanOrEqual(113);
     expect(e.truth!.qrsMs).toBeLessThan(120);
     expect(hasRPrime(e, 'V1')).toBe(true);
