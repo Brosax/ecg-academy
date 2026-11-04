@@ -825,23 +825,30 @@ describe('s6: ST measurement on the tracings', () => {
 });
 
 describe('s7: normal variants on the tracings', () => {
-  it('athlete (hook = worked): about 48/min with RR varying > 120 ms, QRS 110–119 with r′ in V1, SV1 + RV5 ≥ 35 mm, J-point elevation about 1–1.5 mm in II and V5–V6, T inverted in V1', () => {
+  it('athlete (hook = worked): about 48/min with RR varying > 120 ms, QRS about 115 (110–119) with r′ in V1, SV1 + RV5 about 36 mm (≥ 35), J-point elevation 1–1.5 mm in II and V5–V6, T inverted in V1', () => {
     const e = ecgOf(blocksOf('s7', 'hook')[0].ecg);
     expect(blocksOf('s7', 'worked')[0].ecg).toEqual(blocksOf('s7', 'hook')[0].ecg);
     const t = e.truth!;
-    expect(Math.abs(t.hrBpm - 48)).toBeLessThan(3);
+    expect(Math.abs(t.hrBpm - 48)).toBeLessThanOrEqual(1);
     expect(Math.max(...rrs(e)) - Math.min(...rrs(e))).toBeGreaterThan(120);
+    expect(Math.abs(t.qrsMs - 115)).toBeLessThanOrEqual(5);
     expect(t.qrsMs).toBeGreaterThanOrEqual(110);
     expect(t.qrsMs).toBeLessThan(120);
     expect(hasRPrime(e, 'V1')).toBe(true);
-    expect(-qrs(e, 'V1').min + qrs(e, 'V5').max).toBeGreaterThanOrEqual(3.5);
+    const sokolow = -qrs(e, 'V1').min + qrs(e, 'V5').max;
+    expect(sokolow).toBeGreaterThanOrEqual(3.5);
+    expect(Math.abs(sokolow - 3.6)).toBeLessThanOrEqual(0.05 * 3.6);
     for (const l of ['II', 'V5', 'V6'] as const) {
       expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
-      expect(stAt(e, l), l).toBeLessThan(0.16);
+      expect(stAt(e, l), l).toBeLessThanOrEqual(0.15);
     }
     for (const l of ['V5', 'V6'] as const) expect(stAt(e, l, 60), l).toBeGreaterThan(0);
     expect(tInverted(e, 'V1')).toBe(true);
     for (const l of ['V3', 'V4', 'V5', 'V6', 'I', 'II'] as const) expect(tUpright(e, l), l).toBe(true);
+  });
+  it('athlete: the hump before the J mark in II, aVF, V5 and V6 rises from below the baseline, so it is not a notch by the rule the ST sweep uses (the text says J-point elevation, not notch)', () => {
+    const e = ecgOf(blocksOf('s7', 'hook')[0].ecg);
+    for (const l of ['II', 'aVF', 'V5', 'V6'] as const) expect(notch(e, l).dip, l).toBeLessThan(-MIN_WAVE_MV);
   });
   it('ST sweep: in II and aVF at both ends the notch is a separate hump after the R downstroke (from a dip that stays on or above the baseline it rises over 2 mm to the Jp), standing above the J mark; QRS < 120 ms throughout', () => {
     for (const v of [0.06, 0.14]) {
@@ -869,8 +876,26 @@ describe('s7: normal variants on the tracings', () => {
     for (const v of sweepValues('st', sc.dials.st!, 0.09, 0.14)) {
       const e = played('s7', 0, v);
       expect(stAt(e, 'II'), `${v}`).toBeGreaterThanOrEqual(0.1);
-      expect(jPeak(e, 'II'), `${v}`).toBeGreaterThanOrEqual(0.34);
+      expect(jPeak(e, 'II'), `${v}`).toBeGreaterThanOrEqual(0.35);
       expect(jPeak(e, 'II'), `${v}`).toBeLessThanOrEqual(0.4);
+    }
+  });
+  it('ST sweep prediction: in II and aVF the notch (≥ 1 mm, standing above the J mark) is there at every step and does not shrink, while the ST at the J mark rises', () => {
+    const sc = scenarios().find((s) => s.id === 'early-repolarization')!;
+    for (const v of sweepValues('st', sc.dials.st!, 0.06, 0.14)) {
+      const e = played('s7', 0, v);
+      for (const l of ['II', 'aVF'] as const) {
+        const n = notch(e, l);
+        expect(n.dip, `${v} ${l}`).toBeGreaterThan(-MIN_WAVE_MV);
+        expect(n.peak - n.dip, `${v} ${l}`).toBeGreaterThan(0.2);
+        expect(jPeak(e, l), `${v} ${l}`).toBeGreaterThanOrEqual(0.1);
+        expect(jPeak(e, l) - stAt(e, l), `${v} ${l}`).toBeGreaterThan(0.15);
+      }
+    }
+    const [lo, hi] = [played('s7', 0, 0.06), played('s7', 0, 0.14)];
+    for (const l of ['II', 'aVF'] as const) {
+      expect(jPeak(hi, l), l).toBeGreaterThanOrEqual(jPeak(lo, l));
+      expect(stAt(hi, l) - stAt(lo, l), l).toBeGreaterThan(MIN_WAVE_MV);
     }
   });
   it('ST sweep caption: at both ends the notch is over 2 mm in II, III and aVF with a horizontal ST after it (within 0.5 mm of the J mark at J + 60 and J + 100 ms)', () => {
@@ -889,18 +914,25 @@ describe('s7: normal variants on the tracings', () => {
       for (const l of ['V4', 'V5', 'V6'] as const) expect(tUpright(e, l), l).toBe(true);
     }
   });
-  it('never-a-variant film: QS in V2–V3; complete LBBB with QRS about 150 ms; PR about 115 ms with pre-excitation; QTc about 500 ms', () => {
-    const [oldMi, lbbb, preExcited, longQt] = blocksOf('s7', 'film')[1].frames.map((f) => ecgOf(f.ecg));
+  it('never-a-variant film: QS in V2–V3; complete LBBB with QRS about 150 ms; PR about 115 ms with pre-excitation; marked QT about 500 ms at 60/min with RR about 1 s, so QTc about 500 ms', () => {
+    const film = blocksOf('s7', 'film')[1];
+    const [oldMi, lbbb, preExcited, longQt] = film.frames.map((f) => ecgOf(f.ecg));
+    const qtMarks = film.frames[3].marks;
+    expect(Math.abs(markedMs(longQt, qtMarks, 'QT') - 500)).toBeLessThanOrEqual(5);
+    expect(Math.abs(longQt.truth!.qtMs - 500)).toBeLessThanOrEqual(5);
+    expect(Math.abs(longQt.truth!.hrBpm - 60)).toBeLessThanOrEqual(1);
+    expect(Math.abs(meanRr(longQt) - 1000)).toBeLessThanOrEqual(5);
+    expect(Math.abs(markedMs(longQt, qtMarks, 'RR') - 1000)).toBeLessThanOrEqual(10);
     for (const l of ['V2', 'V3'] as const) {
       expect(qrs(oldMi, l).max, l).toBeLessThan(0.02);
       expect(qrs(oldMi, l).min, l).toBeLessThan(-0.8);
     }
     expect(oldMi.truth!.findings).toContain('pathological-q');
-    expect(Math.abs(lbbb.truth!.qrsMs - 150)).toBeLessThan(10);
+    expect(Math.abs(lbbb.truth!.qrsMs - 150)).toBeLessThanOrEqual(5);
     expect(lbbb.truth!.findings).toContain('lbbb');
     expect(Math.abs(preExcited.truth!.prMs! - 115)).toBeLessThanOrEqual(5);
     expect(preExcited.truth!.findings).toContain('wpw');
-    for (const q of [longQt.truth!.qtcBazettMs, longQt.truth!.qtcFridericiaMs]) expect(Math.abs(q - 500)).toBeLessThan(10);
+    for (const q of [longQt.truth!.qtcBazettMs, longQt.truth!.qtcFridericiaMs]) expect(Math.abs(q - 500)).toBeLessThanOrEqual(5);
   });
   it('incomplete RBBB: QRS about 118 ms (110–119) with an r′ in V1', () => {
     const e = ecgOf(blocksOf('s7', 'film')[0].frames[1].ecg);
@@ -915,16 +947,33 @@ describe('s7: normal variants on the tracings', () => {
     for (const l of ['V5', 'V6'] as const) expect(stAt(e, l, 60), l).toBeLessThan(-0.05);
     for (const l of ['V1', 'V2', 'V3'] as const) expect(-qrs(e, l).min, l).toBeGreaterThan(1.5);
   });
-  it('variant or Brugada: A has upright T in V2–V3 (shallow negative T in V1 only) and inferior J notches; B coved ST ≥ 2 mm into a negative T in V1–V2 only', () => {
+  it('variant or Brugada: A has concave ST elevation in V2, upright T in V2–V3 (shallow negative T in V1 only) and J notches in II, aVF, V5 and V6; B coved ST ≥ 2 mm into a negative T in V1–V2 only', () => {
     const c = blocksOf('s7', 'contrast')[1];
     const a = ecgOf(c.left.ecg);
     const b = ecgOf(c.right.ecg);
+    expect(stAt(a, 'V2')).toBeGreaterThanOrEqual(0.1);
+    // concave: from J to the T peak the ST runs below the straight line joining them
+    const bt = midBeat(a);
+    let peakAt = 40;
+    for (let d = 40; d <= bt.tOff - bt.j; d++) if (stAt(a, 'V2', d) > stAt(a, 'V2', peakAt)) peakAt = d;
+    const [j0, top] = [stAt(a, 'V2'), stAt(a, 'V2', peakAt)];
+    for (const f of [0.25, 0.5, 0.75]) {
+      const d = Math.round(f * peakAt);
+      expect(stAt(a, 'V2', d), `V2 at J+${d}`).toBeLessThan(j0 + (top - j0) * (d / peakAt) - 0.01);
+    }
     for (const l of ['V2', 'V3'] as const) expect(tUpright(a, l), l).toBe(true);
     expect(tw(a, 'V1').max).toBeLessThan(0.1);
     expect(tw(a, 'V1').min).toBeLessThan(-0.05);
     expect(tw(a, 'V1').min).toBeGreaterThan(-0.2);
     expect(stAt(a, 'V1')).toBeLessThan(0.1);
-    for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(a, l), l).toBeGreaterThanOrEqual(0.09);
+    for (const l of ['II', 'aVF', 'V5', 'V6'] as const) {
+      const n = notch(a, l);
+      expect(n.dip, `${l} dip not below the baseline`).toBeGreaterThan(-MIN_WAVE_MV);
+      expect(n.peak - n.dip, `${l} hump`).toBeGreaterThan(0.1);
+      expect(Math.abs(n.peak - jPeak(a, l)), `${l} the hump is the Jp`).toBeLessThan(0.01);
+      expect(jPeak(a, l), `${l} Jp ≥ 1 mm`).toBeGreaterThanOrEqual(0.1);
+      expect(jPeak(a, l) - stAt(a, l), `${l} stands above the J mark`).toBeGreaterThan(MIN_WAVE_MV);
+    }
     for (const l of ['V1', 'V2'] as const) {
       expect(stAt(b, l), l).toBeGreaterThanOrEqual(0.2);
       expect(stAt(b, l, 60), l).toBeLessThan(stAt(b, l));
@@ -934,8 +983,8 @@ describe('s7: normal variants on the tracings', () => {
   });
   it('athlete check: about 48/min, PR about 220 ms, r′ in V1', () => {
     const e = ecgOf(inlineItem('s7', 's7:athlete-workup').ecg);
-    expect(Math.abs(e.truth!.hrBpm - 48)).toBeLessThan(3);
-    expect(Math.abs(e.truth!.prMs! - 220)).toBeLessThan(10);
+    expect(Math.abs(e.truth!.hrBpm - 48)).toBeLessThanOrEqual(1);
+    expect(Math.abs(e.truth!.prMs! - 220)).toBeLessThanOrEqual(5);
     expect(hasRPrime(e, 'V1')).toBe(true);
   });
 });
@@ -987,6 +1036,12 @@ const REAL_CLAIMS: Readonly<Partial<Record<(typeof IDS)[number], readonly RealCl
   s6: [
     { id: 13683, sex: 'M', age: 19, has: ['normal-ecg'] },
     { id: 5469, sex: 'M', age: 39, has: ['normal-ecg'] },
+  ],
+  // "three people aged 16 to 42"; "one carries the label incomplete RBBB"
+  s7: [
+    { id: 15112, age: 42, has: ['irbbb'] },
+    { id: 13683, age: 19, not: ['irbbb'] },
+    { id: 2084, age: 16, not: ['irbbb'] },
   ],
 };
 
