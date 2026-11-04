@@ -63,15 +63,15 @@ const lesson: Lesson = {
         'Varón de 58 años, dolor torácico de 40 minutos: ¿es un IAMCEST? Mide antes de responder.',
       ),
       reveal: l(
-        '是。相邻的 **V2–V4** J点抬高约2–3 mm（V3最高）——58岁男性在V2–V3的界值是 **2 mm**——同时 **II、III、aVF** 出现镜像性ST压低：符合急性前壁闭塞的标准，直接走再灌注流程，不必等肌钙蛋白。判读是可以拆成步骤的：本课把这些步骤练成习惯。',
-        'Yes. The J point is raised about 2–3 mm (most in V3) across the contiguous leads **V2–V4** — the limit in V2–V3 for a 58-year-old man is **2 mm** — and **II, III and aVF** show mirror-image ST depression: this meets the criteria for an acute anterior occlusion. Go straight to reperfusion; do not wait for troponin. The reading can be broken into steps, and this lesson drills them into a habit.',
-        'Sí. El punto J está elevado unos 2–3 mm (máximo en V3) en las derivaciones contiguas **V2–V4** —el límite en V2–V3 para un varón de 58 años es **2 mm**— y **II, III y aVF** muestran un descenso del ST en espejo: cumple los criterios de una oclusión anterior aguda. Directo a reperfusión; no esperes la troponina. La lectura se puede descomponer en pasos, y esta lección los convierte en costumbre.',
+        '是。相邻的 **V2–V4** J点抬高约2–3.5 mm（V3最高）——58岁男性在V2–V3的界值是 **2 mm**——同时 **II、III、aVF** 出现镜像性ST压低：符合急性前壁闭塞的标准，直接走再灌注流程，不必等肌钙蛋白。判读是可以拆成步骤的：本课把这些步骤练成习惯。',
+        'Yes. The J point is raised about 2–3.5 mm (most in V3) across the contiguous leads **V2–V4** — the limit in V2–V3 for a 58-year-old man is **2 mm** — and **II, III and aVF** show mirror-image ST depression: this meets the criteria for an acute anterior occlusion. Go straight to reperfusion; do not wait for troponin. The reading can be broken into steps, and this lesson drills them into a habit.',
+        'Sí. El punto J está elevado unos 2–3,5 mm (máximo en V3) en las derivaciones contiguas **V2–V4** —el límite en V2–V3 para un varón de 58 años es **2 mm**— y **II, III y aVF** muestran un descenso del ST en espejo: cumple los criterios de una oclusión anterior aguda. Directo a reperfusión; no esperes la troponina. La lectura se puede descomponer en pasos, y esta lección los convierte en costumbre.',
       ),
     },
     {
       kind: 'heart',
       ecg: synth('stemi-anterior', 802, { st: 0.3 }),
-      emphasize: ['lv-mid-anteroseptal', 'lv-mid-anterior', 'lv-apical-anterior', 'lv-apical-septal', 'lv-apex'],
+      emphasize: ['lv-basal-anterior', 'lv-basal-anteroseptal', 'lv-mid-anterior', 'lv-mid-anteroseptal', 'lv-apical-anterior', 'lv-apical-septal', 'lv-apex'],
       caption: l(
         '播放一个心动周期。发亮的节段由左前降支供血，正对 **V2–V4**：相邻导联看的是相邻的心肌。同一个损伤矢量背向 II、III、aVF，在那里表现为ST压低：对应性改变。',
         'Play one beat. The lit segments, fed by the left anterior descending artery, face **V2–V4**: contiguous leads look at neighbouring muscle. The same injury vector points away from II, III and aVF, where it shows as ST depression: reciprocity.',
@@ -146,9 +146,9 @@ const lesson: Lesson = {
         {
           title: l('找抬高最明显的导联', 'Find the lead with the most elevation', 'Busca la derivación con mayor elevación'),
           body: l(
-            '扫过V1–V6再扫肢体导联：V1约1 mm，V2约3 mm，**V3最高**，V4约2 mm。就在V3测。',
-            'Sweep V1–V6, then the limb leads: about 1 mm in V1, 3 mm in V2, highest in **V3**, about 2 mm in V4. Measure in V3.',
-            'Recorre V1–V6 y luego las derivaciones de las extremidades: alrededor de 1 mm en V1, 3 mm en V2, la máxima en **V3**, unos 2 mm en V4. Mide en V3.',
+            '扫过V1–V6再扫肢体导联：V1约1 mm，V2约2.5 mm，**V3最高**，V4约2 mm。就在V3测。',
+            'Sweep V1–V6, then the limb leads: about 1 mm in V1, about 2.5 mm in V2, highest in **V3**, about 2 mm in V4. Measure in V3.',
+            'Recorre V1–V6 y luego las derivaciones de las extremidades: alrededor de 1 mm en V1, unos 2,5 mm en V2, la máxima en **V3**, unos 2 mm en V4. Mide en V3.',
           ),
           marks: [{ auto: 'st', lead: 'V3' }],
           highlightLeads: ['V2', 'V3', 'V4'],
@@ -166,9 +166,9 @@ const lesson: Lesson = {
         {
           title: l('测量并套用性别年龄网格', 'Measure and apply the sex/age grid', 'Mide y aplica la rejilla sexo/edad'),
           body: l(
-            'V3的J点约 **3 mm**（J+60读数约4 mm）。网格：58岁男性属于 ≥ 40岁组，V2–V3界值 **2 mm** —— 已超过。同一份图放在 < 40岁男性（2.5 mm）或任何年龄女性（1.5 mm）身上，也依然达标。',
-            'The J point in V3 sits about **3 mm** above the baseline (J+60 read-out about 4 mm). The grid: a 58-year-old man falls in the ≥ 40 group, limit **2 mm** in V2–V3 — exceeded. The same tracing would still qualify for a man < 40 (2.5 mm) or a woman of any age (1.5 mm).',
-            'El punto J en V3 está unos **3 mm** por encima de la línea de base (lectura de J+60 unos 4 mm). La rejilla: un varón de 58 años entra en el grupo ≥ 40 años, límite **2 mm** en V2–V3: superado. El mismo trazado también cumpliría en un varón < 40 años (2,5 mm) o en una mujer de cualquier edad (1,5 mm).',
+            'V3的J点在基线上方 **3–3.5 mm**（J+60读数约4 mm）。网格：58岁男性属于 ≥ 40岁组，V2–V3界值 **2 mm** —— 已超过。同一份图放在 < 40岁男性（2.5 mm）或任何年龄女性（1.5 mm）身上，也依然达标。',
+            'The J point in V3 sits **3–3.5 mm** above the baseline (J+60 read-out about 4 mm). The grid: a 58-year-old man falls in the ≥ 40 group, limit **2 mm** in V2–V3 — exceeded. The same tracing would still qualify for a man < 40 (2.5 mm) or a woman of any age (1.5 mm).',
+            'El punto J en V3 está **3–3,5 mm** por encima de la línea de base (lectura de J+60 unos 4 mm). La rejilla: un varón de 58 años entra en el grupo ≥ 40 años, límite **2 mm** en V2–V3: superado. El mismo trazado también cumpliría en un varón < 40 años (2,5 mm) o en una mujer de cualquier edad (1,5 mm).',
           ),
           marks: [{ auto: 'j', lead: 'V3' }, { auto: 'st60', lead: 'V3' }],
           highlightLeads: ['V3'],
@@ -176,11 +176,11 @@ const lesson: Lesson = {
         {
           title: l('相邻导联与对应导联', 'Contiguous and reciprocal leads', 'Derivaciones contiguas y recíprocas'),
           body: l(
-            'V2（约3 mm）和V4（约2 mm，界值1 mm）与V3同属前壁相邻组：**新出现、≥ 2个相邻导联、超过界值**——前壁STEMI。再看对侧：III和aVF压低约1 mm，同一个损伤矢量的背面。对应性改变支持急性闭塞而不是变异。下一步不是肌钙蛋白，而是再灌注。',
-            'V2 (about 3 mm) and V4 (about 2 mm; limit 1 mm) share the anterior contiguous group with V3: **new, ≥ 2 contiguous leads, above threshold** — an anterior STEMI. Now the opposite side: III and aVF are depressed by about 1 mm, the back of the same injury vector. Reciprocity argues for acute occlusion, not a variant. The next step is reperfusion, not troponin.',
-            'V2 (unos 3 mm) y V4 (unos 2 mm; límite 1 mm) comparten con V3 el grupo contiguo anterior: **nuevo, ≥ 2 derivaciones contiguas, por encima del umbral**: IAMCEST anterior. Mira ahora el lado opuesto: III y aVF descienden alrededor de 1 mm, el reverso del mismo vector de lesión. La reciprocidad apoya la oclusión aguda, no una variante. El siguiente paso es la reperfusión, no la troponina.',
+            'V2（J点约2.5 mm）和V4（约2 mm，界值1 mm）与V3同属前壁相邻组：**新出现、≥ 2个相邻导联、超过界值**——前壁STEMI。再看对侧：III和aVF压低约1 mm，同一个损伤矢量的背面。对应性改变支持急性闭塞而不是变异。下一步不是肌钙蛋白，而是再灌注。',
+            'V2 (about 2.5 mm at J) and V4 (about 2 mm; limit 1 mm) share the anterior contiguous group with V3: **new, ≥ 2 contiguous leads, above threshold** — an anterior STEMI. Now the opposite side: III and aVF are depressed by about 1 mm, the back of the same injury vector. Reciprocity argues for acute occlusion, not a variant. The next step is reperfusion, not troponin.',
+            'V2 (unos 2,5 mm en J) y V4 (unos 2 mm; límite 1 mm) comparten con V3 el grupo contiguo anterior: **nuevo, ≥ 2 derivaciones contiguas, por encima del umbral**: IAMCEST anterior. Mira ahora el lado opuesto: III y aVF descienden alrededor de 1 mm, el reverso del mismo vector de lesión. La reciprocidad apoya la oclusión aguda, no una variante. El siguiente paso es la reperfusión, no la troponina.',
           ),
-          marks: [{ auto: 'st60', lead: 'V2' }, { auto: 'st60', lead: 'V4' }, { auto: 'st60', lead: 'III' }, { auto: 'st60', lead: 'aVF' }],
+          marks: [{ auto: 'j', lead: 'V2' }, { auto: 'j', lead: 'V4' }, { auto: 'j', lead: 'III' }, { auto: 'j', lead: 'aVF' }],
           highlightLeads: ['V2', 'V3', 'V4', 'III', 'aVF'],
         },
       ],
@@ -231,8 +231,9 @@ const lesson: Lesson = {
           'The tracing starts at the weakest injury current. In this man of 58, do V3 and V4 already meet the STEMI rule?',
           'El trazado empieza con la corriente de lesión mínima. En este varón de 58 años, ¿cumplen ya V3 y V4 la regla del IAMCEST?',
         ),
-        options: [l('达到：两个都过了界值', 'Yes: both are over their limits', 'Sí: ambas superan su límite'), l('不达到：只有V3过界', 'No: only V3 is over', 'No: solo V3 lo supera'), l('不达到：两个都不过界', 'No: neither is over', 'No: ninguna lo supera')],
-        answer: 0,
+        options: [l('不达到：两个都不过界', 'No: neither is over', 'No: ninguna lo supera'), l('不达到：只有V3过界', 'No: only V3 is over', 'No: solo V3 lo supera'), l('达到：两个都过了界值', 'Yes: both are over their limits', 'Sí: ambas superan su límite')],
+        answer: 2,
+        ordered: true,
       },
       caption: l(
         '拖动损伤电流。每个导联都以PR段为零线、在 **J点** 读数（1 mm = 0.1 mV）：V2–V4一起升高，II、III、aVF一起压低。',
