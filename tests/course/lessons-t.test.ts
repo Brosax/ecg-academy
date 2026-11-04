@@ -16,6 +16,7 @@ import t5 from '../../src/course/lessons/t5';
 import t6 from '../../src/course/lessons/t6';
 import t7 from '../../src/course/lessons/t7';
 import { realisedDials, startDials } from '../../src/course/live';
+import { baselineBefore } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { Ecg } from '../../src/core/ecg';
 import type { L10n } from '../../src/core/l10n';
@@ -578,6 +579,73 @@ describe('t4 on the tracings', () => {
     const b = mid(e);
     for (const l of ['I', 'aVL'] as const) expect(excursion(e, l, b.qrsOn, b.qrsOn, b.qrsOn + 40), l).toBeLessThan(-0.1);
     expect(excursion(e, 'V1', b.qrsOn, b.qrsOn, b.qrsOn + 60)).toBeGreaterThan(0.3);
+  });
+  it('WPW heart: the region at the pathway depolarises at QRS onset, at least 20 ms before any other ventricular region', () => {
+    const e = ecgOf(blocksOf('t4', 'heart')[0].ecg);
+    const rs = e.regions!;
+    const b = mid(e);
+    const buf = new Float32Array(rs.ids.length);
+    const first = new Map<string, number>();
+    for (let t = b.qrsOn - 40; t < b.qrsOn + 150; t += 2) {
+      rs.stateAt(t, buf);
+      rs.ids.forEach((id, k) => {
+        if (!first.has(id) && /^(lv|rv)-/.test(id) && buf[k] > 0 && buf[k] < 1) first.set(id, t - b.qrsOn);
+      });
+    }
+    expect(rs.highlights['lv-basal-anterolateral']).toBe('pathway');
+    const ap = first.get('lv-basal-anterolateral')!;
+    expect(Math.abs(ap)).toBeLessThanOrEqual(10);
+    for (const [id, t] of first) if (id !== 'lv-basal-anterolateral') expect(t, id).toBeGreaterThanOrEqual(ap + 20);
+  });
+  it('mimic film: every frame is the hook ECG; V1 wide and mainly positive; negative delta in I and aVL; T opposite to the QRS in II, III, aVF and V1–V6; I nearly isoelectric, aVF upright, axis beyond +90°', () => {
+    const hook = blocksOf('t4', 'hook')[0].ecg;
+    for (const f of blocksOf('t4', 'film')[0].frames) expect(f.ecg).toEqual(hook);
+    const e = ecgOf(hook);
+    const b = mid(e);
+    const net = (lead: StdLead, t0: number, t1: number) => {
+      const a = e.signal.leads[lead];
+      const base = baselineBefore(a, e.signal.fs, b.qrsOn);
+      let mx = -Infinity;
+      let mn = Infinity;
+      for (let t = t0; t <= t1; t += 2) {
+        mx = Math.max(mx, at(e, lead, t) - base);
+        mn = Math.min(mn, at(e, lead, t) - base);
+      }
+      return { net: mx + mn, p2p: mx - mn };
+    };
+    expect(e.truth!.qrsMs).toBeGreaterThanOrEqual(120);
+    expect(net('V1', b.qrsOn, b.qrsOff).net).toBeGreaterThan(0.1);
+    for (const l of ['I', 'aVL'] as const) expect(excursion(e, l, b.qrsOn, b.qrsOn, b.qrsOn + 30), l).toBeLessThan(-0.1);
+    for (const l of ['II', 'III', 'aVF', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6'] as const) {
+      expect(net(l, b.qrsOn, b.qrsOff).net, `${l} QRS`).toBeGreaterThan(0.1);
+      expect(net(l, b.j + 40, b.tOff).net, `${l} T`).toBeLessThan(-0.04);
+    }
+    const i = net('I', b.qrsOn, b.qrsOff);
+    expect(Math.abs(i.net)).toBeLessThan(0.25 * i.p2p);
+    expect(net('aVF', b.qrsOn, b.qrsOff).net).toBeGreaterThan(0.3);
+    expect(e.truth!.axisDeg.qrs).toBeGreaterThan(90);
+  });
+  it('pathway film: sinus PR about 115 ms with QRS about 120 ms; orthodromic AVRT narrow and regular at about 190/min with the P′ after the QRS; antidromic AVRT regular, about 185/min, QRS about 155 ms; pre-excited AF about 200/min, irregular, QRS width varying with narrower beats, shortest RR about 210 ms', () => {
+    const [sinus, ortho, anti, af] = frames('t4', 1);
+    expect(Math.abs(sinus.truth!.prMs! - 115)).toBeLessThan(5);
+    expect(Math.abs(sinus.truth!.qrsMs - 120)).toBeLessThan(5);
+    expect(sinus.truth!.findings).toContain('wpw');
+    const o = ortho.truth!;
+    expect(Math.abs(o.hrBpm - 190)).toBeLessThan(5);
+    expect(o.qrsMs).toBeLessThan(110);
+    expect(Math.max(...rrs(ortho)) - Math.min(...rrs(ortho))).toBeLessThan(10);
+    expect(mid(ortho).pOn!).toBeGreaterThan(mid(ortho).qrsOff);
+    const a = anti.truth!;
+    expect(Math.abs(a.hrBpm - 185)).toBeLessThan(5);
+    expect(Math.abs(a.qrsMs - 155)).toBeLessThan(5);
+    expect(Math.max(...rrs(anti)) - Math.min(...rrs(anti))).toBeLessThan(10);
+    const p = af.truth!;
+    expect(Math.abs(p.hrBpm - 200)).toBeLessThan(5);
+    expect(Math.abs(Math.min(...rrs(af)) - 210)).toBeLessThan(5);
+    expect(Math.max(...rrs(af)) - Math.min(...rrs(af))).toBeGreaterThan(150);
+    const widths = p.beats.map((x) => x.qrsOff - x.qrsOn);
+    expect(Math.max(...widths)).toBeGreaterThanOrEqual(150);
+    expect(widths.filter((w) => w < 110).length).toBeGreaterThanOrEqual(2);
   });
 });
 

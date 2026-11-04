@@ -77,18 +77,135 @@ const lesson: Lesson = {
       showConduction: true,
       emphasize: ['la', 'av-node', 'lv-basal-anterolateral'],
       caption: l(
-        '播放一个心动周期。房室旁路（Kent 束）从左房直接连到左室基底外侧，绕开房室结的生理性延迟：这部分心室**提前**除极，形成 δ波；随后经房室结下传的激动也抵达心室——QRS 是两条径路的**融合波**。旁路长在哪里，δ波的向量就指向哪里。',
-        'Play one beat. The accessory pathway (bundle of Kent) runs from the left atrium straight to the basolateral left ventricle, bypassing the physiological delay of the AV node: that part of the ventricle depolarises **early**, making the delta wave; then the impulse that came through the AV node arrives too — the QRS is a **fusion** of the two fronts. Where the pathway sits decides where the delta vector points.',
-        'Reproduce un latido. La vía accesoria (haz de Kent) va de la aurícula izquierda directamente al ventrículo izquierdo basolateral, saltándose el retraso fisiológico del nodo AV: esa parte del ventrículo se despolariza **antes**, creando la onda delta; después llega también el impulso que bajó por el nodo AV: el QRS es una **fusión** de los dos frentes. La situación de la vía decide hacia dónde apunta el vector de la delta.',
+        '播放一个心动周期：旁路所在的左室基底外侧（高亮）最先除极，早于其余心室，这就是 δ 波；随后经房室结下传的激动赶到：QRS 是两者的**融合波**。',
+        'Play one beat: the basolateral left ventricle at the pathway (highlighted) depolarises first, before the rest of the ventricle: that is the delta wave. Then the front from the AV node arrives: the QRS is a **fusion** of the two.',
+        'Reproduce un latido: el ventrículo izquierdo basolateral junto a la vía (resaltado) se despolariza primero, antes que el resto del ventrículo: esa es la onda delta. Después llega el frente que bajó por el nodo AV: el QRS es una **fusión** de los dos.',
       ),
     },
     {
-      kind: 'text',
-      title: l('图形还是综合征？', 'Pattern or syndrome?', '¿Patrón o síndrome?'),
-      body: l(
-        '**WPW 图形** = 仅有心电图表现（短 PR、δ波、宽 QRS），无症状、无心动过速；人群患病率约 0.15–0.25%。\n**WPW 综合征** = 图形 + 有症状的心动过速（AVRT 或预激伴房颤）。\n**隐匿性旁路**只能逆传：静息心电图完全正常，也不与猝死相关——但能构成 AVRT 的逆传支。\nSVT 终止后再看窦性心电图（判读规则）：\n- 窦性心律见到预激 ⇒ 显性旁路，AVRT 可能（WPW 综合征）；\n- 心电图正常**不能**排除隐匿性旁路——基线正常时最常见机制依次为 AVNRT、隐匿性旁路 AVRT、局灶性房速；机制靠心动过速心电图判断（RP 间期、V1 假性 r′ 等，见 t1）；\n- 孤立短 PR 无 δ波对判断机制没有价值。',
-        '**WPW pattern** = the ECG findings alone (short PR, delta, wide QRS) with no symptoms and no tachycardia; present in about 0.15-0.25% of the population.\n**WPW syndrome** = the pattern plus symptomatic tachycardia (AVRT or pre-excited AF).\nA **concealed pathway** conducts only retrogradely: the resting ECG is completely normal, and it is not linked to sudden death — but it can still be the retrograde limb of AVRT.\nReading the sinus ECG after an SVT has ended (triage rule):\n- pre-excitation in sinus rhythm => a manifest pathway, so AVRT is likely (WPW syndrome);\n- a normal ECG does **not** exclude a concealed pathway — with a normal baseline the commonest mechanisms are, in order, AVNRT, AVRT over a concealed pathway and focal AT; the mechanism is read from the tachycardia ECG itself (RP interval, pseudo-r\' in V1 and so on, t1);\n- an isolated short PR without delta has no value for deciding the mechanism.',
-        '**Patrón de WPW** = solo los hallazgos electrocardiográficos (PR corto, delta, QRS ancho), sin síntomas ni taquicardia; lo presenta en torno al 0,15-0,25% de la población.\n**Síndrome de WPW** = el patrón más taquicardia sintomática (TRAV o FA preexcitada).\nUna **vía oculta** solo conduce de forma retrógrada: el ECG en reposo es completamente normal y no se relaciona con muerte súbita, pero puede ser la rama retrógrada de una TRAV.\nLectura del ECG sinusal tras una TSV (regla de clasificación):\n- preexcitación en ritmo sinusal => vía manifiesta, así que la TRAV es probable (síndrome de WPW);\n- un ECG normal **no** excluye una vía oculta; con una línea de base normal los mecanismos más frecuentes son, por orden, TRIN, TRAV por vía oculta y taquicardia auricular focal; el mecanismo se lee en el ECG de la propia taquicardia (intervalo RP, pseudo-r\' en V1, etc., t1);\n- un PR corto aislado sin delta no sirve para decidir el mecanismo.',
+      kind: 'film',
+      title: l('预激是模仿高手', 'Pre-excitation, the great mimic', 'La preexcitación, gran imitadora'),
+      view: { layout: '3x4+1' },
+      frames: [
+        {
+          label: l('V1 高 R', 'Tall R in V1', 'R alta en V1'),
+          ecg: synth('wpw', 661),
+          note: l(
+            'V1：QRS 又宽又以 R 为主，像右束支阻滞或后壁心梗。其实是经旁路最先激动的左室基底部。',
+            'V1: a wide, mainly positive QRS that looks like RBBB or a posterior MI. It is the left base, activated first over the pathway.',
+            'V1: un QRS ancho y predominantemente positivo que parece un bloqueo de rama derecha o un IAM posterior. Es la base izquierda, activada primero por la vía.',
+          ),
+          marks: [{ auto: 'delta', lead: 'V1' }],
+        },
+        {
+          label: l('I 与 aVL', 'I and aVL', 'I y aVL'),
+          ecg: synth('wpw', 661),
+          note: l(
+            'I、aVL：负向 δ 波写出一个 Q 波，像侧壁心梗。它是 δ 波，不是坏死。',
+            'I and aVL: the negative delta writes a Q wave that looks like a lateral MI. It is the delta, not necrosis.',
+            'I y aVL: la delta negativa dibuja una onda Q que parece un IAM lateral. Es la delta, no necrosis.',
+          ),
+          marks: [{ auto: 'delta', lead: 'I' }, { auto: 'delta', lead: 'aVL' }],
+        },
+        {
+          label: l('ST–T', 'ST–T', 'ST-T'),
+          ecg: synth('wpw', 661),
+          note: l(
+            'II、III、aVF 和 V1–V6：T 与 QRS 方向相反，像缺血。这是继发性改变。',
+            'II, III, aVF and V1–V6: the T points opposite to the QRS and looks like ischaemia. It is a secondary change.',
+            'II, III, aVF y V1-V6: la T va en sentido opuesto al QRS y parece isquemia. Es un cambio secundario.',
+          ),
+          marks: [{ auto: 't', lead: 'III' }, { auto: 't', lead: 'V4' }],
+        },
+        {
+          label: l('电轴', 'Axis', 'Eje'),
+          ecg: synth('wpw', 661),
+          note: l('I 近乎等电位、aVF 直立：电轴看起来右偏。同样是预激造成的，别判读。', 'I nearly isoelectric, aVF upright: the axis looks rightward. Pre-excitation again, so do not interpret it.', 'I casi isoeléctrica y aVF positiva: el eje parece desviado a la derecha. Otra vez la preexcitación: no lo interpretes.'),
+          marks: [{ auto: 'qrs', lead: 'I' }, { auto: 'qrs', lead: 'aVF' }],
+        },
+      ],
+      predict: {
+        question: l(
+          'I 和 aVL 的 QRS 以负向 δ 波开始。粗看它像什么？',
+          'In I and aVL the QRS starts with a negative delta wave. At a glance, what does that look like?',
+          'En I y aVL el QRS empieza con una onda delta negativa. A primera vista, ¿a qué se parece?',
+        ),
+        options: [
+          l('侧壁心梗的 Q 波', 'The Q waves of a lateral infarct', 'Las ondas Q de un infarto lateral'),
+          l('左束支阻滞', 'Left bundle branch block', 'Un bloqueo de rama izquierda'),
+          l('低电压', 'Low voltage', 'Bajo voltaje'),
+        ],
+        answer: 0,
+      },
+      caption: l(
+        '开头那份预激心电图，四个陷阱。先确认有没有预激，再读其他一切：预激搏动上不诊断心梗、LVH、束支阻滞，也不判读电轴。',
+        'The opening ECG, four traps. Settle whether there is pre-excitation before reading anything else: on pre-excited beats do not diagnose MI, LVH or bundle branch block, and do not read the axis.',
+        'El ECG inicial, cuatro trampas. Decide primero si hay preexcitación antes de leer nada más: en latidos preexcitados no diagnostiques IAM, HVI ni bloqueo de rama, ni leas el eje.',
+      ),
+    },
+    {
+      kind: 'film',
+      title: l('旁路在四种心律里', 'The pathway in four rhythms', 'La vía en cuatro ritmos'),
+      view: STRIP,
+      frames: [
+        {
+          label: l('窦性：图形', 'Sinus: pattern', 'Sinusal: patrón'),
+          ecg: synth('wpw', 664),
+          note: l(
+            'PR 约 115 ms、δ 波、QRS 约 120 ms：旁路画出的图形。没有心动过速 ⇒ 只是 WPW 图形。',
+            'PR about 115 ms, a delta wave and a QRS of about 120 ms: the pathway draws the pattern. No tachycardia → only a WPW pattern.',
+            'PR de unos 115 ms, onda delta y QRS de unos 120 ms: la vía dibuja el patrón. Sin taquicardia → solo es un patrón de WPW.',
+          ),
+          marks: [{ auto: 'pr' }, { auto: 'delta' }],
+        },
+        {
+          label: l('顺向型 AVRT', 'Orthodromic AVRT', 'TRAV ortodrómica'),
+          ecg: synth('avrt', 668),
+          note: l(
+            '经房室结下传、经旁路逆传 ⇒ QRS 窄而规则，约 190 次/分，P′ 落在 ST 段。',
+            'Down the AV node, back up the pathway → a narrow, regular QRS at about 190/min, with the P′ on the ST segment.',
+            'Baja por el nodo AV y vuelve por la vía → QRS estrecho y regular a unos 190 lpm, con la P′ sobre el segmento ST.',
+          ),
+          marks: [{ auto: 'p', label: l('P′', 'P′', 'P′') }],
+        },
+        {
+          label: l('逆向型 AVRT', 'Antidromic AVRT', 'TRAV antidrómica'),
+          ecg: synth('avrt', 666, undefined, 'antidromic'),
+          note: l(
+            '经旁路下传、经房室结逆传 ⇒ QRS 完全预激，宽约 155 ms，规则，约 185 次/分。',
+            'Down the pathway, back up the AV node → a fully pre-excited QRS about 155 ms wide, regular, at about 185/min.',
+            'Baja por la vía y vuelve por el nodo AV → QRS totalmente preexcitado de unos 155 ms, regular, a unos 185 lpm.',
+          ),
+          marks: [{ auto: 'qrs' }],
+        },
+        {
+          label: l('预激伴房颤', 'Pre-excited AF', 'FA preexcitada'),
+          ecg: synth('preexcited-af', 667),
+          note: l(
+            '快（约 200 次/分）、宽、不规则，QRS 宽度逐搏变化，夹着几个较窄的搏动；最短 RR 约 210 ms ⇒ 高危。',
+            'Fast (about 200/min), broad and irregular, with the QRS width changing beat to beat and a few narrower beats mixed in; shortest RR about 210 ms → high risk.',
+            'Rápida (unos 200 lpm), ancha e irregular, con la anchura del QRS cambiando de latido en latido y algunos latidos más estrechos; RR más corto de unos 210 ms → alto riesgo.',
+          ),
+          marks: [{ auto: 'qrs' }],
+        },
+      ],
+      predict: {
+        question: l(
+          '逆向型 AVRT 的冲动经旁路下传到心室。它的 QRS 会是什么样？',
+          'In antidromic AVRT the impulse reaches the ventricles down the pathway. What will its QRS look like?',
+          'En la TRAV antidrómica el impulso llega a los ventrículos por la vía. ¿Cómo será su QRS?',
+        ),
+        options: [
+          l('窄，和窦性一样', 'Narrow, like in sinus rhythm', 'Estrecho, como en ritmo sinusal'),
+          l('完全预激，宽', 'Fully pre-excited and wide', 'Totalmente preexcitado y ancho'),
+          l('完全不规则', 'Completely irregular', 'Totalmente irregular'),
+        ],
+        answer: 1,
+      },
+      caption: l(
+        '四个不同的患者，旁路都在左侧游离壁：窦性心律时它画出图形，心动过速时充当环路。图形 + 心动过速 = WPW 综合征。',
+        'Four different patients, each with a left free-wall pathway: in sinus rhythm it draws the pattern; in tachycardia it forms the circuit. Pattern + tachycardia = WPW syndrome.',
+        'Cuatro pacientes distintos, todos con una vía de pared libre izquierda: en ritmo sinusal dibuja el patrón; en taquicardia forma el circuito. Patrón + taquicardia = síndrome de WPW.',
       ),
     },
     {
@@ -141,6 +258,58 @@ const lesson: Lesson = {
             '房颤中最短预激 RR（SPERRI）≤250 ms，或旁路有效不应期 ≤250 ms；多条旁路、可诱发 AVRT 同样高危',
             'Shortest pre-excited RR during AF (SPERRI) <=250 ms, or accessory-pathway ERP <=250 ms; multiple pathways and inducible AVRT are also high risk',
             'RR preexcitado más corto en FA (SPERRI) <=250 ms, o ERP de la vía <=250 ms; las vías múltiples y la TRAV inducible también son de alto riesgo',
+          ),
+        },
+        {
+          label: l('隐匿性旁路', 'Concealed pathway', 'Vía oculta'),
+          value: l('只能逆传：静息心电图完全正常，不与猝死相关，但可充当 AVRT 的逆传支', 'Conducts only retrogradely: the resting ECG is completely normal and it is not linked to sudden death, but it can be the retrograde limb of AVRT', 'Solo conduce de forma retrógrada: el ECG en reposo es completamente normal y no se asocia a muerte súbita, pero puede ser la rama retrógrada de una TRAV'),
+        },
+        {
+          label: l('SVT 终止后的窦性心电图', 'The sinus ECG after an SVT', 'El ECG sinusal tras una TSV'),
+          value: l(
+            '见到预激 ⇒ 显性旁路，AVRT 可能；心电图正常不能排除隐匿性旁路（基线正常时依次为 AVNRT、隐匿性旁路 AVRT、局灶性房速，机制看心动过速心电图，t1）；孤立短 PR 无 δ 波对判断机制无价值',
+            'Pre-excitation -> a manifest pathway, AVRT likely; a normal ECG does not exclude a concealed pathway (with a normal baseline: AVNRT, then AVRT over a concealed pathway, then focal AT; read the mechanism from the tachycardia ECG, t1); an isolated short PR without delta says nothing about the mechanism',
+            'Preexcitación -> vía manifiesta, TRAV probable; un ECG normal no excluye una vía oculta (con línea de base normal: TRIN, luego TRAV por vía oculta, luego TA focal; el mecanismo se lee en el ECG de la taquicardia, t1); un PR corto aislado sin delta no dice nada del mecanismo',
+          ),
+        },
+        {
+          label: l('预激的模仿', 'What pre-excitation mimics', 'Lo que imita la preexcitación'),
+          value: l(
+            '负向 δ 波写出 Q/QS：下间隔旁路 ⇒ II、III、aVF 假“下壁心梗”，左侧旁路 ⇒ I、aVL 的 Q；左侧旁路 ⇒ V1 高 R，像后壁心梗或右束支阻滞；继发性 ST-T 像缺血',
+            'A negative delta writes Q/QS complexes: an inferoparaseptal pathway fakes an inferior MI in II, III and aVF, a left-sided one a Q in I and aVL; a left-sided pathway gives a tall R in V1, like posterior MI or RBBB; the secondary ST-T looks like ischaemia',
+            'Una delta negativa dibuja complejos Q/QS: una vía inferoparaseptal finge un IAM inferior en II, III y aVF, una izquierda una Q en I y aVL; una vía izquierda da una R alta en V1, como un IAM posterior o un bloqueo de rama derecha; el ST-T secundario parece isquemia',
+          ),
+        },
+        {
+          label: l('预激伴房颤：红线与处理', 'Pre-excited AF: the red line and the treatment', 'FA preexcitada: la línea roja y el tratamiento'),
+          value: l(
+            '禁用腺苷、维拉帕米/地尔硫卓、β 受体阻滞剂、地高辛、静脉胺碘酮（阻断房室结后前传全走旁路，可恶化为室颤）；不稳定 ⇒ 同步电复律；稳定 ⇒ 伊布利特或普鲁卡因胺（ESC 亦认可氟卡尼/普罗帕酮）；随后消融旁路',
+            'No adenosine, verapamil/diltiazem, beta-blockers, digoxin or IV amiodarone (block the AV node and conduction falls on the pathway, which can degenerate into VF); unstable -> synchronised cardioversion; stable -> ibutilide or procainamide (flecainide/propafenone acceptable per ESC); then ablate the pathway',
+            'Nada de adenosina, verapamilo/diltiacem, betabloqueantes, digoxina ni amiodarona intravenosa (al bloquear el nodo AV la conducción cae en la vía y puede degenerar en FV); inestable -> cardioversión sincronizada; estable -> ibutilida o procainamida (flecainida/propafenona aceptables según la ESC); después, ablación de la vía',
+          ),
+        },
+        {
+          label: l('无症状预激', 'Asymptomatic pre-excitation', 'Preexcitación asintomática'),
+          value: l(
+            '竞技运动员与高危职业者：建议电生理检查（含异丙肾上腺素，I 类）；其他无症状者应考虑（IIa）；有高危特征 ⇒ 消融',
+            'Competitive athletes and high-risk occupations: EP study with isoprenaline recommended (Class I); other asymptomatic people: should be considered (IIa); high-risk features -> ablation',
+            'Deportistas de competición y profesiones de alto riesgo: estudio electrofisiológico con isoproterenol recomendado (clase I); otras personas asintomáticas: debe considerarse (IIa); características de alto riesgo -> ablación',
+          ),
+        },
+        {
+          label: l('间歇性预激', 'Intermittent pre-excitation', 'Preexcitación intermitente'),
+          value: l(
+            'δ 波逐搏突然消失、PR 延长、QRS 正常化 ⇒ 旁路不应期长、风险较低（但 > 20% 的 ERP 仍 < 250 ms）；运动中逐渐消失不是同一征象（只是房室结传导增强）',
+            'The delta vanishes abruptly from one beat to the next, the PR lengthens and the QRS normalises -> a long pathway refractory period and lower risk (yet > 20% still have an ERP < 250 ms); a gradual loss during exercise is not the same sign (only enhanced AV-nodal conduction)',
+            'La delta desaparece de golpe de un latido a otro, el PR se alarga y el QRS se normaliza -> vía con período refractario largo y menor riesgo (aunque > 20% siguen con ERP < 250 ms); la pérdida gradual durante el esfuerzo no es el mismo signo (solo conducción AV nodal acelerada)',
+          ),
+        },
+        {
+          label: l('运动员筛查', 'Athlete screening', 'Cribado del deportista'),
+          value: l(
+            '预激（PR < 120 ms + δ 波 + QRS ≥ 120 ms）是异常发现，即使高水平运动员也需进一步评估；孤立短 PR 无 δ 波不是预激，无需检查',
+            'Pre-excitation (PR < 120 ms + delta + QRS >= 120 ms) is an abnormal finding that needs work-up even in a highly trained athlete; an isolated short PR without delta is not pre-excitation and needs none',
+            'La preexcitación (PR < 120 ms + delta + QRS >= 120 ms) es un hallazgo anormal que exige estudio incluso en un deportista muy entrenado; un PR corto aislado sin delta no es preexcitación y no requiere estudio',
           ),
         },
       ],
@@ -209,57 +378,9 @@ const lesson: Lesson = {
         marks: [{ auto: 'pr' }],
       },
       point: l(
-        '两者的 PR 都短，区别全在 QRS 起始部：左侧有 δ波（旁路提前除极心室），右侧 QRS 窄而利落——这是**房室结传导增强**，不是预激，也不叫 LGL。无症状者的短 PR 通常是正常变异；若发生 SVT，按机制分类（AVNRT、隐匿性旁路 AVRT、房速）。',
-        'Both have a short PR; the whole difference sits at the QRS onset. Left: a delta wave (the pathway depolarises the ventricle early). Right: a narrow, crisp QRS — **enhanced AV-nodal conduction**, not pre-excitation, and not "LGL". In an asymptomatic person a short PR is usually a normal variant; if SVT occurs, classify it by mechanism (AVNRT, AVRT over a concealed pathway, focal AT).',
-        'Ambos tienen el PR corto; toda la diferencia está en el inicio del QRS. Izquierda: onda delta (la vía despolariza el ventrículo antes). Derecha: QRS estrecho y nítido: **conducción AV nodal acelerada**, no preexcitación, ni «LGL». En una persona asintomática el PR corto suele ser una variante normal; si aparece una TSV, se clasifica por mecanismo (TRIN, TRAV por vía oculta, taquicardia auricular focal).',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('预激是最好的模仿者', 'Pre-excitation is the best mimic', 'La preexcitación es la gran imitadora'),
-      body: l(
-        '负向 δ波会写出 Q/QS 波，酷似梗死：下（后）间隔旁路在 II、III、aVF 造出“下壁心梗”；左侧旁路在 V1 造出高 R 波，像后壁心梗或右束支阻滞；继发性 ST-T 改变又像缺血。δ波 + 正常 PR（≥120 ms）则多见于左游离壁或缓慢传导的旁路。\n**判读规则**：在（近乎）完全预激的搏动上**不要**诊断心梗、LVH、束支或分支阻滞，也**不要**判读电轴——先确认有无预激，再读其他一切。',
-        'A negative delta writes Q/QS complexes that mimic infarction: an inferoparaseptal pathway fakes an "inferior MI" in II, III and aVF; a left-sided pathway gives a tall R in V1, mimicking posterior MI or RBBB; and the secondary ST-T changes mimic ischaemia. A delta with a normal PR (>=120 ms) points instead to a left free-wall or slowly conducting pathway.\n**The rule**: on (nearly) fully pre-excited beats do **not** diagnose MI, LVH, bundle branch or fascicular block, and do **not** interpret the axis — settle whether there is pre-excitation before reading anything else.',
-        'Una delta negativa escribe complejos Q/QS que imitan el infarto: una vía inferoparaseptal finge un «IAM inferior» en II, III y aVF; una vía izquierda da una R alta en V1, como un IAM posterior o un bloqueo de rama derecha; y los cambios ST-T secundarios imitan la isquemia. Una delta con PR normal (>=120 ms) apunta más bien a una vía de pared libre izquierda o de conducción lenta.\n**La regla**: en latidos con preexcitación (casi) máxima **no** diagnostiques IAM, HVI, bloqueo de rama o de fascículo, **ni** interpretes el eje: decide primero si hay preexcitación antes de leer cualquier otra cosa.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('avrt', 666, undefined, 'antidromic'),
-      view: STRIP,
-      marks: [{ auto: 'qrs' }],
-      caption: l(
-        '这是让“图形”变成“综合征”的心律之一：**逆向型 AVRT**——环路经旁路前传、房室结逆传，QRS 完全预激，又宽又规则。更常见的是顺向型 AVRT（窄 QRS，t1 学过）。旁路在窦性心律画出图形，在心动过速里充当环路——这正是“图形 + 心动过速 = WPW 综合征”的含义。宽 QRS 鉴别见 t5。',
-        'This is one of the rhythms that turn the "pattern" into a "syndrome": **antidromic AVRT** — the circuit travels antegrade over the pathway and retrograde through the AV node, so the QRS is fully pre-excited, wide and regular. The commonest is orthodromic AVRT (narrow QRS, t1). The pathway draws the pattern in sinus rhythm and forms the circuit in tachycardia — that is exactly what "pattern + tachyarrhythmia = WPW syndrome" means. The wide-QRS differential is t5.',
-        'Este es uno de los ritmos que convierten el «patrón» en «síndrome»: la **TRAV antidrómica**; el circuito baja por la vía y sube por el nodo AV, de modo que el QRS está totalmente preexcitado, ancho y regular. La más frecuente es la TRAV ortodrómica (QRS estrecho, t1). La vía dibuja el patrón en ritmo sinusal y forma el circuito en la taquicardia: eso significa exactamente «patrón + taquiarritmia = síndrome de WPW». El diferencial de QRS ancho está en t5.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('preexcited-af', 667),
-      view: { layout: 'strip', lead: 'II', calipers: true },
-      caption: l(
-        '现在**自己读**：节律规则吗？QRS 多宽？宽度逐搏变吗？用分规找出最短的 RR。想好你的判断，再看下一张卡。',
-        'Now **read it yourself**: is the rhythm regular? How wide is the QRS? Does the width change beat to beat? Use the calipers to find the shortest RR. Decide your answer, then move to the next card.',
-        'Ahora **léela tú**: ¿el ritmo es regular? ¿Cómo de ancho es el QRS? ¿Cambia la anchura de latido en latido? Usa el compás para buscar el RR más corto. Decide tu respuesta y pasa a la siguiente tarjeta.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('预激伴房颤：识别即行动', 'Pre-excited AF: recognition is action', 'FA preexcitada: reconocer es actuar'),
-      body: l(
-        '**快、宽、不规则**，QRS 宽度与形态会变（旁路与房室结以不同比例竞争下传）：多数搏动完全预激，夹杂着较窄的融合波甚至正常下传的窄 QRS——上一张图里你应该能找到它们。这就是预激伴房颤。颤动的心房经旁路猛冲，最短 RR 可 <250 ms，室率可 >250–300 次/分。\n**红线**：**禁用**腺苷、维拉帕米/地尔硫卓、β受体阻滞剂、地高辛和静脉胺碘酮——阻断房室结后，前传可能全落在旁路上，恶化为室颤。\n正确路径：血流动力学不稳定 ⇒ **同步电复律**；稳定 ⇒ **伊布利特或普鲁卡因胺**（ESC 亦认可氟卡尼/普罗帕酮）；随后**消融旁路**（既根治 AVRT，也封掉房颤的恶性通道）。',
-        '**Fast, broad, irregular**, with QRS width and morphology that vary (the pathway and the AV node race to the ventricle in varying proportion): most beats fully pre-excited, mixed with narrower fusion beats or even a normally conducted narrow QRS — you should have found them on the previous strip. That is pre-excited AF. The fibrillating atria can pour down the pathway with a shortest RR <250 ms and rates >250-300/min.\n**The red line**: do **not** give adenosine, verapamil/diltiazem, beta-blockers, digoxin or IV amiodarone — block the AV node and all conduction may fall on the pathway, degenerating into VF.\nThe right path: haemodynamically unstable => **synchronised cardioversion**; stable => **ibutilide or procainamide** (flecainide/propafenone acceptable per ESC); then **ablate the pathway** (it cures AVRT and closes the dangerous route for AF).',
-        '**Rápida, ancha, irregular**, con anchura y morfología del QRS variables (la vía y el nodo AV compiten por llegar al ventrículo en proporción variable): la mayoría de los latidos con preexcitación máxima, mezclados con latidos de fusión más estrechos o incluso algún QRS estrecho conducido con normalidad; deberías haberlos encontrado en la tira anterior. Eso es la FA preexcitada. Las aurículas fibrilantes pueden verterse por la vía con un RR más corto <250 ms y frecuencias >250-300 lpm.\n**La línea roja**: **no** administres adenosina, verapamilo/diltiacem, betabloqueantes, digoxina ni amiodarona intravenosa: al bloquear el nodo AV, toda la conducción puede caer en la vía y degenerar en FV.\nEl camino correcto: inestable hemodinámicamente => **cardioversión eléctrica sincronizada**; estable => **ibutilida o procainamida** (flecainida/propafenona aceptables según la ESC); después, **ablación de la vía** (cura la TRAV y cierra la ruta peligrosa de la FA).',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('无症状预激怎么办？', 'What to do with asymptomatic pre-excitation', '¿Qué hacer con la preexcitación asintomática?'),
-      body: l(
-        '高危特征：**SPERRI ≤250 ms**（房颤中最短预激 RR）、**旁路 ERP ≤250 ms**、多条旁路、可诱发 AVRT。\n- **竞技运动员与高危职业者**：建议电生理检查（加异丙肾上腺素），I 类推荐；其他无症状者也应考虑（IIa）。\n- 检出高危特征 ⇒ **消融**。\n- **间歇性预激**（δ波突然逐搏消失、PR 延长、QRS 正常化）提示旁路不应期长、风险较低——但不完美：超过 20% 者 ERP 仍 <250 ms。**运动中逐渐消失不是同一征象**（那只是房室结传导增强）。\n- 运动员筛查：预激（PR <120 ms + δ波 + QRS ≥120 ms）是**异常**发现，即使在高训练水平运动员中也需进一步评估；无症状运动员孤立短 PR 无 δ波不是预激，无需进一步检查。',
-        'High-risk features: **SPERRI <=250 ms** (shortest pre-excited RR during AF), **pathway ERP <=250 ms**, multiple pathways, inducible AVRT.\n- **Competitive athletes and people in high-risk occupations**: an EP study (with isoprenaline) is recommended, Class I; for other asymptomatic people it should be considered (IIa).\n- High-risk features found => **ablation**.\n- **Intermittent pre-excitation** (the delta vanishes abruptly from beat to beat, the PR lengthens and the QRS normalises) suggests a long pathway refractory period and lower risk — imperfectly: more than 20% of such patients still have an ERP <250 ms. **A gradual loss during exercise is NOT the same sign** (it only reflects enhanced AV-nodal conduction).\n- Athlete screening: pre-excitation (PR <120 ms + delta + QRS >=120 ms) is an **abnormal** finding that needs further evaluation even in a highly trained athlete; an isolated short PR without delta in an asymptomatic athlete is not pre-excitation and needs no work-up.',
-        'Características de alto riesgo: **SPERRI <=250 ms** (RR preexcitado más corto en FA), **ERP de la vía <=250 ms**, vías múltiples, TRAV inducible.\n- **Deportistas de competición y personas en profesiones de alto riesgo**: se recomienda estudio electrofisiológico (con isoproterenol), clase I; en las demás personas asintomáticas debe considerarse (IIa).\n- Si se encuentran características de alto riesgo => **ablación**.\n- La **preexcitación intermitente** (la delta desaparece de forma brusca de un latido a otro, el PR se alarga y el QRS se normaliza) sugiere una vía con período refractario largo y menor riesgo, pero es imperfecta: más del 20% de esos pacientes sigue con ERP <250 ms. **La pérdida gradual en el esfuerzo NO es el mismo signo** (solo refleja conducción AV nodal acelerada).\n- Cribado del deportista: la preexcitación (PR <120 ms + delta + QRS >=120 ms) es un hallazgo **anormal** que exige evaluación incluso en un deportista muy entrenado; un PR corto aislado sin delta en un deportista asintomático no es preexcitación y no requiere más estudios.',
+        '两者 PR 都短，区别全在 QRS 起始：左有 δ 波（旁路提前激动心室）；右 QRS 窄而利落 = **房室结传导增强**，不是预激，也不叫 LGL。无症状者的短 PR 多为正常变异。',
+        'Both have a short PR; the difference sits at the QRS onset. Left: a delta wave (the pathway activates the ventricle early). Right: a narrow, crisp QRS = **enhanced AV-nodal conduction**, not pre-excitation, and not "LGL". In someone without symptoms a short PR is usually a normal variant.',
+        'Ambos tienen el PR corto; la diferencia está en el inicio del QRS. Izquierda: onda delta (la vía activa antes el ventrículo). Derecha: QRS estrecho y nítido = **conducción AV nodal acelerada**, no preexcitación ni «LGL». En una persona asintomática el PR corto suele ser una variante normal.',
       ),
     },
     { kind: 'check', item: { family: 'preexcitation', seed: 1 } },
