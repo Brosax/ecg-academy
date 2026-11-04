@@ -421,18 +421,32 @@ describe('h2: LVH voltage and secondary ST–T on the tracings', () => {
       for (const l of ['V1', 'V2'] as const) expect(stAt(e, l, 60), l).toBeGreaterThan(0.1);
     }
   });
-  it('voltage film prediction: the normal frame has its tallest R in V5, the LVH frame in V6 (over all 12 leads)', () => {
+  it('voltage film prediction: on the normal frame the R peaks around V4–V5 (both above the other ten leads); the LVH frame has its tallest R in V6 (over all 12 leads)', () => {
     const [normal, lvh] = frames('h2', 0);
-    const tallest = (e: Ecg): StdLead => [...LIMB, ...CHEST].reduce((best, l) => (qrs(e, l).max > qrs(e, best).max ? l : best));
-    expect(tallest(normal)).toBe('V5');
+    const all = [...LIMB, ...CHEST];
+    for (const peak of ['V4', 'V5'] as const) {
+      for (const l of all.filter((x) => x !== 'V4' && x !== 'V5')) expect(qrs(normal, peak).max, `${peak} vs ${l}`).toBeGreaterThan(qrs(normal, l).max);
+    }
+    const tallest = (e: Ecg): StdLead => all.reduce((best, l) => (qrs(e, l).max > qrs(e, best).max ? l : best));
     expect(tallest(lvh)).toBe('V6');
     const p = blocksOf('h2', 'film')[0].predict!;
+    expect(p.ordered).toBe(true);
     expect(p.options[p.answer].en).toBe('V6');
   });
-  it('heart caption: from the normal frame to the same seed with LVH, the R grows in V6 and aVL', () => {
+  it('the heart and vector-loop captions that name V6 come after the voltage film, so they cannot give its prediction away', () => {
+    const kinds = byId.get('h2')!.blocks.map((b) => b.kind);
+    expect(kinds.indexOf('heart')).toBeGreaterThan(kinds.indexOf('film'));
+    expect(kinds.indexOf('figure')).toBeGreaterThan(kinds.indexOf('film'));
+  });
+  it('heart and vector-loop captions: from the normal frame to the same seed with LVH, the R grows in V6 and aVL and V1–V2 write deep S waves', () => {
     const [normal] = frames('h2', 0);
     const lvh = ecgOf(blocksOf('h2', 'heart')[0].ecg);
+    expect(blocksOf('h2', 'figure')[0].ecg).toEqual(blocksOf('h2', 'heart')[0].ecg);
     for (const l of ['V6', 'aVL'] as const) expect(qrs(lvh, l).max, l).toBeGreaterThan(qrs(normal, l).max + 0.2);
+    for (const l of ['V1', 'V2'] as const) {
+      expect(-qrs(lvh, l).min, l).toBeGreaterThan(1.5);
+      expect(-qrs(lvh, l).min, l).toBeGreaterThan(2 * -qrs(normal, l).min);
+    }
   });
   it('contrast: Sokolow-Lyon positive on both sides ("voltage criteria met too"); A keeps upright T in V5–V6', () => {
     const c = blocksOf('h2', 'contrast')[0];

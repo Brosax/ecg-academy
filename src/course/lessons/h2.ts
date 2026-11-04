@@ -149,17 +149,6 @@ const lesson: Lesson = {
         'Hancock EW et al. AHA/ACCF/HRS Part V: ECG changes associated with cardiac chamber hypertrophy. Circulation 2009;119:e251-e261; Peguero JG et al. J Am Coll Cardiol 2017;69:1694-1703; Romhilt DW, Estes EH. Am Heart J 1968;75:752-758',
     },
     {
-      kind: 'heart',
-      ecg: LVH,
-      showConduction: true,
-      emphasize: ['lv-basal-anterolateral', 'lv-mid-anterolateral', 'lv-apical-lateral', 'lv-apex', 'lv-mid-inferior', 'lv-mid-inferolateral'],
-      caption: l(
-        '播放一个心动周期。肥厚的左心室壁产生更强的除极向量，并更偏向左后方，朝向 V6 和 aVL：那里的 R 波增高；同一向量背离右胸电极，被写成深 S 波。电压标准测量的正是这个向量的两端。',
-        'Play one beat. The hypertrophied LV wall generates a stronger depolarisation vector, turned further left and back towards V6 and aVL: the R there grows. The same vector points away from the right precordial electrodes and is written as a deep S. The voltage criteria measure the two ends of this vector.',
-        'Reproduce un latido. La pared hipertrofiada del VI genera un vector de despolarización más intenso y más girado hacia la izquierda y atrás, hacia V6 y aVL: allí la R crece. El mismo vector se aleja de los electrodos precordiales derechos y se escribe como una S profunda. Los criterios de voltaje miden los dos extremos de este vector.',
-      ),
-    },
-    {
       kind: 'film',
       title: l('正常 → 左心室肥厚 → 伴继发性ST-T改变', 'Normal → LVH → LVH with secondary ST–T', 'Normal → HVI → HVI con alteración secundaria del ST-T'),
       view: { layout: '3x4+1', highlightLeads: ['V1', 'V5', 'V6', 'aVL'] },
@@ -197,9 +186,9 @@ const lesson: Lesson = {
       ],
       predict: {
         question: l(
-          '正常心电图上 V5 的 R 最高。左心室壁增厚后，哪个导联的 R 最高？',
-          'On the normal tracing V5 has the tallest R. Once the LV wall thickens, which lead has the tallest R?',
-          'En el trazado normal la R más alta está en V5. Cuando la pared del VI se engrosa, ¿qué derivación tiene la R más alta?',
+          '正常心电图上 R 波在 V4–V5 附近最高。左心室壁增厚后，哪个导联的 R 最高？',
+          'On the normal tracing the R peaks around V4–V5. Once the LV wall thickens, which lead has the tallest R?',
+          'En el trazado normal la R alcanza su máximo hacia V4-V5. Cuando la pared del VI se engrosa, ¿qué derivación tiene la R más alta?',
         ),
         options: [l('V4', 'V4', 'V4'), l('V5', 'V5', 'V5'), l('V6', 'V6', 'V6')],
         answer: 2,
@@ -212,13 +201,24 @@ const lesson: Lesson = {
       ),
     },
     {
+      kind: 'heart',
+      ecg: LVH,
+      showConduction: true,
+      emphasize: ['lv-basal-anterolateral', 'lv-mid-anterolateral', 'lv-apical-lateral', 'lv-apex', 'lv-mid-inferior', 'lv-mid-inferolateral'],
+      caption: l(
+        '播放一个心动周期。肥厚的左心室壁产生更强的除极向量，并更偏向左后方，朝向 V6 和 aVL：那里的 R 波增高；同一向量背离右胸电极，被写成深 S 波。电压标准测量的正是这个向量的两端。',
+        'Play one beat. The hypertrophied LV wall generates a stronger depolarisation vector, turned further left and back towards V6 and aVL: the R there grows. The same vector points away from the right precordial electrodes and is written as a deep S. The voltage criteria measure the two ends of this vector.',
+        'Reproduce un latido. La pared hipertrofiada del VI genera un vector de despolarización más intenso y más girado hacia la izquierda y atrás, hacia V6 y aVL: allí la R crece. El mismo vector se aleja de los electrodos precordiales derechos y se escribe como una S profunda. Los criterios de voltaje miden los dos extremos de este vector.',
+      ),
+    },
+    {
       kind: 'figure',
       figure: { id: 'vector-loop', params: { plane: 'both' } },
       ecg: LVH,
       caption: l(
-        '同一份左心室肥厚心电图的 QRS 环：指向左后方，朝向 V5–V6 和 aVL，背离 V1–V2。所以前者写高 R，后者写深 S。',
-        'The QRS loop of the same LVH tracing points left and back: towards V5–V6 and aVL, away from V1–V2. So the first write tall R waves and the second deep S waves.',
-        'El bucle del QRS de ese mismo trazado de HVI apunta a la izquierda y atrás: hacia V5-V6 y aVL, lejos de V1-V2. Por eso las primeras escriben R altas y las segundas S profundas.',
+        '同一份左心室肥厚心电图的 QRS 环：指向左后方，朝向 V6 和 aVL，背离 V1–V2。所以 V6 和 aVL 写出更高的 R 波，V1–V2 写出深 S 波。',
+        'The QRS loop of the same LVH tracing points left and back: towards V6 and aVL, away from V1–V2. So V6 and aVL write taller R waves, and V1–V2 deep S waves.',
+        'El bucle del QRS de ese mismo trazado de HVI apunta a la izquierda y atrás: hacia V6 y aVL, lejos de V1-V2. Por eso V6 y aVL escriben R más altas, y V1-V2 S profundas.',
       ),
     },
     {
