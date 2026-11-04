@@ -3,8 +3,8 @@
  * The triage bins (act now / review today / routine) are this course's assessment framework and match the `triage`
  * drill: act now = any finding of severity 'critical' in src/core/findings.ts (Brugada type 1 without symptoms is
  * same-day, TRIAGE_OVERRIDE); occlusion urgency per Byrne 2023, unstable bradycardia per Kusumoto 2019 (2018
- * ACC/AHA/HRS), bundle branch block with ongoing ischaemic symptoms managed like STEMI whether new or known (Byrne
- * 2023), arrest rhythms per Soar 2021 ERC ALS, unstable AF per Van Gelder 2024 ESC, long QT: act now only with QTc ≥ 500 ms or torsades / symptoms
+ * ACC/AHA/HRS), bundle branch block or paced rhythm with ongoing ischaemic symptoms managed like STEMI whether new or
+ * known (Byrne 2023), arrest rhythms per Soar 2021 ERC ALS, unstable AF per Van Gelder 2024 ESC, long QT: act now only with QTc ≥ 500 ms or torsades / symptoms
  * such as syncope (AHA 2009 Part IV), otherwise review promptly (same day).
  *
  * ECGs: synthetic infra-His complete AV block (escape ≈ 34/min, QRS ≈ 150 ms, atrial ≈ 78/min), synthetic anterior
@@ -119,9 +119,9 @@ const lesson: Lesson = {
         {
           label: l('STEMI 等危症及其他“现在处理”图形', 'STEMI equivalents and other act-now patterns', 'Equivalentes de IAMCEST y otros patrones de actuar ya'),
           value: l(
-            '后壁心梗 · 右心室心梗 · de Winter T 波 · 超急性 T 波 · aVR 抬高伴广泛 ST 压低 · Sgarbossa 阳性的左束支阻滞或起搏心律 · 左或右束支阻滞（新发或已知）伴持续缺血症状 · Wellens 图形：此刻不痛，但前降支严重狭窄——立即联系心内科，不做负荷试验',
-            'Posterior MI · RV MI · de Winter T waves · hyperacute T waves · aVR elevation with diffuse ST depression · Sgarbossa-positive LBBB or paced rhythm · LBBB or RBBB, new or known, with ongoing ischaemic symptoms · Wellens pattern: pain-free now, but a critical LAD stenosis — call cardiology now, no stress test',
-            'IAM posterior · IAM del VD · ondas T de De Winter · T hiperagudas · elevación en aVR con descenso difuso del ST · BRI o ritmo de marcapasos con Sgarbossa positivo · bloqueo de rama izquierda o derecha, nuevo o conocido, con síntomas isquémicos en curso · patrón de Wellens: ahora sin dolor, pero con una estenosis crítica de la DA; avisar ya a cardiología, sin prueba de esfuerzo',
+            '后壁心梗 · 右心室心梗 · de Winter T 波 · 超急性 T 波 · aVR 抬高伴广泛 ST 压低 · Sgarbossa 阳性的左束支阻滞或起搏心律 · 左束支阻滞、右束支阻滞或起搏心律（新发或已知）伴持续缺血症状（无症状时，新发左束支阻滞属“当天评估”） · Wellens 图形：此刻不痛，但前降支严重狭窄——立即联系心内科，不做负荷试验',
+            'Posterior MI · RV MI · de Winter T waves · hyperacute T waves · aVR elevation with diffuse ST depression · Sgarbossa-positive LBBB or paced rhythm · LBBB, RBBB or paced rhythm, new or known, with ongoing ischaemic symptoms (without symptoms, a new LBBB is "review today") · Wellens pattern: pain-free now, but a critical LAD stenosis — call cardiology now, no stress test',
+            'IAM posterior · IAM del VD · ondas T de De Winter · T hiperagudas · elevación en aVR con descenso difuso del ST · BRI o ritmo de marcapasos con Sgarbossa positivo · bloqueo de rama izquierda o derecha o ritmo de marcapasos, nuevo o conocido, con síntomas isquémicos en curso (sin síntomas, un BRI nuevo es «revisar hoy») · patrón de Wellens: ahora sin dolor, pero con una estenosis crítica de la DA; avisar ya a cardiología, sin prueba de esfuerzo',
           ),
         },
         {
