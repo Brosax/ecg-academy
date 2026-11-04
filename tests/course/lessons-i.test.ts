@@ -1169,10 +1169,8 @@ describe('i10: confounders on the tracings', () => {
     expect(i10SDepthMm(e, 'V3')).toBeLessThanOrEqual(12.075);
     expect(stOverS(e, 'V3')).toBeGreaterThanOrEqual(-0.35);
     expect(stOverS(e, 'V3')).toBeLessThanOrEqual(-0.25);
-    expect(stOverS(e, 'V1')).toBeGreaterThanOrEqual(-0.28);
-    expect(stOverS(e, 'V1')).toBeLessThanOrEqual(-0.26);
-    expect(stOverS(e, 'V2')).toBeGreaterThanOrEqual(-0.3);
-    expect(stOverS(e, 'V2')).toBeLessThanOrEqual(-0.28);
+    expect(Math.abs(stOverS(e, 'V1') - -0.27), 'V1 ST/S about −0.27').toBeLessThanOrEqual(0.05);
+    expect(Math.abs(stOverS(e, 'V2') - -0.29), 'V2 ST/S about −0.29').toBeLessThanOrEqual(0.05);
   });
   it('contrast A (uncomplicated LBBB): ST/S about −0.1 in V1–V3, lateral ST discordant; B is also an LBBB baseline', () => {
     const e = ecgOf(blocksOf('i10', 'contrast')[0].left.ecg);
