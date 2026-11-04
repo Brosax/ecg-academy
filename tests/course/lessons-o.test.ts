@@ -791,32 +791,39 @@ describe('o7: pericardium on the tracings', () => {
       expect(prShift(e, 'aVR')).toBeGreaterThan(0.03);
     }
   });
-  it('contrast with early repolarisation (II and V6): PR about 1 mm below TP in pericarditis vs level in early repolarisation; ST in II 1.5–2 mm above TP; J ≈ 1.5 mm in ER; V6 ST/T ≈ 0.55 vs ≈ 0.2 (the classic 0.25 line); rates ≈ 96 vs ≈ 62', () => {
+  it('contrast with early repolarisation (II and V6): PR about 1 mm below TP in pericarditis vs level in early repolarisation; ST in II 1.5–2 mm above TP; J ≈ 1.5 mm in ER; V6 ST/T ≈ 0.55 vs ≈ 0.2 (the classic 0.25 line) with the ER ST about 1 mm; rates ≈ 96 vs ≈ 62', () => {
     const c = contrastTitled('o7', 'Pericarditis or early repolarisation');
     expect(c.view).toEqual({ highlightLeads: ['II', 'V6'] });
     const p = ecgOf(c.left.ecg);
     const er = ecgOf(c.right.ecg);
-    expect(prShift(p, 'II')).toBeLessThan(-0.08);
-    expect(stTp(p, 'II')).toBeGreaterThan(0.14);
-    expect(stTp(p, 'II')).toBeLessThan(0.2);
+    expect(prShift(p, 'II')).toBeGreaterThan(-0.125);
+    expect(prShift(p, 'II')).toBeLessThan(-0.075);
+    expect(stTp(p, 'II')).toBeGreaterThanOrEqual(0.15);
+    expect(stTp(p, 'II')).toBeLessThanOrEqual(0.2);
     expect(stTp(p, 'II')).toBeGreaterThan(-prShift(p, 'II') + 0.04);
     const ratio = (e: typeof p) => stAt(e, 'V6', 60) / tw(e, 'V6').max;
-    expect(ratio(p)).toBeGreaterThan(0.45);
-    expect(ratio(p)).toBeLessThan(0.65);
+    expect(ratio(p)).toBeGreaterThan(0.5);
+    expect(ratio(p)).toBeLessThan(0.6);
     expect(ratio(er)).toBeGreaterThan(0.15);
-    expect(ratio(er)).toBeLessThan(0.22);
-    expect(stAt(er, 'V6', 60)).toBeGreaterThan(0.08);
-    expect(stAt(er, 'V6', 60)).toBeLessThan(0.15);
-    expect(Math.abs(prShift(er, 'II'))).toBeLessThan(0.02);
-    expect(stAt(er, 'II')).toBeGreaterThan(0.12);
-    expect(stAt(er, 'II')).toBeLessThan(0.2);
-    expect(Math.abs(p.truth!.hrBpm - 96)).toBeLessThan(3);
-    expect(Math.abs(er.truth!.hrBpm - 62)).toBeLessThan(3);
+    expect(ratio(er)).toBeLessThan(0.25);
+    expect(stAt(er, 'V6', 60)).toBeGreaterThan(0.075);
+    expect(stAt(er, 'V6', 60)).toBeLessThan(0.125);
+    expect(Math.abs(prShift(er, 'II'))).toBeLessThanOrEqual(0.05);
+    expect(stAt(er, 'II')).toBeGreaterThan(0.125);
+    expect(stAt(er, 'II')).toBeLessThan(0.175);
+    expect(Math.abs(p.truth!.hrBpm - 96)).toBeLessThan(1);
+    expect(Math.abs(er.truth!.hrBpm - 62)).toBeLessThan(1);
   });
-  it('contrast with inferior STEMI: III > II, depression in aVL', () => {
-    const e = ecgOf(contrastTitled('o7', 'Pericarditis or inferior STEMI').right.ecg);
+  it('contrast with inferior STEMI: pericarditis has II ≥ III, aVL level and the PR depressed in II; the STEMI has III > II, mirror depression in aVL and I, and a level PR', () => {
+    const c = contrastTitled('o7', 'Pericarditis or inferior STEMI');
+    const p = ecgOf(c.left.ecg);
+    expect(stTp(p, 'II')).toBeGreaterThanOrEqual(stTp(p, 'III'));
+    expect(Math.abs(stTp(p, 'aVL'))).toBeLessThanOrEqual(0.05);
+    expect(prShift(p, 'II')).toBeLessThan(-0.05);
+    const e = ecgOf(c.right.ecg);
     expect(stAt(e, 'III', 60)).toBeGreaterThan(stAt(e, 'II', 60));
-    expect(stAt(e, 'aVL', 60)).toBeLessThan(-0.05);
+    for (const l of ['aVL', 'I'] as const) expect(stAt(e, l, 60), l).toBeLessThan(-0.05);
+    expect(Math.abs(prShift(e, 'II'))).toBeLessThanOrEqual(0.05);
   });
   it('three-questions film: normal at 96/min has PR, ST and TP level; pericarditis lifts the ST in I, II, aVF and V2–V6, drops the PR ≈ 1 mm in II and V4–V6 and lifts it ≈ 1 mm in aVR, and depresses only aVR', () => {
     const [normal, dist, pr, recip] = frames('o7', 0);
