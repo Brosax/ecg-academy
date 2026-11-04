@@ -488,7 +488,6 @@ function FilmBlock(props: { readonly block: BlockOf<'film'> }) {
   const f = b.frames[head.frame];
   return (
     <figure class="crs-fig crs-film">
-      <EcgPanel source={f.ecg} view={b.view} marks={f.marks} />
       {b.predict && (
         <PredictGate
           predict={b.predict}
@@ -522,6 +521,7 @@ function FilmBlock(props: { readonly block: BlockOf<'film'> }) {
         )}
         <NoteBox notes={b.frames.map((x) => x.note)} current={revealed ? f.note : undefined} />
       </div>
+      <EcgPanel source={f.ecg} view={b.view} marks={f.marks} />
       <Caption text={b.caption} hidden={!revealed} />
     </figure>
   );
