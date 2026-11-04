@@ -964,7 +964,7 @@ describe('i10: confounders on the tracings', () => {
 
 describe('i11: mimics on the tracings', () => {
   it('early repolarisation: J about 1–1.5 mm in II, III, aVF, elevation across V1–V6, depression only in aVR', () => {
-    const e = ecgOf(blocksOf('i11', 'ecg')[1].ecg);
+    const e = frame('i11', 1, 1);
     for (const l of ['II', 'III', 'aVF'] as const) {
       expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.09);
       expect(stAt(e, l), l).toBeLessThan(0.18);
@@ -992,12 +992,35 @@ describe('i11: mimics on the tracings', () => {
     expect(stAt(e, 'V1')).toBeLessThan(0.05);
     expect(stAt(e, 'aVR')).toBeLessThan(-0.03);
     for (const l of ['III', 'aVF'] as const) expect(Math.abs(stAt(e, l)), l).toBeLessThan(0.05);
-    const late = ecgOf(blocksOf('i11', 'ecg')[0].ecg);
+    const late = frame('i11', 0, 1);
     expect(Math.abs(late.truth!.qtcFridericiaMs - 505)).toBeLessThan(20);
     for (const l of ['V4', 'V5', 'V6'] as const) expect(tw(late, l).min, l).toBeLessThan(-0.05);
   });
+  it('takotsubo film (one seed): acute = the worked tracing with V4 the highest at about 3 mm; days later no elevation, T inverted in V3–V6 and I, about 10 mm deep in V4–V5, QT about 480 ms', () => {
+    const film = blocksOf('i11', 'film')[0];
+    expect(film.frames[0].ecg).toEqual(blocksOf('i11', 'worked')[0].ecg);
+    const [acute, late] = [frame('i11', 0, 0), frame('i11', 0, 1)];
+    expect(CHEST.reduce((m, l) => (stAt(acute, l) > stAt(acute, m) ? l : m))).toBe('V4');
+    expect(stAt(acute, 'V4')).toBeGreaterThan(0.25);
+    expect(stAt(acute, 'V4')).toBeLessThan(0.33);
+    for (const l of ALL) expect(stAt(late, l), l).toBeLessThan(0.05);
+    for (const l of ['V3', 'V4', 'V5', 'V6', 'I'] as const) expect(tInverted(late, l), l).toBe(true);
+    for (const l of ['V4', 'V5'] as const) {
+      expect(tw(late, l).min, l).toBeLessThan(-0.9);
+      expect(tw(late, l).min, l).toBeGreaterThan(-1.2);
+    }
+    expect(Math.abs(late.truth!.qtMs - 480)).toBeLessThan(5);
+  });
+  it('mimic film: pericarditis frame = the hook; early repolarisation inferior J 1–2 mm', () => {
+    expect(blocksOf('i11', 'film')[1].frames[0].ecg).toEqual(blocksOf('i11', 'hook')[0].ecg);
+    const er = frame('i11', 1, 1);
+    for (const l of ['II', 'III', 'aVF'] as const) {
+      expect(stAt(er, l), l).toBeGreaterThanOrEqual(0.095);
+      expect(stAt(er, l), l).toBeLessThan(0.2);
+    }
+  });
   it('Brugada type 1: coved elevation ≥ 2 mm in V1–V2 into a negative T, V3 normal', () => {
-    const e = ecgOf(blocksOf('i11', 'ecg')[2].ecg);
+    const e = frame('i11', 1, 2);
     for (const l of ['V1', 'V2'] as const) {
       expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.2);
       expect(stAt(e, l, 60), l).toBeLessThan(stAt(e, l));
@@ -1006,17 +1029,17 @@ describe('i11: mimics on the tracings', () => {
     expect(Math.abs(stAt(e, 'V3'))).toBeLessThan(0.05);
   });
   it('hyperkalaemia: tall T in V3–V5 (taller than the R in V4), PR ≥ 200 ms, QRS 110–120 ms; severe: no P wave, QRS > 150 ms', () => {
-    const e = ecgOf(blocksOf('i11', 'ecg')[3].ecg);
+    const e = frame('i11', 1, 3);
     expect(tw(e, 'V4').max).toBeGreaterThan(qrs(e, 'V4').max);
     expect(e.truth!.prMs!).toBeGreaterThanOrEqual(200);
     expect(e.truth!.qrsMs).toBeGreaterThanOrEqual(110);
     expect(e.truth!.qrsMs).toBeLessThan(120);
-    const s = ecgOf(blocksOf('i11', 'ecg')[4].ecg);
+    const s = frame('i11', 1, 4);
     expect(s.truth!.prMs).toBeNull();
     expect(s.truth!.qrsMs).toBeGreaterThan(150);
   });
   it('aneurysm: ST elevation over QS in V2–V3 with T/QRS < 0.36 in V1–V4', () => {
-    const e = ecgOf(blocksOf('i11', 'ecg')[5].ecg);
+    const e = frame('i11', 1, 5);
     for (const l of ['V2', 'V3'] as const) {
       expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
       expect(qDurMs(e, l), l).toBeGreaterThanOrEqual(40);
