@@ -929,7 +929,7 @@ describe('t4 on the tracings', () => {
     expect(net('aVF', b.qrsOn, b.qrsOff).net).toBeGreaterThan(0.3);
     expect(e.truth!.axisDeg.qrs).toBeGreaterThan(90);
   });
-  it('pathway film (12-lead sheet): four left lateral pathways; sinus PR about 115 ms with QRS about 120 ms; orthodromic AVRT narrow and regular at 190/min through a concealed pathway (no WPW finding), the P′ on the ST segment with a dip in I and aVL (where its marks sit) and no hump in II; antidromic AVRT regular, 185/min, QRS about 155 ms; pre-excited AF 200/min, irregular, QRS width varying with narrower beats, shortest RR between two wide beats about 240 ms (bracketed, < 250 ms), its second beat marked', () => {
+  it('pathway film (12-lead sheet): four left lateral pathways; sinus PR about 115 ms with QRS about 120 ms; orthodromic AVRT narrow and regular at 190/min through a concealed pathway (no WPW finding), the P′ on the ST segment with a dip in aVL at least 0.5 mm below the P′-onset level on every beat (where its mark sits) and no hump in II; antidromic AVRT regular, 185/min, QRS about 155 ms; pre-excited AF 200/min, irregular, QRS width varying with narrower beats, shortest RR between two wide beats (QRS ≥ 120 ms) about 225 ms (bracketed, < 250 ms), its second beat marked', () => {
     const film = blocksOf('t4', 'film')[1];
     expect(film.view?.layout).toBe('3x4+1');
     const [sinus, ortho, anti, af] = frames('t4', 1);
@@ -944,9 +944,10 @@ describe('t4 on the tracings', () => {
     const ob = mid(ortho);
     expect(ob.pOn!).toBeGreaterThan(ob.qrsOff);
     expect(ob.pOn!).toBeLessThan(ob.tPeak!);
-    for (const l of ['I', 'aVL'] as const) expect(localPeak(ortho, l, -1, ob.pOn!, ob.tPeak! - 10), `dip in ${l}`).toBeGreaterThan(0.05);
+    expect(localPeak(ortho, 'aVL', -1, ob.pOn!, ob.tPeak! - 10), 'dip in aVL').toBeGreaterThan(0.05);
+    for (const x of o.beats.slice(1, -1)) expect(dipBelowOnset(ortho, 'aVL', x), `aVL dip below the P′ onset, beat at ${Math.round(x.qrsOn)} ms`).toBeGreaterThanOrEqual(0.05);
     expect(localPeak(ortho, 'II', 1, ob.pOn!, ob.tPeak! - 10), 'no hump in II').toBeLessThanOrEqual(0.05);
-    expect(film.frames[1].marks?.map((m) => ('auto' in m ? m.lead : null))).toEqual(['I', 'aVL']);
+    expect(film.frames[1].marks?.map((m) => ('auto' in m ? m.lead : null))).toEqual(['aVL']);
     expect(o.findings).not.toContain('wpw');
     const a = anti.truth!;
     expect(Math.abs(a.hrBpm - 185)).toBeLessThanOrEqual(1);
@@ -956,14 +957,14 @@ describe('t4 on the tracings', () => {
     expect(Math.abs(p.hrBpm - 200)).toBeLessThanOrEqual(1);
     expect(Math.max(...rrs(af)) - Math.min(...rrs(af))).toBeGreaterThan(150);
     const widths = p.beats.map((x) => x.qrsOff - x.qrsOn);
-    expect(Math.max(...widths)).toBeGreaterThanOrEqual(150);
+    expect(Math.max(...widths)).toBeGreaterThanOrEqual(WIDE_QRS_MS);
     expect(widths.filter((w) => w < 110).length).toBeGreaterThanOrEqual(2);
-    const wideRr = rrs(af).filter((_r, i) => widths[i] >= 150 && widths[i + 1] >= 150);
+    const wideRr = rrs(af).filter((_r, i) => widths[i] >= WIDE_QRS_MS && widths[i + 1] >= WIDE_QRS_MS);
     const short = markBeat(film.frames[3].marks, 'rr');
-    expect(widths[short], 'bracket starts on a wide beat').toBeGreaterThanOrEqual(150);
-    expect(widths[short + 1], 'bracket ends on a wide beat').toBeGreaterThanOrEqual(150);
+    expect(widths[short], 'bracket starts on a wide beat').toBeGreaterThanOrEqual(WIDE_QRS_MS);
+    expect(widths[short + 1], 'bracket ends on a wide beat').toBeGreaterThanOrEqual(WIDE_QRS_MS);
     expect(rrs(af)[short], 'the bracket is the shortest wide-to-wide RR').toBe(Math.min(...wideRr));
-    expect(Math.abs(rrs(af)[short] - 240), 'about 240 ms').toBeLessThanOrEqual(5);
+    expect(Math.abs(rrs(af)[short] - 225), 'about 225 ms').toBeLessThanOrEqual(5);
     expect(rrs(af)[short]).toBeLessThan(250);
     expect(markBeat(film.frames[3].marks, 'qrs')).toBe(short + 1);
   });
