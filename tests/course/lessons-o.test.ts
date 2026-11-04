@@ -667,21 +667,48 @@ describe('o5: hypothermia on the tracings', () => {
       expect(e.truth!.findings).toContain('osborn-waves');
     }
   });
-  it('the J-wave contrasts: early repolarisation has a normal QT and J ≈ 1.5 mm in II; hypercalcaemia has a QTcF < 350 ms', () => {
+  it('the J-wave differentials: early repolarisation has a normal QT and J ≈ 1.5 mm in II; hypercalcaemia (J-wave film) has a QTcF < 350 ms', () => {
     const er = ecgOf(contrastTitled('o5', 'Osborn waves or early repolarisation?').right.ecg);
     expect(er.truth!.qtcFridericiaMs).toBeLessThan(440);
     expect(stAt(er, 'II')).toBeGreaterThan(0.12);
     expect(stAt(er, 'II')).toBeLessThan(0.19);
-    const ca = ecgOf(contrastTitled('o5', 'Which way does the QT go: cold or calcium?').right.ecg);
+    const ca = frames('o5', 1)[1];
     expect(ca.truth!.qtcFridericiaMs).toBeLessThan(350);
   });
-  it('shivering (EMG on LA): I, III and aVL noisy, II clean; slow AF ≈ 50/min and irregular', () => {
-    const e = ecgOf(sourcesWith('o5', 'muscle-tremor')[0]);
-    for (const l of ['I', 'III', 'aVL'] as const) expect(hfNoise(e, l), l).toBeGreaterThan(3 * hfNoise(e, 'II'));
-    const af = ecgOf(sourcesWith('o5', 'atrial-fibrillation')[0]);
+  it('slow-or-cold film: normal PR 160, QRS ≈ 95, QT ≈ 380 at 75/min; bradycardia at 46/min keeps PR and QRS, QT ≈ 445, no Osborn wave; the cold at 46/min has PR ≈ 230, QRS ≈ 140, QT ≈ 540', () => {
+    const [normal, brady, cold] = frames('o5', 0);
+    for (const e of [normal, brady]) {
+      expect(Math.abs(e.truth!.prMs! - 160)).toBeLessThan(3);
+      expect(Math.abs(e.truth!.qrsMs - 95)).toBeLessThan(5);
+      expect(e.truth!.findings).not.toContain('osborn-waves');
+    }
+    expect(Math.abs(normal.truth!.qtMs - 380)).toBeLessThan(5);
+    expect(Math.abs(brady.truth!.hrBpm - 46)).toBeLessThan(1);
+    expect(Math.abs(brady.truth!.qtMs - 445)).toBeLessThan(5);
+    expect(Math.abs(cold.truth!.hrBpm - 46)).toBeLessThan(1);
+    expect(Math.abs(cold.truth!.prMs! - 230)).toBeLessThan(5);
+    expect(Math.abs(cold.truth!.qrsMs - 140)).toBeLessThan(5);
+    expect(Math.abs(cold.truth!.qtMs - 540)).toBeLessThan(5);
+  });
+  it('J-wave film: cold QT ≈ 530 ms at 48/min with a flat ST after the hump; high calcium QT ≈ 310 ms; inferior STEMI ST up in II, III, aVF (III highest), down in aVL', () => {
+    const [cold, ca, stemi] = frames('o5', 1);
+    expect(Math.abs(cold.truth!.hrBpm - 48)).toBeLessThan(1);
+    expect(Math.abs(cold.truth!.qtMs - 530)).toBeLessThan(5);
+    expect(Math.abs(stAt(cold, 'II', 60))).toBeLessThan(0.05);
+    expect(Math.abs(ca.truth!.qtMs - 310)).toBeLessThan(5);
+    for (const l of ['II', 'aVF'] as const) expect(stAt(stemi, 'III', 60), l).toBeGreaterThan(stAt(stemi, l, 60));
+    expect(stAt(stemi, 'II', 60)).toBeGreaterThan(0.1);
+    expect(stAt(stemi, 'aVL', 60)).toBeLessThan(-0.1);
+  });
+  it('shivering film: the same cold heart with EMG on LA has I, III and aVL noisy and II clean; slow AF ≈ 55/min and irregular', () => {
+    const [still, shiver, af] = frames('o5', 2);
+    expect(shiver.truth!.beats).toEqual(still.truth!.beats);
+    for (const l of ['I', 'III', 'aVL'] as const) {
+      expect(hfNoise(shiver, l), l).toBeGreaterThan(3 * hfNoise(shiver, 'II'));
+      expect(hfNoise(shiver, l), l).toBeGreaterThan(3 * hfNoise(still, l));
+    }
     expect(af.truth!.rhythm).toBe('atrial-fibrillation');
-    expect(af.truth!.hrBpm).toBeGreaterThan(40);
-    expect(af.truth!.hrBpm).toBeLessThan(62);
+    expect(Math.abs(af.truth!.hrBpm - 55)).toBeLessThan(5);
     expect(Math.max(...rrs(af)) - Math.min(...rrs(af))).toBeGreaterThan(150);
   });
 });
