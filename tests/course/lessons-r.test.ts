@@ -43,6 +43,9 @@ function sourcesOf(lesson: Lesson): { readonly path: string; readonly src: EcgSo
       case 'contrast':
         out.push({ path: `${p}.left`, src: b.left.ecg }, { path: `${p}.right`, src: b.right.ecg });
         break;
+      case 'film':
+        b.frames.forEach((f, k) => out.push({ path: `${p}.frames[${k}]`, src: f.ecg }));
+        break;
       case 'check':
         if ('inline' in b.item) {
           out.push({ path: `${p}.item`, src: b.item.inline.ecg });
@@ -187,15 +190,35 @@ function blocksOf<K extends Block['kind']>(id: string, kind: K): BlockOf<K>[] {
   return lessonById(id).blocks.filter((b): b is BlockOf<K> => b.kind === kind);
 }
 const cache = new Map<string, Ecg>();
-function ecgOf(src: EcgSource | undefined): Ecg {
-  if (!src || src.kind !== 'synth') throw new Error('expected a synthetic source');
-  const k = JSON.stringify(src.req);
+function ecgOf(src: EcgSource | SynthRequest | undefined): Ecg {
+  const req = src && 'kind' in src ? (src.kind === 'synth' ? src.req : null) : src;
+  if (!req) throw new Error('expected a synthetic source');
+  const k = JSON.stringify(req);
   let e = cache.get(k);
   if (!e) {
-    e = generate(src.req).ecg;
+    e = generate(req).ecg;
     cache.set(k, e);
   }
   return e;
+}
+/** what a playing live block shows with its played dial at `v` (its other dials at their start values) */
+function played(id: string, i: number, v: number): Ecg {
+  const b = blocksOf(id, 'live')[i];
+  if (!b.play) throw new Error(`${id}: live block ${i} does not play`);
+  const sc = scenarios().find((s) => s.id === b.scenario);
+  if (!sc) throw new Error(`unknown scenario ${b.scenario}`);
+  const dials = { ...startDials(sc, b.variant, b.dials.map((d) => d.id), b.play), [b.play.dial]: v };
+  return ecgOf({ scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed, dials });
+}
+const frames = (id: string, i: number): Ecg[] => blocksOf(id, 'film')[i].frames.map((f) => ecgOf(f.ecg));
+/** the P wave of the middle beat in a lead: its largest excursion above the PR baseline (mV) */
+function pAmp(e: Ecg, lead: StdLead, b = mid(e)): number {
+  const a = e.signal.leads[lead];
+  const fs = e.signal.fs;
+  const base = baselineBefore(a, fs, b.qrsOn);
+  let max = -Infinity;
+  for (let i = Math.round(((b.pOn ?? b.qrsOn - 150) * fs) / 1000); i < Math.round((b.qrsOn * fs) / 1000); i++) max = Math.max(max, a[i] - base);
+  return max;
 }
 const onsets = (e: Ecg): number[] => e.truth!.beats.map((b) => b.qrsOn);
 const rrs = (e: Ecg): number[] => {
@@ -248,15 +271,50 @@ describe('r1: the sinus node on the tracings', () => {
     for (const x of r.filter((y) => y > 1.5 * pp)) expect(Math.abs(x / pp - 2)).toBeLessThan(0.06);
     expect(Math.abs(Math.max(...r) - 1580)).toBeLessThan(40);
   });
-  it('type I SA block: the pause is shorter than 2 x PP', () => {
-    const r = rrs(ecgOf(blocksOf('r1', 'ecg')[0].ecg));
+  it('pause film: arrest is the hook tracing and type II the worked one (their numbers are asserted above)', () => {
+    const f = blocksOf('r1', 'film')[0].frames;
+    expect(f[0].ecg).toEqual(blocksOf('r1', 'hook')[0].ecg);
+    expect(f[1].ecg).toEqual(blocksOf('r1', 'worked')[0].ecg);
+  });
+  it('type I SA block (film frame 3): in each group the PP shortens from about 920 to about 850 ms, then a pause shorter than 2 x PP', () => {
+    const r = rrs(frames('r1', 0)[2]);
     expect(Math.max(...r)).toBeLessThan(2 * Math.min(...r));
     expect(Math.max(...r)).toBeGreaterThan(1.4 * Math.min(...r));
+    const pauses = r.flatMap((x, i) => (x > 1.4 * Math.min(...r) ? [i] : []));
+    for (const k of pauses.filter((i) => i + 2 < r.length)) {
+      expect(Math.abs(r[k + 1] - 920), `group after pause ${k}`).toBeLessThan(30);
+      expect(Math.abs(r[k + 2] - 850), `group after pause ${k}`).toBeLessThan(30);
+      expect(r[k + 2]).toBeLessThan(r[k + 1]);
+    }
   });
-  it('tachy–brady: the post-conversion pause is about 2.9 s', () => {
-    const e = ecgOf(blocksOf('r1', 'ecg')[2].ecg);
+  it('tachy–brady (film frame 4): an atrial tachycardia ends in a post-conversion pause of about 2.9 s', () => {
+    const e = frames('r1', 0)[3];
     expect(e.truth!.rhythm).toBe('sinus-node-dysfunction');
-    expect(Math.abs(Math.max(...rrs(e)) - 2870)).toBeLessThan(100);
+    const r = rrs(e);
+    const k = r.indexOf(Math.max(...r));
+    expect(Math.abs(r[k] - 2870)).toBeLessThan(100);
+    expect(r[k]).toBeLessThan(3000);
+    expect(e.truth!.beats[k].kind).toBe('atrial');
+  });
+  it('rate sweep notes: 50–58 below 60 and 40–49 below 50 and 38–39 below 40 on the read-out; P and PR the same at every rate, only the RR grows', () => {
+    for (const [v, lo, hi] of [[58, 50, 60], [50, 50, 60], [49, 40, 50], [40, 40, 50], [39, 30, 40], [38, 30, 40]] as const) {
+      const hr = played('r1', 0, v).truth!.hrBpm;
+      expect(hr, `${v}/min`).toBeGreaterThanOrEqual(lo);
+      expect(hr, `${v}/min`).toBeLessThan(hi);
+    }
+    const [fast, slow] = [played('r1', 0, 58), played('r1', 0, 38)];
+    for (const e of [fast, slow]) {
+      for (const p of prs(e)) expect(Math.abs(p - 160)).toBeLessThan(2);
+      expect(e.truth!.beats.every((b) => b.kind === 'sinus')).toBe(true);
+    }
+    expect(Math.abs(pAmp(slow, 'II') - pAmp(fast, 'II'))).toBeLessThan(0.005);
+    expect(Math.min(...rrs(slow))).toBeGreaterThan(Math.max(...rrs(fast)) + 400);
+  });
+  it('sinus tachycardia: about 130/min, a sinus P before every QRS at a fixed PR', () => {
+    const e = ecgOf(blocksOf('r1', 'ecg')[0].ecg);
+    expect(Math.abs(e.truth!.hrBpm - 130)).toBeLessThan(2);
+    expect(e.truth!.beats.every((b) => b.kind === 'sinus' && b.pOn !== null)).toBe(true);
+    expect(Math.max(...prs(e)) - Math.min(...prs(e))).toBeLessThan(5);
   });
   it('checks stay on sinus-node topics', async () => {
     const ok = ['sinus-tachycardia', 'sinus-bradycardia', 'sinus-pause', 'sa-exit-block', 'sinus-node-dysfunction', 'sinus-rhythm'];
