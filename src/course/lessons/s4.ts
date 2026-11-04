@@ -178,20 +178,48 @@ const lesson: Lesson = {
         from: 60,
         to: 100,
         notes: [
-          { min: 60, max: 62, text: l('RR ≈ 1 s：QT ≈ QTc ≈ 405 ms，所有公式都一样。', 'RR ≈ 1 s: QT ≈ QTc ≈ 405 ms by every formula.', 'RR ≈ 1 s: QT ≈ QTc ≈ 405 ms con cualquier fórmula.') },
-          { min: 63, max: 89, text: l('心率加快：纸上的 QT 变短，而 QTc 读数停在你设定的值。', 'Faster: the QT on the paper shortens while the QTc read-out stays where you set it.', 'Más rápido: el QT del papel se acorta mientras la lectura del QTc se queda donde la pusiste.') },
-          { min: 90, max: 100, text: l('QT 约 340–355 ms。Fridericia 仍约 405 ms，Bazett 升到约 430–440 ms：心率快时 Bazett 过度校正。', 'QT about 340–355 ms. Fridericia still gives about 405 ms, Bazett climbs to about 430–440 ms: at fast rates Bazett over-corrects.', 'QT de unos 340–355 ms. Fridericia sigue en unos 405 ms y Bazett sube a unos 430–440 ms: con frecuencias rápidas Bazett sobrecorrige.') },
+          {
+            min: 60,
+            max: 62,
+            text: l(
+              'RR ≈ 1 s，√RR = ∛RR = 1：每个公式的 QTc 都等于标出的 QT，约 405 ms，与读数相同。',
+              'RR ≈ 1 s, so √RR = ∛RR = 1: every formula gives a QTc equal to the marked QT, about 405 ms, as on the read-out.',
+              'RR ≈ 1 s, así que √RR = ∛RR = 1: todas las fórmulas dan un QTc igual al QT marcado, unos 405 ms, como la lectura.',
+            ),
+          },
+          {
+            min: 63,
+            max: 99,
+            text: l(
+              '心率加快：标出的 QT 变短，QTc 读数（模型固定的 Fridericia 值）停在 405 ms。',
+              'Faster: the marked QT shortens; the QTc read-out (the model holds Fridericia fixed) stays at 405 ms.',
+              'Más rápido: el QT marcado se acorta; la lectura del QTc (el modelo fija el de Fridericia) se queda en 405 ms.',
+            ),
+          },
+          {
+            min: 100,
+            max: 100,
+            text: l(
+              'QT 342、RR 603 ms：Bazett 342 ÷ √0.603 ≈ 440；Fridericia 342 ÷ ∛0.603 ≈ 405，即读数。',
+              'QT 342 and RR 603 ms: Bazett 342 ÷ √0.603 ≈ 440; Fridericia 342 ÷ ∛0.603 ≈ 405, the read-out.',
+              'QT 342 y RR 603 ms: Bazett 342 ÷ √0,603 ≈ 440; Fridericia 342 ÷ ∛0,603 ≈ 405, la lectura.',
+            ),
+          },
         ],
       },
       predict: {
-        question: l('真实 QTc 固定，把心率从 60 提到 100 次/分。Bazett 公式算出的 QTc 会怎样？', 'The true QTc is fixed. Raise the rate from 60 to 100/min: what does Bazett’s QTc do?', 'El QTc real está fijo. Sube la frecuencia de 60 a 100 lpm: ¿qué hace el QTc de Bazett?'),
-        options: [l('高于真实值', 'Climbs above the true value', 'Sube por encima del valor real'), l('保持不变', 'Stays the same', 'No cambia'), l('低于真实值', 'Falls below it', 'Baja por debajo')],
+        question: l(
+          '模型把 QTc（Fridericia）固定不变。把心率从 60 提到 100 次/分，Bazett 公式算出的 QTc 会怎样？',
+          'The model holds its QTc (Fridericia) fixed. Raise the rate from 60 to 100/min: what does Bazett’s QTc do?',
+          'El modelo mantiene fijo su QTc (Fridericia). Sube la frecuencia de 60 a 100 lpm: ¿qué hace el QTc de Bazett?',
+        ),
+        options: [l('升到读数之上', 'Climbs above the read-out', 'Sube por encima de la lectura'), l('保持不变', 'Stays the same', 'No cambia'), l('降到读数之下', 'Falls below it', 'Baja por debajo')],
         answer: 0,
       },
       caption: l(
-        '提高心率：纸上的 QT 变短，好的校正值应保持不变。看哪个公式做到了。',
-        'Raise the rate: the QT on the paper shortens and a good correction stays put. Watch which formula does.',
-        'Sube la frecuencia: el QT del papel se acorta y una buena corrección no se mueve. Mira qué fórmula lo consigue.',
+        '提高心率：标出的 QT 变短，QTc 读数不动。把标出的 QT 分别除以 √RR 和 ∛RR（RR 以秒计）：一个跟得上读数，一个往上走。',
+        'Raise the rate: the marked QT shortens and the QTc read-out stays put. Divide the marked QT by √RR and by ∛RR (RR in s): one formula keeps up, one climbs.',
+        'Sube la frecuencia: el QT marcado se acorta y la lectura del QTc no se mueve. Divide el QT marcado entre √RR y entre ∛RR (RR en s): una fórmula se mantiene y la otra sube.',
       ),
     },
     {

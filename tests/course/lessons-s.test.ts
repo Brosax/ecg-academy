@@ -9,7 +9,7 @@ import type { Block, Lesson } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
 import { REGISTERED } from '../../src/course/lessons/index';
 import { realisedDials, startDials, sweepValues } from '../../src/course/live';
-import { baselineBefore, MIN_WAVE_MV, qrsWaves } from '../../src/course/marks';
+import { baselineBefore, MIN_WAVE_MV, qrsWaves, resolveMarks } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
 import type { L10n } from '../../src/core/l10n';
@@ -204,15 +204,16 @@ function ecgOf(src: EcgSource | SynthRequest): Ecg {
   }
   return e;
 }
-/** what a playing live block shows with its played dial at `v` (its other dials at their start values) */
-function played(id: string, i: number, v: number): Ecg {
+/** the request a playing live block generates with its played dial at `v` (its other dials at their start values) */
+function playedReq(id: string, i: number, v: number): SynthRequest {
   const b = blocksOf(id, 'live')[i];
   if (!b.play) throw new Error(`${id}: live block ${i} does not play`);
   const sc = scenarios().find((s) => s.id === b.scenario);
   if (!sc) throw new Error(`unknown scenario ${b.scenario}`);
   const dials = { ...startDials(sc, b.variant, b.dials.map((d) => d.id), b.play), [b.play.dial]: v };
-  return ecgOf({ scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed, dials });
+  return { scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed, dials };
 }
+const played = (id: string, i: number, v: number): Ecg => ecgOf(playedReq(id, i, v));
 
 const LIMB: readonly StdLead[] = ['I', 'II', 'III', 'aVR', 'aVL', 'aVF'];
 const CHEST: readonly StdLead[] = ['V1', 'V2', 'V3', 'V4', 'V5', 'V6'];
@@ -502,21 +503,36 @@ describe('s4: intervals on the tracings', () => {
       expect(Math.abs(pr / 40 - squares), `${v} ms`).toBeLessThan(0.2);
     }
   });
-  it('rate sweep notes: QT ≈ QTc ≈ 405 ms at 60–62/min; the QT shortens while Fridericia holds; at 90–100/min QT 340–355, Fridericia about 405, Bazett about 430–440', () => {
+  it('rate sweep notes, on the QT and RR the strip marks and the QTc read-out: QT about 405 ms at RR ≈ 1 s at 60–62/min; the QT shortens while the read-out holds 405 at 63–99; at 100/min QT 342 and RR 603 ms, Bazett 342 ÷ √0.603 ≈ 440 and Fridericia 342 ÷ ∛0.603 ≈ 405', () => {
+    const b = blocksOf('s4', 'live')[1];
+    const shown = (v: number) => {
+      const req = playedReq('s4', 1, v);
+      const text = resolveMarks(ecgOf(req), b.marks, { layout: b.view?.layout, lead: b.view?.lead })
+        .map((m) => ('label' in m && m.label ? (typeof m.label === 'string' ? m.label : m.label.en) : ''))
+        .join(' ');
+      const ms = (name: string) => Number(new RegExp(`${name} (\\d+) ms`).exec(text)?.[1]);
+      return { qt: ms('QT'), rr: ms('RR'), readout: generate(req).applied.qtc, truth: ecgOf(req).truth! };
+    };
     for (const v of [60, 62]) {
-      const t = played('s4', 1, v).truth!;
-      for (const x of [t.qtMs, t.qtcBazettMs, t.qtcFridericiaMs]) expect(Math.abs(x - 405), `${v}/min`).toBeLessThan(6);
+      const s = shown(v);
+      expect(Math.abs(s.qt - 405), `${v}/min QT`).toBeLessThanOrEqual(5);
+      expect(Math.abs(s.rr - 1000), `${v}/min RR`).toBeLessThan(30);
+      expect(s.readout, `${v}/min`).toBe(405);
+      for (const x of [s.truth.qtcBazettMs, s.truth.qtcFridericiaMs]) expect(Math.abs(x - 405), `${v}/min`).toBeLessThan(6);
     }
-    expect(played('s4', 1, 89).truth!.qtMs).toBeLessThan(played('s4', 1, 63).truth!.qtMs - 20);
-    for (const v of [63, 89]) expect(Math.abs(played('s4', 1, v).truth!.qtcFridericiaMs - 405), `${v}/min`).toBeLessThan(6);
-    for (const v of [90, 100]) {
-      const t = played('s4', 1, v).truth!;
-      expect(t.qtMs, `${v}/min`).toBeGreaterThan(338);
-      expect(t.qtMs, `${v}/min`).toBeLessThan(357);
-      expect(Math.abs(t.qtcFridericiaMs - 405), `${v}/min`).toBeLessThan(6);
-      expect(t.qtcBazettMs, `${v}/min`).toBeGreaterThan(427);
-      expect(t.qtcBazettMs, `${v}/min`).toBeLessThan(444);
+    expect(shown(99).qt).toBeLessThan(shown(63).qt - 20);
+    for (const v of [63, 89, 99]) {
+      expect(shown(v).readout, `${v}/min`).toBe(405);
+      expect(Math.abs(shown(v).truth.qtcFridericiaMs - 405), `${v}/min`).toBeLessThan(6);
     }
+    const end = shown(100);
+    expect(end.qt).toBe(342);
+    expect(end.rr).toBe(603);
+    expect(Math.round(342 / Math.sqrt(0.603))).toBe(440);
+    expect(Math.round(342 / Math.cbrt(0.603))).toBe(405);
+    expect(end.readout).toBe(405);
+    expect(Math.abs(end.truth.qtcBazettMs - 440)).toBeLessThan(5);
+    expect(Math.abs(end.truth.qtcFridericiaMs - 405)).toBeLessThan(5);
   });
   it('QTc-calculator caption: RR about 460 ms in the hook and about 1330 ms in contrast A', () => {
     const meanRr = (e: Ecg) => rrs(e).reduce((s, x) => s + x, 0) / rrs(e).length;
