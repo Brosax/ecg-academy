@@ -778,21 +778,71 @@ describe('h7: QT on the tracings', () => {
     expect(peak(b)).toBeGreaterThan(peak(a) + 40);
     expect(width(b)).toBeLessThan(width(a));
   });
-  it('LQT2 shape: QTc about 520 ms, low T in II (< 2.5 mm), a bifid T in V3 with humps about 100 ms apart', () => {
-    const e = ecgOf(blocksOf('h7', 'ecg')[0].ecg);
+  /** V3 relative to the PR baseline, in ms on the mid beat */
+  const v3 = (e: Ecg) => {
     const b = midBeat(e);
-    expect(Math.abs(e.truth!.qtcBazettMs - 520)).toBeLessThan(15);
-    expect(tw(e, 'II').max).toBeLessThan(0.25);
     const a = e.signal.leads.V3;
     const fs = e.signal.fs;
     const base = baselineBefore(a, fs, b.qrsOn);
-    const v = (ms: number) => a[Math.round((ms * fs) / 1000)] - base;
+    return (ms: number) => a[Math.round((ms * fs) / 1000)] - base;
+  };
+  const tHumps = (e: Ecg): number[] => {
+    const b = midBeat(e);
+    const v = v3(e);
     const humps: number[] = [];
     for (let ms = b.j + 60; ms <= b.tOff - 10; ms += 2) if (v(ms) > 0.2 && v(ms) >= v(ms - 10) && v(ms) > v(ms + 10)) humps.push(ms);
+    return humps;
+  };
+  it('LQT2 shape (film frame 2): QTc about 520 ms, low T in II (about 1 mm, < 2.5 mm), a bifid T in V3 with humps about 100 ms apart', () => {
+    const e = frames('h7', 0)[1];
+    const v = v3(e);
+    expect(Math.abs(e.truth!.qtcBazettMs - 520)).toBeLessThan(15);
+    expect(tw(e, 'II').max).toBeLessThan(0.25);
+    near(tw(e, 'II').max, 1);
+    const humps = tHumps(e);
     expect(humps.length).toBeGreaterThanOrEqual(2);
     expect(humps[humps.length - 1] - humps[0]).toBeGreaterThan(70);
+    expect(Math.abs(humps[humps.length - 1] - humps[0] - 100)).toBeLessThanOrEqual(15);
     const notch = Math.min(...Array.from({ length: humps[humps.length - 1] - humps[0] }, (_, k) => v(humps[0] + k)));
     expect(notch).toBeLessThan(Math.min(v(humps[0]), v(humps[humps.length - 1])) - 0.05);
+  });
+  it('genotype film notes: one QT of about 505 ms at 64/min in all four; LQT1 broad T; LQT3 flat ST for about 280 ms then a later, narrower T; the drug frame has a bifid T and a U wave after the T end', () => {
+    const [lqt1, , lqt3, drug] = frames('h7', 0);
+    for (const e of frames('h7', 0)) {
+      expect(Math.abs(e.truth!.qtMs - 505)).toBeLessThan(5);
+      expect(Math.abs(e.truth!.hrBpm - 64)).toBeLessThan(1);
+    }
+    const peak = (e: Ecg) => midBeat(e).tPeak! - midBeat(e).j;
+    const width = (e: Ecg) => midBeat(e).tOff - midBeat(e).tPeak!;
+    expect(peak(lqt3)).toBeGreaterThan(peak(lqt1) + 40);
+    expect(width(lqt3)).toBeLessThan(width(lqt1) / 1.5);
+    const b3 = midBeat(lqt3);
+    const v = v3(lqt3);
+    let rise = b3.j + 20;
+    while (v(rise) < 0.05) rise += 1;
+    expect(Math.abs(rise - b3.j - 280)).toBeLessThanOrEqual(15);
+    for (let ms = b3.j + 20; ms < rise - 20; ms += 5) expect(Math.abs(v(ms)), `flat ST at J+${ms - b3.j}`).toBeLessThan(0.02);
+    expect(tHumps(drug).length).toBeGreaterThanOrEqual(2);
+    const bd = midBeat(drug);
+    const vd = v3(drug);
+    let u = 0;
+    for (let ms = bd.tOff + 10; ms <= bd.tOff + 150; ms += 2) u = Math.max(u, vd(ms));
+    expect(u, 'U after the T end').toBeGreaterThan(0.1);
+  });
+  it('QTc sweep notes (Fridericia read-out at the start rate of 64/min): 490–495 prolonged but not past 500 with the QT over half the RR; 500–560 past 500', () => {
+    for (const q of [490, 495]) {
+      const t = played('h7', 0, q).truth!;
+      expect(Math.abs(t.qtcFridericiaMs - q), `${q}`).toBeLessThan(3);
+      expect(t.qtcFridericiaMs, `${q}`).toBeGreaterThanOrEqual(480);
+      expect(t.qtcFridericiaMs, `${q}`).toBeLessThan(500);
+      expect(t.qtMs, `${q}: QT over half the RR`).toBeGreaterThan(30000 / t.hrBpm);
+    }
+    for (const q of [500, 505, 560]) {
+      const t = played('h7', 0, q).truth!;
+      expect(Math.abs(t.qtcFridericiaMs - q), `${q}`).toBeLessThan(3);
+      expect(t.qtcFridericiaMs, `${q}`).toBeGreaterThan(500);
+    }
+    expect(Math.abs(played('h7', 0, 490).truth!.hrBpm - 64)).toBeLessThan(1);
   });
   it('hypokalaemia shows U waves; the true long QT does not reach its QTc through a U', () => {
     const c = blocksOf('h7', 'contrast')[1];
