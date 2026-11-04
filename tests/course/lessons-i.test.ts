@@ -1111,10 +1111,10 @@ describe('i10: confounders on the tracings', () => {
 });
 
 describe('i11: mimics on the tracings', () => {
-  it('early repolarisation: J about 1–1.5 mm in II, III, aVF, elevation across V1–V6, depression only in aVR', () => {
+  it('early repolarisation: J 1–2 mm in II, III, aVF (at or above the 1-mm ER threshold), elevation across V1–V6, depression only in aVR', () => {
     const e = frame('i11', 1, 1);
     for (const l of ['II', 'III', 'aVF'] as const) {
-      expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.09);
+      expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
       expect(stAt(e, l), l).toBeLessThan(0.18);
     }
     for (const l of CHEST) expect(stAt(e, l), l).toBeGreaterThan(0.03);
@@ -1131,10 +1131,11 @@ describe('i11: mimics on the tracings', () => {
       expect(prSegment(e, 'aVR'), 'PR aVR').toBeGreaterThan(0.05);
     }
   });
-  it('contrast B (anterior STEMI): V1–V4 elevated, reciprocal depression in II, III, aVF', () => {
+  it('contrast B (anterior STEMI): V1–V4 elevated, reciprocal depression in II, III, aVF, PR segment flat in II and aVR', () => {
     const e = ecgOf(blocksOf('i11', 'contrast')[0].right.ecg);
     for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l), l).toBeLessThan(-0.05);
+    for (const l of ['II', 'aVR'] as const) expect(Math.abs(prSegment(e, l)), `PR ${l}`).toBeLessThanOrEqual(0.05);
   });
   it('takotsubo: V3–V6 elevated, V1 not, aVR depressed, I, aVL and II slightly up (under 1 mm), III and aVF nearly isoelectric; late: QTc (Fridericia) about 505 ms with T inverted in V4–V6', () => {
     const e = ecgOf(blocksOf('i11', 'worked')[0].ecg);
@@ -1150,27 +1151,33 @@ describe('i11: mimics on the tracings', () => {
     expect(Math.abs(late.truth!.qtcFridericiaMs - 505)).toBeLessThan(20);
     for (const l of ['V4', 'V5', 'V6'] as const) expect(tw(late, l).min, l).toBeLessThan(-0.05);
   });
-  it('takotsubo film (one seed): acute = the worked tracing with V4 the highest at about 3 mm; days later no elevation, T inverted in V3–V6 and I, about 10 mm deep in V4–V5, QT about 480 ms', () => {
+  it('takotsubo film (one seed): acute = the worked tracing with V4 the highest at about 3 mm; days later no elevation, T inverted in V3–V6 and I, about 11 mm deep in V4–V5 and deepest there of all twelve leads (the prediction), QT about 480 ms', () => {
     const film = blocksOf('i11', 'film')[0];
     expect(film.frames[0].ecg).toEqual(blocksOf('i11', 'worked')[0].ecg);
     const [acute, late] = [frame('i11', 0, 0), frame('i11', 0, 1)];
     expect(CHEST.reduce((m, l) => (stAt(acute, l) > stAt(acute, m) ? l : m))).toBe('V4');
-    expect(stAt(acute, 'V4')).toBeGreaterThan(0.25);
-    expect(stAt(acute, 'V4')).toBeLessThan(0.33);
+    expect(stAt(acute, 'V4')).toBeGreaterThanOrEqual(0.275);
+    expect(stAt(acute, 'V4')).toBeLessThanOrEqual(0.325);
     for (const l of ALL) expect(stAt(late, l), l).toBeLessThan(0.05);
     for (const l of ['V3', 'V4', 'V5', 'V6', 'I'] as const) expect(tInverted(late, l), l).toBe(true);
     for (const l of ['V4', 'V5'] as const) {
-      expect(tw(late, l).min, l).toBeLessThan(-0.9);
-      expect(tw(late, l).min, l).toBeGreaterThan(-1.2);
+      expect(tw(late, l).min, l).toBeLessThanOrEqual(-1.045);
+      expect(tw(late, l).min, l).toBeGreaterThanOrEqual(-1.155);
     }
+    const p = film.predict!;
+    expect(p.options[p.answer].en).toBe('V4–V5');
+    const deepest = ALL.reduce((m, l) => (tw(late, l).min < tw(late, m).min ? l : m));
+    expect(['V4', 'V5']).toContain(deepest);
+    const v45 = Math.max(tw(late, 'V4').min, tw(late, 'V5').min);
+    for (const l of ['III', 'aVF', 'V1', 'V2'] as const) expect(tw(late, l).min, l).toBeGreaterThan(v45 + 0.3);
     expect(Math.abs(late.truth!.qtMs - 480)).toBeLessThan(5);
   });
   it('mimic film: pericarditis frame = the hook; early repolarisation inferior J 1–2 mm', () => {
     expect(blocksOf('i11', 'film')[1].frames[0].ecg).toEqual(blocksOf('i11', 'hook')[0].ecg);
     const er = frame('i11', 1, 1);
     for (const l of ['II', 'III', 'aVF'] as const) {
-      expect(stAt(er, l), l).toBeGreaterThanOrEqual(0.095);
-      expect(stAt(er, l), l).toBeLessThan(0.2);
+      expect(stAt(er, l), l).toBeGreaterThanOrEqual(0.1);
+      expect(stAt(er, l), l).toBeLessThanOrEqual(0.2);
     }
   });
   it('Brugada type 1: coved elevation ≥ 2 mm in V1–V2 into a negative T, V3 normal', () => {
