@@ -119,9 +119,9 @@ const lesson: Lesson = {
         answer: 0,
       },
       caption: l(
-        '窦性 P 波电轴在 0° 至 +75° 之间。转动它：III 和 aVL 的 P 波翻转方向；I、II、aVF 保持直立、aVR 保持倒置，只是大小在变。',
-        'A sinus P axis lies between 0° and +75°. Turn it: the P in III and aVL changes direction; I, II and aVF stay upright and aVR negative, changing only in size.',
-        'El eje de la P sinusal está entre 0° y +75°. Gíralo: la P de III y aVL cambia de dirección; I, II y aVF siguen positivas y aVR negativa, y solo cambia su tamaño.',
+        '窦性 P 波电轴在 0° 至 +75° 之间。转动它：III 的 P 波从低平或略倒置变为直立，aVL 则从直立变为低平或略倒置；I、II、aVF 保持直立、aVR 保持倒置，只是大小在变。',
+        'A sinus P axis lies between 0° and +75°. Turn it: the P in III goes from flat or slightly negative to upright, and the P in aVL from upright to flat or slightly negative; I, II and aVF stay upright and aVR negative, changing only in size.',
+        'El eje de la P sinusal está entre 0° y +75°. Gíralo: la P de III pasa de plana o algo negativa a positiva, y la de aVL de positiva a plana o algo negativa; I, II y aVF siguen positivas y aVR negativa, y solo cambia su tamaño.',
       ),
     },
     {
