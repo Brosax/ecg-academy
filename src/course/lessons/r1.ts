@@ -235,8 +235,8 @@ const lesson: Lesson = {
         {
           label: l('Ⅰ型（文氏型）', 'Type I (Wenckebach)', 'Tipo I (Wenckebach)'),
           ecg: synth('sa-exit-block', 407, undefined, 'type-1'),
-          note: l('PP 逐搏缩短（约 920 → 850 ms），然后一个短于 2 × PP 的间歇，成组反复。', 'The PP shortens (about 920 → 850 ms), then a pause shorter than 2 x PP, in repeating groups.', 'El PP se acorta (unos 920 → 850 ms) y luego llega una pausa menor de 2 x PP, en grupos que se repiten.'),
-          marks: [{ auto: 'rr', beat: 2 }, { auto: 'rr', beat: 3 }],
+          note: l('PP 逐搏缩短（900 多 → 约 850 ms），然后一个短于 2 × PP 的间歇，成组反复。', 'The PP shortens (from a little over 900 to about 850 ms), then a pause shorter than 2 x PP, in repeating groups.', 'El PP se acorta (de algo más de 900 a unos 850 ms) y luego llega una pausa menor de 2 x PP, en grupos que se repiten.'),
+          marks: [{ auto: 'rr', beat: 1 }, { auto: 'rr', beat: 2 }, { auto: 'rr', beat: 3 }],
         },
         {
           label: l('慢快综合征', 'Tachy–brady', 'Bradi-taqui'),
@@ -309,9 +309,9 @@ const lesson: Lesson = {
           'Implantar un marcapasos por la bradicardia nocturna de la apnea del sueño en lugar de cribar y tratar la propia apnea.',
         ),
         l(
-          '慢快综合征未起搏就加用控制心率或节律的药物：转换后的间歇会更长。起搏后才能安全用药。',
-          'Starting rate- or rhythm-control drugs in tachy–brady syndrome without a pacemaker: the post-conversion pauses get longer. Pace first, then the drugs are safe.',
-          'Iniciar fármacos de control de frecuencia o del ritmo en el síndrome bradicardia-taquicardia sin marcapasos: las pausas posconversión se alargan. Primero el marcapasos; después los fármacos son seguros.',
+          '慢快综合征未起搏就加用控制心率或节律的药物：转换后的间歇会更长。有起搏器防住这些间歇后，才可以用减慢心率的药物。',
+          'Starting rate- or rhythm-control drugs in tachy–brady syndrome without a pacemaker: the post-conversion pauses get longer. Once a pacemaker protects against the pauses, rate-slowing drugs become possible.',
+          'Iniciar fármacos de control de frecuencia o del ritmo en el síndrome bradicardia-taquicardia sin marcapasos: las pausas posconversión se alargan. Cuando un marcapasos protege de las pausas, ya se pueden usar fármacos que frenan la frecuencia.',
         ),
       ],
     },

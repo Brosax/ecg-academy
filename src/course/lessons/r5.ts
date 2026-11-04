@@ -72,9 +72,9 @@ const lesson: Lesson = {
       showConduction: true,
       emphasize: ['rv-outflow'],
       caption: l(
-        '这个室早起自右室流出道。激动先右室后左室：V1 主波向下（左束支阻滞形），II、III、aVF 高 R。它不经过心房，窦房结照常放电。',
-        'This PVC starts in the right ventricular outflow tract. The right ventricle fires first, then the left: V1 points down (LBBB-shaped) and II, III and aVF show tall R waves. It never touches the atria, so the sinus node keeps firing.',
-        'Esta extrasístole nace en el tracto de salida del VD. Primero se activa el ventrículo derecho y después el izquierdo: V1 es negativo (morfología de bloqueo de rama izquierda) y II, III y aVF tienen R altas. No toca las aurículas, así que el nodo sinusal sigue disparando.',
+        '这个室早起自右室流出道。激动先右室后左室：V1 主波向下（左束支阻滞形），II、III、aVF 高 R。这一个没有传到心房，窦房结照常放电。',
+        'This PVC starts in the right ventricular outflow tract. The right ventricle fires first, then the left: V1 points down (LBBB-shaped) and II, III and aVF show tall R waves. This one does not reach the atria, so the sinus node keeps firing.',
+        'Esta extrasístole nace en el tracto de salida del VD. Primero se activa el ventrículo derecho y después el izquierdo: V1 es negativo (morfología de bloqueo de rama izquierda) y II, III y aVF tienen R altas. Esta no llega a las aurículas, así que el nodo sinusal sigue disparando.',
       ),
     },
     {

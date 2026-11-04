@@ -261,7 +261,7 @@ const lesson: Lesson = {
     },
     {
       kind: 'film',
-      title: l('同一个 RBBB，电轴说出第二支', 'One RBBB, and the axis names the second fascicle', 'Un BRD, y el eje nombra el segundo fascículo'),
+      title: l('两份都有 RBBB，电轴说出第二支', 'RBBB in both: the axis names the second fascicle', 'BRD en ambos: el eje nombra el segundo fascículo'),
       view: TWELVE,
       frames: [
         {
