@@ -797,7 +797,7 @@ describe('o7: pericardium on the tracings', () => {
     const p = ecgOf(c.left.ecg);
     const er = ecgOf(c.right.ecg);
     expect(prShift(p, 'II')).toBeGreaterThan(-0.125);
-    expect(prShift(p, 'II')).toBeLessThan(-0.075);
+    expect(prShift(p, 'II')).toBeLessThan(-0.08);
     expect(stTp(p, 'II')).toBeGreaterThanOrEqual(0.15);
     expect(stTp(p, 'II')).toBeLessThanOrEqual(0.2);
     expect(stTp(p, 'II')).toBeGreaterThan(-prShift(p, 'II') + 0.04);
@@ -805,10 +805,10 @@ describe('o7: pericardium on the tracings', () => {
     expect(ratio(p)).toBeGreaterThan(0.5);
     expect(ratio(p)).toBeLessThan(0.6);
     expect(ratio(er)).toBeGreaterThan(0.15);
-    expect(ratio(er)).toBeLessThan(0.25);
-    expect(stAt(er, 'V6', 60)).toBeGreaterThan(0.075);
+    expect(ratio(er)).toBeLessThan(0.22);
+    expect(stAt(er, 'V6', 60)).toBeGreaterThan(0.08);
     expect(stAt(er, 'V6', 60)).toBeLessThan(0.125);
-    expect(Math.abs(prShift(er, 'II'))).toBeLessThanOrEqual(0.05);
+    expect(Math.abs(prShift(er, 'II'))).toBeLessThan(0.02);
     expect(stAt(er, 'II')).toBeGreaterThan(0.125);
     expect(stAt(er, 'II')).toBeLessThan(0.175);
     expect(Math.abs(p.truth!.hrBpm - 96)).toBeLessThan(1);
