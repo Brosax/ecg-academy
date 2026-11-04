@@ -778,7 +778,7 @@ describe('i6: posterior infarction on the tracings', () => {
     expect(Math.abs(stAt(e, 'V4'))).toBeLessThan(0.03);
     for (const l of ['I', 'aVL', 'V5', 'V6'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.05);
   });
-  it('contrast B (subendocardial): depression in V4–V6 and I/aVL, V1–V2 not depressed, nothing elevated ≥ 1 mm', () => {
+  it('contrast B (subendocardial): depression in V4–V6 and I/aVL, V1–V2 not depressed, nothing up ≥ 1 mm (caption and point)', () => {
     const e = ecgOf(blocksOf('i6', 'contrast')[0].right.ecg);
     for (const l of ['V4', 'V5', 'V6', 'I', 'aVL'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
     for (const l of ['V1', 'V2'] as const) expect(stAt(e, l), l).toBeGreaterThan(0);
@@ -814,12 +814,15 @@ describe('i6: posterior infarction on the tracings', () => {
     for (const l of ['I', 'aVL', 'V1', 'V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThanOrEqual(-0.05);
     for (const l of ['V5', 'V6'] as const) expect(stAt(e, l), l).toBeLessThan(0.05);
   });
-  it('company film prediction: aVL, up on the opening tracing, falls below the baseline when the inferior wall joins instead', () => {
-    const film = blocksOf('i6', 'film')[0];
-    const p = film.predict!;
-    expect(p.options[p.answer].en).toMatch(/^Fall below/);
-    expect(stAt(frame('i6', 0, 0), 'aVL')).toBeGreaterThanOrEqual(0.05);
-    expect(stAt(frame('i6', 0, 2), 'aVL')).toBeLessThanOrEqual(-0.05);
+  it('company film prediction: V5–V6, up on the opening tracing, do not rise when the inferior wall joins instead (a yes/no question, not a scale)', () => {
+    const p = blocksOf('i6', 'film')[0].predict!;
+    expect(p.ordered).toBeUndefined();
+    expect(p.answer).toBe(1);
+    expect(p.options[p.answer].en).toBe('No, they do not rise');
+    for (const l of ['V5', 'V6'] as const) {
+      expect(stAt(frame('i6', 0, 0), l), `opening tracing ${l} up`).toBeGreaterThanOrEqual(0.05);
+      expect(stAt(frame('i6', 0, 2), l), `inferoposterior ${l} not up`).toBeLessThan(0.05);
+    }
   });
 });
 

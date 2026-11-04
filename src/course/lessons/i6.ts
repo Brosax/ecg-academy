@@ -224,26 +224,24 @@ const lesson: Lesson = {
           label: l('加下壁', '+ inferior wall', '+ pared inferior'),
           ecg: synth('stemi-inferior', 907, undefined, 'posterior'),
           note: l(
-            'II、III、aVF 抬高且 III > II，I、aVL、V1–V3 压低，V5–V6 不抬高：下后壁，优势型 RCA。加做 V3R/V4R、V7–V9。',
-            'II, III and aVF up with III > II; I, aVL and V1–V3 down; V5–V6 not up: inferoposterior, a dominant RCA. Add V3R/V4R and V7–V9.',
-            'II, III y aVF elevadas con III > II; I, aVL y V1–V3 descendidas; V5–V6 sin elevar: inferoposterior, CD dominante. Añade V3R/V4R y V7–V9.',
+            'II、III、aVF 抬高且 III > II，aVL、V1–V3 压低，V5–V6 不抬高：下后壁，优势型 RCA。加做 V3R/V4R、V7–V9。',
+            'II, III and aVF up with III > II; aVL and V1–V3 down; V5–V6 not up: inferoposterior, a dominant RCA. Add V3R/V4R and V7–V9.',
+            'II, III y aVF elevadas con III > II; aVL y V1–V3 descendidas; V5–V6 sin elevar: inferoposterior, CD dominante. Añade V3R/V4R y V7–V9.',
           ),
           marks: [{ auto: 'j', lead: 'III' }, { auto: 'j', lead: 'V2' }],
         },
       ],
       predict: {
         question: l(
-          '第三份图里，后壁带上的不是侧壁，而是下壁（优势型 RCA）。aVL 的 ST 会怎样？',
-          'In the third tracing the back wall brings the inferior wall (a dominant RCA) instead of the lateral wall. What will the ST in aVL do?',
-          'En el tercer trazado la pared posterior arrastra la pared inferior (CD dominante) en lugar de la lateral. ¿Qué hará el ST en aVL?',
+          '第三份图里，后壁带上的不是侧壁，而是下壁。V5–V6 还会像开头那份图一样抬高吗？',
+          'In the third tracing the back wall brings the inferior wall instead of the lateral wall. Will V5–V6 still rise, as on the opening tracing?',
+          'En el tercer trazado la pared posterior arrastra la pared inferior en lugar de la lateral. ¿Seguirán elevándose V5–V6, como en el trazado inicial?',
         ),
         options: [
-          l('高于基线，和开头那份图一样', 'Rise above the baseline, as on the opening tracing', 'Subir sobre la línea de base, como en el trazado inicial'),
-          l('留在基线上', 'Stay on the baseline', 'Quedarse en la línea de base'),
-          l('低于基线', 'Fall below the baseline', 'Caer bajo la línea de base'),
+          l('会，仍然抬高', 'Yes, they still rise', 'Sí, siguen elevándose'),
+          l('不会，不抬高', 'No, they do not rise', 'No, no se elevan'),
         ],
-        answer: 2,
-        ordered: true,
+        answer: 1,
       },
       caption: l(
         '后壁梗死很少真正孤立：常带上侧壁（LCx）或下壁（RCA）。三种情况都按 STEMI 处理。',
@@ -267,16 +265,16 @@ const lesson: Lesson = {
       right: {
         ecg: synth('st-depression-ischemic', 906),
         caption: l(
-          'B：压低在 V4–V6 与 I、aVL，V1–V2 不受累，没有任何导联抬高——心内膜下缺血',
-          'B: depression in V4–V6 and I, aVL, with V1–V2 spared and no lead elevated — subendocardial ischaemia',
-          'B: descenso en V4–V6 y en I, aVL, con V1–V2 respetadas y ninguna derivación elevada: isquemia subendocárdica',
+          'B：压低在 V4–V6 与 I、aVL，V1–V2 不受累，没有导联抬高 ≥ 1 mm——心内膜下缺血',
+          'B: depression in V4–V6 and I, aVL, with V1–V2 spared and nothing up ≥ 1 mm — subendocardial ischaemia',
+          'B: descenso en V4–V6 y en I, aVL, con V1–V2 respetadas y nada elevado ≥ 1 mm: isquemia subendocárdica',
         ),
         marks: [{ auto: 'st', lead: 'V5' }],
       },
       point: l(
-        '两份图都有胸前 ST 压低，但分布决定去向。A 的压低在**右胸导联（V1–V2）最深**、水平型，到 V4 已消失，而面对侧壁的导联抬高——后侧壁闭塞的镜像：加做 V7–V9 并按 STEMI 处理。B 的压低在**左胸导联 V4–V6**（以及 I、aVL），V1–V2 不受累，也没有任何导联抬高——心内膜下（NSTE）缺血，走另一条路径。压低以 V1–V4 为主而不在 V5–V6、T 直立、R 高，就更像后壁。',
-        'Both tracings show precordial ST depression, but the distribution decides where they go. In A the depression is **deepest in the right chest leads (V1–V2)**, horizontal and gone by V4, while the leads facing the lateral wall are elevated — the mirror of a posterolateral occlusion: record V7–V9 and manage as a STEMI. In B the depression sits in the **left chest leads V4–V6** (and I, aVL), V1–V2 are spared and no lead is elevated — subendocardial (NSTE) ischaemia on a different pathway. Depression maximal in V1–V4 rather than V5–V6, with an upright T and a tall R, looks posterior.',
-        'Ambos registros muestran descenso del ST precordial, pero la distribución decide el camino. En A el descenso es **máximo en las precordiales derechas (V1–V2)**, horizontal y desaparece en V4, mientras las derivaciones que miran a la pared lateral están elevadas: la imagen especular de una oclusión posterolateral; registra V7–V9 y trátalo como IAMCEST. En B el descenso está en las **precordiales izquierdas V4–V6** (y en I, aVL), V1–V2 se respetan y ninguna derivación se eleva: isquemia subendocárdica (SCASEST), otra vía. Un descenso máximo en V1–V4 y no en V5–V6, con T positiva y R alta, apunta a la pared posterior.',
+        '两份图都有胸前 ST 压低，但分布决定去向。A 的压低在**右胸导联（V1–V2）最深**、水平型，到 V4 已消失，而面对侧壁的导联抬高——后侧壁闭塞的镜像：加做 V7–V9 并按 STEMI 处理。B 的压低在**左胸导联 V4–V6**（以及 I、aVL），V1–V2 不受累，也没有导联抬高 ≥ 1 mm——心内膜下（NSTE）缺血，走另一条路径。按 UDMI，V1–V3 的 ST 压低，尤其终末 T 波直立时，提示后壁。',
+        'Both tracings show precordial ST depression, but the distribution decides where they go. In A the depression is **deepest in the right chest leads (V1–V2)**, horizontal and gone by V4, while the leads facing the lateral wall are elevated — the mirror of a posterolateral occlusion: record V7–V9 and manage as a STEMI. In B the depression sits in the **left chest leads V4–V6** (and I, aVL), V1–V2 are spared and nothing is up ≥ 1 mm — subendocardial (NSTE) ischaemia on a different pathway. Per the UDMI, ST depression in V1–V3, especially with an upright terminal T, suggests the back wall.',
+        'Ambos registros muestran descenso del ST precordial, pero la distribución decide el camino. En A el descenso es **máximo en las precordiales derechas (V1–V2)**, horizontal y desaparece en V4, mientras las derivaciones que miran a la pared lateral están elevadas: la imagen especular de una oclusión posterolateral; registra V7–V9 y trátalo como IAMCEST. En B el descenso está en las **precordiales izquierdas V4–V6** (y en I, aVL), V1–V2 se respetan y nada se eleva ≥ 1 mm: isquemia subendocárdica (SCASEST), otra vía. Según la UDMI, el descenso del ST en V1–V3, sobre todo con T terminal positiva, sugiere la pared posterior.',
       ),
     },
     {
