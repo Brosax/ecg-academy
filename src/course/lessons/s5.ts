@@ -151,9 +151,9 @@ const lesson: Lesson = {
         answer: 0,
       },
       caption: l(
-        '等电位的导联总是与电轴相差 90°。看它从 aVF 换到 III，再换到 aVL。',
-        'The equiphasic lead always sits 90° from the axis. Watch it move from aVF to III to aVL.',
-        'La derivación isodifásica siempre está a 90° del eje. Mira cómo pasa de aVF a III y después a aVL.',
+        '最接近等电位的导联大致与电轴垂直。看它从 aVF 换到 III，再换到 aVL。',
+        'The most equiphasic lead is roughly perpendicular to the axis. Watch it move from aVF to III to aVL.',
+        'La derivación más isodifásica es más o menos perpendicular al eje. Mira cómo pasa de aVF a III y después a aVL.',
       ),
     },
     {
@@ -213,7 +213,11 @@ const lesson: Lesson = {
         {
           label: l('正常', 'Normal', 'Normal'),
           ecg: { kind: 'synth', req: PROGRESSION },
-          note: l('V1 呈 rS，R 波在 V3 超过 S 波（移行区），V6 呈 qR：正常递增。', 'rS in V1, the R overtakes the S at V3 (the transition), qR in V6: normal progression.', 'rS en V1, la R supera a la S en V3 (la transición), qR en V6: progresión normal.'),
+          note: l(
+            'V1 呈 rS，R 波在 V3 超过 S 波（移行区），V6 呈 qR，V5–V6 的 S 波很小或没有：正常递增。',
+            'rS in V1, the R overtakes the S at V3 (the transition), qR in V6, small or no S in V5–V6: normal progression.',
+            'rS en V1, la R supera a la S en V3 (la transición), qR en V6, S pequeña o ausente en V5–V6: progresión normal.',
+          ),
           marks: [
             { auto: 'r', lead: 'V1' },
             { auto: 's', lead: 'V1' },
@@ -225,18 +229,30 @@ const lesson: Lesson = {
         {
           label: l('R 波递增不良', 'Poor R progression', 'Mala progresión de R'),
           ecg: synth('poor-r-progression', 504),
-          note: l('V3 的 R 波只有约 2 mm（≤ 3 mm），移行区推到 V4：R 波递增不良。这是描述，原因很多。', 'The R in V3 is only about 2 mm (≤ 3 mm) and the transition moves to V4: poor R-wave progression, a description with many causes.', 'La R en V3 mide solo unos 2 mm (≤ 3 mm) y la transición pasa a V4: mala progresión de la R, una descripción con muchas causas.'),
+          note: l(
+            'V3 的 R 波只有约 2 mm：≤ 3 mm 就是 R 波递增不良。这是描述，原因很多。',
+            'The R in V3 is only about 2 mm: ≤ 3 mm is poor R-wave progression, a description with many causes.',
+            'La R en V3 mide solo unos 2 mm: ≤ 3 mm es mala progresión de la R, una descripción con muchas causas.',
+          ),
           marks: [{ auto: 'r', lead: 'V3' }],
         },
         {
           label: l('V1–V2 贴高了', 'V1–V2 too high', 'V1–V2 demasiado altas'),
           ecg: { kind: 'synth', req: { ...PROGRESSION, recording: { placement: V1V2_HIGH } } },
-          note: l('同一颗心脏，V1–V2 贴在第 2 肋间：V2 的 r 波从约 3.5 mm 降到约 1 mm，V1 的 P 波变成倒置。先查电极位置。', 'Same heart, V1–V2 in the 2nd intercostal space: the r in V2 drops from about 3.5 to 1 mm and the P in V1 turns negative. Check placement first.', 'Mismo corazón, V1–V2 en el 2.º espacio intercostal: la r de V2 baja de unos 3,5 a 1 mm y la P de V1 se hace negativa. Comprueba antes la colocación.'),
-          marks: [{ auto: 'r', lead: 'V2' }],
+          note: l(
+            '同一颗心脏，V1–V2 贴在第 2 肋间：V2 的 r 波从约 3.5 mm 降到约 1 mm，V1 的 r 波减半，V1 的 P 波变成倒置。先查电极位置。',
+            'Same heart, V1–V2 in the 2nd intercostal space: the r in V2 drops from about 3.5 to 1 mm, the r in V1 halves and the P in V1 turns negative. Check placement first.',
+            'Mismo corazón, V1–V2 en el 2.º espacio intercostal: la r de V2 baja de unos 3,5 a 1 mm, la de V1 se reduce a la mitad y la P de V1 se hace negativa. Comprueba antes la colocación.',
+          ),
+          marks: [{ auto: 'r', lead: 'V1' }, { auto: 'r', lead: 'V2' }],
         },
       ],
       predict: {
-        question: l('V1–V2 贴高了两个肋间（第 2 肋间）。它们的 r 波会怎样？', 'V1–V2 are stuck two spaces too high (2nd intercostal space). What happens to their r waves?', 'V1–V2 se colocan dos espacios demasiado altas (2.º espacio intercostal). ¿Qué les pasa a sus ondas r?'),
+        question: l(
+          '判读标准把 V1–V2 电极错位列为 R 波递增不良的原因之一。把 V1–V2 贴高两个肋间（第 2 肋间），它们的 r 波会怎样？',
+          'The criteria list misplaced V1–V2 among the causes of poor R progression. Put V1–V2 two spaces too high (2nd intercostal space): what happens to their r waves?',
+          'Los criterios incluyen V1–V2 mal colocadas entre las causas de mala progresión de la R. Coloca V1–V2 dos espacios demasiado altas (2.º espacio intercostal): ¿qué les pasa a sus ondas r?',
+        ),
         options: [l('变小', 'They shrink', 'Se hacen más pequeñas'), l('变高', 'They grow', 'Crecen'), l('不变', 'Nothing', 'Nada')],
         answer: 0,
       },

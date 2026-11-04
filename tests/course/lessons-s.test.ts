@@ -8,8 +8,8 @@ import { describe, expect, it } from 'vitest';
 import type { Block, Lesson } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
 import { REGISTERED } from '../../src/course/lessons/index';
-import { realisedDials, startDials } from '../../src/course/live';
-import { baselineBefore, qrsWaves } from '../../src/course/marks';
+import { realisedDials, startDials, sweepValues } from '../../src/course/live';
+import { baselineBefore, MIN_WAVE_MV, qrsWaves, resolveMarks } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
 import type { L10n } from '../../src/core/l10n';
@@ -204,15 +204,16 @@ function ecgOf(src: EcgSource | SynthRequest): Ecg {
   }
   return e;
 }
-/** what a playing live block shows with its played dial at `v` (its other dials at their start values) */
-function played(id: string, i: number, v: number): Ecg {
+/** the request a playing live block generates with its played dial at `v` (its other dials at their start values) */
+function playedReq(id: string, i: number, v: number): SynthRequest {
   const b = blocksOf(id, 'live')[i];
   if (!b.play) throw new Error(`${id}: live block ${i} does not play`);
   const sc = scenarios().find((s) => s.id === b.scenario);
   if (!sc) throw new Error(`unknown scenario ${b.scenario}`);
   const dials = { ...startDials(sc, b.variant, b.dials.map((d) => d.id), b.play), [b.play.dial]: v };
-  return ecgOf({ scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed, dials });
+  return { scenario: b.scenario, ...(b.variant ? { variant: b.variant } : {}), seed: b.seed, dials };
 }
+const played = (id: string, i: number, v: number): Ecg => ecgOf(playedReq(id, i, v));
 
 const LIMB: readonly StdLead[] = ['I', 'II', 'III', 'aVR', 'aVL', 'aVF'];
 const CHEST: readonly StdLead[] = ['V1', 'V2', 'V3', 'V4', 'V5', 'V6'];
@@ -256,10 +257,9 @@ describe('s1: the reading order on the tracings', () => {
   it('hook (pre-excitation): PR about 115 ms, QRS about 125 ms, R ≥ S in V1, T inverted in II, III, aVF and V3–V6', () => {
     const e = ecgOf(blocksOf('s1', 'hook')[0].ecg);
     const t = e.truth!;
-    expect(t.prMs!).toBeGreaterThanOrEqual(105);
+    expect(Math.abs(t.prMs! - 115)).toBeLessThanOrEqual(5);
     expect(t.prMs!).toBeLessThan(120);
-    expect(t.qrsMs).toBeGreaterThanOrEqual(115);
-    expect(t.qrsMs).toBeLessThanOrEqual(135);
+    expect(Math.abs(t.qrsMs - 125)).toBeLessThanOrEqual(5);
     expect(t.findings).toContain('wpw');
     expect(qrs(e, 'V1').max).toBeGreaterThanOrEqual(-qrs(e, 'V1').min);
     for (const l of ['II', 'III', 'aVF', 'V3', 'V4', 'V5', 'V6'] as const) expect(tInverted(e, l), l).toBe(true);
@@ -413,7 +413,22 @@ describe('s3: sinus rhythm on the tracings', () => {
     });
     expect(Math.abs(pw(frames[0], 'II').max - pw(frames[1], 'II').max)).toBeLessThan(0.01);
   });
-  it('P-axis sweep notes: III flat or slightly negative at 20–30; III and aVL small at 35–55; aVL flat or slightly negative with III upright at 60–70; I and II upright and aVR negative throughout, aVF upright from 35', () => {
+  it('P-axis sweep notes: III flat or slightly negative at 20–30 with a small upright aVF; III and aVL small at 35–55; aVL flat or slightly negative with III upright at 60–70; I, II, aVF upright and aVR negative at every step (no opposite wave of 0.5 mm), changing only in size', () => {
+    const sc = scenarios().find((s) => s.id === 'normal')!;
+    for (const v of sweepValues('pAxis', sc.dials.pAxis!, 20, 70)) {
+      const e = played('s3', 0, v);
+      for (const l of ['I', 'II', 'aVF'] as const) {
+        expect(pw(e, l).max, `${v}° ${l}`).toBeGreaterThan(0.03);
+        expect(pw(e, l).min, `${v}° ${l}`).toBeGreaterThan(-MIN_WAVE_MV);
+      }
+      for (const l of ['II', 'aVF'] as const) expect(pw(e, l).max, `${v}° ${l}`).toBeGreaterThan(MIN_WAVE_MV);
+      expect(pw(e, 'aVR').min, `${v}° aVR`).toBeLessThan(-MIN_WAVE_MV);
+      expect(pw(e, 'aVR').max, `${v}° aVR`).toBeLessThan(MIN_WAVE_MV);
+      if (v <= 30) expect(pw(e, 'aVF').max, `${v}° aVF small`).toBeLessThan(0.1);
+    }
+    const [lo, hi] = [played('s3', 0, 20), played('s3', 0, 70)];
+    expect(pw(hi, 'I').net).toBeLessThan(pw(lo, 'I').net);
+    for (const l of ['II', 'aVF'] as const) expect(pw(hi, l).net, l).toBeGreaterThan(pw(lo, l).net);
     for (const v of [20, 30, 35, 55, 60, 70]) {
       const e = played('s3', 0, v);
       expect(Math.abs(e.truth!.axisDeg.p! - v), `${v}°`).toBeLessThan(3);
@@ -433,7 +448,7 @@ describe('s3: sinus rhythm on the tracings', () => {
       }
     }
   });
-  it('variability sweep notes: PP spread > 120 ms at 0.10–0.139 and 230–290 ms at 0.14–0.18, with a PR of 160 ms on every beat', () => {
+  it('variability sweep notes: PP spread > 120 ms at 0.10–0.139 and 230–290 ms at 0.14–0.18, with a PR of 160 ms and the same P height in II on every beat', () => {
     for (const v of [0.1, 0.139, 0.14, 0.18]) {
       const e = played('s3', 1, v);
       const beats = e.truth!.beats;
@@ -445,6 +460,8 @@ describe('s3: sinus rhythm on the tracings', () => {
         expect(spread, `${v}`).toBeLessThan(295);
       }
       for (const b of beats) expect(Math.abs(b.qrsOn - b.pOn! - 160), `${v}`).toBeLessThan(5);
+      const heights = beats.map((b) => pw(e, 'II', b).max);
+      expect(Math.max(...heights) - Math.min(...heights), `${v} P height`).toBeLessThan(0.005);
     }
   });
   it('long-PR check: sinus P (upright I, II, aVF; negative aVR), PR about 220 ms, rate under 60', () => {
@@ -486,21 +503,36 @@ describe('s4: intervals on the tracings', () => {
       expect(Math.abs(pr / 40 - squares), `${v} ms`).toBeLessThan(0.2);
     }
   });
-  it('rate sweep notes: QT ≈ QTc ≈ 405 ms at 60–62/min; the QT shortens while Fridericia holds; at 90–100/min QT 340–355, Fridericia about 405, Bazett about 430–440', () => {
+  it('rate sweep notes, on the QT and RR the strip marks and the QTc read-out: QT about 405 ms at RR ≈ 1 s at 60–62/min; the QT shortens while the read-out holds 405 at 63–99; at 100/min QT 342 and RR 603 ms, Bazett 342 ÷ √0.603 ≈ 440 and Fridericia 342 ÷ ∛0.603 ≈ 405', () => {
+    const b = blocksOf('s4', 'live')[1];
+    const shown = (v: number) => {
+      const req = playedReq('s4', 1, v);
+      const text = resolveMarks(ecgOf(req), b.marks, { layout: b.view?.layout, lead: b.view?.lead })
+        .map((m) => ('label' in m && m.label ? (typeof m.label === 'string' ? m.label : m.label.en) : ''))
+        .join(' ');
+      const ms = (name: string) => Number(new RegExp(`${name} (\\d+) ms`).exec(text)?.[1]);
+      return { qt: ms('QT'), rr: ms('RR'), readout: generate(req).applied.qtc, truth: ecgOf(req).truth! };
+    };
     for (const v of [60, 62]) {
-      const t = played('s4', 1, v).truth!;
-      for (const x of [t.qtMs, t.qtcBazettMs, t.qtcFridericiaMs]) expect(Math.abs(x - 405), `${v}/min`).toBeLessThan(6);
+      const s = shown(v);
+      expect(Math.abs(s.qt - 405), `${v}/min QT`).toBeLessThanOrEqual(5);
+      expect(Math.abs(s.rr - 1000), `${v}/min RR`).toBeLessThan(30);
+      expect(s.readout, `${v}/min`).toBe(405);
+      for (const x of [s.truth.qtcBazettMs, s.truth.qtcFridericiaMs]) expect(Math.abs(x - 405), `${v}/min`).toBeLessThan(6);
     }
-    expect(played('s4', 1, 89).truth!.qtMs).toBeLessThan(played('s4', 1, 63).truth!.qtMs - 20);
-    for (const v of [63, 89]) expect(Math.abs(played('s4', 1, v).truth!.qtcFridericiaMs - 405), `${v}/min`).toBeLessThan(6);
-    for (const v of [90, 100]) {
-      const t = played('s4', 1, v).truth!;
-      expect(t.qtMs, `${v}/min`).toBeGreaterThan(338);
-      expect(t.qtMs, `${v}/min`).toBeLessThan(357);
-      expect(Math.abs(t.qtcFridericiaMs - 405), `${v}/min`).toBeLessThan(6);
-      expect(t.qtcBazettMs, `${v}/min`).toBeGreaterThan(427);
-      expect(t.qtcBazettMs, `${v}/min`).toBeLessThan(444);
+    expect(shown(99).qt).toBeLessThan(shown(63).qt - 20);
+    for (const v of [63, 89, 99]) {
+      expect(shown(v).readout, `${v}/min`).toBe(405);
+      expect(Math.abs(shown(v).truth.qtcFridericiaMs - 405), `${v}/min`).toBeLessThan(6);
     }
+    const end = shown(100);
+    expect(end.qt).toBe(342);
+    expect(end.rr).toBe(603);
+    expect(Math.round(342 / Math.sqrt(0.603))).toBe(440);
+    expect(Math.round(342 / Math.cbrt(0.603))).toBe(405);
+    expect(end.readout).toBe(405);
+    expect(Math.abs(end.truth.qtcBazettMs - 440)).toBeLessThan(5);
+    expect(Math.abs(end.truth.qtcFridericiaMs - 405)).toBeLessThan(5);
   });
   it('QTc-calculator caption: RR about 460 ms in the hook and about 1330 ms in contrast A', () => {
     const meanRr = (e: Ecg) => rrs(e).reduce((s, x) => s + x, 0) / rrs(e).length;
@@ -515,21 +547,32 @@ describe('s5: axis on the tracings', () => {
     expect(mostEquiphasic(e)).toBe('III');
     for (const l of ['I', 'II'] as const) expect(qrs(e, l).net, l).toBeGreaterThan(0.1);
   });
-  it('R-wave progression film, normal frame: rS in V1, the R overtakes the S at V3, qR in V6', () => {
+  it('R-wave progression film, normal frame: rS in V1, the R overtakes the S at V3, qR in V6, small or no S in V5–V6', () => {
     const e = ecgOf(blocksOf('s5', 'film')[0].frames[0].ecg);
     expect(transition(e)).toBe('V3');
     const b = midBeat(e);
-    const roles = (l: StdLead) => qrsWaves(e.signal.leads[l], e.signal.fs, b.qrsOn, b.qrsOff).map((w) => w.role).join('');
+    const waves = (l: StdLead) => qrsWaves(e.signal.leads[l], e.signal.fs, b.qrsOn, b.qrsOff);
+    const roles = (l: StdLead) => waves(l).map((w) => w.role).join('');
     expect(roles('V1')).toBe('rs');
     expect(roles('V6').startsWith('qr')).toBe(true);
+    for (const l of ['V5', 'V6'] as const) {
+      const r = Math.max(...waves(l).filter((w) => w.role === 'r').map((w) => w.mv));
+      for (const s of waves(l).filter((w) => w.role === 's')) {
+        expect(-s.mv, `${l} S`).toBeLessThan(0.1);
+        expect(-s.mv, `${l} S`).toBeLessThan(0.1 * r);
+      }
+    }
   });
-  it('R-wave progression film: poor progression has an R of about 2 mm in V3 and its transition at V4; V1–V2 high on the same heart shrinks the r in V2 from about 3.5 to 1 mm and turns the P in V1 negative', () => {
+  it('R-wave progression film: poor progression has an R of about 2 mm in V3 (transition at V4); V1–V2 high on the same heart shrinks the r in V2 from about 3.5 to 1 mm, halves the r in V1 and turns the P in V1 negative', () => {
     const [normal, poor, high] = blocksOf('s5', 'film')[0].frames.map((f) => ecgOf(f.ecg));
     expect(qrs(poor, 'V3').max).toBeGreaterThan(0.15);
     expect(qrs(poor, 'V3').max).toBeLessThanOrEqual(0.25);
     expect(transition(poor)).toBe('V4');
     expect(Math.abs(qrs(normal, 'V2').max - 0.35)).toBeLessThan(0.05);
     expect(Math.abs(qrs(high, 'V2').max - 0.1)).toBeLessThan(0.03);
+    const v1 = qrs(high, 'V1').max / qrs(normal, 'V1').max;
+    expect(v1).toBeGreaterThan(0.4);
+    expect(v1).toBeLessThan(0.6);
     expect(pw(normal, 'V1').max).toBeGreaterThan(0.005);
     expect(pw(high, 'V1').max).toBeLessThan(0.003);
     expect(pw(high, 'V1').min).toBeLessThan(-0.02);
@@ -590,23 +633,20 @@ describe('s6: ST measurement on the tracings', () => {
     expect(stAt(e, 'aVL', 60)).toBeLessThan(-0.1);
     expect(stAt(e, 'I', 60)).toBeLessThan(0);
   });
-  it('worked (anterior): V2 ≈ 2.5 mm at J / 3 mm at J+60, V3 ≈ 3 / 4 mm, V4 ≈ 2 mm, V1 ≈ 1 mm; I and aVL < 1 mm; III and aVF ≈ −1 mm', () => {
+  /** the millimetres the J+60 read-out (AutoMark st60) prints for a lead */
+  const readout = (e: Ecg, lead: StdLead): string => {
+    const m = resolveMarks(e, [{ auto: 'st60', lead }]).find((x) => x.kind === 'arrow');
+    const label = m && 'label' in m && m.label ? (typeof m.label === 'string' ? m.label : m.label.en) : '';
+    return /ST ([+−±]\d+\.\d) mm/.exec(label)?.[1] ?? label;
+  };
+  it('worked (anterior): V2 about 2.6 mm at J with a read-out of +3.0, V3 about 3.3 mm at J with +3.8, read-outs V4 +2.2 and V1 +1.3; I and aVL < 1 mm; read-outs III −1.3 and aVF −1.0', () => {
     const e = ecgOf(blocksOf('s6', 'worked')[0].ecg);
-    expect(stAt(e, 'V2')).toBeGreaterThan(0.2);
-    expect(stAt(e, 'V2')).toBeLessThan(0.3);
-    expect(stAt(e, 'V2', 60)).toBeGreaterThan(0.25);
-    expect(stAt(e, 'V2', 60)).toBeLessThan(0.35);
-    expect(stAt(e, 'V3')).toBeGreaterThan(0.25);
-    expect(stAt(e, 'V3', 60)).toBeGreaterThan(0.33);
-    expect(stAt(e, 'V3', 60)).toBeLessThan(0.45);
-    expect(stAt(e, 'V4', 60)).toBeGreaterThan(0.15);
-    expect(stAt(e, 'V4', 60)).toBeLessThan(0.27);
-    expect(stAt(e, 'V1', 60)).toBeGreaterThan(0.08);
-    expect(stAt(e, 'V1', 60)).toBeLessThan(0.17);
-    for (const l of ['I', 'aVL'] as const) expect(stAt(e, l), l).toBeLessThan(0.1);
-    for (const l of ['III', 'aVF'] as const) {
-      expect(stAt(e, l, 60), l).toBeLessThan(-0.07);
-      expect(stAt(e, l, 60), l).toBeGreaterThan(-0.17);
+    expect(Math.abs(stAt(e, 'V2') - 0.26)).toBeLessThanOrEqual(0.015);
+    expect(Math.abs(stAt(e, 'V3') - 0.33)).toBeLessThanOrEqual(0.015);
+    for (const [l, mm] of [['V2', '+3.0'], ['V3', '+3.8'], ['V4', '+2.2'], ['V1', '+1.3'], ['III', '−1.3'], ['aVF', '−1.0']] as const) expect(readout(e, l), l).toBe(mm);
+    for (const l of ['I', 'aVL'] as const) {
+      expect(stAt(e, l), l).toBeLessThan(0.1);
+      expect(stAt(e, l, 60), l).toBeLessThan(0.1);
     }
   });
   it('live: more injury current raises V3 and lowers III (reciprocity)', () => {
@@ -617,63 +657,56 @@ describe('s6: ST measurement on the tracings', () => {
     expect(stAt(hi, 'V3', 60)).toBeGreaterThan(stAt(lo, 'V3', 60) + 0.15);
     expect(stAt(hi, 'III', 60)).toBeLessThan(stAt(lo, 'III', 60) - 0.05);
   });
-  it('ST sweep notes (J+60 read-out): V3 about +3 mm and III about −1 mm at 0.22–0.25 mV; V2–V4 rise as III and aVF fall across 0.26–0.39; V3 about +5–6 mm and III about −2 mm at 0.40–0.45', () => {
-    for (const v of [0.22, 0.25]) {
+  it('ST sweep notes (J+60 read-out): V3 about +3 mm and III about −1 mm at 0.22–0.24 mV; V2–V4 rise as III and aVF fall across 0.25–0.42; V3 +5–6 mm and III about −2 mm at 0.43–0.45', () => {
+    for (const v of [0.22, 0.24]) {
       const e = played('s6', 0, v);
-      expect(stAt(e, 'V3', 60), `${v}`).toBeGreaterThan(0.27);
-      expect(stAt(e, 'V3', 60), `${v}`).toBeLessThan(0.34);
-      expect(stAt(e, 'III', 60), `${v}`).toBeGreaterThan(-0.125);
-      expect(stAt(e, 'III', 60), `${v}`).toBeLessThan(-0.085);
+      expect(Math.abs(stAt(e, 'V3', 60) - 0.3), `${v}`).toBeLessThanOrEqual(0.02);
+      expect(Math.abs(stAt(e, 'III', 60) + 0.1), `${v}`).toBeLessThanOrEqual(0.015);
     }
-    const [lo, hi] = [played('s6', 0, 0.26), played('s6', 0, 0.39)];
+    const [lo, hi] = [played('s6', 0, 0.25), played('s6', 0, 0.42)];
     for (const l of ['V2', 'V3', 'V4'] as const) expect(stAt(hi, l, 60), l).toBeGreaterThan(stAt(lo, l, 60) + 0.05);
     for (const l of ['III', 'aVF'] as const) expect(stAt(hi, l, 60), l).toBeLessThan(stAt(lo, l, 60) - 0.02);
-    for (const v of [0.4, 0.45]) {
+    for (const v of [0.43, 0.45]) {
       const e = played('s6', 0, v);
-      expect(stAt(e, 'V3', 60), `${v}`).toBeGreaterThan(0.49);
-      expect(stAt(e, 'V3', 60), `${v}`).toBeLessThan(0.6);
-      expect(stAt(e, 'III', 60), `${v}`).toBeGreaterThan(-0.21);
-      expect(stAt(e, 'III', 60), `${v}`).toBeLessThan(-0.165);
+      expect(stAt(e, 'V3', 60), `${v}`).toBeGreaterThanOrEqual(0.5);
+      expect(stAt(e, 'V3', 60), `${v}`).toBeLessThanOrEqual(0.6);
+      expect(Math.abs(stAt(e, 'III', 60) + 0.2), `${v}`).toBeLessThanOrEqual(0.015);
     }
   });
-  it('thresholds film: injury 2–3.5 mm in V2–V4 at J with III and aVF about −1 mm; the monitor filter drops V4 from about 2 to 0.6 mm and V3 from about 3.3 to 2 mm; LBBB 2–2.5 mm in V1–V2 after a deep S with QRS about 150 ms; hyperacute T with V2–V3 about 1 mm and the T in V3 as tall as the R', () => {
+  it('thresholds film: injury 1.9–3.3 mm in V2–V4 at J with III and aVF 1–1.2 mm down; the monitor filter drops V4 from about 1.9 to 0.6 mm and V3 from about 3.3 to 2.1 mm; LBBB 2–2.5 mm in V1–V2, under a quarter of the S before it, QRS about 150 ms; hyperacute T with V2–V3 0.9–1.2 mm and the T in V3 as tall as the R', () => {
     const film = blocksOf('s6', 'film')[0];
     expect(film.frames[0].ecg).toEqual(blocksOf('s6', 'worked')[0].ecg);
     const [injury, monitor, lbbb, hyper] = film.frames.map((f) => ecgOf(f.ecg));
     for (const l of ['V2', 'V3', 'V4'] as const) {
-      expect(stAt(injury, l), l).toBeGreaterThan(0.18);
-      expect(stAt(injury, l), l).toBeLessThan(0.35);
+      expect(stAt(injury, l), l).toBeGreaterThanOrEqual(0.185);
+      expect(stAt(injury, l), l).toBeLessThan(0.335);
     }
     for (const l of ['III', 'aVF'] as const) {
-      expect(stAt(injury, l), l).toBeGreaterThan(-0.13);
-      expect(stAt(injury, l), l).toBeLessThan(-0.08);
+      expect(-stAt(injury, l), l).toBeGreaterThanOrEqual(0.095);
+      expect(-stAt(injury, l), l).toBeLessThan(0.125);
     }
-    expect(stAt(injury, 'V4')).toBeGreaterThan(0.17);
-    expect(stAt(injury, 'V4')).toBeLessThan(0.21);
-    expect(stAt(monitor, 'V4')).toBeGreaterThan(0.045);
-    expect(stAt(monitor, 'V4')).toBeLessThan(0.08);
-    expect(stAt(injury, 'V3')).toBeGreaterThan(0.31);
-    expect(stAt(injury, 'V3')).toBeLessThan(0.35);
-    expect(stAt(monitor, 'V3')).toBeGreaterThan(0.19);
-    expect(stAt(monitor, 'V3')).toBeLessThan(0.22);
-    expect(Math.abs(lbbb.truth!.qrsMs - 150)).toBeLessThan(10);
+    for (const [e, l, mm] of [[injury, 'V4', 1.9], [monitor, 'V4', 0.6], [injury, 'V3', 3.3], [monitor, 'V3', 2.1]] as const) {
+      expect(Math.abs(stAt(e, l) * 10 - mm), `${l} ${mm} mm`).toBeLessThanOrEqual(0.1);
+    }
+    expect(Math.abs(lbbb.truth!.qrsMs - 150)).toBeLessThanOrEqual(5);
     for (const l of ['V1', 'V2'] as const) {
-      expect(stAt(lbbb, l), l).toBeGreaterThan(0.2);
-      expect(stAt(lbbb, l), l).toBeLessThan(0.26);
+      expect(stAt(lbbb, l), l).toBeGreaterThanOrEqual(0.2);
+      expect(stAt(lbbb, l), l).toBeLessThanOrEqual(0.25);
       expect(qrs(lbbb, l).min, l).toBeLessThan(-1.5);
+      expect(stAt(lbbb, l) / -qrs(lbbb, l).min, `${l} ST/S`).toBeLessThan(0.25);
     }
     for (const l of ['V2', 'V3'] as const) {
-      expect(stAt(hyper, l), l).toBeGreaterThan(0.07);
-      expect(stAt(hyper, l), l).toBeLessThan(0.14);
+      expect(stAt(hyper, l), l).toBeGreaterThanOrEqual(0.085);
+      expect(stAt(hyper, l), l).toBeLessThan(0.125);
     }
     expect(tw(hyper, 'V3').max).toBeGreaterThanOrEqual(0.95 * qrs(hyper, 'V3').max);
   });
-  it('contrast A (early repolarisation, man of 24): V2–V3 below 2.5 mm, inferior and V4–V6 J about 1–1.5 mm, only aVR depressed', () => {
+  it('contrast A (early repolarisation, man of 24): V2–V3 below 2.5 mm, inferior and V4–V6 J 1–1.7 mm, only aVR depressed', () => {
     const e = ecgOf(blocksOf('s6', 'contrast')[0].left.ecg);
     for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThan(0.25);
     for (const l of ['II', 'III', 'aVF', 'V4', 'V5', 'V6'] as const) {
-      expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.09);
-      expect(stAt(e, l), l).toBeLessThan(0.2);
+      expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.095);
+      expect(stAt(e, l), l).toBeLessThan(0.175);
     }
     expect(stAt(e, 'aVR')).toBeLessThan(-0.03);
     for (const l of ['I', 'II', 'III', 'aVL', 'aVF', ...CHEST] as const) expect(stAt(e, l), l).toBeGreaterThan(-0.05);
@@ -704,15 +737,15 @@ describe('s7: normal variants on the tracings', () => {
     for (const l of ['II', 'aVF'] as const) expect(stAt(e, l), l).toBeGreaterThanOrEqual(0.1);
     expect(e.truth!.qrsMs).toBeLessThan(120);
   });
-  it('J sweep notes: under 1 mm in every lead at 0.06–0.07; about 1 mm in II at 0.08–0.10; ≥ 1 mm in II, aVF and V5 with QRS < 120 ms at 0.11–0.14', () => {
-    for (const v of [0.06, 0.07]) {
+  it('J sweep notes: under 1 mm in every lead at 0.06–0.08; at 0.09 II past 1 mm with aVF under it; the pattern (II, aVF and V5 ≥ 1 mm, QRS < 120 ms) from 0.11, where aVF crosses 1 mm', () => {
+    for (const v of [0.06, 0.08]) {
       const e = played('s7', 0, v);
       for (const l of [...LIMB, ...CHEST]) expect(Math.abs(stAt(e, l)), `${v} ${l}`).toBeLessThan(0.1);
     }
-    for (const v of [0.08, 0.1]) {
-      const j = stAt(played('s7', 0, v), 'II');
-      expect(j, `${v}`).toBeGreaterThan(0.09);
-      expect(j, `${v}`).toBeLessThan(0.13);
+    for (const v of [0.09, 0.1]) {
+      const e = played('s7', 0, v);
+      expect(stAt(e, 'II'), `${v} II`).toBeGreaterThanOrEqual(0.1);
+      expect(stAt(e, 'aVF'), `${v} aVF`).toBeLessThan(0.1);
     }
     for (const v of [0.11, 0.14]) {
       const e = played('s7', 0, v);
@@ -736,13 +769,14 @@ describe('s7: normal variants on the tracings', () => {
     expect(oldMi.truth!.findings).toContain('pathological-q');
     expect(Math.abs(lbbb.truth!.qrsMs - 150)).toBeLessThan(10);
     expect(lbbb.truth!.findings).toContain('lbbb');
-    expect(Math.abs(preExcited.truth!.prMs! - 115)).toBeLessThan(6);
+    expect(Math.abs(preExcited.truth!.prMs! - 115)).toBeLessThanOrEqual(5);
     expect(preExcited.truth!.findings).toContain('wpw');
     for (const q of [longQt.truth!.qtcBazettMs, longQt.truth!.qtcFridericiaMs]) expect(Math.abs(q - 500)).toBeLessThan(10);
   });
   it('incomplete RBBB: QRS about 118 ms (110–119) with an r′ in V1', () => {
     const e = ecgOf(blocksOf('s7', 'film')[0].frames[1].ecg);
-    expect(e.truth!.qrsMs).toBeGreaterThanOrEqual(113);
+    expect(Math.abs(e.truth!.qrsMs - 118)).toBeLessThanOrEqual(3);
+    expect(e.truth!.qrsMs).toBeGreaterThanOrEqual(110);
     expect(e.truth!.qrsMs).toBeLessThan(120);
     expect(hasRPrime(e, 'V1')).toBe(true);
   });

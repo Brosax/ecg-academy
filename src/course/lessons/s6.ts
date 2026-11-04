@@ -14,7 +14,7 @@ const synth = (scenario: string, seed: number, dials?: Partial<Record<DialId, nu
   kind: 'synth',
   req: { scenario, seed, ...(dials ? { dials } : {}) },
 });
-/** anterior ST elevation at J+60 ≈ 3 mm (V2), 4 mm (V3), 2 mm (V4), 1 mm (V1); reciprocal ≈ 1 mm depression in III / aVF */
+/** anterior ST elevation at J+60 ≈ 3.0 mm (V2), 3.8 mm (V3), 2.2 mm (V4), 1.3 mm (V1); reciprocal 1.3 / 1.0 mm depression in III / aVF */
 const ANTERIOR_REQ = { scenario: 'stemi-anterior', seed: 602, dials: { st: 0.3 } } as const;
 const ANTERIOR: EcgSource = { kind: 'synth', req: ANTERIOR_REQ };
 /** inferior ST elevation ≈ 2 mm (II, III, aVF; largest in III), reciprocal depression deepest in aVL */
@@ -141,9 +141,9 @@ const lesson: Lesson = {
         {
           title: l('在 J 点测量', 'Measure at the J point', 'Mide en el punto J'),
           body: l(
-            'V2 的 J 点明显高于基线：J 点约 2.5 mm，J+60 读数约 3 mm；V3 更高（J 点约 3 mm，J+60 约 4 mm）。40 岁以上男性 V2–V3 的界值是 2 mm：已超过。',
-            'In V2 the J point sits well above the baseline: about 2.5 mm at J and about 3 mm on the J+60 read-out; V3 is higher still (about 3 mm at J, 4 mm at J+60). The V2–V3 limit for a man aged 40 or over is 2 mm: exceeded.',
-            'En V2 el punto J está claramente por encima de la línea de base: unos 2,5 mm en J y unos 3 mm en la lectura de J+60; V3 está aún más alto (unos 3 mm en J, 4 mm en J+60). El límite de V2–V3 para un varón de 40 años o más es 2 mm: superado.',
+            'V2 的 J 点明显高于基线：J 点约 2.6 mm，J+60 读数 3.0 mm；V3 更高（J 点约 3.3 mm，读数 3.8 mm）。40 岁以上男性 V2–V3 的界值是 2 mm：已超过。',
+            'In V2 the J point sits well above the baseline: about 2.6 mm at J and 3.0 mm on the J+60 read-out; V3 is higher still (about 3.3 mm at J, 3.8 mm on the read-out). The V2–V3 limit for a man aged 40 or over is 2 mm: exceeded.',
+            'En V2 el punto J está claramente por encima de la línea de base: unos 2,6 mm en J y 3,0 mm en la lectura de J+60; V3 está aún más alto (unos 3,3 mm en J y 3,8 mm en la lectura). El límite de V2–V3 para un varón de 40 años o más es 2 mm: superado.',
           ),
           marks: [{ auto: 'j', lead: 'V2' }, { auto: 'st60', lead: 'V2' }, { auto: 'st60', lead: 'V3' }],
           highlightLeads: ['V2', 'V3'],
@@ -151,9 +151,9 @@ const lesson: Lesson = {
         {
           title: l('相邻导联', 'Contiguous leads', 'Derivaciones contiguas'),
           body: l(
-            'ST 抬高出现在相邻的导联：V2–V4 明显（V4 约 2 mm），V1 约 1 mm。诊断标准要求 ≥ 2 个相邻导联。I 和 aVL 只有不到 1 mm 的抬高：达不到界值，但方向一致。',
-            'The ST elevation sits in neighbouring leads: clearly in V2–V4 (about 2 mm in V4) and about 1 mm in V1. The criteria need at least 2 contiguous leads. I and aVL rise by less than 1 mm: below the threshold, but pointing the same way.',
-            'La elevación del ST aparece en derivaciones vecinas: claramente en V2–V4 (unos 2 mm en V4) y alrededor de 1 mm en V1. Los criterios exigen al menos 2 derivaciones contiguas. I y aVL suben menos de 1 mm: no llegan al umbral, pero van en la misma dirección.',
+            'ST 抬高出现在相邻的导联：V2–V4 明显（V4 读数 2.2 mm），V1 读数 1.3 mm。诊断标准要求 ≥ 2 个相邻导联。I 和 aVL 只有不到 1 mm 的抬高：达不到界值，但方向一致。',
+            'The ST elevation sits in neighbouring leads: clearly in V2–V4 (V4 reads 2.2 mm) and in V1 (1.3 mm). The criteria need at least 2 contiguous leads. I and aVL rise by less than 1 mm: below the threshold, but pointing the same way.',
+            'La elevación del ST aparece en derivaciones vecinas: claramente en V2–V4 (V4 marca 2,2 mm) y en V1 (1,3 mm). Los criterios exigen al menos 2 derivaciones contiguas. I y aVL suben menos de 1 mm: no llegan al umbral, pero van en la misma dirección.',
           ),
           marks: [{ auto: 'st60', lead: 'V4' }, { auto: 'st60', lead: 'V1' }],
           highlightLeads: ['V1', 'V2', 'V3', 'V4'],
@@ -161,9 +161,9 @@ const lesson: Lesson = {
         {
           title: l('对应导联', 'Reciprocal leads', 'Derivaciones recíprocas'),
           body: l(
-            'III 和 aVF 的 ST 段压低约 1 mm：同一个损伤电流从对侧看到的样子。对应性改变使急性闭塞的可能性更大。',
-            'III and aVF show about 1 mm of ST depression: the same injury current seen from the opposite side. Reciprocal change makes an acute occlusion more likely.',
-            'III y aVF muestran un descenso del ST de alrededor de 1 mm: la misma corriente de lesión vista desde el lado opuesto. El cambio recíproco hace más probable una oclusión aguda.',
+            'III 和 aVF 的 ST 段读数分别压低 1.3 mm 和 1.0 mm：同一个损伤电流从对侧看到的样子。对应性改变使急性闭塞的可能性更大。',
+            'III and aVF read 1.3 and 1.0 mm of ST depression: the same injury current seen from the opposite side. Reciprocal change makes an acute occlusion more likely.',
+            'III y aVF marcan un descenso del ST de 1,3 y 1,0 mm: la misma corriente de lesión vista desde el lado opuesto. El cambio recíproco hace más probable una oclusión aguda.',
           ),
           marks: [{ auto: 'st60', lead: 'III' }, { auto: 'st60', lead: 'aVF' }],
           highlightLeads: ['III', 'aVF'],
@@ -212,9 +212,9 @@ const lesson: Lesson = {
         from: 0.22,
         to: 0.45,
         notes: [
-          { min: 0.22, max: 0.25, text: l('电流小：J+60 读数 V3 约 +3 mm，III 约 −1 mm。', 'Small current: on the J+60 read-out V3 is about +3 mm and III about −1 mm.', 'Corriente pequeña: en la lectura de J+60, V3 está en unos +3 mm y III en unos −1 mm.') },
-          { min: 0.26, max: 0.39, text: l('V2–V4 每升高一点，III 和 aVF 就同步压低一点。', 'Every step up in V2–V4 comes with a step down in III and aVF.', 'Cada subida en V2–V4 llega con una bajada en III y aVF.') },
-          { min: 0.4, max: 0.45, text: l('电流大：V3 约 +5–6 mm，III 约 −2 mm。一个电流，两个视角：对应性改变。', 'Big current: V3 about +5–6 mm, III about −2 mm. One current, two views: reciprocity.', 'Corriente grande: V3 en unos +5–6 mm y III en unos −2 mm. Una corriente, dos puntos de vista: reciprocidad.') },
+          { min: 0.22, max: 0.24, text: l('电流小：J+60 读数 V3 约 +3 mm，III 约 −1 mm。', 'Small current: on the J+60 read-out V3 is about +3 mm and III about −1 mm.', 'Corriente pequeña: en la lectura de J+60, V3 está en unos +3 mm y III en unos −1 mm.') },
+          { min: 0.25, max: 0.42, text: l('V2–V4 每升高一点，III 和 aVF 就同步压低一点。', 'Every step up in V2–V4 comes with a step down in III and aVF.', 'Cada subida en V2–V4 llega con una bajada en III y aVF.') },
+          { min: 0.43, max: 0.45, text: l('电流大：V3 约 +5–6 mm，III 约 −2 mm。一个电流，两个视角：对应性改变。', 'Big current: V3 about +5–6 mm, III about −2 mm. One current, two views: reciprocity.', 'Corriente grande: V3 en unos +5–6 mm y III en unos −2 mm. Una corriente, dos puntos de vista: reciprocidad.') },
         ],
       },
       predict: {
@@ -242,9 +242,9 @@ const lesson: Lesson = {
         marks: [{ auto: 'st60', lead: 'V3' }, { auto: 'st60', lead: 'III' }],
       },
       point: l(
-        'A：ST 段从有切迹或顿挫的 J 点呈凹面向上抬起；V2–V3 低于 40 岁以下男性 2.5 mm 的界值；下壁导联（以及 V4–V6）的 J 点切迹约 1–1.5 mm，这正是早期复极图形的定义；除 aVR 外没有对应性压低。这是正常变异（第 S7 课）——但请注意，光凭毫米数并不能定论。B：V2–V3 的 ST 抬高远超 40 岁以上男性 2 mm 的界值，并延伸到 V1 和 V4，III 和 aVF 有对应性压低：在被排除之前，按急性前壁闭塞处理。',
-        'A: concave ST rising from a notched or slurred J point. In V2–V3 it stays under the 2.5-mm limit for a man under 40; in the inferior leads (and V4–V6) the J notch reaches about 1–1.5 mm, which is what defines the early repolarisation pattern. There is no reciprocal ST depression except in aVR. A normal variant (lesson S7), but note that millimetres alone did not settle it. B: ST elevation in V2–V3 well above the 2-mm limit for a man over 40, spreading to V1 and V4, with reciprocal depression in III and aVF: acute anterior occlusion until proven otherwise.',
-        'A: ST cóncavo que sube desde un punto J con muesca o empastamiento. En V2–V3 queda por debajo del límite de 2,5 mm para un varón menor de 40 años; en las derivaciones inferiores (y en V4–V6) la muesca J llega a 1-1,5 mm, que es justo lo que define el patrón de repolarización precoz. No hay descenso recíproco salvo en aVR. Una variante normal (lección S7), pero fíjate en que los milímetros por sí solos no lo resolvían. B: elevación del ST en V2–V3 muy por encima del límite de 2 mm para un varón de más de 40 años, que se extiende a V1 y V4, con descenso recíproco en III y aVF: oclusión anterior aguda mientras no se demuestre lo contrario.',
+        'A：ST 段从有切迹或顿挫的 J 点呈凹面向上抬起；V2–V3 低于 40 岁以下男性 2.5 mm 的界值；下壁导联（以及 V4–V6）的 J 点切迹 1–1.7 mm，这正是早期复极图形的定义；除 aVR 外没有对应性压低。这是正常变异（第 S7 课）——但请注意，光凭毫米数并不能定论。B：V2–V3 的 ST 抬高远超 40 岁以上男性 2 mm 的界值，并延伸到 V1 和 V4，III 和 aVF 有对应性压低：在被排除之前，按急性前壁闭塞处理。',
+        'A: concave ST rising from a notched or slurred J point. In V2–V3 it stays under the 2.5-mm limit for a man under 40; in the inferior leads (and V4–V6) the J notch reaches 1–1.7 mm, which is what defines the early repolarisation pattern. There is no reciprocal ST depression except in aVR. A normal variant (lesson S7), but note that millimetres alone did not settle it. B: ST elevation in V2–V3 well above the 2-mm limit for a man over 40, spreading to V1 and V4, with reciprocal depression in III and aVF: acute anterior occlusion until proven otherwise.',
+        'A: ST cóncavo que sube desde un punto J con muesca o empastamiento. En V2–V3 queda por debajo del límite de 2,5 mm para un varón menor de 40 años; en las derivaciones inferiores (y en V4–V6) la muesca J llega a 1-1,7 mm, que es justo lo que define el patrón de repolarización precoz. No hay descenso recíproco salvo en aVR. Una variante normal (lección S7), pero fíjate en que los milímetros por sí solos no lo resolvían. B: elevación del ST en V2–V3 muy por encima del límite de 2 mm para un varón de más de 40 años, que se extiende a V1 y V4, con descenso recíproco en III y aVF: oclusión anterior aguda mientras no se demuestre lo contrario.',
       ),
     },
     {
@@ -254,25 +254,29 @@ const lesson: Lesson = {
         {
           label: l('损伤', 'Injury', 'Lesión'),
           ecg: ANTERIOR,
-          note: l('J 点处 V2–V4 抬高 2–3.5 mm，III 和 aVF 压低约 1 mm：超过界值，又有对应性改变。损伤。', 'At J, V2–V4 are up 2–3.5 mm and III and aVF down about 1 mm: over the limits, with reciprocity. Injury.', 'En J, V2–V4 suben 2–3,5 mm y III y aVF bajan alrededor de 1 mm: por encima de los umbrales y con reciprocidad. Lesión.'),
+          note: l('J 点处 V2–V4 抬高 1.9–3.3 mm，III 和 aVF 压低 1–1.2 mm：超过界值，又有对应性改变。损伤。', 'At J, V2–V4 are up 1.9–3.3 mm and III and aVF down 1–1.2 mm: over the limits, with reciprocity. Injury.', 'En J, V2–V4 suben 1,9–3,3 mm y III y aVF bajan 1–1,2 mm: por encima de los umbrales y con reciprocidad. Lesión.'),
           marks: [{ auto: 'j', lead: 'V3' }, { auto: 'j', lead: 'V4' }],
         },
         {
           label: l('监护滤波', 'Monitor filter', 'Filtro de monitor'),
           ecg: { kind: 'synth', req: { ...ANTERIOR_REQ, recording: { filter: FILTER_PRESETS.monitor } } },
-          note: l('同一份心电图换成 0.5–40 Hz 监护滤波：J 点处 V4 从约 2 mm 降到约 0.6 mm，V3 从约 3.3 mm 降到约 2 mm。', 'The same ECG on a 0.5–40 Hz monitor filter: at J, V4 falls from about 2 to 0.6 mm and V3 from about 3.3 to 2 mm.', 'El mismo ECG con filtro de monitor de 0,5–40 Hz: en J, V4 baja de unos 2 a 0,6 mm y V3 de unos 3,3 a 2 mm.'),
+          note: l('同一份心电图换成 0.5–40 Hz 监护滤波：J 点处 V4 从约 1.9 mm 降到约 0.6 mm，V3 从约 3.3 mm 降到约 2.1 mm。', 'The same ECG on a 0.5–40 Hz monitor filter: at J, V4 falls from about 1.9 to 0.6 mm and V3 from about 3.3 to 2.1 mm.', 'El mismo ECG con filtro de monitor de 0,5–40 Hz: en J, V4 baja de unos 1,9 a 0,6 mm y V3 de unos 3,3 a 2,1 mm.'),
           marks: [{ auto: 'j', lead: 'V3' }, { auto: 'j', lead: 'V4' }],
         },
         {
           label: l('左束支阻滞', 'LBBB', 'Bloqueo de rama izquierda'),
           ecg: synth('lbbb', 608),
-          note: l('V1–V2 的 ST 抬高 2–2.5 mm，超过界值，但它跟在深而宽的 S 波后面（QRS 约 150 ms）：继发改变，不是损伤（第 I10 课）。', 'ST up 2–2.5 mm in V1–V2, over the limits, but it follows a deep, wide S (QRS about 150 ms): secondary, not injury (lesson I10).', 'ST elevado 2–2,5 mm en V1–V2, por encima de los umbrales, pero sigue a una S profunda y ancha (QRS de unos 150 ms): secundario, no lesión (lección I10).'),
+          note: l(
+            'V1–V2 的 ST 抬高 2–2.5 mm，超过界值，但不到前面 S 波的 1/4（QRS 约 150 ms）：按 Smith 规则不可疑（第 I10 课）。',
+            'ST up 2–2.5 mm in V1–V2, over the limits, but under a quarter of the depth of the S before it (QRS about 150 ms): not suspicious by the Smith rule (lesson I10).',
+            'ST elevado 2–2,5 mm en V1–V2, por encima de los umbrales, pero menos de un cuarto de la profundidad de la S que lo precede (QRS de unos 150 ms): no sospechoso según la regla de Smith (lección I10).',
+          ),
           marks: [{ auto: 'j', lead: 'V1' }, { auto: 'j', lead: 'V2' }],
         },
         {
           label: l('超急性 T 波', 'Hyperacute T', 'T hiperaguda'),
           ecg: synth('stemi-anterior-subtle', 608),
-          note: l('V2–V3 的 ST 只抬高约 1 mm，低于 52 岁男性 2 mm 的界值，但 V3 的 T 波和 R 波一样高：闭塞可以藏在界值以下（第 I7 课）。', 'ST only about 1 mm up in V2–V3, under the 2-mm limit for a man of 52, yet the T in V3 is as tall as the R: an occlusion can hide below the line (lesson I7).', 'El ST solo sube alrededor de 1 mm en V2–V3, por debajo del límite de 2 mm de un varón de 52 años, pero la T de V3 es tan alta como la R: una oclusión puede esconderse bajo el umbral (lección I7).'),
+          note: l('V2–V3 的 ST 只抬高 0.9–1.2 mm，低于 52 岁男性 2 mm 的界值，但 V3 的 T 波与 R 波等高：闭塞可藏在界值下（第 I7 课）。', 'ST only 0.9–1.2 mm up in V2–V3, under the 2-mm limit for a man of 52, yet the T in V3 is as tall as the R: an occlusion can hide below the line (lesson I7).', 'El ST solo sube 0,9–1,2 mm en V2–V3, por debajo del límite de 2 mm de un varón de 52 años, pero la T de V3 es tan alta como la R: una oclusión puede esconderse bajo el umbral (lección I7).'),
           marks: [{ auto: 't', lead: 'V3' }, { auto: 'r', lead: 'V3' }],
         },
       ],
