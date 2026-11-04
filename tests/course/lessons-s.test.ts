@@ -5,11 +5,11 @@
  * show can be generated.
  */
 import { describe, expect, it } from 'vitest';
-import type { Block, Lesson } from '../../src/course/api';
+import type { Block, Lesson, LessonMark } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
 import { REGISTERED } from '../../src/course/lessons/index';
 import { realisedDials, startDials, sweepValues } from '../../src/course/live';
-import { baselineBefore, MIN_WAVE_MV, qrsWaves, resolveMarks } from '../../src/course/marks';
+import { baselineBefore, leadWindows, MIN_WAVE_MV, qrsWaves, resolveMarks, type ResolveOptions } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
 import type { L10n } from '../../src/core/l10n';
@@ -279,6 +279,20 @@ const hasRPrime = (ecg: Ecg, lead: StdLead): boolean => {
   const b = midBeat(ecg);
   return qrsWaves(ecg.signal.leads[lead], ecg.signal.fs, b.qrsOn, b.qrsOff).some((w) => w.role === 'r' && w.label.includes('′'));
 };
+const meanRr = (e: Ecg) => rrs(e).reduce((s, x) => s + x, 0) / rrs(e).length;
+/** the milliseconds a mark prints on screen, e.g. `QT 520 ms` */
+function markedMs(ecg: Ecg, marks: readonly LessonMark[] | undefined, name: string, o: ResolveOptions = {}): number {
+  const text = resolveMarks(ecg, marks, o)
+    .map((m) => ('label' in m && m.label ? (typeof m.label === 'string' ? m.label : m.label.en) : ''))
+    .join(' ');
+  return Number(new RegExp(`${name} (\\d+) ms`).exec(text)?.[1]);
+}
+/** the beat an auto mark names */
+function markBeat(marks: readonly LessonMark[] | undefined, auto: string, lead?: StdLead): number {
+  const m = (marks ?? []).find((x) => 'auto' in x && x.auto === auto && (lead === undefined || x.lead === lead));
+  if (!m || !('auto' in m) || m.beat === undefined) throw new Error(`no ${auto}${lead ? ` ${lead}` : ''} mark with a beat`);
+  return m.beat;
+}
 
 describe('s1: the reading order on the tracings', () => {
   it('hook (pre-excitation): PR about 115 ms, QRS about 125 ms, R ≥ S in V1, T inverted in II, III, aVF and V3–V6', () => {
@@ -303,17 +317,21 @@ describe('s1: the reading order on the tracings', () => {
     expect(mostEquiphasic(e)).toBe('aVL');
     expect(transition(e)).toBe('V3');
   });
-  it('contrast B (hyperkalaemia): PR about 205, QRS about 115, peaked T in V3–V5 as tall as the R and narrower near its base than the T in A', () => {
+  it('contrast B (hyperkalaemia): PR about 205, QRS about 115, tall peaked T in V3–V5 (over twice the T in A, narrower near its base), taller than the R in V3–V4', () => {
     const c = blocksOf('s1', 'contrast')[0];
     const e = ecgOf(c.right.ecg);
     const t = e.truth!;
-    expect(Math.abs(t.prMs! - 205)).toBeLessThan(10);
+    expect(Math.abs(t.prMs! - 205)).toBeLessThanOrEqual(5);
+    expect(Math.abs(t.qrsMs - 115)).toBeLessThanOrEqual(5);
     expect(t.qrsMs).toBeGreaterThanOrEqual(110);
     expect(t.qrsMs).toBeLessThan(120);
     for (const l of ['V3', 'V4'] as const) expect(tw(e, l).max, l).toBeGreaterThan(qrs(e, l).max);
     expect(tw(e, 'V5').max).toBeGreaterThan(0.85 * qrs(e, 'V5').max);
     const a = ecgOf(c.left.ecg);
-    for (const l of ['V3', 'V4', 'V5'] as const) expect(tWidthMs(e, l, 0.2), l).toBeLessThan(0.7 * tWidthMs(a, l, 0.2));
+    for (const l of ['V3', 'V4', 'V5'] as const) {
+      expect(tw(e, l).max, l).toBeGreaterThan(2 * tw(a, l).max);
+      expect(tWidthMs(e, l, 0.2), l).toBeLessThan(0.7 * tWidthMs(a, l, 0.2));
+    }
   });
   it('walk-through film: every frame is the hook tracing, about 72/min in sinus rhythm (PR, QRS and T are asserted on the hook)', () => {
     const hook = blocksOf('s1', 'hook')[0].ecg;
@@ -335,14 +353,21 @@ describe('s1: the reading order on the tracings', () => {
     expect(diff('II')).toBeLessThan(1e-6);
     for (const l of ['I', 'III', 'aVL'] as const) expect(diff(l), l).toBeGreaterThan(0.03);
   });
-  it('never-miss film: ST up in V1–V4 with III and aVF down; T taller than R in V3–V4, PR > 200, QRS > 110; QTc about 520; PR < 120 with pre-excitation; coved ST ≥ 2 mm into a negative T in V1–V2; P about 96/min with one in three conducted at about 32/min', () => {
-    const [occlusion, potassium, longQt, preExcited, brugada, avBlock] = blocksOf('s1', 'film')[2].frames.map((f) => ecgOf(f.ecg));
+  it('never-miss film: ST up in V1–V4 with III and aVF down; T taller than R in V3–V4, PR > 200, QRS > 110; marked QT about 520 ms at 60/min with RR about 1 s, so QTc about 520; PR < 120 with pre-excitation; coved ST ≥ 2 mm into a negative T in V1–V2; P about 96/min with one in three conducted at about 32/min', () => {
+    const film = blocksOf('s1', 'film')[2];
+    const [occlusion, potassium, longQt, preExcited, brugada, avBlock] = film.frames.map((f) => ecgOf(f.ecg));
+    const qtMarks = film.frames[2].marks;
+    expect(Math.abs(markedMs(longQt, qtMarks, 'QT') - 520)).toBeLessThanOrEqual(5);
+    expect(Math.abs(longQt.truth!.qtMs - 520)).toBeLessThanOrEqual(5);
+    expect(Math.abs(longQt.truth!.hrBpm - 60)).toBeLessThanOrEqual(1);
+    expect(Math.abs(meanRr(longQt) - 1000)).toBeLessThanOrEqual(5);
+    expect(Math.abs(markedMs(longQt, qtMarks, 'RR') - 1000)).toBeLessThanOrEqual(10);
     for (const l of ['V1', 'V2', 'V3', 'V4'] as const) expect(stAt(occlusion, l), l).toBeGreaterThanOrEqual(0.1);
     for (const l of ['III', 'aVF'] as const) expect(stAt(occlusion, l), l).toBeLessThan(-0.05);
     for (const l of ['V3', 'V4'] as const) expect(tw(potassium, l).max, l).toBeGreaterThan(qrs(potassium, l).max);
     expect(potassium.truth!.prMs!).toBeGreaterThan(200);
     expect(potassium.truth!.qrsMs).toBeGreaterThan(110);
-    for (const q of [longQt.truth!.qtcBazettMs, longQt.truth!.qtcFridericiaMs]) expect(Math.abs(q - 520)).toBeLessThan(10);
+    for (const q of [longQt.truth!.qtcBazettMs, longQt.truth!.qtcFridericiaMs]) expect(Math.abs(q - 520)).toBeLessThanOrEqual(5);
     expect(preExcited.truth!.prMs!).toBeLessThan(120);
     expect(preExcited.truth!.findings).toContain('wpw');
     for (const l of ['V1', 'V2'] as const) {
@@ -382,7 +407,6 @@ describe('s2: rate on the tracings', () => {
     const b = blocksOf('s2', 'live')[i];
     return ecgOf({ scenario: b.scenario, seed: b.seed, dials: { rate } });
   };
-  const meanRr = (e: Ecg) => rrs(e).reduce((s, x) => s + x, 0) / rrs(e).length;
   it('clock sweep notes: 5 large squares at 60–62, 4 at 73–77, 3 at 98–100 (one large square = 200 ms)', () => {
     for (const [rate, squares] of [[60, 5], [62, 5], [73, 4], [77, 4], [98, 3], [100, 3]] as const) {
       expect(Math.abs(meanRr(swept(0, rate)) / 200 - squares), `${rate}/min`).toBeLessThan(0.2);
