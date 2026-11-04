@@ -339,6 +339,25 @@ export function deltaEndEstimate(b: BeatMarks): number {
   return b.qrsOn + Math.max(20, Math.min(60, 0.35 * (b.qrsOff - b.qrsOn)));
 }
 
+/** fibrillatory waves labelled at most this often and this many times: one label per wavelet buries the tracing */
+const FIB_GAP_MS = 600;
+const FIB_MAX = 8;
+
+/**
+ * A few fibrillatory waves to label: those in the gaps between beats (QRS onset to T end ± 20 ms excluded), at least
+ * FIB_GAP_MS apart, at most FIB_MAX; when no wavelet falls in a gap (fast AF), the same spacing over all of them.
+ */
+function sparseFibrillation(ts: readonly number[], truth: EcgTruth): number[] {
+  const inBeat = (t: number) => truth.beats.some((b) => t >= b.qrsOn - 20 && t <= b.tOff + 20);
+  const pickSpaced = (cand: readonly number[]) => {
+    const out: number[] = [];
+    for (const t of cand) if (out.length < FIB_MAX && (out.length === 0 || t - out[out.length - 1] >= FIB_GAP_MS)) out.push(t);
+    return out;
+  };
+  const gaps = pickSpaced(ts.filter((t) => !inBeat(t)));
+  return gaps.length > 0 ? gaps : pickSpaced(ts);
+}
+
 function medianPDuration(truth: EcgTruth): number {
   const d = truth.beats.filter((b) => b.pOn !== null && b.pOff !== null).map((b) => (b.pOff as number) - (b.pOn as number));
   if (d.length === 0) return 100;
@@ -374,9 +393,12 @@ function resolveOne(ecg: Ecg, truth: EcgTruth, m: AutoMark, lead: Lead | 'all', 
     if (m.auto === 'f-waves') {
       const wins = leadWindows(l, ecg.signal.durationMs, o);
       const narrow = wins.reduce<Win | null>((a, w) => (a === null || w[1] - w[0] < a[1] - a[0] ? w : a), null) ?? [0, ecg.signal.durationMs];
-      return truth.atrial
-        .filter((e) => (e.kind === 'flutter' || e.kind === 'fibrillation') && e.t >= narrow[0] && e.t <= narrow[1])
-        .map((e): EcgMark => ({ kind: 'wave', lead: l, t: e.t, label: text(e.kind === 'flutter' ? 'F' : 'f'), color }));
+      const inWin = truth.atrial.filter((e) => e.t >= narrow[0] && e.t <= narrow[1]);
+      const flutter = inWin.filter((e) => e.kind === 'flutter').map((e) => e.t);
+      const fib = sparseFibrillation(inWin.filter((e) => e.kind === 'fibrillation').map((e) => e.t), truth);
+      return [...flutter.map((t) => ({ t, f: 'F' })), ...fib.map((t) => ({ t, f: 'f' }))]
+        .sort((a, b) => a.t - b.t)
+        .map((x): EcgMark => ({ kind: 'wave', lead: l, t: x.t, label: text(x.f), color }));
     }
     if (m.auto === 'blocked-p') {
       const dur = medianPDuration(truth);
