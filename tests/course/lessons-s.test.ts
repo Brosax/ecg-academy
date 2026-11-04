@@ -236,6 +236,17 @@ const pw = (ecg: Ecg, lead: StdLead, b = midBeat(ecg)) => span(ecg, lead, b.pOn 
 const tw = (ecg: Ecg, lead: StdLead, b = midBeat(ecg)) => span(ecg, lead, b.j + 40, b.tOff, b);
 const tInverted = (ecg: Ecg, lead: StdLead) => tw(ecg, lead).min < -0.1 && -tw(ecg, lead).min > tw(ecg, lead).max;
 const tUpright = (ecg: Ecg, lead: StdLead) => tw(ecg, lead).max > 0.1 && tw(ecg, lead).max > -tw(ecg, lead).min;
+/** how long (ms) an upright T stays above a fraction of its height; at 0.2 it measures the T near its base */
+function tWidthMs(ecg: Ecg, lead: StdLead, frac: number, b = midBeat(ecg)): number {
+  let peakAt = 40;
+  for (let d = 40; d <= b.tOff - b.j; d++) if (stAt(ecg, lead, d, b) > stAt(ecg, lead, peakAt, b)) peakAt = d;
+  const h = frac * stAt(ecg, lead, peakAt, b);
+  let lo = peakAt;
+  while (lo > 0 && stAt(ecg, lead, lo - 1, b) > h) lo--;
+  let hi = peakAt;
+  while (stAt(ecg, lead, hi + 1, b) > h) hi++;
+  return hi - lo;
+}
 /** deviation from the PR baseline at J + plusMs (mV) */
 function stAt(ecg: Ecg, lead: StdLead, plusMs = 0, b = midBeat(ecg)): number {
   const a = ecg.signal.leads[lead];
@@ -284,14 +295,17 @@ describe('s1: the reading order on the tracings', () => {
     expect(mostEquiphasic(e)).toBe('aVL');
     expect(transition(e)).toBe('V3');
   });
-  it('contrast B (hyperkalaemia): PR about 205, QRS about 115, peaked T in V3–V5 as tall as the R', () => {
-    const e = ecgOf(blocksOf('s1', 'contrast')[0].right.ecg);
+  it('contrast B (hyperkalaemia): PR about 205, QRS about 115, peaked T in V3–V5 as tall as the R and narrower near its base than the T in A', () => {
+    const c = blocksOf('s1', 'contrast')[0];
+    const e = ecgOf(c.right.ecg);
     const t = e.truth!;
     expect(Math.abs(t.prMs! - 205)).toBeLessThan(10);
     expect(t.qrsMs).toBeGreaterThanOrEqual(110);
     expect(t.qrsMs).toBeLessThan(120);
     for (const l of ['V3', 'V4'] as const) expect(tw(e, l).max, l).toBeGreaterThan(qrs(e, l).max);
     expect(tw(e, 'V5').max).toBeGreaterThan(0.85 * qrs(e, 'V5').max);
+    const a = ecgOf(c.left.ecg);
+    for (const l of ['V3', 'V4', 'V5'] as const) expect(tWidthMs(e, l, 0.2), l).toBeLessThan(0.7 * tWidthMs(a, l, 0.2));
   });
   it('walk-through film: every frame is the hook tracing, about 72/min in sinus rhythm (PR, QRS and T are asserted on the hook)', () => {
     const hook = blocksOf('s1', 'hook')[0].ecg;
