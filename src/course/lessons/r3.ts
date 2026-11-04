@@ -71,18 +71,9 @@ const lesson: Lesson = {
       showConduction: true,
       emphasize: ['av-node'],
       caption: l(
-        '播放几个心动周期。窦性 P 波正常出现，激动进入房室结后被明显拖慢——但**每个 P 最终都下传**，QRS 保持狭窄。PR 延长的部位几乎总在房室结（这里约 280 ms）：一度房室传导阻滞的本质是**延迟**，不是阻断。',
-        'Play a few beats. Sinus P waves appear normally and the impulse is markedly slowed inside the AV node — but **every P eventually conducts**, and the QRS stays narrow. The delay almost always sits in the AV node (here about 280 ms): first-degree AV block is a **delay**, not an interruption.',
-        'Reproduce unos latidos. Las ondas P sinusales aparecen con normalidad y el impulso se frena de forma llamativa dentro del nodo AV, pero **cada P acaba conduciendo** y el QRS sigue estrecho. El retraso casi siempre está en el nodo AV (aquí unos 280 ms): el bloqueo AV de primer grado es un **retraso**, no una interrupción.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('一度：延迟，不是阻滞', 'First degree: a delay, not a block', 'Primer grado: un retraso, no un bloqueo'),
-      body: l(
-        '- 成人 PR > 200 ms 且每个 P 都下传（1:1）＝一度房室传导阻滞；正常成人 PR 为 120–200 ms（从 P 波起点量到 QRS 或 R 波起点）。\n- 2018 年指南说更准确的名字是**房室延迟**：没有任何 P 波被“阻断”。\n- PR > 300 ms 且 QRS 窄 → 延迟基本在房室结；PR 极长时心房与心室几乎同时收缩，可出现假性起搏器综合征样症状——症状相关时起搏为 IIa。\n- 常见背景：迷走张力高（训练、睡眠）、药物（β 受体阻滞剂、地高辛、钙拮抗剂）、缺血或传导系统退行性变。\n- 报告写“窦性心律伴一度房室传导阻滞（房室延迟）”，然后去找原因。',
-        '- PR > 200 ms in an adult with every P conducted (1:1) = first-degree AV block; the normal adult PR is 120-200 ms (from P onset to Q or R onset).\n- The 2018 guideline says the more accurate name is **AV delay**: no P wave is blocked at all.\n- PR > 300 ms with a narrow QRS → the delay is essentially in the AV node; with a very long PR the atria and ventricles contract almost together, which can cause pseudo-pacemaker-syndrome-like symptoms — pacing is Class IIa when symptoms correlate.\n- Common settings: high vagal tone (training, sleep), drugs (beta blockers, digoxin, calcium-channel blockers), ischaemia or degenerative conduction disease.\n- Report "sinus rhythm with first-degree AV block (AV delay)" — then go looking for the cause.',
-        '- PR > 200 ms en un adulto con todas las P conducidas (1:1) = bloqueo AV de primer grado; el PR normal del adulto es 120-200 ms (del inicio de la P al del QRS o la R).\n- La guía de 2018 dice que el nombre más exacto es **retraso AV**: ninguna onda P se bloquea.\n- PR > 300 ms con QRS estrecho → el retraso está básicamente en el nodo AV; con un PR muy largo, aurículas y ventrículos se contraen casi a la vez y pueden aparecer síntomas de seudomarcapasos: estimular es clase IIa si los síntomas se correlacionan.\n- Contextos habituales: tono vagal alto (entrenamiento, sueño), fármacos (betabloqueantes, digoxina, antagonistas del calcio), isquemia o enfermedad degenerativa del sistema de conducción.\n- Informa de «ritmo sinusal con bloqueo AV de primer grado (retraso AV)» y después busca la causa.',
+        '看冲动在房室结里被拖慢：PR 约 280 ms，但每个 P 都下传，QRS 窄。一度房室阻滞是延迟，不是阻断。',
+        'Watch the impulse slow down inside the AV node: the PR is about 280 ms, yet every P conducts and the QRS stays narrow. First-degree AV block is a delay, not an interruption.',
+        'Mira cómo el impulso se frena dentro del nodo AV: el PR mide unos 280 ms, pero cada P conduce y el QRS sigue estrecho. El bloqueo AV de primer grado es un retraso, no una interrupción.',
       ),
     },
     {
@@ -92,10 +83,32 @@ const lesson: Lesson = {
       dials: [{ id: 'pr' }],
       view: STRIP,
       marks: [{ auto: 'p' }, { auto: 'pr' }],
+      play: {
+        dial: 'pr',
+        from: 220,
+        to: 360,
+        notes: [
+          {
+            min: 220,
+            max: 300,
+            text: l('PR > 200 ms，每个 P 后都有 QRS（1:1）：一度房室阻滞，更准确的叫法是“房室延迟”。', 'PR > 200 ms and every P is followed by a QRS (1:1): first-degree AV block, more accurately an "AV delay".', 'PR > 200 ms y cada P va seguida de un QRS (1:1): bloqueo AV de primer grado, o mejor dicho, «retraso AV».'),
+          },
+          {
+            min: 301,
+            max: 360,
+            text: l('PR > 300 ms、QRS 窄：延迟基本在房室结。仍然 1:1，没有 P 落空，就不是二度。', 'PR > 300 ms with a narrow QRS: the delay sits in the AV node. Still 1:1; with no dropped P it is not second degree.', 'PR > 300 ms con QRS estrecho: el retraso está en el nodo AV. Sigue 1:1; si no cae ninguna P, no es segundo grado.'),
+          },
+        ],
+      },
+      predict: {
+        question: l('把 PR 从 220 拉到 360 ms，会有 P 落空吗？', 'Stretch the PR from 220 to 360 ms. Will any P be dropped?', 'Alarga el PR de 220 a 360 ms. ¿Caerá alguna P?'),
+        options: [l('会，超过 300 ms 就落空', 'Yes, once it passes 300 ms', 'Sí, en cuanto pase de 300 ms'), l('不会，仍然 1:1', 'No, it stays 1:1', 'No, sigue 1:1'), l('会，每隔一个 P 落空一个', 'Yes, every other P', 'Sí, una P de cada dos')],
+        answer: 1,
+      },
       caption: l(
-        '拖动 PR 旋钮（220–360 ms）：间期可以拉得很长，但 P 与 QRS 始终保持 1:1——这就是“延迟”的含义。要叫“阻滞”，必须有 P 落空；那从下一个板块开始。',
-        'Drag the PR dial (220-360 ms): the interval can stretch a long way, yet P and QRS stay 1:1 — that is what "delay" means. To say "block", a P must be dropped; that begins with the next block.',
-        'Desliza el control del PR (220-360 ms): el intervalo puede estirarse mucho, pero P y QRS siguen 1:1: eso significa «retraso». Para hablar de «bloqueo» tiene que perderse una P; eso empieza en el siguiente bloque.',
+        '拉长的只是 PR：P 与 QRS 始终 1:1。要叫“阻滞”，必须有 P 落空。',
+        'Only the PR stretches: P and QRS stay 1:1. To call it "block", a P must be dropped.',
+        'Solo se alarga el PR: P y QRS siguen 1:1. Para llamarlo «bloqueo», tiene que caer una P.',
       ),
     },
     {
@@ -154,6 +167,14 @@ const lesson: Lesson = {
             'Primer grado y Mobitz I del nodo AV: marcapasos solo si los síntomas son claramente atribuibles, asintomático es clase III; en deportistas un PR < 400 ms es adaptación al entrenamiento y ≥ 400 ms requiere evaluación',
           ),
         },
+        {
+          label: l('PR 延长的常见原因', 'Common causes of a long PR', 'Causas habituales de un PR largo'),
+          value: l(
+            '迷走张力高（训练、睡眠）、药物（β 受体阻滞剂、地高辛、钙拮抗剂）、缺血、传导系统退行性变',
+            'High vagal tone (training, sleep), drugs (beta blockers, digoxin, calcium-channel blockers), ischaemia, degenerative conduction disease',
+            'Tono vagal alto (entrenamiento, sueño), fármacos (betabloqueantes, digoxina, antagonistas del calcio), isquemia, enfermedad degenerativa del sistema de conducción',
+          ),
+        },
       ],
       source:
         'Kusumoto FM et al. 2018 ACC/AHA/HRS Guideline on Bradycardia and Cardiac Conduction Delay. Circulation 2019;140:e382-e482; Mason JW et al. AHA/ACCF/HRS Part II: Electrocardiography diagnostic statement list. Circulation 2007;115:1325-1332',
@@ -204,36 +225,38 @@ const lesson: Lesson = {
       ],
     },
     {
-      kind: 'ecg',
-      ecg: synth('av-block-2-mobitz1', 445, undefined, '3to2'),
+      kind: 'film',
+      title: l('跟着 PR 走：延迟还是落空', 'Follow the PR: delay or drop', 'Sigue el PR: retraso o caída'),
       view: STRIP,
-      marks: [{ auto: 'blocked-p' }],
+      frames: [
+        {
+          label: l('运动员：一度', 'Athlete: first degree', 'Deportista: primer grado'),
+          ecg: synth('athlete', 447, undefined, 'first-degree'),
+          note: l('22 岁运动员，约 48 次/分：PR 约 220 ms，每个 P 都下传（1:1）。PR < 400 ms 属训练相关，无需检查。', 'An athlete of 22 at about 48/min: the PR is about 220 ms and every P conducts (1:1). A PR < 400 ms is training-related and needs no work-up.', 'Deportista de 22 años a unos 48 lpm: el PR mide unos 220 ms y cada P conduce (1:1). Un PR < 400 ms se debe al entrenamiento y no requiere estudio.'),
+          marks: [{ auto: 'p' }, { auto: 'pr' }],
+        },
+        {
+          label: l('3:2 文氏', '3:2 Wenckebach', 'Wenckebach 3:2'),
+          ecg: synth('av-block-2-mobitz1', 445, undefined, '3to2'),
+          note: l('每 3 个 P 下传 2 个：PR 只延长一步（约 150 → 260 ms）就落空，搏动成对。认准间歇后 PR 变短。', 'Two of every three P waves conduct: the PR takes one step (about 150 → 260 ms) and drops, so the beats come in pairs. Rely on the PR shortening after the pause.', 'Conducen dos de cada tres P: el PR da un solo paso (unos 150 → 260 ms) y cae, así que los latidos van en parejas. Fíate del PR que se acorta tras la pausa.'),
+          marks: [{ auto: 'blocked-p' }],
+        },
+        {
+          label: l('5:4 文氏', '5:4 Wenckebach', 'Wenckebach 5:4'),
+          ecg: synth('av-block-2-mobitz1', 446, undefined, '5to4'),
+          note: l('4 个 PR 逐渐延长（约 150 → 230 → 265 → 285 ms），每步加得更少，RR 随之缩短。间歇后第一个 PR 最短。', 'Four PRs lengthen (about 150 → 230 → 265 → 285 ms), each step smaller, so the RR shortens. The first PR after the pause is the shortest.', 'Cuatro PR se alargan (unos 150 → 230 → 265 → 285 ms), cada paso menor, y el RR se acorta. El primer PR tras la pausa es el más corto.'),
+          marks: [{ auto: 'pr' }, { auto: 'blocked-p' }],
+        },
+      ],
+      predict: {
+        question: l('在 5:4 文氏周期里，哪一个 PR 最短？', 'In a 5:4 Wenckebach cycle, which PR is the shortest?', 'En un ciclo de Wenckebach 5:4, ¿qué PR es el más corto?'),
+        options: [l('间歇后的第一个', 'The first after the pause', 'El primero tras la pausa'), l('间歇前的最后一个', 'The last before the pause', 'El último antes de la pausa'), l('都一样长', 'They are all equal', 'Todos iguales')],
+        answer: 0,
+      },
       caption: l(
-        '**3:2 周期**：每 3 个 P 下传 2 个。文氏周期很短时，PR 渐进延长只有一步（约 150 → 260 ms）就落空——成组搏动变成“成对＋间歇”。周期越短，越要靠“间歇后 PR 变短”来辨认。',
-        '**3:2 periods**: three P waves, two of them conducted. When the Wenckebach cycle is this short, the PR progression has only one step (about 150 → 260 ms) before the drop — the group beating becomes "pairs plus a pause". The shorter the cycle, the more you lean on "the PR shortens after the pause".',
-        '**Ciclos 3:2**: tres ondas P, dos conducidas. Cuando el ciclo de Wenckebach es tan corto, la progresión del PR tiene un solo escalón (unos 150 → 260 ms) antes del latido perdido: el agrupamiento se vuelve «parejas más pausa». Cuanto más corto es el ciclo, más te apoyas en «el PR se acorta tras la pausa».',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('av-block-2-mobitz1', 446, undefined, '5to4'),
-      view: STRIP,
-      marks: [{ auto: 'pr' }],
-      caption: l(
-        '**5:4 周期**：周期更长（4 个连续 PR），增量更小、RR 的缩短也更细腻。非典型序列——增量不递减、RR 不缩短——在长周期中很常见，甚至可能过半；**最可靠的仍是“间歇后第一个 PR 最短”**，而不是完整算术。',
-        '**5:4 periods**: a longer cycle (four consecutive PRs), smaller increments and a subtler RR shortening. Atypical sequences — increments that do not shrink, an RR that does not shorten — are common in long cycles and may even be the majority; **the reliable sign remains "the first PR after the pause is the shortest"**, not the full arithmetic.',
-        '**Ciclos 5:4**: un ciclo más largo (cuatro PR consecutivos), incrementos más pequeños y acortamiento del RR más sutil. Las secuencias atípicas —incrementos que no disminuyen, RR que no se acorta— son frecuentes en los ciclos largos y pueden ser incluso la mayoría; **el signo fiable sigue siendo «el primer PR tras la pausa es el más corto»**, no la aritmética completa.',
-      ),
-    },
-    {
-      kind: 'ecg',
-      ecg: synth('athlete', 447, undefined, 'first-degree'),
-      view: STRIP,
-      marks: [{ auto: 'p' }, { auto: 'pr' }],
-      caption: l(
-        '22 岁训练有素的运动员：窦性心动过缓伴 PR 延长（< 400 ms）且 1:1 下传——训练相关改变，**无需进一步评估**；PR ≥ 400 ms 才需要。记住这张图：一度阻滞常常是良性的，判读永远看背景。',
-        'A 22-year-old trained athlete: sinus bradycardia with a prolonged PR (< 400 ms) and 1:1 conduction — a training-related finding that **needs no work-up**; only PR >= 400 ms does. Keep this tracing in mind: first-degree block is often benign; reading is always about context.',
-        'Deportista entrenado de 22 años: bradicardia sinusal con PR prolongado (< 400 ms) y conducción 1:1, un hallazgo relacionado con el entrenamiento que **no requiere estudio**; solo un PR ≥ 400 ms lo exige. Recuerda este trazado: el bloqueo de primer grado suele ser benigno; leer es siempre cuestión de contexto.',
+        '1:1 而 PR 长 = 一度（延迟）。PR 渐长后落空、间歇后又变短 = Mobitz I，不论周期长短。',
+        '1:1 with a long PR = first degree (a delay). A PR that lengthens, drops, then resets short after the pause = Mobitz I, whatever the cycle length.',
+        '1:1 con PR largo = primer grado (retraso). Un PR que se alarga, cae y vuelve corto tras la pausa = Mobitz I, sea cual sea la longitud del ciclo.',
       ),
     },
     {
@@ -260,9 +283,9 @@ const lesson: Lesson = {
       kind: 'figure',
       figure: { id: 'decision-tree', params: { tree: 'brady-av-block' } },
       caption: l(
-        '决策树里今天的位置：心率慢 → 先看 P 与 QRS 的关系 → PR 延长且 1:1 ＝一度（延迟）；出现落空 → 读落空前后的 PR 行为：渐进延长后落空、间歇后又变短 ＝ Mobitz I；PR 恒定的“冷落空” ＝ Mobitz II（r4）。',
-        'Where today sits in the decision tree: slow rate → first the P-QRS relationship → PR long with 1:1 = first degree (delay); a dropped beat → read the PR behaviour around it: progressive lengthening, the drop, then short again after the pause = Mobitz I; a cold drop with a constant PR = Mobitz II (r4).',
-        'Dónde encaja lo de hoy en el árbol de decisión: frecuencia lenta → primero la relación P-QRS → PR largo con 1:1 = primer grado (retraso); un latido perdido → lee el comportamiento del PR a su alrededor: alargamiento progresivo, caída y PR corto de nuevo tras la pausa = Mobitz I; caída brusca con PR constante = Mobitz II (r4).',
+        '走一遍决策树：心率慢 → 先看 P 与 QRS 的关系 → 1:1 而 PR 长 = 一度；有落空 → 落空前 PR 渐长、之后变短 = Mobitz I；PR 恒定的落空 = Mobitz II（r4）。',
+        'Walk the tree: slow rate → the P-QRS relationship first → 1:1 with a long PR = first degree; a drop → PR lengthening before it and shorter after it = Mobitz I; a drop with a constant PR = Mobitz II (r4).',
+        'Recorre el árbol: frecuencia lenta → primero la relación P-QRS → 1:1 con PR largo = primer grado; una caída → PR que se alarga antes y se acorta después = Mobitz I; caída con PR constante = Mobitz II (r4).',
       ),
     },
     { kind: 'check', item: { family: 'av-block', seed: 14 } },

@@ -424,16 +424,54 @@ describe('r3: first degree and Mobitz I on the tracings', () => {
     expect(Math.abs(Math.max(...p) - 280)).toBeLessThan(10);
     expect(Math.abs(Math.max(...rrs(e)) - 1470)).toBeLessThan(40);
   });
-  it('3:2 cycles: PR about 150 → 260 ms', () => {
-    const p = prs(ecgOf(blocksOf('r3', 'ecg')[0].ecg));
+  it('3:2 cycles (PR film frame 2): two of every three P conduct, PR about 150 → 260 ms', () => {
+    const e = frames('r3', 0)[1];
+    const p = prs(e);
     expect(Math.abs(Math.min(...p) - 150)).toBeLessThan(10);
-    expect(Math.abs(Math.max(...p) - 262)).toBeLessThan(12);
+    expect(Math.abs(Math.max(...p) - 260)).toBeLessThan(10);
+    for (let i = 0; i + 1 < p.length; i += 2) expect(p[i + 1]).toBeGreaterThan(p[i] + 80);
+    const a = e.truth!.atrial;
+    expect(Math.abs(a.length / a.filter((x) => x.conductedTo !== null).length - 1.5)).toBeLessThan(0.1);
   });
-  it('athlete: PR between 200 and 400 ms, 1:1', () => {
-    const e = ecgOf(blocksOf('r3', 'ecg')[2].ecg);
-    expect(e.truth!.prMs!).toBeGreaterThan(200);
-    expect(e.truth!.prMs!).toBeLessThan(400);
+  it('athlete (PR film frame 1): about 48/min, PR about 220 ms (under 400), 1:1', () => {
+    const e = frames('r3', 0)[0];
+    expect(Math.abs(e.truth!.hrBpm - 48)).toBeLessThan(1);
+    expect(Math.abs(e.truth!.prMs! - 220)).toBeLessThan(5);
     expect(blocked(e).filter((a) => a.visible).length).toBe(0);
+  });
+  it('5:4 cycles (PR film frame 3): PR about 150 → 230 → 265 → 285 ms, each step smaller, RR shortening; the first PR after the pause is the shortest', () => {
+    const e = frames('r3', 0)[2];
+    const beats = e.truth!.beats;
+    const r = rrs(e);
+    const p = beats.map((b) => b.qrsOn - (b.pOn ?? 0));
+    const starts = r.flatMap((x, i) => (x > 1300 ? [i + 1] : []));
+    expect(starts.length).toBeGreaterThanOrEqual(1);
+    for (const s of starts) {
+      expect(s + 3).toBeLessThan(p.length);
+      [150, 230, 265, 285].forEach((v, k) => expect(Math.abs(p[s + k] - v), `beat ${s + k}`).toBeLessThan(5));
+      expect(p[s + 2] - p[s + 1]).toBeLessThan(p[s + 1] - p[s]);
+      expect(p[s + 3] - p[s + 2]).toBeLessThan(p[s + 2] - p[s + 1]);
+      expect(r[s + 1]).toBeLessThan(r[s]);
+      expect(r[s + 2]).toBeLessThan(r[s + 1]);
+      expect(p[s]).toBeLessThan(Math.min(p[s + 1], p[s + 2], p[s + 3]));
+      expect(p[s]).toBeLessThan(p[s - 1] - 100);
+    }
+  });
+  it('heart: PR about 280 ms, 1:1, narrow QRS', () => {
+    const e = ecgOf(blocksOf('r3', 'heart')[0].ecg);
+    expect(Math.abs(e.truth!.prMs! - 280)).toBeLessThan(5);
+    expect(e.truth!.qrsMs).toBeLessThan(110);
+    expect(blocked(e).filter((a) => a.t < e.truth!.beats[e.truth!.beats.length - 1].qrsOn).length).toBe(0);
+  });
+  it('PR sweep notes: the read-out is over 200 and at most 300 ms at 220–300, over 300 at 301–360; always 1:1 with a narrow QRS', () => {
+    for (const [v, lo, hi] of [[220, 200, 300], [300, 200, 300], [301, 300, 360], [360, 300, 360]] as const) {
+      const e = played('r3', 0, v);
+      expect(e.truth!.prMs!, `${v} ms`).toBeGreaterThan(lo);
+      expect(e.truth!.prMs!, `${v} ms`).toBeLessThanOrEqual(hi);
+      expect(e.truth!.qrsMs, `${v} ms`).toBeLessThan(110);
+      expect(blocked(e).filter((a) => a.t < e.truth!.beats[e.truth!.beats.length - 1].qrsOn).length, `${v} ms`).toBe(0);
+      expect(e.truth!.findings).toContain('av-block-1');
+    }
   });
   it('checks: first degree and Mobitz I only', async () => {
     const ans = await checkAnswers('r3');
