@@ -205,7 +205,7 @@ const lesson: Lesson = {
           label: l('随呼吸变化', 'Breathing with', 'Varía con la respiración'),
           ecg: synth('sinus-arrhythmia', 208),
           note: l('RR 随呼吸忽长忽短：只量一对会偏，改数 10 秒内的 QRS × 6。', 'RR stretches and shrinks with breathing: one pair misleads, so count QRS in 10 s × 6.', 'El RR se alarga y acorta con la respiración: un par engaña; cuenta los QRS de 10 s × 6.'),
-          // the shortest RR on the strip: the pair that misleads most
+          // the shortest RR on the strip: one pair that misleads
           marks: [{ auto: 'rr', beat: 9 }],
         },
         {
