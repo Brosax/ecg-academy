@@ -725,7 +725,7 @@ describe('s6: ST measurement on the tracings', () => {
     }
     expect(tw(hyper, 'V3').max).toBeGreaterThanOrEqual(0.95 * qrs(hyper, 'V3').max);
   });
-  it('contrast A (early repolarisation, man of 24): V2–V3 below 2.5 mm, inferior and V4–V6 J 1–1.7 mm, only aVR depressed', () => {
+  it('contrast A (early repolarisation, man of 24): V2–V3 below 2.5 mm, ST at the J point 1–1.7 mm in the inferior leads and V4–V6, only aVR depressed', () => {
     const e = ecgOf(blocksOf('s6', 'contrast')[0].left.ecg);
     for (const l of ['V2', 'V3'] as const) expect(stAt(e, l), l).toBeLessThan(0.25);
     for (const l of ['II', 'III', 'aVF', 'V4', 'V5', 'V6'] as const) {
