@@ -865,12 +865,66 @@ describe('t6 on the tracings', () => {
 });
 
 describe('t7 on the tracings', () => {
-  it('hook is asystole, the escape strip is about 34/min with a wide QRS', () => {
+  it('hook is asystole; the complete-AV-block heart: sinus P about 78/min, none conducted, a wide ventricular escape about 34/min that starts at the apex', () => {
     expect(ecgOf(blocksOf('t7', 'hook')[0].ecg).truth!.rhythm).toBe('asystole');
-    const esc = blocksOf('t7', 'ecg').find((b) => b.ecg.kind === 'synth' && b.ecg.req.scenario === 'av-block-3')!;
-    const t = ecgOf(esc.ecg).truth!;
+    const e = ecgOf(blocksOf('t7', 'heart')[0].ecg);
+    const t = e.truth!;
     expect(Math.abs(t.hrBpm - 34)).toBeLessThan(3);
     expect(t.qrsMs).toBeGreaterThanOrEqual(120);
+    expect(Math.abs(t.atrialRateBpm! - 78)).toBeLessThan(3);
+    expect(t.atrial.every((a) => a.conductedTo === null)).toBe(true);
+    expect(t.beats.every((b) => b.kind === 'escape-ventricular')).toBe(true);
+    const rs = e.regions!;
+    const b = mid(e);
+    const buf = new Float32Array(rs.ids.length);
+    const first = new Map<string, number>();
+    for (let x = b.qrsOn - 40; x < b.qrsOn + 200; x += 2) {
+      rs.stateAt(x, buf);
+      rs.ids.forEach((id, k) => {
+        if (!first.has(id) && /^(lv|rv)-/.test(id) && buf[k] > 0 && buf[k] < 1) first.set(id, x - b.qrsOn);
+      });
+    }
+    expect(Math.min(...first.values())).toBe(first.get('lv-apex'));
+  });
+  it('pulse film: a wide regular VT at about 150/min; an organised sinus rhythm at about 70/min', () => {
+    const [vt, organised] = frames('t7', 0);
+    expect(vt.truth!.rhythm).toBe('vt-monomorphic');
+    expect(Math.abs(vt.truth!.hrBpm - 150)).toBeLessThan(5);
+    expect(vt.truth!.qrsMs).toBeGreaterThanOrEqual(120);
+    expect(Math.max(...rrs(vt)) - Math.min(...rrs(vt))).toBeLessThan(20);
+    expect(organised.truth!.rhythm).toBe('sinus-rhythm');
+    expect(Math.abs(organised.truth!.hrBpm - 70)).toBeLessThan(3);
+  });
+  it('post-ROSC film: ST up 1–3.5 mm in V1–V4 with II, III and aVF down; QT about 505 ms at about 64/min with QTc over 500 ms; PR about 115 ms with QRS about 125 ms and pre-excitation; coved ST about 3.5 mm into a negative T in V1–V2', () => {
+    const [stemi, lqt, wpw, brugada] = frames('t7', 1);
+    const st = (e: Ecg, lead: StdLead, plus = 0) => {
+      const b = mid(e);
+      return at(e, lead, b.j + plus) - baselineBefore(e.signal.leads[lead], e.signal.fs, b.qrsOn);
+    };
+    for (const l of ['V1', 'V2', 'V3', 'V4'] as const) {
+      expect(st(stemi, l), l).toBeGreaterThanOrEqual(0.1);
+      expect(st(stemi, l), l).toBeLessThanOrEqual(0.35);
+    }
+    for (const l of ['II', 'III', 'aVF'] as const) expect(st(stemi, l), l).toBeLessThan(-0.05);
+    const q = lqt.truth!;
+    expect(Math.abs(q.qtMs - 505)).toBeLessThan(5);
+    expect(Math.abs(q.hrBpm - 64)).toBeLessThan(2);
+    for (const qtc of [q.qtcBazettMs, q.qtcFridericiaMs]) {
+      expect(qtc).toBeGreaterThan(q.qtMs);
+      expect(qtc).toBeGreaterThan(500);
+    }
+    expect(Math.abs(wpw.truth!.prMs! - 115)).toBeLessThan(5);
+    expect(Math.abs(wpw.truth!.qrsMs - 125)).toBeLessThan(5);
+    expect(wpw.truth!.findings).toContain('wpw');
+    for (const l of ['V1', 'V2'] as const) {
+      expect(st(brugada, l), l).toBeGreaterThanOrEqual(0.3);
+      expect(st(brugada, l), l).toBeLessThanOrEqual(0.4);
+      expect(st(brugada, l, 60), l).toBeLessThan(st(brugada, l));
+      const b = mid(brugada);
+      let mn = Infinity;
+      for (let x = b.j + 80; x <= b.tOff; x += 2) mn = Math.min(mn, at(brugada, l, x) - baselineBefore(brugada.signal.leads[l], brugada.signal.fs, b.qrsOn));
+      expect(mn, `${l} T`).toBeLessThan(-0.1);
+    }
   });
   it('drills 10-second recognition: a speed-round text precedes the drill', () => {
     const kinds = lessonById('t7').blocks.map((b) => b.kind);

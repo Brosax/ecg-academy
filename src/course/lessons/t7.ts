@@ -71,15 +71,6 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'text',
-      title: l('先流程，后诊断：两个桶', 'Algorithm first, diagnosis second: two bins', 'Primero el algoritmo, después el diagnóstico: dos grupos'),
-      body: l(
-        '判读心脏骤停只问一件事：**可电击，还是不可电击？**流程先于诊断：确认无反应、呼叫复苏团队、开始胸外按压、贴好电极片。每 2 分钟一个按压周期，**节律检查 ≤10 秒**；电击与检查造成的按压中断保持 <5 秒——按压质量决定存活率。\n两个桶：\n- **可电击**：心室颤动（VF）与无脉性室速（pVT）——立即除颤 + 按压；\n- **不可电击**：心室停搏与无脉性电活动（PEA）——按压 + 肾上腺素 + 4 H/4 T。\n无脉性电活动不是眼睛的诊断，是手的诊断：图形可以完全有组织——没有脉搏就是 PEA，病因清单（4 H/4 T）从这里开始。\n本课的节律条都是合成的：PTB-XL 真实库只有静息 12 导联心电图，没有室速、室颤或骤停心律。',
-        'Reading a cardiac arrest asks exactly one thing: **shockable or non-shockable?** The algorithm comes before the diagnosis: confirm unresponsiveness, call the arrest team, start compressions, attach the pads. Compress in 2-minute cycles and **check the rhythm for 10 seconds or less**, keeping every pause for a shock or a check under 5 s — compression quality drives survival.\nTwo bins:\n- **Shockable**: ventricular fibrillation (VF) and pulseless VT (pVT) — immediate defibrillation + compressions;\n- **Non-shockable**: asystole and pulseless electrical activity (PEA) — compressions + adrenaline + the 4 Hs and 4 Ts.\nPEA is not a diagnosis for your eyes but for your hands: the tracing can look perfectly organised — no pulse means PEA, and the cause list (4 Hs and 4 Ts) starts there.\nThe strips in this lesson are synthetic: the PTB-XL real library holds resting 12-lead ECGs only, with no VT, VF or arrest rhythm.',
-        'Leer una parada cardiaca plantea una sola cosa: **¿desfibrilable o no desfibrilable?** El algoritmo va antes que el diagnóstico: confirma la falta de respuesta, activa el equipo, empieza las compresiones torácicas y coloca los electrodos adhesivos. Comprime en ciclos de 2 minutos y **comprueba el ritmo en 10 segundos o menos**, manteniendo toda pausa para descarga o comprobación por debajo de 5 s: la calidad de las compresiones determina la supervivencia.\nDos grupos:\n- **Desfibrilables**: fibrilación ventricular (FV) y TV sin pulso: desfibrilación inmediata + compresiones;\n- **No desfibrilables**: asistolia y actividad eléctrica sin pulso (AESP): compresiones + adrenalina + 4 H y 4 T.\nLa AESP no se diagnostica con los ojos sino con las manos: el trazado puede parecer perfectamente organizado; sin pulso es AESP, y desde ahí arranca la lista de causas (4 H y 4 T).\nLas tiras de esta lección son sintéticas: la colección real PTB-XL solo tiene ECG de 12 derivaciones en reposo, sin TV, FV ni ritmos de parada.',
-      ),
-    },
-    {
       kind: 'criteria',
       title: l('数值卡：ERC 成人高级生命支持（2025）的第一步', 'Numbers: first actions per ERC adult advanced life support (2025)', 'Números: primeras actuaciones del soporte vital avanzado del ERC (2025)'),
       items: [
@@ -110,6 +101,38 @@ const lesson: Lesson = {
         {
           label: l('ROSC 后', 'After ROSC', 'Tras la RCE'),
           value: l('立即 12 导联心电图（ST 段抬高 ⇒ 急诊导管室）；昏迷患者主动预防发热（>37.7 °C）至少 72 小时', '12-lead ECG immediately (ST elevation => emergency cath lab); in comatose patients actively prevent fever (> 37.7 °C) for at least 72 h', 'ECG de 12 derivaciones de inmediato (elevación del ST ⇒ sala de hemodinámica urgente); en el paciente en coma, prevenir activamente la fiebre (> 37,7 °C) durante al menos 72 h'),
+        },
+        {
+          label: l('流程先于诊断', 'Algorithm before diagnosis', 'El algoritmo antes que el diagnóstico'),
+          value: l('确认无反应、呼叫复苏团队、开始胸外按压、贴好电极片；按压质量决定存活率', 'Confirm unresponsiveness, call the arrest team, start compressions, attach the pads; compression quality drives survival', 'Confirma la falta de respuesta, activa el equipo, empieza las compresiones y coloca los electrodos adhesivos; la calidad de las compresiones determina la supervivencia'),
+        },
+        {
+          label: l('室速：脉搏决定处理', 'VT: the pulse decides', 'TV: el pulso decide'),
+          value: l(
+            '无脉 ⇒ 除颤（与室颤同桶）；有脉而不稳定（低血压、胸痛、心衰、意识改变）⇒ 镇静下同步电复律；有脉且稳定 ⇒ 静脉胺碘酮或普鲁卡因胺，并备好复律（t5）',
+            'No pulse -> defibrillate (same bin as VF); a pulse with instability (hypotension, chest pain, heart failure, altered consciousness) -> synchronised cardioversion under sedation; a pulse and stable -> IV amiodarone or procainamide with cardioversion ready (t5)',
+            'Sin pulso -> desfibrilar (el mismo grupo que la FV); con pulso e inestable (hipotensión, dolor torácico, insuficiencia cardiaca, alteración de la conciencia) -> cardioversión sincronizada con sedación; con pulso y estable -> amiodarona o procainamida intravenosas con la cardioversión preparada (t5)',
+          ),
+        },
+        {
+          label: l('骤停前：仍有脉搏', 'Peri-arrest: a pulse is still there', 'Periparada: todavía hay pulso'),
+          value: l(
+            '症状性严重心动过缓/完全性房室阻滞 ⇒ 阿托品，无效即经皮起搏（阻滞在房室结以下时阿托品常无效，直接起搏；长期方案见 r4）；低血压性 SVT ⇒ 同步电复律。原则：有组织的心动过速 + 不稳定 + 有脉 = 同步复律；无脉或无从同步（室颤、多形性室速）= 除颤',
+            'Symptomatic severe bradycardia or complete AV block -> atropine, then transcutaneous pacing if it fails (below the AV node atropine often does nothing: go straight to pacing; long-term plan in r4); hypotensive SVT -> synchronised cardioversion. Rule: organised tachycardia + instability + a pulse = synchronised cardioversion; no pulse, or nothing to synchronise to (VF, polymorphic VT) = defibrillation',
+            'Bradicardia grave sintomática o bloqueo AV completo -> atropina y, si fracasa, estimulación transcutánea (por debajo del nodo AV la atropina suele no hacer nada: ve directo a la estimulación; plan a largo plazo en r4); TSV hipotensa -> cardioversión sincronizada. Regla: taquicardia organizada + inestabilidad + pulso = cardioversión sincronizada; sin pulso, o sin nada a lo que sincronizar (FV, TV polimorfa) = desfibrilación',
+          ),
+        },
+        {
+          label: l('停搏中的起搏', 'Pacing in asystole', 'Estimulación en la asistolia'),
+          value: l('P 波性停搏中起搏可能夺获心室（t6）；没有 P 波的停搏中起搏无效', 'In P-wave asystole pacing may capture the ventricles (t6); in asystole without P waves it does not work', 'En la asistolia con ondas P la estimulación puede capturar los ventrículos (t6); en la asistolia sin P no sirve'),
+        },
+        {
+          label: l('ROSC 后：继续找原因', 'After ROSC: keep hunting the cause', 'Tras la RCE: sigue buscando la causa'),
+          value: l(
+            'VF/无脉性室速的背景常是冠脉闭塞；复律成功不等于 4 H/4 T 结束（高钾、低氧、肺栓塞、出血逐项排除）；12 导联还可能显示长 QT、预激或 Brugada 图形；不再固定要求 32–36 °C',
+            'The background of VF/pulseless VT is often a coronary occlusion; a successful shock does not close the 4 Hs and 4 Ts (rule out hyperkalaemia, hypoxia, pulmonary embolism and bleeding one by one); the 12-lead may also show a long QT, pre-excitation or a Brugada pattern; a fixed 32-36 °C target is no longer required',
+            'El sustrato de la FV/TV sin pulso suele ser una oclusión coronaria; una descarga eficaz no cierra las 4 H y 4 T (descarta una a una hiperpotasemia, hipoxia, tromboembolia pulmonar y hemorragia); el ECG de 12 derivaciones también puede mostrar un QT largo, una preexcitación o un patrón de Brugada; ya no se exige un objetivo fijo de 32-36 °C',
+          ),
         },
       ],
       source: 'European Resuscitation Council Guidelines 2025: Adult advanced life support. Resuscitation 2025;215(Suppl 1):110769; Sandroni C, Nolan JP et al. ERC-ESICM guidelines on temperature control after cardiac arrest in adults. Resuscitation 2022;172:229-236',
@@ -175,56 +198,94 @@ const lesson: Lesson = {
         caption: l('心室停搏（近于直线）', 'Asystole (near-flat line)', 'Asistolia (línea casi plana)'),
       },
       point: l(
-        '两条都是骤停图形，第一步却相反。左：**可电击**——除颤 + 立即恢复按压。右：**不可电击**——按压 + 肾上腺素 + 4 H/4 T；给停搏放电不会带来任何好处，只会中断按压。报警之前先做两件事：换一个导联、检查增益——**细颤**能在一根导联上装成直线；两个导联都平，才报停搏。',
-        'Both are arrest tracings with opposite first actions. Left: **shockable** — defibrillate and resume compressions at once. Right: **non-shockable** — compressions + adrenaline + the 4 Hs and 4 Ts; shocking asystole buys nothing and only interrupts compressions. Before you commit: change the lead and check the gain — **fine VF** can play a flat line in one lead; flat in two leads, or it is not asystole.',
-        'Ambos son trazados de parada con primeras actuaciones opuestas. Izquierda: **desfibrilable**, desfibrila y reanuda las compresiones de inmediato. Derecha: **no desfibrilable**, compresiones + adrenalina + 4 H y 4 T; dar una descarga a la asistolia no aporta nada y solo interrumpe las compresiones. Antes de decidirte, dos cosas: cambia de derivación y comprueba la ganancia; la **FV fina** puede hacer de línea plana en una derivación, y solo si dos derivaciones son planas se informa asistolia.',
+        '两条都是骤停图形，第一步相反。左：**可电击**，除颤后立即恢复按压。右：**不可电击**，按压 + 肾上腺素 + 4 H/4 T；给停搏放电毫无益处，只会中断按压。报停搏前换一个导联、查增益：两个导联都平才算（**细颤**能装成直线）。',
+        'Both are arrest tracings with opposite first actions. Left: **shockable**: defibrillate, then resume compressions at once. Right: **non-shockable**: compressions + adrenaline + the 4 Hs and 4 Ts; shocking asystole buys nothing and only interrupts compressions. Before you call asystole, change the lead and check the gain: flat in two leads, or it is not (**fine VF** can play a flat line).',
+        'Ambos son trazados de parada con primeras actuaciones opuestas. Izquierda: **desfibrilable**: desfibrila y reanuda las compresiones de inmediato. Derecha: **no desfibrilable**: compresiones + adrenalina + 4 H y 4 T; una descarga sobre la asistolia no aporta nada y solo interrumpe las compresiones. Antes de llamarla asistolia, cambia de derivación y comprueba la ganancia: plana en dos derivaciones, o no lo es (la **FV fina** puede hacer de línea plana).',
       ),
     },
     {
-      kind: 'ecg',
-      ecg: synth('vt-monomorphic', 725),
+      kind: 'film',
+      title: l('脉搏决定处理', 'The pulse decides', 'El pulso decide'),
       view: STRIP,
-      marks: [
-        { auto: 'qrs', label: l('宽 QRS', 'Wide QRS', 'QRS ancho') },
-        { auto: 'rr', label: l('RR 规则', 'Regular RR', 'RR regular') },
+      frames: [
+        {
+          label: l('室速', 'VT', 'TV'),
+          ecg: synth('vt-monomorphic', 725),
+          note: l(
+            '宽、规则、约 150 次/分的室速。图上看不出有没有脉搏：无脉 ⇒ 除颤（同室颤）；有脉而不稳定 ⇒ 同步电复律。',
+            'A wide, regular VT at about 150/min. The tracing cannot show whether there is a pulse: no pulse → defibrillate, as for VF; a pulse with instability → synchronised cardioversion.',
+            'Una TV ancha y regular a unos 150 lpm. El trazado no muestra si hay pulso: sin pulso → desfibrila, como en la FV; con pulso e inestable → cardioversión sincronizada.',
+          ),
+          marks: [{ auto: 'qrs', label: l('宽 QRS', 'Wide QRS', 'QRS ancho') }, { auto: 'rr', label: l('RR 规则', 'Regular RR', 'RR regular') }],
+        },
+        {
+          label: l('有组织的节律', 'Organised rhythm', 'Ritmo organizado'),
+          ecg: synth('normal', 728, { rate: 70 }),
+          note: l(
+            '有组织的节律（这里是约 70 次/分的窦性）。摸不到脉搏，就是无脉性电活动：不可电击，按压 + 肾上腺素 + 4 H/4 T。',
+            'An organised rhythm (here sinus at about 70/min). With no pulse it is PEA: non-shockable, so compressions + adrenaline + the 4 Hs and 4 Ts.',
+            'Un ritmo organizado (aquí sinusal a unos 70 lpm). Sin pulso es una AESP: no desfibrilable; compresiones + adrenalina + 4 H y 4 T.',
+          ),
+          marks: [{ auto: 'p' }, { auto: 'qrs' }],
+        },
       ],
-      caption: l(
-        '宽、规则、约 150 次/分：单形性室速（t5 的判读方法照用）。但**这份图本身分不出“有脉”与“无脉”**——脉搏决定处理：无脉 ⇒ 无脉性室速，**除颤**（与 VF 同桶）；有脉且不稳定 ⇒ **同步**电复律；有脉且稳定 ⇒ 静脉抗心律失常药并备好复律。监护仪回答节律，手回答灌注。',
-        'Wide, regular, about 150/min: monomorphic VT (the reading tools of t5 apply unchanged). But **the tracing itself cannot tell "with pulse" from "pulseless"** — the pulse decides the action: no pulse => pulseless VT, **defibrillate** (same bin as VF); a pulse with instability => **synchronised** cardioversion; a pulse with stability => IV antiarrhythmics with cardioversion on standby. The monitor answers the rhythm; your hands answer the perfusion.',
-        'Ancho, regular, unos 150 lpm: TV monomorfa (las herramientas de lectura de t5 sirven igual). Pero **el trazado por sí solo no distingue «con pulso» de «sin pulso»**: el pulso decide la actuación. Sin pulso ⇒ TV sin pulso, **desfibrila** (el mismo grupo que la FV); con pulso e inestable ⇒ **cardioversión sincronizada**; con pulso y estable ⇒ antiarrítmicos intravenosos con la cardioversión preparada. El monitor responde del ritmo; las manos, de la perfusión.',
-      ),
+      predict: {
+        question: l(
+          '骤停患者的监护仪上是约 70 次/分、看起来正常的窦性心律，但摸不到脉搏。归哪个桶？',
+          'A patient in arrest: the monitor shows a normal-looking sinus rhythm at about 70/min, but there is no pulse. Which bin?',
+          'Un paciente en parada: el monitor muestra un ritmo sinusal de aspecto normal a unos 70 lpm, pero no hay pulso. ¿En qué grupo va?',
+        ),
+        options: [l('可电击', 'Shockable', 'Desfibrilable'), l('不可电击', 'Non-shockable', 'No desfibrilable'), l('不是骤停', 'Not an arrest', 'No es una parada')],
+        answer: 1,
+      },
+      caption: l('监护仪回答节律，手回答灌注。本课节律条均为合成：PTB-XL 静息心电图库里没有骤停心律。', 'The monitor answers the rhythm; your hands answer the perfusion. Every strip in this lesson is synthetic: the PTB-XL resting library holds no arrest rhythms.', 'El monitor responde del ritmo; las manos, de la perfusión. Todas las tiras de esta lección son sintéticas: la colección de reposo PTB-XL no contiene ritmos de parada.'),
     },
     {
-      kind: 'text',
-      title: l('骤停前一步：仍有脉搏的急症', 'One step from arrest: the emergencies that still have a pulse', 'A un paso de la parada: las urgencias que aún tienen pulso'),
-      body: l(
-        '三类“骤停前”节律还有脉搏，第一步不在除颤桶里：\n- **持续室速伴脉搏**：不稳定（低血压、胸痛、心衰、意识改变）⇒ 镇静后**同步**电复律；稳定 ⇒ 静脉抗心律失常药（胺碘酮或普鲁卡因胺）或镇静下择期同步复律，并随时准备复律——判读与用药见 t5。\n- **症状性严重心动过缓 / 完全性房室传导阻滞** ⇒ 阿托品；无效即**经皮起搏**（阻滞在房室结以下时阿托品常常无效——直接准备起搏），长期方案见 r4。\n- **低血压性 SVT** ⇒ 同步电复律。\n一条原则：**有组织的心动过速 + 不稳定 + 有脉搏 = 同步复律；无脉搏，或无从同步（VF、多形性室速）= 除颤。**',
-        'Three "pre-arrest" rhythms still have a pulse, and the first action is not in the shock bin:\n- **Sustained VT with a pulse**: unstable (hypotension, chest pain, heart failure, altered consciousness) => **synchronised** cardioversion after sedation; stable => IV antiarrhythmics (amiodarone or procainamide) or elective synchronised cardioversion under sedation, with cardioversion ready — reading and drugs in t5.\n- **Symptomatic severe bradycardia or complete AV block** => atropine; if it fails, **transcutaneous pacing** (when the block is below the AV node, atropine often does nothing — go straight to pacing); the long-term plan in r4.\n- **Hypotensive SVT** => synchronised cardioversion.\nOne rule: **organised tachycardia + instability + a pulse = synchronised cardioversion; no pulse, or nothing to synchronise to (VF, polymorphic VT) = defibrillation.**',
-        'Tres ritmos «periparada» conservan el pulso y su primera actuación no está en el grupo de la descarga:\n- **TV sostenida con pulso**: inestable (hipotensión, dolor torácico, insuficiencia cardiaca, alteración del nivel de conciencia) ⇒ **cardioversión sincronizada** con sedación; estable ⇒ antiarrítmicos intravenosos (amiodarona o procainamida) o cardioversión sincronizada programada con sedación, con la cardioversión lista — lectura y fármacos en t5.\n- **Bradicardia grave sintomática o bloqueo AV completo** ⇒ atropina; si fracasa, **estimulación transcutánea** (cuando el bloqueo es distal al nodo AV la atropina suele no hacer nada: ve directo a la estimulación); el plan a largo plazo, en r4.\n- **TSV hipotensa** ⇒ cardioversión sincronizada.\nUna regla: **taquicardia organizada + inestabilidad + pulso = cardioversión sincronizada; sin pulso, o sin nada a lo que sincronizar (FV, TV polimorfa) = desfibrilación.**',
-      ),
-    },
-    {
-      kind: 'ecg',
+      kind: 'heart',
       ecg: synth('av-block-3', 726, undefined, 'infra-his'),
-      view: STRIP,
-      marks: [
-        { auto: 'p', label: l('窦性 P，与 QRS 无关', 'Sinus P, unrelated to the QRS', 'P sinusal, independiente del QRS') },
-        { auto: 'qrs', label: l('宽大室性逸搏（34 次/分）', 'Wide ventricular escape (34/min)', 'Escape ventricular ancho (34 lpm)') },
-      ],
+      showConduction: true,
+      emphasize: ['his', 'lv-apex'],
       caption: l(
-        '宽大、规则、约 34 次/分的室性逸搏，窦性 P 按自己的节律穿行——完全性房室传导阻滞（希氏束下）。这还不是骤停，但是**一步之遥**：慢而宽的逸搏随时可能彻底停顿。第一步：阿托品对结下阻滞通常无效——**经皮起搏**现在就开始，同时找原因（缺血、药物、高钾……）。若真的走到停搏：按压 + 肾上腺素；起搏在 P 波性停搏尚可能夺获（t6），在无 P 波的停搏无效。',
-        'A wide, regular ventricular escape at about 34/min while the sinus P waves march to their own schedule — complete AV block below the His bundle. This is not an arrest yet, but it is **one step away**: a slow, wide escape can fail at any moment. First action: atropine usually fails below the AV node — start **transcutaneous pacing** now and hunt the cause (ischaemia, drugs, hyperkalaemia…). If it does degenerate into arrest: compressions + adrenaline; pacing may still capture in P-wave asystole (t6) but not in asystole without P waves.',
-        'Un escape ventricular ancho y regular a unos 34 lpm mientras las P sinusales desfilan a su propio ritmo: bloqueo AV completo por debajo del haz de His. Todavía no es una parada, pero está **a un paso**: un escape lento y ancho puede fallar en cualquier momento. Primera actuación: la atropina suele fracasar por debajo del nodo AV, así que inicia ya la **estimulación transcutánea** y busca la causa (isquemia, fármacos, hiperpotasemia…). Si degenera en parada: compresiones + adrenalina; la estimulación aún puede capturar en la asistolia con ondas P (t6), no en la asistolia sin P.',
+        '完全性房室阻滞：窦性 P 约 78 次/分照常出现，没有一个传到心室；心室靠心尖部的宽大逸搏维持，约 34 次/分。离骤停一步之遥：现在就起搏，同时找原因（缺血、药物、高钾）。',
+        'Complete AV block: the sinus P waves go on at about 78/min and none reaches the ventricles; a wide escape from the apex keeps them going at about 34/min. One step from arrest: pace now and hunt the cause (ischaemia, drugs, hyperkalaemia).',
+        'Bloqueo AV completo: las P sinusales siguen a unos 78 lpm y ninguna llega a los ventrículos; un escape ancho desde el ápex los mantiene a unos 34 lpm. A un paso de la parada: estimula ya y busca la causa (isquemia, fármacos, hiperpotasemia).',
       ),
     },
     {
-      kind: 'text',
-      title: l('ROSC 之后：别在终点前停下', 'After ROSC: do not stop at the finish line', 'Tras la RCE: no pares antes de la meta'),
-      body: l(
-        '自主循环恢复只是第一步：\n- **立即做 12 导联心电图**——骤停后 ST 段抬高（或其他冠脉闭塞等同表现，i8、i10）直接进导管室，别等患者“看起来好转”；VF/无脉性室速的背景常是冠脉闭塞。\n- **继续找病因**：复律成功不等于 4 H/4 T 结束——高钾、低氧、肺栓塞、出血都要在重症监护里逐项排除。\n- **昏迷患者的体温控制**：主动预防发热（>37.7 °C）至少 72 小时（不再固定要求 32–36 °C）。\n- 复苏后的 12 导联还可能揭示长 QT、预激或 Brugada 图形——下一次骤停的原因，也许就写在这一张纸上。',
-        'Return of spontaneous circulation is only the first step:\n- **12-lead ECG immediately** — post-arrest ST elevation (or another occlusion-MI equivalent, i8 and i10) goes straight to the cath lab; do not wait for the patient to look better. The background of VF/pulseless VT is often a coronary occlusion.\n- **Keep hunting the cause**: a successful shock does not close the 4 Hs and 4 Ts — hyperkalaemia, hypoxia, pulmonary embolism and bleeding each get ruled out in intensive care.\n- **Temperature control for comatose patients**: actively prevent fever (> 37.7 °C) for at least 72 h (a fixed 32-36 °C target is no longer required).\n- The post-ROSC 12-lead can also reveal a long QT, pre-excitation or a Brugada pattern — the cause of the next arrest may be written on that very sheet.',
-        'La recuperación de la circulación espontánea es solo el primer paso:\n- **ECG de 12 derivaciones de inmediato**: una elevación del ST tras la parada (u otro equivalente de oclusión coronaria, i8 e i10) va directa a la sala de hemodinámica; no esperes a que el paciente «mejore a simple vista». El sustrato de la FV/TV sin pulso suele ser una oclusión coronaria.\n- **Sigue buscando la causa**: una descarga eficaz no cierra las 4 H y 4 T; hiperpotasemia, hipoxia, tromboembolia pulmonar y hemorragia se descartan una a una en cuidados intensivos.\n- **Control de la temperatura en el paciente en coma**: prevenir activamente la fiebre (> 37,7 °C) durante al menos 72 h (ya no se exige un objetivo fijo de 32-36 °C).\n- El ECG tras la RCE también puede revelar un QT largo, una preexcitación o un patrón de Brugada: la causa de la próxima parada quizá esté escrita en esa misma hoja.',
-      ),
+      kind: 'film',
+      title: l('ROSC 后的 12 导联', 'The post-ROSC 12-lead', 'El ECG de 12 derivaciones tras la RCE'),
+      view: { layout: '3x4+1' },
+      frames: [
+        {
+          label: l('ST 抬高', 'ST elevation', 'Elevación del ST'),
+          ecg: synth('stemi-anterior', 731),
+          note: l('V1–V4 的 ST 段抬高 1–3.5 mm，II、III、aVF 压低 ⇒ 冠脉闭塞：直接去导管室。', 'ST elevation of 1–3.5 mm in V1–V4 with depression in II, III and aVF → coronary occlusion: straight to the cath lab.', 'Elevación del ST de 1-3,5 mm en V1-V4 con descenso en II, III y aVF → oclusión coronaria: directo a la sala de hemodinámica.'),
+          marks: [{ auto: 'st', lead: 'V3' }],
+        },
+        {
+          label: l('长 QT', 'Long QT', 'QT largo'),
+          ecg: synth('long-qt', 731, { qtc: 520 }),
+          note: l(
+            'QT 约 505 ms，心率约 64 次/分（> 60，校正后只会更长）：已过 500 ms 的高危线。查药物与电解质，警惕尖端扭转（t6）。',
+            'QT about 505 ms at about 64/min (above 60, so correction only lengthens it): past the 500 ms danger line. Check drugs and electrolytes; torsades is a risk (t6).',
+            'QT de unos 505 ms a unos 64 lpm (más de 60, así que la corrección solo lo alarga): ya pasa la línea de peligro de 500 ms. Revisa fármacos y electrolitos; hay riesgo de torsade (t6).',
+          ),
+          marks: [{ auto: 'qt', lead: 'II' }],
+        },
+        {
+          label: l('预激', 'Pre-excitation', 'Preexcitación'),
+          ecg: synth('wpw', 731),
+          note: l('PR 约 115 ms、δ 波、QRS 约 125 ms ⇒ 预激：经旁路下传的房颤可以恶化为室颤（t4）。', 'PR about 115 ms, a delta wave and a QRS of about 125 ms → pre-excitation: AF down the pathway can degenerate into VF (t4).', 'PR de unos 115 ms, onda delta y QRS de unos 125 ms → preexcitación: una FA por la vía puede degenerar en FV (t4).'),
+          marks: [{ auto: 'delta', lead: 'II' }],
+        },
+        {
+          label: l('Brugada 图形', 'Brugada pattern', 'Patrón de Brugada'),
+          ecg: synth('brugada-type1', 731),
+          note: l('V1–V2：穹窿形 ST 抬高约 3.5 mm（≥ 2 mm），下接倒置的 T ⇒ Brugada 1 型图形。', 'V1–V2: coved ST elevation of about 3.5 mm (≥ 2 mm) running into a negative T → type 1 Brugada pattern.', 'V1-V2: elevación del ST en cúpula de unos 3,5 mm (≥ 2 mm) que acaba en una T negativa → patrón de Brugada tipo 1.'),
+          marks: [{ auto: 'st', lead: 'V1' }, { auto: 'st', lead: 'V2' }],
+        },
+      ],
+      caption: l('自主循环一恢复就做 12 导联：下一次骤停的原因可能就写在这张纸上。', 'Record a 12-lead as soon as circulation returns: the cause of the next arrest may be written on it.', 'Registra un ECG de 12 derivaciones en cuanto vuelva la circulación: la causa de la próxima parada puede estar escrita en él.'),
     },
     { kind: 'check', item: { family: 'arrest', seed: 8 } },
     { kind: 'check', item: { family: 'arrest', seed: 13 } },
@@ -234,9 +295,9 @@ const lesson: Lesson = {
       kind: 'text',
       title: l('10 秒速读', 'The 10-second round', 'La ronda de 10 segundos'),
       body: l(
-        '下面这一组按真实的节律检查来练：每条节律条**只给自己 10 秒**（出声数：一、二……十），时间到就作答——先说桶（**可电击 / 不可电击**），再说名字。答错的不要只看答案：回到那条图，找出你本该在 10 秒内看到的那一个特征（有没有可辨认的 QRS？规则吗？宽吗？两个导联都平吗？）。目标是全对，而且越来越快。',
-        'Practise the next set as a real rhythm check: give yourself **10 seconds per strip** (count aloud: one, two... ten), then answer — the bin first (**shockable / non-shockable**), then the name. When you miss one, do not just read the answer: go back to the strip and find the single feature you should have seen within those 10 seconds (any identifiable QRS? regular? wide? flat in two leads?). The goal is every one right, and faster each time.',
-        'Practica la siguiente serie como una comprobación del ritmo real: date **10 segundos por tira** (cuenta en voz alta: uno, dos... diez) y responde: primero el grupo (**desfibrilable / no desfibrilable**), después el nombre. Cuando falles, no te limites a leer la respuesta: vuelve a la tira y busca el único rasgo que debías haber visto en esos 10 segundos (¿hay QRS reconocibles? ¿regular? ¿ancho? ¿plana en dos derivaciones?). El objetivo es acertarlas todas, cada vez más rápido.',
+        '每条节律条**只给自己 10 秒**，出声数到十就作答：先说桶（**可电击 / 不可电击**），再说名字。答错时回到那条图，找出本该看到的那一个特征。',
+        'Give yourself **10 seconds per strip**, counting aloud to ten, then answer: the bin first (**shockable / non-shockable**), then the name. When you miss one, go back to the strip and find the one feature you should have seen.',
+        'Date **10 segundos por tira**, contando en voz alta hasta diez, y responde: primero el grupo (**desfibrilable / no desfibrilable**), después el nombre. Cuando falles, vuelve a la tira y busca el único rasgo que debías haber visto.',
       ),
     },
     { kind: 'drill', families: ['arrest'], count: 12, passScore: 0.9 },
