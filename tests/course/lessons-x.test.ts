@@ -487,8 +487,8 @@ describe('x3: triage tracings', () => {
     for (const src of [blocksOf('x3', 'hook')[0].ecg, blocksOf('x3', 'contrast')[0].right.ecg]) {
       const t = ecgOf(src).truth!;
       expect(t.findings).toContain('av-block-3');
-      expect(Math.abs(t.hrBpm - 34)).toBeLessThan(2);
-      expect(Math.abs(t.atrialRateBpm! - 78)).toBeLessThan(3);
+      expect(Math.abs(t.hrBpm - 34)).toBeLessThanOrEqual(1);
+      expect(Math.abs(t.atrialRateBpm! - 78)).toBeLessThanOrEqual(1);
       expect(t.qrsMs).toBeGreaterThanOrEqual(140);
       expect(t.qrsMs).toBeLessThan(160);
     }
@@ -497,7 +497,7 @@ describe('x3: triage tracings', () => {
   it('worked: 92/min, narrow QRS, ST ↑ ≈ 2.5–4.5 mm V2–V4 (highest V3), reciprocal ↓ II/III/aVF, no tall tented T', () => {
     const e = ecgOf(blocksOf('x3', 'worked')[0].ecg);
     const t = e.truth!;
-    expect(Math.abs(t.hrBpm - 92)).toBeLessThan(2);
+    expect(Math.abs(t.hrBpm - 92)).toBeLessThanOrEqual(1);
     expect(t.qrsMs).toBeLessThan(110);
     for (const l of ['V2', 'V3', 'V4'] as const) {
       expect(stAt(e, l, 60), l).toBeGreaterThanOrEqual(0.245);
@@ -507,10 +507,11 @@ describe('x3: triage tracings', () => {
     for (const l of ['II', 'III', 'aVF'] as const) expect(stAt(e, l, 60), l).toBeLessThan(-0.05);
     expect(t.findings).not.toContain('hyperkalemia');
   });
-  it('T-and-device film, hyperkalaemia: no visible P in II, QRS about 170 ms, tall T in V3–V5 (well above the T in II)', () => {
+  it('T-and-device film, hyperkalaemia: no visible P in II, QRS about 170 ms, tall T in V3–V5 (well above the T in II), the "Tented T" mark on a scenario that carries peaked T', () => {
     const e = ecgOf(blocksOf('x3', 'film')[1].frames[0].ecg);
     const t = e.truth!;
     expect(t.findings).toContain('hyperkalemia');
+    expect(t.findings).toContain('peaked-t');
     expect(Math.abs(t.qrsMs - 170)).toBeLessThan(5);
     const b = midBeat(e);
     expect(span(e, 'II', b.qrsOn - 200, b.qrsOn - 20, b).max).toBeLessThan(0.05);
@@ -550,7 +551,7 @@ describe('x3: triage tracings', () => {
       expect(slope(at - 15, at + 15), `spike at ${at}`).toBeGreaterThan(5 * slope(at + 60, at + 160));
     }
   });
-  it('triage film: VF has no QRS; the occlusion is the worked STEMI; rapid AF irregularly irregular at about 140/min with no P; complete block is the hook (P about 78, escape about 34); the normal frame has nothing to catch', () => {
+  it('triage film: VF has no QRS; the occlusion is the worked STEMI; rapid AF irregularly irregular, 23 QRS in 10 s ≈ 138/min, no P, its two RR marks on adjacent unequal cycles in the II panel; complete block is the hook (P about 78, escape about 34); the normal frame has nothing to catch', () => {
     const film = blocksOf('x3', 'film')[0];
     const [vf, , af, , normal] = frames('x3', 0);
     expect(vf.truth!.rhythm).toBe('ventricular-fibrillation');
@@ -558,9 +559,20 @@ describe('x3: triage tracings', () => {
     expect(film.frames[1].ecg).toEqual(blocksOf('x3', 'worked')[0].ecg);
     expect(film.frames[3].ecg).toEqual(blocksOf('x3', 'hook')[0].ecg);
     expect(af.truth!.rhythm).toBe('atrial-fibrillation');
-    expect(Math.abs(af.truth!.hrBpm - 140)).toBeLessThan(5);
+    expect(af.signal.durationMs).toBe(10000);
+    expect(af.truth!.beats.length).toBe(23);
+    expect(Math.abs(af.truth!.hrBpm - 138)).toBeLessThanOrEqual(1);
     expect(af.truth!.beats.every((b) => b.pOn === null)).toBe(true);
     expect(Math.max(...rrs(af)) - Math.min(...rrs(af))).toBeGreaterThan(200);
+    const marked = film.frames[2].marks!.flatMap((m) => ('auto' in m && m.auto === 'rr' && m.beat !== undefined ? [m.beat] : []));
+    expect(marked).toEqual([3, 4]);
+    const beats = af.truth!.beats;
+    for (const i of marked) expect(beats[i].kind, `beat ${i}`).toBe(beats[0].kind);
+    const brackets = resolveMarks(af, film.frames[2].marks, { layout: '3x4+1' }).flatMap((m) => (m.kind === 'bracket' ? [[m.t0, m.t1] as const] : []));
+    expect(brackets.length).toBe(2);
+    for (const [t0, t1] of brackets) expect(t1, 'inside the II column of the sheet').toBeLessThanOrEqual(2500 - 20);
+    const [a, b] = brackets.map(([t0, t1]) => t1 - t0);
+    expect(Math.max(a, b) / Math.min(a, b)).toBeGreaterThan(1.15);
     const n = normal.truth!;
     expect(n.findings).toContain('normal-ecg');
     expect(n.hrBpm).toBeGreaterThan(60);
@@ -691,8 +703,8 @@ const CLAIMS: readonly RealClaim[] = [
   { id: 2466, sex: 'F', age: 73, has: ['pac'] },
   { id: 17835, sex: 'M', age: 76, has: ['pac'] },
   // x3
-  { id: 4408, sex: 'M', age: 77, has: ['sinus-tachycardia'], hr: [125, 135] },
-  { id: 7688, sex: 'F', age: 86, has: ['av-block-3'], hr: [36, 44], qrs: [80, 115] },
+  { id: 4408, sex: 'M', age: 77, has: ['sinus-tachycardia'], hr: [129, 131] },
+  { id: 7688, sex: 'F', age: 86, has: ['av-block-3'], hr: [39, 41], qrs: [80, 115] },
   { id: 19269, sex: 'F', age: 87, has: ['stemi-inferior', 'stemi-posterior'] },
   { id: 16151, sex: 'F', age: 87, has: ['av-block-3'], hr: [20, 32], qrs: [120, 200] },
   { id: 19505, sex: 'F', age: 43, has: ['sinus-tachycardia', 'normal-ecg'], hr: [130, 145] },
