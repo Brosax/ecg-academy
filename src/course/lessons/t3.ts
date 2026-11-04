@@ -67,23 +67,65 @@ const lesson: Lesson = {
       ),
     },
     {
+      kind: 'figure',
+      figure: { id: 'laddergram', params: { maxBeats: 8 } },
+      ecg: synth('atrial-flutter', 641, { conductionRatio: 2 }),
+      caption: l(
+        '开头那条节律条的梯形图：心房层每 200 ms 一个 F，只有每第二个下传。被挡住的那个，正是你在节律条上看不见的 F：看不见不等于不存在。',
+        'The ladder of the opening strip: an F every 200 ms in the atrial tier, and only every second one conducts. The blocked F is exactly the one you could not see on the strip: not visible does not mean not there.',
+        'La escalera de la tira inicial: una F cada 200 ms en el nivel auricular, y solo conduce una de cada dos. La F bloqueada es justo la que no veías en la tira: que no se vea no significa que no esté.',
+      ),
+    },
+    {
       kind: 'heart',
       ecg: synth('atrial-flutter', 642, { conductionRatio: 2 }),
       emphasize: ['ra', 'av-node'],
       showConduction: true,
       caption: l(
-        '环路在右心房：激动绕三尖瓣环运行，每圈都穿过**下腔静脉-三尖瓣峡部（CTI）**。逆钟向、每圈约 200 ms ⇒ 心房率约 300 次/分。峡部是必经之路，所以一条经峡部的线性消融即可根治。房室结不应期约 300 ms，只能放过每两个 F 中的一个——心电图上就是 2:1 下传。',
-        'The loop lives in the right atrium: the wavefront circles the tricuspid annulus and crosses the **cavotricuspid isthmus (CTI)** on every lap. Counter-clockwise, about 200 ms per lap, so an atrial rate of about 300/min. The isthmus is the obligate passage, which is why one ablation line across it is curative. The AV node, refractory for roughly 300 ms, lets through only one F in two — on the ECG that is 2:1 conduction.',
-        'El circuito está en la aurícula derecha: el frente de excitación rodea el anillo tricuspídeo y cruza el **istmo cavotricuspídeo (ICT)** en cada vuelta. Antihorario, unos 200 ms por vuelta, es decir, una frecuencia auricular de unos 300 lpm. El istmo es el paso obligado, y por eso una sola línea de ablación a través de él es curativa. El nodo AV, refractario unos 300 ms, deja pasar solo una F de cada dos: en el ECG eso es una conducción 2:1.',
+        '环路在右心房（高亮）：激动绕三尖瓣环转，每圈都穿过**下腔静脉-三尖瓣峡部**。每圈约 200 ms ⇒ 心房约 300 次/分；房室结只放过每两个 F 中的一个 ⇒ 2:1。',
+        'The loop lives in the right atrium (highlighted): the wavefront circles the tricuspid annulus and crosses the **cavotricuspid isthmus** on every lap. About 200 ms per lap → atria at about 300/min; the AV node lets only one F in two through → 2:1.',
+        'El circuito está en la aurícula derecha (resaltada): el frente rodea el anillo tricuspídeo y cruza el **istmo cavotricuspídeo** en cada vuelta. Unos 200 ms por vuelta → aurículas a unas 300 lpm; el nodo AV deja pasar solo una F de cada dos → 2:1.',
       ),
     },
     {
-      kind: 'text',
-      title: l('三个名字，一个峡部', 'Three names, one isthmus', 'Tres nombres, un istmo'),
-      body: l(
-        '心房扑动的核心是一个**大折返环**：激动绕三尖瓣环运行，必经**下腔静脉-三尖瓣峡部（CTI）**。\n- **典型房扑（逆钟向，峡部依赖）**：房率约 250–330 次/分（约 300）；II、III、aVF 呈**负向锯齿状 F 波**，波与波之间**没有等电位线**；V1 的 F 波**直立**。\n- **反向典型房扑（顺钟向，仍为峡部依赖）**：下壁导联 F 波**宽大直立**，V1 负向或双峰——同一个环、反着转，峡部消融同样根治。\n- **不典型房扑**：非峡部依赖的大折返（心房瘢痕、心脏外科术后等），形态不符合典型环路——**"不典型"不等于"下壁 F 波直立"**。\n心房约 300 次/分、房室结每两个 F 下传一个，心室率就落在约 150 次/分——这就是你最常见的房扑心电图。',
-        'The core of atrial flutter is one **macro-re-entry loop**: the wavefront circles the tricuspid annulus and must cross the **cavotricuspid isthmus (CTI)**.\n- **Typical flutter (counter-clockwise, CTI-dependent)**: atrial rate about 250-330/min (about 300); **negative sawtooth F waves** in II, III and aVF with **no isoelectric baseline** between them; F **upright** in V1.\n- **Reverse-typical flutter (clockwise, still CTI-dependent)**: **broad positive** F waves in the inferior leads, negative or bifid in V1 — the same loop turning the other way, cured by the same isthmus line.\n- **Atypical flutter**: a non-CTI macro-re-entry (atrial scar, after cardiac surgery) whose morphology does not match the typical circuits — **"atypical" does not simply mean "positive F waves inferiorly"**.\nWith the atria near 300/min and the AV node passing every second F, the ventricles sit near 150/min — the flutter ECG you will meet most often.',
-        'El núcleo del flutter auricular es una única **macroreentrada**: el frente rodea el anillo tricuspídeo y tiene que cruzar el **istmo cavotricuspídeo (ICT)**.\n- **Flutter típico (antihorario, istmodependiente)**: frecuencia auricular de unos 250-330 lpm (unas 300); **ondas F en diente de sierra negativas** en II, III y aVF, **sin línea isoeléctrica** entre ellas; F **positiva** en V1.\n- **Flutter típico inverso (horario, también istmodependiente)**: ondas F **anchas y positivas** en las derivaciones inferiores, negativas o bifásicas en V1: el mismo circuito girando al revés, curado con la misma línea en el istmo.\n- **Flutter atípico**: macroreentrada no istmodependiente (cicatriz auricular, poscirugía cardíaca) cuya morfología no encaja con los circuitos típicos; **"atípico" no significa simplemente "F positivas en las inferiores"**.\nCon las aurículas a unas 300 lpm y el nodo AV dejando pasar una F de cada dos, los ventrículos quedan en unos 150 lpm: el ECG de flutter que verás con más frecuencia.',
+      kind: 'film',
+      title: l('同一个峡部，两个方向', 'One isthmus, two directions', 'Un istmo, dos sentidos'),
+      view: { layout: '6x2', highlightLeads: ['II', 'III', 'aVF', 'V1'] },
+      frames: [
+        {
+          label: l('逆钟向', 'Counter-clockwise', 'Antihorario'),
+          ecg: synth('atrial-flutter', 649, { conductionRatio: 4 }),
+          note: l(
+            'II、III、aVF：**负向**锯齿 F 波，波间没有平线；V1：F 直立 ⇒ 典型房扑（逆钟向）。',
+            'II, III, aVF: **negative** sawtooth F waves with no flat line between them; V1: F upright → typical (counter-clockwise) flutter.',
+            'II, III, aVF: ondas F en diente de sierra **negativas**, sin línea plana entre ellas; V1: F positiva → flutter típico (antihorario).',
+          ),
+          marks: [{ auto: 'f-waves', lead: 'II' }, { auto: 'f-waves', lead: 'V1' }],
+        },
+        {
+          label: l('顺钟向', 'Clockwise', 'Horario'),
+          ecg: synth('atrial-flutter', 649, { conductionRatio: 4 }, 'clockwise'),
+          note: l(
+            '同一个环反着转：下壁 F 波变成**直立**，V1 变为负向 ⇒ 反向典型房扑，仍走峡部。',
+            'The same loop turning the other way: the inferior F waves turn **positive** and V1 turns negative → reverse-typical flutter, still through the isthmus.',
+            'El mismo circuito girando al revés: las F inferiores se vuelven **positivas** y V1 negativa → flutter típico inverso, que sigue pasando por el istmo.',
+          ),
+          marks: [{ auto: 'f-waves', lead: 'II' }, { auto: 'f-waves', lead: 'V1' }],
+        },
+      ],
+      predict: {
+        question: l(
+          '同一个峡部环路反方向转，下壁导联的 F 波会怎样？',
+          'If the same isthmus loop turns the other way, what happens to the F waves in the inferior leads?',
+          'Si el mismo circuito del istmo gira al revés, ¿qué pasa con las ondas F de las derivaciones inferiores?',
+        ),
+        options: [l('不变', 'Nothing changes', 'No cambian'), l('翻转为直立', 'They flip to positive', 'Se vuelven positivas'), l('消失', 'They disappear', 'Desaparecen')],
+        answer: 1,
+      },
+      caption: l(
+        '典型房扑是绕三尖瓣环的大折返，每圈都穿过峡部。方向决定 F 波的极性；两种都可用一条峡部消融线根治。',
+        'Typical flutter is a macro-re-entry around the tricuspid annulus that crosses the isthmus on every lap. The direction sets the F-wave polarity; both are cured by one ablation line across the isthmus.',
+        'El flutter típico es una macroreentrada alrededor del anillo tricuspídeo que cruza el istmo en cada vuelta. El sentido fija la polaridad de las F; ambos se curan con una línea de ablación en el istmo.',
       ),
     },
     {
@@ -124,6 +166,14 @@ const lesson: Lesson = {
             'Ic 类药或胺碘酮把房扑减慢到 < 200 次/分后可发生；常为宽 QRS、貌似室速——急症',
             'Can occur when class IC drugs or amiodarone slow flutter below 200/min; often wide-QRS, mimicking VT — an emergency',
             'Puede ocurrir cuando un antiarrítmico IC o la amiodarona enlentece el flutter por debajo de 200 lpm; a menudo con QRS ancho, simulando una TV: urgencia',
+          ),
+        },
+        {
+          label: l('迷走手法 / 腺苷', 'Vagal manoeuvres / adenosine', 'Maniobras vagales / adenosina'),
+          value: l(
+            '提高房室阻滞、暴露 F 波，几乎从不终止房扑；终止且最后一个事件是 P′ ⇒ 依赖房室结（t1）；逐渐减慢再加快 ⇒ 窦速或自律性房速；全程记录 12 导联',
+            'Raise the AV block and unmask the F waves, almost never terminating flutter; termination with a P′ as the last event -> AV-node-dependent (t1); gradual slowing then re-acceleration -> sinus tachycardia or automatic AT; keep a 12-lead running',
+            'Aumentan el bloqueo AV y destapan las ondas F, casi nunca terminan el flutter; terminación con una P′ como último evento -> dependiente del nodo AV (t1); enlentecimiento gradual y reaceleración -> taquicardia sinusal o TA automática; mantén un ECG de 12 derivaciones grabando',
           ),
         },
       ],
@@ -186,10 +236,37 @@ const lesson: Lesson = {
       dials: [{ id: 'conductionRatio' }],
       view: STRIP,
       marks: [{ auto: 'f-waves' }],
+      play: {
+        dial: 'conductionRatio',
+        from: 2,
+        to: 4,
+        notes: [
+          {
+            min: 2,
+            max: 2,
+            text: l('2:1：心室 150 次/分。每两个 F 只看得见一个，另一个藏起来了。', '2:1: ventricles at 150/min. Only one F in two shows; the other is hidden.', '2:1: ventrículos a 150 lpm. Solo se ve una F de cada dos; la otra está escondida.'),
+          },
+          { min: 3, max: 3, text: l('3:1：心室 100 次/分，QRS 之间露出更多 F 波。', '3:1: ventricles at 100/min, and more F waves show between the QRS complexes.', '3:1: ventrículos a 100 lpm, y aparecen más ondas F entre los QRS.') },
+          {
+            min: 4,
+            max: 4,
+            text: l(
+              '4:1：心室 75 次/分，QRS 之间三个 F，锯齿清清楚楚。心房一直是 300 次/分。',
+              '4:1: ventricles at 75/min, three F waves between QRS complexes and a clear sawtooth. The atria stay at 300/min throughout.',
+              '4:1: ventrículos a 75 lpm, tres ondas F entre los QRS y un diente de sierra nítido. Las aurículas siguen a 300 lpm todo el tiempo.',
+            ),
+          },
+        ],
+      },
+      predict: {
+        question: l('把 2:1 调到 4:1，心房率会怎样？', 'Going from 2:1 to 4:1, what happens to the atrial rate?', 'Al pasar de 2:1 a 4:1, ¿qué le ocurre a la frecuencia auricular?'),
+        options: [l('减半', 'It halves', 'Se reduce a la mitad'), l('仍约 300 次/分', 'It stays at about 300/min', 'Sigue en unas 300 lpm'), l('加倍', 'It doubles', 'Se duplica')],
+        answer: 1,
+      },
       caption: l(
-        '拖动传导比例 2 → 3 → 4：心室率一档一档地降——150 → 100 → 75 次/分——而**心房率始终约 300**。比例越大，落在 QRS–T 之外的 F 波越多，锯齿越清楚。诊断始终是同一个房扑，变的只是传导比例：所以报告要写比例，不能只写"房扑"。',
-        'Drag the conduction ratio from 2 to 3 to 4: the ventricular rate steps down — 150, then 100, then 75/min — while the **atrial rate stays at about 300**. The higher the ratio, the more F waves fall outside the QRS–T and the clearer the sawtooth. The diagnosis is the same flutter throughout; only the ratio changes — which is why your report must state the ratio, not just "flutter".',
-        'Arrastra la proporción de conducción de 2 a 3 y a 4: la frecuencia ventricular baja escalón a escalón —150, 100, 75 lpm— mientras la **frecuencia auricular se mantiene en unas 300**. Cuanto mayor la proporción, más ondas F caen fuera del QRS–T y más nítido el diente de sierra. El diagnóstico es el mismo flutter todo el tiempo; solo cambia la proporción, y por eso el informe debe indicarla: no basta con escribir "flutter".',
+        '迷走手法或腺苷就是这样提高比例：暴露 F 波，却几乎从不终止房扑。给药时全程记录 12 导联；报告要写比例。',
+        'Vagal manoeuvres or adenosine raise the ratio just like this: they unmask the F waves but almost never stop flutter. Keep a 12-lead running; report the ratio, not just "flutter".',
+        'Las maniobras vagales o la adenosina suben la proporción justo así: destapan las ondas F pero casi nunca detienen el flutter. Graba un ECG de 12 derivaciones; indica la proporción, no solo "flutter".',
       ),
     },
     {
@@ -214,33 +291,13 @@ const lesson: Lesson = {
     },
     {
       kind: 'ecg',
-      ecg: synth('atrial-flutter', 648, undefined, 'clockwise'),
-      view: STRIP,
-      marks: [{ auto: 'f-waves', label: l('F 波（下壁直立）', 'F waves (positive inferiorly)', 'ondas F (positivas en las inferiores)') }],
-      caption: l(
-        '顺钟向（反向典型）房扑（本条约 4:1 下传）：下壁导联 F 波**宽大直立**而非负向锯齿，V1 负向或双峰——同一个峡部环路反着转。别因为"下壁 F 直立"就叫它不典型房扑：它仍是峡部依赖，峡部消融线照样根治。',
-        'Clockwise (reverse-typical) flutter (about 4:1 conduction here): in the inferior leads the F waves are **broad and positive**, not negative sawtooth, and V1 is negative or bifid — the same isthmus loop turning the other way. Do not call it "atypical" just because the inferior F is upright: it is still CTI-dependent and the same isthmus ablation line cures it.',
-        'Flutter horario (típico inverso; aquí con conducción de unos 4:1): en las derivaciones inferiores las ondas F son **anchas y positivas**, no un diente de sierra negativo, y V1 es negativa o bifásica: el mismo circuito del istmo girando al revés. No lo llames "atípico" solo porque la F inferior sea positiva: sigue istmodependiente y la misma línea de ablación en el istmo lo cura.',
-      ),
-    },
-    {
-      kind: 'ecg',
       ecg: synth('atrial-flutter', 647, undefined, 'variable'),
       view: STRIP,
       marks: [{ auto: 'f-waves' }, { auto: 'rr' }],
       caption: l(
-        '比例不等的房扑：RR 看着乱，但分规一卡就现原形——**每个 RR 都接近恒定 F–F（200 ms）的整数倍**（本条约 3 到 5 倍，房室传导时间的小差异让它不完全整齐）——心房的"钟"从未变过。房颤没有这口钟：房波频率与形态都在变（t2）。所以下一步是找 F，不是先写"房颤"。',
-        'Flutter with variable block: the RR looks chaotic, but the calipers give it away — **every RR sits close to a multiple of the constant F–F (200 ms)** (three to five times on this strip; small differences in AV conduction time keep it from being exact) — the atrial "clock" never changes. AF has no such clock: its atrial activity varies in rate and morphology (t2). So the next step is to find the F waves, not to write "AF".',
-        'Flutter con conducción variable: el RR parece caótico, pero el compás lo delata: **cada RR queda cerca de un múltiplo del F–F constante (200 ms)** (de tres a cinco veces en esta tira; pequeñas diferencias en el tiempo de conducción AV impiden que sea exacto): el "reloj" auricular no cambia nunca. La FA no tiene ese reloj: su actividad auricular varía en frecuencia y morfología (t2). Por eso el paso siguiente es buscar las ondas F, no escribir "FA".',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('让 F 波显形，以及 1:1 急症', 'Unmasking the F waves — and the 1:1 emergency', 'Destapar las ondas F y la urgencia de la 1:1'),
-      body: l(
-        '**迷走手法与腺苷几乎从不终止房扑**——它们提高房室阻滞，把 F 波全部暴露出来。诊断反应要背下来：\n- **一过性房室阻滞而房性心动过速继续** ⇒ 房速或房扑（不依赖房室结）。\n- **终止且最后一个事件是 P′** ⇒ 依赖房室结的心动过速（AVNRT/AVRT，t1），房速可能性很小。\n- **逐渐减慢再加快** ⇒ 窦性心动过速或自律性房速。\n给药时**全程记录 12 导联**——反应只出现一次，错过就没了。\n**1:1 下传是急症**：Ic 类药（氟卡尼、普罗帕酮）或胺碘酮可把房扑减慢到 < 200 次/分，房室结便能每圈都下传——规则的、约 200 次/分以上的**宽 QRS** 心动过速（频率依赖性差异传导），貌似室速。正在服 Ic 类药的患者突然出现规则的极快宽 QRS 心动过速：先想到房扑 1:1。',
-        '**Vagal manoeuvres and adenosine almost never terminate flutter** — they raise the AV block and uncover all the F waves. Learn the diagnostic responses by heart:\n- **Transient AV block with the atrial tachycardia continuing** -> AT or flutter (AV-node-independent).\n- **Termination with the last event a P′** -> an AV-node-dependent tachycardia (AVNRT/AVRT, t1); AT very unlikely.\n- **Gradual slowing and then re-acceleration** -> sinus tachycardia or automatic AT.\nKeep a **12-lead running while the drug goes in** — the response happens once; miss it and it is gone.\n**1:1 conduction is an emergency**: class IC drugs (flecainide, propafenone) or amiodarone can slow flutter below 200/min, and the AV node can then conduct every lap — a regular, very fast (about 200/min or more) **wide-QRS** tachycardia (rate-related aberrancy) that mimics VT. A patient on a class IC drug who suddenly develops a regular, extremely fast wide-QRS tachycardia: think flutter with 1:1 conduction first.',
-        '**Las maniobras vagales y la adenosina casi nunca terminan el flutter**: aumentan el bloqueo AV y dejan todas las ondas F a la vista. Aprende de memoria las respuestas diagnósticas:\n- **Bloqueo AV transitorio con la taquicardia auricular persistente** -> TA o flutter (independiente del nodo AV).\n- **Terminación con la P′ como último evento** -> taquicardia dependiente del nodo AV (TRIN/TRAV, t1); la TA es muy improbable.\n- **Enlentecimiento gradual y reaceleración** -> taquicardia sinusal o TA automática.\nMantén un **ECG de 12 derivaciones grabando mientras se administra el fármaco**: la respuesta ocurre una sola vez y, si se pierde, se perdió.\n**La conducción 1:1 es una urgencia**: los antiarrítmicos IC (flecainida, propafenona) o la amiodarona pueden enlentecer el flutter por debajo de 200 lpm y el nodo AV puede entonces conducir cada vuelta: una taquicardia regular, muy rápida (unos 200 lpm o más) y de **QRS ancho** (aberrancia por frecuencia) que simula una TV. Un paciente con un antiarrítmico IC que presenta de golpe una taquicardia regular, rapidísima y de QRS ancho: piensa primero en un flutter con conducción 1:1.',
+        '比例不等的房扑：RR 看似杂乱，但**每个 RR 都接近 F–F（200 ms）的整数倍**（本条 3 到 5 倍）。心房的“钟”从未变过；房颤没有这口钟（t2）。',
+        'Flutter with variable block: the RR looks chaotic, but **every RR sits close to a whole multiple of the F–F (200 ms)**, three to five times on this strip. The atrial clock never changes; AF has no such clock (t2).',
+        'Flutter con conducción variable: el RR parece caótico, pero **cada RR queda cerca de un múltiplo entero del F–F (200 ms)**, de tres a cinco veces en esta tira. El reloj auricular no cambia nunca; la FA no tiene ese reloj (t2).',
       ),
     },
     { kind: 'check', item: { family: 'narrow-tachy', seed: 9 } },

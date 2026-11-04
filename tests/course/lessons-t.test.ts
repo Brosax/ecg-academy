@@ -503,10 +503,68 @@ describe('t2 on the tracings', () => {
 
 describe('t3 on the tracings', () => {
   it('hook and worked: 2:1 flutter, ventricles 150/min, atria 300/min', () => {
-    for (const src of [blocksOf('t3', 'hook')[0].ecg, blocksOf('t3', 'worked')[0].ecg]) {
+    for (const src of [blocksOf('t3', 'hook')[0].ecg, blocksOf('t3', 'worked')[0].ecg, blocksOf('t3', 'heart')[0].ecg]) {
       const t = ecgOf(src).truth!;
       expect(Math.abs(t.hrBpm - 150)).toBeLessThan(3);
       expect(t.atrialRateBpm).toBe(300);
+    }
+  });
+  it('laddergram: the hook strip, an F every 200 ms, every second F conducted and visible, every blocked F hidden', () => {
+    const fig = blocksOf('t3', 'figure').find((b) => b.figure.id === 'laddergram')!;
+    expect(fig.ecg).toEqual(blocksOf('t3', 'hook')[0].ecg);
+    const t = ecgOf(fig.ecg!).truth!;
+    const inStrip = t.atrial.filter((a) => a.t > t.beats[0].qrsOn && a.t < t.beats[t.beats.length - 1].qrsOn);
+    for (let i = 1; i < t.atrial.length; i++) expect(Math.abs(t.atrial[i].t - t.atrial[i - 1].t - 200)).toBeLessThan(3);
+    inStrip.forEach((a, i) => {
+      expect(a.conductedTo === null, `F ${i}`).toBe(inStrip[0].conductedTo === null ? i % 2 === 0 : i % 2 === 1);
+      expect(a.visible, `F ${i}`).toBe(a.conductedTo !== null);
+    });
+  });
+  it('direction film: one heart; counter-clockwise F negative in II, III, aVF and upright in V1; clockwise F positive inferiorly and negative in V1', () => {
+    const film = blocksOf('t3', 'film')[0];
+    const [ccw, cw] = film.frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req : null));
+    expect({ ...cw!, variant: undefined }).toEqual({ ...ccw!, variant: undefined });
+    const [a, b] = frames('t3', 0);
+    const swing = (e: Ecg, lead: StdLead) => {
+      const bs = e.truth!.beats;
+      const up: number[] = [];
+      const dn: number[] = [];
+      for (let i = 0; i + 1 < bs.length; i++) {
+        const xs: number[] = [];
+        for (let t = bs[i].tOff + 30; t <= bs[i + 1].qrsOn - 30; t += 2) xs.push(at(e, lead, t));
+        if (xs.length < 100) continue;
+        const m = median(xs);
+        up.push(Math.max(...xs) - m);
+        dn.push(m - Math.min(...xs));
+      }
+      return { up: median(up), dn: median(dn) };
+    };
+    for (const l of ['II', 'III', 'aVF'] as const) {
+      expect(swing(a, l).dn, `ccw ${l}`).toBeGreaterThan(1.5 * swing(a, l).up);
+      expect(swing(b, l).up, `cw ${l}`).toBeGreaterThan(1.5 * swing(b, l).dn);
+    }
+    expect(swing(a, 'V1').up).toBeGreaterThan(1.5 * swing(a, 'V1').dn);
+    expect(swing(b, 'V1').dn).toBeGreaterThan(1.5 * swing(b, 'V1').up);
+    expect(a.truth!.rhythm).toBe('atrial-flutter');
+    expect(b.truth!.rhythm).toBe('atrial-flutter');
+  });
+  it('ratio sweep notes: 2:1 at 150/min with about half the F waves hidden; 3:1 at 100/min with more F showing; 4:1 at 75/min with three F per RR; atria at 300/min throughout', () => {
+    const [two, three, four] = [2, 3, 4].map((v) => played('t3', 0, v));
+    for (const [e, hr] of [[two, 150], [three, 100], [four, 75]] as const) {
+      expect(Math.abs(e.truth!.hrBpm - hr), `${hr}`).toBeLessThan(1);
+      expect(e.truth!.atrialRateBpm, `${hr}`).toBe(300);
+    }
+    expect(Math.abs(hiddenShare(two) - 0.5)).toBeLessThan(0.1);
+    expect(hiddenShare(three)).toBeLessThan(hiddenShare(two) - 0.1);
+    for (const rr of rrs(four)) expect(Math.round(rr / 200)).toBe(4);
+    expect(hiddenShare(four)).toBeLessThan(0.35);
+  });
+  it('variable-block strip: every RR within 0.2 F–F of a whole multiple of 200 ms, from 3 to 5', () => {
+    const e = ecgOf(blocksOf('t3', 'ecg')[0].ecg);
+    expect(e.truth!.atrialRateBpm).toBe(300);
+    for (const rr of rrs(e)) {
+      expect(Math.abs(rr / 200 - Math.round(rr / 200)), `${rr}`).toBeLessThan(0.2);
+      expect([3, 4, 5]).toContain(Math.round(rr / 200));
     }
   });
 });
