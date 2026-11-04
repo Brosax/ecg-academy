@@ -9,13 +9,26 @@
  *   major 4  · 19170 (M73, AF/flutter labels, ≈ 111/min), 2627 (M45, old inferior MI), 18776 (M35, LVH label),
  *              2739 (M89, atrial flutter ≈ 147/min)
  *   act now 1 · 12899 (F67, acute inferior STEMI, PTB-XL infarction stadium I)
+ * Films on real tracings point at leads with 'lead' marks only and claim only labels and 12SL values; the synthetic
+ * frames (lvh-strain 1851, atrial-flutter 1850 at 2:1 → 4:1) carry AutoMarks.
  */
 import { l } from '../../core/l10n';
 import type { EcgSource, Item } from '../../practice/api';
+import type { DialId } from '../../synth/api';
 import type { Lesson } from '../api';
 
 const real = (id: number): EcgSource => ({ kind: 'real', id });
+const synth = (scenario: string, seed: number, dials?: Partial<Record<DialId, number>>): EcgSource => ({
+  kind: 'synth',
+  req: { scenario, seed, ...(dials ? { dials } : {}) },
+});
 const GRID = { layout: '3x4+1' } as const;
+const STRIP = { layout: 'strip', lead: 'II' } as const;
+
+/** Voltage with secondary ST–T: the finding that turns tracing 8's voltage into an echo. */
+const LVH_STRAIN = synth('lvh-strain', 1851);
+/** One flutter circuit; only the conduction ratio changes. */
+const FLUTTER = (conductionRatio: number) => synth('atrial-flutter', 1850, { conductionRatio });
 
 /** The hidden emergency of the stream: commit to a bin before the debrief. */
 const hiddenStemi: Item = {
@@ -85,11 +98,10 @@ const lesson: Lesson = {
     },
     {
       kind: 'text',
-      title: l('患病率思维：多数心电图没有急事', 'Prevalence thinking: most ECGs hold nothing urgent', 'Pensamiento en prevalencia: la mayoría de los ECG no esconden nada urgente'),
       body: l(
-        '真实门诊不是考卷：心电图按患病率到来——**大多数正常或接近正常**，其余多为常见发现（窦性心动过缓、早搏、一度房室传导阻滞、束支阻滞、非特异性 ST–T）。今天这条流有 14 份真实图：**5 份正常、4 份次要发现、4 份重要发现、1 份需要现在处理**——真实门诊里正常的比例只会更高。\n- 读者最常见的错误是**把正常变异过度诊断**：早期复极被当作 STEMI、年轻人的电压被当作肥厚——代价是不必要的转诊、检查与焦虑。\n- 机器同样会错：自动判读必须始终由有资质的读者复核，其错误集中在节律（例如伪差被判为房颤、起搏心律），也不能可靠识别电极接反（o12）。\n- 而平凡之流中仍藏着闭塞、传导阻滞与失控节律——**x1 的固定顺序就是筛子**：每份图十步走完，任何发现都别想躲在“节律”那一行后面。',
-        'A real clinic is not an exam: ECGs arrive by prevalence — **most are normal or near-normal**, and the rest are mostly common findings (sinus bradycardia, extrasystoles, first-degree AV block, bundle branch block, non-specific ST–T). Today\'s stream holds 14 real tracings: **5 normal, 4 minor, 4 major, 1 act-now** — in a real clinic the normal share is higher still.\n- The commonest reader error is **over-calling normal variants**: early repolarisation read as STEMI, young voltage read as hypertrophy — the cost is needless referral, testing and anxiety.\n- The machine errs too: the automated statement must always be confirmed by a qualified reader; its errors cluster in rhythm (artefact called AF, pacemaker rhythms) and it does not recognise electrode reversals reliably (o12).\n- And the ordinary stream still hides occlusions, blocks and uncontrolled rhythms — **the fixed order from x1 is the sieve**: ten steps on every tracing, so nothing hides behind the rhythm line.',
-        'Una consulta real no es un examen: los ECG llegan según la prevalencia —**la mayoría son normales o casi normales**— y el resto son sobre todo hallazgos frecuentes (bradicardia sinusal, extrasístoles, bloqueo AV de primer grado, bloqueo de rama, ST–T inespecífico). La serie de hoy tiene 14 ECG reales: **5 normales, 4 con hallazgos menores, 4 mayores y 1 de actuar ya**; en una consulta real la proporción de normales es aún mayor.\n- El error más frecuente del lector es **sobrediagnosticar variantes normales**: una repolarización precoz leída como IAMCEST, un voltaje juvenil leído como hipertrofia; el coste son derivaciones a otros especialistas, pruebas y ansiedad innecesarias.\n- La máquina también se equivoca: la interpretación automática debe confirmarla siempre un lector cualificado; sus errores se concentran en el ritmo (artefacto llamado FA, ritmos con marcapasos) y no reconoce con fiabilidad las inversiones de electrodos (o12).\n- Y en la serie banal siguen escondiéndose oclusiones, bloqueos y ritmos descontrolados: **el orden fijo de x1 es el tamiz**, diez pasos en cada ECG, para que nada quede oculto tras la línea del ritmo.',
+        '今天的门诊流有 14 份真实心电图：**5 份正常、4 份次要、4 份重要、1 份现在处理**；真实门诊里正常的只会更多。其余多是常见发现：窦性心动过缓、早搏、一度房室阻滞、束支阻滞。最常见的错误是过度诊断，代价是不必要的转诊、检查和焦虑。每一份都走完 x1 的十步：这就是筛子。',
+        'Today\'s stream holds 14 real ECGs: **5 normal, 4 minor, 4 major, 1 act now**; a real clinic has even more normals. The rest are mostly common findings: sinus bradycardia, extrasystoles, first-degree AV block, bundle branch block. The commonest error is over-calling, and it costs needless referrals, tests and anxiety. Every one gets the ten steps from x1: that is the sieve.',
+        'La serie de hoy tiene 14 ECG reales: **5 normales, 4 menores, 4 mayores y 1 de actuar ya**; una consulta real tiene aún más normales. El resto son sobre todo hallazgos frecuentes: bradicardia sinusal, extrasístoles, bloqueo AV de primer grado, bloqueo de rama. El error más frecuente es sobrediagnosticar, y cuesta derivaciones, pruebas y ansiedad innecesarias. Cada uno recibe los diez pasos de x1: ese es el tamiz.',
       ),
     },
     {
@@ -124,27 +136,71 @@ const lesson: Lesson = {
           label: l('房性早搏', 'Atrial extrasystole (PAC)', 'Extrasístole auricular'),
           value: l('提前出现、形态不同的 P 波，其后间歇非完全代偿', 'An early P wave of a different shape, followed by a less than fully compensatory pause', 'Una P precoz de morfología distinta, seguida de una pausa no totalmente compensadora'),
         },
+        {
+          label: l('只有电压', 'Voltage alone', 'Solo voltaje'),
+          value: l(
+            '敏感度低（约 10–25%）：单凭电压既不能确诊也不能排除肥厚；伴侧壁 T 倒置、ST 压低、病理性 Q 波、高血压、杂音或症状时做超声',
+            'Insensitive (about 10–25 %): voltage alone neither proves nor excludes hypertrophy; echo when it comes with lateral T inversion, ST depression, pathological Q waves, hypertension, a murmur or symptoms',
+            'Poco sensible (en torno al 10–25 %): el voltaje solo ni demuestra ni descarta la hipertrofia; ecocardiograma si se acompaña de T lateral invertida, descenso del ST, ondas Q patológicas, hipertensión, soplo o síntomas',
+          ),
+        },
       ],
       source:
         'Mason JW et al. AHA/ACCF/HRS Part II: Electrocardiography diagnostic statement list. Circulation 2007;115:1325-1332; Surawicz B et al. AHA/ACCF/HRS Part III: Intraventricular conduction disturbances. Circulation 2009;119:e235-e240; Thygesen K et al. Fourth universal definition of myocardial infarction (2018). Eur Heart J 2019;40:237-269; Drezner JA et al. International recommendations for electrocardiographic interpretation in athletes. J Am Coll Cardiol 2017;69:1057-1075; Schläpfer J, Wellens HJ. Computer-interpreted electrocardiograms. J Am Coll Cardiol 2017;70:1183-1192',
     },
     {
-      kind: 'ecg',
-      ecg: real(6282),
+      kind: 'film',
+      title: l('第 2 份：一条右束支，其余九行照读', 'Tracing 2: one right bundle, nine more lines', 'ECG 2: una rama derecha y nueve líneas más'),
       view: GRID,
+      frames: [
+        {
+          label: l('心率、节律', 'Rate, rhythm', 'Frecuencia, ritmo'),
+          ecg: real(6282),
+          note: l(
+            '窦性心律约 76 次/分，PR 约 134 ms：前几行都正常。',
+            'Sinus rhythm at about 76/min, PR about 134 ms: the first lines are normal.',
+            'Ritmo sinusal a unas 76 lpm, PR de unos 134 ms: las primeras líneas son normales.',
+          ),
+          marks: [{ kind: 'lead', lead: 'II' }],
+        },
+        {
+          label: l('QRS', 'QRS', 'QRS'),
+          ecg: real(6282),
+          note: l(
+            'QRS 约 154 ms，增宽；标注为**完全性右束支传导阻滞**。拿判据卡核对 V1 和 I、V6。',
+            'QRS about 154 ms: wide. Labelled **complete RBBB**: check V1, I and V6 against the criteria card.',
+            'QRS de unos 154 ms: ancho. Etiquetado como **bloqueo completo de rama derecha**: comprueba V1, I y V6 con la tarjeta de criterios.',
+          ),
+          marks: [{ kind: 'lead', lead: 'V1' }, { kind: 'lead', lead: 'I' }, { kind: 'lead', lead: 'V6' }],
+        },
+        {
+          label: l('其余几行', 'The other lines', 'Las demás líneas'),
+          ecg: real(6282),
+          note: l(
+            '右束支阻滞不改变 QRS 起始部，Q 波照样能读；这份没有梗死标注。次要：调旧图看是否新发。',
+            'RBBB leaves the start of the QRS alone, so Q waves stay readable; no infarct is labelled here. Minor: is it new? Compare with an old ECG.',
+            'El bloqueo de rama derecha no cambia el inicio del QRS, así que las Q siguen legibles; aquí no hay infarto etiquetado. Menor: ¿es nuevo? Compara con un ECG previo.',
+          ),
+          marks: [{ kind: 'lead', lead: 'II' }, { kind: 'lead', lead: 'III' }, { kind: 'lead', lead: 'aVF' }, { kind: 'lead', lead: 'V2' }],
+        },
+      ],
+      predict: {
+        question: l(
+          '第 2 份：42 岁男性，QRS 约 154 ms。宽 QRS 对他的报告意味着什么？',
+          'Tracing 2: a 42-year-old man, QRS about 154 ms. What does the wide QRS do to his report?',
+          'ECG 2: varón de 42 años, QRS de unos 154 ms. ¿Qué cambia el QRS ancho en su informe?',
+        ),
+        options: [
+          l('多一条发现，其余几行照读', 'One more finding; the other lines still get read', 'Un hallazgo más; las demás líneas se siguen leyendo'),
+          l('它解释了整份图，不用再读', 'It explains the whole tracing: stop reading', 'Explica todo el ECG: deja de leer'),
+          l('直接进“现在处理”', 'It goes straight to act now', 'Va directo a actuar ya'),
+        ],
+        answer: 0,
+      },
       caption: l(
-        '门诊流第 2 份：42 岁男性。先别看任何提示——在纸上写下十步完整报告，然后往下读小结。',
-        'Tracing 2: a 42-year-old man. No hints first — write the full ten-step report on paper, then read the debrief below.',
-        'ECG 2: varón de 42 años. Primero sin pistas: escribe en papel el informe completo de diez pasos y luego lee el comentario.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('第 2 份小结：一条右束支，其余照读', 'Tracing 2 debrief: a right bundle, and everything else still read', 'ECG 2: una rama derecha, y todo lo demás se sigue leyendo'),
-      body: l(
-        '窦性心律约 76 次/分，PR 约 134 ms；QRS 约 154 ms，V1 呈 rsR′，I 与 V6 见宽钝 S 波，V1 T 波倒置（继发性改变）——**完全性右束支传导阻滞**。\n- 报告的其余九行照写：这份图没有急性 ST 事件；RBBB 不掩盖初始激动，Q 波依然可读。\n- 严重程度：次要；与旧图对比确认是否新发。**新发** RBBB 伴缺血症状才升级为“当天”甚至更高（x3）。\n- 门诊常见——正因如此，它不能劫持整份报告。',
-        'Sinus rhythm at about 76/min, PR about 134 ms; QRS about 154 ms with an rsR′ in V1, broad slurred S waves in I and V6, and T inverted in V1 (a secondary change) — **complete right bundle branch block**.\n- The other nine lines of the report still get written: no acute ST event here; RBBB does not hide initial activation, so Q waves remain readable.\n- Severity: minor; compare with old tracings to see whether it is new. A **new** RBBB with ischaemic symptoms moves up to "today" or higher (x3).\n- Common in clinics — exactly why it must not hijack the whole report.',
-        'Ritmo sinusal a unas 76 lpm, PR de unos 134 ms; QRS de unos 154 ms con rsR′ en V1, S anchas y empastadas en I y V6, y T invertida en V1 (cambio secundario): **bloqueo completo de rama derecha**.\n- Las otras nueve líneas del informe se escriben igual: aquí no hay evento ST agudo; el bloqueo de rama derecha no oculta la activación inicial, así que las ondas Q siguen legibles.\n- Gravedad: menor; compara con ECG previos para saber si es nuevo. Un bloqueo **nuevo** con síntomas isquémicos sube a «hoy» o más arriba (x3).\n- Es frecuente en consulta, y precisamente por eso no debe secuestrar todo el informe.',
+        '门诊流第 2 份：42 岁男性。先在纸上写十步报告，再揭晓。新发右束支阻滞伴缺血症状才升到“当天”或更高（x3）。',
+        'Tracing 2: a 42-year-old man. Write the ten lines first, then reveal. Only a new RBBB with ischaemic symptoms moves up to "today" or higher (x3).',
+        'ECG 2: varón de 42 años. Escribe primero las diez líneas y luego mira. Solo un bloqueo de rama derecha nuevo con síntomas isquémicos sube a «hoy» o más (x3).',
       ),
     },
     {
@@ -229,22 +285,58 @@ const lesson: Lesson = {
       ),
     },
     {
-      kind: 'ecg',
-      ecg: real(18776),
+      kind: 'film',
+      title: l('第 8 份：先写电压，再写它对这个人的意义', 'Tracing 8: state the voltage, then what it means in him', 'ECG 8: di el voltaje y luego qué significa en él'),
       view: GRID,
+      frames: [
+        {
+          label: l('电压', 'Voltage', 'Voltaje'),
+          ecg: real(18776),
+          note: l(
+            '窦性约 53 次/分，QRS 约 100 ms。量 V1 的 S 加 V5 的 R：标注为**左心室肥厚**（电压）。',
+            'Sinus at about 53/min, QRS about 100 ms. Add the S in V1 to the R in V5: labelled **LVH** (voltage).',
+            'Sinusal a unas 53 lpm, QRS de unos 100 ms. Suma la S de V1 y la R de V5: etiquetado como **HVI** (voltaje).',
+          ),
+          marks: [{ kind: 'lead', lead: 'V1' }, { kind: 'lead', lead: 'V5' }],
+        },
+        {
+          label: l('侧壁', 'Lateral leads', 'Laterales'),
+          ecg: real(18776),
+          note: l(
+            '看 I、aVL、V5、V6：没有 ST–T 改变的标注。写“符合左心室肥厚的电压标准”；年轻男性或运动员的孤立电压常属正常（h9）。',
+            'Look at I, aVL, V5, V6: no ST–T change is labelled. Write "voltage criteria for LVH"; isolated voltage in a young man or an athlete is often normal (h9).',
+            'Mira I, aVL, V5 y V6: no hay ST–T etiquetado. Escribe «criterios de voltaje de HVI»; el voltaje aislado en un joven o un deportista suele ser normal (h9).',
+          ),
+          marks: [{ kind: 'lead', lead: 'I' }, { kind: 'lead', lead: 'aVL' }, { kind: 'lead', lead: 'V5' }, { kind: 'lead', lead: 'V6' }],
+        },
+        {
+          label: l('改变结论的', 'What changes it', 'Lo que lo cambia'),
+          ecg: LVH_STRAIN,
+          note: l(
+            '另一颗心脏：高电压**伴** V5–V6 ST 压低、T 倒置。这就改变结论了：做超声。',
+            'Another heart: tall voltage **with** ST depression and T inversion in V5–V6. That changes the verdict: echo.',
+            'Otro corazón: voltaje alto **con** descenso del ST y T invertida en V5–V6. Eso cambia el veredicto: ecocardiograma.',
+          ),
+          marks: [{ auto: 'st60', lead: 'V5' }, { auto: 't', lead: 'V6' }],
+        },
+      ],
+      predict: {
+        question: l(
+          '第 8 份：35 岁男性，胸前导联很高。报告该怎么写？',
+          'Tracing 8: a 35-year-old man with very tall chest leads. How should the report read?',
+          'ECG 8: varón de 35 años con precordiales muy altas. ¿Cómo debe decirlo el informe?',
+        ),
+        options: [
+          l('写出电压，再写它对他意味着什么', 'State the voltage, then what it means in him', 'Decir el voltaje y luego qué significa en él'),
+          l('“左心室肥厚，紧急转诊”', '"LVH, urgent referral"', '«HVI, derivación urgente»'),
+          l('“正常心电图”', '"Normal ECG"', '«ECG normal»'),
+        ],
+        answer: 0,
+      },
       caption: l(
-        '门诊流第 8 份：35 岁男性。年轻人，胸前导联很高——正常还是疾病？**先想好报告，再读下一段**。',
-        'Tracing 8: a 35-year-old man. A young man with very tall chest leads — normal or disease? **Work out the report first, then read the next block**.',
-        'ECG 8: varón de 35 años. Un joven con precordiales muy altas: ¿normal o enfermedad? **Elabora primero el informe y luego lee el siguiente bloque**.',
-      ),
-    },
-    {
-      kind: 'text',
-      title: l('第 8 份小结：电压、年龄与运动员标准', 'Tracing 8 debrief: voltage, age and the athlete criteria', 'ECG 8: voltaje, edad y los criterios del deportista'),
-      body: l(
-        '窦性心律约 53 次/分（窦性心动过缓）；S(V1) 约 16 mm + R(V5) 约 30 mm ≈ **Sokolow 46 mm > 35 mm**——电压标准阳性，心脏科医师也标注了“左心室肥厚”。ST 段等电位，侧壁 T 波直立，没有病理性 Q 波，QRS 约 100 ms。\n- 报告的描述层照实写：“**符合左心室肥厚的电压标准**，无继发性 ST–T 改变”。\n- 解读要看人：年轻、男性、胸壁薄者电压本来就高；若他是运动员，2017 国际运动员标准（h9）把**孤立的 QRS 电压标准**列为训练相关，无需进一步检查。电压标准的敏感度本就很低（约 10–25%）——单凭电压既不能确诊也不能排除肥厚。\n- 会改变结论的：侧壁 T 波倒置、ST 压低、病理性 Q 波、高血压或杂音、症状——出现任何一项都要做超声。\n- 把这份图写成“LVH，紧急转诊”是过度；写成“正常”是漏报。正确的报告**写出电压，再写出它在这个人身上的意义**。',
-        'Sinus rhythm at about 53/min (sinus bradycardia); S in V1 about 16 mm + R in V5 about 30 mm ≈ **Sokolow 46 mm > 35 mm** — the voltage criterion is met, and the cardiologists labelled "LVH". The ST segments are isoelectric, lateral T waves upright, no pathological Q waves, QRS about 100 ms.\n- The descriptive layer of the report states it as it is: "**voltage criteria for LVH**, no secondary ST–T changes".\n- The interpretation depends on the person: voltage runs high anyway in young men with thin chests; if he is an athlete, the 2017 international athlete criteria (h9) classify **isolated QRS voltage** as training-related, with no work-up needed. Voltage criteria are insensitive anyway (about 10–25 %) — voltage alone neither proves nor excludes hypertrophy.\n- What would change the verdict: lateral T inversion, ST depression, pathological Q waves, hypertension or a murmur, symptoms — any one of these calls for an echo.\n- Writing this tracing up as "LVH, urgent referral" is over-calling; writing "normal" is under-reporting. The right report **states the voltage, then what it means in this person**.',
-        'Ritmo sinusal a unas 53 lpm (bradicardia sinusal); S en V1 de unos 16 mm + R en V5 de unos 30 mm ≈ **Sokolow 46 mm > 35 mm**: se cumple el criterio de voltaje, y los cardiólogos etiquetaron «HVI». El ST es isoeléctrico, las T laterales son positivas, no hay ondas Q patológicas y el QRS mide unos 100 ms.\n- La capa descriptiva del informe lo dice tal cual: «**criterios de voltaje de HVI**, sin alteraciones secundarias del ST–T».\n- La interpretación depende de la persona: el voltaje ya es alto en varones jóvenes con tórax delgado; si es deportista, los criterios internacionales de 2017 (h9) consideran el **voltaje del QRS aislado** relacionado con el entrenamiento y sin necesidad de estudio. Además, los criterios de voltaje son poco sensibles (en torno al 10–25 %): el voltaje por sí solo ni demuestra ni descarta la hipertrofia.\n- Lo que cambiaría el veredicto: inversión de la T lateral, descenso del ST, ondas Q patológicas, hipertensión o un soplo, síntomas; cualquiera de ellos pide un ecocardiograma.\n- Informar este ECG como «HVI, derivación urgente» es sobrediagnosticar; escribir «normal» es omitir. El informe correcto **dice el voltaje y luego qué significa en esta persona**.',
+        '门诊流第 8 份：35 岁男性。写成“紧急转诊”是过度诊断，写成“正常”是漏报。',
+        'Tracing 8: a 35-year-old man. "Urgent referral" over-calls it; "normal" under-reports it.',
+        'ECG 8: varón de 35 años. «Derivación urgente» lo sobrediagnostica; «normal» lo omite.',
       ),
     },
     {
@@ -260,6 +352,61 @@ const lesson: Lesson = {
     { kind: 'check', item: { family: 'rhythm-real', seed: 4 } },
     { kind: 'check', item: { family: 'spot-real', seed: 7 } },
     { kind: 'drill', families: ['spot-real', 'findings-real'], count: 10, passScore: 0.8 },
+    {
+      kind: 'film',
+      title: l('房扑：心室率 = 300 ÷ 下传比例', 'Flutter: ventricular rate = 300 ÷ the conduction ratio', 'Aleteo: frecuencia ventricular = 300 ÷ la conducción'),
+      view: STRIP,
+      frames: [
+        {
+          label: l('2:1', '2:1', '2:1'),
+          ecg: FLUTTER(2),
+          note: l(
+            '规则窄 QRS，约 150 次/分：每两个 F 波下传一个，另一个埋在 T 波里。',
+            'Regular and narrow at about 150/min: one F wave in two conducts, the other is buried in the T wave.',
+            'Regular y estrecho a unas 150 lpm: conduce una onda F de cada dos; la otra queda enterrada en la onda T.',
+          ),
+          marks: [{ auto: 'f-waves' }],
+        },
+        {
+          label: l('3:1', '3:1', '3:1'),
+          ecg: FLUTTER(3),
+          note: l(
+            '同一个折返环，3:1：约 100 次/分，两个 QRS 之间露出锯齿波。',
+            'The same circuit at 3:1: about 100/min, and the sawtooth shows between the QRS complexes.',
+            'El mismo circuito a 3:1: unas 100 lpm, y el diente de sierra asoma entre los QRS.',
+          ),
+          marks: [{ auto: 'f-waves' }],
+        },
+        {
+          label: l('4:1', '4:1', '4:1'),
+          ecg: FLUTTER(4),
+          note: l(
+            '4:1：约 75 次/分，锯齿一目了然。F 波始终约每 200 ms 一个：心房率约 300 次/分。',
+            '4:1: about 75/min, the sawtooth is plain. One F wave every 200 ms or so throughout: an atrial rate of about 300/min.',
+            '4:1: unas 75 lpm, el diente de sierra es evidente. Una onda F cada 200 ms aproximadamente: frecuencia auricular de unas 300 lpm.',
+          ),
+          marks: [{ auto: 'f-waves' }],
+        },
+      ],
+      predict: {
+        question: l(
+          '同一个房扑，下传从 2:1 变成 4:1，心室率会怎样？',
+          'The same flutter goes from 2:1 to 4:1 conduction. What happens to the ventricular rate?',
+          'El mismo aleteo pasa de conducción 2:1 a 4:1. ¿Qué le pasa a la frecuencia ventricular?',
+        ),
+        options: [
+          l('150 → 75 次/分', '150 → 75/min', '150 → 75 lpm'),
+          l('保持 150 次/分', 'Stays at 150/min', 'Se queda en 150 lpm'),
+          l('150 → 300 次/分', '150 → 300/min', '150 → 300 lpm'),
+        ],
+        answer: 0,
+      },
+      caption: l(
+        '下一份真实图里有一份快而规则的。约 150 次/分的规则窄 QRS 心动过速，先在 II、III、aVF 找锯齿波。',
+        'The next real set holds a fast, regular one. A regular narrow tachycardia near 150/min: hunt the sawtooth in II, III and aVF first.',
+        'El siguiente grupo real tiene uno rápido y regular. Ante una taquicardia regular estrecha cerca de 150 lpm, busca primero el diente de sierra en II, III y aVF.',
+      ),
+    },
     {
       kind: 'real',
       ids: [2739, 2466, 17835],
@@ -286,6 +433,11 @@ const lesson: Lesson = {
           '节律命名后不再读 QRS 与 ST——第 1 份的 QRS 116 ms 和第 6 份的 Q 波都藏在这条错误后面。',
           'Naming the rhythm and never reading the QRS or the ST — the 116 ms QRS of tracing 1 and the Q waves of tracing 6 both hide behind this error.',
           'Nombrar el ritmo y no seguir con el QRS ni el ST: los 116 ms del QRS del ECG 1 y las ondas Q del ECG 6 se esconden tras este error.',
+        ),
+        l(
+          '把右束支阻滞时 V1–V2 的 T 波倒置读成缺血：那是阻滞带来的继发性改变。',
+          'Reading the inverted T in V1–V2 of a right bundle branch block as ischaemia: it is a secondary change of the block.',
+          'Leer la T invertida en V1–V2 de un bloqueo de rama derecha como isquemia: es un cambio secundario al bloqueo.',
         ),
         l(
           '只写“正常”而不写数字：五份正常图里，任何一份的 PR 或 QTc 都可能是第一个异常。',

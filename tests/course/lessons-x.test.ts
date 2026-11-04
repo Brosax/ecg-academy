@@ -413,6 +413,42 @@ describe('x1: the structured report on the tracings', () => {
   });
 });
 
+describe('x2: the synthetic frames', () => {
+  it('real films: tracing 2 is 6282 in every frame; tracing 8 is 18776 then lvh-strain', () => {
+    const [t2, t8] = blocksOf('x2', 'film');
+    for (const f of t2.frames) expect(f.ecg).toEqual({ kind: 'real', id: 6282 });
+    expect(t8.frames.map((f) => (f.ecg.kind === 'real' ? f.ecg.id : f.ecg.req.scenario))).toEqual([18776, 18776, 'lvh-strain']);
+  });
+  it('voltage with secondary ST–T: S in V1 + the larger R of V5/V6 > 35 mm, ST depressed and T inverted in V5–V6', () => {
+    const e = ecgOf(blocksOf('x2', 'film')[1].frames[2].ecg);
+    expect(-qrs(e, 'V1').min + Math.max(qrs(e, 'V5').max, qrs(e, 'V6').max)).toBeGreaterThan(3.5);
+    for (const l of ['V5', 'V6'] as const) {
+      expect(stAt(e, l, 60), l).toBeLessThan(-0.05);
+      expect(tInverted(e, l), l).toBe(true);
+    }
+  });
+  it('flutter film: one circuit (same seed), atrial rate about 300 with F waves about 200 ms apart; 2:1 ≈ 150/min with every non-conducted F wave hidden, 3:1 ≈ 100/min and 4:1 ≈ 75/min with F waves visible between the complexes', () => {
+    const film = blocksOf('x2', 'film')[2];
+    const reqs = film.frames.map((f) => (f.ecg.kind === 'synth' ? f.ecg.req : null));
+    for (const r of reqs) expect({ ...r, dials: undefined }).toEqual({ ...reqs[0], dials: undefined });
+    const es = frames('x2', 2);
+    es.forEach((e, k) => {
+      const t = e.truth!;
+      expect(t.rhythm).toBe('atrial-flutter');
+      expect(Math.abs(t.atrialRateBpm! - 300), `frame ${k}`).toBeLessThan(5);
+      const gaps = t.atrial.slice(1).map((a, i) => a.t - t.atrial[i].t);
+      for (const g of gaps) expect(Math.abs(g - 200), `frame ${k}`).toBeLessThan(10);
+      expect(Math.abs(t.hrBpm - [150, 100, 75][k]), `frame ${k}`).toBeLessThan(3);
+      expect(t.regular, `frame ${k}`).toBe(true);
+    });
+    const [two, three, four] = es;
+    const blocked = (e: Ecg) => e.truth!.atrial.filter((a) => a.conductedTo === null);
+    expect(blocked(two).length).toBeGreaterThan(5);
+    for (const a of blocked(two)) expect(a.visible, `2:1 F at ${a.t}`).toBe(false);
+    for (const e of [three, four]) expect(blocked(e).filter((a) => a.visible).length).toBeGreaterThan(5);
+  });
+});
+
 describe('x3: triage tracings', () => {
   it('hook and contrast: infra-His complete AV block, escape ≈ 34/min with QRS ≈ 150 ms, P waves ≈ 78/min', () => {
     for (const src of [blocksOf('x3', 'hook')[0].ecg, blocksOf('x3', 'contrast')[0].right.ecg]) {
@@ -507,13 +543,13 @@ const CLAIMS: readonly RealClaim[] = [
   { id: 6764, sex: 'M', age: 64, has: ['pathological-q', 'old-mi-anterior', 'old-mi-lateral'] },
   // x2
   { id: 19170, sex: 'M', age: 73, has: ['atrial-fibrillation', 'atrial-flutter'], hr: [105, 118], qrs: [110, 120], axis: [-20, -8] },
-  { id: 6282, sex: 'M', age: 42, has: ['sinus-rhythm', 'rbbb'], hr: [72, 80], pr: [125, 140], qrs: [145, 160] },
+  { id: 6282, sex: 'M', age: 42, has: ['sinus-rhythm', 'rbbb'], not: ['pathological-q', 'old-mi-anterior', 'old-mi-inferior', 'old-mi-lateral', 'stemi-anterior', 'stemi-inferior', 'stemi-lateral'], hr: [73, 79], pr: [130, 138], qrs: [149, 159] },
   { id: 6271, sex: 'F', age: 60, has: ['normal-ecg'] },
   { id: 2320, sex: 'M', age: 64, has: ['normal-ecg'] },
   { id: 11459, sex: 'F', age: 18, has: ['normal-ecg'] },
   { id: 2627, sex: 'M', age: 45, has: ['sinus-arrhythmia', 'pathological-q', 'old-mi-inferior'], not: ['stemi-inferior'], hr: [75, 85], pr: [135, 150], qrs: [80, 95], axis: [-10, 5] },
   { id: 12899, sex: 'F', age: 67, has: ['stemi-inferior'] },
-  { id: 18776, sex: 'M', age: 35, has: ['lvh'], hr: [50, 56], qrs: [95, 105] },
+  { id: 18776, sex: 'M', age: 35, has: ['lvh', 'sinus-rhythm'], not: ['lvh-strain', 'secondary-st-t', 'nonspecific-st-t', 't-inversion-ischemic', 'st-depression-ischemic', 'pathological-q'], hr: [50, 56], qrs: [95, 105] },
   { id: 2594, sex: 'F', age: 58, has: ['normal-ecg', 'sinus-bradycardia'] },
   { id: 14874, sex: 'M', age: 47, has: ['normal-ecg', 'sinus-arrhythmia'] },
   { id: 6727, sex: 'F', age: 28, has: ['av-block-1'] },
