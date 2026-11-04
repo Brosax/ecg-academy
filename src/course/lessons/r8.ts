@@ -214,9 +214,9 @@ const lesson: Lesson = {
         {
           title: l('第二步：标记 A 层', 'Step 2: populate the A tier', 'Paso 2: llena el nivel A'),
           body: l(
-            '在每个 P 的起始处，于 A 层画一个标记——包括那个最终未下传的 P。每个周期五个 P、五个标记，间距相等。',
-            'At the onset of every P, place a mark in the A tier — including the P that will turn out not to conduct. Five P waves per cycle, five marks, evenly spaced.',
-            'En el inicio de cada P, coloca una marca en el nivel A, incluida la P que acabará sin conducir. Cinco ondas P por ciclo, cinco marcas, igualmente espaciadas.',
+            '在每个 P 的起始处，于 A 层画一个标记——包括那个最终未下传的 P。每个周期五个 P，间距相等。图上标出的是一个周期里下传的四个 P，以及整条上每一个未下传的 P。',
+            'At the onset of every P, place a mark in the A tier — including the P that will turn out not to conduct. Five P waves per cycle, evenly spaced. Marked here: the four conducted P waves of one cycle, and every P on the strip that does not conduct.',
+            'En el inicio de cada P, coloca una marca en el nivel A, incluida la P que acabará sin conducir. Cinco ondas P por ciclo, igualmente espaciadas. Aquí se marcan las cuatro P conducidas de un ciclo y todas las P de la tira que no conducen.',
           ),
           marks: [{ auto: 'p', beat: 3 }, { auto: 'p', beat: 4 }, { auto: 'p', beat: 5 }, { auto: 'p', beat: 6 }, { auto: 'blocked-p', label: l('P', 'P', 'P') }],
         },

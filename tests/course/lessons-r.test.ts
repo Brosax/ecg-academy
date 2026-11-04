@@ -9,7 +9,7 @@ import type { AutoMark, Block, Lesson, LessonMark } from '../../src/course/api';
 import { liveValidateDeps } from '../../src/course/deps';
 import { REGISTERED } from '../../src/course/lessons/index';
 import { realisedDials, startDials } from '../../src/course/live';
-import { baselineBefore, isAutoMark, MIN_WAVE_MV, qrsWaves } from '../../src/course/marks';
+import { baselineBefore, isAutoMark, MIN_WAVE_MV, qrsWaves, resolveMarks } from '../../src/course/marks';
 import { formatIssues, validateLesson } from '../../src/course/validate';
 import type { BeatMarks, Ecg } from '../../src/core/ecg';
 import type { L10n } from '../../src/core/l10n';
@@ -1169,7 +1169,7 @@ describe('r7: fascicular blocks on the tracings', () => {
 });
 
 describe('r8: ladders on the tracings', () => {
-  /** a blocked PAC strip: the P′ is early, sits on the T of the beat before it, and the pause it leaves is shorter than 2 x PP */
+  /** a blocked PAC strip: the P′ is early, sits on the T of the beat before it, the pause it leaves is longer than one PP and shorter than 2 x PP, and the P′ resets the sinus node */
   const blockedPac = (e: Ecg, what: string) => {
     const t = e.truth!;
     const ectopic = t.atrial.filter((a) => a.kind === 'ectopic');
@@ -1184,8 +1184,14 @@ describe('r8: ladders on the tracings', () => {
     expect(p.t, `${what}: the P′ sits on the T`).toBeGreaterThan(t.beats[k].j);
     expect(p.t, `${what}: the P′ sits on the T`).toBeLessThan(t.beats[k].tOff);
     expect(rrs(e)[k], `${what}: the pause is shorter than 2 x PP`).toBeLessThan(2 * mean(pp));
+    expect(rrs(e)[k], `${what}: the pause is longer than one PP`).toBeGreaterThan(mean(pp));
+    const next = Math.min(...sinus.filter((x) => x > p.t));
+    expect(next, `${what}: the next sinus P comes well before its old slot (prev + 2 x PP)`).toBeLessThan(prev + 1.75 * mean(pp));
+    const restart = (next - p.t) / mean(pp);
+    expect(restart, `${what}: the sinus node restarts its cycle from the P′`).toBeGreaterThan(1);
+    expect(restart, `${what}: the sinus node restarts its cycle from the P′`).toBeLessThan(1.25);
   };
-  it('hook and contrast A: blocked PACs — the P′ is early, on the T, and the pause after it is shorter than 2 x PP', () => {
+  it('hook and contrast A: blocked PACs — the P′ is early, on the T, the pause after it is longer than one PP and shorter than 2 x PP, and the P′ resets the sinus node', () => {
     blockedPac(ecgOf(blocksOf('r8', 'hook')[0].ecg), 'hook');
     blockedPac(ecgOf(blocksOf('r8', 'contrast')[0].left.ecg), 'contrast A');
   });
@@ -1225,6 +1231,10 @@ describe('r8: ladders on the tracings', () => {
     const lastP = beats[rr[3]].pOn ?? 0;
     const dropped = t.atrial.find((a) => a.conductedTo === null && a.t > lastP && a.t < beats[rr[3] + 1].qrsOn);
     expect(dropped, 'one P in the cycle is not conducted').toBeDefined();
+    const blockedSeen = t.atrial.filter((a) => a.conductedTo === null && a.visible);
+    expect(blockedSeen).toContain(dropped);
+    const drawn = resolveMarks(e, blocksOf('r8', 'worked')[0].steps[1].marks, { layout: 'strip', lead: 'II' });
+    expect(drawn.length, 'step 2 draws the four conducted P waves of the cycle and every blocked P on the strip').toBe(4 + blockedSeen.length);
     const fiveP = [...rr.map((i) => beats[i].pOn ?? 0), dropped!.t];
     const gaps = fiveP.slice(1).map((x, i) => x - fiveP[i]);
     for (const x of gaps) expect(Math.abs(x / mean(gaps) - 1), 'evenly spaced').toBeLessThan(0.03);
