@@ -91,6 +91,12 @@ describe('every heart block in the course', () => {
       const kk = defaultBeat(tr, e.signal.durationMs);
       expect(kk, at).not.toBeNull();
       const bt = tr.beats[kk!];
+      if (bt.pOn !== null && bt.pOn > bt.qrsOn) {
+        // retrograde atria (orthodromic AVRT): the six phases assume P before QRS, so the block falls back to
+        // following the cursor on the ECG (HeartBlock catches this)
+        expect(() => phaseBeats(HEART_PHASES, bt, 5), at).toThrow();
+        continue;
+      }
       const t2 = phaseBeats(HEART_PHASES, bt, 5);
       expect(t2.durationMs, at).toBeGreaterThanOrEqual(1500);
       expect(t2.durationMs, at).toBeLessThanOrEqual(6000);
