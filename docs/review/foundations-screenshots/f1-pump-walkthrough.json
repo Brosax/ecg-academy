@@ -1,0 +1,312 @@
+{
+  "layouts": [
+    {
+      "lang": "zh-CN",
+      "phase": "舒张与充盈",
+      "progress": "0",
+      "ready": true,
+      "scrollWidth": 1351,
+      "width": 1366
+    },
+    {
+      "lang": "zh-CN",
+      "phase": "心房收缩",
+      "progress": "14",
+      "ready": true,
+      "scrollWidth": 1351,
+      "width": 1366
+    },
+    {
+      "lang": "zh-CN",
+      "phase": "心室收缩",
+      "progress": "52",
+      "ready": true,
+      "scrollWidth": 1351,
+      "width": 1366
+    },
+    {
+      "lang": "zh-CN",
+      "phase": "心室舒张",
+      "progress": "67",
+      "ready": true,
+      "scrollWidth": 1351,
+      "width": 1366
+    },
+    {
+      "lang": "zh-CN",
+      "phase": "舒张与充盈",
+      "progress": "0",
+      "ready": true,
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "lang": "zh-CN",
+      "phase": "心房收缩",
+      "progress": "14",
+      "ready": true,
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "lang": "zh-CN",
+      "phase": "心室收缩",
+      "progress": "52",
+      "ready": true,
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "lang": "zh-CN",
+      "phase": "心室舒张",
+      "progress": "67",
+      "ready": true,
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "lang": "zh-CN",
+      "phase": "舒张与充盈",
+      "progress": "0",
+      "ready": true,
+      "scrollWidth": 305,
+      "width": 320
+    },
+    {
+      "lang": "zh-CN",
+      "phase": "心房收缩",
+      "progress": "14",
+      "ready": true,
+      "scrollWidth": 305,
+      "width": 320
+    },
+    {
+      "lang": "zh-CN",
+      "phase": "心室收缩",
+      "progress": "52",
+      "ready": true,
+      "scrollWidth": 305,
+      "width": 320
+    },
+    {
+      "lang": "zh-CN",
+      "phase": "心室舒张",
+      "progress": "67",
+      "ready": true,
+      "scrollWidth": 305,
+      "width": 320
+    },
+    {
+      "lang": "en",
+      "phase": "Relaxation & filling",
+      "progress": "0",
+      "ready": true,
+      "scrollWidth": 1351,
+      "width": 1366
+    },
+    {
+      "lang": "en",
+      "phase": "Atrial contraction",
+      "progress": "14",
+      "ready": true,
+      "scrollWidth": 1351,
+      "width": 1366
+    },
+    {
+      "lang": "en",
+      "phase": "Ventricular contraction",
+      "progress": "52",
+      "ready": true,
+      "scrollWidth": 1351,
+      "width": 1366
+    },
+    {
+      "lang": "en",
+      "phase": "Ventricular relaxation",
+      "progress": "67",
+      "ready": true,
+      "scrollWidth": 1351,
+      "width": 1366
+    },
+    {
+      "lang": "en",
+      "phase": "Relaxation & filling",
+      "progress": "0",
+      "ready": true,
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "lang": "en",
+      "phase": "Atrial contraction",
+      "progress": "14",
+      "ready": true,
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "lang": "en",
+      "phase": "Ventricular contraction",
+      "progress": "52",
+      "ready": true,
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "lang": "en",
+      "phase": "Ventricular relaxation",
+      "progress": "67",
+      "ready": true,
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "lang": "en",
+      "phase": "Relaxation & filling",
+      "progress": "0",
+      "ready": true,
+      "scrollWidth": 305,
+      "width": 320
+    },
+    {
+      "lang": "en",
+      "phase": "Atrial contraction",
+      "progress": "14",
+      "ready": true,
+      "scrollWidth": 305,
+      "width": 320
+    },
+    {
+      "lang": "en",
+      "phase": "Ventricular contraction",
+      "progress": "52",
+      "ready": true,
+      "scrollWidth": 305,
+      "width": 320
+    },
+    {
+      "lang": "en",
+      "phase": "Ventricular relaxation",
+      "progress": "67",
+      "ready": true,
+      "scrollWidth": 305,
+      "width": 320
+    },
+    {
+      "lang": "es",
+      "phase": "Relajación y llenado",
+      "progress": "0",
+      "ready": true,
+      "scrollWidth": 1351,
+      "width": 1366
+    },
+    {
+      "lang": "es",
+      "phase": "Contracción auricular",
+      "progress": "14",
+      "ready": true,
+      "scrollWidth": 1351,
+      "width": 1366
+    },
+    {
+      "lang": "es",
+      "phase": "Contracción ventricular",
+      "progress": "52",
+      "ready": true,
+      "scrollWidth": 1351,
+      "width": 1366
+    },
+    {
+      "lang": "es",
+      "phase": "Relajación ventricular",
+      "progress": "67",
+      "ready": true,
+      "scrollWidth": 1351,
+      "width": 1366
+    },
+    {
+      "lang": "es",
+      "phase": "Relajación y llenado",
+      "progress": "0",
+      "ready": true,
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "lang": "es",
+      "phase": "Contracción auricular",
+      "progress": "14",
+      "ready": true,
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "lang": "es",
+      "phase": "Contracción ventricular",
+      "progress": "52",
+      "ready": true,
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "lang": "es",
+      "phase": "Relajación ventricular",
+      "progress": "67",
+      "ready": true,
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "lang": "es",
+      "phase": "Relajación y llenado",
+      "progress": "0",
+      "ready": true,
+      "scrollWidth": 305,
+      "width": 320
+    },
+    {
+      "lang": "es",
+      "phase": "Contracción auricular",
+      "progress": "14",
+      "ready": true,
+      "scrollWidth": 305,
+      "width": 320
+    },
+    {
+      "lang": "es",
+      "phase": "Contracción ventricular",
+      "progress": "52",
+      "ready": true,
+      "scrollWidth": 305,
+      "width": 320
+    },
+    {
+      "lang": "es",
+      "phase": "Relajación ventricular",
+      "progress": "67",
+      "ready": true,
+      "scrollWidth": 305,
+      "width": 320
+    }
+  ],
+  "controls": {
+    "repeatStart": 1793744822979,
+    "start": "70",
+    "repeatElapsedMs": 22635,
+    "stillPlaying": true,
+    "rateChangedWhilePlaying": true,
+    "pausedValue": "1",
+    "pausedValueLater": "1",
+    "singleBeatEnd": "100",
+    "reducedRepeatDisabled": true,
+    "flowStillAvailable": "50",
+    "cutSliderAvailable": true,
+    "returnToFlow": true
+  },
+  "reducedFrames": [
+    "0",
+    "14",
+    "52",
+    "67"
+  ]
+}

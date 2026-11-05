@@ -10,25 +10,18 @@ import type { Lesson } from '../api';
 import { l } from '../../core/l10n';
 import { choiceItem, leadItem, SRC, syn } from './f-shared';
 
+// Beginner concepts and detailed narration are provided by the foundations player.
 const lesson: Lesson = {
   id: 'f2',
   stage: 'F',
   order: 2,
-  title: l(
-    '电偶极子与向量：波形为何向上、向下或呈双向',
-    'Dipoles and vectors: why a deflection is positive, negative or equiphasic',
-    'Dipolo y vector: por qué una deflexión es positiva, negativa o isodifásica',
-  ),
-  summary: l(
-    '一条规则解释所有波形：比较心电向量与导联的方向。',
-    'One rule explains every deflection: compare the heart vector with the direction of the lead.',
-    'Una sola regla explica todas las deflexiones: compara el vector cardíaco con la dirección de la derivación.',
-  ),
+  title: l("同一次心跳，为什么有的波向上、有的向下？", "One heartbeat: why do some waves go up and others down?", "Un latido: ¿por qué unas ondas suben y otras bajan?"),
+  summary: l("先认识波形、导联和箭头，再用投影一步步解释波形的正负与变化。", "Meet the waveform, the lead and the arrow; then use projection to explain why the trace goes up or down.", "Conoce el trazado, la derivación y la flecha; después usa la proyección para explicar por qué la línea sube o baja."),
   objectives: [
     l(
-      '朝向正极 → 向上；背离 → 向下；垂直 → 双向。',
-      'Toward the positive pole → up; away → down; perpendicular → equiphasic.',
-      'Hacia el polo positivo → arriba; alejándose → abajo; perpendicular → isodifásica.',
+      '朝向正极 → 向上；背离 → 向下；瞬时垂直 → 零投影。整段双向波需要投影随时间改变正负。',
+      'Toward the positive pole → up; away → down; instantaneously perpendicular → zero projection. A biphasic wave requires projection to change sign over time.',
+      'Hacia el polo positivo → arriba; alejándose → abajo; perpendicular en un instante → proyección nula. Una onda bifásica requiere que la proyección cambie de signo con el tiempo.',
     ),
     l(
       '用三个除极向量解释 V1 的 rS 和 V6 的 qR。',
@@ -42,7 +35,7 @@ const lesson: Lesson = {
       'Predecir el QRS de cada derivación de los miembros desde el vector medio.',
     ),
   ],
-  minutes: 10,
+  minutes: 18,
   competencies: ['C1', 'C5'],
   findings: ['normal-ecg'],
   blocks: [
@@ -74,9 +67,9 @@ const lesson: Lesson = {
       kind: 'figure',
       figure: { id: 'vector-pen' },
       caption: l(
-        '看完演示后，拖动箭头绕六轴转一圈：纸带下方的导联格随之变化（朝向导联 → 向上，与之垂直 → 双向，背离 → 向下）。先回答 III 导联的问题，再看揭晓。',
-        'After the tour, drag the arrow round the wheel: the lead cells under the strip turn up, equiphasic or down as it points toward a lead, is perpendicular to it, or points away. Answer the lead III question before the reveal.',
-        'Tras la demostración, arrastra la flecha por el sistema hexaxial: las casillas bajo el registro suben, se hacen isodifásicas o bajan según apunte hacia la derivación, quede perpendicular a ella o se aleje. Responde a la pregunta sobre III antes de ver la solución.',
+        '拖动箭头比较各导联的观察方向：瞬时朝向正端为正，背离为负，垂直时投影为零。回答 III 导联的问题前，先区分这一瞬间的零投影和整段双向 QRS：后者需要在不同时刻先后出现正负投影。',
+        'Compare the arrow with each lead: toward its positive pole gives a positive instantaneous projection; away gives negative; perpendicular gives zero. Before answering the lead III question, distinguish that momentary zero from a whole biphasic QRS, which requires positive and negative projections at different times.',
+        'Compara la flecha con cada derivación: la proyección instantánea es positiva hacia el polo positivo, negativa al alejarse y nula si es perpendicular. Antes de responder sobre III, distingue ese instante nulo de un QRS bifásico completo, que requiere proyecciones positivas y negativas en momentos diferentes.',
       ),
     },
     {
@@ -250,7 +243,7 @@ const lesson: Lesson = {
     {
       kind: 'summary',
       points: [
-        l('朝向正极 = 向上；背离 = 向下；垂直 = 双向。', 'Toward the positive pole = up; away = down; perpendicular = equiphasic.', 'Hacia el polo positivo = arriba; alejándose = abajo; perpendicular = isodifásica.'),
+        l('瞬时朝向正极 = 向上；背离 = 向下；垂直 = 零投影。双向波来自一段时间内先后出现正负投影。', 'Instantaneously: toward the positive pole = up; away = down; perpendicular = zero projection. A biphasic wave requires both signs over time.', 'En un instante: hacia el polo positivo = arriba; alejándose = abajo; perpendicular = proyección nula. Una onda bifásica necesita ambos signos a lo largo del tiempo.'),
         l(
           'QRS = 室间隔（向右前）+ 游离壁（向左，左心室主导）+ 基底部（向上、向后、略偏右）：V1 呈 rS，V6 呈 qR 或 qRs。',
           'QRS = septum (right, forward) + free walls (left, LV-dominated) + bases (up, back, slightly right): rS in V1, qR or qRs in V6.',

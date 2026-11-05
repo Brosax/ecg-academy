@@ -16,16 +16,13 @@ import type { Lesson } from '../api';
 import { l } from '../../core/l10n';
 import { choiceItem, leadItem, OPT, PLACEMENT, SRC, syn } from './f-shared';
 
+// Beginner concepts and detailed narration are provided by the foundations player.
 const lesson: Lesson = {
   id: 'f6',
   stage: 'F',
   order: 6,
-  title: l('第一步：检查信号质量', 'Step 1: check the signal quality', 'Paso 1: comprobar la calidad de la señal'),
-  summary: l(
-    '判读前先用 30 秒检查记录：定标、导联齐全、基线干净、导线接对。不合格就重做。',
-    'Spend 30 seconds on the recording first: calibration, all leads, a clean baseline, cables in place. If it fails, record again.',
-    'Dedica primero 30 segundos al registro: calibración, todas las derivaciones, línea de base limpia y cables en su sitio. Si falla, repítelo.',
-  ),
+  title: l("读图前，先确认记录是否可靠", "Before reading the ECG, check the recording", "Antes de interpretar, comprueba el registro"),
+  summary: l("从电极到导线再到记录，认识信号怎样传来；通过接线交换和噪声实验，理解记录为什么会失真。", "Follow the signal from electrodes through cables to the recording; use swaps and noise experiments to understand distortion.", "Sigue la señal desde los electrodos y cables hasta el registro; usa intercambios y experimentos con ruido para comprender las distorsiones."),
   objectives: [
     l('每次判读前先做固定的技术检查。', 'Run a fixed technical check before every read.', 'Hacer una comprobación técnica fija antes de cada lectura.'),
     l(
@@ -40,7 +37,7 @@ const lesson: Lesson = {
     ),
     l('有问题的记录要重做，而不是去解释。', 'Repeat a flawed recording instead of interpreting it.', 'Repetir un registro defectuoso en lugar de interpretarlo.'),
   ],
-  minutes: 11,
+  minutes: 14,
   competencies: ['C12', 'C1'],
   findings: ['electrode-reversal-la-ra', 'electrode-reversal-la-ll', 'electrode-reversal-ra-ll', 'precordial-misplacement', 'muscle-tremor'],
   blocks: [

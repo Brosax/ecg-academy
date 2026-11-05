@@ -18,16 +18,13 @@ import { MONITOR_FILTER, rec, SRC, syn } from './f-shared';
 /** a regular 75/min sinus rhythm: RR = 800 ms (± a few ms of natural beat jitter) = four large squares at 25 mm/s */
 const REGULAR_75 = { rate: 75, hrv: 0 } as const;
 
+// Beginner concepts and detailed narration are provided by the foundations player.
 const lesson: Lesson = {
   id: 'f4',
   stage: 'F',
   order: 4,
-  title: l('心电图纸、定标、走纸速度与滤波', 'Paper, calibration, speed and filters', 'Papel, calibración, velocidad y filtros'),
-  summary: l(
-    '测量之前：先读走纸速度、定标脉冲和滤波设置。',
-    'Before any measurement: read the speed, the calibration pulse and the filter.',
-    'Antes de medir: lee la velocidad, el pulso de calibración y el filtro.',
-  ),
+  title: l("心电图的格子，怎样表示时间和电压？", "How do ECG squares represent time and voltage?", "¿Cómo representan el tiempo y el voltaje los cuadros del ECG?"),
+  summary: l("先分清横向的时间和纵向的电压，再认识小格、大格、纸速与增益，最后动手测量。", "Separate time along the page from voltage up the page, learn small and large squares, speed and gain, then measure for yourself.", "Distingue el tiempo horizontal del voltaje vertical, conoce los cuadros pequeños y grandes, la velocidad y la ganancia, y después mide."),
   objectives: [
     l(
       '在 25 mm/s、10 mm/mV 下把格子换算成毫秒和毫伏。',
@@ -45,7 +42,7 @@ const lesson: Lesson = {
       'Conocer el filtro diagnóstico y por qué el de monitorización deforma el ST.',
     ),
   ],
-  minutes: 9,
+  minutes: 14,
   competencies: ['C1', 'C2'],
   findings: [],
   blocks: [

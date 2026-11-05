@@ -12,26 +12,19 @@ import type { Lesson } from '../api';
 import { l } from '../../core/l10n';
 import { choiceItem, leadItem, SRC, syn } from './f-shared';
 
+// Beginner concepts and detailed narration are provided by the foundations player.
 const lesson: Lesson = {
   id: 'f3',
   stage: 'F',
   order: 3,
-  title: l(
-    '导联体系：Einthoven、Goldberger 与 Wilson；六轴系统与水平面',
-    'The lead systems: Einthoven, Goldberger and Wilson; hexaxial and horizontal frames',
-    'Los sistemas de derivaciones: Einthoven, Goldberger y Wilson; sistema hexaxial y plano horizontal',
-  ),
-  summary: l(
-    '十二个导联，只有八个独立信号：每个导联从哪里看心脏。',
-    'Twelve leads, eight independent signals: where each lead looks from.',
-    'Doce derivaciones, ocho señales independientes: desde dónde mira cada derivación.',
-  ),
+  title: l("电极与导联：一颗心脏的不同观察方向", "Electrodes and leads: different views of one heart", "Electrodos y derivaciones: distintas vistas de un corazón"),
+  summary: l("从皮肤上的电极和两点的电压差开始，逐步建立肢体导联、胸导联和十二导联的关系。", "Start with skin electrodes and the voltage difference between two points, then build the limb and chest leads of a 12-lead ECG.", "Empieza por los electrodos sobre la piel y la diferencia de voltaje entre dos puntos; después construye las derivaciones de los miembros y del tórax."),
   objectives: [
     l('由肢体电极构成 I、II、III，并运用 II = I + III。', 'Build I, II and III from the limb electrodes and use II = I + III.', 'Construir I, II y III con los electrodos de los miembros y aplicar II = I + III.'),
     l('在六轴系统上标出六个肢体导联的角度和三对垂直导联。', 'Place the six limb leads on the hexaxial wheel and name the perpendicular pairs.', 'Situar las seis derivaciones de los miembros en el sistema hexaxial y nombrar los pares perpendiculares.'),
     l('说出 V1–V6 的参考点、移行区和各导联组。', 'Name the chest leads’ reference, the transition and the lead groups.', 'Nombrar la referencia de las precordiales, la transición y los grupos de derivaciones.'),
   ],
-  minutes: 10,
+  minutes: 16,
   competencies: ['C1', 'C5'],
   findings: [],
   blocks: [

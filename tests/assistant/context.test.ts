@@ -40,13 +40,13 @@ describe('lessons', () => {
   });
 
   it('a step adds that block, clipped; the step is clamped to the lesson', () => {
-    const f1 = getLesson('f1')!;
+    const f1 = getLesson('s1')!;
     const n = f1.blocks.length;
-    const ctx = pageContext({ name: 'lesson', id: 'f1', step: 2 }, 'en');
+    const ctx = pageContext({ name: 'lesson', id: 's1', step: 2 }, 'en');
     expect(ctx.text).toContain(`Current step 2 of ${n}`);
     expect(ctx.text).toContain(clip(blockText(f1.blocks[1], 'en'), MAX_STEP_CHARS).slice(0, 40));
-    expect(pageContext({ name: 'lesson', id: 'f1', step: 0 }, 'en').text).toContain('Current step 1 of');
-    expect(pageContext({ name: 'lesson', id: 'f1', step: 999 }, 'en').text).toContain(`Current step ${n} of ${n}`);
+    expect(pageContext({ name: 'lesson', id: 's1', step: 0 }, 'en').text).toContain('Current step 1 of');
+    expect(pageContext({ name: 'lesson', id: 's1', step: 999 }, 'en').text).toContain(`Current step ${n} of ${n}`);
   });
 
   it('a hook block gives its question but never its reveal; a check gives nothing', () => {

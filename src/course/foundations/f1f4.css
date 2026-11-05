@@ -1,0 +1,16 @@
+.foundations-player .fd-f1-hotspot { cursor: pointer; outline: none; }
+.foundations-player .fd-f1-hotspot text { font-size: 17px; font-weight: 600; }
+.foundations-player .fd-f1-hotspot:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+.foundations-player .fd-f1-hotspot:hover text { text-decoration: underline; }
+.foundations-player .fd-f1-delay { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; font-size: 14px; }
+.foundations-player .fd-f1-delay input { flex: 1 1 140px; min-width: 90px; accent-color: var(--c-conduction); min-height: 44px; }
+.foundations-player .fd-f1-delay output { min-width: 6ch; font-variant-numeric: tabular-nums; }
+.foundations-player .fd-f1-ap { display: flex; align-items: center; gap: 16px; font-size: 12px; color: var(--fd-muted); }
+.foundations-player .fd-f1-ap svg { width: 190px; max-width: 50%; height: 55px; }
+.foundations-player .fd-f4-reference { stroke: var(--fd-muted); stroke-opacity: .5; stroke-width: 1.4; stroke-dasharray: 4 4; fill: none; }
+.foundations-player .fd-source-wait { min-height: 320px; display: grid; place-items: center; }
+@media (max-width: 600px) {
+  .foundations-player .fd-f1-hotspot text { font-size: 19px; }
+  .foundations-player .fd-f1-delay { align-items: stretch; }
+  .foundations-player .fd-f1-delay input { flex-basis: 65%; }
+}

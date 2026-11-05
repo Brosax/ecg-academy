@@ -21,6 +21,8 @@ import { plannedLesson } from './catalogue';
 import { labLinks } from './lab';
 import { getLessonProgress, progressTick, setLessonProgress } from './deps';
 import { getLesson } from './lessons/index';
+import { isFoundation } from './foundations/presentation';
+import { FoundationsLessonPlayer } from './foundations/FoundationsLessonPlayer';
 import { STAGE_DEFS } from './model';
 import {
   clampStep,
@@ -35,6 +37,7 @@ import {
 
 export function LessonPage(props: { readonly id: string; readonly step?: number }) {
   const lesson = getLesson(props.id);
+  if (lesson && isFoundation(lesson.id)) return <FoundationsLessonPlayer key={lesson.id} lesson={lesson} step={props.step} />;
   if (lesson) return <LessonPlayer key={lesson.id} lesson={lesson} step={props.step} />;
   const planned = plannedLesson(props.id);
   if (planned) return <PlannedLesson id={planned.id} />;

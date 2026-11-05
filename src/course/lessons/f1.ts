@@ -10,16 +10,13 @@ import type { Lesson } from '../api';
 import { l } from '../../core/l10n';
 import { choiceItem, real, SRC, syn } from './f-shared';
 
+// Beginner concepts and detailed narration are provided by the foundations player.
 const lesson: Lesson = {
   id: 'f1',
   stage: 'F',
   order: 1,
-  title: l('传导系统：每一部分在心电图上画出什么', 'The conduction system and what each part draws', 'El sistema de conducción y lo que dibuja cada parte'),
-  summary: l(
-    '沿着一次心跳的传导路径走一遍，把心电图的每一段对应到心脏的一个部位。',
-    'Follow one heartbeat along its conduction path and match every part of the tracing to a part of the heart.',
-    'Sigue un latido por su vía de conducción y relaciona cada parte del trazado con una parte del corazón.',
-  ),
+  title: l("先认识心脏，再看懂一次心跳", "Meet the heart, then understand a heartbeat", "Conoce el corazón y comprende un latido"),
+  summary: l("从心脏怎样泵血开始，认识四个心腔和电活动，再把 P、QRS、T 与一次心跳联系起来。", "Start with how the heart pumps blood, meet its four chambers and electrical activity, then connect P, QRS and T to a heartbeat.", "Empieza por cómo bombea sangre el corazón, conoce sus cuatro cavidades y su actividad eléctrica, y relaciona P, QRS y T con un latido."),
   objectives: [
     l(
       '按顺序说出传导路径：窦房结 → 心房 → 房室结 → 希氏束 → 束支 → 浦肯野纤维 → 心室肌。',
@@ -38,7 +35,7 @@ const lesson: Lesson = {
       'Predecir qué parte del trazado cambia si un tramo de la vía se enlentece, se salta o falla.',
     ),
   ],
-  minutes: 8,
+  minutes: 18,
   competencies: ['C1'],
   findings: ['normal-ecg', 'sinus-rhythm'],
   blocks: [

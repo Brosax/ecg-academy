@@ -1,4 +1,4 @@
-# ECG Academy — master plan (v0.1 draft, 2026-10-16)
+# ECG Academy — master plan (updated 2026-11-04)
 
 > 目标只有一个：**教会人看心电图**。每个功能都用一个问题来检验：它是否让学习者更好、更快、更安全地读懂一份真实的 12 导联心电图？
 > The ECG is always the protagonist. The small 3D heart and the 2D figures only explain *why* the tracing looks the way it does.
@@ -13,10 +13,71 @@ done (2026-10-17); the **[pending]** markers below are historical — §3 and §
 > new synthesizer and link into the lab ("see it in the Heart Lab") for conditions the lab supports. Nav: Learn ·
 > Practice · Heart Lab · Cases · Atlas · Exam · Tools.
 
-## 0. Build status (2026-10-22 integration pass; 2026-10-25 all 64 lessons written)
+## 0. Build status (foundation local acceptance recorded 2026-11-03)
 
-Built and wired end to end — one self-contained `dist/index.html`; every route renders in zh / en / es, light / dark,
-at 1366×768 and 390 px wide, with no console errors (headless Edge check of the built file):
+**Unified F1 cardiac cycle (2026-11-04):** replaced separate heartbeat/blood/electrical modes with one
+continuous model. Activation, wall deformation, valve-gated blood flow and six trilingual explanations share
+one normal-cycle time mapping. Added simultaneous-view controls and reserved caption layout, preserving
+manual start, pause/seek/replay, adjustable speed/amplitude, opt-in repetition and reduced-motion access.
+The independent 3D view shows no ECG; course waveforms keep their existing source. The previous entries
+below describe historical deliveries. Current checks and screenshots: [unified-cycle review](review/f1-unified-heart-cycle-2026-11-04.md).
+
+**Adjustable heartbeat (2026-11-03):** F1's existing 3D model can now contract and relax using the original
+Heart Lab displacement shader and chamber-weight field. A dedicated observation mode offers playback speed,
+visual contraction amplitude, pause/resume, cycle seeking, four key frames, optional repeated beats and reset.
+Blood/electrical explanations also expose speed selection. Defaults remain stationary entry and one-pass
+playback. Full suite: 222 files / 4690 tests passed (4 files / 5 tests skipped); final focused checks: 14 files /
+173 tests. Typecheck and build passed. Browser checks cover 36 mechanical key-frame layouts, live speed and
+amplitude changes, repetition, pause, single-beat completion, reduced motion and return to the original flow
+explanation. See [the heartbeat review](review/f1-adjustable-heartbeat-2026-11-03.md). Local delivery only.
+
+**F1 dynamic 3D follow-up (2026-11-03):** blood and electrical introductory topics now each have four
+seven-second, manually started demonstrations. Existing blood streamlines drive moving markers; the existing
+normal conduction solver drives progressive myocardial activation on the same HRA mesh. Captions, key frames,
+seek, pause/continue and replay share one clock. Reduced-motion mode offers manual key-frame advancement.
+This supersedes the static-only limitation of the initial 3D follow-up below. Full suite: 221 files / 4687 tests
+passed (4 files / 5 tests skipped); final focused regression: 12 files / 152 tests. Typecheck and final build
+passed. Browser checks cover 24 key frames and 72 segment/language/viewport layouts; see
+[the dynamic review](review/f1-3d-motion-2026-11-03.md) for screenshots and exact verification boundaries.
+
+**Current foundation work:** F1–F6 now use an independent story player with named chapters, dark SVG stages,
+manually played segments and experiments. The six stories, legacy-step adapter, shared chapter progress and
+safe chapter-based assistant context are implemented. Original exercises, real cases, values and sources remain
+available; the public lesson/progress contracts are unchanged. See [the implemented design](design/foundations-story.md).
+
+**Beginner revision (2026-11-03):** the entry chapter now starts from no assumed heart knowledge. Added 21
+trilingual concept pages before the original questions, a four-chamber functional diagram, and detailed
+explanations for all 28 animation segments. Playback closes the explanation; reopening it pauses the clock.
+Direct story links offer the same prerequisite material while preserving current experiments. The full suite
+passes 220 files / 4680 tests (4 files / 5 tests skipped). All 21 Chinese concept pages were walked through;
+54 beginner-entry language/viewport combinations have no page overflow. See
+[the beginner review](review/foundations-beginners-2026-11-03.md) for exact checks and screenshots.
+
+**F1 3D follow-up (2026-11-03):** after user approval, the first four concepts now reuse the existing local
+heart/body model for location, four chambers, blood routes and electrical structures. Fourteen observation
+steps support rotation, zoom, anatomical highlighting and an anterior cutaway. The added blood-route concept
+brings F1 to 6 introductory pages and the total to 22. The 2D relationship diagram and waveform story remain.
+Heart Lab's shared behavior and engines are unchanged. Full tests: 221 files / 4683 tests passed (4 files / 5
+tests skipped); final targeted regression: 12 files / 148 tests passed. Typecheck and final build passed.
+All 14 observation steps and 36 topic/language/viewport combinations were checked; no horizontal overflow
+or captured browser errors. Physical touch hardware and forced GPU failure are untested. See
+[the 3D review](review/f1-3d-introduction-2026-11-03.md). Local preview only; no online deployment.
+
+**Browser acceptance is recorded:** all 28 story segments were walked through; 54 first-segment combinations
+(six lessons × zh/en/es × 1366×768, 390×844 and 320×844) have no horizontal overflow. Mouse and keyboard paths,
+reduced-motion samples, retained practice/first real cases, progress export/import, home resume and S1 were
+checked. The full test run passed 219 files and 4674 tests (4 files and 5 tests skipped); typecheck and build
+passed. Final course/AI regression passed 1054 tests; the last foundations/AI check passed 139 tests and the
+build rerun passed. [The redesign review](review/foundations-redesign-2026-11-03.md) includes screenshots and walkthroughs.
+Touchscreen hardware and independent focus/hidden-tab event checks were not manually tested; the first-segment
+layout matrix does not claim exhaustive coverage of every segment. See the review for the exact evidence bounds.
+Delivery is local only; there is no automatic online release. Other courses, Heart Lab, review scheduling and
+resource splitting are outside this redesign.
+
+**Historical integration baseline (2026-10-22; all 64 lessons written by 2026-10-25):** built and wired end to end
+as one self-contained `dist/index.html`; the then-current routes rendered in zh / en / es, light / dark,
+at 1366×768 and 390 px with no console errors in the headless Edge check. That earlier result does not verify the
+new foundation player. Existing modules:
 
 - **Shell** (`src/app`): header · phone menu · tab bar (with Heart Lab), progress ring fed by practice mastery, settings
   (screen calibration, progress export / import / reset), about with every attribution. No placeholder pages remain.
@@ -44,7 +105,8 @@ Planned, not built yet:
 
 - Lesson take-aways → spaced-review queue (§4 `summary`): the course calls practice `scheduleReview(keys, now)`, which
   the practice module does not export yet, so take-aways are not queued.
-- Lazy loading / code splitting of the large assets (the single file is 10.4 MB, see §11).
+- Lazy loading / code splitting of the large assets (see the historical size baseline in §11); excluded from the
+  foundation redesign. Current build size belongs in its delivery record.
 
 ## 1. Learning outcomes (competencies)
 
@@ -74,7 +136,7 @@ lesson; **worked examples → faded examples → independent practice**; **immed
 |---|---|---|
 | `#/` | Home | continue lesson · learning-path map · reviews due today · quick drill · real case of the day |
 | `#/learn` | Course map | stages → units → lessons with progress rings |
-| `#/learn/:lessonId` | Lesson player | blocks (see §4), ECG-first layout |
+| `#/learn/:lessonId` | Lesson player | F1–F6 named chapters and story stage; other lessons retain the block player (see §4) |
 | `#/practice` | Drill hub | choose a skill / pattern family / difficulty; adaptive mixed mode |
 | `#/practice/:drillId` | Drill session | item → answer → feedback → next; session summary |
 | `#/cases` | Real ECG library (PTB-XL) | filter by category; "read first, then reveal" |
@@ -114,7 +176,15 @@ commits a read before any machine statement is shown; confidence is collected fo
 
 ## 4. Lesson anatomy
 
-A lesson is data (`src/course/lessons/<id>.ts`), rendered by one player. Text lives inline as `{ zh, en, es }`.
+A lesson is data (`src/course/lessons/<id>.ts`). Text lives inline as `{ zh, en, es }`.
+
+F1–F6 now use `FoundationsLessonPlayer`: question → mechanism and experiments → practice → real ECG → take-away.
+The story layer replaces the foundation animation presentation while preserving original block indices and
+content references. Named chapters map all old steps; the map, home resume card and player use the same progress
+adapter. Animation position is not persisted. Nonfoundation lessons keep the existing block player.
+See [foundations-story.md](design/foundations-story.md) for the implemented source/time and compatibility rules.
+
+The underlying block vocabulary remains:
 
 ```
 hook          an ECG + a question ("What is wrong here?") — attempt before teaching
@@ -197,7 +267,7 @@ src/synth/      synthetic ECG engine + scenario catalogue + truth/annotations
 src/ecg/        viewer, paper, layouts, tools, overlays, monitor mode
 src/real/       real-ECG bundle decoder, case model, SCP → finding mapping + translations
 src/practice/   item generators, graders, mastery + spaced repetition, drills, exam
-src/course/     curriculum structure, lesson player, lessons/<id>.ts
+src/course/     curriculum structure, block player, foundations/ story player, lessons/<id>.ts
 src/figures/    2D interactive explainers
 src/heart3d/    small three.js heart
 src/atlas/      pattern atlas pages

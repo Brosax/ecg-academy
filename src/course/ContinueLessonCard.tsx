@@ -4,13 +4,15 @@
  * draws the card frame.
  */
 import { href } from '../app/router';
+import { l } from '../core/l10n';
 import { lt } from '../i18n';
 import { tco } from '../i18n/course';
 import { Icon } from '../ui';
 import { getLessonProgress, progressTick } from './deps';
 import { getLesson } from './lessons/index';
 import { STAGE_DEFS } from './model';
-import { lessonCode, lessonFraction, lessonState, nextLessonToContinue, readyOrder, resumeStep } from './stages';
+import { lessonCode, lessonState, nextLessonToContinue, readyOrder, resumeStep } from './stages';
+import { foundationChapters, foundationEntryStep, presentationProgress } from './foundations/presentation';
 
 export function ContinueLessonCard() {
   void progressTick();
@@ -25,11 +27,14 @@ export function ContinueLessonCard() {
     const p = getLessonProgress(id);
     const n = lesson.blocks.length;
     const started = lessonState(p) === 'started';
-    const step = resumeStep(p, n);
+    const step = foundationEntryStep(lesson, undefined, resumeStep(p, n));
     const code = lessonCode(id);
-    text = started ? tco('contResume', { code, title: lt(lesson.title), i: step, n }) : tco('contStart', { code, title: lt(lesson.title) });
+    const presentation = presentationProgress(lesson, p);
+    text = started ? tco('contResume', { code, title: lt(lesson.title), i: presentation.index + 1, n: presentation.total }) : tco('contStart', { code, title: lt(lesson.title) });
+    const chapter = foundationChapters(lesson)[presentation.index];
+    if (started && chapter) text = `${code} · ${lt(lesson.title)} · ${lt(chapter.title)} (${lt(l('章节', 'Chapter', 'Capítulo'))} ${presentation.index + 1}/${presentation.total})`;
     action = { href: href({ name: 'lesson', id, step: started ? step : undefined }), label: started ? tco('contActionResume') : tco('contActionStart') };
-    frac = lessonFraction(p, n);
+    frac = presentation.fraction;
   } else {
     text = anyReady ? tco('contAllDone') : tco('contNoLessons');
     action = { href: href({ name: 'practice' }), label: tco('contActionPractice') };

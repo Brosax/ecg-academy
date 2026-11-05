@@ -15,23 +15,20 @@ import type { Lesson } from '../api';
 import { l } from '../../core/l10n';
 import { choiceItem, PLACEMENT, SRC, syn } from './f-shared';
 
+// Beginner concepts and detailed narration are provided by the foundations player.
 const lesson: Lesson = {
   id: 'f5',
   stage: 'F',
   order: 5,
-  title: l('电极放置、颜色标识、右胸导联与后壁导联', 'Electrode placement, colour codes, right-sided and posterior leads', 'Colocación de los electrodos, código de colores, derivaciones derechas y posteriores'),
-  summary: l(
-    '每个电极放在哪里、两套颜色标识，以及何时加做附加导联。',
-    'Where each electrode goes, the two colour codes, and when to add extra leads.',
-    'Dónde va cada electrodo, los dos códigos de colores y cuándo añadir derivaciones adicionales.',
-  ),
+  title: l("胸前的六个电极，应该贴在哪里？", "Where should the six chest electrodes go?", "¿Dónde se colocan los seis electrodos del tórax?"),
+  summary: l("先认识患者左右、胸骨、肋间和定位线，再一步步放置 V1–V6，区分放错位置与接错线。", "Learn patient left and right, the sternum, rib spaces and landmark lines; then place V1–V6 and distinguish placement from wiring errors.", "Conoce los lados del paciente, el esternón, los espacios intercostales y las líneas de referencia; después coloca V1–V6 y distingue errores de posición y conexión."),
   objectives: [
     l('借助触诊找到的体表标志放置 V1–V6。', 'Place V1–V6 using palpated landmarks.', 'Colocar V1-V6 con referencias anatómicas palpadas.'),
     l('认识 IEC 和 AHA 两套颜色标识。', 'Know the IEC and AHA colour codes.', 'Conocer los códigos de colores IEC y AHA.'),
     l('放置 V3R/V4R 和 V7–V9，并知道何时需要记录它们。', 'Place V3R/V4R and V7–V9 and know when to record them.', 'Colocar V3R/V4R y V7-V9 y saber cuándo registrarlas.'),
     l('识别胸导联电极放错或接错时心电图的变化。', 'Recognise how chest-electrode errors change the tracing.', 'Reconocer cómo cambian el trazado los errores de los electrodos precordiales.'),
   ],
-  minutes: 10,
+  minutes: 16,
   competencies: ['C1', 'C12'],
   findings: ['precordial-misplacement'],
   blocks: [

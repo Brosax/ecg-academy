@@ -1,7 +1,13 @@
 # Stage F explainers — scene runtime, 3D-heart upgrade, nine scenes, text policy
 
-Status: **design, 2026-10-31**. Nothing in `src/` or `tests/` was written or run for this document (no `tsc`, no
-`vitest`); it is the spec the implementation PRs follow. Project root: `C:\Users\A511741\Desktop\Workspace\ECG Academy`.
+Status: **historical design, 2026-10-31**. This document was originally written before its implementation and
+contained no test or build evidence. Project root: `C:\Users\A511741\Desktop\Workspace\ECG Academy`.
+
+**2026-11-03 update:** the foundation lesson presentation is now implemented through an independent story player.
+See [Foundations story player](foundations-story.md) for the current six-lesson flow, timing, interactions and
+compatibility contract. This document remains the design history for the shared figure scenes and reusable
+geometry; it is not the acceptance record for the new player. Browser acceptance and its coverage limits are recorded in
+[the redesign review](../review/foundations-redesign-2026-11-03.md). No production deployment is part of this work.
 
 The user's request: *"The site has too much theory. Use animation as much as possible — 3Blue1Brown-style — or 3D
 models, so the theory becomes intuitive, with more interaction. For now only the foundations (stage F, f1–f6)."*

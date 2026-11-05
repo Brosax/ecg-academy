@@ -10,6 +10,7 @@ import { entryOf } from '../atlas';
 import { FINDINGS, isFindingId } from '../core/findings';
 import { pick, type L10n, type Lang } from '../core/l10n';
 import { getLesson, type Block } from '../course';
+import { foundationChapterAt, foundationChapters, isFoundation } from '../course/foundations/presentation';
 import { tsh } from '../i18n/shell';
 import { getFamily } from '../practice';
 import { getCase } from '../real';
@@ -109,8 +110,15 @@ function lessonContext(id: string, step: number | undefined, lang: Lang): PageCo
   const n = lesson.blocks.length;
   if (step !== undefined && n > 0) {
     const k = Math.min(Math.max(1, Math.floor(step)), n);
-    const block = lesson.blocks[k - 1];
-    lines.push(`Current step ${k} of ${n} (a "${block.kind}" block):`, clip(blockText(block, lang), MAX_STEP_CHARS));
+    if (isFoundation(id)) {
+      const chapters = foundationChapters(lesson);
+      const i = foundationChapterAt(lesson, k);
+      const chapter = chapters[i];
+      if (chapter) lines.push(`Current chapter ${i + 1} of ${chapters.length}: ${t(chapter.title)}`, t(chapter.description));
+    } else {
+      const block = lesson.blocks[k - 1];
+      lines.push(`Current step ${k} of ${n} (a "${block.kind}" block):`, clip(blockText(block, lang), MAX_STEP_CHARS));
+    }
   }
   return { kind: 'lesson', title: `${label} · ${title}`, text: clip(lines.join('\n'), MAX_CONTEXT_CHARS) };
 }

@@ -1,0 +1,805 @@
+{
+  "keyframes": [
+    {
+      "caption": "先看蓝色起点：血液从身体沿腔静脉回来。",
+      "mode": "跟着血液走一圈",
+      "progress": "0",
+      "ready": true,
+      "step": "身体 → 右心",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "血液到达右心房，再经过三尖瓣进入右心室。",
+      "mode": "跟着血液走一圈",
+      "progress": "50",
+      "ready": true,
+      "step": "身体 → 右心",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "现在停在右心室。下一段看它如何流向肺部。",
+      "mode": "跟着血液走一圈",
+      "progress": "100",
+      "ready": true,
+      "step": "身体 → 右心",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "从右心室出发，沿流出道走向肺动脉瓣。",
+      "mode": "跟着血液走一圈",
+      "progress": "0",
+      "ready": true,
+      "step": "右心 → 肺",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "经过肺动脉瓣，进入肺动脉并沿分支前进。",
+      "mode": "跟着血液走一圈",
+      "progress": "50",
+      "ready": true,
+      "step": "右心 → 肺",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "接下来是肺部气体交换；肺没有画在这个局部模型里。",
+      "mode": "跟着血液走一圈",
+      "progress": "100",
+      "ready": true,
+      "step": "右心 → 肺",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "从肺部回来的血液，沿肺静脉进入左心房。",
+      "mode": "跟着血液走一圈",
+      "progress": "0",
+      "ready": true,
+      "step": "肺 → 左心",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "到达左心房后，经过二尖瓣进入左心室。",
+      "mode": "跟着血液走一圈",
+      "progress": "50",
+      "ready": true,
+      "step": "肺 → 左心",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "现在停在左心室。下一段看它如何把血送向身体。",
+      "mode": "跟着血液走一圈",
+      "progress": "100",
+      "ready": true,
+      "step": "肺 → 左心",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "从左心室出发，沿流出道走向主动脉瓣。",
+      "mode": "跟着血液走一圈",
+      "progress": "0",
+      "ready": true,
+      "step": "左心 → 身体",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "经过主动脉瓣，血液进入主动脉。",
+      "mode": "跟着血液走一圈",
+      "progress": "50",
+      "ready": true,
+      "step": "左心 → 身体",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "沿主动脉送往全身。左右心实际协调工作，这四段只是逐段跟踪路线。",
+      "mode": "跟着血液走一圈",
+      "progress": "100",
+      "ready": true,
+      "step": "左心 → 身体",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "先找到右心房上方的窦房结：正常心跳的起点。",
+      "mode": "肌肉为什么会按顺序收缩？",
+      "progress": "0",
+      "ready": true,
+      "step": "发起：窦房结",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "亮点沿窦房结展开：一次电激动开始了。",
+      "mode": "肌肉为什么会按顺序收缩？",
+      "progress": "50",
+      "ready": true,
+      "step": "发起：窦房结",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "电激动即将进入心房肌。这里移动的是激活标记，不是血液。",
+      "mode": "肌肉为什么会按顺序收缩？",
+      "progress": "100",
+      "ready": true,
+      "step": "发起：窦房结",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "从窦房结附近开始，让激动进入心房肌。",
+      "mode": "肌肉为什么会按顺序收缩？",
+      "progress": "0",
+      "ready": true,
+      "step": "传播：两个心房",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "已到达的心肌变亮；激动也沿房间连接传播到左心房。",
+      "mode": "肌肉为什么会按顺序收缩？",
+      "progress": "50",
+      "ready": true,
+      "step": "传播：两个心房",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "两个心房的激活展开了，对应之后认识的 P 波；它们不会整块同时亮起。",
+      "mode": "肌肉为什么会按顺序收缩？",
+      "progress": "100",
+      "ready": true,
+      "step": "传播：两个心房",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "来到房室结。心房已被激活，心室还没有开始。",
+      "mode": "肌肉为什么会按顺序收缩？",
+      "progress": "0",
+      "ready": true,
+      "step": "稍等：房室结",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "这里传导较慢：亮点仍在房室结附近，心室保持暗色。",
+      "mode": "肌肉为什么会按顺序收缩？",
+      "progress": "50",
+      "ready": true,
+      "step": "稍等：房室结",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "离开房室结，接到希氏束。下一段再看信号如何分配到心室。",
+      "mode": "肌肉为什么会按顺序收缩？",
+      "progress": "100",
+      "ready": true,
+      "step": "稍等：房室结",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "从希氏束进入左右束支。观察亮点沿既有传导束前进。",
+      "mode": "肌肉为什么会按顺序收缩？",
+      "progress": "0",
+      "ready": true,
+      "step": "分配：两个心室",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "激动经过束支和浦肯野系统，到达心室肌；到达处逐渐变亮。",
+      "mode": "肌肉为什么会按顺序收缩？",
+      "progress": "50",
+      "ready": true,
+      "step": "分配：两个心室",
+      "url": "#/learn/f1/1"
+    },
+    {
+      "caption": "心室激活完成，对应 QRS。亮色保留来显示已到达区域，不代表持续通电或肌肉收缩。",
+      "mode": "肌肉为什么会按顺序收缩？",
+      "progress": "100",
+      "ready": true,
+      "step": "分配：两个心室",
+      "url": "#/learn/f1/1"
+    }
+  ],
+  "layouts": [
+    {
+      "captionHeight": 96,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "身体 → 右心",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "右心 → 肺",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "肺 → 左心",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "左心 → 身体",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "发起：窦房结",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "传播：两个心房",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "稍等：房室结",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "分配：两个心室",
+      "width": 1366
+    },
+    {
+      "captionHeight": 142,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "身体 → 右心",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "右心 → 肺",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "肺 → 左心",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "左心 → 身体",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "发起：窦房结",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "传播：两个心房",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "稍等：房室结",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "分配：两个心室",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "身体 → 右心",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "右心 → 肺",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "肺 → 左心",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "左心 → 身体",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "发起：窦房结",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "传播：两个心房",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "稍等：房室结",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "zh-CN",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "分配：两个心室",
+      "width": 320
+    },
+    {
+      "captionHeight": 96,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "Body → right heart",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "Right heart → lungs",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "Lungs → left heart",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "Left heart → body",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "Start: sinus node",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "Spread: the atria",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "Delay: AV node",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "Distribute: the ventricles",
+      "width": 1366
+    },
+    {
+      "captionHeight": 142,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "Body → right heart",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "Right heart → lungs",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "Lungs → left heart",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "Left heart → body",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "Start: sinus node",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "Spread: the atria",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "Delay: AV node",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "Distribute: the ventricles",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "Body → right heart",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "Right heart → lungs",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "Lungs → left heart",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "Left heart → body",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "Start: sinus node",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "Spread: the atria",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "Delay: AV node",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "en",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "Distribute: the ventricles",
+      "width": 320
+    },
+    {
+      "captionHeight": 96,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "Cuerpo → corazón derecho",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "Corazón derecho → pulmones",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "Pulmones → corazón izquierdo",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "Corazón izquierdo → cuerpo",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "Inicio: nodo sinusal",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "Propagación: aurículas",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "Retraso: nodo AV",
+      "width": 1366
+    },
+    {
+      "captionHeight": 96,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 1351,
+      "step": "Distribución: ventrículos",
+      "width": 1366
+    },
+    {
+      "captionHeight": 142,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "Cuerpo → corazón derecho",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "Corazón derecho → pulmones",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "Pulmones → corazón izquierdo",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "Corazón izquierdo → cuerpo",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "Inicio: nodo sinusal",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "Propagación: aurículas",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "Retraso: nodo AV",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 375,
+      "step": "Distribución: ventrículos",
+      "width": 390
+    },
+    {
+      "captionHeight": 142,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "Cuerpo → corazón derecho",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "Corazón derecho → pulmones",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "Pulmones → corazón izquierdo",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "Corazón izquierdo → cuerpo",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "Inicio: nodo sinusal",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "Propagación: aurículas",
+      "width": 320
+    },
+    {
+      "captionHeight": 142,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "Retraso: nodo AV",
+      "width": 320
+    },
+    {
+      "captionHeight": 156.25,
+      "lang": "es",
+      "ready": true,
+      "scrollWidth": 305,
+      "step": "Distribución: ventrículos",
+      "width": 320
+    }
+  ],
+  "playback": [
+    {
+      "mode": "flow",
+      "step": 0,
+      "progress": "100%"
+    },
+    {
+      "mode": "electrical",
+      "step": 3,
+      "progress": "100%"
+    }
+  ],
+  "reducedFrames": [
+    "0%",
+    "50%",
+    "100%"
+  ],
+  "spanish320CaptionHeights": [
+    156.25,
+    156.25,
+    156.25
+  ],
+  "keyboard": {
+    "progress": 1,
+    "url": "#/learn/f1/1"
+  },
+  "limits": [
+    "No physical touchscreen test",
+    "No independently forced window blur/hidden-tab event",
+    "No forced GPU failure test"
+  ]
+}

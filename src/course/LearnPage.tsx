@@ -12,7 +12,8 @@ import type { StageDef } from './api';
 import { getLessonProgress, progressTick } from './deps';
 import { getLesson } from './lessons/index';
 import { STAGE_DEFS } from './model';
-import { countDone, lessonCode, lessonFraction, lessonState, nextLessonToContinue } from './stages';
+import { countDone, lessonCode, lessonState, nextLessonToContinue } from './stages';
+import { presentationProgress } from './foundations/presentation';
 
 const stageAnchor = (id: string) => `crs-stage-${id}`;
 
@@ -107,7 +108,7 @@ function ReadyLesson(props: { readonly id: string }) {
   if (!lesson) return null;
   const p = getLessonProgress(props.id);
   const state = lessonState(p);
-  const frac = lessonFraction(p, lesson.blocks.length);
+  const frac = presentationProgress(lesson, p).fraction;
   const code = lessonCode(props.id);
   return (
     <a class={`crs-lcard crs-lcard--${state}`} href={href({ name: 'lesson', id: props.id })}>

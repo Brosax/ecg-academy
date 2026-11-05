@@ -1,0 +1,450 @@
+{
+  "steps": [
+    {
+      "page": "1 心脏首先是一个泵",
+      "choice": "心脏在胸廓里",
+      "description": "心脏在胸廓里\n\n透明的外形是人体表面，亮起的是胸腔里的心脏。先看正面：患者的左侧在画面右侧。心脏大部分偏向患者左侧，并不是整个都在左边。",
+      "ready": true
+    },
+    {
+      "page": "1 心脏首先是一个泵",
+      "choice": "靠近看外形",
+      "description": "靠近看外形\n\n现在靠近同一个心脏。下方较尖的一端叫心尖；上方连接大血管。拖动模型看看前后：正面只能看见一部分结构，背面的心房可能被遮住。",
+      "ready": true
+    },
+    {
+      "page": "2 四个心腔：上面接收，下面泵出",
+      "choice": "右心房",
+      "description": "右心房\n\n先找右心房：它接收从全身回来的血液。亮色标出这一个心腔的心肌，其余部位淡化。右心房接下来把血液送到右心室。",
+      "ready": true
+    },
+    {
+      "page": "2 四个心腔：上面接收，下面泵出",
+      "choice": "右心室",
+      "description": "右心室\n\n右心室把血液送往肺部。它在心脏的较前方；“右”指患者右侧，不能根据画面左右猜名字。打开剖切，可以观察心肌壁围出的内部空间。",
+      "ready": true
+    },
+    {
+      "page": "2 四个心腔：上面接收，下面泵出",
+      "choice": "左心房",
+      "description": "左心房\n\n左心房接收从肺部回来的血液。它主要位于后方，所以这里转到背面帮助寻找。人体不是四个平排的方框；可以旋转模型，再对照二维关系图。",
+      "ready": true
+    },
+    {
+      "page": "2 四个心腔：上面接收，下面泵出",
+      "choice": "左心室",
+      "description": "左心室\n\n左心室把血液经主动脉送往全身，构成心尖的大部分。观察它的肌肉壁与内部空腔，区分“装血的空间”和“用力收缩的肌肉”。",
+      "ready": true
+    },
+    {
+      "page": "3 跟着血液走一圈",
+      "choice": "身体 → 右心",
+      "description": "身体 → 右心\n\n来自身体的血液沿腔静脉进入右心房，再通过三尖瓣进入右心室。箭头只表示流向，不表示速度；蓝色是缺氧血的示意色，真实血液不是蓝色。",
+      "ready": true
+    },
+    {
+      "page": "3 跟着血液走一圈",
+      "choice": "右心 → 肺",
+      "description": "右心 → 肺\n\n右心室收缩时，血液经肺动脉瓣进入肺动脉，送往肺部交换气体。图中展示心脏附近的血管；肺部本身不在这个模型中。",
+      "ready": true
+    },
+    {
+      "page": "3 跟着血液走一圈",
+      "choice": "肺 → 左心",
+      "description": "肺 → 左心\n\n血液在肺部获得氧气后，沿肺静脉回到左心房，再通过二尖瓣进入左心室。红蓝只区分这两段循环的含氧状态，不是电极的正负。",
+      "ready": true
+    },
+    {
+      "page": "3 跟着血液走一圈",
+      "choice": "左心 → 身体",
+      "description": "左心 → 身体\n\n左心室收缩时，血液经主动脉瓣进入主动脉，分送到全身。四步是在跟踪血液的路线，真实左右心同时协调工作，并不是右边完成一轮才轮到左边。",
+      "ready": true
+    },
+    {
+      "page": "4 肌肉为什么会按顺序收缩？",
+      "choice": "发起：窦房结",
+      "description": "发起：窦房结\n\n金色位置是窦房结，位于右心房。它通常发起电激动。这里高亮的是位置，不是血液的路线，也不是给心脏输入外来的电。",
+      "ready": true
+    },
+    {
+      "page": "4 肌肉为什么会按顺序收缩？",
+      "choice": "传播：两个心房",
+      "description": "传播：两个心房\n\n电激动传播到两个心房的肌肉，随后心房收缩。心房的电激活与后面要认识的 P 波有关。亮色是教学强调，不表示真实组织会发光。",
+      "ready": true
+    },
+    {
+      "page": "4 肌肉为什么会按顺序收缩？",
+      "choice": "稍等：房室结",
+      "description": "稍等：房室结\n\n房室结附近传导较慢，让心房和心室的激活在时间上错开。电激动经过这里及希氏束传向心室；血液并不从房室结流过。",
+      "ready": true
+    },
+    {
+      "page": "4 肌肉为什么会按顺序收缩？",
+      "choice": "分配：两个心室",
+      "description": "分配：两个心室\n\n束支与浦肯野纤维把激动分配到心室肌。心室电激活形成 QRS，随后发生机械收缩。下一部分用二维时间图讲清顺序；这张 3D 图先帮助你认清位置。",
+      "ready": true
+    }
+  ],
+  "layouts": [
+    {
+      "lang": "zh",
+      "page": 1,
+      "canvasHeight": 370,
+      "canvasWidth": 738,
+      "ready": true,
+      "scrollWidth": 1351,
+      "title": "心脏首先是一个泵",
+      "width": 1366
+    },
+    {
+      "lang": "zh",
+      "page": 2,
+      "canvasHeight": 370,
+      "canvasWidth": 738,
+      "ready": true,
+      "scrollWidth": 1351,
+      "title": "四个心腔：上面接收，下面泵出",
+      "width": 1366
+    },
+    {
+      "lang": "zh",
+      "page": 3,
+      "canvasHeight": 370,
+      "canvasWidth": 738,
+      "ready": true,
+      "scrollWidth": 1351,
+      "title": "跟着血液走一圈",
+      "width": 1366
+    },
+    {
+      "lang": "zh",
+      "page": 4,
+      "canvasHeight": 370,
+      "canvasWidth": 738,
+      "ready": true,
+      "scrollWidth": 1351,
+      "title": "肌肉为什么会按顺序收缩？",
+      "width": 1366
+    },
+    {
+      "lang": "zh",
+      "page": 1,
+      "canvasHeight": 310,
+      "canvasWidth": 339.20001220703125,
+      "ready": true,
+      "scrollWidth": 375,
+      "title": "心脏首先是一个泵",
+      "width": 390
+    },
+    {
+      "lang": "zh",
+      "page": 2,
+      "canvasHeight": 310,
+      "canvasWidth": 339.20001220703125,
+      "ready": true,
+      "scrollWidth": 375,
+      "title": "四个心腔：上面接收，下面泵出",
+      "width": 390
+    },
+    {
+      "lang": "zh",
+      "page": 3,
+      "canvasHeight": 310,
+      "canvasWidth": 339.20001220703125,
+      "ready": true,
+      "scrollWidth": 375,
+      "title": "跟着血液走一圈",
+      "width": 390
+    },
+    {
+      "lang": "zh",
+      "page": 4,
+      "canvasHeight": 310,
+      "canvasWidth": 339.20001220703125,
+      "ready": true,
+      "scrollWidth": 375,
+      "title": "肌肉为什么会按顺序收缩？",
+      "width": 390
+    },
+    {
+      "lang": "zh",
+      "page": 1,
+      "canvasHeight": 310,
+      "canvasWidth": 280.8000183105469,
+      "ready": true,
+      "scrollWidth": 305,
+      "title": "心脏首先是一个泵",
+      "width": 320
+    },
+    {
+      "lang": "zh",
+      "page": 2,
+      "canvasHeight": 310,
+      "canvasWidth": 280.8000183105469,
+      "ready": true,
+      "scrollWidth": 305,
+      "title": "四个心腔：上面接收，下面泵出",
+      "width": 320
+    },
+    {
+      "lang": "zh",
+      "page": 3,
+      "canvasHeight": 310,
+      "canvasWidth": 280.8000183105469,
+      "ready": true,
+      "scrollWidth": 305,
+      "title": "跟着血液走一圈",
+      "width": 320
+    },
+    {
+      "lang": "zh",
+      "page": 4,
+      "canvasHeight": 310,
+      "canvasWidth": 280.8000183105469,
+      "ready": true,
+      "scrollWidth": 305,
+      "title": "肌肉为什么会按顺序收缩？",
+      "width": 320
+    },
+    {
+      "lang": "en",
+      "page": 1,
+      "canvasHeight": 370,
+      "canvasWidth": 738,
+      "ready": true,
+      "scrollWidth": 1351,
+      "title": "Start with the heart as a pump",
+      "width": 1366
+    },
+    {
+      "lang": "en",
+      "page": 2,
+      "canvasHeight": 370,
+      "canvasWidth": 738,
+      "ready": true,
+      "scrollWidth": 1351,
+      "title": "Four chambers: receive, then pump",
+      "width": 1366
+    },
+    {
+      "lang": "en",
+      "page": 3,
+      "canvasHeight": 370,
+      "canvasWidth": 738,
+      "ready": true,
+      "scrollWidth": 1351,
+      "title": "Follow the blood around",
+      "width": 1366
+    },
+    {
+      "lang": "en",
+      "page": 4,
+      "canvasHeight": 370,
+      "canvasWidth": 738,
+      "ready": true,
+      "scrollWidth": 1351,
+      "title": "What coordinates contraction?",
+      "width": 1366
+    },
+    {
+      "lang": "en",
+      "page": 1,
+      "canvasHeight": 310,
+      "canvasWidth": 339.20001220703125,
+      "ready": true,
+      "scrollWidth": 375,
+      "title": "Start with the heart as a pump",
+      "width": 390
+    },
+    {
+      "lang": "en",
+      "page": 2,
+      "canvasHeight": 310,
+      "canvasWidth": 339.20001220703125,
+      "ready": true,
+      "scrollWidth": 375,
+      "title": "Four chambers: receive, then pump",
+      "width": 390
+    },
+    {
+      "lang": "en",
+      "page": 3,
+      "canvasHeight": 310,
+      "canvasWidth": 339.20001220703125,
+      "ready": true,
+      "scrollWidth": 375,
+      "title": "Follow the blood around",
+      "width": 390
+    },
+    {
+      "lang": "en",
+      "page": 4,
+      "canvasHeight": 310,
+      "canvasWidth": 339.20001220703125,
+      "ready": true,
+      "scrollWidth": 375,
+      "title": "What coordinates contraction?",
+      "width": 390
+    },
+    {
+      "lang": "en",
+      "page": 1,
+      "canvasHeight": 310,
+      "canvasWidth": 280.8000183105469,
+      "ready": true,
+      "scrollWidth": 305,
+      "title": "Start with the heart as a pump",
+      "width": 320
+    },
+    {
+      "lang": "en",
+      "page": 2,
+      "canvasHeight": 310,
+      "canvasWidth": 280.8000183105469,
+      "ready": true,
+      "scrollWidth": 305,
+      "title": "Four chambers: receive, then pump",
+      "width": 320
+    },
+    {
+      "lang": "en",
+      "page": 3,
+      "canvasHeight": 310,
+      "canvasWidth": 280.8000183105469,
+      "ready": true,
+      "scrollWidth": 305,
+      "title": "Follow the blood around",
+      "width": 320
+    },
+    {
+      "lang": "en",
+      "page": 4,
+      "canvasHeight": 310,
+      "canvasWidth": 280.8000183105469,
+      "ready": true,
+      "scrollWidth": 305,
+      "title": "What coordinates contraction?",
+      "width": 320
+    },
+    {
+      "lang": "es",
+      "page": 1,
+      "canvasHeight": 370,
+      "canvasWidth": 738,
+      "ready": true,
+      "scrollWidth": 1351,
+      "title": "El corazón es una bomba",
+      "width": 1366
+    },
+    {
+      "lang": "es",
+      "page": 2,
+      "canvasHeight": 370,
+      "canvasWidth": 738,
+      "ready": true,
+      "scrollWidth": 1351,
+      "title": "Cuatro cavidades: recibir y bombear",
+      "width": 1366
+    },
+    {
+      "lang": "es",
+      "page": 3,
+      "canvasHeight": 370,
+      "canvasWidth": 738,
+      "ready": true,
+      "scrollWidth": 1351,
+      "title": "Sigue el recorrido de la sangre",
+      "width": 1366
+    },
+    {
+      "lang": "es",
+      "page": 4,
+      "canvasHeight": 370,
+      "canvasWidth": 738,
+      "ready": true,
+      "scrollWidth": 1351,
+      "title": "¿Qué coordina la contracción?",
+      "width": 1366
+    },
+    {
+      "lang": "es",
+      "page": 1,
+      "canvasHeight": 310,
+      "canvasWidth": 339.20001220703125,
+      "ready": true,
+      "scrollWidth": 375,
+      "title": "El corazón es una bomba",
+      "width": 390
+    },
+    {
+      "lang": "es",
+      "page": 2,
+      "canvasHeight": 310,
+      "canvasWidth": 339.20001220703125,
+      "ready": true,
+      "scrollWidth": 375,
+      "title": "Cuatro cavidades: recibir y bombear",
+      "width": 390
+    },
+    {
+      "lang": "es",
+      "page": 3,
+      "canvasHeight": 310,
+      "canvasWidth": 339.20001220703125,
+      "ready": true,
+      "scrollWidth": 375,
+      "title": "Sigue el recorrido de la sangre",
+      "width": 390
+    },
+    {
+      "lang": "es",
+      "page": 4,
+      "canvasHeight": 310,
+      "canvasWidth": 339.20001220703125,
+      "ready": true,
+      "scrollWidth": 375,
+      "title": "¿Qué coordina la contracción?",
+      "width": 390
+    },
+    {
+      "lang": "es",
+      "page": 1,
+      "canvasHeight": 310,
+      "canvasWidth": 280.8000183105469,
+      "ready": true,
+      "scrollWidth": 305,
+      "title": "El corazón es una bomba",
+      "width": 320
+    },
+    {
+      "lang": "es",
+      "page": 2,
+      "canvasHeight": 310,
+      "canvasWidth": 280.8000183105469,
+      "ready": true,
+      "scrollWidth": 305,
+      "title": "Cuatro cavidades: recibir y bombear",
+      "width": 320
+    },
+    {
+      "lang": "es",
+      "page": 3,
+      "canvasHeight": 310,
+      "canvasWidth": 280.8000183105469,
+      "ready": true,
+      "scrollWidth": 305,
+      "title": "Sigue el recorrido de la sangre",
+      "width": 320
+    },
+    {
+      "lang": "es",
+      "page": 4,
+      "canvasHeight": 310,
+      "canvasWidth": 280.8000183105469,
+      "ready": true,
+      "scrollWidth": 305,
+      "title": "¿Qué coordina la contracción?",
+      "width": 320
+    }
+  ]
+}

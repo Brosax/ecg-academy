@@ -1,0 +1,481 @@
+[
+  {
+    "lang": "en",
+    "id": "f1",
+    "client": 305,
+    "errors": [],
+    "scroll": 305,
+    "stageHeight": 1122.425048828125,
+    "title": "One impulse, the first wave",
+    "width": 320
+  },
+  {
+    "lang": "en",
+    "id": "f2",
+    "client": 305,
+    "errors": [],
+    "scroll": 305,
+    "stageHeight": 1105.5,
+    "title": "Begin with one arrow",
+    "width": 320
+  },
+  {
+    "lang": "en",
+    "id": "f3",
+    "client": 305,
+    "errors": [],
+    "scroll": 305,
+    "stageHeight": 1017.8375244140624,
+    "title": "Two electrodes, one lead",
+    "width": 320
+  },
+  {
+    "lang": "en",
+    "id": "f4",
+    "client": 305,
+    "errors": [],
+    "scroll": 305,
+    "stageHeight": 1098.9000244140625,
+    "title": "Faster paper, unchanged time",
+    "width": 320
+  },
+  {
+    "lang": "en",
+    "id": "f5",
+    "client": 305,
+    "errors": [],
+    "scroll": 305,
+    "stageHeight": 1043,
+    "title": "Find the landmarks",
+    "width": 320
+  },
+  {
+    "lang": "en",
+    "id": "f6",
+    "client": 305,
+    "errors": [],
+    "scroll": 305,
+    "stageHeight": 1118.2249755859375,
+    "title": "Where did the change start?",
+    "width": 320
+  },
+  {
+    "lang": "en",
+    "id": "f1",
+    "client": 375,
+    "errors": [],
+    "scroll": 375,
+    "stageHeight": 1213.375,
+    "title": "One impulse, the first wave",
+    "width": 390
+  },
+  {
+    "lang": "en",
+    "id": "f2",
+    "client": 375,
+    "errors": [],
+    "scroll": 375,
+    "stageHeight": 1191.125,
+    "title": "Begin with one arrow",
+    "width": 390
+  },
+  {
+    "lang": "en",
+    "id": "f3",
+    "client": 375,
+    "errors": [],
+    "scroll": 375,
+    "stageHeight": 1093.5125732421875,
+    "title": "Two electrodes, one lead",
+    "width": 390
+  },
+  {
+    "lang": "en",
+    "id": "f4",
+    "client": 375,
+    "errors": [],
+    "scroll": 375,
+    "stageHeight": 1184.5250244140625,
+    "title": "Faster paper, unchanged time",
+    "width": 390
+  },
+  {
+    "lang": "en",
+    "id": "f5",
+    "client": 375,
+    "errors": [],
+    "scroll": 375,
+    "stageHeight": 1072.5250244140625,
+    "title": "Find the landmarks",
+    "width": 390
+  },
+  {
+    "lang": "en",
+    "id": "f6",
+    "client": 375,
+    "errors": [],
+    "scroll": 375,
+    "stageHeight": 1184.175048828125,
+    "title": "Where did the change start?",
+    "width": 390
+  },
+  {
+    "lang": "en",
+    "id": "f1",
+    "client": 1351,
+    "errors": [],
+    "scroll": 1351,
+    "stageHeight": 716.4000244140625,
+    "title": "One impulse, the first wave",
+    "width": 1366
+  },
+  {
+    "lang": "en",
+    "id": "f2",
+    "client": 1351,
+    "errors": [],
+    "scroll": 1351,
+    "stageHeight": 723,
+    "title": "Begin with one arrow",
+    "width": 1366
+  },
+  {
+    "lang": "en",
+    "id": "f3",
+    "client": 1351,
+    "errors": [],
+    "scroll": 1351,
+    "stageHeight": 716.4000244140625,
+    "title": "Two electrodes, one lead",
+    "width": 1366
+  },
+  {
+    "lang": "en",
+    "id": "f4",
+    "client": 1351,
+    "errors": [],
+    "scroll": 1351,
+    "stageHeight": 716.4000244140625,
+    "title": "Faster paper, unchanged time",
+    "width": 1366
+  },
+  {
+    "lang": "en",
+    "id": "f5",
+    "client": 1351,
+    "errors": [],
+    "scroll": 1351,
+    "stageHeight": 733.4500122070312,
+    "title": "Find the landmarks",
+    "width": 1366
+  },
+  {
+    "lang": "en",
+    "id": "f6",
+    "client": 1351,
+    "errors": [],
+    "scroll": 1351,
+    "stageHeight": 716.4000244140625,
+    "title": "Where did the change start?",
+    "width": 1366
+  },
+  {
+    "lang": "es",
+    "id": "f1",
+    "client": 1351,
+    "errors": [],
+    "scroll": 1351,
+    "title": "Un impulso, la primera onda",
+    "width": 1366
+  },
+  {
+    "lang": "es",
+    "id": "f2",
+    "client": 1351,
+    "errors": [],
+    "scroll": 1351,
+    "title": "Empezar con una flecha",
+    "width": 1366
+  },
+  {
+    "lang": "es",
+    "id": "f3",
+    "client": 1351,
+    "errors": [],
+    "scroll": 1351,
+    "title": "Dos electrodos, una derivación",
+    "width": 1366
+  },
+  {
+    "lang": "es",
+    "id": "f4",
+    "client": 1351,
+    "errors": [],
+    "scroll": 1351,
+    "title": "Papel más rápido, el mismo tiempo",
+    "width": 1366
+  },
+  {
+    "lang": "es",
+    "id": "f5",
+    "client": 1351,
+    "errors": [],
+    "scroll": 1351,
+    "title": "Encuentra las referencias",
+    "width": 1366
+  },
+  {
+    "lang": "es",
+    "id": "f6",
+    "client": 1351,
+    "errors": [],
+    "scroll": 1351,
+    "title": "¿Dónde empezó el cambio?",
+    "width": 1366
+  },
+  {
+    "lang": "es",
+    "id": "f1",
+    "client": 375,
+    "errors": [],
+    "scroll": 375,
+    "title": "Un impulso, la primera onda",
+    "width": 390
+  },
+  {
+    "lang": "es",
+    "id": "f2",
+    "client": 375,
+    "errors": [],
+    "scroll": 375,
+    "title": "Empezar con una flecha",
+    "width": 390
+  },
+  {
+    "lang": "es",
+    "id": "f3",
+    "client": 375,
+    "errors": [],
+    "scroll": 375,
+    "title": "Dos electrodos, una derivación",
+    "width": 390
+  },
+  {
+    "lang": "es",
+    "id": "f4",
+    "client": 375,
+    "errors": [],
+    "scroll": 375,
+    "title": "Papel más rápido, el mismo tiempo",
+    "width": 390
+  },
+  {
+    "lang": "es",
+    "id": "f5",
+    "client": 375,
+    "errors": [],
+    "scroll": 375,
+    "title": "Encuentra las referencias",
+    "width": 390
+  },
+  {
+    "lang": "es",
+    "id": "f1",
+    "client": 305,
+    "scroll": 305,
+    "title": "Un impulso, la primera onda",
+    "width": 320
+  },
+  {
+    "lang": "es",
+    "id": "f2",
+    "client": 305,
+    "scroll": 305,
+    "title": "Empezar con una flecha",
+    "width": 320
+  },
+  {
+    "lang": "es",
+    "id": "f3",
+    "client": 305,
+    "scroll": 305,
+    "title": "Dos electrodos, una derivación",
+    "width": 320
+  },
+  {
+    "lang": "es",
+    "id": "f4",
+    "client": 305,
+    "scroll": 305,
+    "title": "Papel más rápido, el mismo tiempo",
+    "width": 320
+  },
+  {
+    "lang": "es",
+    "id": "f5",
+    "client": 305,
+    "scroll": 305,
+    "title": "Encuentra las referencias",
+    "width": 320
+  },
+  {
+    "lang": "es",
+    "id": "f6",
+    "client": 305,
+    "scroll": 305,
+    "title": "¿Dónde empezó el cambio?",
+    "width": 320
+  },
+  {
+    "lang": "es",
+    "id": "f6",
+    "client": 375,
+    "scroll": 375,
+    "title": "¿Dónde empezó el cambio?",
+    "width": 390
+  },
+  {
+    "lang": "zh",
+    "id": "f1",
+    "client": 1351,
+    "scroll": 1351,
+    "title": "一个起点，第一道波",
+    "width": 1366
+  },
+  {
+    "lang": "zh",
+    "id": "f2",
+    "client": 1351,
+    "scroll": 1351,
+    "title": "把电活动变成一个箭头",
+    "width": 1366
+  },
+  {
+    "lang": "zh",
+    "id": "f3",
+    "client": 1351,
+    "scroll": 1351,
+    "title": "两个电极，一条导联",
+    "width": 1366
+  },
+  {
+    "lang": "zh",
+    "id": "f4",
+    "client": 1351,
+    "scroll": 1351,
+    "title": "纸走快，时间不变",
+    "width": 1366
+  },
+  {
+    "lang": "zh",
+    "id": "f5",
+    "client": 1351,
+    "scroll": 1351,
+    "title": "先找到坐标",
+    "width": 1366
+  },
+  {
+    "lang": "zh",
+    "id": "f6",
+    "client": 1351,
+    "scroll": 1351,
+    "title": "异常来自哪里？",
+    "width": 1366
+  },
+  {
+    "lang": "zh",
+    "id": "f1",
+    "client": 375,
+    "scroll": 375,
+    "title": "一个起点，第一道波",
+    "width": 390
+  },
+  {
+    "lang": "zh",
+    "id": "f2",
+    "client": 375,
+    "scroll": 375,
+    "title": "把电活动变成一个箭头",
+    "width": 390
+  },
+  {
+    "lang": "zh",
+    "id": "f3",
+    "client": 375,
+    "scroll": 375,
+    "title": "两个电极，一条导联",
+    "width": 390
+  },
+  {
+    "lang": "zh",
+    "id": "f4",
+    "client": 375,
+    "scroll": 375,
+    "title": "纸走快，时间不变",
+    "width": 390
+  },
+  {
+    "lang": "zh",
+    "id": "f5",
+    "client": 375,
+    "scroll": 375,
+    "title": "先找到坐标",
+    "width": 390
+  },
+  {
+    "lang": "zh",
+    "id": "f6",
+    "client": 375,
+    "scroll": 375,
+    "title": "异常来自哪里？",
+    "width": 390
+  },
+  {
+    "lang": "zh",
+    "id": "f1",
+    "client": 305,
+    "scroll": 305,
+    "title": "一个起点，第一道波",
+    "width": 320
+  },
+  {
+    "lang": "zh",
+    "id": "f2",
+    "client": 305,
+    "scroll": 305,
+    "title": "把电活动变成一个箭头",
+    "width": 320
+  },
+  {
+    "lang": "zh",
+    "id": "f3",
+    "client": 305,
+    "scroll": 305,
+    "title": "两个电极，一条导联",
+    "width": 320
+  },
+  {
+    "lang": "zh",
+    "id": "f4",
+    "client": 305,
+    "scroll": 305,
+    "title": "纸走快，时间不变",
+    "width": 320
+  },
+  {
+    "lang": "zh",
+    "id": "f5",
+    "client": 305,
+    "scroll": 305,
+    "title": "先找到坐标",
+    "width": 320
+  },
+  {
+    "lang": "zh",
+    "id": "f6",
+    "client": 305,
+    "scroll": 305,
+    "title": "异常来自哪里？",
+    "width": 320
+  }
+]
